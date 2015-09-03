@@ -72,11 +72,6 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
       column="REQ_SPECIMEN_ID" />
 
-    <set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER" inverse="true" cascade="all-delete-orphan">
-      <key column="SPECIMEN_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
-    </set>
-    
     <set 
       name="specimenLists" 
       table="CATISSUE_SPEC_TAG_ITEMS"
@@ -164,6 +159,18 @@
         join site.institute i
       where
         s.id in (:specimenIds)
+    </query>
+
+    <query name="getDistributedSpecimens">
+      select
+        sp.id
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem item
+        join item.specimen sp
+        join item.order o
+      where
+        o.status = 'EXECUTED' and
+        sp.id in (:specimenIds)
     </query>
   </class>
 </hibernate-mapping>

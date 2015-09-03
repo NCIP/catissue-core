@@ -24,6 +24,8 @@ angular.module('os.biospecimen.cp',
             updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
             deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
           }
+
+          $scope.codingEnabled = $scope.global.appProps.cp_coding_enabled;
         },
         parent: 'signed-in'
       })
@@ -126,6 +128,9 @@ angular.module('os.biospecimen.cp',
               return CollectionProtocol.getById($stateParams.cpId);
             }
             return new CollectionProtocol();
+          },
+          extensionCtxt: function(CollectionProtocol) {
+            return CollectionProtocol.getExtensionCtxt();
           }
         },
         controller: 'CpAddEditCtrl',

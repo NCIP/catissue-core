@@ -76,6 +76,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	private Date createdOn;
 	
 	private String code;
+
+	private Boolean distributed;
 	
 	public Long getId() {
 		return id;
@@ -315,6 +317,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Boolean getDistributed() {
+		return distributed;
+	}
+
+	public void setDistributed(Boolean distributed) {
+		this.distributed = distributed;
 	}
 
 	public static SpecimenInfo from(Specimen specimen) {

@@ -73,7 +73,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		List<Field> fields = new ArrayList<Field>();
 		List<Record> subRecords = new ArrayList<Record>();
 		
-		for (Control ctrl : form.getControls()) {
+		for (Control ctrl : form.getAllControls()) {
 			if (ctrl instanceof SubFormControl) {
 				subRecords.add(getSubRecord((SubFormControl)ctrl));
 			} else {

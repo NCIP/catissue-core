@@ -474,6 +474,12 @@ public class StorageContainer extends BaseEntity {
 		return null;
 	}
 
+	public boolean isPositionOccupied(String posOne, String posTwo) {
+		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
+		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+
+		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
+	}
 
 	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo) {
 		return canOccupyPosition(true, specimenId, posOne, posTwo);

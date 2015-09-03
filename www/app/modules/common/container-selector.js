@@ -1,46 +1,56 @@
 angular.module('openspecimen')
-  .directive('osContainerSelector', function(Container) {
+  .directive('osContainerSelector', function(Container, Util) {
     var extend = angular.extend;
+    var defaultContainers = undefined;
 
     function linker(scope, element, attrs) {
-      var criteria = getContainerListCriteria(scope);
-
-      scope.entityType = scope.entity.getType();
+      scope.filterOpts = {name: scope.name};
+      scope.entityType = scope.type;
+      scope.initList = false;
       scope.toggleContainerSelection = toggleContainerSelection(scope);
-      scope.loadChildren = loadChildren(scope, criteria);
+      scope.loadChildren = loadChildren(scope);
 
-      initContainersList(scope, criteria);
+      scope.$watch('criteria', function(newVal, oldVal) {
+        if (!newVal) {
+          return;
+        }
+
+        initContainersList(scope, scope.name);
+      });
+
+      Util.filter(scope, 'filterOpts', function() { filterContainers(scope); });
     };
 
-    function initContainersList(scope, criteria) {
+    function initContainersList(scope, name) {
       scope.containers = [];
 
-      Container.query(extend({topLevelContainers: true}, criteria)).then(
+      var criteria = getContainerListCriteria(scope);
+      extend(criteria, !!name ? {name: name} : {topLevelContainers: true});
+      Container.query(criteria).then(
         function(containers) {
-          addChildPlaceholders(containers);
-          scope.containers = Container.flatten(containers);
+          if (!name) {
+            addChildPlaceholders(containers);
+            defaultContainers = scope.containers = Container.flatten(containers);
+          } else {
+            scope.containers = containers;
+          }
+
+          scope.initList = true;
         }
       );
     }
 
-    function getContainerListCriteria(scope) {
-      var criteria = {
-        onlyFreeContainers: true,
-        hierarchical: true
-      };
-
-      if (scope.entity.getType() == 'specimen') {
-        extend(criteria, {
-          storeSpecimensEnabled: true,
-          specimenClass: scope.entity.specimenClass,
-          specimenType: scope.entity.type,
-          cpId: scope.cpId
-        });
-      } else {
-        extend(criteria, {site: scope.entity.siteName});
+    function getContainerListCriteria(scope, hierarchical) {
+      if (typeof hierarchical === 'undefined') {
+        hierarchical = true;
       }
 
-      return criteria;
+      var criteria = {
+        onlyFreeContainers: true,
+        hierarchical: hierarchical
+      };
+
+      return extend(criteria, scope.criteria);
     }
 
     function addChildPlaceholders(containers) {
@@ -62,13 +72,14 @@ angular.module('openspecimen')
       }
     }
 
-    function loadChildren(scope, criteria) {
+    function loadChildren(scope) {
       return function(container) {
         if (container.childContainersLoaded) {
           return;
         }
 
         var idx = scope.containers.indexOf(container);
+        var criteria = getContainerListCriteria(scope);
         Container.query(extend({parentContainerId: container.id}, criteria)).then(
           function(containers) {
             addChildPlaceholders(containers);
@@ -85,6 +96,25 @@ angular.module('openspecimen')
       };
     }
 
+    function filterContainers(scope) {
+      if (scope.filterOpts.name.trim().length == 0) {
+        if (defaultContainers) {
+          scope.containers = defaultContainers;
+        } else {
+          initContainersList(scope);
+        }
+
+        return;
+      }
+ 
+      var criteria = getContainerListCriteria(scope, false);
+      Container.query(extend({name: scope.filterOpts.name}, criteria)).then(
+        function(containers) {
+          scope.containers = containers;
+        }
+      );
+    }
+
     return {
       restrict: 'E',
  
@@ -93,8 +123,9 @@ angular.module('openspecimen')
       templateUrl: 'modules/common/container-selector.html',
 
       scope: {
-        entity: '=',
-        cpId: '=?',
+        type: '=',
+        name: '=',
+        criteria: '=',
         onToggleSelection: '&'
       },
 

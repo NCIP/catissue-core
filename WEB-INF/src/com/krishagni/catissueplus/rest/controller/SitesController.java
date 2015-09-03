@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,12 +19,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.services.FormService;
 
 @Controller
 @RequestMapping("/sites")
@@ -31,6 +37,9 @@ public class SitesController {
 
 	@Autowired
 	private SiteService siteService;
+	
+	@Autowired
+	private FormService formSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -38,7 +47,7 @@ public class SitesController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SiteDetail> getSites(
+	public List<SiteSummary> getSites(
 			@RequestParam(value = "name", required= false)
 			String name,
 			
@@ -74,7 +83,7 @@ public class SitesController {
 			.includeStat(includeStats);
 		
 		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(crit);
-		ResponseEvent<List<SiteDetail>> resp = siteService.getSites(req);
+		ResponseEvent<List<SiteSummary>> resp = siteService.getSites(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -103,6 +112,7 @@ public class SitesController {
 		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.createSite(req);
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 
@@ -115,6 +125,7 @@ public class SitesController {
 		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.updateSite(req);
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
@@ -152,5 +163,20 @@ public class SitesController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
-	}	
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public FormCtxtSummary getForm() {
+		ListEntityFormsOp op = new ListEntityFormsOp();
+		op.setEntityType(EntityType.SITE_EXTN); 
+        
+		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+	}
+
 }

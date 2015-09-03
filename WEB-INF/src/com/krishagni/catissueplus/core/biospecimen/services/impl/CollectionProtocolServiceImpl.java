@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -191,6 +192,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
+			cp.addOrUpdateExtension();
 			
 			//Assign default roles to PI and Coordinators
 			addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
@@ -236,6 +238,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			Collection<User> removedCoord = CollectionUtils.subtract(existingCp.getCoordinators(), cp.getCoordinators());
 			
 			existingCp.update(cp);
+			existingCp.addOrUpdateExtension();
 			
 			// PI role handling
 			if (piChanged) {
@@ -617,6 +620,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
 			
 			SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+			if (StringUtils.isNotBlank(requirement.getCode())) {
+				setAliquotCode(parent, aliquots, requirement.getCode());
+			}
 			parent.addChildRequirements(aliquots);			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(aliquots));
@@ -663,6 +669,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(sr.getCollectionProtocol());
 			SpecimenRequirement partial = srFactory.createForUpdate(sr.getLineage(), detail);
+			if (isSpecimenClassOrTypeChanged(sr, partial)) {
+				ensureSpecimensNotCollected(sr);
+			}
+			
 			sr.update(partial);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
 		} catch (OpenSpecimenException ose) {
@@ -708,6 +718,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			sr.delete();
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(sr);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(sr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req) {
+		try {
+			Long srId = req.getPayload();
+			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(srId);
+			if (sr == null) {
+				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(
+					daoFactory.getSpecimenRequirementDao().getSpecimensCount(srId));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -1018,6 +1047,36 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 					consentTier.getId() != consentTierDetail.getId()) {
 				throw OpenSpecimenException.userError(CpErrorCode.DUP_CONSENT, consentTier.getStatement());
 			}
+		}
+	}
+	
+	private void ensureSpecimensNotCollected(SpecimenRequirement sr) {
+		int count = daoFactory.getSpecimenRequirementDao().getSpecimensCount(sr.getId());
+		if (count > 0) {
+			throw OpenSpecimenException.userError(SrErrorCode.CANNOT_CHANGE_CLASS_OR_TYPE);
+		}
+	}
+	
+	private boolean isSpecimenClassOrTypeChanged(SpecimenRequirement existingSr, SpecimenRequirement sr) {
+		return !existingSr.getSpecimenClass().equals(sr.getSpecimenClass()) || 
+				!existingSr.getSpecimenType().equals(sr.getSpecimenType());
+	}
+	
+	private void setAliquotCode(SpecimenRequirement parent, List<SpecimenRequirement> aliquots, String code) {
+		Set<String> codes = new HashSet<String>();
+		CollectionProtocolEvent cpe = parent.getCollectionProtocolEvent();
+		for (SpecimenRequirement sr:  cpe.getSpecimenRequirements()) {
+			if (StringUtils.isNotBlank(sr.getCode())) {
+				codes.add(sr.getCode());
+			}
+		}
+
+		int count = 1;
+		for (SpecimenRequirement sr: aliquots) {
+			while (!codes.add(code + count)) {
+				count++;
+			}
+			sr.setCode(code + count++);
 		}
 	}
 }

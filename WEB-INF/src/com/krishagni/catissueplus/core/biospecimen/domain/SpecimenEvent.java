@@ -33,6 +33,7 @@ public abstract class SpecimenEvent extends DeObject {
 	private ConfigurationService cfgSvc;
 	
 	public SpecimenEvent(Specimen specimen) {
+		super(true);
 		this.specimen = specimen;
 	}
 

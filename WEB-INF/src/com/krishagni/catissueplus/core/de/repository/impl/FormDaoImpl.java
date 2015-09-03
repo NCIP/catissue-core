@@ -153,7 +153,19 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		query.setLong("scgId", scgId);		
 		return getEntityForms(query.list());
 	}
-		
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FormCtxtSummary> getFormContexts(Long cpId, String entityType) {
+		List<FormContextBean> result = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_FORM_CTXTS_BY_ENTITY)
+			.setLong("cpId", cpId)
+			.setString("entityType", entityType)
+			.list();
+				
+		return FormCtxtSummary.from(result);
+	}
+			
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormRecordSummary> getFormRecords(Long formCtxtId, Long objectId) {
@@ -634,6 +646,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_SCG_FORMS = FQN + ".getScgForms";
 	
+	private static final String GET_FORM_CTXTS_BY_ENTITY = FQN + ".getFormContextsByEntity";
+	
 	private static final String GET_FORM_BY_CTXT = FQN + ".getFormByCtxt";
 	
 	private static final String GET_FORM_RECORDS = FQN + ".getFormRecords";
@@ -682,5 +696,5 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String SOFT_DELETE_FORM_CONTEXTS_SQL = 
 			"update catissue_form_context set deleted_on = :deletedOn where container_id = :formId";
-	
+
 }

@@ -37,6 +37,7 @@
     </field>
 
     <field>
+      <type>datetime</type>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>
     </field>

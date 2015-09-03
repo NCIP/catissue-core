@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
@@ -50,6 +51,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private List<ConsentTierDetail> consents;
 	
 	private List<CollectionProtocolEventDetail> events;
+	
+	private ExtensionDetail extensionDetail;
 
 	public List<String> getRepositoryNames() {
 		return repositoryNames;
@@ -187,6 +190,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.events = events;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+
 	public static CollectionProtocolDetail from(CollectionProtocol cp) {
 		return from(cp, false);
 	}
@@ -209,6 +220,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
+		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));

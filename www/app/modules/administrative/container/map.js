@@ -6,7 +6,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
       var width = element.width();
       var noOfColumns = scope.container.noOfColumns;
-      var slotWidth = width / 10;
+      var slotWidth = Math.floor(width / 10);
       if (slotWidth * noOfColumns > width) {
         slotWidth = width / noOfColumns;
         if (slotWidth < 85) {

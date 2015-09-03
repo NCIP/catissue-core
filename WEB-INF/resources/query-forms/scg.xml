@@ -206,5 +206,16 @@
         <extnFkCol>RECORD_ID</extnFkCol>
       </subForm>
     </row>
+    <row>
+      <subForm>
+        <name>participant</name>
+        <udn>participant</udn>
+        <caption>#getMessage("participant")</caption>
+        <table>CPR_VIEW</table>
+        <foreignKey>CPR_ID</foreignKey>
+        <parentKey>COLLECTION_PROTOCOL_REG_ID</parentKey>
+        <pathLink>true</pathLink>
+      </subForm>
+    </row>
   </view>
 </form>

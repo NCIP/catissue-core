@@ -17,4 +17,17 @@ public class SpecimenRequirementDaoImpl extends AbstractDao<SpecimenRequirement>
 				.getCurrentSession()
 				.get(SpecimenRequirement.class, id);
 	}
+	
+	@Override
+	public int getSpecimensCount(Long srId) {
+		return ((Number) getSessionFactory()
+			.getCurrentSession()
+			.getNamedQuery(GET_SPECIMENS_COUNT)
+			.setLong("srId", srId)
+			.uniqueResult()).intValue();
+	}
+	
+	private static final String FQN = SpecimenRequirement.class.getName();
+	
+	private static final String GET_SPECIMENS_COUNT = FQN + ".getSpecimensCount";
 }

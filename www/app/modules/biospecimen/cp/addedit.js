@@ -1,11 +1,23 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, cp, User, Site) {
+  .controller('CpAddEditCtrl', function($scope, $state, cp, extensionCtxt, User, Site) {
 
     var repositoryNames = null;
 
     function init() {
       $scope.cp = cp;
+      $scope.deFormCtrl = {};
+
+      if (!!extensionCtxt) {
+        $scope.extnOpts = {
+          formId: extensionCtxt.formId,
+          recordId: !!cp.id ? cp.extensionDetail.id : undefined,
+          formCtxtId: parseInt(extensionCtxt.formCtxtId),
+          objectId: cp.id,
+          showActionBtns: false,
+          labelAlignment: 'horizontal'
+        }
+      }
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -59,8 +71,13 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     };
 
     $scope.createCp = function() {
+      if (!$scope.deFormCtrl.ctrl.validate()) {
+        return;
+      }
+
       var cp = angular.copy($scope.cp);
       cp.ppidFmt = getPpidFmt();
+      cp.extensionDetail = $scope.deFormCtrl.ctrl.getFormData();
       cp.$saveOrUpdate().then(
         function(savedCp) {
           $state.go('cp-detail.overview', {cpId: savedCp.id});

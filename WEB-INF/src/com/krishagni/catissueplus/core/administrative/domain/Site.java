@@ -36,6 +36,8 @@ public class Site extends BaseEntity {
 	private String activityStatus;
 
 	private String address;
+	
+	private SiteExtension extension;
     
 	private Set<User> coordinators = new HashSet<User>();
 
@@ -101,6 +103,19 @@ public class Site extends BaseEntity {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	@NotAudited
+	public SiteExtension getExtension() {
+		if (extension == null) {
+			extension = SiteExtension.getFor(this);
+		}
+		
+		return extension;
+	}
+
+	public void setExtension(SiteExtension extension) {
+		this.extension = extension;
 	}
 
 	public Set<User> getCoordinators() {
@@ -172,6 +187,7 @@ public class Site extends BaseEntity {
 		setCode(other.getCode());
 		setType(other.getType());
 		setAddress(other.getAddress());
+		setExtension(other.getExtension());
 		updateActivityStatus(other.getActivityStatus());
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}
@@ -202,6 +218,14 @@ public class Site extends BaseEntity {
 		}
 		
 		setActivityStatus(activityStatus);
+	}
+	
+	public void addOrUpdateExtension() {
+		if (getExtension() == null) {
+			return;
+		}
+		
+		getExtension().saveOrUpdate();
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {

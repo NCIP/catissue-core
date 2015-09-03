@@ -41,4 +41,32 @@
 		<links>
 		</links>
 	</path>
+
+	<path>
+		<from>Specimen</from>
+		<to>SpecimenCollectionGroup</to>
+		<start-field>scg</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>Specimen</from>
+		<to>Participant</to>
+		<start-field>scg.participant</start-field>
+		<links>
+		</links>
+	</path>
+
+	<path>
+		<from>Specimen</from>
+		<to>CollectionProtocol</to>
+		<start-field>scg.participant</start-field>
+                <links>
+                        <link>
+                                <key>CP_ID</key>
+                                <ref-tab-key>IDENTIFIER</ref-tab-key>
+                        </link>
+                </links>
+	</path>
 </paths>

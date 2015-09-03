@@ -6,11 +6,32 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
   .directive('osDeForm', function($http, $rootScope, Form, ApiUrls, LocationChangeListener) {
     return {
       restrict: 'A',
+      controller: function() {
+        this.form = null;
 
-      link: function(scope, element, attrs) {
+        this.validate = function() {
+          return this.form.validate();
+        }
+
+        this.getFormData = function() {
+          var attrValues = [];
+          angular.forEach(this.form.getValue(), function(value, key) {
+            attrValues.push({name: key, value: value});
+          });
+
+          return {attrs: attrValues};
+        }
+      },
+
+      link: function(scope, element, attrs, ctrl) {
+
+        if (!!attrs.ctrl) {
+          scope[attrs.ctrl].ctrl = ctrl;
+        }
+
         var onceRendered = false;
         scope.$watch(attrs.opts, function(opts, oldVal) {
-          if (onceRendered) {
+          if (!opts || onceRendered) {
             return;
           }
 
@@ -43,14 +64,48 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             onCancel       : opts.onCancel,
             onPrint        : opts.onPrint,
             onDelete       : opts.onDelete,
+            showActionBtns : opts.showActionBtns,
             customHdrs     : hdrs
           };
 
-          var form = new edu.common.de.Form(args);
-          form.render();
+          ctrl.form = new edu.common.de.Form(args);
+          ctrl.form.render();
           onceRendered = true;
           LocationChangeListener.preventChange();
+          addWatchForDomChanges(opts); 
         }, true);
+
+        function addWatchForDomChanges(opts) {
+          if (opts.labelAlignment == 'horizontal') {
+            var domChange = scope.$watch(
+              function() {
+                return element.children().length;
+              },
+
+              function(length) {
+                if (length > 0) {
+                  domChange(); // kill the watch
+                  alignLabelsHorizontally();
+                }
+              }
+            );
+          }
+        }
+
+        function alignLabelsHorizontally() {
+          element.find(".col-xs-8")
+            .each(function(index) {
+               angular.element(this)
+                 .addClass("col-xs-12")
+                 .removeClass("col-xs-8");
+            });
+
+          element.find('label.control-label')
+            .each(function(index) {
+               angular.element(this).addClass("col-xs-3");
+               angular.element(this).next().wrap("<div class='col-xs-6'></div>");
+            });
+        }
       }
     }
   });

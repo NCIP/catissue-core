@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteFactory;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SiteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -58,7 +59,7 @@ public class SiteServiceImpl implements SiteService {
 	
 	@Override
 	@PlusTransactional	
-	public ResponseEvent<List<SiteDetail>> getSites(RequestEvent<SiteListCriteria> req) {
+	public ResponseEvent<List<SiteSummary>> getSites(RequestEvent<SiteListCriteria> req) {
 		try {
 			SiteListCriteria listCrit = req.getPayload();			
 			List<Site> sites = null;
@@ -69,7 +70,7 @@ public class SiteServiceImpl implements SiteService {
 				sites = getAccessibleSites(listCrit);
 			}
 			
-			List<SiteDetail> result = SiteDetail.from(sites);
+			List<SiteSummary> result = SiteSummary.from(sites);
 			if (listCrit.includeStat()) {
 				addSiteStats(result);
 			}
@@ -104,7 +105,7 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	@PlusTransactional	
 	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req) {
-		try {	
+		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
 			Site site = siteFactory.createSite(req.getPayload());
@@ -113,6 +114,7 @@ public class SiteServiceImpl implements SiteService {
 			ensureUniqueConstraint(site, null, ose);
 			ose.checkAndThrow();
 			daoFactory.getSiteDao().saveOrUpdate(site, true);
+			site.addOrUpdateExtension();
 			addDefaultCoordinatorRoles(site, site.getCoordinators());
 			return ResponseEvent.response(SiteDetail.from(site));
 		} catch (OpenSpecimenException ose) {
@@ -171,13 +173,13 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 	
-	private void addSiteStats(List<SiteDetail> sites) {
+	private void addSiteStats(List<SiteSummary> sites) {
 		if (CollectionUtils.isEmpty(sites)) {
 			return;
 		}
 		
-		Map<Long, SiteDetail> sitesMap = new HashMap<Long, SiteDetail>();
-		for (SiteDetail site : sites) {
+		Map<Long, SiteSummary> sitesMap = new HashMap<Long, SiteSummary>();
+		for (SiteSummary site : sites) {
 			sitesMap.put(site.getId(), site);
 		}
 		
@@ -221,6 +223,7 @@ public class SiteServiceImpl implements SiteService {
 			
 			existing.update(site);			
 			daoFactory.getSiteDao().saveOrUpdate(existing);
+			existing.addOrUpdateExtension();
 			
 			removeDefaultCoordinatorRoles(existing, removedCoordinators);
 			addDefaultCoordinatorRoles(existing, addedCoordinators);
