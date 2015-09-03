@@ -572,6 +572,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   font-size: 12px;
   padding-top: 5px;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .os-key-values .item .key, .os-key-values .item .value {
