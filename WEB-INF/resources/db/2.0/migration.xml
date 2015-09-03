@@ -76,54 +76,6 @@
       tableName="CATISSUE_USER"/>
   </changeSet>
   
-  <changeSet id="Trigger for creating container hierarchy during migration" author="marwahan" dbms="mysql">
-    <sql endDelimiter="//" >
-      create trigger trg_container_replication after insert 
-      on os_storage_containers
-      for each row begin
- 
-        if (new.parent_container_id is not null ) then
-          insert into os_containers_hierarchy(ancestor_id, descendent_id) 
-            select 
-              och.ancestor_id, new.identifier 
-            from 
-              os_containers_hierarchy och 
-            where 
-              och.descendent_id = new.parent_container_id;
-        end if;
- 
-        insert into os_containers_hierarchy(ancestor_id, descendent_id) values (new.identifier, new.identifier);
-
-      end;
-      //
-    </sql>
-  </changeSet>
-  
-  <changeSet id="Trigger for creating container hierarchy during migration" author="marwahan" dbms="oracle">
-    <sql endDelimiter="//">
-      create or replace trigger trg_container_replication after insert 
-      on os_storage_containers
-      for each row
-      begin
- 
-        if (:new.parent_container_id is not null ) then
-          insert into os_containers_hierarchy
-            (ancestor_id, descendent_id) 
-          select 
-            och.ancestor_id, :new.identifier 
-          from 
-            os_containers_hierarchy och 
-          where 
-            och.descendent_id = :new.parent_container_id;
-        end if;
-  
-        insert into os_containers_hierarchy(ancestor_id, descendent_id) values (:new.identifier, :new.identifier);
-
-      end;
-      //
-    </sql>
-  </changeSet>
-  
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="mysql">
     <validCheckSum>7:c1fd34a4dfd6b7e0a135e7cb80666a46</validCheckSum>
     <sql>
@@ -290,13 +242,6 @@
         end;
       end;
       //
-    </sql>
-  </changeSet>
-  
-  <changeSet id="Drop container hierarchy trigger" author="nmarwaha">
-    <validCheckSum>7:b19fcc792300711bf283a765a4cc6f5a</validCheckSum>
-    <sql>
-      drop trigger trg_container_replication
     </sql>
   </changeSet>
   
