@@ -11,7 +11,7 @@
       <textField>
         <name>url</name>
         <udn>url</udn>
-        <caption>#getMessage("procedure_evnt_url")</caption>
+        <caption>#getMessage("procedure_event_url")</caption>
         <column>URL</column>
         <mandatory>true</mandatory>
       </textField>
@@ -21,7 +21,7 @@
       <textField>
         <name>name</name>
         <udn>name</udn>
-        <caption>#getMessage("procedure_evnt_name")</caption>
+        <caption>#getMessage("procedure_event_name")</caption>
         <column>NAME</column>
         <mandatory>true</mandatory>
       </textField>
@@ -31,7 +31,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>#getMessage("specimen_evnt_user")</caption>
+        <caption>#getMessage("specimen_event_user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
         <mandatory>true</mandatory>
@@ -42,7 +42,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>#getMessage("specimen_evnt_date_time")</caption>
+        <caption>#getMessage("specimen_event_date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -55,7 +55,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>#getMessage("specimen_evnt_comments")</caption>
+        <caption>#getMessage("specimen_event_comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>
