@@ -528,8 +528,8 @@ public class VisitServiceImpl implements VisitService {
 		} catch(Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		} finally {
-			out.close();
 			document.close();
+			out.close();
 		}
 	}
 	
