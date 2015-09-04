@@ -64,15 +64,7 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
     function loadInstitutes() {
       Institute.query().then(
         function(institutes) {
-          $scope.instituteNames = getInstituteNames(institutes);
-        }
-      );
-    }
-    
-    function getInstituteNames (institutes) {
-      return institutes.map(
-        function (inst) {
-          return inst.name;
+          $scope.instituteNames = Institute.getNames(institutes);
         }
       );
     }

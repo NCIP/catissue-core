@@ -66,15 +66,24 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     
     function filterAvailableInstituteNames () {
       if (availableInstituteNames.length == 0 ) {
-        availableInstituteNames = getInstituteNames($scope.institutes);
+        availableInstituteNames = Institute.getNames($scope.institutes);
       }
       
-      var selectedInst = $scope.distributionProtocol.getInstitutes();
+      var selectedInst = getDistInstitutes();
       $scope.instituteNames = availableInstituteNames.filter(
         function(name) {
           return selectedInst.indexOf(name) == -1;
         }
       )
+    }
+    
+    function getDistInstitutes () {
+      var dp = $scope.distributionProtocol;
+      if (!dp.distributingSites) {
+        dp.distributingSites = [];
+      }
+      
+      return dp.distributingSites.map(function(instSite) { return instSite.instituteName});
     }
     
     function loadSites(instituteName) {
@@ -94,16 +103,29 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       return sites;
     }
     
-    function getInstituteNames (institutes) {
-      return institutes.map(
-        function (institute) {
-          return institute.name;
-        }
-      );
+    function newDistSite () {
+      var dp = $scope.distributionProtocol;
+      if (!dp.distributingSites) {
+        dp.distributingSites = [];
+      }
+      
+      dp.distributingSites.push({instituteName: '', sites: []});
+    }
+    
+    function updateDistSites (dp) {
+      var sites = [];
+      angular.forEach(dp.distributingSites, function (distSite) {
+        angular.forEach(distSite.sites, function (siteName) {
+          sites.push({name: siteName});
+        });
+      });
+      
+      dp.distributingSites = sites;
     }
     
     $scope.createDp = function() {
       var dp = angular.copy($scope.distributionProtocol);
+      updateDistSites(dp);
       dp.$saveOrUpdate().then(
         function(savedDp) {
           $state.go('dp-detail.overview', {dpId: savedDp.id});
@@ -131,12 +153,17 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     $scope.removeDistSite = function (index) {
-      $scope.distributionProtocol.removeDistSite(index);
+      var dp = $scope.distributionProtocol;
+      dp.distributingSites.splice(index, 1);
+      if (dp.distributingSites.length == 0) {
+        newDistSite();
+      }
+      
       filterAvailableInstituteNames();
     }
     
     $scope.addDistSite = function () {
-      $scope.distributionProtocol.newDistSite();
+      newDistSite();
     }
 
     $scope.loadQueries = loadQueries;

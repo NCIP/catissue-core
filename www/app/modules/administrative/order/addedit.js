@@ -47,7 +47,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     function loadInstitutes () {
       Institute.query().then(
         function (institutes) {
-          $scope.instituteNames = getInstituteNames(institutes);
+          $scope.instituteNames = Institute.getNames(institutes);
         }
       );
     }
@@ -58,14 +58,6 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
           $scope.siteList = sites;
         }
       );    
-    }
-    
-    function getInstituteNames (institutes) {
-      return institutes.map(
-        function (inst) {
-          return inst.name;
-        }
-      );
     }
     
     function setUserFilterOpts(institute) {
