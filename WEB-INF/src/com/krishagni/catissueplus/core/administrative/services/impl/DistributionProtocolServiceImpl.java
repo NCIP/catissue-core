@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.services.DistributionProto
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -182,8 +183,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			
 			Long dpId = req.getPayload().getId();
 			String status = req.getPayload().getActivityStatus();
-			if (StringUtils.isBlank(status) || !isStatusChangeAllowed(status)) {
-				return ResponseEvent.userError(DistributionProtocolErrorCode.STATUS_CHANGE_NOT_ALLOWED);
+			if (StringUtils.isBlank(status) || !Status.isValidActivityStatus(status)) {
+				return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
 			}
 			
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(dpId);
@@ -194,8 +195,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			if (existing.getActivityStatus().equals(status)) {
 				return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 			}
+			
+			if (status.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+				existing.delete();
+			} else {
+				existing.setActivityStatus(status);
+			}
 
-			existing.setActivityStatus(status);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -264,8 +270,4 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return true;
 	}
 	
-	private boolean isStatusChangeAllowed(String status) {
-		return status.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) ||
-				status.equals(Status.ACTIVITY_STATUS_CLOSED.getStatus());
-	}
 }

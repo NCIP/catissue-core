@@ -594,22 +594,20 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	
-	@SuppressWarnings("unchecked")
 	public Set<Long> getReadAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		return (Set<Long>) Utility.collect(getSites(Resource.ORDER, Operation.READ), "id", true);
+		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, Operation.READ), "id", true);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		return (Set<Long>) Utility.collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
+		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -622,7 +620,7 @@ public class AccessCtrlMgr {
 			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getDistributingSites()));
 		}
 		
-		return (Set<Long>) Utility.collect(allowedSites, "id", true);
+		return Utility.<Set<Long>>collect(allowedSites, "id", true);
 	}
 
 	public void ensureCreateDistributionOrderRights(DistributionOrder order) {

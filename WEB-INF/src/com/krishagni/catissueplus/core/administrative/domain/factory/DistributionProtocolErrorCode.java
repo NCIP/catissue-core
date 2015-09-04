@@ -25,10 +25,8 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	INVALID_DISTRIBUTING_SITES,
 	
-	DISTRIBUTING_SITES_REQUIRED,
+	DISTRIBUTING_SITES_REQUIRED;
 	
-	STATUS_CHANGE_NOT_ALLOWED;
-
 	@Override
 	public String code() {
 		return "DP_" + this.name();

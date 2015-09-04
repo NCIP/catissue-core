@@ -191,16 +191,17 @@ public class Utility {
 		return cal.getTime();
 	}
 	
-	public static Collection<?> collect(Collection<?> collection, String propertyName, boolean returnSet) {
+	@SuppressWarnings("unchecked")
+	public static <T> T collect(Collection<?> collection, String propertyName, boolean returnSet) {
 		Collection<?> result = CollectionUtils.collect(collection, new BeanToPropertyValueTransformer(propertyName));
 		if (returnSet) {
-			return new HashSet(result);
+			return (T) new HashSet(result);
 		}
 		
-		return result;
+		return (T) result;
 	}
 	
-	public static Collection<?> collect(Collection<?> collection, String propertyName) {
+	public static <T> T collect(Collection<?> collection, String propertyName) {
 		return collect(collection, propertyName, false);
 	}
 

@@ -140,24 +140,29 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 				.createAlias("visit", "visit")
 				.createAlias("visit.registration", "cpr")
 				.createAlias("cpr.collectionProtocol", "cp")
-				.createAlias("cp.repositories", "sites");
+				.createAlias("cp.repositories", "site");
 		
 		ProjectionList projs = Projections.projectionList();
 		query.setProjection(projs);
 		projs.add(Projections.property("label"));
-		projs.add(Projections.property("sites.id"));
+		projs.add(Projections.property("site.id"));
 		query.add(Restrictions.in("id", specimenIds));
 		
 		List<Object []> rows = query.list();
-		Map<String, Set<Long>> result = new HashMap<String, Set<Long>>();
+		Map<String, Set<Long>> results = new HashMap<String, Set<Long>>();
 		for (Object[] row: rows) {
-			if (!result.containsKey((String)row[0])) {
-				result.put((String)row[0], new HashSet<Long>());
+			String label = (String)row[0];
+			Long siteId = (Long)row[1];
+			Set<Long> siteIds = results.get(label);
+			if (siteIds == null) {
+				siteIds = new HashSet<Long>();
+				results.put(label, siteIds);
 			}
-			result.get((String)row[0]).add((Long)row[1]);
+			
+			siteIds.add(siteId);
 		}
 		
-		return result;
+		return results;
 	}
 
 	@SuppressWarnings("unchecked")
