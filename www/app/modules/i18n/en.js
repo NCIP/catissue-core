@@ -240,10 +240,10 @@
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
     "consent": {
-      "signed_consent_form": "Signed Consent Form",
-      "deleting_consent_form": "Deleting Signed Consent Form",
-      "confirm_delete_consent_form": "Are you sure you want to delete {{consentDocumentName}}?",
-      "consent_responses": "Consent Responses",
+      "signed_form": "Signed Consent Form",
+      "deleting_form": "Deleting Signed Consent Form",
+      "confirm_delete_form": "Are you sure you want to delete {{consentDocumentName}}?",
+      "responses": "Consent Responses",
       "signature_date": "Consent Signature Date",
       "witness": "Consent Witness",
       "clear": "Clear response"
@@ -422,6 +422,11 @@
 
     "pos_selector": "Specimen Position Selector",
 
+    "visit_details": "Visit Details",
+    "visit_name": "Visit Name",
+    "visit_date": "Visit Date",
+    "visit_site": "Visit Site",
+
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
     "bulk_import": "Bulk Import Specimens",
     "spmn_extensions": "Specimen Forms",
@@ -440,7 +445,7 @@
     "specimen_closed": "Specimen is closed successfully",
 
     "col_event": {
-      "title": "COLLECTION DETAILS",
+      "title": "Collection Details",
       "user_time": "User and Time",
       "user": "Collector",
       "date": "Collection Date",
@@ -449,7 +454,7 @@
     },
 
     "recv_event": {
-      "title": "RECEIVED DETAILS",
+      "title": "Received Details",
       "user_time": "User and Time",
       "user": "Receiver",
       "date": "Receive Date",
@@ -817,6 +822,8 @@
     "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
+    "search": "Type storage container name to filter containers",
+    "no_containers_match_search": "No containers match search criteria to store specimen/s",
 
     "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",

@@ -119,6 +119,10 @@ angular.module('os.common.models', [])
         })
       }
 
+      Model.getExtensionCtxt = function() {
+        return $http.get(url + "extension-form").then(function(result) { return result.data; });
+      }
+
       return Model;
     };
 

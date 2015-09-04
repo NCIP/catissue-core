@@ -39,6 +39,7 @@ osApp.config(function(
     };
 
     $translatePartialLoaderProvider.addPart('modules');
+    $translateProvider.useSanitizeValueStrategy('sanitize');
     $translateProvider.useLoader('$translatePartialLoader', {  
       urlTemplate: '{part}/i18n/{lang}.js',
       loadFailureHandler: 'i18nErrHandler'
@@ -286,6 +287,7 @@ osApp.config(function(
         $rootScope.global.appProps = appProps;
         var plugins = appProps['plugins'];
         if (plugins) {
+          osApp.providers.pluginReg = PluginReg;
           PluginReg.usePlugins(plugins);
           angular.forEach(plugins, function(plugin) {
             $translatePartialLoader.addPart('plugin-ui-resources/'+ plugin + '/');

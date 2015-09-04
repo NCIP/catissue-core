@@ -62,7 +62,7 @@
     <property name="hibernateProperties">
       <props>
         <prop key="hibernate.dialect">${datasource.dialect}</prop>
-        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.show_sql">false</prop>
         <prop key="org.hibernate.envers.track_entities_changed_in_revision">true</prop>
         <prop key="org.hibernate.envers.global_with_modified_flag">true</prop>
       </props>
@@ -636,6 +636,14 @@
       </map>
     </property>
   </bean>
+  
+  <bean id="importEntityForms" class="com.krishagni.catissueplus.core.init.ImportEntityForms">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
+  </bean>
 
   <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
     <property name="cfgSvc" ref="cfgSvc"/>
@@ -656,7 +664,7 @@
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>
   </bean>
-
+  
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>
   <context:annotation-config/>

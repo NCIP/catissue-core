@@ -2,10 +2,12 @@ package com.krishagni.catissueplus.core.importer.services;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,9 +199,9 @@ public class ObjectReader implements Closeable {
 		} else if (value.trim().equals(SET_TO_BLANK)) {
 			return SET_TO_BLANK;
 		} else if (field.getType() != null && field.getType().equals("date")) {
-			return new SimpleDateFormat(dateFmt).parse(value);
+			return parseDate(value);
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
-			return new SimpleDateFormat(dateFmt + " " + timeFmt).parse(value);
+			return parseDateTime(value);
 		} else if (field.getType() != null && field.getType().equals("boolean")) {
 			return value.equalsIgnoreCase("yes") ? true : value.equalsIgnoreCase("no") ? false : value;
 		} else {
@@ -264,6 +266,27 @@ public class ObjectReader implements Closeable {
 	
 	private boolean isSetToBlankField(Object value) {
 		return value instanceof String && ((String)value).trim().equals(SET_TO_BLANK);
+	}
+	
+	private Date parseDateTime(String value) 
+	throws ParseException {
+		try {
+			return parseDate(value, dateFmt + " " + timeFmt);
+		} catch (ParseException e) {
+			return parseDate(value, dateFmt);
+		}		
+	}
+	
+	private Date parseDate(String value) 
+	throws ParseException {
+		return parseDate(value, dateFmt);
+	}
+	
+	private Date parseDate(String value, String fmt) 
+	throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+		sdf.setLenient(false);
+		return sdf.parse(value);		
 	}
 			
 	public static void main(String[] args) 

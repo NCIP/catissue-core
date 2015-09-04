@@ -141,7 +141,7 @@ public class MigrateContainerRestrictions implements InitializingBean {
 		for (StorageContainer childContainer : container.getChildContainers()) {
 			migrateRestrictions(childContainer);
 		}
-		
+
 		LOGGER.info(
 				"Migrating restrictions for container with ID: " + container.getId() + 
 				" with name : " +container.getName());
@@ -158,9 +158,14 @@ public class MigrateContainerRestrictions implements InitializingBean {
 		setComputedRestrictions(container);
 
 		List<Specimen> problematicSpmns = new ArrayList<Specimen>();
+		List<StorageContainer> problematicCntnrs = new ArrayList<StorageContainer>();
 		for (StorageContainerPosition pos : container.getOccupiedPositions()) {
 			if (pos.getOccupyingSpecimen() != null && !container.canContain(pos.getOccupyingSpecimen())) {
 				problematicSpmns.add(pos.getOccupyingSpecimen());
+			}
+			
+			if (pos.getOccupyingContainer() != null && !container.canContain(pos.getOccupyingContainer())) {
+				problematicCntnrs.add(pos.getOccupyingContainer());
 			}
 		}
 		
@@ -170,6 +175,15 @@ public class MigrateContainerRestrictions implements InitializingBean {
 					" for container with name : " + container.getName());
 			container.getAllowedSpecimenTypes().add(spmn.getSpecimenType());
 			container.getAllowedCps().add(spmn.getCollectionProtocol());			
+		}
+		
+		for (StorageContainer cntnr : problematicCntnrs) {
+			LOGGER.info(
+					"Updating the restrictions for Container with label : " + cntnr.getName() + 
+					" for parent container with name : " + container.getName());
+			container.getAllowedSpecimenClasses().addAll(cntnr.getAllowedSpecimenClasses());
+			container.getAllowedSpecimenTypes().addAll(cntnr.getAllowedSpecimenTypes());
+			container.getAllowedCps().addAll(cntnr.getAllowedCps());			
 		}
 		
 		Set<String> specimenClassRestrictions = getClassRestrictions(container.getAllowedSpecimenTypes());
@@ -193,6 +207,8 @@ public class MigrateContainerRestrictions implements InitializingBean {
 			if(!container.getCompAllowedSpecimenTypes().containsAll(childContainer.getAllowedSpecimenTypes())){
 				container.getAllowedSpecimenTypes().addAll(childContainer.getAllowedSpecimenTypes());
 			}
+			
+			clearDuplicateTypes(container);
 		}
 		
 		for (StorageContainer childContainer : container.getChildContainers()) {
@@ -208,10 +224,18 @@ public class MigrateContainerRestrictions implements InitializingBean {
 				childContainer.getAllowedSpecimenTypes().clear();
 			}
 			
+			clearDuplicateTypes(container);
 			setComputedRestrictions(childContainer);			
 		}
 		
 		setComputedRestrictions(container);
+	}
+
+	private void clearDuplicateTypes(StorageContainer container) {
+		if(CollectionUtils.isNotEmpty(container.getAllowedSpecimenClasses())){
+			List<String> types = daoFactory.getPermissibleValueDao().getSpecimenTypes(container.getAllowedSpecimenClasses());
+			container.getAllowedSpecimenTypes().removeAll(types);
+		}
 	}
 	
 	private void disableOldPrimaryContainer(StorageContainer container) {

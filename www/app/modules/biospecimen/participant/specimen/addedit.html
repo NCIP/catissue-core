@@ -190,7 +190,9 @@
         </div>
 
         <div ng-if = "!currSpecimen.id && !currSpecimen.reqId">
-          <div class="os-section-divider" translate="specimens.col_event.title"/>
+          <div class="os-section-divider">
+            <span translate="specimens.col_event.title">Collection Details</span>
+          </div>
 
           <div class="form-group">
             <label class="col-xs-3 control-label"  translate="specimens.col_event.user_time">User and Time</label>
@@ -216,7 +218,9 @@
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_container">Collection Container</label>
+            <label class="col-xs-3 control-label" translate="specimens.col_event.collection_container">
+              Collection Container
+            </label>
             <div class="col-xs-6">
               <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainers"
                 placeholder="{{'specimens.col_event.collection_container' | translate}}" required>
@@ -235,7 +239,9 @@
             </div>
           </div>
 
-          <div class="os-section-divider" translate="specimens.recv_event.title"/>
+          <div class="os-section-divider">
+            <span translate="specimens.recv_event.title">Received Details</span>
+          </div>
 
           <div class="form-group">
             <label class="col-xs-3 control-label"  translate="specimens.recv_event.user">User and Time</label>

@@ -1,7 +1,9 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
 <form>
   <view>
     <name>SpecimenReceivedEvent</name>
-    <caption>Received Event</caption>
+    <caption>#getMessage("received_event")</caption>
     <table>CATISSUE_RECEIVED_EVENT_PARAM</table>
     <primaryKey>IDENTIFIER</primaryKey>
 
@@ -9,7 +11,7 @@
       <dropDown>
         <name>quality</name>
         <udn>quality</udn>
-        <caption>Quality</caption>
+        <caption>#getMessage("received_event_quality")</caption>
         <column>RECEIVED_QUALITY</column>
         <options>
           <sql>
@@ -26,7 +28,7 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>User</caption>
+        <caption>#getMessage("specimen_event_user")</caption>
         <column>USER_ID</column>
         <showInGrid>true</showInGrid>
         <mandatory>true</mandatory>
@@ -37,7 +39,7 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>Date and Time</caption>
+        <caption>#getMessage("specimen_event_date_time")</caption>
         <column>EVENT_TIMESTAMP</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
@@ -51,7 +53,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>Comments</caption>
+        <caption>#getMessage("specimen_event_comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>
