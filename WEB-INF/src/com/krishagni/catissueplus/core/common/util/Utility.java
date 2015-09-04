@@ -96,18 +96,30 @@ public class Utility {
 	}
 	
 	public static String stringListToCsv(List<String> elements) {
-		return stringListToCsv(elements.toArray(new String[0]));
+		return stringListToCsv(elements.toArray(new String[0]), true);
 	}
 	
 	public static String stringListToCsv(Set<String> elements) {
-		return stringListToCsv(elements.toArray(new String[0]));
+		return stringListToCsv(elements.toArray(new String[0]), true);
+	}
+	
+	public static String stringListToCsv(Set<String> elements, boolean quotechar) {
+		return stringListToCsv(elements.toArray(new String[0]), quotechar);
 	}
 	
 	public static String stringListToCsv(String[] elements) {
+		return stringListToCsv(elements, true);
+	}
+	
+	public static String stringListToCsv(String[] elements, boolean quotechar) {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = null;
 		try {
-			csvWriter = new CSVWriter(writer);
+			if (quotechar) {
+				csvWriter = new CSVWriter(writer);
+			} else {
+				csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+			}
 			csvWriter.writeNext(elements);
 			csvWriter.flush();
 			return writer.toString();

@@ -91,11 +91,8 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
     };
 
     Visit.prototype.getSprFileUrl = function(pdf) {
-      var url = Visit.url() + this.$id() + '/spr-file';
-      if (pdf) {
-        url = url + '?type=pdf';
-      }
-      return url
+      var param = !!pdf ? '?type=pdf' : '';
+      return Visit.url() + this.$id() + '/spr-file' + param;
     };
 
     Visit.prototype.getSprTextUrl = function() {

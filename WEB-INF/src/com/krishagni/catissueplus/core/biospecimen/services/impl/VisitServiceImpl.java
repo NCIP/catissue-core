@@ -13,7 +13,6 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.bridge.MessageUtil;
 import org.springframework.context.MessageSource;
 
 import com.itextpdf.text.Chunk;
@@ -554,8 +553,8 @@ public class VisitServiceImpl implements VisitService {
 		Integer age = Utility.getAge(visit.getRegistration().getParticipant().getBirthDate());
 		headerInfo.put(getMessage("spr_age"), (age != null) ? age.toString() : "-");
 		headerInfo.put(getMessage("spr_printed_on_date"), Utility.getDateString(new Date()));
-		headerInfo.put(getMessage("spr_participant_race"),
-				Utility.stringListToCsv(visit.getRegistration().getParticipant().getRaces()));
+		headerInfo.put(getMessage("spr_participant_race"), 
+				Utility.stringListToCsv(visit.getRegistration().getParticipant().getRaces(), false));
 		headerInfo.put(getMessage("spr_visit_date"), Utility.getDateString(visit.getVisitDate()));
 		
 		for (Map.Entry<String, String> entry : headerInfo.entrySet()) {
