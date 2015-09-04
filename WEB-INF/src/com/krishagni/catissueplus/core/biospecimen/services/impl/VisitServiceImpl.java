@@ -556,7 +556,7 @@ public class VisitServiceImpl implements VisitService {
 		headerInfo.put(getMessage("spr_printed_on_date"), Utility.getDateString(new Date()));
 		headerInfo.put(getMessage("spr_participant_race"),
 				Utility.stringListToCsv(visit.getRegistration().getParticipant().getRaces()));
-		headerInfo.put(getMessage("spr_collection_date"), Utility.getDateString(visit.getVisitDate()));
+		headerInfo.put(getMessage("spr_visit_date"), Utility.getDateString(visit.getVisitDate()));
 		
 		for (Map.Entry<String, String> entry : headerInfo.entrySet()) {
 			Paragraph paragraph = new Paragraph();
@@ -581,7 +581,9 @@ public class VisitServiceImpl implements VisitService {
 	private Chunk getChunk(String message, int fontSize, boolean bold, boolean underline) {
 		Chunk chunk = new Chunk(message);
 		chunk.setFont(getFont(fontSize, bold));
-		chunk.setUnderline(0.1f, -2f);
+		if (underline) {
+			chunk.setUnderline(0.1f, -2f);
+		}
 		return chunk;
 	}
 	
