@@ -309,7 +309,10 @@
     "visit_site": "Visit Site",
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
+    "cohort": "Cohort",
     "surgical_path_no": "Surg Path Number",
+    "reason_for_missed_visit": "Reason for Missed Visit",
+    "comments": "Comments",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
 import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.COHORT;
 import static com.krishagni.catissueplus.core.common.PvAttributes.MISSED_VISIT_REASON;
 import static com.krishagni.catissueplus.core.common.PvAttributes.VISIT_STATUS;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
@@ -63,6 +64,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setActivityStatus(visitDetail, visit, ose);
 		setMissedReason(visitDetail, visit, ose);
 		setMissedBy(visitDetail, visit, ose);
+		setCohort(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
@@ -97,6 +99,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setSurgicalPathNo(detail, existing, visit, ose);
 		setMissedVisitReason(detail, existing, visit, ose);
 		setMissedBy(detail, existing, visit, ose);
+		setCohort(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
 
 		ose.checkAndThrow();
@@ -385,6 +388,24 @@ public class VisitFactoryImpl implements VisitFactory {
 			visit.setSurgicalPathologyNumber(detail.getSurgicalPathologyNumber());
 		} else {
 			visit.setSurgicalPathologyNumber(existing.getSurgicalPathologyNumber());
+		}
+	}
+	
+	private void setCohort(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
+		String cohort = visitDetail.getCohort();
+		if (!isValid(COHORT, cohort)) {
+			ose.addError(VisitErrorCode.INVALID_COHORT);
+			return;
+		}
+		
+		visit.setCohort(cohort);
+	}
+	
+	private void setCohort(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("cohort")) {
+			setCohort(detail, visit, ose);
+		} else {
+			visit.setCohort(existing.getCohort());
 		}
 	}
 }

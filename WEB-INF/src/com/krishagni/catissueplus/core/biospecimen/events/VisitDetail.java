@@ -59,6 +59,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private Date visitDate;
 	
 	private String code;
+	
+	private String cohort;
 
 	public Long getCprId() {
 		return cprId;
@@ -236,6 +238,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.missedBy = missedBy;
 	}
 
+	public String getCohort() {
+		return cohort;
+	}
+
+	public void setCohort(String cohort) {
+		this.cohort = cohort;
+	}
+
 	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
@@ -250,6 +260,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setSprLocked(visit.isSprLocked());
 		detail.setVisitDate(visit.getVisitDate());
 		detail.setMissedReason(visit.getMissedReason());
+		detail.setCohort(visit.getCohort());
 
 		if (visit.getMissedBy() != null) {
 			detail.setMissedBy(UserSummary.from(visit.getMissedBy()));

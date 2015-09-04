@@ -65,6 +65,15 @@
         </div>
       </div>
 
+      <div class="col-xs-4" ng-if="visit.status != 'Missed Collection' && (!!cohorts && cohorts.length > 0)">
+        <div class="form-group">
+          <os-select name="cohort" ng-model="visit.cohort" list="cohorts"
+            os-md-input placeholder="Cohort" required>
+          </os-select>
+          <div os-field-error field="visitForm.cohort"></div>
+        </div>
+      </div>
+
       <div class="col-xs-4" ng-if="visit.status != 'Missed Collection'">
         <div class="form-group">
           <input name="surgicalPathologyNo" ng-model="visit.surgicalPathologyNumber" 

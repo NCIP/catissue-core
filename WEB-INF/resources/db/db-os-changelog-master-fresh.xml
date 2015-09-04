@@ -27,5 +27,6 @@
 
   <include file="db/2.2/schema.xml"/>
   <include file="db/2.2/config.xml"/>
+  <include file="db/2.2/seed-data.xml"/>
   <include file="db/2.2/audit.xml"/>
 </databaseChangeLog> 

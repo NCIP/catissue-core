@@ -72,6 +72,8 @@ public class Visit {
 
 	private User missedBy;
 	
+	private String cohort;
+	
 	@Autowired
 	@Qualifier("visitNameGenerator")
 	private LabelGenerator labelGenerator;
@@ -244,6 +246,14 @@ public class Visit {
 		this.missedBy = missedBy;
 	}
 
+	public String getCohort() {
+		return cohort;
+	}
+
+	public void setCohort(String cohort) {
+		this.cohort = cohort;
+	}
+
 	public void setActive() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -307,6 +317,7 @@ public class Visit {
 		setMissedBy(isMissed() ? visit.getMissedBy() : null);
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
+		setCohort(visit.getCohort());
 	}
 
 	public void updateSprName(String sprName) {
