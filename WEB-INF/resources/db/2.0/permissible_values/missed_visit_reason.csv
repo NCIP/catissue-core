@@ -1,13 +1,10 @@
 IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
-"4141660082537375039",,,null,Previous excisional biopsy done,missed_visit_reason,null
-"4141660082537375040",,,null,Tumour too small (size less than 2cm or in-situ ca),missed_visit_reason,null
-"4141660082537375041",,,null,Not Malignant tissue,missed_visit_reason,null
-"4141660082537375042",,,null,No residual tumour after treatment,missed_visit_reason,null
-"4141660082537375043",,,null,Open and closed ops / Bypass ops,missed_visit_reason,null
-"4141660082537375044",,,null,OT surgeon forgot to page TRO,missed_visit_reason,null
-"4141660082537375045",,,null,Patient declined tissue donation,missed_visit_reason,null
-"4141660082537375046",,,null,No post ops consent taken within 3 months,missed_visit_reason,null
-"4141660082537375047",,,null,Late Case,missed_visit_reason,null
-"4141660082537375048",,,null,Specimen sent to Frozen Section,missed_visit_reason,null
-"4141660082537375049",,,null,No Pre-Op consent,missed_visit_reason,null
-"4141660082537375050",,,null,Other reasons,missed_visit_reason,null
+"4141660082537375039",,,null,Beyond processing time,missed_visit_reason,null
+"4141660082537375040",,,null,Insufficient sample collected / available,missed_visit_reason,null
+"4141660082537375041",,,null,Poor sample quality,missed_visit_reason,null
+"4141660082537375042",,,null,Laboratory error,missed_visit_reason,null
+"4141660082537375043",,,null,Sample not collected by clinic / Clinic error,missed_visit_reason,null
+"4141660082537375044",,,null,Patient declined consent,missed_visit_reason,null
+"4141660082537375045",,,null,Patient declined collection,missed_visit_reason,null
+"4141660082537375046",,,null,Sample damaged,missed_visit_reason,null
+"4141660082537375047",,,null,Visit cancelled,missed_visit_reason,null
