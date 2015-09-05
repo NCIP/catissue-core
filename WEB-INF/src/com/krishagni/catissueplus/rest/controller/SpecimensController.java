@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -54,6 +55,9 @@ public class SpecimensController {
 	
 	@Autowired
 	private FormService formSvc;
+	
+	@Autowired
+	private DistributionOrderService distributionService;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -83,6 +87,9 @@ public class SpecimensController {
 			@RequestParam(value = "visitId", required = false) 
 			Long visitId,
 			
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
 			@RequestParam(value = "label", required = false)
 			List<String> labels) {
 				
@@ -96,7 +103,16 @@ public class SpecimensController {
 			resp.throwErrorIfUnsuccessful();
 			return resp.getPayload();			
 		} else if (CollectionUtils.isNotEmpty(labels)) {
-			ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.getSpecimens(getRequest(labels));
+			ResponseEvent<List<SpecimenInfo>> resp = null;
+			if (dpId != null) {
+				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
+				crit.setDpId(dpId);
+				crit.setLabels(labels);
+				resp = distributionService.getSpecimens(getRequest(crit));
+			} else {
+				resp = specimenSvc.getSpecimens(getRequest(labels));
+			}
+			
 			resp.throwErrorIfUnsuccessful();
 			return resp.getPayload();
 		} else {

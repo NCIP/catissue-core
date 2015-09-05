@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,8 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
@@ -132,18 +135,34 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Long> getSpecimenInstitutes(Set<Long> specimenIds) {		
-		List<Object[]> rows = getSessionFactory().getCurrentSession()
-				.getNamedQuery(GET_SPECIMEN_INSTITUTE_IDS)
-				.setParameterList("specimenIds", specimenIds)
-				.list();
+	public Map<String, Set<Long>> getSpecimenSites(Set<Long> specimenIds) {
+		Criteria query = getSessionFactory().getCurrentSession().createCriteria(Specimen.class)
+				.createAlias("visit", "visit")
+				.createAlias("visit.registration", "cpr")
+				.createAlias("cpr.collectionProtocol", "cp")
+				.createAlias("cp.repositories", "site");
 		
-		Map<String, Long> result = new HashMap<String, Long>();
-		for (Object[] row : rows) {
-			result.put((String)row[0], (Long)row[1]);
+		ProjectionList projs = Projections.projectionList();
+		query.setProjection(projs);
+		projs.add(Projections.property("label"));
+		projs.add(Projections.property("site.id"));
+		query.add(Restrictions.in("id", specimenIds));
+		
+		List<Object []> rows = query.list();
+		Map<String, Set<Long>> results = new HashMap<String, Set<Long>>();
+		for (Object[] row: rows) {
+			String label = (String)row[0];
+			Long siteId = (Long)row[1];
+			Set<Long> siteIds = results.get(label);
+			if (siteIds == null) {
+				siteIds = new HashSet<Long>();
+				results.put(label, siteIds);
+			}
+			
+			siteIds.add(siteId);
 		}
 		
-		return result;
+		return results;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -200,7 +219,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		query.add(cpSitesCond);
 	}
-			
 	private static final String FQN = Specimen.class.getName();
 	
 	private static final String GET_BY_LABEL = FQN + ".getByLabel";
@@ -214,8 +232,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 	
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
-	
-	private static final String GET_SPECIMEN_INSTITUTE_IDS = FQN + ".getSpecimenInstituteIds";
 
 	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
 

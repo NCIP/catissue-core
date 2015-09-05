@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -29,6 +30,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectAccess;
@@ -119,6 +121,17 @@ public class AccessCtrlMgr {
 		User user = AuthUtil.getCurrentUser();
 		Operation[] ops = {Operation.CREATE, Operation.UPDATE};
 		if (!canUserPerformOp(user.getId(), Resource.ORDER, ops)) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+	
+	public void ensureReadDPRights(DistributionProtocol dp) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		if (CollectionUtils.intersection(userSites, dp.getDistributingSites()).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -580,18 +593,43 @@ public class AccessCtrlMgr {
 	//          Distribution order access control helper methods                        //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
-	public Set<Long> getReadAccessDistributionOrderInstitutes() {
+	
+	public Set<Long> getReadAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
-
-		Set<Site> sites = getSites(Resource.ORDER, Operation.READ);
-		Set<Long> result = new HashSet<Long>();
-		for (Site site : sites) {
-			result.add(site.getInstitute().getId());
+		
+		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, Operation.READ), "id", true);
+	}
+	
+	public boolean canCreateUpdateDistributionOrder() {
+		if (AuthUtil.isAdmin()) {
+			return true;
 		}
-
-		return result;
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		return canUserPerformOp(userId, Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
+	}
+	
+	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Set<Long> getDistributionOrderAllowedSites(DistributionProtocol dp) {
+		Set<Site> allowedSites = null;
+		if (AuthUtil.isAdmin()) {
+			allowedSites = dp.getDistributingSites();
+		} else {
+			Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getDistributingSites()));
+		}
+		
+		return Utility.<Set<Long>>collect(allowedSites, "id", true);
 	}
 
 	public void ensureCreateDistributionOrderRights(DistributionOrder order) {
@@ -609,40 +647,16 @@ public class AccessCtrlMgr {
 	public void ensureDeleteDistributionOrderRights(DistributionOrder order) {
 		ensureDistributionOrderObjectRights(order, Operation.DELETE);
 	}
-
-	private void ensureDistributionOrderObjectRights(DistributionOrder order, Operation op) {
+	
+	private void ensureDistributionOrderObjectRights(DistributionOrder order, Operation operation) {
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
-
-		Long userId = AuthUtil.getCurrentUser().getId();
-		String resource = Resource.ORDER.getName();
-		String[] ops = {op.getName()};
-
-		boolean allowed = false;
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
-		if (accessList.isEmpty()) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
-		}
-
-		Institute orderInstitute = order.getInstitute();
-		for (SubjectAccess access : accessList) {
-			Site accessSite = access.getSite();
-			if (accessSite != null && accessSite.getInstitute().equals(orderInstitute)) { // Specific site institute
-				allowed = true;
-			} else if (accessSite == null) { // user institute
-				Institute userInstitute = getUserInstitute(userId);
-				if (userInstitute.equals(orderInstitute)) {
-					allowed = true;
-				}
-			}
-
-			if (allowed) {
-				break;
-			}
-		}
-
-		if (!allowed) {
+		
+		if (CollectionUtils.intersection(
+				getSites(Resource.ORDER, operation),
+				order.getDistributionProtocol().getDistributingSites()).isEmpty()) {
+			
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -691,12 +705,19 @@ public class AccessCtrlMgr {
 
 		return results;
 	}
+	
+	public Set<Site> getSites(Resource resource, Operation op) {
+		return getSites(resource, new Operation[]{op});
+	}
 
-	public Set<Site> getSites(Resource resource, Operation operation) {
+	public Set<Site> getSites(Resource resource, Operation[] operations) {
 		User user = AuthUtil.getCurrentUser();
-		String[] ops = {operation.getName()};
+		String[] ops = new String[operations.length];
+		for(int i = 0; i < operations.length; i++ ) {
+			ops[i] = operations[i].getName();
+		}
+		
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(user.getId(), resource.getName(), ops);
-
 		Set<Site> results = new HashSet<Site>();
 		boolean allSites = false;
 		for (SubjectAccess access : accessList) {
@@ -715,7 +736,7 @@ public class AccessCtrlMgr {
 
 		return results;
 	}
-
+	
 	public Set<Long> getEligibleCpIds(String resource, String op, List<String> siteNames) {
 		if (AuthUtil.isAdmin()) {
 			return null;

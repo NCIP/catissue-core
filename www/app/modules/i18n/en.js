@@ -81,7 +81,8 @@
       "clear_filters": "Clear Filters",
       "close": "Close",
       "upload": "Upload",
-      "reset_password": "Reset Password"
+      "reset_password": "Reset Password",
+      "add_new": "Add New"
     }
   },
 
@@ -636,7 +637,14 @@
     "irb_id": "IRB ID",
     "description_url": "Description URL",
     "institute": "Institute",
+    "sites": "Sites",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
+    "closed": "Closed",
+    "confirm_close_title": "Closing {{shortTitle}} confirmation",
+    "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -655,11 +663,14 @@
       "filter_title": "Filters",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
-      "pi": "Select Principal Investigator"
+      "pi": "Select Principal Investigator",
+      "activity_status": "Activity Status"
     },
 
     "menu_options": {
-      "delete": "Delete"
+      "delete": "Delete",
+      "close": "Close",
+      "reopen": "Reopen"
     }
   },
 
@@ -1250,6 +1261,7 @@
      "dist_date": "Distribution Date",
      "creation_date": "Creation Date",
      "tracking_url": "Tracking URL",
+     "receiving_institute": "Receiving Institute",
      "receiving_site": "Receiving Site",
      "execution_date": "Execution Date",
      "courier_tracking_url": "Courier Tracking URL",

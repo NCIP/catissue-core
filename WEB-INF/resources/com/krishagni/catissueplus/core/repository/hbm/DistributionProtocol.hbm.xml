@@ -15,6 +15,11 @@
       name="institute"
       class="com.krishagni.catissueplus.core.administrative.domain.Institute"
       column="INSTITUTE_ID"/>
+      
+    <many-to-one
+      name="defReceivingSite"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="DEF_RECEIVING_SITE_ID"/>
 
     <many-to-one
       name="principalInvestigator"
@@ -42,6 +47,11 @@
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
       <filter name="activeEntity"/>
+    </set>
+    
+    <set name="distributingSites" table="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <many-to-many column="SITE_ID" class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
     </set>
     
     <filter name="activeEntity"/>

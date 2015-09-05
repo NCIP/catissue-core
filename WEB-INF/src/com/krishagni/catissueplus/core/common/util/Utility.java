@@ -10,18 +10,22 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanToPropertyValueTransformer;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
+
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
@@ -185,6 +189,20 @@ public class Utility {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T collect(Collection<?> collection, String propertyName, boolean returnSet) {
+		Collection<?> result = CollectionUtils.collect(collection, new BeanToPropertyValueTransformer(propertyName));
+		if (returnSet) {
+			return (T) new HashSet(result);
+		}
+		
+		return (T) result;
+	}
+	
+	public static <T> T collect(Collection<?> collection, String propertyName) {
+		return collect(collection, propertyName, false);
 	}
 
 }

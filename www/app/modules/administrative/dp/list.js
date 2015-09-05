@@ -1,11 +1,12 @@
 
 angular.module('os.administrative.dp.list', ['os.administrative.models'])
-  .controller('DpListCtrl', function($scope, $state, DistributionProtocol, Util) {
+  .controller('DpListCtrl', function($scope, $state, DistributionProtocol, Util, PvManager) {
 
     function init() {
       $scope.dpFilterOpts = {includeStats: true};
       loadDps($scope.dpFilterOpts);
       Util.filter($scope, 'dpFilterOpts', filter);
+      loadActivityStatuses();
     }
     
     function loadDps(filterOpts) {
@@ -29,6 +30,19 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
     $scope.showDpOverview = function(distributionProtocol) {
       $state.go('dp-detail.overview', {dpId:distributionProtocol.id});
     };
+    
+    function loadActivityStatuses () {
+      PvManager.loadPvs('activity-status').then(
+        function (result) {
+          $scope.activityStatuses = [];
+          angular.forEach(result, function (status) {
+            if (status != 'Disabled' && status != 'Pending') {
+              $scope.activityStatuses.push(status);
+            }
+          });
+        }
+      );
+    }
 
     init();
   });

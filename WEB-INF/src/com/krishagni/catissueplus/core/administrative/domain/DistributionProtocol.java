@@ -19,6 +19,8 @@ public class DistributionProtocol {
 	private Long id;
 	
 	private Institute institute;
+	
+	private Site defReceivingSite;
 
 	private User principalInvestigator;
 
@@ -38,6 +40,8 @@ public class DistributionProtocol {
 	
 	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 	
+	private Set<Site> distributingSites = new HashSet<Site>();
+	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -56,6 +60,14 @@ public class DistributionProtocol {
 
 	public void setInstitute(Institute institute) {
 		this.institute = institute;
+	}
+	
+	public Site getDefReceivingSite() {
+		return defReceivingSite;
+	}
+	
+	public void setDefReceivingSite(Site defReceivingSite) {
+		this.defReceivingSite = defReceivingSite;
 	}
 
 	public User getPrincipalInvestigator() {
@@ -129,6 +141,14 @@ public class DistributionProtocol {
 	public void setDistributionOrders(Set<DistributionOrder> distributionOrders) {
 		this.distributionOrders = distributionOrders;
 	}
+	
+	public Set<Site> getDistributingSites() {
+		return distributingSites;
+	}
+	
+	public void setDistributingSites(Set<Site> distributingSites) {
+		this.distributingSites = distributingSites;
+	}
 
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
@@ -141,11 +161,13 @@ public class DistributionProtocol {
 		}
 		setIrbId(distributionProtocol.getIrbId());
 		setInstitute(distributionProtocol.getInstitute());
+		setDefReceivingSite(distributionProtocol.getDefReceivingSite());
 		setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
 		setStartDate(distributionProtocol.getStartDate());
 		setEndDate(distributionProtocol.getEndDate());
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
+		setDistributingSites(distributionProtocol.getDistributingSites());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {

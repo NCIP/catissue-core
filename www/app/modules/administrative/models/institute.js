@@ -55,6 +55,14 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
         }
       );
     }
+    
+    Institute.getNames = function (institutes) {
+      return institutes.map(
+        function (institute) {
+          return institute.name;
+        }
+      );
+    };
 
     return Institute;
   });

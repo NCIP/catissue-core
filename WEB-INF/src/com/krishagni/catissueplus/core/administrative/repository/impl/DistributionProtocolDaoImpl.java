@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -95,6 +96,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		addPiCondition(query, crit);
 		addInstCondition(query, crit);
+		addDistSitesCondition(query, crit);
+		addActivityStatusCondition(query, crit);
 	}
 	
 	private void addPiCondition(Criteria query, DpListCriteria crit) {
@@ -113,6 +116,26 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		}
 		
 		query.add(Restrictions.eq("institute.id", instituteId));
+	}
+	
+	private void addDistSitesCondition(Criteria query, DpListCriteria crit) {
+		Set<Long> siteIds = crit.siteIds();
+		if (CollectionUtils.isEmpty(siteIds)) {
+			return;
+		}
+		
+		query.createAlias("distributingSites", "distSite")
+			.add(Restrictions.in("distSite.id", siteIds));
+		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+	}
+	
+	private void addActivityStatusCondition(Criteria query, DpListCriteria crit) {
+		String activityStatus = crit.activityStatus();
+		if (StringUtils.isBlank(activityStatus)) {
+			return;
+		}
+		
+		query.add(Restrictions.eq("activityStatus", activityStatus));
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();
