@@ -120,10 +120,10 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/participants")
+	@RequestMapping(method = RequestMethod.GET, value = "/cprs")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<CprSummary> getParticipants(
+	public List<CprSummary> getRegistrations(
 
 			@RequestParam(value = "ppid", required = false)
 			String ppid,

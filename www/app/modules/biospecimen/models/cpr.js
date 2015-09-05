@@ -85,7 +85,7 @@ angular.module('os.biospecimen.models.cpr',
 
 
     CollectionProtocolRegistration.getParticipants = function(params) {
-      var url = CollectionProtocolRegistration.url() + "/participants"
+      var url = CollectionProtocolRegistration.url() + "/cprs"
       return $http.get(url, {params: params}).then(function(result) {return result.data;});
     }
 
