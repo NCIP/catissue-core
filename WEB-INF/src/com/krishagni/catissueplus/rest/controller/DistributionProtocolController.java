@@ -1,9 +1,14 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+
+import edu.common.dynamicextensions.nutility.IoUtil;
 
 @Controller
 @RequestMapping("/distribution-protocols")
@@ -120,5 +128,43 @@ public class DistributionProtocolController {
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/history")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<DistributionOrderDetail> getDpHistory (@PathVariable Long id) {
+		ResponseEvent<List<DistributionOrderDetail>> resp = dpSvc.getDpHistory(new RequestEvent<Long>(id));
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/export")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public void exportHistory (@PathVariable Long id, 
+			@RequestParam(value = "filename", required = false, defaultValue = "dp-history.csv")
+			String filename,
+	
+			HttpServletResponse response) {
+		
+		File file = response(dpSvc.exportHistory(new RequestEvent<Long>(id)));
+		
+		response.setContentType("text/csv;");
+		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
+		
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			IoUtil.copy(in, response.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IoUtil.close(in);
+		}
+	}
+	
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 }
