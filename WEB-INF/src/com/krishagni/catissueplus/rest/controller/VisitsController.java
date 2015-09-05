@@ -67,8 +67,11 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<VisitSummary> getVisits(
-			@RequestParam(value = "cprId", required = true) Long cprId,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+		@RequestParam(value = "cprId", required = true) 
+		Long cprId,
+		
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
+		boolean includeStats) {
 		
 		VisitsListCriteria crit = new VisitsListCriteria()
 			.cprId(cprId)
@@ -100,7 +103,13 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
+	public VisitDetail updateVisit(
+		@PathVariable("id") 
+		Long visitId, 
+		
+		@RequestBody 
+		VisitDetail visit) {
+
 		visit.setId(visitId);
 		
 		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
@@ -111,7 +120,12 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String uploadSprFile(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
+	public String uploadSprFile(
+		@PathVariable("id") 
+		Long visitId, 
+		
+		@PathVariable("file") 
+		MultipartFile file)
 	throws IOException {
 		ResponseEvent<String> resp = null;
 		InputStream inputStream = null;
@@ -135,10 +149,14 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public void downloadSpr(
-			@PathVariable("id") Long visitId,
-			@RequestParam(value = "type", required = false, defaultValue="text") String type,
-			HttpServletResponse httpResp
-			)throws IOException {
+		@PathVariable("id") 
+		Long visitId,
+		
+		@RequestParam(value = "type", required = false, defaultValue="text") 
+		String type,
+		
+		HttpServletResponse httpResp)
+	throws IOException {
 		FileType fileType = FileType.fromType(type);
 		if (fileType == null) {
 			fileType = FileType.TEXT;
@@ -239,11 +257,11 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public EntityFormRecords getFormRecords(
-			@PathVariable("id") 
-			Long visitId,
+		@PathVariable("id") 
+		Long visitId,
 			
-			@PathVariable("formCtxtId") 
-			Long formCtxtId) {
+		@PathVariable("formCtxtId") 
+		Long formCtxtId) {
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(visitId);
