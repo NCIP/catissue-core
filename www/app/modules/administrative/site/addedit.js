@@ -32,7 +32,8 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
     }
 
     $scope.save = function() {
-      if (!$scope.deFormCtrl.ctrl.validate()) {
+      var formCtrl = $scope.deFormCtrl.ctrl;
+      if (!!formCtrl && !formCtrl.validate()) {
         return;
       }
       var site = angular.copy($scope.site);
