@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class SprRequestDetail {
+import com.krishagni.catissueplus.core.common.events.FileType;
+
+public class SprFileDownloadDetail {
 	
 	private Long visitId;
 	

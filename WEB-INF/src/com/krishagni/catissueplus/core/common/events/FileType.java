@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.biospecimen.events;
+package com.krishagni.catissueplus.core.common.events;
 
 public enum FileType {
 	TEXT("text"),

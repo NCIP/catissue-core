@@ -22,10 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.FileType;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SprRequestDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -34,6 +33,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.FileType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -135,18 +135,15 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public void downloadSpr(
-			@PathVariable("id")
-			Long visitId,
-			
-			@RequestParam(value = "type", required = false, defaultValue="text") 
-			String type,
-			
-			HttpServletResponse httpResp)throws IOException {
+			@PathVariable("id") Long visitId,
+			@RequestParam(value = "type", required = false, defaultValue="text") String type,
+			HttpServletResponse httpResp
+			)throws IOException {
 		FileType fileType = FileType.fromType(type);
 		if (fileType == null) {
 			fileType = FileType.TEXT;
 		}
-		SprRequestDetail sprReqDetail = new SprRequestDetail();
+		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
 		sprReqDetail.setVisitId(visitId);
 		sprReqDetail.setType(fileType);
 		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
@@ -159,7 +156,7 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String getSprText(@PathVariable("id") Long visitId) {
-		SprRequestDetail sprReqDetail = new SprRequestDetail();
+		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
 		sprReqDetail.setVisitId(visitId);
 		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();

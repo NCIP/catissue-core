@@ -10,8 +10,8 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -95,15 +95,11 @@ public class Utility {
 		return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);		
 	}
 	
-	public static String stringListToCsv(List<String> elements) {
+	public static String stringListToCsv(Collection<String> elements) {
 		return stringListToCsv(elements.toArray(new String[0]), true);
 	}
-	
-	public static String stringListToCsv(Set<String> elements) {
-		return stringListToCsv(elements.toArray(new String[0]), true);
-	}
-	
-	public static String stringListToCsv(Set<String> elements, boolean quotechar) {
+		
+	public static String stringListToCsv(Collection<String> elements, boolean quotechar) {
 		return stringListToCsv(elements.toArray(new String[0]), quotechar);
 	}
 	
