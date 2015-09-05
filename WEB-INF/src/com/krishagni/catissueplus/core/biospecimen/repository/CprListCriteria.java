@@ -23,6 +23,8 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	
 	private Set<Long> siteIds;
 
+	private String uid;
+
 	@Override
 	public CprListCriteria self() {
 		return this;
@@ -86,7 +88,17 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 		this.specimen = specimen;
 		return self();
 	}
-	
+
+	public String uid() {
+		return uid;
+	}
+
+	public CprListCriteria uid(String uid) {
+		this.uid = uid;
+		return self();
+	}
+
+
 	public String specimen() {
 		return specimen;
 	}

@@ -115,5 +115,10 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return $http.put(url, {locked: lock}).then(function(result) { return result.data; });
     };
 
+    Visit.getByName = function(visitName) {
+      var url = Visit.url() + visitName + '/name'
+      return $http.get(url).then(function(result) { return result.data; });
+    };
+
     return Visit;
   });

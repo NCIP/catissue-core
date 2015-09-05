@@ -239,6 +239,7 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
+    "search_results": "Participant Search Results",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -1359,6 +1360,10 @@
        "FAILED": "Failed",
        "IN_PROGRESS": "In Progress"
      }
+   },
+
+   "search": {
+     "error": "{{component}} with the given id {{id}} is not found."
    }
 
 }

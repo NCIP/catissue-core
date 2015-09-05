@@ -120,6 +120,31 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/participants")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<CprSummary> getParticipants(
+
+			@RequestParam(value = "ppid", required = false)
+			String ppid,
+
+			@RequestParam(value = "uid", required = false)
+			String uid,
+
+			@RequestParam(value = "exactMatch", required = false, defaultValue = "true")
+			Boolean exactMatch) {
+
+		CprListCriteria crit = new CprListCriteria()
+				.ppid(ppid)
+				.uid(uid)
+				.exactMatch(exactMatch)
+				.includePhi(true);
+
+		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

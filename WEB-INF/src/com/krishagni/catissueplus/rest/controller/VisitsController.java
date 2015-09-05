@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,6 +82,15 @@ public class VisitsController {
 	@ResponseBody
 	public VisitDetail getVisit(@PathVariable("id") Long visitId) {
 		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/{name}/name")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail getVisitByName(@PathVariable("name") String visitName) {
+		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitName));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -263,7 +271,11 @@ public class VisitsController {
 	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(Long visitId) {
 		return getRequest(new EntityQueryCriteria(visitId));		
 	}
-	
+
+	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(String visitName) {
+		return getRequest(new EntityQueryCriteria(visitName));
+	}
+
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);				
 	}

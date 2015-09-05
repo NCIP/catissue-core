@@ -13,6 +13,7 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.addvisit',
     'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.participant.consents',
+    'os.biospecimen.participant.searchresult',
     'os.biospecimen.visit',
     'os.biospecimen.specimen',
     'os.biospecimen.extensions.list',
@@ -186,5 +187,11 @@ angular.module('os.biospecimen.participant',
           return CpConfigSvc.getBulkRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         parent: 'participant-root'
+      })
+      .state('participant-search', {
+        url: '/participant-search',
+        templateUrl: 'modules/biospecimen/participant/search-result.html',
+        controller: 'ParticipantSearch',
+        parent: 'cp-view'
       });
   });

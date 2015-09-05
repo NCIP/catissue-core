@@ -83,5 +83,11 @@ angular.module('os.biospecimen.models.cpr',
       return $http.get(url).then(function(result) {return result.data;});
     }
 
+
+    CollectionProtocolRegistration.getParticipants = function(params) {
+      var url = CollectionProtocolRegistration.url() + "/participants"
+      return $http.get(url, {params: params}).then(function(result) {return result.data;});
+    }
+
     return CollectionProtocolRegistration;
   });
