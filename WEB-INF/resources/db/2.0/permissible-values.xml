@@ -4,104 +4,378 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-		
+
   <changeSet id="Loading permissible values for attribute: clinical status" author="vratnaparkhi">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003988'
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/clinical-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: collection procedure" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003996'
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/collection-procedure.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: collection status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2004300'
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/collection-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: container" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003997'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/container.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: embedding medium" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003999'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/embedding-medium.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: ethnicity" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Ethnicity_PID'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/ethnicity.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: fixation type" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003995'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/fixation-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: gender" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003989'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/gender.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: genotype" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003990'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/genotype.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: histological quality" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Hist_Quality'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/histological-quality.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: method" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003998'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/method.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: pathological status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003993'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/pathological-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: race" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Race_PID'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/race.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: received quality" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003994'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/received-quality.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: requested items status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '4285'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/requested-items-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: request status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '4284'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/request-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: site type" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Site_Type_PID'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/site-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: tissue side" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003992'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/tissue-side.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: tissue site" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Tissue_Site_PID'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/tissue-site.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: vital status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2004001'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/vital-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2003991'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/specimen-class-and-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: scg collection status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'scg_collection_status'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/scg-collection-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: order status" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'order_status'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/order-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: missed visit reason" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'missed_visit_reason'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/missed-visit-reason.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: consent response" author="vratnaparkhi">
+      <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'consent_response'  
+      </sqlCheck>
+    </preConditions>
     <loadData file="db/2.0/permissible-values/consent-response.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
