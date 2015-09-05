@@ -211,9 +211,8 @@ public class VisitServiceImpl implements VisitService {
 			}
 			
 			if (detail.getType() != null && detail.getType().equals(FileType.PDF)) {
-				Map<String, Object> contextMap = new HashMap<String, Object>();
-				contextMap.put("visit", visit);
-				file = sprText2PdfGenerator.generate(file, contextMap);
+				Map<String, Object> props = Collections.<String, Object>singletonMap("visit", visit);
+				file = sprText2PdfGenerator.generate(file, props);
 				fileName = fileName.split("\\.")[0] + ".pdf";
 			}
 
