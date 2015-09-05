@@ -90,8 +90,9 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       return Form.listRecords(url);
     };
 
-    Visit.prototype.getSprFileUrl = function() {
-      return Visit.url() + this.$id() + '/spr-file';
+    Visit.prototype.getSprFileUrl = function(pdf) {
+      var param = !!pdf ? '?type=pdf' : '';
+      return Visit.url() + this.$id() + '/spr-file' + param;
     };
 
     Visit.prototype.getSprTextUrl = function() {

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,14 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.biospecimen.services.SprPdfGenerator;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -32,6 +35,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.FileType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
@@ -50,6 +54,8 @@ public class VisitServiceImpl implements VisitService {
 	private ConfigurationService cfgSvc;
 	
 	private LabelGenerator visitNameGenerator;
+	
+	private SprPdfGenerator sprText2PdfGenerator;
 	
 	private static String defaultVisitSprDir;
 	
@@ -72,6 +78,10 @@ public class VisitServiceImpl implements VisitService {
 	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
 		this.visitNameGenerator = visitNameGenerator;
 	}
+	
+	public void setSprText2PdfGenerator(SprPdfGenerator sprText2PdfGenerator) {
+		this.sprText2PdfGenerator = sprText2PdfGenerator;
+	}	
 
 	@Override
 	@PlusTransactional
@@ -183,10 +193,10 @@ public class VisitServiceImpl implements VisitService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<EntityQueryCriteria> req) {
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprFileDownloadDetail> req) {
 		try {
-			EntityQueryCriteria crit = req.getPayload();
-			Visit visit = getVisit(crit.getId(), crit.getName());
+			SprFileDownloadDetail detail = req.getPayload();
+			Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
 			
 			AccessCtrlMgr.getInstance().ensureReadSprRights(visit);
 		
@@ -199,17 +209,24 @@ public class VisitServiceImpl implements VisitService {
 			if (!file.exists()) {
 				return ResponseEvent.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
-			FileDetail detail = new FileDetail();
-			detail.setFile(file);
-			detail.setFileName(fileName);
-			return ResponseEvent.response(detail);
+			
+			if (detail.getType() != null && detail.getType().equals(FileType.PDF)) {
+				Map<String, Object> props = Collections.<String, Object>singletonMap("visit", visit);
+				file = sprText2PdfGenerator.generate(file, props);
+				fileName = fileName.split("\\.")[0] + ".pdf";
+			}
+
+			FileDetail fileDetail = new FileDetail();
+			fileDetail.setFile(file);
+			fileDetail.setFileName(fileName);
+			return ResponseEvent.response(fileDetail);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req) {
@@ -462,5 +479,4 @@ public class VisitServiceImpl implements VisitService {
 		
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSprRights(visit);
 	}
-
 }

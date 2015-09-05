@@ -98,15 +98,27 @@ public class Utility {
 		return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);		
 	}
 	
-	public static String stringListToCsv(List<String> elements) {
-		return stringListToCsv(elements.toArray(new String[0]));
+	public static String stringListToCsv(Collection<String> elements) {
+		return stringListToCsv(elements.toArray(new String[0]), true);
+	}
+		
+	public static String stringListToCsv(Collection<String> elements, boolean quotechar) {
+		return stringListToCsv(elements.toArray(new String[0]), quotechar);
 	}
 	
 	public static String stringListToCsv(String[] elements) {
+		return stringListToCsv(elements, true);
+	}
+	
+	public static String stringListToCsv(String[] elements, boolean quotechar) {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = null;
 		try {
-			csvWriter = new CSVWriter(writer);
+			if (quotechar) {
+				csvWriter = new CSVWriter(writer);
+			} else {
+				csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+			}
 			csvWriter.writeNext(elements);
 			csvWriter.flush();
 			return writer.toString();
@@ -147,6 +159,7 @@ public class Utility {
 		FileNameMap contentTypesMap = URLConnection.getFileNameMap();
 		return contentTypesMap.getContentTypeFor(file.getAbsolutePath());
 	}
+	
 	
 	public static String getFileText(File file) {
 		FileInputStream in = null;
@@ -203,6 +216,29 @@ public class Utility {
 	
 	public static <T> T collect(Collection<?> collection, String propertyName) {
 		return collect(collection, propertyName, false);
+    }
+
+	public static Integer getAge(Date birthDate) {
+		if (birthDate == null) {
+			return null;
+		}
+		
+		Calendar currentDate = Calendar.getInstance();
+		Calendar dob = Calendar.getInstance();
+		dob.setTime(birthDate);
+
+		int currentYear = currentDate.get(Calendar.YEAR);
+		int birthYear = dob.get(Calendar.YEAR);
+		int age = currentYear - birthYear;
+		
+		int currentMonth = currentDate.get(Calendar.MONTH);
+		int birthMonth = dob.get(Calendar.MONTH);
+		if (currentMonth < birthMonth  ||
+				(currentMonth == birthMonth && currentDate.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))) {
+		  age--;
+		}
+		
+		return age;
 	}
 
 }
