@@ -6,107 +6,103 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 		
   <changeSet id="Loading permissible values for attribute: clinical status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/clinical_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/clinical-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: collection procedure" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/collection_procedure.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/collection-procedure.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: collection status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/collection_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/collection-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: container" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/container.csv" tableName="catissue_permissible_value">
-    </loadData>
-  </changeSet>
-  <changeSet id="Loading permissible values for attribute: countries" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/countries.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/container.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: embedding medium" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/embedding_medium.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/embedding-medium.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: ethnicity" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/ethnicity.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/ethnicity.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: fixation type" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/fixation_type.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/fixation-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: gender" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/gender.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/gender.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: genotype" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/genotype.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/genotype.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: histological quality" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/histological_quality.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/histological-quality.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: method" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/method.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/method.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: pathological status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/pathological_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/pathological-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: race" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/race.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/race.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: received quality" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/received_quality.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/received-quality.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: requested items status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/requested_items_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/requested-items-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: request status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/request_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/request-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: site type" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/site_type.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/site-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: tissue side" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/tissue_side.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/tissue-side.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: tissue site" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/tissue_site.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/tissue-site.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: vital status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/vital_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/vital-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/specimen_class_and_type.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/specimen-class-and-type.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: scg collection status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/scg_collection_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/scg-collection-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: order status" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/order_status.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/order-status.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: missed visit reason" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/missed_visit_reason.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/missed-visit-reason.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
   <changeSet id="Loading permissible values for attribute: consent response" author="vratnaparkhi">
-    <loadData file="db/2.0/permissible_values/consent_response.csv" tableName="catissue_permissible_value">
+    <loadData file="db/2.0/permissible-values/consent-response.csv" tableName="catissue_permissible_value">
     </loadData>
   </changeSet>
 </databaseChangeLog>
