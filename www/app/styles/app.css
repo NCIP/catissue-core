@@ -383,12 +383,15 @@ h4 + .btn-group {
   color: white;
 }
 
-.os-table-body .row .col.col-xs-1.os-more-options {
+.os-table-body .row .col.os-more-options {
   position: relative;
   text-align: center;
   padding: 0px!important;
   overflow: visible;
   top: 0px!important;
+}
+
+.os-table-body .row .col.col-xs-1.os-more-options {
   width: 8.33333333%!important;
 }
 
@@ -569,6 +572,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   font-size: 12px;
   padding-top: 5px;
   letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .os-key-values .item .key, .os-key-values .item .value {
@@ -646,7 +650,10 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-section {
   margin-bottom: 20px;
 }
-  
+
+.os-line-section .os-btn-section-collapse {
+  padding-top: 3px;
+} 
 
 .btn-xs.os-btn-icon {
   padding: 0px 4px!important;
@@ -1017,3 +1024,4 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #333;
   font-weight: normal;
 }
+

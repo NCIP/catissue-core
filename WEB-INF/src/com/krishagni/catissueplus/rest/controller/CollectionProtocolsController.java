@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,10 @@ import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
 
@@ -53,6 +58,9 @@ public class CollectionProtocolsController {
 
 	@Autowired
 	private CollectionProtocolService cpSvc;
+	
+	@Autowired
+	private FormService formSvc;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -332,6 +340,20 @@ public class CollectionProtocolsController {
 		
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public FormCtxtSummary getForm() {
+		ListEntityFormsOp op = new ListEntityFormsOp();
+		op.setEntityType(EntityType.CP_EXTN); 
+        
+		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
 	}
 	
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {

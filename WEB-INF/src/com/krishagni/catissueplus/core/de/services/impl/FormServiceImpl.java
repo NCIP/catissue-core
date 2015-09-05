@@ -268,6 +268,14 @@ public class FormServiceImpl implements FormService {
 			    	AccessCtrlMgr.getInstance().ensureReadSpecimenRights(entityId);
 			    	forms = formDao.getSpecimenEventForms(opDetail.getEntityId());
 			    	break;	
+			    	
+			    case SITE_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "SiteExtension");
+			    	break;
+			    	
+			    case CP_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "CollectionProtocolExtension");
+			    	break;
 			}
 			
 			return ResponseEvent.response(forms);			
@@ -294,7 +302,7 @@ public class FormServiceImpl implements FormService {
 		
 		return ResponseEvent.response(result);
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req) {

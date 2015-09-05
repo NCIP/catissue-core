@@ -72,11 +72,6 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
       column="REQ_SPECIMEN_ID" />
 
-    <set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER" inverse="true" cascade="all-delete-orphan">
-      <key column="SPECIMEN_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ExternalIdentifier" />
-    </set>
-    
     <set 
       name="specimenLists" 
       table="CATISSUE_SPEC_TAG_ITEMS"

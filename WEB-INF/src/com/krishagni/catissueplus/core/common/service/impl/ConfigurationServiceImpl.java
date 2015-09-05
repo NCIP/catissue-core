@@ -19,6 +19,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.PluginManager;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
@@ -263,7 +264,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getAppProps() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("plugin.custom_module",  appProps.getProperty("plugin.custom_module"));
+		props.put("plugins",               PluginManager.getInstance().getPluginNames());
 		props.put("build_version",         appProps.getProperty("buildinfo.version"));
 		props.put("build_date",            appProps.getProperty("buildinfo.date"));
 		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));

@@ -192,6 +192,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
+			cp.addOrUpdateExtension();
 			
 			//Assign default roles to PI and Coordinators
 			addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
@@ -237,6 +238,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			Collection<User> removedCoord = CollectionUtils.subtract(existingCp.getCoordinators(), cp.getCoordinators());
 			
 			existingCp.update(cp);
+			existingCp.addOrUpdateExtension();
 			
 			// PI role handling
 			if (piChanged) {

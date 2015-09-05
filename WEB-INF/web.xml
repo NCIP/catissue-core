@@ -29,6 +29,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   </filter-mapping>
 
   <listener>
+    <listener-class>com.krishagni.catissueplus.core.init.AppServletContextListener</listener-class>
+  </listener>
+
+  <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
 
@@ -38,6 +42,16 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <init-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>/WEB-INF/restApiContext.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>pluginUiResources</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/pluginUiContext.xml</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -61,6 +75,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <url-pattern>/rest/ng/*</url-pattern>
   </servlet-mapping>
  
+  <servlet-mapping>
+    <servlet-name>pluginUiResources</servlet-name>
+    <url-pattern>/plugin-ui-resources/*</url-pattern>
+  </servlet-mapping>
+
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>

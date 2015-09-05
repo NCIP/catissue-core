@@ -24,6 +24,9 @@ angular.module('os.administrative.site',
               return Site.getById($stateParams.siteId);
             }
             return new Site();
+          },
+          extensionCtxt: function(Site) {
+            return Site.getExtensionCtxt();
           }
         },
         controller: 'SiteAddEditCtrl',

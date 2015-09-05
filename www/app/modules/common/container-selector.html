@@ -1,5 +1,23 @@
 <div>
-  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr">
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" 
+        ng-model="filterOpts.name" placeholder="{{'container.search' | translate}}">
+      <span class="input-group-addon">
+        <span class="fa fa-search"></span>
+      </span>
+    </div>
+  </div>
+
+  <div ng-if="initList && (!containers || containers.length == 0)">
+    <div class="alert alert-warning">
+      <span translate="container.no_containers_match_search">
+        No containers match search criteria to store specimen/s
+      </span>
+    </div>
+  </div>
+
+  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr" ng-if="containers.length > 0">
     <div class="os-table-head">
       <div class="row">
         <div class="col col-xs-6">

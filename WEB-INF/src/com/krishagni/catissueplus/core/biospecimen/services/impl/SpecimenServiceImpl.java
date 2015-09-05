@@ -401,7 +401,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		// 3. Copy parent's created on to its children
 		//
 		Date createdOn = Calendar.getInstance().getTime();
-		if (detail.getLineage().equals(Specimen.NEW)) {
+		if (Specimen.NEW.equals(detail.getLineage())) {
 			if (detail.getReceivedEvent() != null && detail.getReceivedEvent().getTime() != null) {
 				setCreatedOn(detail.getChildren(), detail.getReceivedEvent().getTime());
 			} else {

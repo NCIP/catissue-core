@@ -54,7 +54,7 @@
     <link rel="stylesheet" href="styles/datepicker.css">
 
     <!-- custom modules css -->
-    <link rel="stylesheet" href="styles/le/styles/le.css">
+    <!-- link rel="stylesheet" href="styles/le/styles/le.css" -->
     <!-- endbuild -->
   </head>
   <body ng-app="openspecimen">
@@ -91,6 +91,7 @@
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-load/angular-load.js"></script>
     <!-- endbower -->
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
@@ -148,6 +149,9 @@
     <script src="modules/common/container-selector.js"></script>
     <script src="modules/common/storage-position.js"></script>
     <script src="modules/common/storage-position-selector.js"></script>
+    <script src="modules/common/show-if-menu-items-present.js"></script>
+    <script src="modules/common/unique-item.js"></script>
+    <script src="modules/common/content-toggle.js"></script>
 
     <!-- Import module -->
     <script src="modules/common/import/module.js"></script>
@@ -259,6 +263,7 @@
     <script src="modules/biospecimen/extensions/list.js"></script>
     <script src="modules/biospecimen/extensions/addedit.js"></script>
     <script src="modules/biospecimen/extensions/select2.js"></script>
+    <script src="modules/biospecimen/extensions/extension-overview.js"></script>
     <script src="modules/biospecimen/extensions/fancy/de-users.js"></script>
     <script src="modules/biospecimen/extensions/fancy/de-storage-containers.js"></script>
 
@@ -271,6 +276,7 @@
     <script src="modules/biospecimen/cp/consents.js"></script>
     <script src="modules/biospecimen/cp/events.js"></script>
     <script src="modules/biospecimen/cp/specimens.js"></script>
+    <script src="modules/biospecimen/cp/config.js"></script>
 
     <!-- Participant module -->
     <script src="modules/biospecimen/participant/module.js"></script>
@@ -341,18 +347,14 @@
     <script src="modules/administrative/job/addedit.js"></script>
     <script src="modules/administrative/job/runlog.js"></script>
 
-
-
     <!-- TODO: Interim includes. Should go away -->
-    <script src="modules/biospecimen/cp/config.js"></script>
-    <script src="custom-modules/biospecimen/participant/register.js"></script>
+    <!-- script src="custom-modules/biospecimen/participant/register.js"></script>
     <script src="custom-modules/le/biospecimen/collect-specimens.js"></script>
     <script src="custom-modules/le/biospecimen/specimen-box.js"></script>
 
     <script src="custom-modules/sgh/module.js"></script>
     <script src="custom-modules/sgh/biospecimen/bulk-registrations.js"></script>
-    <script src="custom-modules/sgh/biospecimen/bulk-printing.js"></script>
-
+    <script src="custom-modules/sgh/biospecimen/bulk-printing.js"></script -->
 
     <!-- endbuild -->
   </body>

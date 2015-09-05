@@ -8,9 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.SiteExtension;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
@@ -23,6 +25,9 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 
 public class SiteFactoryImpl implements SiteFactory {
 
@@ -45,6 +50,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		setType(detail, site, ose);
 		setAddress(detail, site);
 		setActivityStatus(detail, site, ose);
+		setSiteExtension(detail, site, ose);
 		
 		ose.checkAndThrow();
 		return site;
@@ -63,6 +69,7 @@ public class SiteFactoryImpl implements SiteFactory {
 		setType(detail, existing, site, ose);
 		setAddress(detail, existing, site, ose);
 		setActivityStatus(detail, existing, site, ose);
+		setSiteExtension(detail, existing, site, ose);
 		
 		ose.checkAndThrow();
 		return site;		
@@ -206,6 +213,30 @@ public class SiteFactoryImpl implements SiteFactory {
 			setActivityStatus(detail, site, ose);
 		} else {
 			site.setActivityStatus(existing.getActivityStatus());
+		}
+	}
+	
+	private void setSiteExtension(SiteDetail detail, Site site, OpenSpecimenException ose) {
+		ExtensionDetail extDetail = detail.getExtensionDetail();
+		if (extDetail == null) {
+			return;
+		}
+		
+		SiteExtension extension = SiteExtension.getFor(site);
+		for (AttrDetail attrDetail: extDetail.getAttrs()) {
+			Attr attr = new Attr();
+			BeanUtils.copyProperties(attrDetail, attr);
+			extension.getAttrs().add(attr);
+		}
+		
+		site.setExtension(extension);
+	}
+	
+	private void setSiteExtension(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {
+		if (detail.isAttrModified("extensionDetail")) {
+			setSiteExtension(detail, site, ose);
+		} else {
+			site.setExtension(existing.getExtension());
 		}
 	}
 }
