@@ -1,0 +1,13 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+83,,,null,Quantity Not Sufficient,2003994,null
+84,,,null,Cauterized,2003994,null
+85,,,null,"Unacceptable, Not Specified",2003994,null
+86,,,null,Hemorrhagic,2003994,null
+87,,,null,Lipemic,2003994,null
+88,,,null,Frozen,2003994,null
+89,,,null,Not Specified,2003994,null
+90,,,null,Damaged,2003994,null
+91,,,null,Thawed,2003994,null
+92,,,null,Clotted,2003994,null
+93,,,null,Hemolyzed,2003994,null
+94,,,null,Acceptable,2003994,null

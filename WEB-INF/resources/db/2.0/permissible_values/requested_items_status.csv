@@ -1,0 +1,10 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+5005,,,null,New,4285,null
+5006,,,null,Pending - Protocol Review,4285,null
+5007,,,null,Pending - For Distribution,4285,null
+5008,,,null,Pending - Specimen Preparation,4285,null
+5009,,,null,Rejected - Inappropriate Request,4285,null
+5010,,,null,Rejected - Specimen Unavailable,4285,null
+5011,,,null,Rejected - Unable to Create,4285,null
+5012,,,null,Distributed,4285,null
+5013,,,null,Distributed And Close,4285,null
