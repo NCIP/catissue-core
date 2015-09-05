@@ -1,24 +1,26 @@
 
 angular.module('os.administrative.order.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('OrderAddEditCtrl', function(
-    $scope, $state, $translate, order, 
+    $scope, $state, $translate, order, Institute,
     Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts) {
     
     function init() {
       $scope.order = order;
       $scope.dpList = [];
+      $scope.instituteNames = [];
       $scope.siteList = [];
       $scope.userFilterOpts = {};
       $scope.input = {labelText: ''};
 
       loadItemStatusPvs();
       loadDps();
+      loadInstitutes();
       setUserAndSiteList(order);
 
       if (!order.id && angular.isArray(SpecimensHolder.getSpecimens())) {
         order.orderItems = getOrderItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
-      } 
+      }
     }
 
     function loadItemStatusPvs() {
@@ -34,31 +36,36 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function loadDps() {
-      DistributionProtocol.query().then(
+      var filterOpts = {activityStatus: 'Active'};
+      DistributionProtocol.query(filterOpts).then(
         function(dps) {
           $scope.dpList = dps;
         }
       );
     }
+    
+    function loadInstitutes () {
+      Institute.query().then(
+        function (institutes) {
+          $scope.instituteNames = Institute.getNames(institutes);
+        }
+      );
+    }
 
     function loadSites(instituteName) {
-      Site.listForInstitute(instituteName).then(
+      Site.listForInstitute(instituteName, true).then(
         function(sites) {
           $scope.siteList = sites;
         }
       );    
     }
-
+    
     function setUserFilterOpts(institute) {
       $scope.userFilterOpts = {institute: institute};
     }
 
-    function getInstituteName(order) {
-      return !order || !order.distributionProtocol ? undefined : order.distributionProtocol.instituteName;
-    }
-
     function setUserAndSiteList(order) {
-      var instituteName = getInstituteName(order);
+      var instituteName = order.instituteName;
       setUserFilterOpts(instituteName);
       loadSites(instituteName);
     }
@@ -76,6 +83,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function saveOrUpdate(order) {
+      order.siteId = undefined;
       angular.copy(order).$saveOrUpdate().then(
         function(savedOrder) {
           $state.go('order-detail.overview', {orderId: savedOrder.id});
@@ -84,7 +92,18 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     };
 
     $scope.onDpSelect = function() {
+      $scope.order.instituteName = $scope.order.distributionProtocol.instituteName;
+      $scope.order.siteName = $scope.order.distributionProtocol.defReceivingSiteName;
+      $scope.order.requester = $scope.order.distributionProtocol.principalInvestigator;
       setUserAndSiteList($scope.order);
+    }
+    
+    $scope.onInstSelect = function () {
+      var instName = $scope.order.instituteName;
+      loadSites(instName);
+      setUserFilterOpts(instName);
+      $scope.order.siteName = '';
+      $scope.order.requester = '';
     }
 
     $scope.addSpecimens = function() {
@@ -108,11 +127,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         return;
       }
 
-      Specimen.listByLabels(labels).then(
-        function(specimens) {
-          if (labels.length != specimens.length) {
-            Alerts.error('orders.specimens_not_found_or_no_access');
-          }
+      Specimen.listForDp(labels, $scope.order.distributionProtocol.id).then(
+        function (specimens) {
           order.orderItems = order.orderItems.concat(getOrderItems(specimens));
           $scope.input.labelText = '';
         }

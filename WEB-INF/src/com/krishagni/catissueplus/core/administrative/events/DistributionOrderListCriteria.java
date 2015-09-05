@@ -9,6 +9,8 @@ import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 public class DistributionOrderListCriteria extends AbstractListCriteria<DistributionOrderListCriteria> {
 	private Set<Long> instituteIds;
 	
+	private Set<Long> siteIds;
+	
 	private String dpShortTitle;
 	
 	private Long dpId;
@@ -20,6 +22,8 @@ public class DistributionOrderListCriteria extends AbstractListCriteria<Distribu
 	private Date executionDate;
 	
 	private String receivingSite;
+	
+	private String receivingInstitute;
 		
 	@Override
 	public DistributionOrderListCriteria self() {
@@ -32,6 +36,15 @@ public class DistributionOrderListCriteria extends AbstractListCriteria<Distribu
 	
 	public DistributionOrderListCriteria instituteIds(Set<Long> instituteIds) {
 		this.instituteIds = instituteIds;
+		return self();
+	}
+	
+	public Set<Long> siteIds() {
+		return siteIds;
+	}
+	
+	public DistributionOrderListCriteria siteIds(Set<Long> siteIds) {
+		this.siteIds = siteIds;
 		return self();
 	}
 	
@@ -86,6 +99,15 @@ public class DistributionOrderListCriteria extends AbstractListCriteria<Distribu
 	
 	public DistributionOrderListCriteria receivingSite(String receivingSite) {
 		this.receivingSite = receivingSite;
+		return self();
+	}
+	
+	public String receivingInstitute() {
+		return receivingInstitute;
+	}
+	
+	public DistributionOrderListCriteria receivingInstitute(String receivingInstitute) {
+		this.receivingInstitute = receivingInstitute;
 		return self();
 	}
 }

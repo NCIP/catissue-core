@@ -46,7 +46,30 @@
         <div os-field-error field="ordForm.dp"></div>
       </div>
     </div>
-       
+    
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="orders.receiving_institute">
+        Receiving Institute
+      </label>
+      <div class="col-xs-6">
+        <os-select name="institute" ng-model="order.instituteName" list="instituteNames"
+          placeholder="{{'orders.receiving_institute' | translate}}" required
+          on-select="onInstSelect()">
+        </os-select>
+        <div os-field-error field="ordForm.institute"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="orders.receiving_site">Receiving Site</label>
+      <div class="col-xs-6">
+        <os-select name="site" ng-model="order.siteName" 
+          list="siteList" placeholder="{{'orders.receiving_site' | translate}}" required>
+        </os-select>
+        <div os-field-error field="ordForm.site"></div>
+      </div>
+    </div>
+    
     <div class="form-group">
       <label class="control-label col-xs-3" translate="orders.requestor">Requestor</label>
       <div class="col-xs-6">
@@ -54,16 +77,6 @@
           filter-opts="userFilterOpts" placeholder="{{'orders.requestor' | translate}}" required>
         </os-users>
         <div os-field-error field="ordForm.requestor"></div>
-      </div>
-    </div>
-     
-    <div class="form-group">
-      <label class="col-xs-3 control-label" translate="orders.receiving_site">Receiving Site</label>
-      <div class="col-xs-6">
-        <os-select name="site" ng-model="order.siteName" 
-          list="siteList" placeholder="{{'orders.receiving_site' | translate}}" required>
-        </os-select>       
-        <div os-field-error field="ordForm.site"></div>
       </div>
     </div>
     
