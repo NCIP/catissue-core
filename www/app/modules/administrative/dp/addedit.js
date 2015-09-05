@@ -162,9 +162,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       filterAvailableInstituteNames();
     }
     
-    $scope.addDistSite = function () {
-      newDistSite();
-    }
+    $scope.addDistSite = newDistSite;
 
     $scope.loadQueries = loadQueries;
     

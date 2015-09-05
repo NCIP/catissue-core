@@ -53,7 +53,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function loadSites(instituteName) {
-      Site.listForInstitute(instituteName).then(
+      Site.listAllForInstitute(instituteName).then(
         function(sites) {
           $scope.siteList = sites;
         }
