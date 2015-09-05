@@ -71,7 +71,8 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     };
 
     $scope.createCp = function() {
-      if (!$scope.deFormCtrl.ctrl.validate()) {
+      var formCtrl = $scope.deFormCtrl.ctrl;
+      if (!!formCtrl && !formCtrl.validate()) {
         return;
       }
 
