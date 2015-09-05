@@ -65,13 +65,8 @@ public class SiteServiceImpl implements SiteService {
 			
 			if (AuthUtil.isAdmin()) {
 				sites = daoFactory.getSiteDao().getSites(listCrit);
-			} else if (listCrit.listAll()) {
-				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
-				if (siteIds != null && CollectionUtils.isNotEmpty(siteIds)) {
-					sites = daoFactory.getSiteDao().getSites(listCrit);
-				} else {
-					sites = getAccessibleSites(listCrit);
-				}
+			} else if (listCrit.listAll() && AccessCtrlMgr.getInstance().canCreateUpdateDistributionOrder()) {
+				sites = daoFactory.getSiteDao().getSites(listCrit);
 			} else {
 				sites = getAccessibleSites(listCrit);
 			}

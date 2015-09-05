@@ -30,16 +30,11 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return getSites(opts);
     }
 
-    Site.listForInstitute = function(instituteName) {
-       var opts = {institute: instituteName}
+    Site.listForInstitute = function(instituteName, listAll) {
+       var opts = {institute: instituteName, listAll: listAll || false};
        return getSites(opts);
     }
     
-    Site.listAllForInstitute = function (instituteName) {
-      var opts = {institute: instituteName, listAll: true};
-      return getSites(opts);
-    }
-
     Site.list = function(opts) {
       return getSites(opts);
     }

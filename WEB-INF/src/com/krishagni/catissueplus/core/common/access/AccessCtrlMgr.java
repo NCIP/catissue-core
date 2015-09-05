@@ -602,6 +602,15 @@ public class AccessCtrlMgr {
 		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, Operation.READ), "id", true);
 	}
 	
+	public boolean canCreateUpdateDistributionOrder() {
+		if (AuthUtil.isAdmin()) {
+			return true;
+		}
+		
+		Long userId = AuthUtil.getCurrentUser().getId();
+		return canUserPerformOp(userId, Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
+	}
+	
 	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
