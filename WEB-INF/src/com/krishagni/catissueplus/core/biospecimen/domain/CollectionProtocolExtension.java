@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 
@@ -50,6 +51,10 @@ public class CollectionProtocolExtension extends DeObject{
 
 	public static CollectionProtocolExtension getFor(CollectionProtocol cp) {
 		CollectionProtocolExtension extension = new CollectionProtocolExtension(cp);
+		if (StringUtils.isBlank(extension.getFormName())) {
+			return null;
+		}
+		
 		if (cp.getId() == null) {
 			return extension;
 		}

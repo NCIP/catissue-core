@@ -223,6 +223,10 @@ public class SiteFactoryImpl implements SiteFactory {
 		}
 		
 		SiteExtension extension = SiteExtension.getFor(site);
+		if (extension == null) {
+			return;
+		}
+		
 		for (AttrDetail attrDetail: extDetail.getAttrs()) {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(attrDetail, attr);

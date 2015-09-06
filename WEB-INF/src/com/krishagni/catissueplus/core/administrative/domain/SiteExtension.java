@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -52,6 +53,10 @@ public class SiteExtension extends DeObject {
 	
 	public static SiteExtension getFor(Site site) {
 		SiteExtension extension = new SiteExtension(site);
+		if (StringUtils.isBlank(extension.getFormName())) {
+			return null;
+		}
+		
 		if (site.getId() == null) {
 			return extension;
 		}

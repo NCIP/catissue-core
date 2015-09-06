@@ -72,13 +72,17 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
     $scope.createCp = function() {
       var formCtrl = $scope.deFormCtrl.ctrl;
-      if (!!formCtrl && !formCtrl.validate()) {
+      if (formCtrl && !formCtrl.validate()) {
         return;
       }
 
       var cp = angular.copy($scope.cp);
       cp.ppidFmt = getPpidFmt();
-      cp.extensionDetail = $scope.deFormCtrl.ctrl.getFormData();
+
+      if (formCtrl) {
+        cp.extensionDetail = formCtrl.getFormData();
+      }
+
       cp.$saveOrUpdate().then(
         function(savedCp) {
           $state.go('cp-detail.overview', {cpId: savedCp.id});
