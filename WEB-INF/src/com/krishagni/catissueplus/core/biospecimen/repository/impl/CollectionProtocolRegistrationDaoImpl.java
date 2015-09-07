@@ -266,7 +266,7 @@ public class CollectionProtocolRegistrationDaoImpl
 				.add(Projections.property("id"))
 				.add(Projections.property("ppid"))
 				.add(Projections.property("registrationDate"))
-				.add(Projections.property("cp.title"))
+				.add(Projections.property("cp.shortTitle"))
 				.add(Projections.property("participant.id"));
 
 		if (cprCrit.includePhi()) {
@@ -283,7 +283,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		cpr.setCprId((Long)row[0]);
 		cpr.setPpid((String)row[1]);
 		cpr.setRegistrationDate((Date)row[2]);
-		cpr.setCpTitle((String)row[3]);
+		cpr.setCpShortTitle((String)row[3]);
 
 		ParticipantSummary participant = new ParticipantSummary();
 		cpr.setParticipant(participant);			
