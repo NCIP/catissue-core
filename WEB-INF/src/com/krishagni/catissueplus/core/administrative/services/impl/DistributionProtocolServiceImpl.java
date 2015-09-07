@@ -1,30 +1,20 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -34,7 +24,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
@@ -279,108 +268,5 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		return true;
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<List<DistributionOrderDetail>> getDpHistory(RequestEvent<Long> req) {
-		return ResponseEvent.response(getOrdersData(req.getPayload()));
-	}
-	
-	public List<DistributionOrderDetail> getOrdersData(Long id){
-		List<DistributionOrderDetail> orders = new ArrayList<DistributionOrderDetail>();
-		
-		DistributionOrderDetail order1 = new DistributionOrderDetail();
-		order1.setName("Distributed to Prof Tin");
-		order1.setExecutionDate(new Date(1441174401000L));
-		order1.setSpecimenCnt(20L);
-		SpecimenInfo spmn = new SpecimenInfo();
-		spmn.setType("DNA");
-		spmn.setAnatomicSite("Lung");
-		spmn.setPathology("Malignant");
-		DistributionOrderItemDetail orderDetail = new DistributionOrderItemDetail();
-		orderDetail.setSpecimen(spmn);
-		List<DistributionOrderItemDetail> orderList = new ArrayList<DistributionOrderItemDetail>();
-		orderList.add(orderDetail);
-		order1.setOrderItems(orderList);
-		
-		DistributionOrderDetail order2 = new DistributionOrderDetail();
-		order2.setName("Distributed to Prof Tin");
-		order2.setExecutionDate(new Date(1362002400000L));
-		order2.setSpecimenCnt(508L);
-		SpecimenInfo spmn1 = new SpecimenInfo();
-		spmn1.setType("RNA");
-		spmn1.setAnatomicSite("Lung");
-		spmn1.setPathology("Malignant");
-		DistributionOrderItemDetail orderDetail1 = new DistributionOrderItemDetail();
-		orderDetail1.setSpecimen(spmn1);
-		List<DistributionOrderItemDetail> orderList1 = new ArrayList<DistributionOrderItemDetail>();
-		orderList1.add(orderDetail1);
-		order2.setOrderItems(orderList1);
-		
-		orders.add(order1);
-		orders.add(order2);
-		
-		return orders;
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<File> exportHistory(RequestEvent<Long> req) {
-		final String filename = UUID.randomUUID().toString();
-		List<String[]> data = new ArrayList<String[]>();
-		String[] header = {"Order Name", "Distribution Date", "Specimen Type", "Anatomic Site", "Pathology Status", "Specimen Distributed"};
-		data.add(header);
-		
-		List<DistributionOrderDetail> orders = getOrdersData(req.getPayload());
-		
-		for(int i=0; i<orders.size(); i++) {
-			DistributionOrderDetail orderDetail = orders.get(i);
-			List<String> row = new ArrayList<String>();
-			
-			row.add(orderDetail.getName());
-			row.add(orderDetail.getExecutionDate().toString());
-			row.add(orderDetail.getOrderItems().get(0).getSpecimen().getType());
-			row.add(orderDetail.getOrderItems().get(0).getSpecimen().getAnatomicSite());
-			row.add(orderDetail.getOrderItems().get(0).getSpecimen().getPathology());
-			row.add(orderDetail.getSpecimenCnt().toString());
-			data.add(row.toArray(new String[row.size()]));
-		}
-		
-		FileWriter csvFile;
-		CSVWriter csvWriter = null;
-		try {
-			csvFile = new FileWriter(getExportDataDir() + filename);
-			csvWriter = new CSVWriter(csvFile);
-			csvWriter.writeAll(data);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (csvWriter != null) {
-				try {
-					csvWriter.close();
-				} catch (Exception e) {					
-				}				
-			}
-		}
-		
-		File file = new File(getExportDataDir() + filename);
-		return ResponseEvent.response(file);
-	}
-	
-	private static String getExportDataDir() {
-		String path = new StringBuilder()
-			.append(ConfigUtil.getInstance().getDataDir()).append(File.separator)
-			.append("dp-history").append(File.separator)
-			.toString();
-		
-		File dirFile = new File(path);
-		if(!dirFile.exists()) {
-			if(!dirFile.mkdirs()) {
-				throw new RuntimeException("Error couldn't create directory for exporting history data");
-			}
-		}
-		
-		return path;
 	}
 }

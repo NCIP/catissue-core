@@ -1,10 +1,8 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
-import java.io.File;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -26,8 +24,4 @@ public interface DistributionProtocolService {
 	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req);
 	
 	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req);
-	
-	public ResponseEvent<List<DistributionOrderDetail>> getDpHistory(RequestEvent<Long> req);
-	
-	public ResponseEvent<File> exportHistory(RequestEvent<Long> req);
 }

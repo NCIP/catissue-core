@@ -1,7 +1,8 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil, $modal) {
+  .controller('DpDetailCtrl', function($scope, $q, $sce, distributionProtocol, DeleteUtil, $modal) {
     $scope.distributionProtocol = distributionProtocol;
+    $scope.exportUrl = $sce.trustAsResourceUrl(distributionProtocol.exportUrl);
     
     $scope.editDp = function(property, value) {
       var d = $q.defer();

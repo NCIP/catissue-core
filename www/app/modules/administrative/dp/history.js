@@ -1,13 +1,13 @@
 
 angular.module('os.administrative.dp.history', ['os.administrative.models'])
   .controller('DpHistoryCtrl', function($scope, distributionProtocol) {
-    $scope.orders = [];
+    $scope.exportUrl = distributionProtocol.historyExportUrl();
   
-    distributionProtocol.getOrderHistory().then(function(orders) {
-      $scope.orders = orders;
-    });
-    
-    $scope.exportHistory = function() {
-      distributionProtocol.exportHistory();
+    function loadOrders() {
+      distributionProtocol.getOrderHistory().then(function(orders) {
+        $scope.orders = orders;
+      });
     }
+    
+    loadOrders();
   });

@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
@@ -28,6 +32,7 @@ import com.krishagni.catissueplus.core.administrative.services.DistributionProto
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
 
@@ -147,19 +152,7 @@ public class DistributionProtocolController {
 		return resp.getPayload();
 	}
 	
-	private <T> RequestEvent<T> getRequest(T payload) {
-		return new RequestEvent<T>(payload);
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/history")
-	@ResponseBody
-	@ResponseStatus(HttpStatus.OK)
-	public List<DistributionOrderDetail> getDpHistory (@PathVariable Long id) {
-		ResponseEvent<List<DistributionOrderDetail>> resp = dpSvc.getDpHistory(new RequestEvent<Long>(id));
-		return resp.getPayload();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/export")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/orders-report")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public void exportHistory (@PathVariable Long id, 
@@ -168,24 +161,41 @@ public class DistributionProtocolController {
 	
 			HttpServletResponse response) {
 		
-		File file = response(dpSvc.exportHistory(new RequestEvent<Long>(id)));
-		
-		response.setContentType("text/csv;");
-		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
-		
-		InputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			IoUtil.copy(in, response.getOutputStream());
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
-		} finally {
-			IoUtil.close(in);
-		}
+		File file = generateCSVFile();
+		Utility.sendToClient(response, filename, file);
 	}
 	
-	private <T> T response(ResponseEvent<T> resp) {
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+	private File generateCSVFile() {
+		List<String[]> data = new ArrayList<String[]>();
+		String[] header = {"Order Name", "Distribution Date", "Specimen Type", "Anatomic Site", "Pathology Status", "Specimen Distributed"};
+		String[] row1 = {"Distributed to Prof Tin", "Sep 02 2015", "DNA", "Lung", "Malignant", "20"};
+		String[] row2 = {"Distributed to Prof Tin", "Feb 28 2013", "RNA", "Lung", "Malignant", "508"};
+		data.add(header);
+		data.add(row1);
+		data.add(row2);
+		
+		File file;
+		FileWriter csvFile;
+		CSVWriter csvWriter = null;
+		try {
+			file = File.createTempFile("dp-history", null);
+			csvFile = new FileWriter(file);
+			csvWriter = new CSVWriter(csvFile);
+			csvWriter.writeAll(data);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		} finally {
+			if (csvWriter != null) {
+				try {
+					csvWriter.close();
+				} catch (Exception e) {					
+				}				
+			}
+		}
+		return file;
+	}
+	
+	private <T> RequestEvent<T> getRequest(T payload) {
+		return new RequestEvent<T>(payload);
 	}
 }
