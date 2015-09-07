@@ -60,6 +60,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Address migration to user table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         catissue_user usr,
@@ -78,6 +83,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Address migration to site table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_SITE" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         catissue_site site,
@@ -96,6 +106,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Phone number data migration to user table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         catissue_user usr,
@@ -108,6 +123,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Address migration to user table" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         ( select
@@ -127,6 +147,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Address migration to site table" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_SITE" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         ( select
@@ -146,6 +171,11 @@
   </changeSet>
 
   <changeSet author="hemant" id="Phone number data migration to user table" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <sql>
       update
         ( select
@@ -160,10 +190,20 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Drop address_id column from catissue site table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_SITE"/>
   </changeSet>
 
   <changeSet author="ahegade" id="Drop address_id column from catissue user table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
     <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_USER"/>
   </changeSet>
 

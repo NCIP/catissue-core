@@ -5,6 +5,25 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <changeSet author="vgaikwad" id="Consent response PV category">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          count(*) 
+        from 
+          catissue_cde
+        where 
+          public_id = 'consent_response'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated) 
+      values
+        ('consent_response', 'Consent Response', 'Consent Response', 2.0, ${now});
+    </sql>
+  </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: clinical status" author="vratnaparkhi">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
@@ -350,8 +369,29 @@
     </loadData>
   </changeSet>
   
+  <changeSet author="ahegade" id="Missed visit reasons PV category">
+    <validCheckSum>7:a5918f69da80b616592b8f464dd1054b</validCheckSum>
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          count(*) 
+        from 
+          catissue_cde
+        where 
+          public_id = 'missed_visit_reason'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ('missed_visit_reason', 'Missed Visit Reason', 'Missed Visit Reason', '2.0', ${now})
+    </sql>
+  </changeSet>
+  
   <changeSet id="Loading permissible values for attribute: missed visit reason" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:01ec7c07e8739afa5f04926b02c4a266</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
