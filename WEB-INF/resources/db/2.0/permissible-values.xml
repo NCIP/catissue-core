@@ -420,6 +420,21 @@
     </loadData>
   </changeSet>
   
+  <changeSet id="Loading permissible values for attribute: clinical diagnosis" author="vratnaparkhi">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = 'Clinical_Diagnosis_PID'  
+      </sqlCheck>
+    </preConditions>
+    <loadData file="db/2.0/permissible-values/clinical-diagnosis.csv" tableName="catissue_permissible_value">
+    </loadData>
+  </changeSet>
+  
   <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle">
     <sql endDelimiter="//">
       begin
