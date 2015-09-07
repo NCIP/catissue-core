@@ -69,7 +69,7 @@ angular.module('openspecimen')
     link: function(scope, element, attrs) {
       $rootScope.quickSearch = {};
       $rootScope.quickSearch.show = false;
-      $rootScope.quickSearch.searchComponents = ["Participant", "Specimen", "Visit", "Container"];
+      $rootScope.quickSearch.searchComponents = ["Participant", "Visit", "Specimen", "Container"];
       $rootScope.quickSearch.component = "Participant";
 
       element.bind('click', function(e) {
@@ -80,6 +80,16 @@ angular.module('openspecimen')
         $rootScope.quickSearch.show = false;
         scope.$apply(attrs.osQuickSearch);
       });
+
+      $rootScope.search = function() {
+        $rootScope.quickSearch.show = !$rootScope.quickSearch.show;
+        $rootScope.quickSearch.component = 'Participant';
+        $rootScope.quickSearch.participant.ppid = null;
+        $rootScope.quickSearch.participant.uid= null;
+        $rootScope.quickSearch.visit = null;
+        $rootScope.quickSearch.specimen = null;
+        $rootScope.quickSearch.container = null;
+      }
 
       $rootScope.onComponentSelect = function(component) {
         $rootScope.quickSearch.component = component;

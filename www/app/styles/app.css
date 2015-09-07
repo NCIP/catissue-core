@@ -127,6 +127,7 @@ body {
 .os-quick-search {
   position: relative;
   color: #666;
+  font-weight: normal !important;
   background-color: white;
   border: 1px #ddd solid;
   flex-grow: 1;
