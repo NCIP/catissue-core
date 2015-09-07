@@ -11,6 +11,8 @@ public class DistributionOrderSummary {
 	
 	private DistributionProtocolDetail distributionProtocol;
 	
+	private String instituteName;
+	
 	private Long siteId;
 	
 	private String siteName;
@@ -49,6 +51,14 @@ public class DistributionOrderSummary {
 		this.distributionProtocol = distributionProtocol;
 	}
 
+	public String getInstituteName() {
+		return instituteName;
+	}
+	
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
+	}
+	
 	public Long getSiteId() {
 		return siteId;
 	}

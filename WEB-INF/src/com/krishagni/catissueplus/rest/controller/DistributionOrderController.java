@@ -60,6 +60,9 @@ public class DistributionOrderController {
 		@RequestParam(value = "receivingSite", required = false, defaultValue = "")
 		String receivingSite,
 		
+		@RequestParam(value = "receivingInstitute", required = false, defaultValue = "")
+		String receivingInstitute,
+		
 		@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 		int startAt,
 			
@@ -78,6 +81,7 @@ public class DistributionOrderController {
 			.requestorId(requestorId)
 			.executionDate(executionDate)
 			.receivingSite(receivingSite)
+			.receivingInstitute(receivingInstitute)
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.includeStat(includeStats);

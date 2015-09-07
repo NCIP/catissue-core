@@ -20,6 +20,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     Specimen.listByLabels = function(labels) {
       return Specimen.query({label: labels});
     };
+    
+    Specimen.listForDp = function (labels, dpId) {
+      return Specimen.query({label: labels, dpId: dpId});
+    }
 
     Specimen.flatten = function(specimens, parent, depth) {
       var result = [];

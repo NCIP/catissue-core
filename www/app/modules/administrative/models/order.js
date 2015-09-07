@@ -35,6 +35,6 @@ angular.module('os.administrative.models.order', ['os.common.models'])
         }
       );
     }
-
+    
     return DistributionOrder;
   });

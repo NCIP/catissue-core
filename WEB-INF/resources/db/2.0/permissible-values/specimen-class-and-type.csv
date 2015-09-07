@@ -1,0 +1,51 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+1,,,null,Molecular,2003991,null
+2,,,null,Cell,2003991,null
+3,,,null,Fluid,2003991,null
+4,,,null,Tissue,2003991,null
+5,,,1,"RNA, poly-A enriched",null,null
+6,,,1,"RNA, nuclear",null,null
+7,,,1,Not Specified,null,null
+8,,,1,protein,null,null
+9,,,1,cDNA,null,null
+10,,,1,RNA,null,null
+11,,,1,DNA,null,null
+12,,,1,"RNA, cytoplasmic",null,null
+13,,,2,Frozen Cell Pellet,null,null
+14,,,2,Fixed Cell Block,null,null
+15,,,2,Frozen Cell Block,null,null
+16,,,2,Not Specified,null,null
+17,,,2,Cryopreserved Cells,null,null
+18,,,3,Whole Bone Marrow,null,null
+19,,,3,Saliva,null,null
+20,,,3,Plasma,null,null
+21,,,3,Body Cavity Fluid,null,null
+22,,,3,Milk,null,null
+23,,,3,Pericardial Fluid,null,null
+24,,,3,Lavage,null,null
+25,,,3,Whole Blood,null,null
+26,,,3,Vitreous Fluid,null,null
+27,,,3,Gastric Fluid,null,null
+28,,,3,Not Specified,null,null
+29,,,3,Bone Marrow Plasma,null,null
+30,,,3,Urine,null,null
+31,,,3,Serum,null,null
+32,,,3,Amniotic Fluid,null,null
+33,,,3,Cerebrospinal Fluid,null,null
+34,,,3,Bile,null,null
+35,,,3,Synovial Fluid,null,null
+36,,,3,Sweat,null,null
+37,,,3,Feces,null,null
+38,,,4,Fixed Tissue,null,null
+39,,,4,Fixed Tissue Block,null,null
+40,,,4,Frozen Tissue Block,null,null
+41,,,4,Fixed Tissue Slide,null,null
+42,,,4,Frozen Tissue Slide,null,null
+43,,,4,Fresh Tissue,null,null
+44,,,4,Microdissected,null,null
+45,,,4,Frozen Tissue,null,null
+46,,,4,Not Specified,null,null
+2637,,,3,Sputum,null,null
+2646,,,2,Slide,null,null
+2651,,,1,Total Nucleic Acid,null,null
+2652,,,1,Whole Genome Amplified DNA,null,null

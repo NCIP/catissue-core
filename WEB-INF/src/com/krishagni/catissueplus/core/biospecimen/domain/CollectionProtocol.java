@@ -482,11 +482,11 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public void addOrUpdateExtension() {
-		if (getExtension() == null) {
+		if (extension == null) {
 			return;
 		}
 		
-		getExtension().saveOrUpdate();
+		extension.saveOrUpdate();
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

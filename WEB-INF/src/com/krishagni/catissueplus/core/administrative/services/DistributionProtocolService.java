@@ -25,6 +25,8 @@ public interface DistributionProtocolService {
 	
 	public ResponseEvent<DistributionProtocolDetail> deleteDistributionProtocol(RequestEvent<Long> req);
 	
+	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req);
+	
 	public ResponseEvent<List<DistributionOrderDetail>> getDpHistory(RequestEvent<Long> req);
 	
 	public ResponseEvent<File> exportHistory(RequestEvent<Long> req);

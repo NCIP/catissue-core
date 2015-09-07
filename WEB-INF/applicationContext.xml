@@ -134,6 +134,10 @@
   <bean id="visitNameGenerator" class="com.krishagni.catissueplus.core.common.service.impl.LabelGeneratorImpl">
     <property name="tokenRegistrar" ref="visitTokenRegistrar"/>
   </bean>
+  
+  <bean id="sprText2PdfGenerator" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SprText2PdfGenerator">
+    <property name="messageSource" ref="messageSource"/>
+  </bean>
 
   <bean id="visitService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.VisitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -141,6 +145,7 @@
     <property name="specimenSvc" ref="specimenSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
+    <property name="sprText2PdfGenerator" ref="sprText2PdfGenerator"/>
   </bean>
 
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">

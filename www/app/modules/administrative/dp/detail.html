@@ -3,7 +3,13 @@
     <ul os-breadcrumbs>
       <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
     </ul>
+    
     <h3>{{distributionProtocol.shortTitle}}</h3>
+    
+    <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'"
+      translate="dp.closed">
+      Closed
+    </span>
 
     <div class="os-btns right">
       <button show-if-admin class="primary" title="{{'dp.tooltip.edit' | translate}}"
@@ -17,10 +23,24 @@
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-admin>
-            <a ng-click="deleteDp()">
+          <li show-if-admin class="default" ng-click="deleteDp()">
+            <a>
               <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
+              <span translate="dp.menu_options.delete">Delete</span>
+            </a>
+          </li>
+          <li show-if-admin ng-if="distributionProtocol.activityStatus != 'Closed'" class="default"
+            ng-click="closeDp()">
+            <a>
+              <span class="fa fa-remove"></span>
+              <span translate="dp.menu_options.close">Close</span>
+            </a>
+          </li>
+          <li show-if-admin ng-if="distributionProtocol.activityStatus == 'Closed'" class="default"
+            ng-click="reopenDp()">
+            <a>
+              <span class="fa fa-check"></span>
+              <span translate="dp.menu_options.reopen">Reopen</span>
             </a>
           </li>
         </ul>

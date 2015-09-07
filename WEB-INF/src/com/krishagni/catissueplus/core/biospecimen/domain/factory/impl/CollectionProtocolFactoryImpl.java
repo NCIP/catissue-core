@@ -221,6 +221,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 		
 		CollectionProtocolExtension extension = CollectionProtocolExtension.getFor(result);
+		if (extension == null) {
+			return;
+		}
+		
 		for (AttrDetail attrDetail: extDetail.getAttrs()) {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(attrDetail, attr);

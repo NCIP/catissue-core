@@ -40,6 +40,10 @@ public class ExtensionDetail {
 	}
 
 	public static ExtensionDetail from(DeObject extension) {
+		if (extension == null || extension.getId() == null) {
+			return null;
+		}
+		
 		ExtensionDetail detail = new ExtensionDetail();
 		detail.setId(extension.getId());
 		detail.setObjectId(extension.getObjectId()); 

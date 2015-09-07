@@ -4,7 +4,6 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -33,6 +33,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.FileType;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -66,8 +67,11 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<VisitSummary> getVisits(
-			@RequestParam(value = "cprId", required = true) Long cprId,
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false") boolean includeStats) {
+		@RequestParam(value = "cprId", required = true) 
+		Long cprId,
+		
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
+		boolean includeStats) {
 		
 		VisitsListCriteria crit = new VisitsListCriteria()
 			.cprId(cprId)
@@ -99,7 +103,13 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public VisitDetail updateVisit(@PathVariable("id") Long visitId, @RequestBody VisitDetail visit) {
+	public VisitDetail updateVisit(
+		@PathVariable("id") 
+		Long visitId, 
+		
+		@RequestBody 
+		VisitDetail visit) {
+
 		visit.setId(visitId);
 		
 		ResponseEvent<VisitDetail> resp = visitService.updateVisit(getRequest(visit));
@@ -110,7 +120,12 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/spr-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public String uploadSprFile(@PathVariable("id") Long visitId, @PathVariable("file") MultipartFile file)
+	public String uploadSprFile(
+		@PathVariable("id") 
+		Long visitId, 
+		
+		@PathVariable("file") 
+		MultipartFile file)
 	throws IOException {
 		ResponseEvent<String> resp = null;
 		InputStream inputStream = null;
@@ -133,13 +148,24 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void downloadSpr(@PathVariable("id") Long visitId, HttpServletResponse httpResp)
+	public void downloadSpr(
+		@PathVariable("id") 
+		Long visitId,
+		
+		@RequestParam(value = "type", required = false, defaultValue="text") 
+		String type,
+		
+		HttpServletResponse httpResp)
 	throws IOException {
-		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
-		
-		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(crit));
+		FileType fileType = FileType.fromType(type);
+		if (fileType == null) {
+			fileType = FileType.TEXT;
+		}
+		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
+		sprReqDetail.setVisitId(visitId);
+		sprReqDetail.setType(fileType);
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();
-		
 		FileDetail detail = resp.getPayload();
 		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
 	}
@@ -148,11 +174,10 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String getSprText(@PathVariable("id") Long visitId) {
-		EntityQueryCriteria crit = new EntityQueryCriteria(visitId);
-		
-		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(crit));
+		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
+		sprReqDetail.setVisitId(visitId);
+		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();
-		
 		FileDetail detail = resp.getPayload();
 		return Utility.getFileText(detail.getFile());
 	}
@@ -232,11 +257,11 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public EntityFormRecords getFormRecords(
-			@PathVariable("id") 
-			Long visitId,
+		@PathVariable("id") 
+		Long visitId,
 			
-			@PathVariable("formCtxtId") 
-			Long formCtxtId) {
+		@PathVariable("formCtxtId") 
+		Long formCtxtId) {
 
 		GetEntityFormRecordsOp opDetail = new GetEntityFormRecordsOp();
 		opDetail.setEntityId(visitId);

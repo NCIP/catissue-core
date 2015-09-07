@@ -221,11 +221,11 @@ public class Site extends BaseEntity {
 	}
 	
 	public void addOrUpdateExtension() {
-		if (getExtension() == null) {
+		if (extension == null) {
 			return;
 		}
 		
-		getExtension().saveOrUpdate();
+		extension.saveOrUpdate();
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {

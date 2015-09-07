@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-
+import org.apache.commons.lang.StringUtils;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
@@ -28,13 +28,15 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 	private DaoFactory daoFactory;
@@ -54,10 +56,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
 			DpListCriteria crit = req.getPayload();
-			AccessCtrlMgr.getInstance().ensureReadDpRights();
-			if (!AuthUtil.isAdmin()) {
-				User user = daoFactory.getUserDao().getById(AuthUtil.getCurrentUser().getId());
-				crit.instituteId(user.getInstitute().getId());
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
+			if (siteIds != null) {
+				crit.siteIds(siteIds);
 			}
 			
 			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao().getDistributionProtocols(crit);
@@ -79,15 +84,16 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureReadDpRights();
-			
 			Long protocolId = req.getPayload();
 			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(protocolId);
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadDPRights(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -180,6 +186,43 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			
+			Long dpId = req.getPayload().getId();
+			String status = req.getPayload().getActivityStatus();
+			if (StringUtils.isBlank(status) || !Status.isValidActivityStatus(status)) {
+				return ResponseEvent.userError(ActivityStatusErrorCode.INVALID);
+			}
+			
+			DistributionProtocol existing = daoFactory.getDistributionProtocolDao().getById(dpId);
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
+			
+			if (existing.getActivityStatus().equals(status)) {
+				return ResponseEvent.response(DistributionProtocolDetail.from(existing));
+			}
+			
+			if (status.equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+				existing.delete();
+			} else {
+				existing.setActivityStatus(status);
+			}
+
+			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
+			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+		
+	}
+	
 	private void addDpStats(List<DistributionProtocolDetail> dps) {
 		if (CollectionUtils.isEmpty(dps)) {
 			return;
@@ -202,11 +245,11 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		if (!isUniqueTitle(newDp, existingDp)) {
-			ose.addError(DistributionProtocolErrorCode.DUP_TITLE);
+			ose.addError(DistributionProtocolErrorCode.DUP_TITLE, newDp.getTitle());
 		}
 		
 		if (!isUniqueShortTitle(newDp, existingDp)) {
-			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE);
+			ose.addError(DistributionProtocolErrorCode.DUP_SHORT_TITLE, newDp.getShortTitle());
 		}
 		
 		ose.checkAndThrow();

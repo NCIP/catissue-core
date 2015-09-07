@@ -1,15 +1,23 @@
 
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -40,13 +48,14 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setTitle(detail, distributionProtocol, ose);
 		setShortTitle(detail, distributionProtocol, ose);
 		setInstitute(detail, distributionProtocol, ose);
+		setDefReceivingSite(detail, distributionProtocol, ose);
 		setPrincipalInvestigator(detail, distributionProtocol, ose);
 		setIrbId(detail, distributionProtocol, ose);
 		setStartDate(detail, distributionProtocol);
 		setEndDate(detail, distributionProtocol);
 		setActivityStatus(detail, distributionProtocol, ose);
 		setReport(detail, distributionProtocol, ose);
-		
+		setDistributingSites(detail, distributionProtocol, ose);
 		ose.checkAndThrow();
 		return distributionProtocol;
 	}
@@ -92,6 +101,26 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setInstitute(institute);
 	}
 	
+	private void setDefReceivingSite(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
+		String defReceivingSiteName = detail.getDefReceivingSiteName();
+		if (StringUtils.isBlank(defReceivingSiteName)) {
+			return;
+		}
+		
+		Site defReceivingSite = daoFactory.getSiteDao().getSiteByName(defReceivingSiteName);
+		if (defReceivingSite == null) {
+			ose.addError(SiteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		if (!defReceivingSite.getInstitute().equals(dp.getInstitute())) {
+			ose.addError(SiteErrorCode.INVALID_SITE_INSTITUTE, defReceivingSite.getName(), dp.getInstitute().getName());
+			return;
+		}
+		
+		dp.setDefReceivingSite(defReceivingSite);
+	}
+	
 	private void setPrincipalInvestigator(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
 		
 		if (detail.getPrincipalInvestigator() == null || detail.getPrincipalInvestigator().getId() == null) {
@@ -107,7 +136,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 		
 		if (!pi.getInstitute().equals(distributionProtocol.getInstitute())) {
-			ose.addError(DistributionProtocolErrorCode.PI_DOES_NOT_BELONG_TO_INST);
+			ose.addError(DistributionProtocolErrorCode.PI_DOES_NOT_BELONG_TO_INST, pi.formattedName(), distributionProtocol.getInstitute().getName());
 			return;
 		}
 		
@@ -142,5 +171,25 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		}
 
 		distributionProtocol.setReport(report);
+	}
+		
+	private void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
+		if (CollectionUtils.isEmpty(detail.getDistributingSites())) {
+			ose.addError(DistributionProtocolErrorCode.DISTRIBUTING_SITES_REQUIRED);
+			return;
+		}
+		
+		List<String> distSites = new ArrayList<String>();
+		for (SiteDetail site: detail.getDistributingSites()) {
+			distSites.add(site.getName());
+		}
+		
+		List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(distSites);
+		if (distributingSites.size() != distSites.size()) {
+			ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
+			return;
+		}
+		
+		dp.setDistributingSites(new HashSet<Site>(distributingSites));
 	}
 }

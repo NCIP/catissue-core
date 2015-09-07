@@ -10,18 +10,22 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanToPropertyValueTransformer;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
+
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 public class Utility {
@@ -94,15 +98,27 @@ public class Utility {
 		return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);		
 	}
 	
-	public static String stringListToCsv(List<String> elements) {
-		return stringListToCsv(elements.toArray(new String[0]));
+	public static String stringListToCsv(Collection<String> elements) {
+		return stringListToCsv(elements.toArray(new String[0]), true);
+	}
+		
+	public static String stringListToCsv(Collection<String> elements, boolean quotechar) {
+		return stringListToCsv(elements.toArray(new String[0]), quotechar);
 	}
 	
 	public static String stringListToCsv(String[] elements) {
+		return stringListToCsv(elements, true);
+	}
+	
+	public static String stringListToCsv(String[] elements, boolean quotechar) {
 		StringWriter writer = new StringWriter();
 		CSVWriter csvWriter = null;
 		try {
-			csvWriter = new CSVWriter(writer);
+			if (quotechar) {
+				csvWriter = new CSVWriter(writer);
+			} else {
+				csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+			}
 			csvWriter.writeNext(elements);
 			csvWriter.flush();
 			return writer.toString();
@@ -143,6 +159,7 @@ public class Utility {
 		FileNameMap contentTypesMap = URLConnection.getFileNameMap();
 		return contentTypesMap.getContentTypeFor(file.getAbsolutePath());
 	}
+	
 	
 	public static String getFileText(File file) {
 		FileInputStream in = null;
@@ -185,6 +202,43 @@ public class Utility {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T collect(Collection<?> collection, String propertyName, boolean returnSet) {
+		Collection<?> result = CollectionUtils.collect(collection, new BeanToPropertyValueTransformer(propertyName));
+		if (returnSet) {
+			return (T) new HashSet(result);
+		}
+		
+		return (T) result;
+	}
+	
+	public static <T> T collect(Collection<?> collection, String propertyName) {
+		return collect(collection, propertyName, false);
+    }
+
+	public static Integer getAge(Date birthDate) {
+		if (birthDate == null) {
+			return null;
+		}
+		
+		Calendar currentDate = Calendar.getInstance();
+		Calendar dob = Calendar.getInstance();
+		dob.setTime(birthDate);
+
+		int currentYear = currentDate.get(Calendar.YEAR);
+		int birthYear = dob.get(Calendar.YEAR);
+		int age = currentYear - birthYear;
+		
+		int currentMonth = currentDate.get(Calendar.MONTH);
+		int birthMonth = dob.get(Calendar.MONTH);
+		if (currentMonth < birthMonth  ||
+				(currentMonth == birthMonth && currentDate.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))) {
+		  age--;
+		}
+		
+		return age;
 	}
 
 }

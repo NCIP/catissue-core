@@ -68,6 +68,9 @@ public class SitesController {
 			
 			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
 			int maxResults,
+			
+			@RequestParam(value = "listAll", required = false, defaultValue = "false")
+			boolean listAll,
 
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
 			boolean includeStats) {
@@ -80,6 +83,7 @@ public class SitesController {
 			.institute(institute)
 			.startAt(startAt)
 			.maxResults(maxResults)
+			.listAll(listAll)
 			.includeStat(includeStats);
 		
 		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(crit);

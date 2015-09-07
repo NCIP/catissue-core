@@ -14,6 +14,8 @@ public class DistributionProtocolDetail {
 	private Long id;
 
 	private String instituteName;
+
+	private String defReceivingSiteName;
 	
 	private UserSummary principalInvestigator;
 
@@ -32,6 +34,8 @@ public class DistributionProtocolDetail {
 	private int distributedSpecimensCount;
 	
 	private SavedQuerySummary report;
+	
+	private List<SiteDetail> distributingSites = new ArrayList<SiteDetail>();
 
 	public Long getId() {
 		return id;
@@ -47,6 +51,14 @@ public class DistributionProtocolDetail {
 
 	public void setInstituteName(String instituteName) {
 		this.instituteName = instituteName;
+	}
+	
+	public String getDefReceivingSiteName() {
+		return defReceivingSiteName;
+	}
+	
+	public void setDefReceivingSiteName(String defReceivingSiteName) {
+		this.defReceivingSiteName = defReceivingSiteName;
 	}
 
 	public UserSummary getPrincipalInvestigator() {
@@ -120,6 +132,14 @@ public class DistributionProtocolDetail {
 	public void setReport(SavedQuerySummary report) {
 		this.report = report;
 	}
+	
+	public List<SiteDetail> getDistributingSites() {
+		return distributingSites;
+	}
+	
+	public void setDistributingSites(List<SiteDetail> distributingSites) {
+		this.distributingSites = distributingSites;
+	}
 
 	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
 		DistributionProtocolDetail detail = new DistributionProtocolDetail();
@@ -130,13 +150,18 @@ public class DistributionProtocolDetail {
 		detail.setStartDate(distributionProtocol.getStartDate());
 		detail.setEndDate(distributionProtocol.getEndDate());
 		detail.setInstituteName(distributionProtocol.getInstitute().getName());
+		if (distributionProtocol.getDefReceivingSite() != null) {
+			detail.setDefReceivingSiteName(distributionProtocol.getDefReceivingSite().getName());
+		}
 		detail.setPrincipalInvestigator(getPrincipleInvestigatorInfo(distributionProtocol.getPrincipalInvestigator()));
 		detail.setActivityStatus(distributionProtocol.getActivityStatus());
 
 		if (distributionProtocol.getReport() != null) {
 			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
 		}
-
+		
+		detail.setDistributingSites(SiteDetail.from(distributionProtocol.getDistributingSites()));
+		
 		return detail;
 	}
 

@@ -47,8 +47,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		order.setId(detail.getId());
 		setName(detail, order, ose);
 		setDistributionProtocol(detail, order, ose);		
-		setRequester(detail, order, ose);
-		setReceivingSite(detail, order, ose);
+		setRequesterAndReceivingSite(detail, order, ose);
 		setDistributionDate(detail, order, ose);
 		setDistributor(detail, order, ose);
 		setOrderItems(detail, order, ose);
@@ -96,27 +95,17 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		order.setDistributionProtocol(dp);
 	}
 
-	private void setRequester(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
+	private void setRequesterAndReceivingSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
 		User requester = getUser(detail.getRequester(), null);
 		if (requester == null) {
 			ose.addError(UserErrorCode.NOT_FOUND);
 			return;
 		}
 		
-		if (!requester.getInstitute().equals(order.getInstitute())) {
-			ose.addError(DistributionOrderErrorCode.REQUESTER_DOES_NOT_BELONG_DP_INST);
-			return;
-		}
-		
-		
-		order.setRequester(requester);
-	}
-
-	private void setReceivingSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
 		Long siteId = detail.getSiteId();
 		String siteName = detail.getSiteName();		
 		if (siteId == null && StringUtils.isBlank(siteName)) {
-			ose.addError(SiteErrorCode.NOT_FOUND);
+			ose.addError(DistributionOrderErrorCode.RECV_SITE_REQUIRED);
 			return;			
 		}
 		
@@ -132,11 +121,12 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return;
 		}
 		
-		if (!site.getInstitute().equals(order.getInstitute())) {
-			ose.addError(DistributionOrderErrorCode.RECV_SITE_DOES_NOT_BELONG_DP_INST);
+		if (!requester.getInstitute().equals(site.getInstitute())) {
+			ose.addError(DistributionOrderErrorCode.INVALID_REQUESTER_RECV_SITE_INST, requester.formattedName(), site.getName());
 			return;
 		}
-				
+		
+		order.setRequester(requester);
 		order.setSite(site);
 	}
 
@@ -200,14 +190,14 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 		
 		if (detail.getStatus() == null) {
-			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
+			ose.addError(DistributionOrderErrorCode.INVALID_STATUS, detail.getStatus());
 		}
 		
 		DistributionOrder.Status status = null;
 		try {
 			status = DistributionOrder.Status.valueOf(detail.getStatus());
 		} catch (IllegalArgumentException iae) {
-			ose.addError(DistributionOrderErrorCode.INVALID_STATUS);
+			ose.addError(DistributionOrderErrorCode.INVALID_STATUS, detail.getStatus());
 			return;
 		}
 		
@@ -270,7 +260,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		try {
 			orderItem.setStatus(DistributionOrderItem.Status.valueOf(detail.getStatus()));
 		} catch (IllegalArgumentException iae) {
-			ose.addError(DistributionOrderErrorCode.INVALID_SPECIMEN_STATUS);
+			ose.addError(DistributionOrderErrorCode.INVALID_SPECIMEN_STATUS, detail.getStatus());
 		}
 		
 		return orderItem;

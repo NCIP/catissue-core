@@ -81,6 +81,9 @@
       "clear_filters": "Clear Filters",
       "close": "Close",
       "upload": "Upload",
+      "reset_password": "Reset Password",
+      "add_new": "Add New",
+      "download": "Download",
       "reset_password": "Reset Password"
     }
   },
@@ -314,16 +317,15 @@
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",
 
+    "spr": "Surgical Pathology Report",
     "upload_spr": "Upload Surgical Pathology Report",
-    "spr_contents": "Report Contents",
     "spr_uploaded": "Surgical pathology report {{file}} uploaded successfully.",
-    "no_spr": "No surgical pathology report uploaded.",
     "deleting_spr": "Deleting Surgical Pathology Report",
     "confirm_delete_spr": "Are you sure you want to delete {{sprName}} ?",
     "spr_locked": "Surgical pathology report locked successfully.",
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
-    "lock_spr": "Click to lock Surgical Pathology Report",
-    "unlock_spr": "Click to unlock Surgical Pathology Report",
+    "spr_pdf": "PDF",
+    "spr_text": "Text",
     "reason": "Reason",
     "status": {
       "pending": "Pending",
@@ -636,7 +638,14 @@
     "irb_id": "IRB ID",
     "description_url": "Description URL",
     "institute": "Institute",
+    "sites": "Sites",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "distributing_sites": "Distributing Sites",
     "order_report_query": "Order Report Query",
+    "closed": "Closed",
+    "confirm_close_title": "Closing {{shortTitle}} confirmation",
+    "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -656,11 +665,14 @@
       "filter_title": "Filters",
       "title_or_short_title": "Title / Short Title",
       "title": "Type the Title",
-      "pi": "Select Principal Investigator"
+      "pi": "Select Principal Investigator",
+      "activity_status": "Activity Status"
     },
 
     "menu_options": {
-      "delete": "Delete"
+      "delete": "Delete",
+      "close": "Close",
+      "reopen": "Reopen"
     },
     
     "history": {
@@ -1260,6 +1272,7 @@
      "dist_date": "Distribution Date",
      "creation_date": "Creation Date",
      "tracking_url": "Tracking URL",
+     "receiving_institute": "Receiving Institute",
      "receiving_site": "Receiving Site",
      "execution_date": "Execution Date",
      "courier_tracking_url": "Courier Tracking URL",

@@ -32,11 +32,16 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
     }
 
     $scope.save = function() {
-      if (!$scope.deFormCtrl.ctrl.validate()) {
+      var formCtrl = $scope.deFormCtrl.ctrl;
+      if (formCtrl && !formCtrl.validate()) {
         return;
       }
+
       var site = angular.copy($scope.site);
-      site.extensionDetail = $scope.deFormCtrl.ctrl.getFormData();
+      if (formCtrl) {
+        site.extensionDetail = formCtrl.getFormData();
+      }
+
       site.$saveOrUpdate().then(
         function(savedSite) {
           $state.go('site-detail.overview', {siteId: savedSite.id});

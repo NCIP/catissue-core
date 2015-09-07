@@ -11,6 +11,8 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 	
 	private String institute;
 	
+	private boolean listAll;
+	
 	@Override
 	public SiteListCriteria self() {
 		return this;
@@ -43,5 +45,13 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 		return self();
 	}
 	
+	public boolean listAll() {
+		return listAll;
+	}
+	
+	public SiteListCriteria listAll(boolean listAll) {
+		this.listAll = listAll;
+		return self();
+	}
 	
 }

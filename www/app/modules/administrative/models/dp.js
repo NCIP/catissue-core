@@ -11,6 +11,22 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       return this.title;
     }
     
+    DistributionProtocol.prototype.close = function () {
+      return updateActivityStatus(this, 'Closed');
+    }
+    
+    DistributionProtocol.prototype.reopen = function () {
+      return updateActivityStatus(this, 'Active');
+    }
+    
+    function updateActivityStatus (dp, status) {
+      return $http.put(DistributionProtocol.url() + '/' + dp.$id() + '/activity-status', {activityStatus: status}).then(
+        function (result) {
+          return new DistributionProtocol(result.data);
+        }
+      );
+    }
+    
     DistributionProtocol.prototype.getOrderHistory = function() {
       return $http.get(DistributionProtocol.url() + this.$id() + '/history').then(
         function(resp) {
@@ -40,6 +56,6 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
 
       link.remove();
     }
-
+    
     return DistributionProtocol;
   });
