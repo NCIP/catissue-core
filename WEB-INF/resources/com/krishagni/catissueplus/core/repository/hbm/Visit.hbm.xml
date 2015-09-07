@@ -59,6 +59,8 @@
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="MISSED_BY"
     />
+    
+    <property name="cohort" column="COHORT"/>
 
     <filter name="activeEntity"/>
 

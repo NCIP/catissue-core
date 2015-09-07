@@ -178,4 +178,11 @@
       referencedTableName="CATISSUE_SITE"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Adding cohort column to visit table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="COHORT" type="${text.type}(64)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

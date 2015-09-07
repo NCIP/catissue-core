@@ -10,6 +10,7 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.ethnicities = PvManager.getPvs('ethnicity');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
+      $scope.cohorts = PvManager.getPvs('cohort');
 
       var siteNames = cpr.getMrnSites();
       $scope.cpsForReg = [];

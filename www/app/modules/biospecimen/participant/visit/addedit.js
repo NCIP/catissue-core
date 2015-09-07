@@ -6,6 +6,7 @@ angular.module('os.biospecimen.visit.addedit', [])
       $scope.missedReasons = PvManager.getPvs('missed-visit-reason');
       $scope.sites = PvManager.getSites();
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
+      $scope.cohorts = PvManager.getPvs('cohort');
 
       $scope.searchClinicalDiagnoses = function(searchTerm) {
         $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
