@@ -9,7 +9,7 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
       if (!!extensionCtxt) {
         $scope.extnOpts = {
           formId: extensionCtxt.formId,
-          recordId: !!site.id ? site.extensionDetail.id : undefined,
+          recordId: !!site.id && !!site.extensionDetail ? site.extensionDetail.id : undefined,
           formCtxtId: parseInt(extensionCtxt.formCtxtId),
           objectId: site.id,
           showActionBtns: false,

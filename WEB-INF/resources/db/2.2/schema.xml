@@ -185,4 +185,18 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Creating collection protocol extension view" dbms="mysql">
+    <createView viewName="coll_proto_extn_records_view">
+      select 
+        re.OBJECT_ID AS CP_ID, re.RECORD_ID AS RECORD_ID 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+      where 
+        fc.ENTITY_TYPE = 'CollectionProtocolExtension'
+        and fc.deleted_on is null 
+        and re.ACTIVITY_STATUS = 'ACTIVE'
+    </createView>
+  </changeSet>
+
 </databaseChangeLog>

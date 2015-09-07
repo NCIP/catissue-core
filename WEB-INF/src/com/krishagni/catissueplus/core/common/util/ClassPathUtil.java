@@ -16,6 +16,7 @@ public class ClassPathUtil {
 	public static void addURL(URL u) 
 	throws IOException {
 		ClassLoader loader = ClassPathUtil.class.getClassLoader();
+		URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 		Class<URLClassLoader> urlLoaderCls = URLClassLoader.class;
 
 		try {
@@ -23,7 +24,7 @@ public class ClassPathUtil {
 				"addURL",
 				new Class<?>[] { URL.class });
 			method.setAccessible(true);
-			method.invoke(loader, new Object[] { u });
+			method.invoke(systemClassLoader, new Object[] { u });
 		} catch (Throwable t) {
 			throw new IOException("Error, could not add URL to classloader: " + u);
 		}
