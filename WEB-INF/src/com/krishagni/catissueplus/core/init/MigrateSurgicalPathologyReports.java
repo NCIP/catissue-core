@@ -344,7 +344,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
 			"where " +
-			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' limit ?";
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and scg.spr_name is null limit ?";
 	
 	private static final String GET_IDENTIFIED_SPR_DETAILS_SQL_ORACLE =
 			"select "+ 
@@ -357,7 +357,7 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
 			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
 			"where " +
-			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and rownum <= ?";
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and scg.spr_name is null and rownum <= ?";
 	
 	private static final String UPDATE_SPR_DOC_NAME_AND_LOCK_STATUS_SQL =
 			"update " +
