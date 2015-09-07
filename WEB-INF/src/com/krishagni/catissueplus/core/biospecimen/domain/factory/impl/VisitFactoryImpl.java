@@ -394,7 +394,7 @@ public class VisitFactoryImpl implements VisitFactory {
 	private void setCohort(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String cohort = visitDetail.getCohort();
 		if (!isValid(COHORT, cohort)) {
-			ose.addError(VisitErrorCode.INVALID_COHORT);
+			ose.addError(VisitErrorCode.INVALID_COHORT, cohort);
 			return;
 		}
 		
