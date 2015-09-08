@@ -46,6 +46,11 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
       );
     };
 
+    Visit.getByName = function(visitName) {
+      var url = Visit.url() + 'byName/' + visitName;
+      return $http.get(url).then(function(result) {return new Visit(result.data)});
+    };
+
     function visitFilter(visits, filterfn) {
       var results = [];
       angular.forEach(visits, function(visit) {
@@ -113,11 +118,6 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
     Visit.prototype.updateSprLockStatus = function(lock) {
       var url = Visit.url() + this.$id() + '/spr-lock';
       return $http.put(url, {locked: lock}).then(function(result) { return result.data; });
-    };
-
-    Visit.getByName = function(visitName) {
-      var url = Visit.url() + visitName + '/name'
-      return $http.get(url).then(function(result) { return result.data; });
     };
 
     return Visit;
