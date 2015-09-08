@@ -1,9 +1,9 @@
 
 angular.module('os.biospecimen.participant.searchresult', ['os.biospecimen.models'])
-  .controller('ParticipantSearch', function($rootScope, $scope, $state) {
+  .controller('ParticipantSearch', function($scope, $state, participants) {
 
     function init() {
-      $scope.cprs = $rootScope.quickSearch.cprs;
+      $scope.cprs = participants;
     }
 
     $scope.participantDetail = function(cprId) {

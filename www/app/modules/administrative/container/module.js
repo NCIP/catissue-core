@@ -120,4 +120,26 @@ angular.module('os.administrative.container',
         controller: 'ContainerLocationsCtrl',
         parent: 'container-detail'
       });
+  })
+
+  .run(function($state, QuickSearchSvc, Container, Alerts) {
+    var opts = {
+      template: 'modules/administrative/container/quick-search.html',
+      caption: 'Container',
+      search: function(searchData) {
+        Container.getByName(searchData.containerName).then(
+          function(container) {
+            if (container == undefined) {
+              Alerts.error('search.error', {component: 'Container', id: searchData.containerName});
+              return;
+            }
+
+            $state.go('container-detail.overview', {containerId: container.id});
+          }
+        );
+      }
+    };
+
+    QuickSearchSvc.register('container', opts);
+
   });

@@ -147,18 +147,23 @@ public class CollectionProtocolRegistrationDaoImpl
 				.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
 				.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
 
-		if (cprCrit.cpId() != null) {
-			query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
-		}
-
+		addCpRestrictions(query, cprCrit);
 		addRegDateCondition(query, cprCrit);
 		addMrnSiteAndEmpiAndSsnCondition(query, cprCrit);
-		addNameAndPpidCondition(query, cprCrit);
+		addNamePpidAndUidCondition(query, cprCrit);
 		addDobCondition(query, cprCrit);
 		addSpecimenCondition(query, cprCrit);
 		return query;		
 	}
-	
+
+	private void addCpRestrictions(Criteria query, CprListCriteria cprCrit) {
+		if (cprCrit.cpId() == null || cprCrit.cpId() == -1) {
+			return;
+		}
+
+		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
+	}
+
 	private void addRegDateCondition(Criteria query, CprListCriteria crit) {
 		if (crit.registrationDate() == null) {
 			return;
@@ -199,7 +204,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		}
 	}
 	
-	private void addNameAndPpidCondition(Criteria query, CprListCriteria crit) {
+	private void addNamePpidAndUidCondition(Criteria query, CprListCriteria crit) {
 		if (StringUtils.isNotBlank(crit.query())) {
 			Junction namePpidCrit = Restrictions.disjunction()
 				.add(Restrictions.ilike("ppid", crit.query(), MatchMode.ANYWHERE));
@@ -215,19 +220,11 @@ public class CollectionProtocolRegistrationDaoImpl
 
 
 		if (StringUtils.isNotBlank(crit.ppid())) {
-			if (crit.exactMatch()) {
-				query.add(Restrictions.eq("ppid", crit.ppid()));
-			} else {
-				query.add(Restrictions.ilike("ppid", crit.ppid(), MatchMode.ANYWHERE));
-			}
+			query.add(Restrictions.ilike("ppid", crit.ppid(), crit.matchMode()));
 		}
 
 		if (StringUtils.isNotBlank(crit.uid())) {
-			if (crit.exactMatch()) {
-				query.add(Restrictions.eq("participant.uid", crit.uid()));
-			} else {
-				query.add(Restrictions.ilike("participant.uid", crit.uid(), MatchMode.ANYWHERE));
-			}
+			query.add(Restrictions.ilike("participant.uid", crit.uid(), crit.matchMode()));
 		}
 		
 		if (crit.includePhi() && StringUtils.isNotBlank(crit.name())) {
@@ -290,9 +287,9 @@ public class CollectionProtocolRegistrationDaoImpl
 		participant.setId((Long)row[4]);
 		if (row.length > 5) {
 			participant.setFirstName((String)row[5]);
-			participant.setLastName((String)row[6]);
-			participant.setEmpi((String)row[7]);
-			participant.setUid((String)row[8]);
+			participant.setLastName((String) row[6]);
+			participant.setEmpi((String) row[7]);
+			participant.setUid((String) row[8]);
 		}
 		
 		return cpr;

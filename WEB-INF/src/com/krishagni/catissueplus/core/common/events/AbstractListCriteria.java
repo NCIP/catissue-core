@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.common.events;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.criterion.MatchMode;
+
 
 public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements ListCriteria<T> {	
 	private int startAt;
@@ -73,7 +75,11 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 		this.exactMatch = exactMatch;
 		return self();
 	}
-	
+
+	public MatchMode matchMode() {
+		return exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
+	}
+
 	@Override
 	public boolean includeStat() {
 		return includeStat;

@@ -191,7 +191,22 @@ angular.module('os.biospecimen.participant',
       .state('participant-search', {
         url: '/participant-search',
         templateUrl: 'modules/biospecimen/participant/search-result.html',
+        resolve: {
+          participants: function(ParticipantSearchSvc) {
+            return ParticipantSearchSvc.getParticipants();
+          }
+        },
         controller: 'ParticipantSearch',
         parent: 'cp-view'
       });
+  })
+
+  .run(function(QuickSearchSvc, ParticipantSearchSvc) {
+    var opts = {
+      template: 'modules/biospecimen/participant/quick-search.html',
+      caption: 'Participant',
+      search: ParticipantSearchSvc.search
+    };
+
+    QuickSearchSvc.register('participant', opts);
   });

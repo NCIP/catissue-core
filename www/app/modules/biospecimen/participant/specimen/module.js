@@ -117,4 +117,25 @@ angular.module('os.biospecimen.specimen',
         },
         parent: 'specimen-detail'
       });
+  })
+
+  .run(function($state, QuickSearchSvc, Specimen, Alerts) {
+    var opts = {
+      template: 'modules/biospecimen/participant/specimen/quick-search.html',
+      caption: 'Specimen',
+      search: function(searchData) {
+        Specimen.listByLabels(searchData.label).then(
+          function(specimen) {
+            if (specimen == undefined || specimen.length == 0) {
+              Alerts.error('search.error', {component: 'Specimen', id: searchData.label});
+              return;
+            }
+
+            $state.go('specimen-detail.overview', {eventId: specimen[0].eventId, specimenId: specimen[0].id, srId: specimen[0].reqId});
+          }
+        );
+      }
+    }
+
+    QuickSearchSvc.register('specimen', opts);
   });

@@ -1,0 +1,16 @@
+<div class="form-group">
+  <div class="col-xs-11">
+    <input type="text" os-md-input name="ppid" ng-model="searchData.ppid"
+      class="form-control" placeholder="{{'participant.protocol_id' | translate}}" ng-disabled = "searchData.uid"
+      autofocus>
+    <div os-field-error field="searchForm.ppid"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-xs-11">
+    <input type="text" os-md-input name="uid" ng-model="searchData.uid"
+      class="form-control" placeholder="{{'participant.uid' | translate}}" ng-disabled = "searchData.ppid">
+    <div os-field-error field="searchForm.uid"></div>
+  </div>
+</div>

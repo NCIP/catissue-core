@@ -1,111 +1,54 @@
 
 angular.module('openspecimen')
-  .directive('osQuickSearch', function($rootScope, $state, $document, CollectionProtocolRegistration, Visit, Specimen, Container, Alerts) {
+  .controller('QuickSearchCtrl', function($scope, $document, QuickSearchSvc) {
 
-  function participantSearch() {
-    CollectionProtocolRegistration.getParticipants({ppid: $rootScope.quickSearch.participant.ppid, uid: $rootScope.quickSearch.participant.uid}).then(
-      function(participant) {
-        if (participant == undefined || participant.length == 0) {
-          Alerts.error('search.error', {component: 'Participant', id: $rootScope.quickSearch.participant.ppid || $rootScope.quickSearch.participant.uid});
-          return;
-        } else if (participant.length > 1) {
-          $rootScope.quickSearch.cprs = participant;
-          $state.go('participant-search');
-        } else {
-          $state.go('participant-detail.overview', {cprId: participant[0].cprId});
-        }
+    function initSelection() {
+      var initialSelected = 'participant';
+      $scope.ctx.selectedEntity = initialSelected;
+      $scope.ctx.tmpl = QuickSearchSvc.getTemplate(initialSelected);
+      $scope.searchData = {};
+    }
 
-        $rootScope.quickSearch.show = false;
-      }
-    );
-  }
+    function init() {
+      $scope.quickSearch = {};
 
-  function specimenSearch() {
-    Specimen.listByLabels($rootScope.quickSearch.specimen).then(
-      function(specimen) {
-        if (specimen == undefined || specimen.length == 0) {
-          Alerts.error('search.error', {component: 'Specimen', id: $rootScope.quickSearch.specimen});
-          return;
-        }
+      $scope.ctx = {
+        entities: QuickSearchSvc.getEntities(),
+        tmpl: ''
+      };
 
-        $state.go('specimen-detail.overview', {eventId: specimen[0].eventId, specimenId: specimen[0].id, srId: specimen[0].reqId});
-        $rootScope.quickSearch.show = false;
-      }
-    );
-  }
+      initSelection();
+    }
 
-  function visitSearch() {
-    Visit.getByName($rootScope.quickSearch.visit).then(
-      function(visit) {
-        if (visit == undefined) {
-          Alerts.error('search.error', {component: 'Visit', id: $rootScope.quickSearch.visit});
-          return;
-        }
+    $scope.initSearch = function(event) {
+      $scope.quickSearch.show = !$scope.quickSearch.show;
+      initSelection();
 
-        $state.go('visit-detail.overview', {visitId: visit.id, eventId: visit.eventId});
-        $rootScope.quickSearch.show = false;
-      }
-    );
-  }
-
-  function containerSearch() {
-    Container.getByName($rootScope.quickSearch.container).then(
-      function(container) {
-        if (container == undefined) {
-          Alerts.error('search.error', {component: 'Container', id: $rootScope.quickSearch.container});
-          return;
-        }
-
-        $state.go('container-detail.overview', {containerId: container.id});
-        $rootScope.quickSearch.show = false;
-      }
-    );
-  }
-
-  return {
-    restrict: 'A',
-    templateUrl: 'modules/common/search/search.html',
-
-    link: function(scope, element, attrs) {
-      $rootScope.quickSearch = {};
-      $rootScope.quickSearch.show = false;
-      $rootScope.quickSearch.searchComponents = ["Participant", "Visit", "Specimen", "Container"];
-      $rootScope.quickSearch.component = "Participant";
-
-      element.bind('click', function(e) {
+      // target.parent.parent gives main search div
+      $scope.ele = angular.element(event.target.parentElement.parentElement);
+      $scope.ele.bind('click', function(e) {
         e.stopPropagation();
       });
 
       $document.bind('click', function(e) {
-        $rootScope.quickSearch.show = false;
-        scope.$apply(attrs.osQuickSearch);
-      });
-
-      $rootScope.search = function() {
-        $rootScope.quickSearch.show = !$rootScope.quickSearch.show;
-        $rootScope.quickSearch.component = 'Participant';
-        $rootScope.quickSearch.participant.ppid = null;
-        $rootScope.quickSearch.participant.uid= null;
-        $rootScope.quickSearch.visit = null;
-        $rootScope.quickSearch.specimen = null;
-        $rootScope.quickSearch.container = null;
-      }
-
-      $rootScope.onComponentSelect = function(component) {
-        $rootScope.quickSearch.component = component;
-      }
-
-      $rootScope.searchSubmit = function() {
-        if ($rootScope.quickSearch.component == "Participant") {
-          participantSearch();
-        } else if ($rootScope.quickSearch.component == "Specimen") {
-          specimenSearch();
-        } else if ($rootScope.quickSearch.component == "Visit") {
-          visitSearch();
-        } else if ($rootScope.quickSearch.component == "Container") {
-          containerSearch();
+        if(!$scope.quickSearch.show) {
+          $document.unbind('click');
         }
-      }
+
+        $scope.quickSearch.show = false;
+        $scope.$apply();
+      });
     }
-  }
-});
+
+    $scope.onEntitySelect = function() {
+      $scope.ctx.tmpl = QuickSearchSvc.getTemplate($scope.ctx.selectedEntity);
+    }
+
+    $scope.search = function() {
+      QuickSearchSvc.search($scope.ctx.selectedEntity, $scope.searchData);
+      $scope.quickSearch.show = !$scope.quickSearch.show;
+    }
+
+    init();
+  })
+
