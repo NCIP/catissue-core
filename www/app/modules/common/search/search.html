@@ -12,7 +12,7 @@
   <div class="os-quick-search" ng-if="quickSearch.show">
     <form name="searchForm" os-form-validator="searchForm" validator="searchFormValidator" class="form-horizontal" novalidate>
       <div class="form-group">
-        <div class="col-xs-11">
+        <div>
           <os-select name ="searchFor" list="ctx.entities" display-prop="caption" select-prop="name"
             ng-model="ctx.selectedEntity"
             on-select="onEntitySelect()"
@@ -28,7 +28,7 @@
       <div class="os-divider"></div>
 
       <div class="form-group">
-        <div class="col-xs-11">
+        <div>
           <button class="btn btn-primary"  os-form-submit=" search()" local-form="true">
             <span class="fa fa-search"></span>
             <span translate="common.buttons.search"></span>

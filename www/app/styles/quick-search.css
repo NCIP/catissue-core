@@ -13,7 +13,8 @@
   padding-top:20px;
 }
 
-.os-quick-search .col-xs-11 {
+.os-quick-search .form-group {
+  width: 90%;
   margin-left: 15px;
 }
 
@@ -30,4 +31,9 @@
 
 .os-quick-search .ui-select-toggle {
   margin-left: 0px !important;
+}
+
+.os-navbar .search .input-search {
+  flex-grow: 1;
+  display: flex;
 }

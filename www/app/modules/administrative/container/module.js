@@ -125,7 +125,7 @@ angular.module('os.administrative.container',
   .run(function($state, $translate, QuickSearchSvc, Container, Alerts) {
     var opts = {
       template: 'modules/administrative/container/quick-search.html',
-      caption: 'entities.storage_container',
+      caption: 'entities.container',
       search: function(searchData) {
         Container.getByName(searchData.containerName).then(
           function(container) {

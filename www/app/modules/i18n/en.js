@@ -1160,7 +1160,8 @@
     "specimen_event": "Specimen Event",
     "specimen_list": "Specimen List",
     "consent_response": "Consent Response",
-    "consent": "Consent"
+    "consent": "Consent",
+    "container": "Container"
   },
 
   "bulk_imports": {

@@ -2,13 +2,6 @@
 angular.module('os.common.search.ctrl', [])
   .controller('QuickSearchCtrl', function($scope, $document, $timeout, QuickSearchSvc) {
 
-    function initSelection() {
-//      var initialSelected = 'participant';
-//      $scope.ctx.selectedEntity = initialSelected;
-//      $scope.ctx.tmpl = QuickSearchSvc.getTemplate(initialSelected);
-      $scope.searchData = {};
-    }
-
     function init() {
       $scope.quickSearch = {};
 
@@ -17,12 +10,12 @@ angular.module('os.common.search.ctrl', [])
         tmpl: ''
       };
 
-      initSelection();
+      $scope.searchData = {};
     }
 
     $scope.initSearch = function(event) {
       $scope.quickSearch.show = !$scope.quickSearch.show;
-      initSelection();
+      $scope.searchData = {};
 
       // target.parent.parent gives main search div
       $scope.ele = angular.element(event.target.parentElement.parentElement);

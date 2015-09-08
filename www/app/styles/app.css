@@ -115,11 +115,6 @@ body {
   z-index: 999;
 }
 
-.os-navbar .search .input-search {
-  flex-grow: 1;
-  display: flex;
-}
-
 .os-navbar .search {
   flex-direction: column;
 }
