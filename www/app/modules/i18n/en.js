@@ -1363,7 +1363,9 @@
    },
 
    "search": {
-     "error": "{{component}} with the given id {{id}} is not found."
+     "error": "Could not find any {{entity}} for matching search key {{key}}",
+     "quick_search": "Quick Search",
+     "search_for": "Search For"
    }
 
 }

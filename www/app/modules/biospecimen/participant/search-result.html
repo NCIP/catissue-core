@@ -29,7 +29,7 @@
       <div class="os-table-body">
         <div class="row" ng-repeat="cpr in cprs">
           <div class="col col-xs-2">
-            <a ng-click="participantDetail(cpr.cprId)">
+            <a ui-sref="participant-detail.overview({cprId: cpr.cprId})">
               <span>#{{cpr.ppid}}</span>
             </a>
           </div>
@@ -40,10 +40,10 @@
             <span>{{cpr.cpShortTitle}}</span>
           </div>
           <div class="col col-xs-2">
-            <span>{{cpr.participant.firstName}}</span>
+            <span>{{cpr.participant.firstName | osNoValue}}</span>
           </div>
           <div class="col col-xs-2">
-            <span>{{cpr.participant.lastName}}</span>
+            <span>{{cpr.participant.lastName | osNoValue}}</span>
           </div>
         </div>
       </div>

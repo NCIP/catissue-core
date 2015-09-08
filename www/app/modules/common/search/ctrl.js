@@ -1,11 +1,11 @@
 
-angular.module('openspecimen')
-  .controller('QuickSearchCtrl', function($scope, $document, QuickSearchSvc) {
+angular.module('os.common.search.ctrl', [])
+  .controller('QuickSearchCtrl', function($scope, $document, $timeout, QuickSearchSvc) {
 
     function initSelection() {
-      var initialSelected = 'participant';
-      $scope.ctx.selectedEntity = initialSelected;
-      $scope.ctx.tmpl = QuickSearchSvc.getTemplate(initialSelected);
+//      var initialSelected = 'participant';
+//      $scope.ctx.selectedEntity = initialSelected;
+//      $scope.ctx.tmpl = QuickSearchSvc.getTemplate(initialSelected);
       $scope.searchData = {};
     }
 
@@ -35,8 +35,10 @@ angular.module('openspecimen')
           $document.unbind('click');
         }
 
-        $scope.quickSearch.show = false;
-        $scope.$apply();
+        $timeout(function() {
+          $scope.quickSearch.show = false;
+        });
+
       });
     }
 

@@ -122,15 +122,15 @@ angular.module('os.administrative.container',
       });
   })
 
-  .run(function($state, QuickSearchSvc, Container, Alerts) {
+  .run(function($state, $translate, QuickSearchSvc, Container, Alerts) {
     var opts = {
       template: 'modules/administrative/container/quick-search.html',
-      caption: 'Container',
+      caption: 'entities.storage_container',
       search: function(searchData) {
         Container.getByName(searchData.containerName).then(
           function(container) {
             if (container == undefined) {
-              Alerts.error('search.error', {component: 'Container', id: searchData.containerName});
+              Alerts.error('search.error', {entity: 'Container', key: searchData.containerName});
               return;
             }
 

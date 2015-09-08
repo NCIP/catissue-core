@@ -98,12 +98,12 @@ angular.module('os.biospecimen.visit', [
   .run(function($state, QuickSearchSvc, Visit, Alerts) {
     var opts = {
       template: 'modules/biospecimen/participant/visit/quick-search.html',
-      caption: 'Visit',
+      caption: 'entities.visit',
       search: function(searchData) {
         Visit.getByName(searchData.visitName).then(
           function(visit) {
             if (visit == undefined) {
-              Alerts.error('search.error', {component: 'Visit', id: searchData.visitName});
+              Alerts.error('search.error', {entity: 'Visit', key: searchData.visitName});
               return;
             }
 

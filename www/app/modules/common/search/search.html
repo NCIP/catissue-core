@@ -1,10 +1,10 @@
 <div ng-controller = "QuickSearchCtrl">
   <div class="input-search">
-    <input type="text" class="form-control" placeholder="Quick Search"
+    <input type="text" class="form-control" placeholder="{{'search.quick_search' | translate}}"
       ng-click="initSearch($event)">
     </input>
 
-    <button class="btn btn-primary crearfix">
+    <button class="btn btn-primary">
       <span class="fa fa-search"></span>
     </button>
   </div>
@@ -16,9 +16,10 @@
           <os-select name ="searchFor" list="ctx.entities" display-prop="caption" select-prop="name"
             ng-model="ctx.selectedEntity"
             on-select="onEntitySelect()"
-            placeholder="Search For"
+            placeholder="{{'search.search_for' | translate}}"
             os-md-input required>
           </os-select>
+          <div os-field-error field="searchForm.searchFor"></div>
         </div>
       </div>
 

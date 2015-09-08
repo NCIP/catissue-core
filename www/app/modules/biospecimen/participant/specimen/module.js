@@ -122,16 +122,16 @@ angular.module('os.biospecimen.specimen',
   .run(function($state, QuickSearchSvc, Specimen, Alerts) {
     var opts = {
       template: 'modules/biospecimen/participant/specimen/quick-search.html',
-      caption: 'Specimen',
+      caption: 'entities.specimen',
       search: function(searchData) {
         Specimen.listByLabels(searchData.label).then(
-          function(specimen) {
-            if (specimen == undefined || specimen.length == 0) {
-              Alerts.error('search.error', {component: 'Specimen', id: searchData.label});
+          function(specimens) {
+            if (specimens == undefined || specimens.length == 0) {
+              Alerts.error('search.error', {entity: 'Specimen', key: searchData.label});
               return;
             }
 
-            $state.go('specimen-detail.overview', {eventId: specimen[0].eventId, specimenId: specimen[0].id, srId: specimen[0].reqId});
+            $state.go('specimen-detail.overview', {eventId: specimens[0].eventId, specimenId: specimens[0].id, srId: specimens[0].reqId});
           }
         );
       }

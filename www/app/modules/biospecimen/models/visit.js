@@ -47,7 +47,7 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
     };
 
     Visit.getByName = function(visitName) {
-      var url = Visit.url() + 'byName/' + visitName;
+      var url = Visit.url() + 'byname/' + visitName;
       return $http.get(url).then(function(result) {return new Visit(result.data)});
     };
 

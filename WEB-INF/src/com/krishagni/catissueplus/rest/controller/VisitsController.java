@@ -86,7 +86,7 @@ public class VisitsController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/byName/{name}")
+	@RequestMapping(method = RequestMethod.GET, value="/byname/{name}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public VisitDetail getVisitByName(@PathVariable("name") String visitName) {
