@@ -2,16 +2,15 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -33,8 +31,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Utility;
-
-import edu.common.dynamicextensions.nutility.IoUtil;
 
 @Controller
 @RequestMapping("/distribution-protocols")
@@ -155,15 +151,16 @@ public class DistributionProtocolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/orders-report")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public void exportHistory (@PathVariable Long id, 
-			@RequestParam(value = "filename", required = false, defaultValue = "dp-history.csv")
-			String filename,
-	
-			HttpServletResponse response) {
+	public void exportHistory (@PathVariable Long id, HttpServletResponse response) {
 		
 		File file = generateCSVFile();
-		Utility.sendToClient(response, filename, file);
+		Utility.sendToClient(response, "dp-history.csv", file);
 	}
+	
+	/**
+	 * TODO:: This method is for temporary use, remove this method once back-end api's ready for exporting dp-history data.
+	 * 
+	 **/
 	
 	private File generateCSVFile() {
 		List<String[]> data = new ArrayList<String[]>();
@@ -185,12 +182,7 @@ public class DistributionProtocolController {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		} finally {
-			if (csvWriter != null) {
-				try {
-					csvWriter.close();
-				} catch (Exception e) {					
-				}				
-			}
+				IOUtils.closeQuietly(csvWriter);
 		}
 		return file;
 	}

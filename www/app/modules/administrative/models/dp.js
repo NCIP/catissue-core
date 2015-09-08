@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.dp', ['os.common.models'])
-  .factory('DistributionProtocol', function(osModel, $q, $http, $document) {
+  .factory('DistributionProtocol', function(osModel, $q, $http) {
     var DistributionProtocol = osModel('distribution-protocols');
 
     DistributionProtocol.prototype.getType = function() {
