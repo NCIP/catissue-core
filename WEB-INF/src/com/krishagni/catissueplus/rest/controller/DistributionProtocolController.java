@@ -152,19 +152,19 @@ public class DistributionProtocolController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public void exportHistory (@PathVariable Long id, HttpServletResponse response) {
-		
 		File file = generateCSVFile();
 		Utility.sendToClient(response, "dp-history.csv", file);
 	}
 	
 	/**
-	 * TODO:: This method is for temporary use, remove this method once back-end api's ready for exporting dp-history data.
-	 * 
+	 * TODO:: This method is for temporary use.
+	 * Remove this method once back-end api's ready for exporting dp-history data.
 	 **/
 	
 	private File generateCSVFile() {
 		List<String[]> data = new ArrayList<String[]>();
-		String[] header = {"Order Name", "Distribution Date", "Specimen Type", "Anatomic Site", "Pathology Status", "Specimen Distributed"};
+		String[] header = {"Order Name", "Distribution Date", "Specimen Type", "Anatomic Site", 
+				           "Pathology Status", "Specimen Distributed"};
 		String[] row1 = {"Distributed to Prof Tin", "Sep 02 2015", "DNA", "Lung", "Malignant", "20"};
 		String[] row2 = {"Distributed to Prof Tin", "Feb 28 2013", "RNA", "Lung", "Malignant", "508"};
 		data.add(header);
