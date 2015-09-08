@@ -25,6 +25,8 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -707,6 +709,7 @@ public class QueryServiceImpl implements QueryService {
 		OutputStream out = null;
 		
 		try {
+			final Authentication auth = AuthUtil.getAuth();
 			final User user = AuthUtil.getCurrentUser();
 			final String filename = UUID.randomUUID().toString();
 			final OutputStream fout = new FileOutputStream(getExportDataDir() + File.separator + filename);
@@ -728,9 +731,10 @@ public class QueryServiceImpl implements QueryService {
 					
 			Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 				@Override
-				public Boolean call() throws Exception {				
+				public Boolean call() throws Exception {
+					SecurityContextHolder.getContext().setAuthentication(auth);
+					
 					QueryResultExporter exporter = new QueryResultCsvExporter();
-
 					Session session = startTxn();
 					try {
 						QueryResponse resp = exporter.export(fout, query, new QueryResultScreenerImpl(user, false));
