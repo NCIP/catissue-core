@@ -95,6 +95,7 @@
   border: 0px;
   box-shadow: none;
   height: auto!important;
+  min-height: 20px;
   padding: 0px;
   background: transparent;
 }
