@@ -53,6 +53,11 @@
     </field>  
 
     <field>
+      <caption>#getMessage("visit_cohort")</caption>
+      <attribute>cohort</attribute>
+    </field>  
+
+    <field>
       <caption>#getMessage("visit_surgical_pathology_number")</caption>
       <attribute>surgicalPathologyNumber</attribute>
     </field>  

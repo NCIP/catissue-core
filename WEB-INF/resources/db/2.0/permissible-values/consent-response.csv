@@ -2,3 +2,5 @@ IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
 "4141660082537375034",,,null,Yes,consent_response,1
 "4141660082537375035",,,null,No,consent_response,2
 "4141660082537375037",,,null,Not Specified,consent_response,3
+"4142660082537375138",,,null,Withdrawn,consent_response,4
+"4142660082537375139",,,null,None,consent_response,5

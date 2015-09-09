@@ -23,8 +23,8 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -35,7 +35,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
@@ -707,6 +706,7 @@ public class QueryServiceImpl implements QueryService {
 		OutputStream out = null;
 		
 		try {
+			final Authentication auth = AuthUtil.getAuth();
 			final User user = AuthUtil.getCurrentUser();
 			final String filename = UUID.randomUUID().toString();
 			final OutputStream fout = new FileOutputStream(getExportDataDir() + File.separator + filename);
@@ -728,24 +728,18 @@ public class QueryServiceImpl implements QueryService {
 					
 			Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 				@Override
-				public Boolean call() throws Exception {				
+				@PlusTransactional
+				public Boolean call() throws Exception {
+					SecurityContextHolder.getContext().setAuthentication(auth);
+					
 					QueryResultExporter exporter = new QueryResultCsvExporter();
-
-					Session session = startTxn();
 					try {
 						QueryResponse resp = exporter.export(fout, query, new QueryResultScreenerImpl(user, false));
 						insertAuditLog(user, opDetail, resp);
 						sendEmail();
-						session.getTransaction().commit();
 					} catch (Exception e) {
-						Transaction txn = session.getTransaction();
-						if (txn != null) {
-							txn.rollback();
-						}
-					} finally {
-						if (session != null) {
-							session.close();
-						}
+						e.printStackTrace();
+						throw OpenSpecimenException.serverError(e);
 					}
 	                
 					return true;
@@ -893,13 +887,6 @@ public class QueryServiceImpl implements QueryService {
 		daoFactory.getQueryAuditLogDao().saveOrUpdate(auditLog);
 	}
 	
-	private Session startTxn() {
-		AbstractDao<?> dao = (AbstractDao<?>)daoFactory.getQueryAuditLogDao();
-		Session session = dao.getSessionFactory().openSession();
-		session.beginTransaction();
-		return session;
-	}
-		
 	private class QueryResultScreenerImpl implements QueryResultScreener {
 		private User user;
 		

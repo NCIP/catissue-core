@@ -91,6 +91,8 @@ public class VisitServiceImpl implements VisitService {
 			Visit visit = getVisit(crit.getId(), crit.getName());
 			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
 			return ResponseEvent.response(VisitDetail.from(visit));			
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

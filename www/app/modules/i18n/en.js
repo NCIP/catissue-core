@@ -242,6 +242,7 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
+    "search_results": "Participant Search Results",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -312,7 +313,10 @@
     "visit_site": "Visit Site",
     "clinical_diagnosis": "Clinical Diagnosis",
     "clinical_status": "Clinical Status",
+    "cohort": "Cohort",
     "surgical_path_no": "Surg Path Number",
+    "reason_for_missed_visit": "Reason for Missed Visit",
+    "comments": "Comments",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",
@@ -1181,7 +1185,8 @@
     "specimen_event": "Specimen Event",
     "specimen_list": "Specimen List",
     "consent_response": "Consent Response",
-    "consent": "Consent"
+    "consent": "Consent",
+    "container": "Container"
   },
 
   "bulk_imports": {
@@ -1382,6 +1387,12 @@
        "FAILED": "Failed",
        "IN_PROGRESS": "In Progress"
      }
+   },
+
+   "search": {
+     "error": "Could not find any {{entity}} matching search key {{key}}",
+     "quick_search": "Quick Search",
+     "search_for": "Search for"
    }
 
 }

@@ -27,8 +27,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocol
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-import edu.common.dynamicextensions.domain.nui.DisableAction;
-
 public class CollectionProtocolRegistrationDaoImpl 
 	extends AbstractDao<CollectionProtocolRegistration> 
 	implements CollectionProtocolRegistrationDao {
@@ -142,22 +140,30 @@ public class CollectionProtocolRegistrationDaoImpl
 				.createCriteria(CollectionProtocolRegistration.class)
 				.createAlias("collectionProtocol", "cp")
 				.createAlias("participant", "participant")
-				.add(Restrictions.eq("cp.id", cprCrit.cpId()))
 				.add(Restrictions.ne("activityStatus", "Disabled"))
 				.add(Restrictions.ne("cp.activityStatus", "Disabled"))
 				.add(Restrictions.ne("participant.activityStatus", "Disabled"))
 				.addOrder(Order.asc("id"))
 				.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
 				.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
-		
+
+		addCpRestrictions(query, cprCrit);
 		addRegDateCondition(query, cprCrit);
 		addMrnSiteAndEmpiAndSsnCondition(query, cprCrit);
-		addNameAndPpidCondition(query, cprCrit);
+		addNamePpidAndUidCondition(query, cprCrit);
 		addDobCondition(query, cprCrit);
 		addSpecimenCondition(query, cprCrit);
 		return query;		
 	}
-	
+
+	private void addCpRestrictions(Criteria query, CprListCriteria cprCrit) {
+		if (cprCrit.cpId() == null || cprCrit.cpId() == -1) {
+			return;
+		}
+
+		query.add(Restrictions.eq("cp.id", cprCrit.cpId()));
+	}
+
 	private void addRegDateCondition(Criteria query, CprListCriteria crit) {
 		if (crit.registrationDate() == null) {
 			return;
@@ -198,7 +204,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		}
 	}
 	
-	private void addNameAndPpidCondition(Criteria query, CprListCriteria crit) {
+	private void addNamePpidAndUidCondition(Criteria query, CprListCriteria crit) {
 		if (StringUtils.isNotBlank(crit.query())) {
 			Junction namePpidCrit = Restrictions.disjunction()
 				.add(Restrictions.ilike("ppid", crit.query(), MatchMode.ANYWHERE));
@@ -211,9 +217,14 @@ public class CollectionProtocolRegistrationDaoImpl
 			query.add(namePpidCrit);
 			return;
 		}
-		
+
+
 		if (StringUtils.isNotBlank(crit.ppid())) {
-			query.add(Restrictions.ilike("ppid", crit.ppid(), MatchMode.ANYWHERE));
+			query.add(Restrictions.ilike("ppid", crit.ppid(), crit.matchMode()));
+		}
+
+		if (StringUtils.isNotBlank(crit.uid())) {
+			query.add(Restrictions.ilike("participant.uid", crit.uid(), crit.matchMode()));
 		}
 		
 		if (crit.includePhi() && StringUtils.isNotBlank(crit.name())) {
@@ -252,15 +263,16 @@ public class CollectionProtocolRegistrationDaoImpl
 				.add(Projections.property("id"))
 				.add(Projections.property("ppid"))
 				.add(Projections.property("registrationDate"))
-				.add(Projections.property("participant.id"));				
-		
+				.add(Projections.property("cp.shortTitle"))
+				.add(Projections.property("participant.id"));
+
 		if (cprCrit.includePhi()) {
 			projs.add(Projections.property("participant.firstName"))
 				.add(Projections.property("participant.lastName"))
-				.add(Projections.property("participant.empi"));
+				.add(Projections.property("participant.empi"))
+				.add(Projections.property("participant.uid"));
 		}
-		
-		return projs;		
+		return projs;
 	}
 	
 	private CprSummary getCprSummary(Object[] row) {
@@ -268,14 +280,16 @@ public class CollectionProtocolRegistrationDaoImpl
 		cpr.setCprId((Long)row[0]);
 		cpr.setPpid((String)row[1]);
 		cpr.setRegistrationDate((Date)row[2]);
-		
+		cpr.setCpShortTitle((String)row[3]);
+
 		ParticipantSummary participant = new ParticipantSummary();
 		cpr.setParticipant(participant);			
-		participant.setId((Long)row[3]);
-		if (row.length > 4) {
-			participant.setFirstName((String)row[4]);
-			participant.setLastName((String)row[5]);
-			participant.setEmpi((String)row[6]);
+		participant.setId((Long)row[4]);
+		if (row.length > 5) {
+			participant.setFirstName((String)row[5]);
+			participant.setLastName((String) row[6]);
+			participant.setEmpi((String) row[7]);
+			participant.setUid((String) row[8]);
 		}
 		
 		return cpr;

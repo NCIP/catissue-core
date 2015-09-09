@@ -49,4 +49,16 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Adding cohort column to visit table">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="COHORT" type="VARCHAR2(64 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Visit cohort modified">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="cohort_mod" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

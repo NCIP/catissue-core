@@ -78,6 +78,9 @@ public class CollectionProtocolRegistrationsController {
 			
 			@RequestParam(value = "ppid",             required = false)
 			String ppid,
+
+			@RequestParam(value = "uid",             required = false)
+			String uid,
 			
 			@RequestParam(value = "participantId",    required = false)
 			String participantId,
@@ -99,7 +102,10 @@ public class CollectionProtocolRegistrationsController {
 			int maxRecs,
 			
 			@RequestParam(value = "includeStats",     required = false, defaultValue = "false") 
-			boolean includeStats) {
+			boolean includeStats,
+
+			@RequestParam(value = "exactMatch", required = false, defaultValue = "false")
+			Boolean exactMatch) {
 
 		CprListCriteria crit = new CprListCriteria()
 			.cpId(cpId)
@@ -107,12 +113,14 @@ public class CollectionProtocolRegistrationsController {
 			.query(searchStr)
 			.name(name)
 			.ppid(ppid)
+			.uid(uid)
 			.participantId(participantId)
 			.dob(dob)
 			.specimen(specimen)
 			.startAt(startAt)
 			.maxResults(maxRecs)
 			.includeStat(includeStats)
+			.exactMatch(exactMatch)
 			.includePhi(true);
 		
 		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(crit));
