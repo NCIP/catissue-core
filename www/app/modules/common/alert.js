@@ -42,8 +42,8 @@ angular.module('openspecimen')
         return this.add($translate.instant(code, params), 'warning', timeout);
       },
 
-      error: function(code, timeout) {
-        return this.add($translate.instant(code), 'danger', timeout);
+      error: function(code, params, timeout) {
+        return this.add($translate.instant(code, params), 'danger', timeout);
       },
 
       errorText: function(text, timeout) {
