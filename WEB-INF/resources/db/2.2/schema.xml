@@ -186,7 +186,7 @@
   </changeSet>
 
   <changeSet author="vlonushte" id="Creating collection protocol extension view" dbms="mysql">
-    <createView viewName="coll_proto_extn_records_view">
+    <createView viewName="os_cp_extn_records_view">
       select 
         re.OBJECT_ID AS CP_ID, re.RECORD_ID AS RECORD_ID 
       from 

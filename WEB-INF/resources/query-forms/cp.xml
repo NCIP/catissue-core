@@ -159,7 +159,7 @@
         <name>extensions</name>
         <udn>extensions</udn>
         <caption>Collection Protocol Extension</caption>
-        <table>coll_proto_extn_records_view</table>
+        <table>os_cp_extn_records_view</table>
         <foreignKey>CP_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
         <pathLink>true</pathLink>
