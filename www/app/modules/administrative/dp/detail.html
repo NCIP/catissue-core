@@ -4,12 +4,14 @@
       <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
     </ul>
     
-    <h3>{{distributionProtocol.shortTitle}}</h3>
+    <h3>
+      <span>{{distributionProtocol.shortTitle}}</span>
     
-    <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'"
-      translate="dp.closed">
-      Closed
-    </span>
+      <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'"
+        translate="dp.closed">
+        Closed
+      </span>
+    </h3>
 
     <div class="os-btns right">
       <button show-if-admin class="primary" title="{{'dp.tooltip.edit' | translate}}"
