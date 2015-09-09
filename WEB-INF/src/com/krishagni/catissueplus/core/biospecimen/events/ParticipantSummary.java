@@ -10,6 +10,8 @@ public class ParticipantSummary {
 	
 	private String empi;
 
+	private String uid;
+
 	public Long getId() {
 		return id;
 	}
@@ -40,5 +42,13 @@ public class ParticipantSummary {
 
 	public void setEmpi(String empi) {
 		this.empi = empi;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 }

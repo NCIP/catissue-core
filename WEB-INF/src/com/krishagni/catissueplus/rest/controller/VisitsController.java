@@ -90,6 +90,15 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/byname/{name}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail getVisitByName(@PathVariable("name") String visitName) {
+		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitName));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
@@ -288,7 +297,11 @@ public class VisitsController {
 	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(Long visitId) {
 		return getRequest(new EntityQueryCriteria(visitId));		
 	}
-	
+
+	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(String visitName) {
+		return getRequest(new EntityQueryCriteria(visitName));
+	}
+
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);				
 	}

@@ -93,4 +93,25 @@ angular.module('os.biospecimen.visit', [
         controller: 'VisitSprCtrl',
         parent: 'visit-detail'
       });
+  })
+
+  .run(function($state, QuickSearchSvc, Visit, Alerts) {
+    var opts = {
+      template: 'modules/biospecimen/participant/visit/quick-search.html',
+      caption: 'entities.visit',
+      search: function(searchData) {
+        Visit.getByName(searchData.visitName).then(
+          function(visit) {
+            if (visit == undefined) {
+              Alerts.error('search.error', {entity: 'Visit', key: searchData.visitName});
+              return;
+            }
+
+            $state.go('visit-detail.overview', {visitId: visit.id, eventId: visit.eventId});
+          }
+        );
+      }
+    };
+
+    QuickSearchSvc.register('visit', opts);
   });
