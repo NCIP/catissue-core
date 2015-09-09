@@ -33,11 +33,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
 
       search: search
     };
-  });
-
-
-
-angular.module('os.biospecimen.participant.searchresult', ['os.biospecimen.models'])
+  })
   .controller('ParticipantResultsView', function($scope, $state, participants) {
     function init() {
       $scope.cprs = participants;
