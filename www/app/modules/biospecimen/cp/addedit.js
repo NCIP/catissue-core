@@ -11,7 +11,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       if (!!extensionCtxt) {
         $scope.extnOpts = {
           formId: extensionCtxt.formId,
-          recordId: !!cp.id ? cp.extensionDetail.id : undefined,
+          recordId: !!cp.id && !!cp.extensionDetail ? cp.extensionDetail.id : undefined,
           formCtxtId: parseInt(extensionCtxt.formCtxtId),
           objectId: cp.id,
           showActionBtns: false,
