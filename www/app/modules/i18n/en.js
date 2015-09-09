@@ -1364,9 +1364,9 @@
    },
 
    "search": {
-     "error": "Could not find any {{entity}} for matching search key {{key}}",
+     "error": "Could not find any {{entity}} matching search key {{key}}",
      "quick_search": "Quick Search",
-     "search_for": "Search For"
+     "search_for": "Search for"
    }
 
 }
