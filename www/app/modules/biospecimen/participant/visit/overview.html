@@ -41,6 +41,11 @@
         <span class="value value-md">{{visit.clinicalStatus | osNoValue}}</span>
       </li>
 
+      <li class="item" ng-if="visit.status != 'Missed Collection' && !!visit.cohort">
+        <strong class="key key-sm" translate="visits.cohort">Cohort</strong>
+        <span class="value value-md">{{visit.cohort | osNoValue}}</span>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="visits.surgical_path_no">Surg Path Number</strong>
         <span class="value value-md">{{visit.surgicalPathologyNumber | osNoValue}}</span>

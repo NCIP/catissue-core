@@ -1,6 +1,9 @@
 package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,11 +11,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -21,6 +28,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.openspecimen.core.migration.domain.Migration.Status;
@@ -42,6 +50,10 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	
 	private MigrationService migrationSvc;
 	
+	private JdbcTemplate jdbcTemplate;
+	
+	private boolean identifiedReports = true;
+	
 	public void setTxnMgr(PlatformTransactionManager txnMgr) {
 		this.txnMgr = txnMgr;
 	}
@@ -61,13 +73,19 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
+	
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		migrate();
+		migrateFromFiles();
+		migrateFromDatabase(!identifiedReports);
+		migrateFromDatabase(identifiedReports);
 	}
 	
-	private void migrate() {
+	private void migrateFromFiles() {
 		String srcDirPath = migrationProps.getProperty("visit.old_spr_dir");
 		if (StringUtils.isBlank(srcDirPath)) {
 			logger.info("Old spr directory path not spcified, either no need of migration for this version or missed it.");
@@ -121,6 +139,62 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 			logger.info("Total time for migration: " + 
 					(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");
 		}
+	}
+	
+	private void migrateFromDatabase(final boolean identifiedReports) {
+		Date startTime = Calendar.getInstance().getTime();
+		logger.info("Migration from static table start time: " + startTime);
+		
+		int totalMigratedReportsCnt = 0;
+		final int maxResult = 100;
+		boolean moreRecords = true;
+		while (moreRecords) {
+			TransactionTemplate txnTmpl = new TransactionTemplate(txnMgr);
+			Integer migrtedReportsCnt = 
+				txnTmpl.execute(new TransactionCallback<Integer>() {
+					@Override
+					public Integer doInTransaction(TransactionStatus status) {
+						final List<SprDetail> sprDetails  = getSprDetailsFromTable(getReportsSql(identifiedReports), maxResult);
+						if (CollectionUtils.isEmpty(sprDetails)) {
+							logger.info("No surgical pathology reports in static table to migrate from static table");
+							return 0;
+						}
+						
+						for (final SprDetail detail : sprDetails) {
+							OutputStream outputStream = null;
+							try {
+								File sprFile = getSprFile(detail.getVisitId());
+								FileUtils.writeStringToFile(sprFile, detail.getReportContent());
+								
+								String sprName = detail.getVisitName() + ".txt"; 
+								boolean sprLocked = SPR_LOCKED.equals(detail.getActivityStatus());
+								
+								jdbcTemplate.update(UPDATE_SPR_DOC_NAME_AND_LOCK_STATUS_SQL, 
+										new Object[] {sprName, sprLocked, detail.getVisitId()});
+								
+								jdbcTemplate.update(DISABLE_OLD_MIGRATED_SPR_SQL, detail.getReportId());
+							} catch (Exception e) {
+								logger.error("Error while migrating records from static table: ", e);
+							} finally {
+								IOUtils.closeQuietly(outputStream);
+							}
+						} 
+						return sprDetails.size();
+					}
+				});
+			
+			totalMigratedReportsCnt = totalMigratedReportsCnt + migrtedReportsCnt;
+			logger.info("Number of reports migrated from static table, till now: " + totalMigratedReportsCnt);
+			
+			if (migrtedReportsCnt < maxResult) {
+				moreRecords = false;
+			}
+		}
+		
+		Date endTime = Calendar.getInstance().getTime();
+		logger.info("Migration from static table end time: " + endTime);
+		logger.info("Total time for migration from static table: " + 
+				(endTime.getTime() - startTime.getTime()) / (1000 * 60) + " minutes");		
 	}
 
 	private void migrateSprs(final File[] files) throws Exception {
@@ -181,6 +255,32 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		return result;
 	}
 	
+	private String getReportsSql(boolean identifiedReports) {
+		if (isMysql()) {
+			return identifiedReports ? GET_IDENTIFIED_SPR_DETAILS_SQL_MYSQL : GET_DEIDENTIFIED_SPR_DETAILS_SQL_MYSQL;
+		} else {
+			return identifiedReports ? GET_IDENTIFIED_SPR_DETAILS_SQL_ORACLE : GET_DEIDENTIFIED_SPR_DETAILS_SQL_ORACLE;
+		}
+		
+	}
+
+	private List<SprDetail> getSprDetailsFromTable(final String getSprDetailsSql, final int maxResult) {
+		return jdbcTemplate.query(
+				getSprDetailsSql,
+				new Object[] {maxResult},
+				new RowMapper<SprDetail>() {
+					public SprDetail mapRow(ResultSet rs, int rowNum) throws SQLException {
+						SprDetail sprDetail = new SprDetail();
+						sprDetail.setVisitId(rs.getLong("visitId"));
+						sprDetail.setVisitName(rs.getString("visitName"));
+						sprDetail.setActivityStatus(rs.getString("activityStatus"));
+						sprDetail.setReportContent(rs.getString("reportContent"));
+						sprDetail.setReportId(rs.getLong("reportId"));
+						return sprDetail;
+					}
+			 });					
+	}
+	
 	private File getSprFile(Long visitId) {
 		String path = cfgSvc.getStrSetting(
 				ConfigParams.MODULE, 
@@ -194,6 +294,141 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	private String getDefaultVisitSprDir() {
 		return cfgSvc.getDataDir() + File.separator + "visit-sprs";
 	}
-
+	
+	private boolean isMysql(){
+		String dbType;
+		try {
+			dbType = jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName();
+		}
+		catch (SQLException e) {
+			logger.error("Error while checking the database type", e);
+			throw new OpenSpecimenException(e);
+		}
+		return "MYSQL".equalsIgnoreCase(dbType);
+	}
+	
+	private static final String GET_DEIDENTIFIED_SPR_DETAILS_SQL_MYSQL =
+			"select "+ 
+			  "pr.identifier reportId, pr.activity_status activityStatus, " +
+			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
+			"from " +
+			  "catissue_deidentified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
+			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
+			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
+			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
+			"where " +
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' limit ?";
+	
+	private static final String GET_DEIDENTIFIED_SPR_DETAILS_SQL_ORACLE =
+			"select "+ 
+			  "pr.identifier reportId, pr.activity_status activityStatus, " +
+			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
+			"from " +
+			  "catissue_deidentified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
+			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
+			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
+			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
+			"where " +
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and rownum <= ?";
+	
+	private static final String GET_IDENTIFIED_SPR_DETAILS_SQL_MYSQL =
+			"select "+ 
+			  "pr.identifier reportId, pr.activity_status activityStatus, " +
+			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
+			"from " +
+			  "catissue_identified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
+			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
+			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
+			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
+			"where " +
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and scg.spr_name is null limit ?";
+	
+	private static final String GET_IDENTIFIED_SPR_DETAILS_SQL_ORACLE =
+			"select "+ 
+			  "pr.identifier reportId, pr.activity_status activityStatus, " +
+			  "dr.scg_id visitId, scg.name visitName, rc.report_data reportContent " + 
+			"from " +
+			  "catissue_identified_report dr " + 
+			  "join catissue_pathology_report pr on dr.identifier = pr.identifier " + 
+			  "join catissue_report_textcontent rtc on rtc.report_id = pr.identifier " + 
+			  "join catissue_report_content rc on rc.identifier = rtc.identifier " +
+			  "join catissue_specimen_coll_group scg on dr.scg_id = scg.identifier " +
+			"where " +
+			  "pr.activity_status <> 'Disabled' and scg.activity_status <> 'Disabled' and scg.spr_name is null and rownum <= ?";
+	
+	private static final String UPDATE_SPR_DOC_NAME_AND_LOCK_STATUS_SQL =
+			"update " +
+			  "catissue_specimen_coll_group " +
+			"set " +
+			  "spr_name = ? , spr_locked = ? " +
+			"where " +
+			  "identifier = ? " ;
+	
+	private static final String DISABLE_OLD_MIGRATED_SPR_SQL = 
+			"update " +
+			  "catissue_pathology_report " +
+			"set " +
+			  "activity_status = 'Disabled' " +
+			"where "+
+			  "identifier = ?" ;
+	
+	private static final String SPR_LOCKED = "Locked";
+	
 	private static final String MIGRATION_NAME = "Surgical Pathology Reports";
+	
+	private class SprDetail {
+		private Long visitId;
+		 
+		private String visitName;
+		 
+		private Long reportId;
+		 
+		private String activityStatus;
+		 
+		private String reportContent;
+		 
+		public Long getVisitId() {
+			return visitId;
+		}
+
+		public void setVisitId(Long visitId) {
+			this.visitId = visitId;
+		}
+
+		public String getVisitName() {
+			return visitName;
+		}
+
+		public void setVisitName(String visitName) {
+			this.visitName = visitName;
+		}
+
+		public Long getReportId() {
+			return reportId;
+		}
+
+		public void setReportId(Long reportId) {
+			this.reportId = reportId;
+		}
+
+		public String getActivityStatus() {
+			return activityStatus;
+		}
+
+		public void setActivityStatus(String activityStatus) {
+			this.activityStatus = activityStatus;
+		}
+
+		public String getReportContent() {
+			return reportContent;
+		}
+
+		public void setReportContent(String reportContent) {
+			this.reportContent = reportContent;
+		}
+	}
+
 }

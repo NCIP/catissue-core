@@ -34,7 +34,9 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	UNABLE_TO_LOCATE_SPR,
 	
-	LOCKED_SPR;
+	LOCKED_SPR,
+	
+	INVALID_COHORT;
 	
 	public String code() {
 		return "VISIT_" + this.name();
