@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -74,15 +75,19 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Visit getByName(String name) {
-		List<Visit> visits = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISIT_BY_NAME)
-				.setString("name", name)
-				.list();
-		
+		List<Visit> visits = getByName(Collections.singleton(name));
 		return !visits.isEmpty() ? visits.iterator().next() : null;
-	}	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Visit> getByName(Collection<String> names) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_VISIT_BY_NAME)
+				.setParameterList("names", names)
+				.list();
+	}
 	
 	private String getVisitKey(Long visitId, Long cpeId) {
 		String key = "";
