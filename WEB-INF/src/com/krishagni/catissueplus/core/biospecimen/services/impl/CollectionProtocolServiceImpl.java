@@ -55,8 +55,11 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
@@ -189,6 +192,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ensureUniqueTitle(null, cp, ose);
 			ensureUniqueShortTitle(null, cp, ose);
 			ensureUniqueCode(null, cp, ose);
+			ensureUniqueCpSiteCode(cp, ose);
 			ose.checkAndThrow();
 
 			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
@@ -225,6 +229,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			ensureUniqueTitle(existingCp, cp, ose);
 			ensureUniqueShortTitle(existingCp, cp, ose);
 			ensureUniqueCode(existingCp, cp, ose);
+			ensureUniqueCpSiteCode(cp, ose);
 			if (!existingCp.isConsentsWaived().equals(cp.isConsentsWaived())) {
 			  ensureConsentTierIsEmpty(existingCp, ose);
 			}
@@ -907,6 +912,16 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		CollectionProtocol dbCp = daoFactory.getCollectionProtocolDao().getCpByCode(code);
 		if (dbCp != null) {
 			ose.addError(CpErrorCode.DUP_CODE, code);
+		}
+	}
+	
+	private void ensureUniqueCpSiteCode(CollectionProtocol cp, OpenSpecimenException ose) {
+		List<String> codes = Utility.<List<String>>collect(cp.getCollectionProtocolSites(), "code");
+		codes.removeAll(Arrays.asList(new Long[] {null}));
+		
+		Set<String> uniqueCode = new HashSet<String>(codes);
+		if (codes.size() != uniqueCode.size()) {
+			ose.addError(CpErrorCode.DUP_CP_SITE_CODES, codes);
 		}
 	}
 	

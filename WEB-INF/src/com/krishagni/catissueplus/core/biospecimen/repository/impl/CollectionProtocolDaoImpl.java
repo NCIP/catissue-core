@@ -312,8 +312,9 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		String repositoryName = cpCriteria.repositoryName();
 		if (StringUtils.isNotBlank(repositoryName)) {
-			query.createCriteria("repositories", "repo")
-				.add(Restrictions.eq("repo.name", repositoryName));
+			query.createCriteria("collectionProtocolSites", "cpSite")
+				.createAlias("cpSite.site", "site")
+				.add(Restrictions.eq("site.name", repositoryName));
 		}
 
 		applyIdsFilter(query, "id", cpCriteria.ids());

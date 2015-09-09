@@ -1,13 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
@@ -15,9 +12,9 @@ import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
 public class CollectionProtocolDetail extends CollectionProtocolSummary {
-	private List<String> repositoryNames;
-	
 	private List<UserSummary> coordinators;
+	
+	private List<CollectionProtocolSiteDetail> cpSites;
 
 	private Boolean consentsWaived;
 
@@ -54,20 +51,20 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	
 	private ExtensionDetail extensionDetail;
 
-	public List<String> getRepositoryNames() {
-		return repositoryNames;
-	}
-
-	public void setRepositoryNames(List<String> repositoryNames) {
-		this.repositoryNames = repositoryNames;
-	}
-
 	public List<UserSummary> getCoordinators() {
 		return coordinators;
 	}
 
 	public void setCoordinators(List<UserSummary> coordinators) {
 		this.coordinators = coordinators;
+	}
+
+	public List<CollectionProtocolSiteDetail> getCpSites() {
+		return cpSites;
+	}
+
+	public void setCpSites(List<CollectionProtocolSiteDetail> cpSites) {
+		this.cpSites = cpSites;
 	}
 
 	public Boolean getConsentsWaived() {
@@ -219,7 +216,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setActivityStatus(cp.getActivityStatus());
-		result.setRepositoryNames(getRepositoryNames(cp.getRepositories()));
+		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getCollectionProtocolSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));
 		
 		if (fullObject) {
@@ -229,13 +226,5 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		
 		return result;
 	}
-
-	private static List<String> getRepositoryNames(Collection<Site> repositories) {
-		List<String> repositoryNames = new ArrayList<String>();
-		for (Site site: repositories) {
-			repositoryNames.add(site.getName());
-		}
-		
-		return repositoryNames;
-	}
+	
 }

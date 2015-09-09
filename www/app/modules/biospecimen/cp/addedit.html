@@ -19,7 +19,8 @@
         <label class="control-label col-xs-3" translate="cp.repositories">Repositories</label>
         <div class="col-xs-6">
           <os-select multiple name="repositoryNames" ng-model="cp.repositoryNames" list="sites"
-            class="form-control" placeholder="{{'cp.repositories' | translate}}" required>
+            class="form-control" placeholder="{{'cp.repositories' | translate}}" 
+            on-select="onRepositorySelect" on-remove="onRepositoryRemove" required>
           </os-select>
           <div os-field-error field="cpForm.repositoryNames"></div>
         </div>
@@ -166,6 +167,37 @@
             <input type="checkbox" ng-model="cp.manualSpecLabelEnabled"> 
             <span translate="cp.spec_labels">Specimen Labels</span>
           </label>
+        </div>
+      </div>
+
+      <div class="col-xs-offset-3" ng-if="codingEnabled && showAdvAttrs">
+        <div class="form-group clearfix">
+          <div class="col-xs-3">
+            <label class="control-label" translate="cp.site">Site</label>
+          </div>
+          <div class="col-xs-3">
+            <label class="control-label" translate="cp.code">Code</label>
+          </div>
+        </div>
+
+        <div class="form-group clearfix" ng-repeat="cpSite in cp.cpSites">
+          <div class="col-xs-3">
+            <input type="text" ng-model="cpSite.siteName" class="form-control" ng-readonly="true"/>
+          </div> 
+          <div class="col-xs-3">
+            <input name="code" type="text" ng-model="cpSite.code" class="form-control"
+              placeholder="{{'cp.code' | translate}}">
+            <div os-field-error field="cpForm.code"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="codingEnabled">
+        <div class="col-xs-offset-3 col-xs-6">
+          <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
+            <span ng-if="!showAdvAttrs" translate="cp.more_info">More Site Code Information</span>
+            <span ng-if="showAdvAttrs" translate="cp.less_info">Less Site Code Information</span>
+          </a>
         </div>
       </div>
 

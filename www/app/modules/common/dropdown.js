@@ -32,7 +32,11 @@ angular.module('openspecimen')
           .attr('os-tabable', !!tAttrs.osTabable);
     
         if (tAttrs.onSelect) {
-          uiSelect.attr('on-select', tAttrs.onSelect);
+          uiSelect.attr('on-select', tAttrs.onSelect + '($item)');
+        }
+
+        if (tAttrs.onRemove) {
+          uiSelect.attr('on-remove', tAttrs.onRemove + '($item)');
         }
 
         if (tAttrs.title) {

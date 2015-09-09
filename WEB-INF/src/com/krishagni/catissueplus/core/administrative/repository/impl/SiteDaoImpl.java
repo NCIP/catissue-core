@@ -42,7 +42,7 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Site> getSitesByNames(List<String> siteNames) {
+	public List<Site> getSitesByNames(Collection<String> siteNames) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_SITES_BY_NAMES)
 				.setParameterList("siteNames", siteNames)
