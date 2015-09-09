@@ -72,12 +72,18 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String SPECIMEN_EVENT_FORM = "SpecimenEvent";
 	
+	private static final String COLLECTION_PROTOCOL_EXTENSION = "CollectionProtocolExtension";
+	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
+	
+	private static Map<String, String> customExtensionForms = new HashMap<String, String>();
 	
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
+		
+		customExtensionForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
 	}
 	
 	private FormDao formDao;
@@ -164,13 +170,18 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
-		if (!staticExtendedForms.contains(formName)) {
+		if (!staticExtendedForms.contains(formName) && customExtensionForms.get(formName) == null) {
 			return ResponseEvent.response(fields);
 		}
 		
 		List<Long> extendedFormIds = formDao.getFormIds(cpId, formName);
 		if (formName.equals(SPECIMEN_FORM)) {
 			extendedFormIds.addAll(formDao.getFormIds(cpId, SPECIMEN_EVENT_FORM));
+		}
+		
+		String extensionName = customExtensionForms.get(formName);
+		if (extensionName != null) {
+			extendedFormIds.addAll(formDao.getFormIds(-1L, extensionName));
 		}
 
 		FormFieldSummary field = new FormFieldSummary();
@@ -610,7 +621,6 @@ public class FormServiceImpl implements FormService {
 		formData.setRecordId(recordId);
 		return formData;
 	}
-	
 	
 	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();

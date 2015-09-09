@@ -154,5 +154,17 @@
         </row>
       </subForm>
     </row>
+    <row>
+      <subForm>
+        <name>extensions</name>
+        <udn>extensions</udn>
+        <caption>Collection Protocol Extension</caption>
+        <table>os_cp_extn_records_view</table>
+        <foreignKey>CP_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <pathLink>true</pathLink>
+        <extnFkCol>RECORD_ID</extnFkCol>
+      </subForm>
+    </row>
   </view>
 </form>
