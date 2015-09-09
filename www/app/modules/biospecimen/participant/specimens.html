@@ -84,7 +84,7 @@
                     </a>
 
                     <span class="fa fa-circle"
-                      ng-class="{'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId,
+                      ng-class="{'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId && !specimen.distributed,
                                  'os-status-collected': specimen.status == 'Collected',
                                  'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                                  'os-status-not-collected': specimen.status == 'Missed Collection',
