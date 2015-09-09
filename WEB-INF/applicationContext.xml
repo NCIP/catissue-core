@@ -256,7 +256,6 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidSpecTypeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
         <property name="cfgSvc" ref="cfgSvc"/>
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-type-abbr.csv"/>
