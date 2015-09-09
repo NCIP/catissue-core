@@ -87,7 +87,7 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
     }
 
     CollectionProtocol.prototype.getRepositoryNames = function() {
-      if (this.cpSites) {
+      if (!this.cpSites) {
         return [];
       }
       return this.cpSites.map(function(cpSite) { return cpSite.siteName; });
