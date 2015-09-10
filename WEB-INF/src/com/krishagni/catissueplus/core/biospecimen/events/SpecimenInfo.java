@@ -393,9 +393,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setStorageType(sr != null ? sr.getStorageType() : null);
 		result.setVisitId(specimen.getVisit().getId());
 		result.setVisitName(specimen.getVisit().getName());
-		result.setEventId(specimen.getVisit().getCpEvent().getId());
-		result.setCpId(specimen.getVisit().getCollectionProtocol().getId());
 		result.setCprId(specimen.getVisit().getRegistration().getId());
+		result.setCpId(specimen.getCollectionProtocol().getId());
 		result.setCpShortTitle(specimen.getCollectionProtocol().getShortTitle());
 	}	
 	
