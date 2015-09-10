@@ -729,7 +729,7 @@
        "cp": "Collection Protocol",
        "role": "Role",
        "no_roles": "There are no roles to show. Add a new role by clicking Add Role...",
-       "all": "All Current & Future"
+       "all": "All Current and Future"
     },
 
     "create_account": "Create your OpenSpecimen Account",
