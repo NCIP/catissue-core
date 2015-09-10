@@ -17,7 +17,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
           } else if (participants.length > 1) {
             matchingParticipants = participants;
             if ($state.current.url == '/participant-search') {
-              $state.go($state.current, {}, {reload: true}); //second parameter is for $stateParams
+              $state.go($state.current, {}, {reload: true});
             } else {
               $state.go('participant-search');
             }
