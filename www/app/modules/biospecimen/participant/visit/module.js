@@ -99,6 +99,7 @@ angular.module('os.biospecimen.visit', [
     var opts = {
       template: 'modules/biospecimen/participant/visit/quick-search.html',
       caption: 'entities.visit',
+      order: 2,
       search: function(searchData) {
         Visit.getByName(searchData.visitName).then(
           function(visit) {
@@ -107,7 +108,7 @@ angular.module('os.biospecimen.visit', [
               return;
             }
 
-            $state.go('visit-detail.overview', {visitId: visit.id, eventId: visit.eventId});
+            $state.go('visit-detail.overview', {cpId: visit.cpId, cprId: visit.cprId, visitId: visit.id, eventId: visit.eventId});
           }
         );
       }

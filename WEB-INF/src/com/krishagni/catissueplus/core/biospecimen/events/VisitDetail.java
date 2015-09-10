@@ -25,9 +25,11 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String eventLabel;
 
 	private Double eventPoint;
-	
+
+	private Long cpId;
+
 	private String cpTitle;
-	
+
 	private String cpShortTitle;
 
 	private Long id;
@@ -100,6 +102,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	public void setEventPoint(Double eventPoint) {
 		this.eventPoint = eventPoint;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
 	}
 
 	public String getCpTitle() {
@@ -273,6 +283,7 @@ public class VisitDetail extends AttributeModifiedSupport {
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		detail.setCprId(cpr.getId());
 		detail.setPpid(cpr.getPpid());
+		detail.setCpId(cpr.getCollectionProtocol().getId());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setCpShortTitle(cpr.getCollectionProtocol().getShortTitle());
 		

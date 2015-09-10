@@ -126,6 +126,7 @@ angular.module('os.administrative.container',
     var opts = {
       template: 'modules/administrative/container/quick-search.html',
       caption: 'entities.container',
+      order: 4,
       search: function(searchData) {
         Container.getByName(searchData.containerName).then(
           function(container) {
