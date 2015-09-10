@@ -28,32 +28,24 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
     }
     
     function getHistory() {
-      var deferred = $q.defer();
+      var def = $q.defer();
       
-      deferred.resolve({
+      def.resolve({
         "data": [{
           "name": "Distributed to Prof Tin",
           "executionDate": "1441174401000",
-          "specimens": {
-                         "type": "DNA",
-                         "anatomicSite": "Lung",
-                         "pathology": "Malignant"
-                       },
+          "specimens": {"type": "DNA", "anatomicSite": "Lung", "pathology": "Malignant"},
           "specimenCnt": 20
         },
         {
           "name": "Distributed to Prof Tin",
           "executionDate": "1362002400000",
-          "specimens": {
-                         "type": "RNA",
-                         "anatomicSite": "Lung",
-                         "pathology": "Malignant"
-                       },
+          "specimens": {"type": "RNA", "anatomicSite": "Lung", "pathology": "Malignant"},
           "specimenCnt": 508
         }]
       })
       
-      return deferred.promise;
+      return def.promise;
     }
     
     DistributionProtocol.prototype.getOrderHistory = function() {

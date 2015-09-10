@@ -650,6 +650,7 @@
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
+    "add_requirement": "Add Specimen Requirement",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -662,7 +663,8 @@
     
     "menu": {
       "overview": "Overview",
-      "history": "History"
+      "history": "History",
+      "requirements": "Requirements"
     },
 
     "filter": {
@@ -679,13 +681,19 @@
       "reopen": "Reopen"
     },
     
-    "history": {
+    "distribution_order": {
       "order_name": "Order Name",
       "dist_date": "Distribution Date",
       "specimen_type": "Speciment Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
-      "specimens_cnt": "Specimens Distributed"
+      "specimens_cnt": "Specimens Distributed",
+      "specimens_req": "Specimens Required",
+      "target": "Target",
+      "distributed": "Distributed",
+      "price": "Price",
+      "unit_price": "Price Per Unit",
+      "comments": "Comments"
     }
   },
 
