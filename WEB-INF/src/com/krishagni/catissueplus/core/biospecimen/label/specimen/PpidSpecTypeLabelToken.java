@@ -24,7 +24,7 @@ public class PpidSpecTypeLabelToken extends AbstractSpecimenLabelToken {
 	}
 
 	@Override
-	public java.lang.String getLabel(Specimen specimen) {
+	public String getLabel(Specimen specimen) {
 		String ppid = specimen.getVisit().getRegistration().getPpid();
 		String key = ppid + "_" + specimen.getSpecimenType();
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId(name, key);
