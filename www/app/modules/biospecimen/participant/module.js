@@ -205,6 +205,7 @@ angular.module('os.biospecimen.participant',
     var opts = {
       template: 'modules/biospecimen/participant/quick-search.html',
       caption: 'entities.participant',
+      order : 1,
       search: ParticipantSearchSvc.search
     };
 

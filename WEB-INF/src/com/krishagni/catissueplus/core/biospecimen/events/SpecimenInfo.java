@@ -18,7 +18,9 @@ import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 @ListenAttributeChanges
 public class SpecimenInfo extends AttributeModifiedSupport implements Comparable<SpecimenInfo> {
 	private Long id;
-	
+
+	private Long cpId;
+
 	private Long cprId;
 	
 	private Long eventId;
@@ -85,6 +87,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
 	}
 
 	public Long getCprId() {
@@ -383,6 +393,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setStorageType(sr != null ? sr.getStorageType() : null);
 		result.setVisitId(specimen.getVisit().getId());
 		result.setVisitName(specimen.getVisit().getName());
+		result.setCprId(specimen.getVisit().getRegistration().getId());
+		result.setCpId(specimen.getCollectionProtocol().getId());
 		result.setCpShortTitle(specimen.getCollectionProtocol().getShortTitle());
 	}	
 	
@@ -402,7 +414,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setConcentration(anticipated.getConcentration());
 		result.setParentId(null);
 		result.setCollectionContainer(anticipated.getCollectionContainer());
-	
+
 		StorageLocationSummary location = new StorageLocationSummary();
 		result.setStorageLocation(location);
 		result.setStorageType(anticipated.getStorageType());

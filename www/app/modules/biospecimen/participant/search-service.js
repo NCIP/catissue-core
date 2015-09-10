@@ -16,7 +16,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
             return;
           } else if (participants.length > 1) {
             matchingParticipants = participants;
-            $state.go('participant-search');
+            $state.go('participant-search', {}, {reload: true});
           } else {
             $state.go('participant-detail.overview', {cprId: participants[0].cprId});
           }
