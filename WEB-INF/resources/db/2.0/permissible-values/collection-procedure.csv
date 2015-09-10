@@ -1,8 +1,8 @@
 IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
-104,,,null,Surgical Resection,2003996,null
-105,,,null,Lavage,2003996,null
-106,,,null,Needle Core Biopsy,2003996,null
-107,,,null,Needle Aspirate,2003996,null
-108,,,null,Indwelling Catheter,2003996,null
-109,,,null,Venipuncture,2003996,null
-110,,,null,Not Specified,2003996,null
+getNextPvId(),,,null,Surgical Resection,2003996,null
+getNextPvId(),,,null,Lavage,2003996,null
+getNextPvId(),,,null,Needle Core Biopsy,2003996,null
+getNextPvId(),,,null,Needle Aspirate,2003996,null
+getNextPvId(),,,null,Indwelling Catheter,2003996,null
+getNextPvId(),,,null,Venipuncture,2003996,null
+getNextPvId(),,,null,Not Specified,2003996,null

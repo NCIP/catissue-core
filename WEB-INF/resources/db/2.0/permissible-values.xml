@@ -5,7 +5,88 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+  
+  <changeSet author="nmarwaha" id="Creating function for getting next PV Id" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace function getNextPvId
+        return number as
+        begin
+          return catissue_permi_value_seq.nextval;
+        end getNextPvId;
+        //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating function for getting next PV Id" dbms="mysql">
+    <sql endDelimiter="//">
+      drop function if exists getNextPvId
+      //
+  
+      create function getNextPvId()
+        returns bigint(20)
+      begin
+        declare nxtPvId bigint(20);
+
+        select 
+          max(identifier)+1 into nxtPvId 
+        from 
+          catissue_permissible_value;
+
+        return (nxtPvId);
+      end
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace function getPvParentId( 
+        public_id IN varchar2, pvValue IN varchar2
+        )return number as
+
+        pvId catissue_permissible_value.identifier%TYPE; 
+
+        begin
+          select 
+            identifier into pvId 
+          from 
+            catissue_permissible_value 
+          where 
+            public_id = public_id and value = pvValue; 
+  
+          return pvId;
+        end getPvParentId;
+        //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="mysql">
+    <sql endDelimiter="//">
+      drop function if exists getPvParentId
+      //
+
+      create function getPvParentId (public_id varchar(255), pvValue varchar(255))
+        returns bigint(20)
+      begin
+        declare pvId bigint(20);
+
+        select 
+          identifier into pvId 
+        from 
+          catissue_permissible_value 
+        where 
+          public_id = public_id and value = pvValue;
+        
+        return (pvId);
+      end
+      //
+    </sql>
+  </changeSet>
+  
   <changeSet author="vgaikwad" id="Consent response PV category">
+    <validCheckSum>7:d5ae917f8bf3fc9f91511012f9aaf155</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -25,6 +106,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: clinical status" author="vratnaparkhi">
+    <validCheckSum>7:299032147410423d7a5eeeec97384f54</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -36,11 +118,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/clinical-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: collection procedure" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:0c61c1e6462ca009a992eeb773747473</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -51,11 +135,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/collection-procedure.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: collection status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:f79afe06bb61f7f435916361d0768e81</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -66,11 +152,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/collection-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: container" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:ce5bc9c97e75d3e46fc4aa76b9e87e34</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -81,11 +169,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/container.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: embedding medium" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:f6a2d575feadc885ba6937d88dff4599</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -96,11 +186,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/embedding-medium.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: ethnicity" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:3ff7f23fb265368327b900691810293f</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -111,11 +203,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/ethnicity.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: fixation type" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:96790b2e5a1d783d1ff433c206663754</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -126,11 +220,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/fixation-type.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: gender" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:25849716eded3eb8dfa13158513c3c5d</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -141,11 +237,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/gender.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: genotype" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:7d6b11faf75cd0dce179a59cc719e538</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -156,11 +254,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/genotype.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: histological quality" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:58b23e03a15134076f3fbad5d4d86f31</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -171,11 +271,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/histological-quality.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: method" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:b0821b7c86e019f45510310b2a010421</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -186,11 +288,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/method.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: pathological status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:d174d1db2f47a50910f4a81bdc87a1e4</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -201,11 +305,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/pathological-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: race" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:5e288216cf27d6795509461af07d68b4</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -216,11 +322,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/race.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: received quality" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:270589124bed45c47dac69bee5001480</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -231,11 +339,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/received-quality.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: requested items status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:96df522a225c8b76d6f32fb0089c3b30</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -246,11 +356,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/requested-items-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: request status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:d2337c6659fbb599f09c0fd48f35a03b</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -261,11 +373,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/request-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: site type" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:140d5f875213e6b013b048df110f4321</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -276,11 +390,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/site-type.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: tissue side" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:6d36449d2dc8a98a3e560e7324e9a5c0</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -291,11 +407,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/tissue-side.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: tissue site" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:cfdb94e214a1b37bff2d915561aa602d</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -306,11 +424,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/tissue-site.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: vital status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:509a02086ddc916b471a62b174fdc8e3</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -321,11 +441,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/vital-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:6f6b15853dd7ce2209b4e193141e3f9a</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -336,11 +458,14 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/specimen-class-and-type.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
+      <column name="parent_identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: scg collection status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:920bc7686d02ce286f25212f4724b44a</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -351,11 +476,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/scg-collection-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: order status" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:aaff17e02e55cebeaf0eb157d281e950</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -366,6 +493,7 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/order-status.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
@@ -390,7 +518,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: missed visit reason" author="vratnaparkhi">
-    <validCheckSum>7:01ec7c07e8739afa5f04926b02c4a266</validCheckSum>
+    <validCheckSum>7:3cd9e016a22781197f81508244c0e35b</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -402,11 +530,13 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/missed-visit-reason.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: consent response" author="vratnaparkhi">
-      <preConditions onFail="MARK_RAN">
+    <validCheckSum>7:1fb744025056583b7e43dbc9c363befb</validCheckSum>
+    <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
           case when (count(*) > 0) then 1 else 0 end 
@@ -417,10 +547,12 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/consent-response.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: clinical diagnosis" author="vratnaparkhi">
+    <validCheckSum>7:65824f78eb2c86ab2ac3e8c070d6e095</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -432,25 +564,8 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/clinical-diagnosis.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle">
-    <sql endDelimiter="//">
-      begin
-        declare
-          instId number;
-        begin
-        
-          select 
-            nvl(max(identifier),0)+1 into instId
-          from 
-            catissue_permissible_value;
-  
-          execute immediate('create sequence catissue_permi_value_seq start with '||instId);
-        end;
-      end;
-      //
-    </sql>
-  </changeSet>
 </databaseChangeLog>
