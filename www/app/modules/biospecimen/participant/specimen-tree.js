@@ -118,6 +118,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
       restrict: 'E',
 
       scope: {
+        cp: '=',
         cpr: '=',
         visit: '=',
         specimenTree: '=specimens',

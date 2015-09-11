@@ -283,8 +283,8 @@
             <div os-field-error field="derivativeForm.specimenType"></div>
           </div>
         </div>
-  
-        <div class="os-col-30">
+
+        <div class="os-col-30" ng-if="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
           <div class="form-group">
             <input name="label" ng-model="derivative.label" os-md-input class="form-control"
               type="text" placeholder="{{'specimens.label' | translate}}" 
