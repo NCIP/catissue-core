@@ -327,7 +327,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: received quality" author="vratnaparkhi">
-    <validCheckSum>7:270589124bed45c47dac69bee5001480</validCheckSum>
+    <validCheckSum>7:67c868c53067362060fe4d2d09ba8842</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -446,7 +446,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
-    <validCheckSum>7:6f6b15853dd7ce2209b4e193141e3f9a</validCheckSum>
+    <validCheckSum>7:27011490af174c674869030d71eb6789</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -564,6 +564,22 @@
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/clinical-diagnosis.csv" tableName="catissue_permissible_value">
+      <column name="identifier" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+  
+  <changeSet id="Loading permissible values for attribute: biohazard" author="vratnaparkhi">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          catissue_permissible_value
+        where
+          public_id = '2004000'  
+      </sqlCheck>
+    </preConditions>
+    <loadData file="db/2.0/permissible-values/biohazard.csv" tableName="catissue_permissible_value">
       <column name="identifier" type="NUMERIC"/>
     </loadData>
   </changeSet>

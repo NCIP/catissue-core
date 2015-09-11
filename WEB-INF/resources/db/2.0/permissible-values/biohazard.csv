@@ -1,0 +1,6 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,HIV,2004000,null
+getNextPvId(),,,null,Hepatitis A,2004000,null
+getNextPvId(),,,null,Hepatitis B,2004000,null
+getNextPvId(),,,null,Hepatitis C,2004000,null
+getNextPvId(),,,null,Tuberculosis,2004000,null

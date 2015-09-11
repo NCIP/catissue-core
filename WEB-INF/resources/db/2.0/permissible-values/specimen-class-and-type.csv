@@ -36,6 +36,7 @@ getNextPvId(),,,"getPvParentId('2003991', 'Fluid')",Bile,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Fluid')",Synovial Fluid,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Fluid')",Sweat,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Fluid')",Feces,null,null
+getNextPvId(),,,"getPvParentId('2003991', 'Fluid')",Buffy Coat,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Tissue')",Fixed Tissue,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Tissue')",Fixed Tissue Block,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Tissue')",Frozen Tissue Block,null,null
