@@ -106,7 +106,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: clinical status" author="vratnaparkhi">
-    <validCheckSum>7:299032147410423d7a5eeeec97384f54</validCheckSum>
+    <validCheckSum>7:fa56aa88ef630514cfa0f864176458fe</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
