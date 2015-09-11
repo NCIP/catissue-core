@@ -63,7 +63,7 @@
         <strong class="key key-sm" translate="cp.repositories">Repositories</strong>
         <span class="value value-md">
           <span ng-repeat="site in cp.cpSites">
-            {{site.siteName}}<span ng-if="codingEnabled && !!site.code">({{site.code}})</span>, 
+            {{site.siteName}} <span ng-if="codingEnabled && !!site.code">({{site.code}})</span>, 
           </span>
         </span>
       </li>

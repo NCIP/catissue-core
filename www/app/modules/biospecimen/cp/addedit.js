@@ -17,12 +17,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         }
       }
 
-      /**
-       * Some how the ui-select's multiple option is removing pre-selected items
-       * when site list is being loaded or not yet loaded...
-       * Therefore we copy pre-selected repositoryNames and then use it when all Sites are loaded
-       */
-
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 
@@ -96,8 +90,13 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     }
 
     $scope.onRepositoryRemove = function(repositoryName) {
-      var index = $scope.cp.repositoryNames.indexOf(repositoryName);
-      $scope.cp.cpSites.splice(index, 1);
+      var sites = $scope.cp.cpSites;
+      for (var i = 0; i < sites.length; i++) {
+        if (sites[i].siteName == repositoryName) {
+          $scope.cp.cpSites.splice(i, 1);
+          break;
+        }
+      }
     }
 
     init();

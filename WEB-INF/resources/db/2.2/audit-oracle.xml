@@ -61,31 +61,31 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Adding primary key to site cp table">
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="IDENTIFIER" type="NUMBER(19, 0)"/>
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Cp Site site modified">
+  <changeSet author="vlonushte" id="Column to track site modification of CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="site_mod" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Cp Site collection protocol modified">
+  <changeSet author="vlonushte" id="Column to track CP modification of CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="collectionProtocol_mod" type="NUMBER(1, 0)"/>
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Adding code column to site cp table">
+  <changeSet author="vlonushte" id="Adding code to identify CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="CODE" type="VARCHAR(16 CHAR)"/>
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Cp Site code modified">
+  <changeSet author="vlonushte" id="Column to track code modification of CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="code_mod" type="NUMBER(1, 0)"/>
     </addColumn>

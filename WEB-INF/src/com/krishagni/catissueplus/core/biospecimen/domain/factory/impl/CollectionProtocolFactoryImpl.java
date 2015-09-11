@@ -61,7 +61,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
-		setCollectionProtocolSite(input, cp, ose);
+		setCollectionProtocolSites(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
 		setCode(input, cp, ose);
@@ -86,7 +86,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		return cp;
 	}
 	
-	private void setCollectionProtocolSite(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+	private void setCollectionProtocolSites(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		 if (CollectionUtils.isEmpty(input.getCpSites())) {
 			 ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
 			 return;
@@ -108,21 +108,19 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			 return;
 		 }
 		 
-		 Set<CollectionProtocolSite> collectionProtocolSites = new HashSet<CollectionProtocolSite>();
+		 Set<CollectionProtocolSite> sites = new HashSet<CollectionProtocolSite>();
 		 for (Site site: repositories) {
 			 CollectionProtocolSiteDetail detail = cpSiteDetails.get(site.getName());
 			 CollectionProtocolSite cpSite = new CollectionProtocolSite();
 			 cpSite.setId(detail.getId());
 			 cpSite.setSite(site); 
-			 if (StringUtils.isNotEmpty(detail.getCode())) {
-				 cpSite.setCode(detail.getCode());
-			 }
+			 cpSite.setCode(detail.getCode() == null ? null: detail.getCode().trim());
 			 cpSite.setCollectionProtocol(result);
 			 
-			 collectionProtocolSites.add(cpSite);
+			 sites.add(cpSite);
 		 }
 		 
-		 result.setCollectionProtocolSites(collectionProtocolSites);
+		 result.setSites(sites);
  	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {

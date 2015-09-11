@@ -79,7 +79,7 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
-	private Set<CollectionProtocolSite> collectionProtocolSites = new HashSet<CollectionProtocolSite>();
+	private Set<CollectionProtocolSite> sites = new HashSet<CollectionProtocolSite>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 
@@ -281,16 +281,16 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public Set<Site> getRepositories() {
-		return Utility.<Set<Site>>collect(collectionProtocolSites, "site", true);
+		return Utility.<Set<Site>>collect(sites, "site", true);
 	}
 
 	@NotAudited
-	public Set<CollectionProtocolSite> getCollectionProtocolSites() {
-		return collectionProtocolSites;
+	public Set<CollectionProtocolSite> getSites() {
+		return sites;
 	}
 
-	public void setCollectionProtocolSites(Set<CollectionProtocolSite> collectionProtocolSites) {
-		this.collectionProtocolSites = collectionProtocolSites;
+	public void setSites(Set<CollectionProtocolSite> sites) {
+		this.sites = sites;
 	}
 
 	@NotAudited
@@ -352,8 +352,7 @@ public class CollectionProtocol extends BaseEntity {
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
-		//CollectionUpdater.update(this.repositories, cp.getRepositories());
-		updateCollectionProtocolSites(cp.getCollectionProtocolSites());
+		updateCollectionProtocolSites(cp.getSites());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 		
@@ -508,21 +507,21 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	private void updateCollectionProtocolSites(Set<CollectionProtocolSite> newCpSites) {
-		Map<Site, CollectionProtocolSite> oldSites = new HashMap<Site, CollectionProtocolSite>();
-		for (CollectionProtocolSite cpSite: getCollectionProtocolSites()) {
-			oldSites.put(cpSite.getSite(), cpSite);
+		Map<Site, CollectionProtocolSite> existingSites = new HashMap<Site, CollectionProtocolSite>();
+		for (CollectionProtocolSite cpSite: getSites()) {
+			existingSites.put(cpSite.getSite(), cpSite);
 		}
 		
 		for (CollectionProtocolSite newSite: newCpSites) {
-			CollectionProtocolSite oldSite = oldSites.get(newSite.getSite());
+			CollectionProtocolSite oldSite = existingSites.get(newSite.getSite());
 			if (oldSite != null) {
 				oldSite.update(newSite);
-				oldSites.remove(oldSite.getSite());
+				existingSites.remove(oldSite.getSite());
 			} else {
-				getCollectionProtocolSites().add(newSite);
+				getSites().add(newSite);
 			}
 		}
 		
-		getCollectionProtocolSites().removeAll(oldSites.values());
+		getSites().removeAll(existingSites.values());
 	}
 }

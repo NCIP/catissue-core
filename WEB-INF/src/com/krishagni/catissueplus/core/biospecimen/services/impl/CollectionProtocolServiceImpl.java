@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -59,7 +60,6 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService {
 
@@ -916,11 +916,11 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	}
 	
 	private void ensureUniqueCpSiteCode(CollectionProtocol cp, OpenSpecimenException ose) {
-		List<String> codes = Utility.<List<String>>collect(cp.getCollectionProtocolSites(), "code");
-		codes.removeAll(Arrays.asList(new Long[] {null}));
+		List<String> codes = Utility.<List<String>>collect(cp.getSites(), "code");
+		codes.removeAll(Arrays.asList(new String[] {null, ""}));
 		
-		Set<String> uniqueCode = new HashSet<String>(codes);
-		if (codes.size() != uniqueCode.size()) {
+		Set<String> uniqueCodes = new HashSet<String>(codes);
+		if (codes.size() != uniqueCodes.size()) {
 			ose.addError(CpErrorCode.DUP_CP_SITE_CODES, codes);
 		}
 	}

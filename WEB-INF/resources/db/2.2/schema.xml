@@ -201,7 +201,7 @@
     <dropPrimaryKey tableName="CATISSUE_SITE_CP"/>
   </changeSet> 
 
-  <changeSet author="vlonushte" id="Adding primary key to site cp table" dbms="mysql">
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="mysql">
     <addColumn tableName="CATISSUE_SITE_CP">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
@@ -210,7 +210,7 @@
   </changeSet>
 
   
-  <changeSet author="vlonushte" id="Adding primary key to site cp table" dbms="oracle">
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="oracle">
     <addColumn tableName="CATISSUE_SITE_CP">
       <column name="IDENTIFIER" type="${int.type}"/>
     </addColumn>
@@ -237,7 +237,7 @@
     />
   </changeSet>
 
-  <changeSet author="vlonushte" id="Adding code column to site cp table">
+  <changeSet author="vlonushte" id="Adding code to identify CP-site relation">
     <addColumn tableName="CATISSUE_SITE_CP">
       <column name="CODE" type="${text.type}(16)"/>
     </addColumn>

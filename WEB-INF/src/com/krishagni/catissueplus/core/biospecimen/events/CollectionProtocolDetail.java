@@ -216,7 +216,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setActivityStatus(cp.getActivityStatus());
-		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getCollectionProtocolSites()));
+		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));
 		
 		if (fullObject) {

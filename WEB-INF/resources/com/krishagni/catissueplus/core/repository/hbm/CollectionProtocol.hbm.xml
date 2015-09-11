@@ -68,7 +68,7 @@
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
     
-    <set name="collectionProtocolSites" inverse="true" cascade="all-delete-orphan">
+    <set name="sites" inverse="true" cascade="all-delete-orphan">
        <key column="COLLECTION_PROTOCOL_ID"/>
        <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite"/>
     </set>
@@ -175,7 +175,7 @@
         cp
       from
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
-        join cp.collectionProtocolSites cpSite
+        join cp.sites cpSite
         join cpSite.site site
       where
         cp.shortTitle in (:shortTitles) and
@@ -242,7 +242,7 @@
         site.id
       from
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
-        join cp.collectionProtocolSites cpSite
+        join cp.sites cpSite
         join cpSite.site site
       where
         cp.id in (:cpIds)
