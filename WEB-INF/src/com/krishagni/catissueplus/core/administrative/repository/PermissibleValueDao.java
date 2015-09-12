@@ -17,6 +17,8 @@ public interface PermissibleValueDao extends Dao<PermissibleValue>{
 	
 	public PermissibleValue getByConceptCode(String attribute, String conceptCode);
 	
+	public PermissibleValue getByValue(String attribute, String value);
+	
 	public boolean exists(String attribute, Collection<String> values);
 	
 	public boolean exists(String attribute, String parentValue, Collection<String> values);
