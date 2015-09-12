@@ -116,7 +116,8 @@
 
     "cp_def_file": "Collection Protocol Definition File",
   
-    "repositories": "Repositories", 
+    "repositories": "Repositories",
+    "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
     "code": "Short Code",
@@ -166,6 +167,9 @@
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
+
+    "show_site_coding": "More Site Code Information",
+    "hide_site_coding": "Less Site Code Information",
 
     "tab": {
       "overview": "Overview",

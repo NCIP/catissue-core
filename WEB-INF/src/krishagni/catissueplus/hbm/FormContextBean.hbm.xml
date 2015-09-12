@@ -373,7 +373,8 @@
         krishagni.catissueplus.beans.FormContextBean fc
       where
         fc.entityType = :entityType and
-        fc.cpId = :cpId
+        fc.cpId = :cpId and
+        fc.deletedOn is null
     </query>
 
     <sql-query name="getFormByCtxt">

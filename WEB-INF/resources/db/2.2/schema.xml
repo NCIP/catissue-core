@@ -199,4 +199,87 @@
     </createView>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Drop foreign key for site id from site cp table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP"
+      constraintName="FK3"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop foreign key for collection protocol id from site cp table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP"
+      constraintName="FK4"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop primary key of site cp table">
+    <dropPrimaryKey tableName="CATISSUE_SITE_CP"/>
+  </changeSet> 
+
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="mysql">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="oracle">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Site Cp table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SITE_CP_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="Update identifier column with default value in of site cp table" dbms="oracle">
+    <sql>
+      update CATISSUE_SITE_CP set IDENTIFIER = OS_SITE_CP_SEQ.nextval;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="PK on identifier of  site cp table" dbms="oracle">
+    <addPrimaryKey 
+      columnNames="IDENTIFIER" 
+      tableName="CATISSUE_SITE_CP"
+    />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding code to identify CP-site relation">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on site id of site cp table">
+    <addForeignKeyConstraint
+      constraintName="FK_SITE_CP_SITE_ID"
+      baseTableName="CATISSUE_SITE_CP"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on collection protocol id of site cp table">
+    <addForeignKeyConstraint
+      constraintName="FK_SITE_CP_COLL_PROT_ID"
+      baseTableName="CATISSUE_SITE_CP"
+      baseColumnNames="COLLECTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique constraint on site id and cp id in site cp table">
+    <addUniqueConstraint 
+      tableName="CATISSUE_SITE_CP"
+      columnNames="SITE_ID, COLLECTION_PROTOCOL_ID"
+      constraintName="OS_CP_SITE_SITE_ID_CP_ID_UQ"/>
+  </changeSet>
+
 </databaseChangeLog>

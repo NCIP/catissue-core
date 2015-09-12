@@ -99,5 +99,12 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return CollectionProtocol.saveWorkflows(this.$id(), workflows);
     }
 
+    CollectionProtocol.prototype.getRepositoryNames = function() {
+      if (!this.cpSites) {
+        return [];
+      }
+      return this.cpSites.map(function(cpSite) { return cpSite.siteName; });
+    }
+
     return CollectionProtocol;
   });
