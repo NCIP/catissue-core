@@ -31,14 +31,12 @@ angular.module('openspecimen')
           .attr('append-to-body', !!tAttrs.appendToBody)
           .attr('os-tabable', !!tAttrs.osTabable);
     
-        if (tAttrs.onSelect && tAttrs.onSelect.indexOf("(") == -1) {
-          uiSelect.attr('on-select', tAttrs.onSelect + '($item)');
-        } else if (tAttrs.onSelect) {
+        if (tAttrs.onSelect) {
           uiSelect.attr('on-select', tAttrs.onSelect);
         }
 
         if (tAttrs.onRemove) {
-          uiSelect.attr('on-remove', tAttrs.onRemove + '($item)');
+          uiSelect.attr('on-remove', tAttrs.onRemove);
         }
 
         if (tAttrs.title) {

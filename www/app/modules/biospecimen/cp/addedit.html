@@ -20,7 +20,7 @@
         <div class="col-xs-6">
           <os-select multiple name="repositoryNames" ng-model="cp.repositoryNames" list="sites"
             class="form-control" placeholder="{{'cp.repositories' | translate}}" 
-            on-select="onRepositorySelect" on-remove="onRepositoryRemove" required>
+            on-select="onRepositorySelect($item)" on-remove="onRepositoryRemove($item)" required>
           </os-select>
           <div os-field-error field="cpForm.repositoryNames"></div>
         </div>
