@@ -6,8 +6,13 @@ angular.module('os.administrative.dp.requirement.list', ['os.administrative.mode
       });
     }
     
-    $scope.delete = function(index) {
-      var req = $scope.requirements.splice(index, 1);
+    $scope.delete = function(requirement) {
+      requirement.$remove().then(
+        function() {
+          var index = $scope.requirements.indexOf(requirement);
+          $scope.requirements.splice(index, 1);
+        }
+      );
     }
     
     loadRequirements();

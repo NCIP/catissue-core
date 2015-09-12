@@ -27,11 +27,12 @@ angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.m
     }
     
     $scope.save = function() {
-      OrderRequirement.saveUpdate($scope.requirement).then(function(resp) {
-        if(resp) {
+      var requirement = angular.copy($scope.requirement);
+      requirement.$saveOrUpdate().then(
+        function(saveReq) {
           $state.go('req-list');
         }
-      });
+      );
     }
     
     loadPvs();

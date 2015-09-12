@@ -370,6 +370,9 @@
     <property name="emailService" ref="emailService"/>
   </bean>
   
+  <bean id="distributionOrderRequirementService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderRequirementServiceImpl">
+  </bean>
+  
   <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>

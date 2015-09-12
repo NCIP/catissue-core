@@ -40,13 +40,13 @@
         <div class="col os-col-10">{{req.specimenReq}}</div>
         <div class="col os-col-10">{{req.specimenDistributed}}</div>
         <div class="col os-col-5">{{req.price}}</div>
-        <div class="col os-col-25 os-ellipsis" title="{{req.comments}}"> {{req.comments}} </div>
+        <div class="col os-col-25 os-ellipsis" title="{{req.comments}}">{{req.comments}}</div>
         <div class="col os-col-5">
           <div class="pull-right btn-group btn-group-xs">
             <button class="btn btn-default" ui-sref="req-addedit({reqId: req.id})">
               <span class="fa fa-pencil"></span>
             </button>
-            <button class="btn btn-default" ng-click="delete($index)">
+            <button class="btn btn-default" ng-click="delete(req)">
               <span class="fa fa-trash"></span>
             </button>
           </div>
