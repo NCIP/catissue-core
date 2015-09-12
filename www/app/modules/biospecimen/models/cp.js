@@ -31,11 +31,16 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       );
     }
 
-    //
-    // TODO: This should be an instance method.
-    //
     CollectionProtocol.getWorkflows = function(cpId) {
       return $http.get(CollectionProtocol.url() + cpId + '/workflows').then(
+        function(result) {
+          return result.data;
+        }
+      )
+    }
+
+    CollectionProtocol.saveWorkflows = function(cpId, workflows) {
+      return $http.put(CollectionProtocol.url() + cpId  + '/workflows', workflows).then(
         function(result) {
           return result.data;
         }
@@ -84,6 +89,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
           return new CollectionProtocol(result.data);
         }
       );
+    }
+
+    CollectionProtocol.prototype.getWorkflows = function() {
+      return CollectionProtocol.getWorkflows(this.$id());
+    }
+
+    CollectionProtocol.prototype.saveWorkflows = function(workflows) {
+      return CollectionProtocol.saveWorkflows(this.$id(), workflows);
     }
 
     return CollectionProtocol;
