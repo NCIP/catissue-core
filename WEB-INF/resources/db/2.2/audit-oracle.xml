@@ -61,10 +61,55 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Drop foreign key on rev column of CP-site relation">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP_AUD"
+      constraintName="FK_8bytnb90kr6dd9hr194p9ei57"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop primary key of CP-site relation">
+    <dropPrimaryKey tableName="CATISSUE_SITE_CP_AUD"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop not null constraint on cpId column of CP-site relation">
+    <dropNotNullConstraint
+      columnDataType="BIGINT"
+      columnName="COLLECTION_PROTOCOL_ID"
+      tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop not null constraint on siteId column of CP-site relation">
+    <dropNotNullConstraint
+      columnDataType="BIGINT"
+      columnName="SITE_ID"
+      tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
   <changeSet author="vlonushte" id="Primary key to identify CP-site relation">
     <addColumn tableName="catissue_site_cp_aud">
       <column name="IDENTIFIER" type="NUMBER(19, 0)"/>
     </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Update identifier column with default values of CP-site relation">
+    <sql>
+      update catissue_site_cp_aud set identifier = rownum;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding pk for CP-site relation">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on rev column of CP-site relation">
+    <addForeignKeyConstraint
+      constraintName="FK_8bytnb90kr6dd9hr194p9ei57"
+      onDelete="NO ACTION" 
+      onUpdate="NO ACTION" 
+      baseTableName="CATISSUE_SITE_CP_AUD"
+      baseColumnNames="REV"
+      referencedTableName="os_revisions"
+      referencedColumnNames="REV"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Column to track site modification of CP-site relation">
