@@ -568,7 +568,8 @@
     </loadData>
   </changeSet>
   
-  <changeSet id="Loading permissible values for attribute: biohazard" author="vratnaparkhi">
+  <changeSet id="Loading permissible values for attribute: biohazard" author="vratnaparkhi" runOnChange="true">
+    <validCheckSum>7:ec4c990eb40cf49cd4835701810955c3</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -576,7 +577,7 @@
         from 
           catissue_permissible_value
         where
-          public_id = '2004000'  
+          public_id = 'specimen_biohazard'  
       </sqlCheck>
     </preConditions>
     <loadData file="db/2.0/permissible-values/biohazard.csv" tableName="catissue_permissible_value">
