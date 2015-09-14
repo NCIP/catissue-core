@@ -257,9 +257,6 @@ public class StorageContainersController {
 			
 			) {
 		
-		/*AssignPositionsOp detail = new AssignPositionsOp();
-		detail.setContainerId(containerId);
-		detail.setPositions(positions);*/
 		detail.setContainerId(containerId);
 		
 		RequestEvent<AssignPositionsOp> req = new RequestEvent<AssignPositionsOp>(detail);

@@ -1,6 +1,6 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, $sce, container, occupancyMap,
+    $scope, $state, container, occupancyMap,
     Util, ContainerUtil, Alerts) {
 
     function init() {

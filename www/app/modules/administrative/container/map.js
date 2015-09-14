@@ -27,7 +27,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
             td.addClass(!!locationMatrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
           }
 
-          if (!!locationMatrix[i][j].overwrite) {
+          if (locationMatrix[i][j].overwrite) {
             td.addClass('slot-overwritten');
           }
 

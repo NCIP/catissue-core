@@ -74,7 +74,6 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     };
 
     Container.prototype.assignPositions = function(positions) {
-      console.log(positions);
       return $http.post(Container.url() + this.$id() + '/occupied-positions', positions).then(
         function(result) {
           return result.data;

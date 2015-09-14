@@ -628,7 +628,7 @@ public class StorageContainer extends BaseEntity {
 		
 	/**
 	 * Assign positions in container,
-	 * 1. If overwrite is true, overwrite existing positions make them virtual if not in list of assigning positions
+	 * 1. If overwrite is true, overwrite existing occupied specimen move to virtual if not in list of assigning positions
 	 * 2. If overwrite is false, assign to unoccupied positions  
 	 */
 
@@ -641,10 +641,8 @@ public class StorageContainer extends BaseEntity {
 			}
 						
 			if (position.getOccupyingSpecimen() != null) {
-				if (overwrite) {
-					if (existing != null && !isSpecimenExist(positions,existing)) {
-						existing.getOccupyingSpecimen().updatePosition(null);
-					}
+				if (existing != null && !isSpecimenExist(positions,existing)) {
+					existing.getOccupyingSpecimen().updatePosition(null);
 				}
 				position.getOccupyingSpecimen().updatePosition(position);
 			} else {
@@ -745,7 +743,13 @@ public class StorageContainer extends BaseEntity {
 		return result;
 	}
 	
-	private boolean canOccupyPosition(boolean isSpecimenEntity, Long entityId, String posOne, String posTwo, boolean overwrite) {
+	private boolean canOccupyPosition(
+			boolean isSpecimenEntity,
+			Long entityId, 
+			String posOne, 
+			String posTwo, 
+			boolean overwrite) {
+		
 		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
 		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		
