@@ -54,8 +54,8 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       }
 
 
-      var assignPositionDetail = {'overwritePosition': $scope.input.overwrite, 'positions': positions};
-      container.assignPositions(assignPositionDetail).then(
+      var assignPositionsDetail = {'overwritePosition': $scope.input.overwrite, 'positions': positions};
+      container.assignPositions(assignPositionsDetail).then(
         function(latestOccupancyMap) {
           $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
           $scope.input.labels = undefined;

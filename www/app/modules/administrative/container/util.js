@@ -104,7 +104,10 @@ angular.module('os.administrative.container.util', [])
               break;
             }
 
-            if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y && !overwrite) {
+            if (mapIdx < newMap.length &&
+              newMap[mapIdx].posOneOrdinal == x &&
+              newMap[mapIdx].posTwoOrdinal == y &&
+              !overwrite) {
               mapIdx++;
               continue;
             }

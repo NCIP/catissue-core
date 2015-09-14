@@ -253,9 +253,7 @@ public class StorageContainersController {
 			Long containerId,
 			
 			@RequestBody
-			AssignPositionsOp detail
-			
-			) {
+			AssignPositionsOp detail) {
 		
 		detail.setContainerId(containerId);
 		
