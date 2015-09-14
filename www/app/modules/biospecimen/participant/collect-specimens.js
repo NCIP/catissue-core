@@ -43,7 +43,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
           function(specimen) {
             specimen.existingStatus = specimen.status;
-            specimen.initialQty = Util.getScintificNotation(specimen.initialQty);
+            specimen.initialQty = Util.getScientificNotation(specimen.initialQty);
             if (specimen.status != 'Collected') {
               specimen.status = 'Collected';
             }

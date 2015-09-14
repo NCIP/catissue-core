@@ -72,8 +72,8 @@ angular.module('os.biospecimen.specimen.addedit', [])
         $scope.currSpecimen.receivedEvent.receivedQuality = "Acceptable";
       }
 
-      $scope.currSpecimen.initialQty = Util.getScintificNotation($scope.currSpecimen.initialQty);
-      $scope.currSpecimen.availableQty = Util.getScintificNotation($scope.currSpecimen.availableQty);
+      $scope.currSpecimen.initialQty = Util.getScientificNotation($scope.currSpecimen.initialQty);
+      $scope.currSpecimen.availableQty = Util.getScientificNotation($scope.currSpecimen.availableQty);
     }
 
     $scope.saveSpecimen = function() {
