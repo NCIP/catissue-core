@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -144,6 +146,34 @@ public class DistributionProtocolController {
 		detail.setId(id);
 		RequestEvent<DistributionProtocolDetail> req = new RequestEvent<DistributionProtocolDetail>(detail);
 		ResponseEvent<DistributionProtocolDetail> resp = dpSvc.updateActivityStatus(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/orders")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DistributionOrderSpecificationDetails> getOrderSpecifications(
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
+			@RequestParam(value = "specimenType", required = false, defaultValue = "false")
+			boolean specimenType,
+			
+			@RequestParam(value = "anatomicSite", required = false, defaultValue = "false")
+			boolean anatomicSite,
+			
+			@RequestParam(value = "pathologyStatus", required = false, defaultValue = "false")
+			boolean pathologyStatus) {
+		
+		DistributionOrderSpecificationListCriteria crit = new DistributionOrderSpecificationListCriteria()
+			.dpId(dpId)
+			.specimenType(specimenType)
+			.anatomicSite(anatomicSite)
+			.pathologyStatus(pathologyStatus);
+		
+		RequestEvent<DistributionOrderSpecificationListCriteria> req = new RequestEvent<DistributionOrderSpecificationListCriteria>(crit);
+		ResponseEvent<List<DistributionOrderSpecificationDetails>> resp = dpSvc.getOrderSpecifications(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
