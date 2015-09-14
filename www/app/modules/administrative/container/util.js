@@ -77,10 +77,20 @@ angular.module('os.administrative.container.util', [])
       };
     }
 
+    function removeSpecimenIfExist(map, newPos) {
+       for (var i = 0; i < map.length; ++i) {
+         var pos = map[i];
+         if(pos.posOneOrdinal == newPos.posOneOrdinal &&
+           pos.posTwoOrdinal == newPos.posTwoOrdinal) {
+           map.splice(i, 1);
+         }
+       }
+    }
+
     return {
       fromOrdinal: fromOrdinal, 
 
-      assignPositions: function(container, occupancyMap, inputLabels) {
+      assignPositions: function(container, occupancyMap, inputLabels, overwrite) {
         var newMap = angular.copy(occupancyMap);
         var mapIdx = 0, labelIdx = 0;
         var labels = Util.splitStr(inputLabels, /,|\t|\n/, true);
@@ -94,7 +104,7 @@ angular.module('os.administrative.container.util', [])
               break;
             }
 
-            if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y) {
+            if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y && !overwrite) {
               mapIdx++;
               continue;
             }
@@ -105,7 +115,13 @@ angular.module('os.administrative.container.util', [])
             }
 
             var newPos = createSpmnPos(container, label, x, y);
-            newMap.splice(mapIdx, 0, newPos);
+            if (overwrite) {
+              removeSpecimenIfExist(newMap, newPos);
+              newMap.splice(0, 0, newPos);
+            } else {
+              newMap.splice(mapIdx, 0, newPos);
+            }
+
             mapIdx++;
           }
 

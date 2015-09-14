@@ -8,13 +8,33 @@
 .os-container-locations .input-spmn-labels {
   flex: 1;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .os-container-locations .map {
   flex: 9;
   width: 100%;
   overflow: auto;
+}
+
+.os-container-overwrite-locations {
+  width: 100%;
+}
+.os-container-overwrite-locations .checkbox {
+  float: left;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+
+.os-container-overwrite-locations .message {
+  color: #707070;
+  float: left;
+}
+
+.os-container-overwrite-locations:after {
+  display: block;
+  content: ' ';
+  clear: both;
 }
 
 .os-container-map-wrapper {
@@ -100,6 +120,13 @@
 
 .os-container-map .slot-assigned .slot-desc {
   background: rgba(92, 184, 92, 0.8);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.os-container-map .slot-overwritten .slot-desc {
+  background: #d9534f;
   color: #fff;
   font-weight: bold;
   text-align: center;

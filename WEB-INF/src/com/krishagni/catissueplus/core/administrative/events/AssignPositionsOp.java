@@ -8,6 +8,8 @@ public class AssignPositionsOp {
 	
 	private String containerName;
 	
+	private boolean overwritePosition;
+	
 	private List<StorageContainerPositionDetail> positions = new ArrayList<StorageContainerPositionDetail>();
 
 	public Long getContainerId() {
@@ -25,6 +27,14 @@ public class AssignPositionsOp {
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
+	
+	public boolean getOverwritePosition() {
+		return overwritePosition;
+	}
+
+	public void setOverwritePosition(boolean overwritePosition) {
+		this.overwritePosition = overwritePosition;
+	}
 
 	public List<StorageContainerPositionDetail> getPositions() {
 		return positions;
@@ -33,4 +43,5 @@ public class AssignPositionsOp {
 	public void setPositions(List<StorageContainerPositionDetail> positions) {
 		this.positions = positions;
 	}
+	
 }

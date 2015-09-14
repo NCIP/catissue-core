@@ -1,12 +1,12 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, container, occupancyMap, 
+    $scope, $state, $sce, container, occupancyMap,
     Util, ContainerUtil, Alerts) {
 
     function init() {
       $scope.container = container;
       $scope.pristineMap = $scope.occupancyMap = occupancyMap;
-      $scope.input = {labels: '', noFreeLocs: false};
+      $scope.input = {labels: '', noFreeLocs: false, overwrite: false};
     }
 
     $scope.addContainer = function(posOne, posTwo) {
@@ -23,7 +23,8 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       var result = ContainerUtil.assignPositions(
         container, 
         $scope.pristineMap, 
-        $scope.input.labels);
+        $scope.input.labels,
+        $scope.input.overwrite);
 
       $scope.occupancyMap = result.map;
       $scope.input.noFreeLocs = result.noFreeLocs;
@@ -52,7 +53,9 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         return;
       }
 
-      container.assignPositions(positions).then(
+
+      var assignPositionDetail = {'overwritePosition': $scope.input.overwrite, 'positions': positions};
+      container.assignPositions(assignPositionDetail).then(
         function(latestOccupancyMap) {
           $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
           $scope.input.labels = undefined;

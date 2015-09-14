@@ -662,7 +662,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		StorageContainerPosition position = null;
 		String posOne = location.getPositionX(), posTwo = location.getPositionY();
 		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
-			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
+			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo, false)) {
 				position = container.createPosition(posOne, posTwo);
 				container.setLastAssignedPos(position);
 			} else {
