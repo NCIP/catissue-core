@@ -57,14 +57,14 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.initial_qty">Initial Quantity</strong>
       <div class="value value-md">
-        <span>{{childReq.initialQty}}</span>
+        <span>{{childReq.initialQty | osNumber}}</span>
         <os-specimen-qty-unit specimen-class="childReq.specimenClass" type="childReq.type"></os-specimen-qty-unit>
       </div>
     </li>
     <li class="item" ng-if="childReq.specimenClass == 'Molecular'">
       <strong class="key key-sm" translate="srs.concentration">Concentration</strong>
       <div class="value value-md">
-        <span>{{childReq.concentration}} <span>&#181;g/&#181;l</span></span>
+        <span>{{childReq.concentration | osNumber}} <span>&#181;g/&#181;l</span></span>
       </div>
     </li>
     <li class="item" ng-if="childReq.specimenClass == 'Molecular' ? codingEnabled : !codingEnabled"> 

@@ -141,6 +141,15 @@ angular.module('openspecimen')
       });
     }
 
+    function getScintificNotation(input) {
+      if (angular.isNumber(input) && input > 1000000) {
+        var number = input/1000000;
+        return number  + "e6";
+      }
+
+      return input;
+    }
+
     return {
       clear: clear,
 
@@ -154,6 +163,8 @@ angular.module('openspecimen')
 
       getDupObjects: getDupObjects,
 
-      hidePopovers: hidePopovers
+      hidePopovers: hidePopovers,
+
+      getScintificNotation: getScintificNotation
     };
   });

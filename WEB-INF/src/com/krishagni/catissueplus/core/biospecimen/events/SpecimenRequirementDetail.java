@@ -36,7 +36,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private BigDecimal initialQty;
 	
-	private Double concentration;
+	private BigDecimal concentration;
 	
 	private UserSummary collector;
 	
@@ -142,11 +142,11 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.initialQty = initialQty;
 	}
 
-	public Double getConcentration() {
+	public BigDecimal getConcentration() {
 		return concentration;
 	}
 
-	public void setConcentration(Double concentration) {
+	public void setConcentration(BigDecimal concentration) {
 		this.concentration = concentration;
 	}
 
