@@ -4,7 +4,12 @@ angular.module('os.administrative.dp.history', ['os.administrative.models'])
     $scope.exportUrl = $sce.trustAsResourceUrl(distributionProtocol.historyExportUrl());
   
     function loadOrders() {
-      distributionProtocol.getOrderHistory().then(function(orders) {
+      var opts = {
+        specimenType: true,
+        anatomicSite: true,
+        pathologyStatus: true
+      };
+      distributionProtocol.getOrderHistory(opts).then(function(orders) {
         $scope.orders = orders;
       });
     }

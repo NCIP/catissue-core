@@ -30,12 +30,16 @@
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="order in orders">
-        <div class="col os-col-25">{{order.name}}</div>
+        <div class="col os-col-25">
+          <a ui-sref="order-detail.overview({orderId: order.id})">
+            {{order.name}}
+          </a>
+        </div>
         <div class="col os-col-15">{{order.executionDate | date: global.dateFmt}}</div>
-        <div class="col os-col-15">{{order.specimens.type}}</div>
-        <div class="col os-col-15">{{order.specimens.anatomicSite}}</div>
-        <div class="col os-col-15">{{order.specimens.pathology}}</div>
-        <div class="col os-col-15">{{order.specimenCnt}}</div>
+        <div class="col os-col-15">{{order.specimenType}}</div>
+        <div class="col os-col-15">{{order.anatomicSite}}</div>
+        <div class="col os-col-15">{{order.pathologicalStatus}}</div>
+        <div class="col os-col-15">{{order.specimenDistributed}}</div>
       </div>
     </div>
   </div>
