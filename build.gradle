@@ -208,6 +208,7 @@ processResources {
         datasource_jndi: datasource_jndi, 
         datasource_type: deployment_type,
         datasource_dialect: datasource_dialect,
+        database_type: database_type,
         app_data_dir: props.app_data_dir,
         plugin_dir: props.plugin_dir,
         buildinfo_version : props.buildinfo_version,
