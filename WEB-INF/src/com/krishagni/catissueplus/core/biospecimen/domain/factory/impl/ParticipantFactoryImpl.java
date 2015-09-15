@@ -9,9 +9,11 @@ import static com.krishagni.catissueplus.core.common.PvAttributes.VITAL_STATUS;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -20,9 +22,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
-import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantExtension;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -30,15 +30,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUti
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
-import com.krishagni.catissueplus.core.common.util.RegexValidator;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Validator;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
@@ -92,7 +88,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setRace(detail, participant, partial, ose);
 		setEthnicity(detail, participant, partial, ose);
 		setPmi(detail, participant, partial, ose);
-		setParticipantExtension(detail, participant, partial, ose);
+		setExtension(detail, participant, partial, ose);
 	}
 
 	private void setUid(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
@@ -349,22 +345,24 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		return pmi;
 	}
 	
-	private void setParticipantExtension(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+	private void setExtension(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
 		ExtensionDetail extDetail = detail.getExtensionDetail();
 		if (extDetail == null) {
 			return;
 		}
 		
-		ParticipantExtension extension = ParticipantExtension.getFor(participant);
+		DeObject extension = participant.createExtension();
 		if (extension == null) {
 			return;
 		} 
 		
+		List<Attr> attrs = new ArrayList<Attr>();
 		for (AttrDetail attrDetail: extDetail.getAttrs()) {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(attrDetail, attr);
-			extension.getAttrs().add(attr);
+			attrs.add(attr);
 		}
+		extension.setAttrs(attrs);
 		
 		participant.setExtension(extension);
 	}

@@ -19,7 +19,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
-public class Participant extends BaseEntity {
+public class Participant extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "participant";
 	
 	private String lastName;
@@ -48,8 +48,6 @@ public class Participant extends BaseEntity {
 	
 	protected String empi;
 	
-	protected ParticipantExtension extension;
-
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
@@ -173,19 +171,7 @@ public class Participant extends BaseEntity {
 	public void setEmpi(String empi) {
 		this.empi = empi;
 	}
-
-	@NotAudited
-	public ParticipantExtension getExtension() {
-		if (this.extension == null) {
-			this.extension = ParticipantExtension.getFor(this);
-		}
-		return extension;
-	}
-
-	public void setExtension(ParticipantExtension extension) {
-		this.extension = extension;
-	}
-
+	
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -260,12 +246,9 @@ public class Participant extends BaseEntity {
 		return result;
 	}
 	
-	public void addOrUpdateExtension() {
-		if (extension == null) {
-			return;
-		}
-		
-		extension.saveOrUpdate();
+	@Override
+	public String getEntityType() {
+		return "ParticipantExtension";
 	}
 	
 	private void updatePmis(Participant participant) {

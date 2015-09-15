@@ -4,7 +4,9 @@ package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.PvAttributes.SITE_TYPE;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -227,11 +229,13 @@ public class SiteFactoryImpl implements SiteFactory {
 			return;
 		}
 		
+		List<Attr> attrs = new ArrayList<Attr>();
 		for (AttrDetail attrDetail: extDetail.getAttrs()) {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(attrDetail, attr);
-			extension.getAttrs().add(attr);
+			attrs.add(attr);
 		}
+		extension.setAttrs(attrs);
 		
 		site.setExtension(extension);
 	}

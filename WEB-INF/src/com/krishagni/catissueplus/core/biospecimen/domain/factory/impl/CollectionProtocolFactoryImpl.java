@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolExtension;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
@@ -245,16 +246,18 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 			return;
 		}
 		
-		CollectionProtocolExtension extension = CollectionProtocolExtension.getFor(result);
+		DeObject extension = result.createExtension();
 		if (extension == null) {
 			return;
 		}
 		
+		List<Attr> attrs = new ArrayList<Attr>();
 		for (AttrDetail attrDetail: extDetail.getAttrs()) {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(attrDetail, attr);
-			extension.getAttrs().add(attr);
+			attrs.add(attr);
 		}
+		extension.setAttrs(attrs);
 		
 		result.setExtension(extension);
 	}
