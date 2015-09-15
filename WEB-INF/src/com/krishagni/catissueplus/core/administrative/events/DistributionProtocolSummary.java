@@ -96,7 +96,7 @@ public class DistributionProtocolSummary {
 		return result;
 	}
 	
-	public static <T extends DistributionProtocolSummary> void copy(DistributionProtocol dp, T detail) {
+	public static void copy(DistributionProtocol dp, DistributionProtocolSummary detail) {
 		detail.setId(dp.getId());
 		detail.setTitle(dp.getTitle());
 		detail.setShortTitle(dp.getShortTitle());

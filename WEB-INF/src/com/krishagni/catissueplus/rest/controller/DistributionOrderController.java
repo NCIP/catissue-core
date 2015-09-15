@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -131,6 +133,34 @@ public class DistributionOrderController {
 	@ResponseBody
 	public QueryDataExportResult exportDistributionReport(@PathVariable("id") Long orderId) {
 		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(new RequestEvent<Long>(orderId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/specifications")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DistributionOrderSpecificationDetails> getOrderSpecifications(
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
+			@RequestParam(value = "specimenType", required = false, defaultValue = "false")
+			boolean specimenType,
+			
+			@RequestParam(value = "anatomicSite", required = false, defaultValue = "false")
+			boolean anatomicSite,
+			
+			@RequestParam(value = "pathologyStatus", required = false, defaultValue = "false")
+			boolean pathologyStatus) {
+		
+		DistributionOrderSpecificationListCriteria crit = new DistributionOrderSpecificationListCriteria()
+			.dpId(dpId)
+			.specimenType(specimenType)
+			.anatomicSite(anatomicSite)
+			.pathologyStatus(pathologyStatus);
+		
+		RequestEvent<DistributionOrderSpecificationListCriteria> req = new RequestEvent<DistributionOrderSpecificationListCriteria>(crit);
+		ResponseEvent<List<DistributionOrderSpecificationDetails>> resp = distributionService.getOrderSpecifications(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

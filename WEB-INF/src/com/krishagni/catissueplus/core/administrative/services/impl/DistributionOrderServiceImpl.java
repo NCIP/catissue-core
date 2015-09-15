@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -22,6 +21,8 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -237,6 +238,35 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			SpecimenInfo.orderByLabels(result, specimenLabels);
 			return ResponseEvent.response(result);
 		} catch(OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DistributionOrderSpecificationDetails>> getOrderSpecifications(RequestEvent<DistributionOrderSpecificationListCriteria> req) {
+		try {
+			DistributionOrderSpecificationListCriteria crit = req.getPayload();
+			
+			if (crit.dpId() != null) {
+				DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
+				AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
+			} else {
+				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+				if (siteIds != null & CollectionUtils.isEmpty(siteIds)) {
+					return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+				}
+				
+				if (siteIds != null) {
+					crit.siteIds(siteIds);
+				}
+			}
+			
+			List<DistributionOrderSpecificationDetails> details = daoFactory.getDistributionOrderDao().getOrderSpecifications(crit);
+			return ResponseEvent.response(details);
+		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

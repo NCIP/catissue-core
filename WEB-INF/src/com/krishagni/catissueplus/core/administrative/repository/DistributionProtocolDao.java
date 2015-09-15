@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
@@ -24,6 +22,4 @@ public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 	//	
 	public Map<Long, Integer> getSpecimensCountByDpIds(Collection<Long> dpIds);
 	
-	public List<DistributionOrderSpecificationDetails> getOrderSpecifications(DistributionOrderSpecificationListCriteria listCrit);
-
 }

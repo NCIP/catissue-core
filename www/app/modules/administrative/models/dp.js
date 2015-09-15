@@ -27,15 +27,6 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       );
     }
     
-    DistributionProtocol.prototype.getOrderHistory = function(opts) {
-      opts ? opts.dpId = this.$id() : opts = {dpId: this.$id()};
-      return $http.get(DistributionProtocol.url() + 'orders', {params: opts}).then(
-        function (resp) {
-          return resp.data;
-        }
-      );
-    }
-    
     DistributionProtocol.prototype.historyExportUrl = function() {
       return DistributionProtocol.url() + this.$id() + '/orders-report';
     }
