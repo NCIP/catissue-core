@@ -108,25 +108,12 @@
       </dropDown>
     </row>
     <row>
-      <subForm>
+      <userField>
         <name>missedBy</name>
         <udn>missedBy</udn>
         <caption>#getMessage("missed_by")</caption>
-        <table>USER_VIEW</table>
-        <foreignKey>IDENTIFIER</foreignKey>
-        <parentKey>MISSED_BY</parentKey>
-        <row>
-          <dropDown>
-            <name>missedBy</name>
-            <udn>missedBy</udn>
-            <caption>#getMessage("missed_by")</caption>
-            <column>NAME</column>
-            <options>
-              <sql>select distinct NAME from USER_VIEW</sql>
-            </options>
-          </dropDown>
-        </row>
-      </subForm>
+        <column>MISSED_BY</column>
+      </userField>
     </row>
     <row>
       <dropDown>
