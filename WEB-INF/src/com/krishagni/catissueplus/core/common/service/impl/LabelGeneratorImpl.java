@@ -71,8 +71,11 @@ public class LabelGeneratorImpl implements LabelGenerator {
 
 			lastIdx = matcher.end();
 		}
-		
-		result.append(labelTmpl.substring(lastIdx, labelTmpl.length()));
+
+		if (nextFreeTextAppend) {
+			result.append(labelTmpl.substring(lastIdx, labelTmpl.length()));
+		}
+
 		return result.toString();
 	}
 	
