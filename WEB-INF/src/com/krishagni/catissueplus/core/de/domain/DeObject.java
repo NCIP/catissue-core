@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FormData;
@@ -156,9 +157,14 @@ public abstract class DeObject {
 		}
 				
 		Map<String, Object> attrValues = new HashMap<String, Object>();
+		Map<String, Attr> attrMap = new HashMap<String, DeObject.Attr>();
 		for (ControlValue cv : formData.getFieldValues()) {
-			attrs.add(Attr.from(cv));
+			attrMap.put(cv.getControl().getName(), Attr.from(cv));
 			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
+		}
+		
+		for (Control ctrl: formData.getContainer().getAllControls()) {
+			attrs.add(attrMap.get(ctrl.getName()));
 		}
 		
 		setAttrValues(attrValues);

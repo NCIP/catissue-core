@@ -47,6 +47,8 @@ public class Participant extends BaseEntity {
 	protected String vitalStatus;
 	
 	protected String empi;
+	
+	protected ParticipantExtension extension;
 
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
@@ -172,6 +174,18 @@ public class Participant extends BaseEntity {
 		this.empi = empi;
 	}
 
+	@NotAudited
+	public ParticipantExtension getExtension() {
+		if (this.extension == null) {
+			this.extension = ParticipantExtension.getFor(this);
+		}
+		return extension;
+	}
+
+	public void setExtension(ParticipantExtension extension) {
+		this.extension = extension;
+	}
+
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -202,6 +216,7 @@ public class Participant extends BaseEntity {
 		setEthnicity(participant.getEthnicity());
 		setBirthDate(participant.getBirthDate());
 		setDeathDate(participant.getDeathDate());
+		setExtension(participant.getExtension());	
 		CollectionUpdater.update(getRaces(), participant.getRaces());
 		updatePmis(participant);
 	}
@@ -243,6 +258,14 @@ public class Participant extends BaseEntity {
 		}
 		
 		return result;
+	}
+	
+	public void addOrUpdateExtension() {
+		if (extension == null) {
+			return;
+		}
+		
+		extension.saveOrUpdate();
 	}
 	
 	private void updatePmis(Participant participant) {

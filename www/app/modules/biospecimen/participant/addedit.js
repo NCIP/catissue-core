@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, $translate, cp, cpr,
+    $scope, $state, $stateParams, $translate, cp, cpr, extensionCtxt,
     CollectionProtocolRegistration, Participant,
     Site, PvManager) {
 
@@ -11,11 +11,24 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpId = $stateParams.cpId;
       $scope.pid = undefined;
       $scope.allowIgnoreMatches = true;
+      $scope.deFormCtrl = {};
 
       $scope.cp = cp;
       $scope.cpr = angular.copy(cpr);
       $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
-      
+
+      var participant =  $scope.cpr.participant;      
+      if (!!extensionCtxt) {
+        $scope.extnOpts = {
+          formId: extensionCtxt.formId,
+          recordId: !!participant.id && !!participant.extensionDetail ? participant.extensionDetail.id : undefined,
+          formCtxtId: parseInt(extensionCtxt.formCtxtId),
+          objectId: participant.id,
+          showActionBtns: false,
+          labelAlignment: 'horizontal'
+        }
+      }
+
       loadPvs();
     };
 
@@ -44,8 +57,18 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     }
 
     function registerParticipant() {
+      var formCtrl = $scope.deFormCtrl.ctrl;
+      if (formCtrl && !formCtrl.validate()) {
+        return;
+      }
+
       var cprToSave = angular.copy($scope.cpr);
       cprToSave.cpId = $scope.cpId;
+
+      if (formCtrl) {
+        cprToSave.participant.extensionDetail = formCtrl.getFormData();
+      }
+
       cprToSave.$saveOrUpdate().then(
         function(savedCpr) {
           angular.extend(cpr, savedCpr);

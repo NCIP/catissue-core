@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantExtension;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -38,6 +39,9 @@ import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.RegexValidator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Validator;
+import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
 
@@ -87,7 +91,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setGender(detail, participant, partial, ose);
 		setRace(detail, participant, partial, ose);
 		setEthnicity(detail, participant, partial, ose);
-		setPmi(detail, participant, partial, ose);		
+		setPmi(detail, participant, partial, ose);
+		setParticipantExtension(detail, participant, partial, ose);
 	}
 
 	private void setUid(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
@@ -278,7 +283,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		
 		participant.setEthnicity(ethnicity);
 	}
-
+	
 	private void setPmi(
 			ParticipantDetail detail,
 			Participant participant, 	
@@ -343,5 +348,25 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		pmi.setMedicalRecordNumber(pmiDetail.getMrn());
 		return pmi;
 	}
-
+	
+	private void setParticipantExtension(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		ExtensionDetail extDetail = detail.getExtensionDetail();
+		if (extDetail == null) {
+			return;
+		}
+		
+		ParticipantExtension extension = ParticipantExtension.getFor(participant);
+		if (extension == null) {
+			return;
+		} 
+		
+		for (AttrDetail attrDetail: extDetail.getAttrs()) {
+			Attr attr = new Attr();
+			BeanUtils.copyProperties(attrDetail, attr);
+			extension.getAttrs().add(attr);
+		}
+		
+		participant.setExtension(extension);
+	}
+	
 }
