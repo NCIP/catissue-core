@@ -128,8 +128,8 @@ body {
   text-align: center;
   width: 100%;
   padding: 15px 5px;
+  height: auto!important;
   height: initial!important;
-  overflow-y: initial!important;
 }
 
 .os-custom-banner {
