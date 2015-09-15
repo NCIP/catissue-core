@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
@@ -50,7 +49,7 @@ public abstract class AbstractSpmnAbbrLabelToken extends AbstractSpecimenLabelTo
 	
 	protected String getLabel(String key, ErrorCode code) {
 		String label = abbrMap.get(key);
-		if (StringUtils.isBlank(label)) {
+		if (label == null) {
 			throw OpenSpecimenException.userError(code, key);
 		}
 		
