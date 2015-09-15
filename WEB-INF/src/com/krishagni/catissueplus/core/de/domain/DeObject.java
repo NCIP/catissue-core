@@ -121,7 +121,7 @@ public abstract class DeObject {
 	}
 	
 	/** Hackish method */
-	protected List<Long> getRecordIds() {
+	public List<Long> getRecordIds() {
 		FormContextBean formCtx = getFormContext();
 		if (formCtx == null) {
 			return null;
