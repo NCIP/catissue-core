@@ -1,8 +1,6 @@
 package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +20,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -31,7 +28,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.openspecimen.core.migration.domain.Migration.Status;
@@ -54,6 +50,8 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	private MigrationService migrationSvc;
 	
 	private JdbcTemplate jdbcTemplate;
+	
+	private Properties appProps = new Properties();
 	
 	private boolean mysql = true;
 	
@@ -82,11 +80,15 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
+	
+	public void setAppProps(Properties appProps) {
+		this.appProps = appProps;
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		migrateFromFiles();
-		mysql = isMysql();
+		mysql = "MYSQL".equalsIgnoreCase(appProps.getProperty(DB_TYPE_PROP));
 		migrateFromDatabase(!identifiedReports);
 		migrateFromDatabase(identifiedReports);
 	}
@@ -300,28 +302,6 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 		return cfgSvc.getDataDir() + File.separator + "visit-sprs";
 	}
 	
-	private boolean isMysql() {
-		String dbType;
-		InputStream in = null;
-		try {
-			in = this.getClass().getClassLoader().getResourceAsStream(APP_PROPS_FILE);
-
-			Properties props = new Properties();
-			props.load(in);
-
-			dbType = props.getProperty(DB_TYPE_PROP);
-			logger.info("Database type is: " + dbType);
-		}
-		catch (IOException e) {
-			logger.error("Error migrating SPR reports", e);
-			throw new OpenSpecimenException(e);
-		}
-		finally {
-			IOUtils.closeQuietly(in);
-		}
-		return "MYSQL".equalsIgnoreCase(dbType);
-	}
-	
 	private static final String GET_DEIDENTIFIED_SPR_DETAILS_SQL_MYSQL =
 			"select "+ 
 			  "pr.identifier reportId, pr.activity_status activityStatus, " +
@@ -394,8 +374,6 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	
 	private static final String MIGRATION_NAME = "Surgical Pathology Reports";
 	
-	private static final String APP_PROPS_FILE = "application.properties";
-
 	private static final String DB_TYPE_PROP = "database.type";
 
 	
