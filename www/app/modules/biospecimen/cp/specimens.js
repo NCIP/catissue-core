@@ -143,7 +143,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
           $scope.specimensCount = count;
         }
       );
-      $scope.sr.initialQty = Util.getScientificNotation($scope.sr.initialQty);
+      $scope.sr.initialQty = Util.getNumberInScientificNotation($scope.sr.initialQty);
       loadPvs();
     };
 

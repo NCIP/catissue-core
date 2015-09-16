@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .filter('osNumber', function($translate) {
+  .filter('osNumberInScientificNotation', function($translate, Util) {
     return function(input, placeholder) {
 
       var result = placeholder || $translate.instant("common.not_specified");
@@ -8,11 +8,7 @@ angular.module('openspecimen')
         return result;
       }
 
-      if (angular.isNumber(input) && input > 1000000) {
-        var number = input/1000000;
-        return number  + "e6";
-      }
 
-      return input;
+      return Util.getNumberInScientificNotation(input, 1000000, 6);
     }
   });

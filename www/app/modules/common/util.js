@@ -141,10 +141,9 @@ angular.module('openspecimen')
       });
     }
 
-    function getScientificNotation(input) {
-      if (angular.isNumber(input) && input > 1000000) {
-        var number = input/1000000;
-        return number  + "e6";
+    function getNumberInScientificNotation(input, minRange, fractionDigits) {
+      if (angular.isNumber(input) && input > minRange) {
+        input = input.toExponential(fractionDigits);
       }
 
       return input;
@@ -165,6 +164,6 @@ angular.module('openspecimen')
 
       hidePopovers: hidePopovers,
 
-      getScientificNotation: getScientificNotation
+      getNumberInScientificNotation: getNumberInScientificNotation
     };
   });
