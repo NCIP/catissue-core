@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.specimen.addedit', [])
-  .controller('AddEditSpecimenCtrl', function($scope, $state, cpr, visit, specimen, PvManager) {
+  .controller('AddEditSpecimenCtrl', function($scope, $state, cpr, visit, specimen, PvManager, Util) {
     function loadPvs() {
       $scope.loadSpecimenTypes = function(specimenClass, notclear) {
         $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
@@ -72,6 +72,8 @@ angular.module('os.biospecimen.specimen.addedit', [])
         $scope.currSpecimen.receivedEvent.receivedQuality = "Acceptable";
       }
 
+      $scope.currSpecimen.initialQty = Util.getNumberInScientificNotation($scope.currSpecimen.initialQty);
+      $scope.currSpecimen.availableQty = Util.getNumberInScientificNotation($scope.currSpecimen.availableQty);
     }
 
     $scope.saveSpecimen = function() {

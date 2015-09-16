@@ -141,6 +141,14 @@ angular.module('openspecimen')
       });
     }
 
+    function getNumberInScientificNotation(input, minRange, fractionDigits) {
+      if (angular.isNumber(input) && input > minRange) {
+        input = input.toExponential(fractionDigits);
+      }
+
+      return input;
+    }
+
     return {
       clear: clear,
 
@@ -154,6 +162,8 @@ angular.module('openspecimen')
 
       getDupObjects: getDupObjects,
 
-      hidePopovers: hidePopovers
+      hidePopovers: hidePopovers,
+
+      getNumberInScientificNotation: getNumberInScientificNotation
     };
   });

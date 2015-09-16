@@ -11,7 +11,7 @@ public class DerivedSpecimenRequirement {
 	
 	private BigDecimal quantity;
 	
-	private Double concentration;
+	private BigDecimal concentration;
 	
 	private String labelFmt;
 	
@@ -53,11 +53,11 @@ public class DerivedSpecimenRequirement {
 		this.quantity = quantity;
 	}
 
-	public Double getConcentration() {
+	public BigDecimal getConcentration() {
 		return concentration;
 	}
 
-	public void setConcentration(Double concentration) {
+	public void setConcentration(BigDecimal concentration) {
 		this.concentration = concentration;
 	}
 

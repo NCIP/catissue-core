@@ -61,7 +61,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	
 	private Boolean available;
 	
-	private Double concentration;
+	private BigDecimal concentration;
 	
 	private Long parentId;
 	
@@ -257,11 +257,11 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.available = available;
 	}
 
-	public Double getConcentration() {
+	public BigDecimal getConcentration() {
 		return concentration;
 	}
 
-	public void setConcentration(Double concentration) {
+	public void setConcentration(BigDecimal concentration) {
 		this.concentration = concentration;
 	}
 

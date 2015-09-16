@@ -137,4 +137,8 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="ahegade" id="Modify concentration from double to big decimal in specimen audit table">
+    <modifyDataType tableName="catissue_specimen_aud" columnName="CONCENTRATION" newDataType="decimal(24,8)" />
+  </changeSet>
+
 </databaseChangeLog>
