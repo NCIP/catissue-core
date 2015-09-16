@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.RequirementDetail;
-import com.krishagni.catissueplus.core.administrative.services.DistributionOrderRequirementService;
+import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolRequirementService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 @Controller
-@RequestMapping("/distribution-order-requirements")
-public class DistributionOrderRequirementController {
+@RequestMapping("/distribution-protocol-requirement")
+public class DistributionProtocolRequirementController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
 	@Autowired
-	private DistributionOrderRequirementService reqSvc;
+	private DistributionProtocolRequirementService dprSvc;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -45,7 +45,7 @@ public class DistributionOrderRequirementController {
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
 			boolean includeStats) {
 		
-		ResponseEvent<List<RequirementDetail>> resp = reqSvc.getRequirements(new RequestEvent<Long>(dpId));
+		ResponseEvent<List<RequirementDetail>> resp = dprSvc.getRequirements(new RequestEvent<Long>(dpId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -54,7 +54,7 @@ public class DistributionOrderRequirementController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RequirementDetail getRequirement(@PathVariable("id") Long reqId) {
-		ResponseEvent<RequirementDetail> resp = reqSvc.getRequirementById(new RequestEvent<Long>(reqId));
+		ResponseEvent<RequirementDetail> resp = dprSvc.getRequirement(new RequestEvent<Long>(reqId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -63,7 +63,7 @@ public class DistributionOrderRequirementController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public RequirementDetail addNewRequirement(@RequestBody RequirementDetail detail) {
-		ResponseEvent<RequirementDetail> resp = reqSvc.addRequirement(new RequestEvent<RequirementDetail>(detail));
+		ResponseEvent<RequirementDetail> resp = dprSvc.addRequirement(new RequestEvent<RequirementDetail>(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -78,7 +78,7 @@ public class DistributionOrderRequirementController {
 			@RequestBody RequirementDetail detail) {
 		
 		detail.setId(reqId);
-		ResponseEvent<RequirementDetail> resp = reqSvc.updateRequirement(new RequestEvent<RequirementDetail>(detail));
+		ResponseEvent<RequirementDetail> resp = dprSvc.updateRequirement(new RequestEvent<RequirementDetail>(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -87,7 +87,7 @@ public class DistributionOrderRequirementController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Long deleteRequirement(@PathVariable("id") Long reqId) {
-		ResponseEvent<Long> resp = reqSvc.deleteRequirement(new RequestEvent<Long>(reqId));
+		ResponseEvent<Long> resp = dprSvc.deleteRequirement(new RequestEvent<Long>(reqId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

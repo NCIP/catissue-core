@@ -2,7 +2,7 @@ angular.module('os.administrative.dp.requirement',
   [ 
     'ui.router',
     'os.administrative.dp.requirement.list',
-    'os.administrative.dp.requirement.addedit',
+    'os.administrative.dp.requirement.addedit'
   ])
 
   .config(function($stateProvider) {
@@ -10,20 +10,20 @@ angular.module('os.administrative.dp.requirement',
       .state('req-list', {
         url: '/requirement',
         templateUrl: 'modules/administrative/dp/requirement/list.html',     
-        controller: 'RequirementListCtrl',
+        controller: 'DprListCtrl',
         parent: 'dp-detail'
       })
       .state('req-addedit', {
         url: '/requirement/:reqId',
         templateUrl: 'modules/administrative/dp/requirement/addedit.html',
-        controller: 'DpRequirementsAddEditCtrl',
+        controller: 'DprAddEditCtrl',
         parent: 'dp-detail',
         resolve: {
-          requirement: function($stateParams, OrderRequirement) {
-            if($stateParams.reqId) {
-              return OrderRequirement.getById($stateParams.reqId);
+          dpr: function($stateParams, DistributionProtocolRequirement) {
+            if ($stateParams.reqId) {
+              return DistributionProtocolRequirement.getById($stateParams.reqId);
             }
-            return new OrderRequirement();
+            return new DistributionProtocolRequirement();
           }
         }
       });

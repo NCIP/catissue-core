@@ -2,12 +2,19 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 public class RequirementDetail {
 	private Long id;
+	
 	private String type;
+	
 	private String anatomicSite;
+	
 	private String pathology;
+	
 	private Long specimenReq;
+	
 	private Long specimenDistributed;
+	
 	private double price;
+	
 	private String comments;
 	
 	public Long getId() {
@@ -72,19 +79,5 @@ public class RequirementDetail {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public RequirementDetail() {
-	}
-
-	public RequirementDetail(Long id, String type, String site, String pathology, Long req, Long dis, double price, String comment) {
-		this.id = id;
-		this.type = type;
-		this.anatomicSite = site;
-		this.pathology = pathology;
-		this.specimenReq = req;
-		this.specimenDistributed = dis;
-		this.price = price;
-		this.comments = comment;
 	}
 }

@@ -1,16 +1,18 @@
 angular.module('os.administrative.dp.requirement.list', ['os.administrative.models'])
-  .controller('RequirementListCtrl', function($scope, distributionProtocol, OrderRequirement) {
+  .controller('DprListCtrl', function($scope, distributionProtocol, DistributionProtocolRequirement) {
     function loadRequirements() {
-      OrderRequirement.query(distributionProtocol.$id()).then(function(data) {
-        $scope.requirements = data;
-      });
+      DistributionProtocolRequirement.query(distributionProtocol.$id()).then(
+        function(data) {
+          $scope.dprs = data;
+        }
+      );
     }
     
-    $scope.delete = function(requirement) {
-      requirement.$remove().then(
+    $scope.delete = function(dpr) {
+      dpr.$remove().then(
         function() {
-          var index = $scope.requirements.indexOf(requirement);
-          $scope.requirements.splice(index, 1);
+          var index = $scope.dprs.indexOf(dpr);
+          $scope.dprs.splice(index, 1);
         }
       );
     }

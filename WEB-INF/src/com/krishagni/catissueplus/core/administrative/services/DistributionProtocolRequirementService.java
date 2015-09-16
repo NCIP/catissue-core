@@ -6,10 +6,10 @@ import com.krishagni.catissueplus.core.administrative.events.RequirementDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public interface DistributionOrderRequirementService {
+public interface DistributionProtocolRequirementService {
 	public ResponseEvent<List<RequirementDetail>> getRequirements (RequestEvent<Long> req);
 	
-	public ResponseEvent<RequirementDetail> getRequirementById (RequestEvent<Long> req);
+	public ResponseEvent<RequirementDetail> getRequirement (RequestEvent<Long> req);
 	
 	public ResponseEvent<RequirementDetail> addRequirement (RequestEvent<RequirementDetail> req);
 	

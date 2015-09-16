@@ -33,20 +33,20 @@
       </div>
     </div>
     <div class="os-table-body">
-      <div class="row" ng-repeat="req in requirements">
-        <div class="col os-col-15">{{req.type}}</div>
-        <div class="col os-col-15">{{req.anatomicSite}}</div>
-        <div class="col os-col-15">{{req.pathology}}</div>
-        <div class="col os-col-10">{{req.specimenReq}}</div>
-        <div class="col os-col-10">{{req.specimenDistributed}}</div>
-        <div class="col os-col-5">{{req.price}}</div>
-        <div class="col os-col-25 os-ellipsis" title="{{req.comments}}">{{req.comments}}</div>
+      <div class="row" ng-repeat="dpr in dprs">
+        <div class="col os-col-15">{{dpr.type}}</div>
+        <div class="col os-col-15">{{dpr.anatomicSite}}</div>
+        <div class="col os-col-15">{{dpr.pathology}}</div>
+        <div class="col os-col-10">{{dpr.specimenReq}}</div>
+        <div class="col os-col-10">{{dpr.specimenDistributed}}</div>
+        <div class="col os-col-5">{{dpr.price || 'N/A'}}</div>
+        <div class="col os-col-25 os-ellipsis" title="{{dpr.comments}}">{{dpr.comments}}</div>
         <div class="col os-col-5">
           <div class="pull-right btn-group btn-group-xs">
-            <button class="btn btn-default" ui-sref="req-addedit({reqId: req.id})">
+            <button class="btn btn-default" ui-sref="req-addedit({reqId: dpr.id})">
               <span class="fa fa-pencil"></span>
             </button>
-            <button class="btn btn-default" ng-click="delete(req)">
+            <button class="btn btn-default" ng-click="delete(dpr)">
               <span class="fa fa-trash"></span>
             </button>
           </div>

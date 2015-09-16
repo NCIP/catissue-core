@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 import com.krishagni.catissueplus.core.administrative.events.RequirementDetail;
-import com.krishagni.catissueplus.core.administrative.services.DistributionOrderRequirementService;
+import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolRequirementService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
-public class DistributionOrderRequirementServiceImpl implements DistributionOrderRequirementService {
+public class DistributionProtocolRequirementServiceImpl implements DistributionProtocolRequirementService {
 
 	private List<RequirementDetail> data = getRequirementList();
 	
@@ -22,16 +22,15 @@ public class DistributionOrderRequirementServiceImpl implements DistributionOrde
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RequirementDetail> getRequirementById(RequestEvent<Long> req) {
-		return ResponseEvent.response(getRequirement(req.getPayload()));
+	public ResponseEvent<RequirementDetail> getRequirement(RequestEvent<Long> req) {
+		return ResponseEvent.response(getRequirementById(req.getPayload()));
 	}
 
 	@Override
 	@PlusTransactional
 	public ResponseEvent<RequirementDetail> addRequirement(RequestEvent<RequirementDetail> detail) {
 		RequirementDetail request = detail.getPayload();
-		Long id = (long)new Random().nextInt(200-50) + 50;
-		RequirementDetail req = new RequirementDetail(id, request.getType(), request.getAnatomicSite(), request.getPathology(),
+		RequirementDetail req = createRequirement(request.getType(), request.getAnatomicSite(), request.getPathology(),
 			request.getSpecimenReq(), request.getSpecimenDistributed(), request.getPrice(), request.getComments());
 		data.add(req);
 		return ResponseEvent.response(req);
@@ -53,6 +52,7 @@ public class DistributionOrderRequirementServiceImpl implements DistributionOrde
 				requirementDetail.setType(request.getType());
 				detail = requirementDetail;
 			}
+			break;
 		}
 		
 		return ResponseEvent.response(detail);
@@ -67,17 +67,19 @@ public class DistributionOrderRequirementServiceImpl implements DistributionOrde
 			if(requirementDetail.getId().equals(req.getPayload())) {
 				id = requirementDetail.getId();
 				data.remove(requirementDetail);
+				break;
 			}
 		}
 		return ResponseEvent.response(id);
 	}
 	
-	private RequirementDetail getRequirement(Long id) {
+	private RequirementDetail getRequirementById(Long id) {
 		RequirementDetail resp = null;
 		
 		for (RequirementDetail requirementDetail : data) {
 			if (requirementDetail.getId().equals(id)) {
 				resp = requirementDetail;
+				break;
 			}
 		}
 		return resp;
@@ -85,12 +87,27 @@ public class DistributionOrderRequirementServiceImpl implements DistributionOrde
 	
 	private List<RequirementDetail> getRequirementList() {
 		List<RequirementDetail> data = new ArrayList<RequirementDetail>();
-		data.add(new RequirementDetail(1L, "Body Cavity Fluid", "Jejunum", "Metastatic", 20L, 0L, 34.78, ""));
-		data.add(new RequirementDetail(2L, "cDNA", "Cornea, NOS", "Malignant, Invasive", 56L, 0L, 75, "Sample comment"));
-		data.add(new RequirementDetail(3L, "Feces", "Ileum", "Not Specified", 150L, 0L, 150, ""));
-		data.add(new RequirementDetail(4L, "RNA", "Lower gum", "Pre-Malignant", 6L, 0L, 3, ""));
-		data.add(new RequirementDetail(5L, "Sweat", "Ovary", "Non-Malignant", 100L, 0L, 45, ""));
-		data.add(new RequirementDetail(6L, "Whole Blood", "Pelvis, NOS", "Metastatic", 75L, 0L, 65, ""));
+		data.add(createRequirement("Body Cavity Fluid", "Jejunum", "Metastatic", 20L, 0L, 34.78, ""));
+		data.add(createRequirement("cDNA", "Cornea, NOS", "Malignant, Invasive", 56L, 0L, 75, "Sample comment"));
+		data.add(createRequirement("Feces", "Ileum", "Not Specified", 150L, 0L, 150, ""));
+		data.add(createRequirement("RNA", "Lower gum", "Pre-Malignant", 6L, 0L, 3, ""));
+		data.add(createRequirement("Sweat", "Ovary", "Non-Malignant", 100L, 0L, 45, ""));
+		data.add(createRequirement("Whole Blood", "Pelvis, NOS", "Metastatic", 75L, 0L, 65, ""));
 		return data;
-	}	
+	}
+	
+	private RequirementDetail createRequirement(String type, String site, String pathology, Long req, Long dis, double price, String comment) {
+		RequirementDetail detail = new RequirementDetail();
+		Long id = (long)new Random().nextInt(500-1) + 1;
+		detail.setId(id);
+		detail.setType(type);
+		detail.setAnatomicSite(site);
+		detail.setPathology(pathology);
+		detail.setSpecimenReq(req);
+		detail.setSpecimenDistributed(dis != null ? dis : 0);
+		detail.setPrice(price);
+		detail.setComments(comment);
+		
+		return detail;
+	}
 }

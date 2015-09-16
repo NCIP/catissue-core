@@ -370,7 +370,7 @@
     <property name="emailService" ref="emailService"/>
   </bean>
   
-  <bean id="distributionOrderRequirementService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderRequirementServiceImpl">
+  <bean id="distributionProtocolRequirementService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolRequirementServiceImpl">
   </bean>
   
   <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">
