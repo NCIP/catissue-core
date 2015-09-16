@@ -149,6 +149,17 @@ angular.module('openspecimen')
       return input;
     }
 
+    function parseDate(value) {
+      if (typeof value === 'string') {
+        var matches = isoDateRe.exec(value);
+        if (matches) {
+          return new Date(value);
+        }
+      }
+
+      return value;
+    }
+
     return {
       clear: clear,
 
@@ -164,6 +175,8 @@ angular.module('openspecimen')
 
       hidePopovers: hidePopovers,
 
-      getNumberInScientificNotation: getNumberInScientificNotation
+      getNumberInScientificNotation: getNumberInScientificNotation,
+
+      parseDate: parseDate
     };
   });
