@@ -4,13 +4,10 @@ package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 import static com.krishagni.catissueplus.core.common.PvAttributes.SITE_TYPE;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -27,16 +24,20 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
-import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
+import com.krishagni.catissueplus.core.de.domain.factory.ExtensionFactory;
 
 public class SiteFactoryImpl implements SiteFactory {
 
 	private DaoFactory daoFactory;
-
+	
+	private ExtensionFactory extensionFactory;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setExtensionFactory(ExtensionFactory extensionFactory) {
+		this.extensionFactory = extensionFactory;
 	}
 
 	@Override
@@ -219,24 +220,7 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 	
 	private void setSiteExtension(SiteDetail detail, Site site, OpenSpecimenException ose) {
-		ExtensionDetail extDetail = detail.getExtensionDetail();
-		if (extDetail == null) {
-			return;
-		}
-		
-		DeObject extension = site.createExtension();
-		if (extension == null) {
-			return;
-		}
-		
-		List<Attr> attrs = new ArrayList<Attr>();
-		for (AttrDetail attrDetail: extDetail.getAttrs()) {
-			Attr attr = new Attr();
-			BeanUtils.copyProperties(attrDetail, attr);
-			attrs.add(attr);
-		}
-		extension.setAttrs(attrs);
-		
+		DeObject extension = extensionFactory.createExtension(detail.getExtensionDetail(), site);
 		site.setExtension(extension);
 	}
 	

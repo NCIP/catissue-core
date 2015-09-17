@@ -152,6 +152,7 @@
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>  
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
+    <property name="extensionFactory" ref="extensionFactory"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -173,6 +174,7 @@
   
   <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="extensionFactory" ref="extensionFactory"/>
   </bean>
 
   <bean id="specimenFactory"
@@ -308,6 +310,8 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
   </bean>
+  
+  <bean id="extensionFactory" class="com.krishagni.catissueplus.core.de.domain.factory.impl.ExtensionFactoryImpl"/>
 
   <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
     <property name="daoFactory" ref="deDaoFactory"/>
@@ -327,6 +331,7 @@
 
   <bean id="siteFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.SiteFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="extensionFactory" ref="extensionFactory"/>
   </bean>
     
   <bean id="siteService" class="com.krishagni.catissueplus.core.administrative.services.impl.SiteServiceImpl">
@@ -556,6 +561,7 @@
       <map>
         <entry key="extensions">
           <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+            <property name="formDao" ref="formDao"/>
           </bean>
         </entry>
       </map>

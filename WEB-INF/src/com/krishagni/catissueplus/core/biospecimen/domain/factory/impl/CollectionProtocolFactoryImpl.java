@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -28,9 +26,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
-import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
+import com.krishagni.catissueplus.core.de.domain.factory.ExtensionFactory;
 
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
 	private DaoFactory daoFactory;
@@ -38,6 +34,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private LabelGenerator specimenLabelGenerator;
 	
 	private LabelGenerator visitNameGenerator;
+	
+	private ExtensionFactory extensionFactory;
 	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -53,6 +51,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
 		this.visitNameGenerator = visitNameGenerator;
+	}
+
+	public void setExtensionFactory(ExtensionFactory extensionFactory) {
+		this.extensionFactory = extensionFactory;
 	}
 
 	@Override
@@ -241,24 +243,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 	
 	private void setCollectionProtocolExtension(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		ExtensionDetail extDetail = input.getExtensionDetail();
-		if (extDetail == null) {
-			return;
-		}
-		
-		DeObject extension = result.createExtension();
-		if (extension == null) {
-			return;
-		}
-		
-		List<Attr> attrs = new ArrayList<Attr>();
-		for (AttrDetail attrDetail: extDetail.getAttrs()) {
-			Attr attr = new Attr();
-			BeanUtils.copyProperties(attrDetail, attr);
-			attrs.add(attr);
-		}
-		extension.setAttrs(attrs);
-		
+		DeObject extension = extensionFactory.createExtension(input.getExtensionDetail(), result);
 		result.setExtension(extension);
 	}
 }

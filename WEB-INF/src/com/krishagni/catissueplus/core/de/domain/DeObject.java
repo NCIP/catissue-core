@@ -143,13 +143,13 @@ public abstract class DeObject {
 			return;
 		}
 		
-		recordLoaded = true;
-		attrs.clear();
-		
 		Long recordId = getId();
 		if (recordId == null) {
 			return;
 		}
+		
+		recordLoaded = true;
+		attrs.clear();
 		
 		FormData formData = formDataMgr.getFormData(getForm(), recordId);
 		if (formData == null) {

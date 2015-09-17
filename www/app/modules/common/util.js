@@ -141,6 +141,17 @@ angular.module('openspecimen')
       });
     }
 
+    function getExtnOpts(extnCtxt, entity) {
+      return !!extnCtxt ? {
+        formId: extnCtxt.formId,
+        recordId: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.id : undefined,
+        formCtxtId: parseInt(extnCtxt.formCtxtId),
+        objectId: entity.id,
+        showActionBtns: false,
+        labelAlignment: 'horizontal'
+      } : undefined;
+    }
+
     return {
       clear: clear,
 
@@ -154,6 +165,8 @@ angular.module('openspecimen')
 
       getDupObjects: getDupObjects,
 
-      hidePopovers: hidePopovers
+      hidePopovers: hidePopovers,
+
+      getExtnOpts: getExtnOpts
     };
   });

@@ -3,7 +3,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, $translate, cp, cpr, extensionCtxt,
     CollectionProtocolRegistration, Participant,
-    Site, PvManager) {
+    Site, PvManager, Util) {
 
     var availableSites = [];
 
@@ -16,18 +16,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cp = cp;
       $scope.cpr = angular.copy(cpr);
       $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
-
-      var participant =  $scope.cpr.participant;      
-      if (!!extensionCtxt) {
-        $scope.extnOpts = {
-          formId: extensionCtxt.formId,
-          recordId: !!participant.id && !!participant.extensionDetail ? participant.extensionDetail.id : undefined,
-          formCtxtId: parseInt(extensionCtxt.formCtxtId),
-          objectId: participant.id,
-          showActionBtns: false,
-          labelAlignment: 'horizontal'
-        }
-      }
+      $scope.extnOpts = Util.getExtnOpts(extensionCtxt, $scope.cpr.participant); 
 
       loadPvs();
     };
