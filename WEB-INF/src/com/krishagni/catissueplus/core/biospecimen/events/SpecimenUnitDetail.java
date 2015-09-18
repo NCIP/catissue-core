@@ -89,16 +89,16 @@ public class SpecimenUnitDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public static SpecimenUnitDetail from(SpecimenUnit qtyUnit) {
+	public static SpecimenUnitDetail from(SpecimenUnit specimenUnit) {
 		SpecimenUnitDetail detail = new SpecimenUnitDetail();
-		BeanUtils.copyProperties(qtyUnit, detail);
+		BeanUtils.copyProperties(specimenUnit, detail);
 		return detail;
 	}
 	
-	public static List<SpecimenUnitDetail> from(Collection<SpecimenUnit> qtyUnits) {
+	public static List<SpecimenUnitDetail> from(Collection<SpecimenUnit> specimenUnits) {
 		List<SpecimenUnitDetail> result = new ArrayList<SpecimenUnitDetail>();
-		for (SpecimenUnit qtyUnit : qtyUnits) {
-			result.add(SpecimenUnitDetail.from(qtyUnit));
+		for (SpecimenUnit specimenUnit : specimenUnits) {
+			result.add(SpecimenUnitDetail.from(specimenUnit));
 		}
 		
 		return result;
