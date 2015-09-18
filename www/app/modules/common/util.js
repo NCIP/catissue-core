@@ -141,15 +141,19 @@ angular.module('openspecimen')
       });
     }
 
-    function getExtnOpts(extnCtxt, entity) {
-      return !!extnCtxt ? {
+    function getExtnOpts(entity, extnCtxt) {
+      if (!extnCtxt) {
+        return undefined;
+      }
+
+      return {
         formId: extnCtxt.formId,
         recordId: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.id : undefined,
         formCtxtId: parseInt(extnCtxt.formCtxtId),
         objectId: entity.id,
         showActionBtns: false,
         labelAlignment: 'horizontal'
-      } : undefined;
+      };
     }
 
     return {

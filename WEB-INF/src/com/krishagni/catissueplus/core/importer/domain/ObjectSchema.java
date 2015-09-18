@@ -29,6 +29,16 @@ public class ObjectSchema {
 		this.record = record;
 	}
 	
+	public Record getExtensionRecord() {
+		for (Record rec: record.getSubRecords()) {
+			if (rec.getType() != null && rec.getType().equals("extensions")) {
+				return rec;
+			}
+		}
+		
+		return null;
+	}
+	
 	public static ObjectSchema parseSchema(String filePath) {
 		XStream parser = getSchemaParser();		
 		return (ObjectSchema)parser.fromXML(new File(filePath));
@@ -45,6 +55,8 @@ public class ObjectSchema {
 		xstream.alias("object-schema", ObjectSchema.class);
 		
 		xstream.alias("record", Record.class);
+		xstream.aliasAttribute(Record.class, "type", "type");
+		xstream.aliasAttribute(Record.class, "entityType", "entityType");
 		xstream.addImplicitCollection(Record.class, "subRecords", "record", Record.class);
 		
 		xstream.alias("field", Field.class);
@@ -59,6 +71,10 @@ public class ObjectSchema {
 		private String attribute;
 		
 		private String caption;
+		
+		private String type;
+		
+		private String entityType;
 		
 		private boolean multiple;
 		
@@ -88,6 +104,22 @@ public class ObjectSchema {
 
 		public void setCaption(String caption) {
 			this.caption = caption;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getEntityType() {
+			return entityType;
+		}
+
+		public void setEntityType(String entityType) {
+			this.entityType = entityType;
 		}
 
 		public boolean isMultiple() {

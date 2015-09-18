@@ -24,20 +24,13 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
-import com.krishagni.catissueplus.core.de.domain.factory.ExtensionFactory;
 
 public class SiteFactoryImpl implements SiteFactory {
 
 	private DaoFactory daoFactory;
 	
-	private ExtensionFactory extensionFactory;
-	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-
-	public void setExtensionFactory(ExtensionFactory extensionFactory) {
-		this.extensionFactory = extensionFactory;
 	}
 
 	@Override
@@ -220,7 +213,7 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 	
 	private void setSiteExtension(SiteDetail detail, Site site, OpenSpecimenException ose) {
-		DeObject extension = extensionFactory.createExtension(detail.getExtensionDetail(), site);
+		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), site);
 		site.setExtension(extension);
 	}
 	

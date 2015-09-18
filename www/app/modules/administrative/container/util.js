@@ -124,8 +124,6 @@ angular.module('os.administrative.container.util', [])
         }
 
         return {map: newMap, noFreeLocs: noFreeLocs};
-      },
-
-      getExtnOpts: getExtnOpts
+      }
     };
   });

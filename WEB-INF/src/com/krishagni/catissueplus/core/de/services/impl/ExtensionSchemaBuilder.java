@@ -62,7 +62,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		
 		Container form = Container.getContainer(ids.get(0));
 		Record attrs = getFormRecord(form, false);
-		attrs.setAttribute("attrs");
+		attrs.setAttribute("attributes");
 		record.setSubRecords(Collections.singletonList(attrs));
 		
 		ObjectSchema objectSchema = new ObjectSchema();

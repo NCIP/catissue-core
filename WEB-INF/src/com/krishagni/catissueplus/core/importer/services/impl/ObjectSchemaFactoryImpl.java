@@ -11,25 +11,12 @@ import org.apache.commons.io.IOUtils;
 
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
+import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
 
 
 public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
-	private static final String COLLECTION_PROTOCOL_EXTENSION = "CollectionProtocolExtension";
-	
-	private static final String PARTICIPANT_EXTENSION = "ParticipantExtension";
-	
-	private static final String SITE_EXTENSION = "SiteExtension";
-	
-	private static Map<String, String> customExtensionForms = new HashMap<String, String>();
-	
-	static {
-		customExtensionForms.put("collectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
-		customExtensionForms.put("participant", PARTICIPANT_EXTENSION);
-		customExtensionForms.put("site", SITE_EXTENSION);
-	}
-	
 	private TemplateService templateService;
 	
 	private Map<String, ObjectSchema> schemaMap = new HashMap<String, ObjectSchema>();
@@ -64,7 +51,6 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 	public ObjectSchema getSchema(String name, Map<String, Object> params) {
 		ObjectSchema schema = schemaMap.get(name);
 		if (schema != null) {
-			addExtensionRecord(schema, name);
 			return schema;
 		}
 		
@@ -81,30 +67,39 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		schemaMap.put(name, schema);
 	}
 	
-	private void addExtensionRecord(ObjectSchema schema, String name) {
-		String entityType = customExtensionForms.get(name);
+	private ObjectSchema parseSchema(String schemaResource) {
+		InputStream in = null;
+		try {
+			in = preprocessSchema(schemaResource);
+			ObjectSchema schema = ObjectSchema.parseSchema(in);
+			Record extnRecord = schema.getExtensionRecord();
+			if (extnRecord != null) {
+				populateExtensionRecord(extnRecord);
+			}
+			
+			return schema;
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+	
+	private void populateExtensionRecord(Record extnRecord) {
+		String entityType = extnRecord.getEntityType();
 		if (entityType == null) {
 			return;
 		}
 
 		ObjectSchema extension = null;
-		ObjectSchemaBuilder builder = schemaBuilders.get("extensions");
+		ObjectSchemaBuilder builder = schemaBuilders.get(extnRecord.getType());
 		if (builder != null) {
 			extension = builder.getObjectSchema(entityType);
 		}
 		
 		if (extension != null) {
-			schema.getRecord().getSubRecords().add(extension.getRecord());
-		}
-	}
-	
-	private ObjectSchema parseSchema(String schemaResource) {
-		InputStream in = null;
-		try {
-			in = preprocessSchema(schemaResource);
-			return ObjectSchema.parseSchema(in);
-		} finally {
-			IOUtils.closeQuietly(in);
+			Record record = extension.getRecord();
+			extnRecord.setCaption(record.getCaption());
+			extnRecord.setAttribute(record.getAttribute());
+			extnRecord.setSubRecords(record.getSubRecords());
 		}
 	}
 	

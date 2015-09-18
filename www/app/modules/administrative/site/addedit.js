@@ -4,7 +4,7 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
     function init() {
       $scope.site = site;
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(extensionCtxt, site);
+      $scope.extnOpts = Util.getExtnOpts(site, extensionCtxt);
       loadPvs();
     }
 

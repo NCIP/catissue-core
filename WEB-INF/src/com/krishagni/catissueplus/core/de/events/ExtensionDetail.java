@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 
@@ -37,6 +38,17 @@ public class ExtensionDetail {
 
 	public void setAttrs(List<AttrDetail> attrs) {
 		this.attrs = attrs;
+	}
+	
+	public void setAttributes(Map<String, Object> attrs) {
+		this.attrs.clear();
+		
+		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
+			AttrDetail attr = new AttrDetail();
+			attr.setName(entry.getKey()); 
+			attr.setValue(entry.getValue());
+			this.attrs.add(attr);
+		}
 	}
 
 	public static ExtensionDetail from(DeObject extension) {

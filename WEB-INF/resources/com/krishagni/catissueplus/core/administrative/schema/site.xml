@@ -40,6 +40,8 @@
         <attribute>emailAddress</attribute>
       </field>
     </record>
+
+    <record type="extensions" entityType="SiteExtension"></record>
   </record>
 </object-schema>
 

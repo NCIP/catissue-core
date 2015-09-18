@@ -84,5 +84,7 @@
         <attribute>mrn</attribute>
       </field>
     </record>
+
+    <record type="extensions" entityType="ParticipantExtension"></record>
   </record>
 </object-schema>

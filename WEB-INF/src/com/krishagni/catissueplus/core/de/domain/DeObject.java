@@ -11,14 +11,18 @@ import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -105,9 +109,19 @@ public abstract class DeObject {
 			}
 			
 			this.id = recordId;
+			
+			Map<String, Control> controls = new HashMap<String, Control>();
+			for (ControlValue cv : formData.getFieldValues()) {
+				controls.put(cv.getControl().getName(), cv.getControl());
+			}
+			
+			for(Attr attr : attrs) {
+				Control ctrl = controls.get(attr.getName());
+				attr.setCaption(ctrl.getCaption());
+			}
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
-		}		 
+		}
 	}
 	
 	public void delete() {
@@ -143,13 +157,13 @@ public abstract class DeObject {
 			return;
 		}
 		
+		recordLoaded = true;
+		attrs.clear();
+		
 		Long recordId = getId();
 		if (recordId == null) {
 			return;
 		}
-		
-		recordLoaded = true;
-		attrs.clear();
 		
 		FormData formData = formDataMgr.getFormData(getForm(), recordId);
 		if (formData == null) {
@@ -157,7 +171,7 @@ public abstract class DeObject {
 		}
 				
 		Map<String, Object> attrValues = new HashMap<String, Object>();
-		Map<String, Attr> attrMap = new HashMap<String, DeObject.Attr>();
+		Map<String, Attr> attrMap = new HashMap<String, Attr>();
 		for (ControlValue cv : formData.getFieldValues()) {
 			attrMap.put(cv.getControl().getName(), Attr.from(cv));
 			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
@@ -248,6 +262,36 @@ public abstract class DeObject {
 
 		object.saveOrUpdate();
 		return object.getId();
+	}
+	
+	public static DeObject createExtension(ExtensionDetail detail, BaseExtensionEntity entity) {
+		if (detail == null) {
+			return null;
+		}
+		
+		DeObject extension = entity.createExtension();
+		if (extension == null) {
+			return null;
+		}
+		
+		Map<String, Attr> existingAttrs = new HashMap<String, Attr>();
+		for (Attr attr : extension.getAttrs()) {
+			existingAttrs.put(attr.getName(), attr);
+		}
+		
+		List<Attr> attrs = new ArrayList<Attr>();
+		for (AttrDetail attrDetail : detail.getAttrs()) {
+			Attr attr = existingAttrs.get(attrDetail.getName());
+			if (attr == null) {
+				attr = new Attr();
+			} 
+			
+			BeanUtils.copyProperties(attrDetail, attr, new String[]{"caption"});
+			attrs.add(attr);
+		}
+		
+		extension.setAttrs(attrs);
+		return extension;
 	}
 	
 	private UserContext getUserCtx() {

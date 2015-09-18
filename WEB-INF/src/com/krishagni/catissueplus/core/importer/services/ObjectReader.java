@@ -84,22 +84,6 @@ public class ObjectReader implements Closeable {
 	private Object parseObject() {
 		try {
 			Map<String, Object> objectProps = parseObject(schema.getRecord(), "");
-			
-			if (objectProps.containsKey("extensionDetail")) {
-				Map<String, Object> extensionDetail = (Map<String, Object>) objectProps.get("extensionDetail");
-				Map<String, Object> attrs = (Map<String, Object>) extensionDetail.get("attrs");
-				
-				List<Object> attributes = new ArrayList<Object>();
-				for (Map.Entry<String, Object> entry: attrs.entrySet()) {
-					Map<String, Object> attr = new HashMap<String, Object>();
-					attr.put("name", entry.getKey());
-					attr.put("value", entry.getValue());
-					attributes.add(attr);
-				}
-				
-				extensionDetail.put("attrs", attributes);
-			}
-			
 			if (objectClass == null) {
 				return objectProps;
 			} else {

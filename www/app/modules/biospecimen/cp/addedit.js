@@ -5,7 +5,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
     function init() {
       $scope.cp = cp;
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(extensionCtxt, cp);
+      $scope.extnOpts = Util.getExtnOpts(cp, extensionCtxt);
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 
