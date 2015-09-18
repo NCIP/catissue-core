@@ -1,19 +1,19 @@
 
 angular.module('os.administrative.dp.history', ['os.administrative.models'])
-  .controller('DpHistoryCtrl', function($scope, $sce, distributionProtocol, DistributionOrder) {
+  .controller('DpHistoryCtrl', function($scope, $sce, distributionProtocol, DistributionProtocol) {
     $scope.exportUrl = $sce.trustAsResourceUrl(distributionProtocol.historyExportUrl());
   
     function loadOrders() {
       var opts = {
         dpId: distributionProtocol.id,
-        specimenType: true,
-        anatomicSite: true,
-        pathologyStatus: true
+        groupBy: 'specimenType,anatomicSite,pathologyStatus'
       };
       
-      DistributionOrder.getOrderSpecifications(opts).then(function(orders) {
-        $scope.orders = orders;
-      });
+      DistributionProtocol.getOrders(opts).then(
+        function(orders) {
+          $scope.orders = orders;
+        }
+      );
     }
     
     loadOrders();

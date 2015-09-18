@@ -36,13 +36,5 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       );
     }
     
-    DistributionOrder.getOrderSpecifications = function(opts) {
-      return $http.get(DistributionOrder.url() + 'specifications', {params: opts}).then(
-        function (resp) {
-          return resp.data;
-        }
-      );
-    }
-    
     return DistributionOrder;
   });
