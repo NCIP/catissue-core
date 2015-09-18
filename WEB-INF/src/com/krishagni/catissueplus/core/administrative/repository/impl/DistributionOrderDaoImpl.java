@@ -17,13 +17,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolSummary;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -111,38 +107,6 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		addProjections(query, CollectionUtils.isNotEmpty(crit.siteIds()));
 		return query.list();		
 	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<DistributionOrderSpecificationDetails> getOrderSpecifications(DistributionOrderSpecificationListCriteria listCrit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionOrder.class)
-				.createAlias("orderItems", "item")
-				.createAlias("item.specimen", "specimen");
-
-		query.add(Restrictions.eq("status", DistributionOrder.Status.EXECUTED));
-		if (listCrit.dpId() != null) {
-			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
-		}
-		else {
-			if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
-				query.createAlias("distributionProtocol", "dp")
-					.createAlias("dp.distributingSites", "distSite")
-					.add(Restrictions.in("distSite.id", listCrit.siteIds()));
-			}
-		}
-		
-		addOrderSpecProjections(query, listCrit);
-		
-		List<Object []> rows = query.list();
-		List<DistributionOrderSpecificationDetails> result = new ArrayList<DistributionOrderSpecificationDetails>();
-		for (Object[] row: rows) {
-			DistributionOrderSpecificationDetails detail = getDOSpecDetail(row, listCrit);
-			result.add(detail);
-		}
-		
-		return result;
-	}
-
 	
 	private void addNameRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {
 		if (StringUtils.isBlank(crit.query())) {
@@ -259,58 +223,6 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		result.setRequester(requester);
 		
 		return result;
-	}
-	
-	private void addOrderSpecProjections(Criteria query, DistributionOrderSpecificationListCriteria crit) {
-		ProjectionList projs = Projections.projectionList();
-		
-		projs.add(Projections.property("id"));
-		projs.add(Projections.property("name"));
-		projs.add(Projections.property("distributionProtocol"));
-		projs.add(Projections.property("executionDate"));
-		projs.add(Projections.property("specimen.specimenType"));
-		projs.add(Projections.property("specimen.tissueSite"));
-		projs.add(Projections.property("specimen.pathologicalStatus"));
-		projs.add(Projections.count("specimen.specimenType"));
-		
-		projs.add(Projections.groupProperty("id"));
-		if (crit.specimenType()) {
-			projs.add(Projections.groupProperty("specimen.specimenType"));
-		}
-		
-		if (crit.anatomicSite()) {
-			projs.add(Projections.groupProperty("specimen.tissueSite"));
-		}
-		
-		if (crit.pathologyStatus()) {
-			projs.add(Projections.groupProperty("specimen.pathologicalStatus"));
-		}
-		
-		query.setProjection(projs);
-	}
-	
-	private DistributionOrderSpecificationDetails getDOSpecDetail(Object[] row, DistributionOrderSpecificationListCriteria crit) {
-		DistributionOrderSpecificationDetails detail = new DistributionOrderSpecificationDetails();
-		
-		detail.setId((Long) row[0]);
-		detail.setName((String) row[1]);
-		detail.setDistributionProtocol(DistributionProtocolSummary.from((DistributionProtocol) row[2]));
-		detail.setExecutionDate((Date) row[3]);
-		if (crit.specimenType()) {
-			detail.setSpecimenType((String) row[4]);
-		}
-		
-		if (crit.anatomicSite()) {
-			detail.setAnatomicSite((String) row[5]);
-		}
-		
-		if (crit.pathologyStatus()) {
-			detail.setPathologicalStatus((String) row[6]);
-		}
-		
-		detail.setSpecimenDistributed((Long) row[7]);
-		
-		return detail;
 	}
 	
 	public static final String FQN  = DistributionOrder.class.getName();

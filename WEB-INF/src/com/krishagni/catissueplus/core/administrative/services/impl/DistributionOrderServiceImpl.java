@@ -21,8 +21,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecificationListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -244,35 +242,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<List<DistributionOrderSpecificationDetails>> getOrderSpecifications(RequestEvent<DistributionOrderSpecificationListCriteria> req) {
-		try {
-			DistributionOrderSpecificationListCriteria crit = req.getPayload();
-			
-			if (crit.dpId() != null) {
-				DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
-				AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
-			} else {
-				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
-				if (siteIds != null & CollectionUtils.isEmpty(siteIds)) {
-					return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-				}
-				
-				if (siteIds != null) {
-					crit.siteIds(siteIds);
-				}
-			}
-			
-			List<DistributionOrderSpecificationDetails> details = daoFactory.getDistributionOrderDao().getOrderSpecifications(crit);
-			return ResponseEvent.response(details);
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-		
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
 			DistributionOrder order = daoFactory.getDistributionOrderDao().getOrder(newOrder.getName());

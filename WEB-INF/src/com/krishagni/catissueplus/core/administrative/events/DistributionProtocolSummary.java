@@ -80,13 +80,13 @@ public class DistributionProtocolSummary {
 		this.distributedSpecimensCount = distributedSpecimensCount;
 	}
 	
-	public static DistributionProtocolSummary from (DistributionProtocol dp) {
+	public static DistributionProtocolSummary from(DistributionProtocol dp) {
 		DistributionProtocolSummary summary = new DistributionProtocolSummary();
 		copy(dp, summary);
 		return summary;
 	}
 	
-	public static List<DistributionProtocolSummary> from (Collection<DistributionProtocol> dps) {
+	public static List<DistributionProtocolSummary> from(Collection<DistributionProtocol> dps) {
 		List<DistributionProtocolSummary> result = new ArrayList<DistributionProtocolSummary>();
 		
 		for (DistributionProtocol dp: dps) {

@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.Date;
 
-public class DistributionOrderSpecificationDetails {
+public class DistributionOrderSpecReqDetails {
 	private Long id;
 	
 	private String name;
@@ -15,9 +15,9 @@ public class DistributionOrderSpecificationDetails {
 	
 	private String anatomicSite;
 	
-	private String pathologicalStatus;
+	private String pathologyStatus;
 	
-	private Long specimenDistributed;
+	private Long distributedSpecimenCount;
 
 	public Long getId() {
 		return id;
@@ -67,20 +67,20 @@ public class DistributionOrderSpecificationDetails {
 		this.anatomicSite = anatomicSite;
 	}
 
-	public String getPathologicalStatus() {
-		return pathologicalStatus;
+	public String getPathologyStatus() {
+		return pathologyStatus;
 	}
 
-	public void setPathologicalStatus(String pathologicalStatus) {
-		this.pathologicalStatus = pathologicalStatus;
+	public void setPathologyStatus(String pathologyStatus) {
+		this.pathologyStatus = pathologyStatus;
 	}
 
-	public Long getSpecimenDistributed() {
-		return specimenDistributed;
+	public Long getDistributedSpecimenCount() {
+		return distributedSpecimenCount;
 	}
 
-	public void setSpecimenDistributed(Long specimenDistributed) {
-		this.specimenDistributed = specimenDistributed;
+	public void setDistributedSpecimenCount(Long distributedSpecimenCount) {
+		this.distributedSpecimenCount = distributedSpecimenCount;
 	}
 	
 }

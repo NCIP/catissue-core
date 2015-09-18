@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
-public class DistributionOrderSpecificationListCriteria extends AbstractListCriteria<DistributionOrderSpecificationListCriteria> {
+public class DistributionOrderSpecReqListCriteria extends AbstractListCriteria<DistributionOrderSpecReqListCriteria> {
 	private Long dpId;
 	
 	private boolean specimenType;
@@ -16,7 +16,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 	private Set<Long> siteIds;
 	
 	@Override
-	public DistributionOrderSpecificationListCriteria self() {
+	public DistributionOrderSpecReqListCriteria self() {
 		return this;
 	}
 	
@@ -24,7 +24,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 		return dpId;
 	}
 	
-	public DistributionOrderSpecificationListCriteria dpId(Long dpId) {
+	public DistributionOrderSpecReqListCriteria dpId(Long dpId) {
 		this.dpId = dpId;
 		return self();
 	}
@@ -33,7 +33,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 		return specimenType;
 	}
 	
-	public DistributionOrderSpecificationListCriteria specimenType(boolean specimenType) {
+	public DistributionOrderSpecReqListCriteria specimenType(boolean specimenType) {
 		this.specimenType = specimenType;
 		return self();
 	}
@@ -42,7 +42,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 		return anatomicSite;
 	}
 	
-	public DistributionOrderSpecificationListCriteria anatomicSite(boolean anatomicSite) {
+	public DistributionOrderSpecReqListCriteria anatomicSite(boolean anatomicSite) {
 		this.anatomicSite = anatomicSite;
 		return self();
 	}
@@ -51,7 +51,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 		return pathologyStatus;
 	}
 	
-	public DistributionOrderSpecificationListCriteria pathologyStatus(boolean pathologyStatus) {
+	public DistributionOrderSpecReqListCriteria pathologyStatus(boolean pathologyStatus) {
 		this.pathologyStatus = pathologyStatus;
 		return self();
 	}
@@ -60,7 +60,7 @@ public class DistributionOrderSpecificationListCriteria extends AbstractListCrit
 		return siteIds;
 	}
 	
-	public DistributionOrderSpecificationListCriteria siteIds(Set<Long> siteIds) {
+	public DistributionOrderSpecReqListCriteria siteIds(Set<Long> siteIds) {
 		this.siteIds = siteIds;
 		return self();
 	}
