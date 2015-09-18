@@ -169,6 +169,11 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          select count(*) from catissue_permissible_value where value = 'Missed Collection'
+      </sqlCheck>
+    </preConditions>
     <sql>
       insert into catissue_permissible_value
         (identifier, value, public_id)
