@@ -67,10 +67,10 @@
       <key column="COLLECTION_PROTOCOL_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
-
-    <set name="repositories" table="CATISSUE_SITE_CP" inverse="false" cascade="none" sort="unsorted">
-      <key column="COLLECTION_PROTOCOL_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.Site" column="SITE_ID"/>
+    
+    <set name="sites" inverse="true" cascade="all-delete-orphan">
+       <key column="COLLECTION_PROTOCOL_ID"/>
+       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite"/>
     </set>
 
     <set name="collectionProtocolEvents" table="CATISSUE_COLL_PROT_EVENT" inverse="true" cascade="save-update">
@@ -175,7 +175,8 @@
         cp
       from
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
-        join cp.repositories site
+        join cp.sites cpSite
+        join cpSite.site site
       where
         cp.shortTitle in (:shortTitles) and
         site.name = :siteName and
@@ -238,10 +239,11 @@
 
     <query name="getRepoIdsByCps">
       select 
-        r.id
+        site.id
       from
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
-        join cp.repositories r
+        join cp.sites cpSite
+        join cpSite.site site
       where
         cp.id in (:cpIds)
     </query>

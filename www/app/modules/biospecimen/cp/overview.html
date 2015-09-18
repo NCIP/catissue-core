@@ -61,12 +61,11 @@
 
       <li class="item">
         <strong class="key key-sm" translate="cp.repositories">Repositories</strong>
-        <os-inline-edit editor="repoEditor" name="repositoryNames" class="value value-md" value="cp.repositoryNames">
-          <span ng-if="repoEditor.isDisplayMode()">{{repoEditor.viewValue.join(', ') | osNoValue}}</span>
-          <os-select ng-if="repoEditor.isEditMode()" multiple name="repositoryNames" 
-            ng-model="cp.repositoryNames" list="sites" class="form-control">
-          </os-select>
-        </os-inline-edit>
+        <span class="value value-md">
+          <span ng-repeat="site in cp.cpSites">
+            {{site.siteName}} <span ng-if="codingEnabled && !!site.code">({{site.code}})</span>, 
+          </span>
+        </span>
       </li>
 
       <li class="item">

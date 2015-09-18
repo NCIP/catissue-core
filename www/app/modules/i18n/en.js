@@ -56,6 +56,7 @@
     "build_date": "Build date",
     "build_commit_revision": "Revision",
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
+    "footer_note": "OpenSpecimen - powered by Krishagni",
 
     "buttons": {
       "add": "Add",
@@ -116,7 +117,8 @@
 
     "cp_def_file": "Collection Protocol Definition File",
   
-    "repositories": "Repositories", 
+    "repositories": "Repositories",
+    "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
     "code": "Short Code",
@@ -166,6 +168,9 @@
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
+
+    "show_site_coding": "More Site Code Information",
+    "hide_site_coding": "Less Site Code Information",
 
     "tab": {
       "overview": "Overview",
@@ -739,7 +744,7 @@
        "cp": "Collection Protocol",
        "role": "Role",
        "no_roles": "There are no roles to show. Add a new role by clicking Add Role...",
-       "all": "All Current & Future"
+       "all": "All Current and Future"
     },
 
     "create_account": "Create your OpenSpecimen Account",

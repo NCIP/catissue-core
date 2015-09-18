@@ -28,7 +28,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.openspecimen.core.migration.domain.Migration.Status;
@@ -51,6 +50,10 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	private MigrationService migrationSvc;
 	
 	private JdbcTemplate jdbcTemplate;
+	
+	private Properties appProps = new Properties();
+	
+	private boolean mysql = true;
 	
 	private boolean identifiedReports = true;
 	
@@ -77,10 +80,15 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
+	
+	public void setAppProps(Properties appProps) {
+		this.appProps = appProps;
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		migrateFromFiles();
+		mysql = "MYSQL".equalsIgnoreCase(appProps.getProperty(DB_TYPE_PROP));
 		migrateFromDatabase(!identifiedReports);
 		migrateFromDatabase(identifiedReports);
 	}
@@ -256,12 +264,11 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	}
 	
 	private String getReportsSql(boolean identifiedReports) {
-		if (isMysql()) {
+		if (mysql) {
 			return identifiedReports ? GET_IDENTIFIED_SPR_DETAILS_SQL_MYSQL : GET_DEIDENTIFIED_SPR_DETAILS_SQL_MYSQL;
 		} else {
 			return identifiedReports ? GET_IDENTIFIED_SPR_DETAILS_SQL_ORACLE : GET_DEIDENTIFIED_SPR_DETAILS_SQL_ORACLE;
 		}
-		
 	}
 
 	private List<SprDetail> getSprDetailsFromTable(final String getSprDetailsSql, final int maxResult) {
@@ -293,18 +300,6 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	
 	private String getDefaultVisitSprDir() {
 		return cfgSvc.getDataDir() + File.separator + "visit-sprs";
-	}
-	
-	private boolean isMysql(){
-		String dbType;
-		try {
-			dbType = jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName();
-		}
-		catch (SQLException e) {
-			logger.error("Error while checking the database type", e);
-			throw new OpenSpecimenException(e);
-		}
-		return "MYSQL".equalsIgnoreCase(dbType);
 	}
 	
 	private static final String GET_DEIDENTIFIED_SPR_DETAILS_SQL_MYSQL =
@@ -378,6 +373,9 @@ public class MigrateSurgicalPathologyReports implements InitializingBean {
 	private static final String SPR_LOCKED = "Locked";
 	
 	private static final String MIGRATION_NAME = "Surgical Pathology Reports";
+	
+	private static final String DB_TYPE_PROP = "database.type";
+
 	
 	private class SprDetail {
 		private Long visitId;

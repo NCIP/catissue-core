@@ -51,7 +51,9 @@ public enum CpErrorCode implements ErrorCode {
 	
 	CONSENT_TIER_FOUND,
 	
-	CONSENTS_WAIVED;
+	CONSENTS_WAIVED,
+	
+	DUP_CP_SITE_CODES;
 	
 	@Override
 	public String code() {

@@ -5,7 +5,7 @@
         <ul class="os-key-values os-two-cols">
           <li class="item">
             <strong class="key key-sm" translate="srs.available_qty">Available Quantity:</strong>
-            <span class="value value-md">{{parentSr.availableQty()}}</span>
+            <span class="value value-md">{{parentSr.availableQty() | osNumberInScientificNotation}}</span>
           </li>
         </ul>
       </div>
@@ -25,14 +25,14 @@
         <div class="form-group" ng-if="!childReq.id">
           <input name="qtyPerAliquot" ng-model="childReq.qtyPerAliquot" 
             os-md-input class="form-control" type="text" placeholder="{{'srs.qty_per_aliquot' | translate}}"
-            ng-required="!childReq.noOfAliquots" ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/" 
+            ng-required="!childReq.noOfAliquots" ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
             ng-model-options="{allowInvalid: 'true'}">
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
         <div class="form-group" ng-if="!!childReq.id">
           <input name="aliquotQty" ng-model="childReq.initialQty" 
             os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-            ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/" 
+            ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
             ng-model-options="{allowInvalid: 'true'}">
           <div os-field-error field="aliquotForm.aliquotQty"></div>
         </div>

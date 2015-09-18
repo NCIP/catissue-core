@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -12,9 +14,11 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolExtension;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSiteDetail;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -57,7 +61,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		cp.setId(input.getId());
-		setRepositories(input, cp, ose);
+		setCollectionProtocolSites(input, cp, ose);
 		setTitle(input, cp, ose);
 		setShortTitle(input, cp, ose);
 		setCode(input, cp, ose);
@@ -82,21 +86,42 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		return cp;
 	}
 	
-	private void setRepositories(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		List<String> repositoryNames = input.getRepositoryNames();
-		if (CollectionUtils.isEmpty(repositoryNames)) {
-			ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
-			return;
-		}
-		
-		List<Site> repositories = daoFactory.getSiteDao().getSitesByNames(repositoryNames);
-		if (repositories.size() != repositoryNames.size()) {
-			ose.addError(CpErrorCode.INVALID_REPOSITORIES);
-			return;
-		}
-		
-		result.setRepositories(new HashSet<Site>(repositories));
-	}
+	private void setCollectionProtocolSites(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		 if (CollectionUtils.isEmpty(input.getCpSites())) {
+			 ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
+			 return;
+		 }
+		 
+		 Map<String, CollectionProtocolSiteDetail> cpSiteDetails = new HashMap<String, CollectionProtocolSiteDetail>();
+		 for (CollectionProtocolSiteDetail detail: input.getCpSites()) {
+			 cpSiteDetails.put(detail.getSiteName(), detail);
+		 }
+		 
+		 if (CollectionUtils.isEmpty(cpSiteDetails.keySet())) {
+			 ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
+			 return;
+		 }
+		 
+		 List<Site> repositories = daoFactory.getSiteDao().getSitesByNames(cpSiteDetails.keySet());
+		 if (repositories.size() != cpSiteDetails.keySet().size()) {
+			 ose.addError(CpErrorCode.INVALID_REPOSITORIES);
+			 return;
+		 }
+		 
+		 Set<CollectionProtocolSite> sites = new HashSet<CollectionProtocolSite>();
+		 for (Site site: repositories) {
+			 CollectionProtocolSiteDetail detail = cpSiteDetails.get(site.getName());
+			 CollectionProtocolSite cpSite = new CollectionProtocolSite();
+			 cpSite.setId(detail.getId());
+			 cpSite.setSite(site); 
+			 cpSite.setCode(detail.getCode() == null ? null: detail.getCode().trim());
+			 cpSite.setCollectionProtocol(result);
+			 
+			 sites.add(cpSite);
+		 }
+		 
+		 result.setSites(sites);
+ 	}
 
 	private void setTitle(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getTitle())) {

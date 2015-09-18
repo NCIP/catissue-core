@@ -75,10 +75,12 @@
 
 .os-page-hdr .os-status-closed {
   background: #d9534f!important;
-  padding: 2px 4px;
+  padding: 0px 4px;
   color: #fff;
   font-weight: bold;
   border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 /** Used in CP events **/
@@ -250,3 +252,8 @@
 .os-secondary-row {
   background-color: #eee;
 }
+
+.os-cp-site-code .os-table-body .control-label {
+  font-weight: normal;
+}
+

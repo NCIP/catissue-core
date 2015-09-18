@@ -2,8 +2,6 @@
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('CpAddEditCtrl', function($scope, $state, cp, extensionCtxt, User, Site) {
 
-    var repositoryNames = null;
-
     function init() {
       $scope.cp = cp;
       $scope.deFormCtrl = {};
@@ -18,13 +16,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
           labelAlignment: 'horizontal'
         }
       }
-
-      /**
-       * Some how the ui-select's multiple option is removing pre-selected items
-       * when site list is being loaded or not yet loaded...
-       * Therefore we copy pre-selected repositoryNames and then use it when all Sites are loaded
-       */
-      repositoryNames = angular.copy(cp.repositoryNames);
 
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
@@ -56,7 +47,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
            $scope.sites.push(site.name);
          })
          
-         $scope.cp.repositoryNames = repositoryNames;
+         $scope.cp.repositoryNames = cp.getRepositoryNames();
       });
     }
 
@@ -77,6 +68,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       }
 
       var cp = angular.copy($scope.cp);
+      delete cp.repositoryNames;
       cp.ppidFmt = getPpidFmt();
 
       if (formCtrl) {
@@ -89,6 +81,23 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         }
       );
     };
+
+    $scope.onRepositorySelect = function(repositoryName) {
+      if (!$scope.cp.cpSites) {
+        $scope.cp.cpSites = [];
+      }
+      $scope.cp.cpSites.push({siteName: repositoryName, code: undefined});
+    }
+
+    $scope.onRepositoryRemove = function(repositoryName) {
+      var sites = $scope.cp.cpSites;
+      for (var i = 0; i < sites.length; i++) {
+        if (sites[i].siteName == repositoryName) {
+          $scope.cp.cpSites.splice(i, 1);
+          break;
+        }
+      }
+    }
 
     init();
   });

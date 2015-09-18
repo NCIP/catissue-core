@@ -24,10 +24,10 @@ angular.module('os.common.search.service', [])
     function getEntities() {
       var results = [];
       angular.forEach(entitySearchMap, function(value, key) {
-        results.push({name: key, caption: $translate.instant(value.caption)});
+        results.push({name: key, caption: $translate.instant(value.caption), order: value.order});
       });
 
-      results.sort(function(a, b) {b.name > a.name});
+      results = results.sort(function(a, b) {return b.order < a.order});
       return results;
     }
 

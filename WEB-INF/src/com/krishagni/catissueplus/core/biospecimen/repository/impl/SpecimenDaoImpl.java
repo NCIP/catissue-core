@@ -140,7 +140,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 				.createAlias("visit", "visit")
 				.createAlias("visit.registration", "cpr")
 				.createAlias("cpr.collectionProtocol", "cp")
-				.createAlias("cp.repositories", "site");
+				.createAlias("cp.sites", "cpSite")
+				.createAlias("cpSite.site", "site");
 		
 		ProjectionList projs = Projections.projectionList();
 		query.setProjection(projs);
@@ -191,7 +192,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		query.createAlias("visit", "visit")
 			.createAlias("visit.registration", "cpr")
 			.createAlias("cpr.collectionProtocol", "cp")
-			.createAlias("cp.repositories", "cpSite")
+			.createAlias("cp.sites", "cpSite")
+			.createAlias("cpSite.site", "site")
 			.createAlias("cpr.participant", "participant")
 			.createAlias("participant.pmis", "pmi", JoinType.LEFT_OUTER_JOIN)
 			.createAlias("pmi.site", "mrnSite", JoinType.LEFT_OUTER_JOIN);
@@ -207,7 +209,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 				/** mrn site = siteId or cp site = siteId **/
 				Restrictions.disjunction()
 					.add(Restrictions.eq("mrnSite.id", siteId))
-					.add(Restrictions.eq("cpSite.id", siteId))
+					.add(Restrictions.eq("site.id", siteId))
 			);
 
 			if (cpId != null) {

@@ -37,3 +37,8 @@
   flex-grow: 1;
   display: flex;
 }
+
+.input-search input {
+  cursor: pointer !important;
+  background-color: #fff !important;
+}

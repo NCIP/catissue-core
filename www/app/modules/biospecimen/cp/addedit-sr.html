@@ -84,7 +84,7 @@
         <div class="col-xs-8">
           <div class="input-group">
             <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
-              placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="input-group-addon">
               <os-specimen-qty-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-qty-unit>
             </div>
@@ -97,7 +97,7 @@
         <div class="col-xs-8">
           <div class="input-group">
             <input name="concentration" ng-model="sr.concentration" class="form-control" type="text" 
-              placeholder="{{'srs.concentration' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              placeholder="{{'srs.concentration' | translate}}" required  ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="input-group-addon">
               <span>&#181;g/&#181;l</span>
             </div>

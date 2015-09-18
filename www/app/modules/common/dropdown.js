@@ -35,6 +35,10 @@ angular.module('openspecimen')
           uiSelect.attr('on-select', tAttrs.onSelect);
         }
 
+        if (tAttrs.onRemove) {
+          uiSelect.attr('on-remove', tAttrs.onRemove);
+        }
+
         if (tAttrs.title) {
            uiSelect.attr('title', tAttrs.title);
         }

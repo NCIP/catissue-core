@@ -123,6 +123,7 @@ angular.module('os.biospecimen.specimen',
     var opts = {
       template: 'modules/biospecimen/participant/specimen/quick-search.html',
       caption: 'entities.specimen',
+      order: 3,
       search: function(searchData) {
         Specimen.listByLabels(searchData.label).then(
           function(specimens) {
@@ -131,7 +132,14 @@ angular.module('os.biospecimen.specimen',
               return;
             }
 
-            $state.go('specimen-detail.overview', {eventId: specimens[0].eventId, specimenId: specimens[0].id, srId: specimens[0].reqId});
+            var specimen = specimens[0];
+            var params = {
+              cpId: specimen.cpId,
+              visitId: specimen.visitId,
+              cprId: specimen.cprId,
+              specimenId: specimen.id
+            };
+            $state.go('specimen-detail.overview', params);
           }
         );
       }

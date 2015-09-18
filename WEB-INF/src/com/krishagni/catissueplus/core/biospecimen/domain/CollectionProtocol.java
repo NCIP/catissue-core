@@ -2,8 +2,10 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,7 +79,7 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Set<User> coordinators = new HashSet<User>();
 	
-	private Set<Site> repositories = new HashSet<Site>();
+	private Set<CollectionProtocolSite> sites = new HashSet<CollectionProtocolSite>();
 	
 	private Set<CollectionProtocolEvent> collectionProtocolEvents = new HashSet<CollectionProtocolEvent>();
 
@@ -279,11 +281,16 @@ public class CollectionProtocol extends BaseEntity {
 	}
 	
 	public Set<Site> getRepositories() {
-		return repositories;
+		return Utility.<Set<Site>>collect(sites, "site", true);
 	}
 
-	public void setRepositories(Set<Site> repositories) {
-		this.repositories = repositories;
+	@NotAudited
+	public Set<CollectionProtocolSite> getSites() {
+		return sites;
+	}
+
+	public void setSites(Set<CollectionProtocolSite> sites) {
+		this.sites = sites;
 	}
 
 	@NotAudited
@@ -345,7 +352,7 @@ public class CollectionProtocol extends BaseEntity {
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
-		CollectionUpdater.update(this.repositories, cp.getRepositories());
+		updateCollectionProtocolSites(cp.getSites());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 	}
 		
@@ -497,5 +504,24 @@ public class CollectionProtocol extends BaseEntity {
 		}
 		
 		return null;
-	}	
+	}
+	
+	private void updateCollectionProtocolSites(Set<CollectionProtocolSite> newCpSites) {
+		Map<Site, CollectionProtocolSite> existingSites = new HashMap<Site, CollectionProtocolSite>();
+		for (CollectionProtocolSite cpSite: getSites()) {
+			existingSites.put(cpSite.getSite(), cpSite);
+		}
+		
+		for (CollectionProtocolSite newSite: newCpSites) {
+			CollectionProtocolSite oldSite = existingSites.get(newSite.getSite());
+			if (oldSite != null) {
+				oldSite.update(newSite);
+				existingSites.remove(oldSite.getSite());
+			} else {
+				getSites().add(newSite);
+			}
+		}
+		
+		getSites().removeAll(existingSites.values());
+	}
 }

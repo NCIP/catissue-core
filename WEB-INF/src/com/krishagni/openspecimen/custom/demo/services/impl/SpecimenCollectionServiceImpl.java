@@ -116,6 +116,8 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		visit.setEventId(cpe.getId());
 		visit.setCprId(cprId);
 		visit.setCpTitle(cp.getTitle());
+		visit.setCpId(cp.getId());
+
 		visit.setStatus(Visit.VISIT_STATUS_COMPLETED);
 		
 		RequestEvent<VisitDetail> req = new RequestEvent<VisitDetail>(visit);
