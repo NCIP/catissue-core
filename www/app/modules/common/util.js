@@ -1,6 +1,7 @@
 
 angular.module('openspecimen')
   .factory('Util', function($rootScope, $timeout, $document) {
+    var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
     };
