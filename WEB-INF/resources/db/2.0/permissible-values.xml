@@ -123,7 +123,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: collection procedure" author="vratnaparkhi">
-    <validCheckSum>7:0c61c1e6462ca009a992eeb773747473</validCheckSum>
+    <validCheckSum>7:4bf3d8c22f96418b83665beea57f8382</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -157,7 +157,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: container" author="vratnaparkhi">
-    <validCheckSum>7:ce5bc9c97e75d3e46fc4aa76b9e87e34</validCheckSum>
+    <validCheckSum>7:561e80f5f8bbb3eab7a6de02e80d9a3b</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -174,7 +174,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: embedding medium" author="vratnaparkhi">
-    <validCheckSum>7:f6a2d575feadc885ba6937d88dff4599</validCheckSum>
+    <validCheckSum>7:2b5080c634231271ddb5e960ec47efa0</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -276,7 +276,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: method" author="vratnaparkhi">
-    <validCheckSum>7:b0821b7c86e019f45510310b2a010421</validCheckSum>
+    <validCheckSum>7:c9c37d4d086bb2f95b568c8c1f58a25b</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -395,7 +395,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: tissue side" author="vratnaparkhi">
-    <validCheckSum>7:6d36449d2dc8a98a3e560e7324e9a5c0</validCheckSum>
+    <validCheckSum>7:e1b0a393bed1ce0b572230d905ad4af3</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
@@ -446,7 +446,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
-    <validCheckSum>7:27011490af174c674869030d71eb6789</validCheckSum>
+    <validCheckSum>7:54757531856fb273aa808a4a7229b045</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 
