@@ -78,9 +78,10 @@
           <div class="input-group">
             <input type="text" name="qty" ng-model="currSpecimen.initialQty" class="form-control"
               required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.initial_qty' | translate}}">
-            <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
-              <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
-              </os-specimen-qty-unit>
+            <div class="input-group-addon">
+              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
+                measure="quantity">
+              </os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="sform.qty"></div>
@@ -93,9 +94,10 @@
           <div class="input-group">
             <input type="text" name="aqty" ng-model="currSpecimen.availableQty" class="form-control"
               required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.available_qty' | translate}}">
-            <div class="input-group-addon" ng-switch on="currSpecimen.specimenClass">
-              <os-specimen-qty-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
-              </os-specimen-qty-unit>
+            <div class="input-group-addon">
+              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
+                measure="quantity">
+              </os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="sform.aqty"></div>
@@ -118,14 +120,16 @@
         </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && currSpecimen.specimenClass == 'Molecular'">
+      <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot'">
         <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
         <div class="col-xs-6"> 
           <div class="input-group">
             <input type="text" name="concentration" ng-model="currSpecimen.concentration" class="form-control"
               ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.concentration' | translate}}">
             <div class="input-group-addon">
-              <span translate="specimens.concentration_unit"></span>
+              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
+                measure="concentration">
+              </os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="sform.concentration"></div>
