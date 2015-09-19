@@ -169,8 +169,8 @@
 
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
 
-    "show_site_coding": "More Site Code Information",
-    "hide_site_coding": "Less Site Code Information",
+    "show_site_coding": "Show Site Code Information",
+    "hide_site_coding": "Hide Site Code Information",
 
     "tab": {
       "overview": "Overview",
