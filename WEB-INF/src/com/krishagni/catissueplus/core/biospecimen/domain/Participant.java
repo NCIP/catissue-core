@@ -12,8 +12,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -58,7 +56,6 @@ public class Participant extends BaseEntity {
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
 	
 	@Autowired
-	@Qualifier("mpiGenerator")
 	private MpiGenerator mpiGenerator;
 	
 	public static String getEntityName() {
@@ -263,7 +260,7 @@ public class Participant extends BaseEntity {
 			return;
 		}
 
-		setEmpi(mpiGenerator.generateMpi(this));
+		setEmpi(mpiGenerator.generateMpi());
 	}
 	
 	private void updatePmis(Participant participant) {

@@ -11,7 +11,7 @@ public class ConfigParams {
 	
 	public static final String MPI_VALIDATOR             = "mpi_validator";
 	
-	public static final String MPI_FORMAT             = "mpi_format";
+	public static final String MPI_FORMAT                = "mpi_format";
 	
 	public static final String SPECIMEN_LABEL_PRINTER    = "specimen_label_printer";
 	
