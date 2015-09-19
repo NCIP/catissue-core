@@ -308,7 +308,7 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
   </bean>
-  
+
   <bean id="querySvc" class="com.krishagni.catissueplus.core.de.services.impl.QueryServiceImpl">
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
@@ -536,15 +536,6 @@
 
   <bean id="objectSchemaFactory" class="com.krishagni.catissueplus.core.importer.services.impl.ObjectSchemaFactoryImpl">
     <property name="templateService" ref="templateService"/>
-    <property name="schemaBuilders">
-      <map>
-        <entry key="extensions">
-          <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
-            <property name="formDao" ref="formDao"/>
-          </bean>
-        </entry>
-      </map>
-    </property>
     <property name="schemaResources">
       <list>
         <value>com/krishagni/catissueplus/core/administrative/schema/institute.xml</value>
@@ -559,6 +550,16 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-derivative.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-aliquot.xml</value>
       </list>
+    </property>
+
+    <property name="schemaBuilders">
+      <map>
+        <entry key="extensions">
+          <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+            <property name="formDao" ref="formDao"/>
+          </bean>
+        </entry>
+      </map>
     </property>
   </bean>
 

@@ -85,6 +85,8 @@
       </field>
     </record>
 
-    <record type="extensions" entityType="ParticipantExtension"></record>
+    <record type="extensions" entityType="ParticipantExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
   </record>
 </object-schema>

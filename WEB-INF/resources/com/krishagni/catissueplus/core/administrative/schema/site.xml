@@ -41,7 +41,9 @@
       </field>
     </record>
 
-    <record type="extensions" entityType="SiteExtension"></record>
+    <record type="extensions" entityType="SiteExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
   </record>
 </object-schema>
 

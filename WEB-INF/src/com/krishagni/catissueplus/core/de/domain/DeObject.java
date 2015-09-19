@@ -110,13 +110,13 @@ public abstract class DeObject {
 			
 			this.id = recordId;
 			
-			Map<String, Control> controls = new HashMap<String, Control>();
-			for (ControlValue cv : formData.getFieldValues()) {
-				controls.put(cv.getControl().getName(), cv.getControl());
-			}
-			
 			for(Attr attr : attrs) {
-				Control ctrl = controls.get(attr.getName());
+				Control ctrl = null;
+				if (useUdn) {
+					ctrl = form.getControlByUdn(attr.getUdn());
+ 				} else {
+					ctrl = form.getControl(attr.getName());
+				}
 				attr.setCaption(ctrl.getCaption());
 			}
 		} catch (Exception e) {
@@ -169,16 +169,11 @@ public abstract class DeObject {
 		if (formData == null) {
 			return;
 		}
-				
-		Map<String, Object> attrValues = new HashMap<String, Object>();
-		Map<String, Attr> attrMap = new HashMap<String, Attr>();
-		for (ControlValue cv : formData.getFieldValues()) {
-			attrMap.put(cv.getControl().getName(), Attr.from(cv));
-			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
-		}
 		
-		for (Control ctrl: formData.getContainer().getAllControls()) {
-			attrs.add(attrMap.get(ctrl.getName()));
+		Map<String, Object> attrValues = new HashMap<String, Object>();
+		for (ControlValue cv : formData.getOrderedFieldValues()) {
+			attrs.add(Attr.from(cv));
+			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
 		}
 		
 		setAttrValues(attrValues);
@@ -362,7 +357,7 @@ public abstract class DeObject {
 		
 		return formCtxt;
 	}
-	
+
 	public static class Attr {
 		private String name;
 		

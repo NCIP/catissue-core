@@ -8,15 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.InitializingBean;
 
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
+import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
 
 
-public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
+public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, InitializingBean{
 	private TemplateService templateService;
 	
 	private Map<String, ObjectSchema> schemaMap = new HashMap<String, ObjectSchema>();
@@ -39,6 +42,16 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		for (String schemaResource : schemaResources) {
 			ObjectSchema schema = parseSchema(schemaResource);
 			schemaMap.put(schema.getName(), schema);
+		}
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		for (ObjectSchema schema : schemaMap.values()) {
+			Record extnRecord = schema.getExtensionRecord();
+			if (extnRecord != null) {
+				populateExtensionRecord(extnRecord);
+			}
 		}
 	}
 	
@@ -71,22 +84,21 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		InputStream in = null;
 		try {
 			in = preprocessSchema(schemaResource);
-			ObjectSchema schema = ObjectSchema.parseSchema(in);
-			Record extnRecord = schema.getExtensionRecord();
-			if (extnRecord != null) {
-				populateExtensionRecord(extnRecord);
-			}
-			
-			return schema;
+			return ObjectSchema.parseSchema(in);
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
 	}
 	
+	private InputStream preprocessSchema(String schemaResource) {
+		String template = templateService.render(schemaResource, new HashMap<String, Object>());
+		return new ByteArrayInputStream( template.getBytes() );
+	}
+	
 	private void populateExtensionRecord(Record extnRecord) {
 		String entityType = extnRecord.getEntityType();
 		if (entityType == null) {
-			return;
+			throw OpenSpecimenException.userError(FormErrorCode.ENTITY_TYPE_REQUIRED);
 		}
 
 		ObjectSchema extension = null;
@@ -98,13 +110,8 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		if (extension != null) {
 			Record record = extension.getRecord();
 			extnRecord.setCaption(record.getCaption());
-			extnRecord.setAttribute(record.getAttribute());
 			extnRecord.setSubRecords(record.getSubRecords());
 		}
 	}
 	
-	private InputStream preprocessSchema(String schemaResource) {
-		String template = templateService.render(schemaResource, new HashMap<String, Object>());
-		return new ByteArrayInputStream( template.getBytes() );
-	}
 }

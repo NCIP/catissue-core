@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.events;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class ExtensionDetail {
 	private Long objectId;
 	
 	private List<AttrDetail> attrs = new ArrayList<AttrDetail>();
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -39,11 +40,11 @@ public class ExtensionDetail {
 	public void setAttrs(List<AttrDetail> attrs) {
 		this.attrs = attrs;
 	}
-	
-	public void setAttributes(Map<String, Object> attrs) {
+
+	public void setAttrsMap(Map<String, Object> attrs) {
 		this.attrs.clear();
 		
-		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
+		for (Map.Entry<String, Object> entry : attrs.entrySet()) {
 			AttrDetail attr = new AttrDetail();
 			attr.setName(entry.getKey()); 
 			attr.setValue(entry.getValue());
