@@ -635,11 +635,9 @@ public class StorageContainer extends BaseEntity {
 	 * 1. If overwrite is true, overwrite existing occupied specimen move to virtual if not in list of assigning positions
 	 * 2. If overwrite is false, assign to unoccupied positions  
 	 */
-
 	public void assignPositions(Collection<StorageContainerPosition> positions, boolean vacateOccupant) {
 		for (StorageContainerPosition position : positions) {
 			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
-			
 			if (existing != null && !vacateOccupant) {
 				continue; 
 			}
