@@ -8,7 +8,7 @@ public class AssignPositionsOp {
 	
 	private String containerName;
 	
-	private boolean overwritePosition;
+	private boolean vacateOccupant;
 	
 	private List<StorageContainerPositionDetail> positions = new ArrayList<StorageContainerPositionDetail>();
 
@@ -28,14 +28,6 @@ public class AssignPositionsOp {
 		this.containerName = containerName;
 	}
 	
-	public boolean getOverwritePosition() {
-		return overwritePosition;
-	}
-
-	public void setOverwritePosition(boolean overwritePosition) {
-		this.overwritePosition = overwritePosition;
-	}
-
 	public List<StorageContainerPositionDetail> getPositions() {
 		return positions;
 	}
@@ -43,5 +35,12 @@ public class AssignPositionsOp {
 	public void setPositions(List<StorageContainerPositionDetail> positions) {
 		this.positions = positions;
 	}
-	
+
+	public boolean getVacateOccupant() {
+		return vacateOccupant;
+	}
+
+	public void setVacateOccupant(boolean vacateOccupant) {
+		this.vacateOccupant = vacateOccupant;
+	}
 }

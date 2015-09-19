@@ -229,11 +229,26 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainer container = getContainer(op.getContainerId(), op.getContainerName());
 			
 			List<StorageContainerPosition> positions = new ArrayList<StorageContainerPosition>();
+			List<StorageContainerPosition> vacateSpecimenPositions = new ArrayList<StorageContainerPosition>();
 			for (StorageContainerPositionDetail posDetail : op.getPositions()) {
-				positions.add(createPosition(container, posDetail, op.getOverwritePosition()));				
+				String entityType = posDetail.getOccuypingEntity();
+				if (StringUtils.isBlank(entityType)) {
+					throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_TYPE_REQUIRED);
+				}
+				
+				if (op.getVacateOccupant() && 
+						StringUtils.isBlank(posDetail.getPosOne()) && 
+						StringUtils.isBlank(posDetail.getPosTwo()) && 
+						posDetail.getOccuypingEntity().equalsIgnoreCase("specimen")) {
+					vacateSpecimenPositions.add(createSpecimenVacatePosition(posDetail));
+					continue;
+				}
+				
+				positions.add(createPosition(container, posDetail, op.getVacateOccupant()));				
 			}
-		
-			container.assignPositions(positions, op.getOverwritePosition());
+			
+			vacateSpecimenPositions(vacateSpecimenPositions, positions);
+			container.assignPositions(positions, op.getVacateOccupant());
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerPositionDetail.from(container.getOccupiedPositions()));
 		} catch (OpenSpecimenException ose) {
@@ -242,7 +257,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
@@ -394,14 +409,9 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		return container == null;
 	}
 	
-	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos, boolean overwrite) {
+	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos, boolean vacateOccupant) {
 		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_POSITIONS);
-		}
-		
-		String entityType = pos.getOccuypingEntity();
-		if (StringUtils.isBlank(entityType)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_TYPE_REQUIRED);
 		}
 		
 		String entityName = pos.getOccupyingEntityName();
@@ -410,8 +420,9 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED);
 		}
 		
+		String entityType = pos.getOccuypingEntity();
 		if (entityType.equalsIgnoreCase("specimen")) {
-			return createSpecimenPosition(container, pos, entityId, entityName, overwrite);
+			return createSpecimenPosition(container, pos, entityId, entityName, vacateOccupant);
 		} else if (entityType.equalsIgnoreCase("container")) {
 			return createChildContainerPosition(container, pos, entityId, entityName);
 		}
@@ -424,8 +435,28 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainerPositionDetail pos, 
 			Long specimenId, 
 			String label,
-			boolean overwrite) {
+			boolean vacateOccupant) {
 		
+		Specimen specimen = getSpecimen(specimenId, label);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+		
+		if (!container.canContain(specimen)) {
+			throw OpenSpecimenException.userError(
+					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+					container.getName(), 
+					specimen.getLabelOrDesc());
+		}
+		
+		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo(), vacateOccupant)) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+		}
+		
+		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
+		position.setOccupyingSpecimen(specimen);
+		return position;		
+	}
+	
+	private Specimen getSpecimen(Long specimenId, String label) {
 		Specimen specimen = null;
 		Object key = null;
 		if (specimenId != null) {
@@ -439,22 +470,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		if (specimen == null) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, key);
 		}
-		
-		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);		
-		if (!container.canContain(specimen)) {
-			throw OpenSpecimenException.userError(
-					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
-					container.getName(), 
-					specimen.getLabelOrDesc());
-		}
-		
-		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo(), overwrite)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
-		}
-		
-		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
-		position.setOccupyingSpecimen(specimen);
-		return position;		
+		return specimen;
 	}
 	
 	private StorageContainerPosition createChildContainerPosition(
@@ -522,5 +538,28 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		copy.setStoreSpecimenEnabled(source.isStoreSpecimenEnabled());
 		copy.setCreatedBy(AuthUtil.getCurrentUser());
 		return copy;
-	}	
+	}
+	
+	private void vacateSpecimenPositions(List<StorageContainerPosition> vacateSpecimenPositions, 
+			List<StorageContainerPosition> occupyingPositions) {
+		for (StorageContainerPosition vacateSpecimenPosition : vacateSpecimenPositions) {
+			if (!StorageContainer.specimenExistInOccupyingPositions(occupyingPositions, vacateSpecimenPosition.getOccupyingSpecimen())) {
+				vacateSpecimenPosition.getOccupyingSpecimen().updatePosition(null);
+			}
+		}
+	}
+	
+	private StorageContainerPosition createSpecimenVacatePosition(StorageContainerPositionDetail posDetail) {
+		String label = posDetail.getOccupyingEntityName();
+		Long specimenId = posDetail.getOccupyingEntityId();
+		if (StringUtils.isBlank(label) && specimenId == null) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED);
+		}
+		
+		Specimen specimen = getSpecimen(specimenId, label);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+		StorageContainerPosition pos = new StorageContainerPosition();
+		pos.setOccupyingSpecimen(specimen);
+		return pos;
+	}
 }

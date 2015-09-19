@@ -2,7 +2,7 @@
 angular.module('os.administrative.container.map', ['os.administrative.container.util'])
   .directive('osContainerMap', function($compile, ContainerUtil) {
     function drawMap(scope, element) {
-      var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap, scope.pristineMap);
+      var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap);
 
       var width = element.width();
       var noOfColumns = scope.container.noOfColumns;
@@ -40,7 +40,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       element.append(table);
     }
 
-    function getLocationsMatrix(container, occupancyMap, pristineMap) {
+    function getLocationsMatrix(container, occupancyMap) {
       var matrix = new Array(container.noOfRows);
       for (var i = 0; i < container.noOfRows; ++i) {
         matrix[i] = new Array(container.noOfColumns);
@@ -52,13 +52,9 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
       angular.forEach(occupancyMap, function(position) {
         matrix[position.posTwoOrdinal - 1][position.posOneOrdinal - 1].occupied = position;
-      });
-
-      angular.forEach(pristineMap, function(oldPosition) {
-        var newPosition = matrix[oldPosition.posTwoOrdinal - 1][oldPosition.posOneOrdinal - 1];
-        if (newPosition && !newPosition.occupied.id &&
-          oldPosition.occupyingEntityName.toLowerCase() != newPosition.occupied.occupyingEntityName.toLowerCase()) {
-          matrix[oldPosition.posTwoOrdinal - 1][oldPosition.posOneOrdinal - 1].overwrite = true;
+        if (!!position.occupiedEntityName &&
+          position.occupiedEntityName.toLowerCase() != position.occupyingEntityName.toLowerCase()) {
+          matrix[position.posTwoOrdinal - 1][position.posOneOrdinal - 1].overwrite = true;
         }
       });
 
@@ -117,7 +113,6 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       scope: {
         container: '=',
         occupancyMap: '=',
-        pristineMap: '=',
         onAddEvent: '&'
       },
 

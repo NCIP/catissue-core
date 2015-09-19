@@ -1,12 +1,5 @@
 <div class="os-container-locations">
 
-  <div class="os-container-overwrite-locations" ng-if="container.storeSpecimensEnabled">
-    <div class="checkbox">
-      <os-checkbox ng-model="input.overwrite" ng-change="showUpdatedMap()"></os-checkbox>
-    </div>
-    <span class="message" translate="container.overwrite_positions">Overwrite existing positions</span>
-  </div>
-
   <div class="input-spmn-labels" ng-if="container.storeSpecimensEnabled">
     <div class="input-group" os-textarea-input-group>
       <textarea ng-model="input.labels" class="form-control" 
@@ -18,6 +11,12 @@
           <span translate="container.assign_positions">Assign Positions</span>
         </button>
       </span>
+    </div>
+    <div class="os-container-overwrite-locations">
+      <div class="checkbox">
+        <os-checkbox ng-model="input.overwrite" ng-change="showUpdatedMap()"></os-checkbox>
+      </div>
+      <span class="message" translate="container.overwrite_positions">Overwrite existing positions</span>
     </div>
   </div>
 

@@ -27,6 +27,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         $scope.input.overwrite);
 
       $scope.occupancyMap = result.map;
+
       $scope.input.noFreeLocs = result.noFreeLocs;
       if (result.noFreeLocs) {
         Alerts.error("container.no_free_locs");
@@ -46,6 +47,19 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
           continue;
         }
 
+        /**
+         Case when vacating existing position, set occupyingEntityName to existing entity name
+         and set positions to null
+        **/
+        if (!pos.occupyingEntityName || pos.occupyingEntityName.trim().length == 0) {
+          pos.occupyingEntityName = pos.occupiedEntityName;
+          delete pos.posOne;
+          delete pos.posTwo;
+          delete pos.posOneOrdinal;
+          delete pos.posTwoOrdinal;
+        }
+
+        delete pos.occupiedEntityName;
         positions.push(pos);
       }
 
@@ -54,7 +68,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       }
 
 
-      var assignPositionsDetail = {'overwritePosition': $scope.input.overwrite, 'positions': positions};
+      var assignPositionsDetail = {'vacateOccupant': $scope.input.overwrite, 'positions': positions};
       container.assignPositions(assignPositionsDetail).then(
         function(latestOccupancyMap) {
           $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;

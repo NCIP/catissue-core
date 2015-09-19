@@ -480,9 +480,13 @@ public class StorageContainer extends BaseEntity {
 
 		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
 	}
+	
+	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo) {
+		return canOccupyPosition(true, specimenId, posOne, posTwo, false);
+	}
 
-	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo, boolean overwrite) {
-		return canOccupyPosition(true, specimenId, posOne, posTwo, overwrite);
+	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo, boolean vacateOccupant) {
+		return canOccupyPosition(true, specimenId, posOne, posTwo, vacateOccupant);
 	}
 
 	public boolean canContainerOccupyPosition(Long containerId, String posOne, String posTwo) {
@@ -632,16 +636,16 @@ public class StorageContainer extends BaseEntity {
 	 * 2. If overwrite is false, assign to unoccupied positions  
 	 */
 
-	public void assignPositions(Collection<StorageContainerPosition> positions, boolean overwrite) {
+	public void assignPositions(Collection<StorageContainerPosition> positions, boolean vacateOccupant) {
 		for (StorageContainerPosition position : positions) {
 			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
 			
-			if (existing != null && !overwrite) {
+			if (existing != null && !vacateOccupant) {
 				continue; 
 			}
 						
 			if (position.getOccupyingSpecimen() != null) {
-				if (existing != null && !isSpecimenExist(positions,existing)) {
+				if (existing != null && !specimenExistInOccupyingPositions(positions, existing.getOccupyingSpecimen())) {
 					existing.getOccupyingSpecimen().updatePosition(null);
 				}
 				position.getOccupyingSpecimen().updatePosition(position);
@@ -658,15 +662,14 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private boolean isSpecimenExist(Collection<StorageContainerPosition> positions, StorageContainerPosition position) {
-		Iterator<StorageContainerPosition> iter = positions.iterator();
+	public static boolean specimenExistInOccupyingPositions(Collection<StorageContainerPosition> occupyingPositions, Specimen specimen) {
 		boolean exist = false;
-		while (iter.hasNext()) {
-			if (iter.next().getOccupyingSpecimen().getId().equals(position.getOccupyingSpecimen().getId())) {
+		for (StorageContainerPosition occupyingPos : occupyingPositions) {
+			if (occupyingPos.getOccupyingSpecimen().getId().equals(specimen.getId())) {
 				exist = true;
 				break;
 			}
-		}		
+		}
 		return exist;
 	}
 	
@@ -748,7 +751,7 @@ public class StorageContainer extends BaseEntity {
 			Long entityId, 
 			String posOne, 
 			String posTwo, 
-			boolean overwrite) {
+			boolean vacateOccupant) {
 		
 		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
 		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
@@ -763,10 +766,8 @@ public class StorageContainer extends BaseEntity {
 		} else if (entityId == null) { 
 			return false; // position is not vacant and entity is new
 		} else if (isSpecimenEntity) {
-			if (overwrite) {
-				return pos.getOccupyingContainer() == null; // position is occupied by container then return false otherwise true 
-			}
-			return pos.getOccupyingSpecimen() != null && pos.getOccupyingSpecimen().getId().equals(entityId); 
+			return (vacateOccupant && pos.getOccupyingContainer() == null) ||
+					pos.getOccupyingSpecimen() != null && pos.getOccupyingSpecimen().getId().equals(entityId);
 		} else {
 			return pos.getOccupyingContainer() != null && pos.getOccupyingContainer().getId().equals(entityId);
 		}

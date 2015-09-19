@@ -77,12 +77,11 @@ angular.module('os.administrative.container.util', [])
       };
     }
 
-    function removeSpecimenIfExist(map, newPos) {
-       for (var i = 0; i < map.length; ++i) {
-         var pos = map[i];
-         if(pos.posOneOrdinal == newPos.posOneOrdinal &&
-           pos.posTwoOrdinal == newPos.posTwoOrdinal) {
-           map.splice(i, 1);
+    function specimenExistAtPosition(map, x, y) {
+       for (var idx = 0; idx < map.length; ++idx) {
+         var pos = map[idx];
+         if(pos.posOneOrdinal == x && pos.posTwoOrdinal == y) {
+           return idx;
          }
        }
     }
@@ -104,28 +103,39 @@ angular.module('os.administrative.container.util', [])
               break;
             }
 
-            if (mapIdx < newMap.length &&
-              newMap[mapIdx].posOneOrdinal == x &&
-              newMap[mapIdx].posTwoOrdinal == y &&
-              !overwrite) {
-              mapIdx++;
-              continue;
-            }
- 
-            var label = labels[labelIdx++];
-            if (!label || label.trim().length == 0) {
-              continue;
-            }
-
-            var newPos = createSpmnPos(container, label, x, y);
             if (overwrite) {
-              removeSpecimenIfExist(newMap, newPos);
-              newMap.splice(0, 0, newPos);
-            } else {
-              newMap.splice(mapIdx, 0, newPos);
-            }
+              var label = labels[labelIdx++];
+              var idx = specimenExistAtPosition(newMap, x, y);
+              if (idx == undefined && (!label || label.trim().length == 0)) {
+                mapIdx++;
+                continue;
+              }
 
-            mapIdx++;
+              var newPos = createSpmnPos(container, label, x, y);
+
+              if (idx != undefined) {
+                var existingPos = newMap[idx];
+                newPos.occupiedEntityName = existingPos.occupyingEntityName;
+                newMap.splice(idx, 1);
+              }
+              newMap.splice(mapIdx, 0, newPos);
+              mapIdx++;
+            } else {
+              if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y) {
+                mapIdx++;
+                continue;
+              }
+ 
+              var label = labels[labelIdx++];
+              if (!label || label.trim().length == 0) {
+                continue;
+              }
+
+              var newPos = createSpmnPos(container, label, x, y);
+              newMap.splice(mapIdx, 0, newPos);
+
+              mapIdx++;
+            }
           }
 
           if (done) {
