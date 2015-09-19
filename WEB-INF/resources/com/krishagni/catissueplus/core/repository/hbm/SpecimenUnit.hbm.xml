@@ -37,18 +37,18 @@
 
     <query name="getByClass">
       from
-      com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
       where
-      u.specimenClass = :specimenClass and
-      u.type is null
+        u.specimenClass = :specimenClass and
+        u.type is null
     </query>
 
     <query name="getByType">
       from
-      com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
       where
-      u.specimenClass = :specimenClass and
-      u.type = :type
+        u.specimenClass = :specimenClass and
+        u.type = :type
     </query>
   </class>
 </hibernate-mapping>

@@ -86,7 +86,7 @@
             <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
               placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="input-group-addon">
-              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type" measure="quantity"></os-specimen-unit>
+              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="srForm.initialQty"></div>

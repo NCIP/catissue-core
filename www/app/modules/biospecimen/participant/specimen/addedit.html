@@ -79,8 +79,7 @@
             <input type="text" name="qty" ng-model="currSpecimen.initialQty" class="form-control"
               required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.initial_qty' | translate}}">
             <div class="input-group-addon">
-              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
-                measure="quantity">
+              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
               </os-specimen-unit>
             </div>
           </div>
@@ -95,8 +94,7 @@
             <input type="text" name="aqty" ng-model="currSpecimen.availableQty" class="form-control"
               required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.available_qty' | translate}}">
             <div class="input-group-addon">
-              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
-                measure="quantity">
+              <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
               </os-specimen-unit>
             </div>
           </div>

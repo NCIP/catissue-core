@@ -286,23 +286,23 @@
     <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="CONCENTRATION" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
-  <changeSet author="ahegade" id="Rename Specimen quantity unit table to specimen unit table">
+  <changeSet author="ahegade" id="Rename specimen quantity unit to specimen units for various measures">
     <renameTable oldTableName="OS_SPECIMEN_QTY_UNITS" newTableName="OS_SPECIMEN_UNITS"/>
   </changeSet>
 
-  <changeSet author="ahegade" id="Rename unit in specimen unit table as quantity specific unit">
+  <changeSet author="ahegade" id="Rename unit to quantity measure unit">
     <renameColumn
       columnDataType="${text.type}(32)"
-      newColumnName="QTY_UNIT"
       oldColumnName="UNIT"
+      newColumnName="QTY_UNIT"
       tableName="OS_SPECIMEN_UNITS"/>
   </changeSet>
 
-  <changeSet author="ahegade" id="Rename html display code in specimen unit table as quantity specific html display code">
+  <changeSet author="ahegade" id="Rename unit html display code to quantity measure specific">
     <renameColumn
       columnDataType="${text.type}(32)"
-      newColumnName="QTY_HTML_DISPLAY_CODE"
       oldColumnName="HTML_DISPLAY_CODE"
+      newColumnName="QTY_HTML_DISPLAY_CODE"
       tableName="OS_SPECIMEN_UNITS"/>
   </changeSet>
 
