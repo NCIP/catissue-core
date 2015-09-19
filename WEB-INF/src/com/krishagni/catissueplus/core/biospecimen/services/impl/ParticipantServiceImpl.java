@@ -140,7 +140,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
 		ose.checkAndThrow();
-		
+		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
 	}
 	

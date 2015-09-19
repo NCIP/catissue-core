@@ -26,4 +26,6 @@
   <include file="db/2.2/seed-data.xml"/>
   <include file="db/2.2/audit.xml"/>
   <include file="db/2.2/migration.xml"/>
+  
+  <include file="db/2.3/config.xml"/>
 </databaseChangeLog> 
