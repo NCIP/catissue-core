@@ -41,14 +41,14 @@ public class ExtensionDetail {
 		this.attrs = attrs;
 	}
 
-	public void setAttrsMap(Map<String, Object> attrs) {
-		this.attrs.clear();
+	public void setAttrsMap(Map<String, Object> attrsMap) {
+		attrs.clear();
 		
-		for (Map.Entry<String, Object> entry : attrs.entrySet()) {
+		for (Map.Entry<String, Object> entry : attrsMap.entrySet()) {
 			AttrDetail attr = new AttrDetail();
 			attr.setName(entry.getKey()); 
 			attr.setValue(entry.getValue());
-			this.attrs.add(attr);
+			attrs.add(attr);
 		}
 	}
 
