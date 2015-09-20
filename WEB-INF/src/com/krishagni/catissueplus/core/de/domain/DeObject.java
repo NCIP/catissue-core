@@ -110,7 +110,7 @@ public abstract class DeObject {
 			
 			this.id = recordId;
 			
-			for(Attr attr : attrs) {
+			for (Attr attr : attrs) {
 				Control ctrl = null;
 				if (useUdn) {
 					ctrl = form.getControlByUdn(attr.getUdn());
