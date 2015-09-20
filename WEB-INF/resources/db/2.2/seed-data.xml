@@ -20,20 +20,19 @@
   <changeSet author="ahegade" id="Update specimen unit table with concentration measures">
     <sql>
       update
-        OS_SPECIMEN_UNITS
+        os_specimen_units
       set
-        CONC_UNIT = 'cells'
+        conc_unit = 'cells'
       where
-        SPECIMEN_CLASS = 'Cell';
+        specimen_class = 'Cell';
 
       update
-        OS_SPECIMEN_UNITS
+        os_specimen_units
       set
-        CONC_UNIT = 'microgram/ml',
-        CONC_HTML_DISPLAY_CODE='&#181;g/ml'
+        conc_unit = 'microgram/ml',
+        conc_html_display_code='&#181;g/ml'
       where
-        SPECIMEN_CLASS in ('Molecular', 'Fluid', 'Tissue');
-
+        specimen_class in ('Molecular', 'Tissue');
     </sql>
   </changeSet>
 </databaseChangeLog>
