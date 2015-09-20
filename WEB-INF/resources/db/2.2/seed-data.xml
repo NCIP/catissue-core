@@ -16,4 +16,23 @@
         ('cohort', 'Cohort', 'Cohort', '2.2', ${now})
     </sql>
   </changeSet>
+
+  <changeSet author="ahegade" id="Update specimen unit table with concentration measures">
+    <sql>
+      update
+        os_specimen_units
+      set
+        conc_unit = 'cells'
+      where
+        specimen_class = 'Cell';
+
+      update
+        os_specimen_units
+      set
+        conc_unit = 'microgram/ml',
+        conc_html_display_code='&#181;g/ml'
+      where
+        specimen_class in ('Molecular', 'Tissue');
+    </sql>
+  </changeSet>
 </databaseChangeLog>

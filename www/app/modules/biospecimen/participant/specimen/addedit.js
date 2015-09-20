@@ -74,6 +74,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
 
       $scope.currSpecimen.initialQty = Util.getNumberInScientificNotation($scope.currSpecimen.initialQty);
       $scope.currSpecimen.availableQty = Util.getNumberInScientificNotation($scope.currSpecimen.availableQty);
+      $scope.currSpecimen.concentration = Util.getNumberInScientificNotation($scope.currSpecimen.concentration);
     }
 
     $scope.saveSpecimen = function() {

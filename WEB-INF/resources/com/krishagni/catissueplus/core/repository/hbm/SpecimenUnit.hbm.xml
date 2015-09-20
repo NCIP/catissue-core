@@ -5,8 +5,8 @@
 
 <hibernate-mapping auto-import="false">
   <class
-    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenQuantityUnit"
-    table="OS_SPECIMEN_QTY_UNITS" lazy="true">
+    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit"
+    table="OS_SPECIMEN_UNITS" lazy="true">
 
 
     <id name="id" column="IDENTIFIER">
@@ -19,29 +19,33 @@
 
     <property name="type" column="SPECIMEN_TYPE"/>
 
-    <property name="unit" column="UNIT"/>
+    <property name="qtyUnit" column="QTY_UNIT"/>
 
-    <property name="htmlDisplayCode" column="HTML_DISPLAY_CODE"/>
+    <property name="qtyHtmlDisplayCode" column="QTY_HTML_DISPLAY_CODE"/>
+
+    <property name="concUnit" column="CONC_UNIT"/>
+
+    <property name="concHtmlDisplayCode" column="CONC_HTML_DISPLAY_CODE"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
     <filter name="activeEntity"/>
 
     <query name="getAll">
-      from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenQuantityUnit 
+      from com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit
     </query>
 
     <query name="getByClass">
-      from 
-        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenQuantityUnit u
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
       where
         u.specimenClass = :specimenClass and
         u.type is null
     </query>
 
     <query name="getByType">
-      from 
-        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenQuantityUnit u
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit u
       where
         u.specimenClass = :specimenClass and
         u.type = :type

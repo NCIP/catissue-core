@@ -86,20 +86,20 @@
             <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
               placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="input-group-addon">
-              <os-specimen-qty-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-qty-unit>
+              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="srForm.initialQty"></div>
         </div>
       </div>
-      <div class="form-group" ng-if="sr.specimenClass == 'Molecular'">
+      <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.concentration">Concentration</label>
         <div class="col-xs-8">
           <div class="input-group">
             <input name="concentration" ng-model="sr.concentration" class="form-control" type="text" 
               placeholder="{{'srs.concentration' | translate}}" required  ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="input-group-addon">
-              <span>&#181;g/&#181;l</span>
+              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type" measure="concentration"></os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="srForm.concentration"></div>
