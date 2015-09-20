@@ -18,11 +18,15 @@ public class MpiGeneratorImpl implements MpiGenerator {
 
 	@Override
 	public String generateMpi() {
-		String mpiFmt = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
+		Boolean mpiEnabled = Boolean.parseBoolean(
+				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
+		if(mpiEnabled){
+			String mpiFmt = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_PATTERN, null);
 
-		if (StringUtils.isNotBlank(mpiFmt)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "");
-			return String.format(mpiFmt, uniqueId.intValue());
+			if (StringUtils.isNotBlank(mpiFmt)) {
+				Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
+				return String.format(mpiFmt, uniqueId.intValue());
+			}
 		}
 		return null;
 	}
