@@ -19,7 +19,7 @@ import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
 
 
-public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, InitializingBean{
+public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, InitializingBean {
 	private TemplateService templateService;
 	
 	private Map<String, ObjectSchema> schemaMap = new HashMap<String, ObjectSchema>();
