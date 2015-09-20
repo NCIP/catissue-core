@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -414,6 +415,10 @@ public class StorageContainer extends BaseEntity {
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
+	public StorageContainerPosition createVirtualPosition() {
+		return createPosition(0, null, 0, null);
+	}
+
 	public void removePosition(StorageContainerPosition position) {
 		Iterator<StorageContainerPosition> iter = getOccupiedPositions().iterator();
 		while (iter.hasNext()) {
@@ -629,13 +634,30 @@ public class StorageContainer extends BaseEntity {
 		names.delete(names.length() - 2, names.length());
 		return names.toString();
 	}
-		
-	/**
-	 * Assign positions in container,
-	 * 1. If overwrite is true, overwrite existing occupied specimen move to virtual if not in list of assigning positions
-	 * 2. If overwrite is false, assign to unoccupied positions  
-	 */
+
+	//
+	// Assign unoccupied positions in container
+	//
+	public void assignPositions(Collection<StorageContainerPosition> positions) {
+		assignPositions(positions, false);
+	}
+
+	//
+	// Two cases:
+	// case #1: vacateOccupant: true - Assign unoccupied positions
+	// case #2: Otherwise - Vacate occupant before assigning position to new occupant
+	//
 	public void assignPositions(Collection<StorageContainerPosition> positions, boolean vacateOccupant) {
+		Set<Long> specimenIds = Collections.emptySet();
+		if (vacateOccupant) {
+			specimenIds = new HashSet<Long>();
+			for (StorageContainerPosition position : positions) {
+				if (position.getOccupyingSpecimen() != null) {
+					specimenIds.add(position.getOccupyingSpecimen().getId());
+				}
+			}
+		}
+
 		for (StorageContainerPosition position : positions) {
 			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
 			if (existing != null && !vacateOccupant) {
@@ -643,9 +665,14 @@ public class StorageContainer extends BaseEntity {
 			}
 						
 			if (position.getOccupyingSpecimen() != null) {
-				if (existing != null && !specimenExistInOccupyingPositions(positions, existing.getOccupyingSpecimen())) {
+				if (existing != null && !specimenIds.contains(existing.getOccupyingSpecimen().getId())) {
+					//
+					// The occupant that is being vacated is not assigned any new position
+					// in this transaction. Therefore virtualise it.
+					//
 					existing.getOccupyingSpecimen().updatePosition(null);
 				}
+
 				position.getOccupyingSpecimen().updatePosition(position);
 			} else {
 				StorageContainer childContainer = position.getOccupyingContainer();
@@ -658,17 +685,6 @@ public class StorageContainer extends BaseEntity {
 				}
 			}
 		}
-	}
-	
-	public static boolean specimenExistInOccupyingPositions(Collection<StorageContainerPosition> occupyingPositions, Specimen specimen) {
-		boolean exist = false;
-		for (StorageContainerPosition occupyingPos : occupyingPositions) {
-			if (occupyingPos.getOccupyingSpecimen().getId().equals(specimen.getId())) {
-				exist = true;
-				break;
-			}
-		}
-		return exist;
 	}
 	
 	private void deleteWithoutCheck() {
