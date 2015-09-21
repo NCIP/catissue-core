@@ -140,21 +140,21 @@ public class ParticipantServiceImpl implements ParticipantService {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
+		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
 		
-		Boolean mpiAutoEnabled = Boolean.parseBoolean(
-				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
-		
-		if (mpiAutoEnabled) {
-			if (StringUtils.isNotBlank(participant.getEmpi())) {
-				ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
-			} 
-		} else {
-				ParticipantUtil.ensureValidAndUniqueEmpi(daoFactory, participant.getEmpi(), ose);
-		}
+		String mpiFormat = getMpiFormat();
+		if (StringUtils.isNotBlank(mpiFormat) && StringUtils.isNotBlank(participant.getEmpi())) {
+			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		} 
 
 		ose.checkAndThrow();
 		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
+	}
+
+	private String getMpiFormat() {
+		return ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
 	}
 	
 	public void updateParticipant(Participant existing, Participant newParticipant) {
@@ -169,13 +169,13 @@ public class ParticipantServiceImpl implements ParticipantService {
 		String existingEmpi = existing.getEmpi();
 		String newEmpi = newParticipant.getEmpi();
 		
-		Boolean mpiEnabled = Boolean.parseBoolean(
-				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
+		String mpiFormat = getMpiFormat();
 		
-		if(mpiEnabled && !existingEmpi.equals(newEmpi)){
+		if (StringUtils.isNotBlank(mpiFormat) && !existingEmpi.equals(newEmpi)){
 			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
-		} else if(StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
-			ParticipantUtil.ensureValidAndUniqueEmpi(daoFactory, newEmpi, ose);
+		} 
+		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
+			ParticipantUtil.ensureUniqueEmpi(daoFactory, newEmpi, ose);
 		}
 		
 		List<PmiDetail> pmis = PmiDetail.from(newParticipant.getPmis(), false);

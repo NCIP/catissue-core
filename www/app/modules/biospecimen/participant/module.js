@@ -27,7 +27,7 @@ angular.module('os.biospecimen.participant',
         template: '<div ui-view></div>',
         controller: function($scope, cp) {
           $scope.cp = cp;
-          $scope.autoEmpiEnabled = $scope.global.appProps.mpi_auto_enabled;  
+          $scope.autoEmpiEnabled = !!$scope.global.appProps.mpi_format;  
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {

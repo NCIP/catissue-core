@@ -123,6 +123,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 
+		if (!ParticipantUtil.isValidMpi(empi, ose)) {
+			return;
+		}
+		
 		if (partial && !empi.equals(participant.getEmpi())) {
 			//ParticipantUtil.en
 		}

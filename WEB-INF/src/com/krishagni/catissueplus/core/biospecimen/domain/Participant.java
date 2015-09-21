@@ -261,8 +261,10 @@ public class Participant extends BaseEntity {
 			return;
 		}
 
-		Boolean mpiAutoEnabled = Boolean.parseBoolean(getMpiCfgProp(ConfigParams.MPI_AUTO_ENABLED));
-		if (!mpiAutoEnabled) {
+		String mpiFormat = getMpiCfgProp(ConfigParams.MPI_FORMAT);
+		if (StringUtils.isNotBlank(mpiFormat)) {
+			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
+			setEmpi(String.format(mpiFormat, uniqueId.intValue()));
 			return;
 		}
 		
@@ -270,14 +272,6 @@ public class Participant extends BaseEntity {
 		if (StringUtils.isNotBlank(mpiGeneratorBean)) {
 			MpiGenerator generator = OpenSpecimenAppCtxProvider.getBean(mpiGeneratorBean);
 			setEmpi(generator.generateMpi());
-		}
-		else {
-			String mpiFormat = getMpiCfgProp(ConfigParams.MPI_PATTERN);
-			if (StringUtils.isNotBlank(mpiFormat)) {
-		
-				Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
-				setEmpi(String.format(mpiFormat, uniqueId.intValue()));
-			}
 		}
 	}
 

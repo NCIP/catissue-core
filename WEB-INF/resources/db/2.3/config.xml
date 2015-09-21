@@ -7,7 +7,7 @@
 
   <changeSet author="nmarwaha" id="Config setting to specify MPI format and/or generator">
     <sql>
-      call add_cfg_prop('biospecimen', 'mpi_auto_enabled', 'mpi_auto_enabled', 'mpi_auto_enabled_desc', 'STRING', '');
+      call add_cfg_prop('biospecimen', 'mpi_format', 'mpi_format', 'mpi_format_desc', 'STRING', '');
     </sql>
     <sql>
       call add_cfg_prop('biospecimen', 'mpi_generator', 'mpi_generator', 'mpi_generator_desc', 'STRING', '');
