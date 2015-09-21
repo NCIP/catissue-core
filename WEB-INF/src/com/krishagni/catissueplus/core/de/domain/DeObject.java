@@ -27,6 +27,7 @@ import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FormData;
@@ -110,15 +111,8 @@ public abstract class DeObject {
 			
 			this.id = recordId;
 			
-			for (Attr attr : attrs) {
-				Control ctrl = null;
-				if (useUdn) {
-					ctrl = form.getControlByUdn(attr.getUdn());
- 				} else {
-					ctrl = form.getControl(attr.getName());
-				}
-				attr.setCaption(ctrl.getCaption());
-			}
+			attrs.clear();
+			attrs.addAll(getAttrs(formData));
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		}
@@ -170,9 +164,10 @@ public abstract class DeObject {
 			return;
 		}
 		
+		attrs.addAll(getAttrs(formData));
+		
 		Map<String, Object> attrValues = new HashMap<String, Object>();
 		for (ControlValue cv : formData.getOrderedFieldValues()) {
-			attrs.add(Attr.from(cv));
 			attrValues.put(cv.getControl().getUserDefinedName(), cv.getValue());
 		}
 		
@@ -356,6 +351,31 @@ public abstract class DeObject {
 		}
 		
 		return formCtxt;
+	}
+	
+	private List<Attr> getAttrs(FormData formData) {
+		List<Attr> attrs = new ArrayList<Attr>();
+		for (ControlValue cv : formData.getOrderedFieldValues()) {
+			if (cv == null) {
+				continue;
+			}
+                
+			if (cv.getControl() instanceof SubFormControl) {
+				SubFormControl sfCtrl = (SubFormControl)cv.getControl();
+				if (sfCtrl.isOneToOne()) {
+					cv.setValue(getAttrs((FormData)cv.getValue()));
+				} else {
+					List<List<Attr>> values = new ArrayList<List<Attr>>();
+					for (Object fd : (List)cv.getValue()) {
+						values.add(getAttrs((FormData)fd));
+					}
+					cv.setValue(values);
+				}
+			}
+			attrs.add(Attr.from(cv));
+		}
+
+		return attrs;
 	}
 
 	public static class Attr {
