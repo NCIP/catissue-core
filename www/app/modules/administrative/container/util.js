@@ -67,12 +67,6 @@ angular.module('os.administrative.container.util', [])
     }
 
     function createSpmnPos(container, label, x, y, oldOccupant) {
-      // If occupying entity and old occupant is same
-      // then set old occupant to null.Cause in actual occupying entity not going to change position.
-      if (!!oldOccupant && oldOccupant.occupyingEntityName.toLowerCase() == label) {
-        oldOccupant = null;
-      }
-
       return {
         occuypingEntity: 'specimen', 
         occupyingEntityName: label,
@@ -131,7 +125,12 @@ angular.module('os.administrative.container.util', [])
               continue;
             }
 
-            var newPos = createSpmnPos(container, label, x, y, existing);
+            if (!!existing && existing.occupyingEntityName.toLowerCase() == label.toLowerCase()) {
+              var newPos = existing;
+            } else {
+              var newPos = createSpmnPos(container, label, x, y, existing);
+            }
+
             newMap.splice(mapIdx, 0, newPos);
             mapIdx++;
           }
