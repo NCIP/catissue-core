@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -21,6 +22,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class ParticipantServiceImpl implements ParticipantService {
 	private DaoFactory daoFactory;
@@ -137,11 +139,22 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public void createParticipant(Participant participant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
+		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
 		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
-		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
-		ose.checkAndThrow();
 		
+		String mpiFormat = getMpiFormat();
+		if (StringUtils.isNotBlank(mpiFormat) && StringUtils.isNotBlank(participant.getEmpi())) {
+			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		} 
+
+		ose.checkAndThrow();
+		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
+	}
+
+	private String getMpiFormat() {
+		return ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
 	}
 	
 	public void updateParticipant(Participant existing, Participant newParticipant) {
@@ -155,7 +168,13 @@ public class ParticipantServiceImpl implements ParticipantService {
 		
 		String existingEmpi = existing.getEmpi();
 		String newEmpi = newParticipant.getEmpi();
-		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)) {
+		
+		String mpiFormat = getMpiFormat();
+		
+		if (StringUtils.isNotBlank(mpiFormat) && !existingEmpi.equals(newEmpi)){
+			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		} 
+		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
 			ParticipantUtil.ensureUniqueEmpi(daoFactory, newEmpi, ose);
 		}
 		

@@ -122,7 +122,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setEmpi(null);
 			return;
 		}
-		
+
 		if (!ParticipantUtil.isValidMpi(empi, ose)) {
 			return;
 		}
