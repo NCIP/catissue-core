@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.MpiGenerator;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class ParticipantServiceImpl implements ParticipantService {
@@ -142,13 +143,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
 		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
 		
-		String mpiFormat = getMpiFormat();
-		if (StringUtils.isNotBlank(mpiFormat) && StringUtils.isNotBlank(participant.getEmpi())) {
-			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
-		} 
-
 		ose.checkAndThrow();
-		participant.setEmpiIfEmpty();
+		participant.setEmpi();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
 	}
 
@@ -164,10 +160,11 @@ public class ParticipantServiceImpl implements ParticipantService {
 		String existingEmpi = existing.getEmpi();
 		String newEmpi = newParticipant.getEmpi();
 		
-		String mpiFormat = getMpiFormat();
-		if (StringUtils.isNotBlank(mpiFormat) && !existingEmpi.equals(newEmpi)){
+		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
+		if (generator != null && !existingEmpi.equals(newEmpi)){
 			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
-		} 
+		}
+		
 		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
 			ParticipantUtil.ensureUniqueEmpi(daoFactory, newEmpi, ose);
 		}

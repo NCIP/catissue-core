@@ -269,10 +269,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		props.put("build_date",            appProps.getProperty("buildinfo.date"));
 		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
 		props.put("cp_coding_enabled",     getBoolSetting("biospecimen", "cp_coding_enabled", false));
-		props.put("mpi_format",            getStrSetting("biospecimen", "mpi_format", ""));
+		props.put("auto_empi_enabled",     autoEmpiEnabled());
 		return props;
 	}
-	
+
 	@Override
 	public String getDataDir() {		
 		String dataDir = appProps.getProperty("app.data_dir");
@@ -351,5 +351,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
+	}
+	
+	private boolean autoEmpiEnabled() {
+		return StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_format", "")) || 
+				StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_generator", ""));
 	}
 }

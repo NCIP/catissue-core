@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
@@ -256,23 +258,17 @@ public class Participant extends BaseEntity {
 		return result;
 	}
 	
-	public void setEmpiIfEmpty() {
-		if (StringUtils.isNotBlank(empi)) {
+	public void setEmpi() {
+		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
+		if (generator == null) {
 			return;
 		}
 
-		String mpiFormat = getMpiCfgProp(ConfigParams.MPI_FORMAT);
-		if (StringUtils.isNotBlank(mpiFormat)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
-			setEmpi(String.format(mpiFormat, uniqueId.intValue()));
-			return;
+		if (generator != null && StringUtils.isNotBlank(empi)) {
+			throw OpenSpecimenException.userError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
 		}
 		
-		String mpiGeneratorBean = getMpiCfgProp(ConfigParams.MPI_GENERATOR);
-		if (StringUtils.isNotBlank(mpiGeneratorBean)) {
-			MpiGenerator generator = OpenSpecimenAppCtxProvider.getBean(mpiGeneratorBean);
-			setEmpi(generator.generateMpi());
-		}
+		setEmpi(generator.generateMpi());
 	}
 
 	private void updatePmis(Participant participant) {
@@ -328,4 +324,5 @@ public class Participant extends BaseEntity {
 	private String getMpiCfgProp(String property) {
 		return ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, property, null);
 	}
+	
 }
