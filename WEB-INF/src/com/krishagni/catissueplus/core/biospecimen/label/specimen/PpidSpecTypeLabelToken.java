@@ -1,10 +1,10 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 
 public class PpidSpecTypeLabelToken extends AbstractSpecimenLabelToken {
 
@@ -29,7 +29,7 @@ public class PpidSpecTypeLabelToken extends AbstractSpecimenLabelToken {
 		String key = ppid + "_" + specimen.getSpecimenType();
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId(name, key);
 
-		return uniqueId == 1L ? StringUtils.EMPTY : uniqueId.toString();
+		return uniqueId == 1L ? LabelTmplToken.EMPTY_VALUE : uniqueId.toString();
 	}
 
 }
