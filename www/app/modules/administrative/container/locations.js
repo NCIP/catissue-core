@@ -1,12 +1,12 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, container, occupancyMap, 
+    $scope, $state, container, occupancyMap,
     Util, ContainerUtil, Alerts) {
 
     function init() {
       $scope.container = container;
       $scope.pristineMap = $scope.occupancyMap = occupancyMap;
-      $scope.input = {labels: '', noFreeLocs: false};
+      $scope.input = {labels: '', noFreeLocs: false, vacateOccupants: false};
     }
 
     $scope.addContainer = function(posOne, posTwo) {
@@ -23,9 +23,11 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       var result = ContainerUtil.assignPositions(
         container, 
         $scope.pristineMap, 
-        $scope.input.labels);
+        $scope.input.labels,
+        $scope.input.vacateOccupants);
 
       $scope.occupancyMap = result.map;
+
       $scope.input.noFreeLocs = result.noFreeLocs;
       if (result.noFreeLocs) {
         Alerts.error("container.no_free_locs");
@@ -38,21 +40,42 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         return;
       }
 
-      var positions = [];
+      var posMap = {};
+      var vacatedEntities = [];
       for (var i = 0; i < $scope.occupancyMap.length; ++i) {
         var pos = $scope.occupancyMap[i];
         if (!!pos.id) {
           continue;
         }
 
-        positions.push(pos);
+        if (!pos.occupyingEntityName || pos.occupyingEntityName.trim().length == 0) {
+          vacatedEntities.push(pos.oldOccupant);
+        } else {
+          posMap[pos.occupyingEntityName.toLowerCase()] = pos;
+          delete pos.oldOccupant;
+        }
       }
+
+      for (var i = vacatedEntities.length - 1; i >= 0; --i) {
+        var label = vacatedEntities[i].occupyingEntityName.toLowerCase();
+        if (!!posMap[label]) {
+          vacatedEntities.splice(i, 1);
+        } else {
+          posMap[label] = {occuypingEntity: 'specimen', occupyingEntityName: label};
+        }
+      }
+
+      var positions = [];
+      angular.forEach(posMap, function(pos) {
+        positions.push(pos);
+      });
 
       if (positions.length == 0) {
         return;
       }
 
-      container.assignPositions(positions).then(
+      var assignOp = {'vacateOccupant': $scope.input.vacateOccupants, 'positions': positions};
+      container.assignPositions(assignOp).then(
         function(latestOccupancyMap) {
           $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
           $scope.input.labels = undefined;

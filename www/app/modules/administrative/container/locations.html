@@ -1,4 +1,5 @@
 <div class="os-container-locations">
+
   <div class="input-spmn-labels" ng-if="container.storeSpecimensEnabled">
     <div class="input-group" os-textarea-input-group>
       <textarea ng-model="input.labels" class="form-control" 
@@ -11,7 +12,16 @@
         </button>
       </span>
     </div>
+    <div class="os-container-vacate-cb">
+      <div class="checkbox">
+        <os-checkbox ng-model="input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
+      </div>
+      <div class="message">
+        <span translate="container.vacate_positions">Vacate existing specimens</span>
+      </div>
+    </div>
   </div>
+
   <div class="map">
     <os-container-map 
       container="container" 
