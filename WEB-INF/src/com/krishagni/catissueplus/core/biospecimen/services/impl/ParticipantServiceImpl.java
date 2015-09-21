@@ -141,15 +141,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
 		
-		Boolean mpiEnabled = Boolean.parseBoolean(
+		Boolean mpiAutoEnabled = Boolean.parseBoolean(
 				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
 		
-		if(mpiEnabled ){
-			if(StringUtils.isNotBlank(participant.getEmpi())){
-			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		if (mpiAutoEnabled) {
+			if (StringUtils.isNotBlank(participant.getEmpi())) {
+				ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
 			} 
 		} else {
-			ParticipantUtil.ensureValidAndUniqueEmpi(daoFactory, participant.getEmpi(), ose);
+				ParticipantUtil.ensureValidAndUniqueEmpi(daoFactory, participant.getEmpi(), ose);
 		}
 
 		ose.checkAndThrow();

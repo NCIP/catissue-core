@@ -261,26 +261,26 @@ public class Participant extends BaseEntity {
 			return;
 		}
 
-		Boolean mpiEnabled = Boolean.parseBoolean(
-				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
-		if(mpiEnabled){
-			String mpiFmt = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_PATTERN, null);
-
-			if (StringUtils.isNotBlank(mpiFmt)) {
-				Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
-				setEmpi(String.format(mpiFmt, uniqueId.intValue()));
-			}
-			
-			String mpiGeneratorBean = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_GENERATOR, null);
-			if (StringUtils.isBlank(mpiGeneratorBean)) {
-				return;
-			}
-			
+		Boolean mpiAutoEnabled = Boolean.parseBoolean(getMpiCfgProp(ConfigParams.MPI_AUTO_ENABLED));
+		if (!mpiAutoEnabled) {
+			return;
+		}
+		
+		String mpiGeneratorBean = getMpiCfgProp(ConfigParams.MPI_GENERATOR);
+		if (StringUtils.isNotBlank(mpiGeneratorBean)) {
 			MpiGenerator generator = OpenSpecimenAppCtxProvider.getBean(mpiGeneratorBean);
 			setEmpi(generator.generateMpi());
 		}
+		else {
+			String mpiFormat = getMpiCfgProp(ConfigParams.MPI_PATTERN);
+			if (StringUtils.isNotBlank(mpiFormat)) {
+		
+				Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
+				setEmpi(String.format(mpiFormat, uniqueId.intValue()));
+			}
+		}
 	}
-	
+
 	private void updatePmis(Participant participant) {
 		for (ParticipantMedicalIdentifier pmi : participant.getPmis()) {
 			ParticipantMedicalIdentifier existing = getPmiBySite(getPmis(), pmi.getSite().getName());
@@ -331,4 +331,7 @@ public class Participant extends BaseEntity {
 		return result;
 	}
 	
+	private String getMpiCfgProp(String property) {
+		return ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, property, null);
+	}
 }
