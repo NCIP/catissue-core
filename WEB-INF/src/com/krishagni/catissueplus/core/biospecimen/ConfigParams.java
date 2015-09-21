@@ -13,6 +13,8 @@ public class ConfigParams {
 	
 	public static final String MPI_AUTO_ENABLED          = "mpi_auto_enabled";
 	
+	public static final String MPI_GENERATOR             = "mpi_generator";
+	
 	public static final String SPECIMEN_LABEL_PRINTER    = "specimen_label_printer";
 	
 	public static final String SPECIMEN_LABEL_PRINT_RULES = "specimen_label_print_rules";
