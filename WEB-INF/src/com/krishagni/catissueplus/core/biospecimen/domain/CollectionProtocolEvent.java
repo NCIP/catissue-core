@@ -134,7 +134,7 @@ public class CollectionProtocolEvent {
 		}
 		
 		for (SpecimenRequirement sr : getSpecimenRequirements()) {
-			if (sr.getParentSpecimenRequirement() == null) {
+			if (sr.getParentSpecimenRequirement() == null && sr.getPooledSpecimensHead() == null) {
 				anticipated.add(sr);
 			}
 		}
@@ -164,10 +164,7 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void addSpecimenRequirement(SpecimenRequirement sr) {
-		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
-			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
-		}
-		
+		ensureUniqueSrCode(sr);
 		getSpecimenRequirements().add(sr);
 		sr.setCollectionProtocolEvent(this);
 	}
@@ -199,6 +196,18 @@ public class CollectionProtocolEvent {
 		for (SpecimenRequirement sr : getSpecimenRequirements()) {
 			if (sr.getParentSpecimenRequirement() == null) {
 				sr.delete();
+			}
+		}
+	}
+
+	private void ensureUniqueSrCode(SpecimenRequirement sr) {
+		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
+			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+		}
+
+		for (SpecimenRequirement pooledSpmn : sr.getPooledSpecimenReqs()) {
+			if (StringUtils.isNotBlank(pooledSpmn.getCode()) && getSrByCode(pooledSpmn.getCode()) != null) {
+				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, pooledSpmn.getCode());
 			}
 		}
 	}

@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -84,7 +85,9 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		requirement.setSortOrder(detail.getSortOrder());
 		requirement.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 
-		ose.checkAndThrow();		
+		ose.checkAndThrow();
+
+		setPooledSpmns(detail, requirement, ose);
 		return requirement;
 	}
 
@@ -349,6 +352,18 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 		
 		sr.setCollectionProtocolEvent(cpe);
+	}
+
+	private void setPooledSpmns(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {		
+		if (CollectionUtils.isEmpty(detail.getPooledSpmns())) {
+			return;
+		}
+
+		for (SpecimenRequirementDetail pooledReqDetail : detail.getPooledSpmns()) {
+			SpecimenRequirement pooledReq = createSpecimenRequirement(pooledReqDetail);
+			pooledReq.setPooledSpecimensHead(sr);
+			sr.getPooledSpecimenReqs().add(pooledReq);
+		}
 	}
 		
 	private String ensureNotEmptyAndValid(String attr, String value, ErrorCode req, ErrorCode invalid, OpenSpecimenException ose) {

@@ -65,6 +65,10 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	
 	private Set<SpecimenRequirement> childSpecimenRequirements = new HashSet<SpecimenRequirement>();
 
+	private SpecimenRequirement pooledSpecimensHead;
+
+	private Set<SpecimenRequirement> pooledSpecimenReqs = new HashSet<SpecimenRequirement>();
+
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
 	public Long getId() {
@@ -257,6 +261,30 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	}
 
 	@NotAudited
+	public SpecimenRequirement getPooledSpecimensHead() {
+		return pooledSpecimensHead;
+	}
+
+	public void setPooledSpecimensHead(SpecimenRequirement pooledSpecimensHead) {
+		this.pooledSpecimensHead = pooledSpecimensHead;
+	}
+
+	@NotAudited
+	public Set<SpecimenRequirement> getPooledSpecimenReqs() {
+		return pooledSpecimenReqs;
+	}
+
+	public void setPooledSpecimenReqs(Set<SpecimenRequirement> pooledSpecimenReqs) {
+		this.pooledSpecimenReqs = pooledSpecimenReqs;
+	}
+
+	public List<SpecimenRequirement> getOrderedPooledSpmnReqs() {
+		List<SpecimenRequirement> pooledReqs = new ArrayList<SpecimenRequirement>(getPooledSpecimenReqs());
+		Collections.sort(pooledReqs);
+		return pooledReqs;
+	}
+
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}
@@ -420,6 +448,20 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 		
 		result.setChildSpecimenRequirements(childSrs);
+
+		if (Specimen.NEW.equals(getLineage())) {
+			Set<SpecimenRequirement> pooledSrs = new HashSet<SpecimenRequirement>();
+			order = 1;
+			for (SpecimenRequirement pooledSr : getPooledSpecimenReqs()) {
+				SpecimenRequirement copiedSr = pooledSr.deepCopy(cpe, null);
+				copiedSr.setPooledSpecimensHead(result);
+				copiedSr.setSortOrder(order++);
+				pooledSrs.add(copiedSr);
+			}
+
+			result.setPooledSpecimenReqs(pooledSrs);
+		}
+
 		return result;
 	}
 	
@@ -454,6 +496,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		"code",
 		"parentSpecimenRequirement",
 		"childSpecimenRequirements",
+		"pooledSpecimenReqs",
 		"specimens"		
 	};
 }
