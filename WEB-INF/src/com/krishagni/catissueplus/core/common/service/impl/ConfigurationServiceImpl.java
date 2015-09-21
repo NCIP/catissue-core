@@ -297,7 +297,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			}
 		});
 	}
-	
+
+	@Override
+	public String getBooleanVal(Boolean value) {
+		String bool = "common_no";
+		if (value) {
+			bool = "common_yes";
+		}
+
+		return messageSource.getMessage(bool, null, Locale.getDefault());
+	}
+
 	private boolean isValidSetting(ConfigProperty property, String setting) {
 		if (StringUtils.isBlank(setting)) {
 			return true;

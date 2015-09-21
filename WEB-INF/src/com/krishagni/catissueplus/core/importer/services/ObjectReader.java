@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvReader;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -38,16 +39,20 @@ public class ObjectReader implements Closeable {
 	private String dateFmt;
 	
 	private String timeFmt;
+
+	private ConfigurationService cfgSvc;
 			
-	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt) {
+	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt, ConfigurationService cfgSvc) {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
 			this.schema = schema;
 			if (StringUtils.isNotBlank(schema.getRecord().getName())) {
 				this.objectClass = Class.forName(schema.getRecord().getName());
-			}			
+			}
+
 			this.dateFmt = dateFmt;
 			this.timeFmt = timeFmt;
+			this.cfgSvc = cfgSvc;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -203,7 +208,8 @@ public class ObjectReader implements Closeable {
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
 			return parseDateTime(value);
 		} else if (field.getType() != null && field.getType().equals("boolean")) {
-			return value.equalsIgnoreCase("yes") ? true : value.equalsIgnoreCase("no") ? false : value;
+			return (value.equalsIgnoreCase(cfgSvc.getBooleanVal(true)) || value.equalsIgnoreCase("true"))  ? true :
+					(value.equalsIgnoreCase(cfgSvc.getBooleanVal(false)) || value.equalsIgnoreCase("false")) ? false : value;
 		} else {
 			return value;
 		}

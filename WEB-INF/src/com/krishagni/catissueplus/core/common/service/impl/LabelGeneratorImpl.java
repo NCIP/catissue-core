@@ -57,14 +57,17 @@ public class LabelGeneratorImpl implements LabelGenerator {
 			if (replacement == null) {
 				replacement = matcher.group(0);
 			}
-
+			
 			if (StringUtils.isNotEmpty(replacement)) {
 				if (nextFreeTextAppend) {
 					result.append(labelTmpl.substring(lastIdx, matcher.start()));
 				}
 
+				if (!replacement.equals(token.EMPTY_VALUE)) {
+					result.append(replacement);
+				}
+
 				nextFreeTextAppend = true;
-				result.append(replacement);
 			} else {
 				nextFreeTextAppend = false;
 			}
