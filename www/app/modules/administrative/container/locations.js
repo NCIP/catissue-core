@@ -51,13 +51,13 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         if (!pos.occupyingEntityName || pos.occupyingEntityName.trim().length == 0) {
           vacatedEntities.push(pos.oldOccupant);
         } else {
-          posMap[pos.occupyingEntityName] = pos;
+          posMap[pos.occupyingEntityName.toLowerCase()] = pos;
           delete pos.oldOccupant;
         }
       }
 
       for (var i = vacatedEntities.length - 1; i >= 0; --i) {
-        var label = vacatedEntities[i].occupyingEntityName;
+        var label = vacatedEntities[i].occupyingEntityName.toLowerCase();
         if (!!posMap[label]) {
           vacatedEntities.splice(i, 1);
         } else {

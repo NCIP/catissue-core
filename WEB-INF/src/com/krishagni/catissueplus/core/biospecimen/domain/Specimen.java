@@ -830,7 +830,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition) {
-		if (newPosition.getPosOneOrdinal() == 0 && newPosition.getPosTwoOrdinal() == 0) {
+		if (newPosition != null && newPosition.getPosOneOrdinal() == 0 && newPosition.getPosTwoOrdinal() == 0) {
 			newPosition = null;
 		}
 
