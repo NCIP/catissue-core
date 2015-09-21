@@ -119,8 +119,8 @@
                   name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
                   ng-model-options="{allowInvalid: 'true'}" ng-change="changeQuantity(specimen, specimen.initialQty)">
                 <div class="os-input-addon-right os-md-input-addon">
-                  <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                  </os-specimen-qty-unit>
+                  <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                  </os-specimen-unit>
                 </div>
               </div>
               <div os-field-error field="sform.qty"></div>

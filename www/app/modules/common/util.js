@@ -143,6 +143,9 @@ angular.module('openspecimen')
     }
 
     function getNumberInScientificNotation(input, minRange, fractionDigits) {
+      minRange = minRange || 1000000;
+      fractionDigits = fractionDigits || 6;
+      
       if (angular.isNumber(input) && input > minRange) {
         input = input.toExponential(fractionDigits);
       }

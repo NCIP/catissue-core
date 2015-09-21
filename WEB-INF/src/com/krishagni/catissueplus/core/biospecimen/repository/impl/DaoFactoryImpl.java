@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.LabelPrintJobDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListDao;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenQuantityUnitDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenUnitDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenRequirementDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -187,8 +187,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public SpecimenQuantityUnitDao getSpecimenQuantityUnitDao() {
-		SpecimenQuantityUnitDaoImpl dao = new SpecimenQuantityUnitDaoImpl();
+	public SpecimenUnitDao getSpecimenUnitDao() {
+		SpecimenUnitDaoImpl dao = new SpecimenUnitDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

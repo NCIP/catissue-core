@@ -30,4 +30,7 @@
   <include file="db/2.2/config.xml"/>
   <include file="db/2.2/seed-data.xml"/>
   <include file="db/2.2/audit.xml"/>
+
+  <include file="db/2.3/schema.xml"/>
+  <include file="db/2.3/seed-data.xml"/>
 </databaseChangeLog> 

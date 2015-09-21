@@ -202,7 +202,7 @@
           </div>
           <div class="col os-col-10">
             <span> {{specimen.availableQty}} </span>
-            <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-qty-unit>
+            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
           </div>
           <div class="col os-col-10">
             <div class="os-input-addon-grp">
@@ -213,8 +213,8 @@
                 ]" 
                 ng-model-options="{allowInvalid: 'true'}">
               <div class="os-input-addon-right os-md-input-addon">
-                <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                </os-specimen-qty-unit>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-unit>
               </div>
             </div>
             <div os-field-error field="sform.qty"></div>

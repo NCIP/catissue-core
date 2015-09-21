@@ -5,16 +5,22 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <property name="now" value="now()"   dbms="mysql" />
-  <property name="now" value="sysdate" dbms="oracle" />
-
-  <changeSet author="vlonushte" id="Cohort PV category">
+  <changeSet author="ahegade" id="Update specimen unit table with concentration measures">
     <sql>
-      insert into catissue_cde
-        (public_id, long_name, definition, version, last_updated)
-      values
-        ('cohort', 'Cohort', 'Cohort', '2.2', ${now})
+      update
+        os_specimen_units
+      set
+        conc_unit = 'cells'
+      where
+        specimen_class = 'Cell';
+
+      update
+        os_specimen_units
+      set
+        conc_unit = 'microgram/ml',
+        conc_html_display_code='&#181;g/ml'
+      where
+        specimen_class in ('Molecular', 'Tissue');
     </sql>
   </changeSet>
-
 </databaseChangeLog>

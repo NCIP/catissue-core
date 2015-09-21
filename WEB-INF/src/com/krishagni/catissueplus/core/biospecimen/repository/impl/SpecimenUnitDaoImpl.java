@@ -6,26 +6,26 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenQuantityUnit;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenQuantityUnitDao;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenUnitDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-public class SpecimenQuantityUnitDaoImpl extends AbstractDao<SpecimenQuantityUnit> implements SpecimenQuantityUnitDao {
+public class SpecimenUnitDaoImpl extends AbstractDao<SpecimenUnit> implements SpecimenUnitDao {
 	
 	@Override
-	public Class<SpecimenQuantityUnit> getType() {
-		return SpecimenQuantityUnit.class;
+	public Class<SpecimenUnit> getType() {
+		return SpecimenUnit.class;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<SpecimenQuantityUnit> listAll() {
+	public List<SpecimenUnit> listAll() {
 		return getSessionFactory().getCurrentSession().getNamedQuery(GET_ALL).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public SpecimenQuantityUnit getByClassAndType(String specimenClass, String type) {
+	public SpecimenUnit getByClassAndType(String specimenClass, String type) {
 		Query query = null; 
 		if (StringUtils.isBlank(type)) {
 			query = getSessionFactory().getCurrentSession().getNamedQuery(GET_BY_CLASS)
@@ -36,11 +36,11 @@ public class SpecimenQuantityUnitDaoImpl extends AbstractDao<SpecimenQuantityUni
 					.setString("type", type);
 		}
 		
-		List<SpecimenQuantityUnit> result = query.list();
+		List<SpecimenUnit> result = query.list();
 		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();
 	} 	
 	
-	private static final String FQN = SpecimenQuantityUnit.class.getName();
+	private static final String FQN = SpecimenUnit.class.getName();
 	
 	private static final String GET_ALL = FQN + ".getAll";
 	

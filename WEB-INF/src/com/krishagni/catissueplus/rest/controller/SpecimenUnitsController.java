@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenQuantityUnitDetail;
-import com.krishagni.catissueplus.core.biospecimen.services.SpecimenQuantityUnitService;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenUnitDetail;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenUnitService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 @Controller
-@RequestMapping("/specimen-quantity-units")
-public class SpecimenQuantityUnitsController {
+@RequestMapping("/specimen-units")
+public class SpecimenUnitsController {
 
 	@Autowired
-	private SpecimenQuantityUnitService qtyUnitSvc;
+	private SpecimenUnitService specUnitsSvc;
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenQuantityUnitDetail> getUnits() {
-		ResponseEvent<List<SpecimenQuantityUnitDetail>> resp = qtyUnitSvc.getQuantityUnits();
+	public List<SpecimenUnitDetail> getUnits() {
+		ResponseEvent<List<SpecimenUnitDetail>> resp = specUnitsSvc.getUnits();
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
 	}
@@ -37,9 +37,9 @@ public class SpecimenQuantityUnitsController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenQuantityUnitDetail saveUnit(@RequestBody SpecimenQuantityUnitDetail detail) {
-		RequestEvent<SpecimenQuantityUnitDetail> req = new RequestEvent<SpecimenQuantityUnitDetail>(detail);
-		ResponseEvent<SpecimenQuantityUnitDetail> resp = qtyUnitSvc.saveOrUpdate(req);
+	public SpecimenUnitDetail saveUnit(@RequestBody SpecimenUnitDetail detail) {
+		RequestEvent<SpecimenUnitDetail> req = new RequestEvent<SpecimenUnitDetail>(detail);
+		ResponseEvent<SpecimenUnitDetail> resp = specUnitsSvc.saveOrUpdate(req);
 		resp.throwErrorIfUnsuccessful();		
 		return resp.getPayload();
 	}
@@ -47,11 +47,11 @@ public class SpecimenQuantityUnitsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenQuantityUnitDetail updateUnit(@PathVariable("id") Long id, @RequestBody SpecimenQuantityUnitDetail detail) {
+	public SpecimenUnitDetail updateUnit(@PathVariable("id") Long id, @RequestBody SpecimenUnitDetail detail) {
 		detail.setId(id);
 		
-		RequestEvent<SpecimenQuantityUnitDetail> req = new RequestEvent<SpecimenQuantityUnitDetail>(detail);
-		ResponseEvent<SpecimenQuantityUnitDetail> resp = qtyUnitSvc.saveOrUpdate(req);
+		RequestEvent<SpecimenUnitDetail> req = new RequestEvent<SpecimenUnitDetail>(detail);
+		ResponseEvent<SpecimenUnitDetail> resp = specUnitsSvc.saveOrUpdate(req);
 		resp.throwErrorIfUnsuccessful();		
 		return resp.getPayload();
 	}
