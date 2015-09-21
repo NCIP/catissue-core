@@ -399,13 +399,17 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_POSITIONS);
 		}
 		
+		String entityType = pos.getOccuypingEntity();
+		if (StringUtils.isBlank(entityType)) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_TYPE_REQUIRED);
+		}
+		
 		String entityName = pos.getOccupyingEntityName();
 		Long entityId = pos.getOccupyingEntityId();
 		if (StringUtils.isBlank(entityName) && entityId == null) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED);
 		}
 		
-		String entityType = pos.getOccuypingEntity();
 		if (entityType.equalsIgnoreCase("specimen")) {
 			return createSpecimenPosition(container, pos, entityId, entityName, vacateOccupant);
 		} else if (entityType.equalsIgnoreCase("container")) {
