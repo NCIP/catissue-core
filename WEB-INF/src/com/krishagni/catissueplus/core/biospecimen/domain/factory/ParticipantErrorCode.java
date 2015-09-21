@@ -36,7 +36,9 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	EMPI_REQUIRED,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND, 
+	
+	MANUAL_MPI_NOT_ALLOWED;
 
 	public String code() {
 		return "PARTICIPANT_" + this.name();

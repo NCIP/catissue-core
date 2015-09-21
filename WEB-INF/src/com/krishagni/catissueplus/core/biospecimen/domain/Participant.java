@@ -10,14 +10,22 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
+import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.MpiGenerator;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Configurable
 @Audited
 public class Participant extends BaseEntity {
 	private static final String ENTITY_NAME = "participant";
@@ -51,6 +59,9 @@ public class Participant extends BaseEntity {
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
+	
+	@Autowired
+	private DaoFactory daoFactory;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -188,7 +199,7 @@ public class Participant extends BaseEntity {
 	public void setCprs(Set<CollectionProtocolRegistration> cprs) {
 		this.cprs = cprs;
 	}
-
+	
 	public void update(Participant participant) {
 		setFirstName(participant.getFirstName());
 		setLastName(participant.getLastName());
@@ -245,6 +256,31 @@ public class Participant extends BaseEntity {
 		return result;
 	}
 	
+	public void setEmpiIfEmpty() {
+		if (StringUtils.isNotBlank(empi)) {
+			return;
+		}
+
+		Boolean mpiEnabled = Boolean.parseBoolean(
+				ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_AUTO_ENABLED, null));
+		if(mpiEnabled){
+			String mpiFmt = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_PATTERN, null);
+
+			if (StringUtils.isNotBlank(mpiFmt)) {
+				Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("MPI", "MPI");
+				setEmpi(String.format(mpiFmt, uniqueId.intValue()));
+			}
+			
+			String mpiGeneratorBean = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_GENERATOR, null);
+			if (StringUtils.isBlank(mpiGeneratorBean)) {
+				return;
+			}
+			
+			MpiGenerator generator = OpenSpecimenAppCtxProvider.getBean(mpiGeneratorBean);
+			setEmpi(generator.generateMpi());
+		}
+	}
+	
 	private void updatePmis(Participant participant) {
 		for (ParticipantMedicalIdentifier pmi : participant.getPmis()) {
 			ParticipantMedicalIdentifier existing = getPmiBySite(getPmis(), pmi.getSite().getName());
@@ -294,4 +330,5 @@ public class Participant extends BaseEntity {
 		
 		return result;
 	}
+	
 }
