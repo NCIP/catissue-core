@@ -12,11 +12,13 @@
         </button>
       </span>
     </div>
-    <div class="os-container-overwrite-locations">
+    <div class="os-container-vacate-cb">
       <div class="checkbox">
-        <os-checkbox ng-model="input.overwrite" ng-change="showUpdatedMap()"></os-checkbox>
+        <os-checkbox ng-model="input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
       </div>
-      <span class="message" translate="container.overwrite_positions">Overwrite existing positions</span>
+      <div class="message">
+        <span translate="container.vacate_positions">Vacate existing specimens</span>
+      </div>
     </div>
   </div>
 
@@ -24,7 +26,6 @@
     <os-container-map 
       container="container" 
       occupancy-map="occupancyMap"
-      pristine-map="pristineMap"
       on-add-event="addContainer">
     </os-container-map>
   </div>

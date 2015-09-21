@@ -25,10 +25,10 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
           if (locationMatrix[i][j].occupied) {
             td.addClass(!!locationMatrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
-          }
 
-          if (locationMatrix[i][j].overwrite) {
-            td.addClass('slot-overwritten');
+            if (!!locationMatrix[i][j].occupied.oldOccupant) {
+              td.addClass('slot-vacated');
+            }
           }
 
           tr.append(td);
@@ -52,10 +52,6 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
       angular.forEach(occupancyMap, function(position) {
         matrix[position.posTwoOrdinal - 1][position.posOneOrdinal - 1].occupied = position;
-        if (!!position.occupiedEntityName &&
-          position.occupiedEntityName.toLowerCase() != position.occupyingEntityName.toLowerCase()) {
-          matrix[position.posTwoOrdinal - 1][position.posOneOrdinal - 1].overwrite = true;
-        }
       });
 
       return matrix;

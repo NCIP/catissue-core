@@ -17,19 +17,25 @@
   overflow: auto;
 }
 
-.os-container-overwrite-locations {
-  width: 100%;
+.os-container-vacate-cb {
   margin-top: 10px;
 }
-.os-container-overwrite-locations .checkbox {
-  float: left;
-  margin-top: 4px;
-  margin-bottom: 0px;
+
+.os-container-vacate-cb:after {
+  content: ' ';
+  display: block;
+  clear: both;
 }
 
-.os-container-overwrite-locations .message {
-  color: #707070;
+.os-container-vacate-cb .checkbox {
   float: left;
+  height: 16px;
+  margin-top: 4px;
+}
+
+.os-container-vacate-cb .message {
+  float: left;
+  color: #707070;
 }
 
 .os-container-map-wrapper {
@@ -120,7 +126,7 @@
   text-align: center;
 }
 
-.os-container-map .slot-overwritten .slot-desc {
+.os-container-map .slot-vacated .slot-desc {
   background: #d9534f;
   color: #fff;
   font-weight: bold;

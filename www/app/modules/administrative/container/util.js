@@ -66,30 +66,22 @@ angular.module('os.administrative.container.util', [])
       return convertersMap[scheme](ordinal);
     }
 
-    function createSpmnPos(container, label, x, y) {
+    function createSpmnPos(container, label, x, y, oldOccupant) {
       return {
         occuypingEntity: 'specimen', 
         occupyingEntityName: label,
         posOne: fromOrdinal(container.columnLabelingScheme, x),
         posTwo: fromOrdinal(container.rowLabelingScheme, y),
         posOneOrdinal: x,
-        posTwoOrdinal: y
+        posTwoOrdinal: y,
+        oldOccupant: oldOccupant
       };
-    }
-
-    function specimenExistAtPosition(map, x, y) {
-       for (var idx = 0; idx < map.length; ++idx) {
-         var pos = map[idx];
-         if(pos.posOneOrdinal == x && pos.posTwoOrdinal == y) {
-           return idx;
-         }
-       }
     }
 
     return {
       fromOrdinal: fromOrdinal, 
 
-      assignPositions: function(container, occupancyMap, inputLabels, overwrite) {
+      assignPositions: function(container, occupancyMap, inputLabels, vacateOccupants) {
         var newMap = angular.copy(occupancyMap);
         var mapIdx = 0, labelIdx = 0;
         var labels = Util.splitStr(inputLabels, /,|\t|\n/, true);
@@ -99,43 +91,43 @@ angular.module('os.administrative.container.util', [])
         for (var y = 1; y <= container.noOfRows; ++y) {
           for (var x = 1; x <= container.noOfColumns; ++x) {
             if (labelIdx >= labels.length) {
+              //
+              // we are done with iterating through all input labels
+              //
               done = true;
               break;
             }
 
-            if (overwrite) {
-              var label = labels[labelIdx++];
-              var idx = specimenExistAtPosition(newMap, x, y);
-              if (idx == undefined && (!label || label.trim().length == 0)) {
+            var existing = undefined;
+            if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y) {
+              //
+              // current map location is occupied
+              //
+              if (!vacateOccupants || newMap[mapIdx].occuypingEntity != 'specimen') {
+                //
+                // When asked not to vacate existing occupants or present occupant
+                // is not specimen, then examine next container slot
+                //
                 mapIdx++;
                 continue;
               }
 
-              var newPos = createSpmnPos(container, label, x, y);
-
-              if (idx != undefined) {
-                var existingPos = newMap[idx];
-                newPos.occupiedEntityName = existingPos.occupyingEntityName;
-                newMap.splice(idx, 1);
-              }
-              newMap.splice(mapIdx, 0, newPos);
-              mapIdx++;
-            } else {
-              if (mapIdx < newMap.length && newMap[mapIdx].posOneOrdinal == x && newMap[mapIdx].posTwoOrdinal == y) {
-                mapIdx++;
-                continue;
-              }
- 
-              var label = labels[labelIdx++];
-              if (!label || label.trim().length == 0) {
-                continue;
-              }
-
-              var newPos = createSpmnPos(container, label, x, y);
-              newMap.splice(mapIdx, 0, newPos);
-
-              mapIdx++;
+              existing = newMap[mapIdx];
+              newMap.splice(mapIdx, 1);
             }
+ 
+            var label = labels[labelIdx++];
+            if ((!label || label.trim().length == 0) && (!vacateOccupants || !existing)) {
+              //
+              // Label is empty. Either asked not to vacate existing occupants or 
+              // present slot is empty
+              //
+              continue;
+            }
+
+            var newPos = createSpmnPos(container, label, x, y, existing);
+            newMap.splice(mapIdx, 0, newPos);
+            mapIdx++;
           }
 
           if (done) {

@@ -659,7 +659,11 @@ public class StorageContainer extends BaseEntity {
 		}
 
 		for (StorageContainerPosition position : positions) {
-			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
+			StorageContainerPosition existing = null;
+			if (position.getPosOneOrdinal() != 0 && position.getPosTwoOrdinal() != 0) {
+				existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
+			}
+
 			if (existing != null && !vacateOccupant) {
 				continue; 
 			}
