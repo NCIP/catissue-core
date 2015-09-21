@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -132,12 +131,13 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraints(null, order, ose);
 			List<String> specimenLabels = Utility.<List<String>>collect(order.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(order.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
 				ose.addError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
-			ensureUniqueConstraints(null, order, ose);
+			
 			ose.checkAndThrow();
 			
 			Status inputStatus = Status.valueOf(detail.getStatus());
@@ -171,12 +171,13 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraints(existingOrder, newOrder, ose);
 			List<String> specimenLabels = Utility.<List<String>>collect(newOrder.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(newOrder.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
 				ose.addError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
-			ensureUniqueConstraints(existingOrder, newOrder, ose);
+			
 			ose.checkAndThrow();
 			
 			Status oldStatus = existingOrder.getStatus();

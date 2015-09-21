@@ -69,5 +69,12 @@
       <column name="CONC_HTML_DISPLAY_CODE" type="${text.type}(32)"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Remove not null constraint on site_id in os_orders table">
+    <dropNotNullConstraint
+      columnDataType="${int.type}"
+      columnName="SITE_ID"
+      tableName="OS_ORDERS"/>
+  </changeSet>
 
 </databaseChangeLog>
