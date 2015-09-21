@@ -125,10 +125,11 @@ angular.module('os.administrative.container.util', [])
               continue;
             }
 
+            var newPos = undefined;
             if (!!existing && existing.occupyingEntityName.toLowerCase() == label.toLowerCase()) {
-              var newPos = existing;
+              newPos = existing;
             } else {
-              var newPos = createSpmnPos(container, label, x, y, existing);
+              newPos = createSpmnPos(container, label, x, y, existing);
             }
 
             newMap.splice(mapIdx, 0, newPos);
