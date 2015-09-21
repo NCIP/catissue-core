@@ -152,11 +152,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
 	}
 
-	private String getMpiFormat() {
-		return ConfigUtil.getInstance()
-				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
-	}
-	
 	public void updateParticipant(Participant existing, Participant newParticipant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
@@ -170,7 +165,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 		String newEmpi = newParticipant.getEmpi();
 		
 		String mpiFormat = getMpiFormat();
-		
 		if (StringUtils.isNotBlank(mpiFormat) && !existingEmpi.equals(newEmpi)){
 			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
 		} 
@@ -234,5 +228,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 		
 		return result;
+	}
+	
+	private String getMpiFormat() {
+		return ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
 	}
 }

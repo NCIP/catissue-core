@@ -104,10 +104,4 @@ public class ParticipantUtil {
 		return validator.validate(input, ose);		
 	}
 
-	public static void ensureValidAndUniqueEmpi(DaoFactory daoFactory, String empi, OpenSpecimenException ose) {
-		if(StringUtils.isNotBlank(empi) && !isValidMpi(empi, ose)){
-			return;
-		}
-		ensureUniqueEmpi(daoFactory, empi, ose);
-	}	
 }
