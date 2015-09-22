@@ -367,6 +367,17 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 	}
 	
+	public void addPooledRequirement(SpecimenRequirement pooledSpmnReq) {
+		pooledSpmnReq.setPooledSpecimensHead(this);
+		getPooledSpecimenReqs().add(pooledSpmnReq);
+	}
+
+	public void addPooledRequirements(Collection<SpecimenRequirement> pooledSpmnReqs) {
+		for (SpecimenRequirement req : pooledSpmnReqs) {
+			addPooledRequirement(req);
+		}
+	}
+
 	public BigDecimal getQtyAfterAliquotsUse() {
 		BigDecimal available = getInitialQuantity();
 		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {

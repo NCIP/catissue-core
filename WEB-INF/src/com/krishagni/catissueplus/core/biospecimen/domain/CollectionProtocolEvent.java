@@ -200,9 +200,13 @@ public class CollectionProtocolEvent {
 		}
 	}
 
-	private void ensureUniqueSrCode(SpecimenRequirement sr) {
+	public void ensureUniqueSrCode(SpecimenRequirement sr) {
 		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
 			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+		}
+		
+		if (sr.getParentSpecimenRequirement() != null || sr.getPooledSpecimensHead() != null) {
+			return;
 		}
 
 		for (SpecimenRequirement pooledSpmn : sr.getPooledSpecimenReqs()) {
