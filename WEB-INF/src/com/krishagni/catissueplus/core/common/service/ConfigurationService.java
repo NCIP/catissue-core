@@ -44,5 +44,4 @@ public interface ConfigurationService {
 	
 	public String getDataDir();
 
-	public String getBooleanVal(Boolean value);
 }

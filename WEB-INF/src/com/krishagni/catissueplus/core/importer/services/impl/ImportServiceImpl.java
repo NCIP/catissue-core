@@ -324,7 +324,7 @@ public class ImportServiceImpl implements ImportService {
 				objReader = new ObjectReader(
 						filePath, schema, 
 						ConfigUtil.getInstance().getDeDateFmt(),
-						ConfigUtil.getInstance().getTimeFmt(), cfgSvc);
+						ConfigUtil.getInstance().getTimeFmt());
 				
 				List<String> columnNames = objReader.getCsvColumnNames();
 				columnNames.add("OS_IMPORT_STATUS");

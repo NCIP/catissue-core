@@ -16,9 +16,9 @@ import org.apache.commons.lang.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvReader;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
@@ -40,9 +40,7 @@ public class ObjectReader implements Closeable {
 	
 	private String timeFmt;
 
-	private ConfigurationService cfgSvc;
-			
-	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt, ConfigurationService cfgSvc) {
+	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt) {
 		try {
 			this.csvReader = CsvFileReader.createCsvFileReader(filePath, true);
 			this.schema = schema;
@@ -52,7 +50,6 @@ public class ObjectReader implements Closeable {
 
 			this.dateFmt = dateFmt;
 			this.timeFmt = timeFmt;
-			this.cfgSvc = cfgSvc;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -208,8 +205,8 @@ public class ObjectReader implements Closeable {
 		} else if (field.getType() != null && field.getType().equals("datetime")) {
 			return parseDateTime(value);
 		} else if (field.getType() != null && field.getType().equals("boolean")) {
-			return (value.equalsIgnoreCase(cfgSvc.getBooleanVal(true)) || value.equalsIgnoreCase("true"))  ? true :
-					(value.equalsIgnoreCase(cfgSvc.getBooleanVal(false)) || value.equalsIgnoreCase("false")) ? false : value;
+			return (value.equalsIgnoreCase(MessageUtil.getInstance().getBooleanMsg(true)) || value.equalsIgnoreCase("true"))  ? true :
+					(value.equalsIgnoreCase(MessageUtil.getInstance().getBooleanMsg(false)) || value.equalsIgnoreCase("false")) ? false : value;
 		} else {
 			return value;
 		}
