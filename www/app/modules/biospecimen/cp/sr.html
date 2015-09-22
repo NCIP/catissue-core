@@ -80,13 +80,13 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.collector">Collector</strong>
       <div class="value value-md">
-        <span>{{childReq.collector.firstName}} {{childReq.collector.lastName}}</span>
+        <span>{{childReq.collector | osUserDisplayName}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.receiver">Receiver</strong>
       <div class="value value-md">
-        <span>{{childReq.receiver.firstName}} {{childReq.receiver.lastName}}</span>
+        <span>{{childReq.receiver | osUserDisplayName}}</span>
       </div>
     </li>
     <li class="item">
