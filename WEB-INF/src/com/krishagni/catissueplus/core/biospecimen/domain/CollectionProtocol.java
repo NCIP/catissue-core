@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 @AuditTable(value="CAT_COLLECTION_PROTOCOL_AUD")
-public class CollectionProtocol extends BaseEntity {
+public class CollectionProtocol extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");
@@ -73,8 +73,6 @@ public class CollectionProtocol extends BaseEntity {
 	
 	private Boolean consentsWaived;
 
-	private CollectionProtocolExtension extension;
-	
 	private Set<ConsentTier> consentTier = new HashSet<ConsentTier>();
 	
 	private Set<User> coordinators = new HashSet<User>();
@@ -249,18 +247,6 @@ public class CollectionProtocol extends BaseEntity {
 
 	public void setConsentsWaived(Boolean consentsWaived) {
 		this.consentsWaived = consentsWaived;
-	}
-
-	@NotAudited
-	public CollectionProtocolExtension getExtension() {
-		if (this.extension == null) {
-			this.extension = CollectionProtocolExtension.getFor(this);
-		}
-		return extension;
-	}
-
-	public void setExtension(CollectionProtocolExtension extension) {
-		this.extension = extension;
 	}
 
 	@NotAudited
@@ -488,12 +474,9 @@ public class CollectionProtocol extends BaseEntity {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
-	public void addOrUpdateExtension() {
-		if (extension == null) {
-			return;
-		}
-		
-		extension.saveOrUpdate();
+	@Override
+	public String getEntityType() {
+		return "CollectionProtocolExtension";
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

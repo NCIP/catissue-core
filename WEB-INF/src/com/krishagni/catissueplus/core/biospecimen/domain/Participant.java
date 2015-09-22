@@ -27,7 +27,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 @Audited
-public class Participant extends BaseEntity {
+public class Participant extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "participant";
 	
 	private String lastName;
@@ -55,7 +55,7 @@ public class Participant extends BaseEntity {
 	protected String vitalStatus;
 	
 	protected String empi;
-
+	
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
@@ -182,7 +182,7 @@ public class Participant extends BaseEntity {
 	public void setEmpi(String empi) {
 		this.empi = empi;
 	}
-
+	
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -213,6 +213,7 @@ public class Participant extends BaseEntity {
 		setEthnicity(participant.getEthnicity());
 		setBirthDate(participant.getBirthDate());
 		setDeathDate(participant.getDeathDate());
+		setExtension(participant.getExtension());	
 		CollectionUpdater.update(getRaces(), participant.getRaces());
 		updatePmis(participant);
 	}
@@ -275,6 +276,11 @@ public class Participant extends BaseEntity {
 		}
 	}
 
+	@Override
+	public String getEntityType() {
+		return "ParticipantExtension";
+	}
+	
 	private void updatePmis(Participant participant) {
 		for (ParticipantMedicalIdentifier pmi : participant.getPmis()) {
 			ParticipantMedicalIdentifier existing = getPmiBySite(getPmis(), pmi.getSite().getName());

@@ -72,6 +72,9 @@ angular.module('os.biospecimen.participant',
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
+          extensionCtxt: function(Participant) {
+            return Participant.getExtensionCtxt();
+          }
         },
         parent: 'participant-root'
       })

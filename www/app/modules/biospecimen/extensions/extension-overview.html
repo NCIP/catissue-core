@@ -1,7 +1,7 @@
 <div os-content-toggle="{{'common.buttons.more' | translate}}" show-by-default="collapsed"
   class="os-section os-line-section" ng-if="extObject.attrs.length > 0">
   <div class="os-content">
-    <ul class="os-key-values" ng-class="{'os-one-col': showColumn == 1, 'os-two-col': showColumn == 2}">
+    <ul class="os-key-values" ng-class="{'os-one-col': showColumn == 1, 'os-two-cols': showColumn == 2}">
       <li class="item" ng-repeat="attr in extObject.attrs">
         <strong class="key key-sm">{{attr.caption}}</strong>
         <span class="value value-md">{{attr.value | osNoValue}}</span>

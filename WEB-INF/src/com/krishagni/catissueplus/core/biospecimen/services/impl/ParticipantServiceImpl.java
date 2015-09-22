@@ -150,6 +150,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ose.checkAndThrow();
 		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
+		participant.addOrUpdateExtension();
 	}
 
 	public void updateParticipant(Participant existing, Participant newParticipant) {
@@ -177,7 +178,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ose.checkAndThrow();
 		
 		existing.update(newParticipant);
-		daoFactory.getParticipantDao().saveOrUpdate(existing);			
+		daoFactory.getParticipantDao().saveOrUpdate(existing);	
+		existing.addOrUpdateExtension();
 	}
 
 	@Override

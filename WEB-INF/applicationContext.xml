@@ -556,6 +556,7 @@
       <map>
         <entry key="extensions">
           <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+            <property name="formDao" ref="formDao"/>
           </bean>
         </entry>
       </map>
