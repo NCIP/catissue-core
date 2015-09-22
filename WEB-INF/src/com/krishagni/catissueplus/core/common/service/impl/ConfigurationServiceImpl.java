@@ -297,7 +297,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			}
 		});
 	}
-
+	
 	private boolean isValidSetting(ConfigProperty property, String setting) {
 		if (StringUtils.isBlank(setting)) {
 			return true;
