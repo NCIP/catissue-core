@@ -72,9 +72,9 @@
   
   <changeSet author="ckhilosiya" id="Remove not null constraint on site_id in os_orders table">
     <dropNotNullConstraint
-      columnDataType="${int.type}"
+      tableName="OS_ORDERS"
       columnName="SITE_ID"
-      tableName="OS_ORDERS"/>
+      columnDataType="${int.type}"/>
   </changeSet>
 
 </databaseChangeLog>

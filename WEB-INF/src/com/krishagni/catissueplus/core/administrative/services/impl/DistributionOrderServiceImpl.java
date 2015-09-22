@@ -132,6 +132,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraints(null, order, ose);
+			
 			List<String> specimenLabels = Utility.<List<String>>collect(order.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(order.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
@@ -172,6 +173,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraints(existingOrder, newOrder, ose);
+			
 			List<String> specimenLabels = Utility.<List<String>>collect(newOrder.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(newOrder.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
