@@ -1594,7 +1594,7 @@
         select
           u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
           u.email_address as email_address,
-          concat(u.last_name, concat(', ', u.first_name)) as name,
+          concat(u.first_name, concat(' ', u.last_name)) as name,
           d.name as department_name
         from
           catissue_user u
