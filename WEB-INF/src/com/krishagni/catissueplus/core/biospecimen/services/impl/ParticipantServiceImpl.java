@@ -142,9 +142,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
 		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
 		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
-		
+
 		ose.checkAndThrow();
-		participant.setEmpi();
+
+		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
 	}
 
@@ -159,13 +160,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 		
 		String existingEmpi = existing.getEmpi();
 		String newEmpi = newParticipant.getEmpi();
-		
 		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
 		if (generator != null && !existingEmpi.equals(newEmpi)){
 			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
-		}
-		
-		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
+		} else if (generator == null && StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
 			ParticipantUtil.ensureUniqueEmpi(daoFactory, newEmpi, ose);
 		}
 		

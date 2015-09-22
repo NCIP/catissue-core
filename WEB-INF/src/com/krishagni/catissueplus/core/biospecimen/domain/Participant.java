@@ -14,13 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
-import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.MpiGenerator;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
@@ -258,13 +256,13 @@ public class Participant extends BaseEntity {
 		return result;
 	}
 	
-	public void setEmpi() {
+	public void setEmpiIfEmpty() {
 		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
 		if (generator == null) {
 			return;
 		}
 
-		if (generator != null && StringUtils.isNotBlank(empi)) {
+		if (StringUtils.isNotBlank(empi)) {
 			throw OpenSpecimenException.userError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
 		}
 		
