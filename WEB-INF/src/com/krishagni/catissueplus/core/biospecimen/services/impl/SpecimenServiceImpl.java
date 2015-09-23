@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageLocationSumm
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
@@ -403,7 +406,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		Date createdOn = Calendar.getInstance().getTime();
 		if (Specimen.NEW.equals(detail.getLineage())) {
 			if (detail.getReceivedEvent() != null && detail.getReceivedEvent().getTime() != null) {
-				setCreatedOn(detail.getChildren(), detail.getReceivedEvent().getTime());
+				createdOn = detail.getReceivedEvent().getTime();
 			} else {
 				ReceivedEventDetail receivedEvent = detail.getReceivedEvent();
 				if (receivedEvent == null) {
@@ -412,11 +415,12 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 				receivedEvent.setTime(createdOn);
 				detail.setReceivedEvent(receivedEvent);
-				setCreatedOn(detail.getChildren(), createdOn);
 			}
-		} else {
-			setCreatedOn(detail.getChildren(), createdOn);
+
+			setCreatedOn(detail.getPooledSpecimens(), createdOn);
 		}
+
+		setCreatedOn(detail.getChildren(), createdOn);
 	}
 
 	private void setCreatedOn(List<SpecimenDetail> details, Date createdOn) {
@@ -497,6 +501,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 		if (existing == null || !existing.isCollected()) {
 			specimen = saveOrUpdate(detail, existing, parent, false);
 		}
+		
+		//
+		// if (specimen is pooled) {
+		//    return specimen;
+		// }
+		//
+		
+		//
+		// if (specimen is new and have pooled specimens) {
+		//    for (SpecimenDetail spmn : detail.getPooledSpmns()) {
+		//        collectSpecimen(spmn, null);
+		//    }
+		// }
+		//
+		//
 				
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
@@ -563,8 +582,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 			specimen.getParentSpecimen().addSpecimen(specimen);
 		} else {
-			specimen.checkQtyConstraints(); // TODO: Should we be calling this at all?
+			specimen.checkQtyConstraints();
 			specimen.occupyPosition();
+			createPooledSpecimens(detail, specimen, ose);
 		}
 
 		specimen.setLabelIfEmpty();
@@ -615,5 +635,62 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		
 		return specimen;
+	}
+
+	private void createPooledSpecimens(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		if (sr == null) {
+			return;
+		}
+
+		if (sr.isPooledSpecimensHead()) {
+			boolean atLeastOneColl = false;
+			if (CollectionUtils.isNotEmpty(detail.getPooledSpecimens())) {
+				for (SpecimenDetail pooledSpmnDetail : detail.getPooledSpecimens()) {
+					Specimen pooledSpmn = specimenFactory.createPooledSpecimen(pooledSpmnDetail, specimen);
+					specimen.getPooledSpecimens().add(pooledSpmn);
+
+					if (specimen.isMissed()) {
+						pooledSpmn.updateCollectionStatus(Specimen.MISSED_COLLECTION);
+					} else if (specimen.isPending()) {
+						pooledSpmn.updateCollectionStatus(Specimen.PENDING);
+					}
+
+					if (pooledSpmn.isCollected()) {
+						atLeastOneColl = true;
+					}
+				}
+			}
+
+			if (specimen.isCollected() && !atLeastOneColl) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN_COLLECTED, specimen.getLabel());
+			}
+
+			if (specimen.isMissed()) {
+				Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(sr.getPooledSpecimenReqs());
+				for (Specimen pooledSpmn : specimen.getPooledSpecimens()) {
+					anticipated.remove(pooledSpmn.getSpecimenRequirement());
+				}
+
+				for (SpecimenRequirement pooledSr : anticipated) {
+					Specimen pooledSpmn = pooledSr.getSpecimen();
+					pooledSpmn.setVisit(specimen.getVisit());
+					pooledSpmn.setCollectionStatus(Specimen.MISSED_COLLECTION);
+					specimen.getPooledSpecimens().add(pooledSpmn);
+				}
+			}
+		} else if (sr.isPooledSpecimen()) {
+			Specimen poolHd = specimen.getPooledSpecimensHead();
+			if (poolHd == null) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_SPMN_POOL_HD, specimen.getLabel());
+			}
+
+			if (specimen.isCollected()) {
+				if (!poolHd.isCollected()) {
+					poolHd.updateCollectionStatus(Specimen.COLLECTED);
+					addOrUpdateEvents(poolHd);
+				}
+			} // TODO: if pending, missed
+		}
 	}
 }

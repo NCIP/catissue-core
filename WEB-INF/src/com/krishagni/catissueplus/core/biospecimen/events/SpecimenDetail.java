@@ -32,6 +32,10 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private List<SpecimenDetail> children;
 
+	private Long pooledSpecimenHeadId;
+
+	private List<SpecimenDetail> pooledSpecimens;
+
 	// This is needed for creation of derivatives from BO for closing parent specimen.
 	private Boolean closeParent;
 	
@@ -65,6 +69,22 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	public void setChildren(List<SpecimenDetail> children) {
 		this.children = children;
+	}
+
+	public Long getPooledSpecimenHeadId() {
+		return pooledSpecimenHeadId;
+	}
+
+	public void setPooledSpecimenHeadId(Long pooledSpecimenHeadId) {
+		this.pooledSpecimenHeadId = pooledSpecimenHeadId;
+	}
+
+	public List<SpecimenDetail> getPooledSpecimens() {
+		return pooledSpecimens;
+	}
+
+	public void setPooledSpecimens(List<SpecimenDetail> pooledSpecimens) {
+		this.pooledSpecimens = pooledSpecimens;
 	}
 
 	public Set<String> getBiohazards() {

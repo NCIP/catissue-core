@@ -89,6 +89,10 @@ public class Specimen extends BaseEntity {
 
 	private Set<Specimen> childCollection = new HashSet<Specimen>();
 
+	private Specimen pooledSpecimensHead;
+
+	private Set<Specimen> pooledSpecimens = new HashSet<Specimen>();
+
 	private Set<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
 	
 	private SpecimenCollectionEvent collectionEvent;
@@ -348,6 +352,23 @@ public class Specimen extends BaseEntity {
 
 	public void setChildCollection(Set<Specimen> childSpecimenCollection) {
 		this.childCollection = childSpecimenCollection;
+	}
+
+	public Specimen getPooledSpecimensHead() {
+		return pooledSpecimensHead;
+	}
+
+	public void setPooledSpecimensHead(Specimen pooledSpecimensHead) {
+		this.pooledSpecimensHead = pooledSpecimensHead;
+	}
+
+	@NotAudited
+	public Set<Specimen> getPooledSpecimens() {
+		return pooledSpecimens;
+	}
+
+	public void setPooledSpecimens(Set<Specimen> pooledSpecimens) {
+		this.pooledSpecimens = pooledSpecimens;
 	}
 
 	@NotAudited
@@ -610,7 +631,9 @@ public class Specimen extends BaseEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_OR_MISSED_PARENT_REQ);
 			} else {
 				updateHierarchyStatus(collectionStatus);
-				createMissedSpecimens();
+				createMissedChildSpecimens();
+
+				updatePooledSpecimensStatus(collectionStatus);
 			}
 		} else if (isPending(collectionStatus)) {
 			if (!getVisit().isCompleted() && !getVisit().isPending()) {
@@ -619,6 +642,7 @@ public class Specimen extends BaseEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_OR_PENDING_PARENT_REQ);
 			} else {
 				updateHierarchyStatus(collectionStatus);
+				updatePooledSpecimensStatus(collectionStatus);
 			}
 		} else if (isCollected(collectionStatus)) {
 			if (!getVisit().isCompleted()) {
@@ -981,18 +1005,37 @@ public class Specimen extends BaseEntity {
 		}
 	}
 
-	private void createMissedSpecimens() {
-		if (getSpecimenRequirement() == null) {
+	private void updatePooledSpecimensStatus(String status) {
+		if (Specimen.isCollected(status)) {
+			if (pooledSpecimensHead != null) {
+				pooledSpecimensHead.setCollectionStatus(COLLECTED);
+				pooledSpecimensHead.addOrUpdateCollRecvEvents();
+			} else if (specimenRequirement != null && specimenRequirement.isPooledSpecimensHead()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN_COLLECTED, getLabel());
+			}
+		} else {
+			for (Specimen pooled : getPooledSpecimens()) {
+				pooled.updateCollectionStatus(status);
+			}
+
+			if (Specimen.isMissed(status)) {
+				createMissedPooledSpecimens();
+			}
+		}
+	}
+
+	private void createMissedChildSpecimens() {
+		if (specimenRequirement == null) {
 			return;
 		}
 
 		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(
-				getSpecimenRequirement().getChildSpecimenRequirements());
+				specimenRequirement.getChildSpecimenRequirements());
 
 		for (Specimen childSpecimen : getChildCollection()) {
 			if (childSpecimen.getSpecimenRequirement() != null) {
 				anticipated.remove(childSpecimen.getSpecimenRequirement());
-				childSpecimen.createMissedSpecimens();
+				childSpecimen.createMissedChildSpecimens();
 			}
 		}
 
@@ -1003,7 +1046,28 @@ public class Specimen extends BaseEntity {
 			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
 			getChildCollection().add(specimen);
 
-			specimen.createMissedSpecimens();
+			specimen.createMissedChildSpecimens();
+		}
+	}
+
+	private void createMissedPooledSpecimens() {
+		if (specimenRequirement == null) {
+			return;
+		}
+
+		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(specimenRequirement.getPooledSpecimenReqs());
+		for (Specimen pooled : getPooledSpecimens()) {
+			if (pooled.getSpecimenRequirement() != null) {
+				anticipated.remove(pooled);
+			}
+		}
+
+		for (SpecimenRequirement sr : anticipated) {
+			Specimen specimen = sr.getSpecimen();
+			specimen.setVisit(getVisit());
+			specimen.setParentSpecimen(this);
+			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
+			getPooledSpecimens().add(specimen);
 		}
 	}
 

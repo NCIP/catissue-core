@@ -59,9 +59,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	public Specimen createSpecimen(SpecimenDetail detail, Specimen parent) {
 		return createSpecimen(null, detail, parent);
 	}
-	
+
+	@Override
+	public Specimen createPooledSpecimen(SpecimenDetail detail, Specimen poolHd) {
+		return createSpecimen(null, detail, null, poolHd);
+	}
+
 	@Override
 	public Specimen createSpecimen(Specimen existing, SpecimenDetail detail, Specimen parent) {
+		return createSpecimen(existing, detail, parent, null);
+	}
+
+	private Specimen createSpecimen(Specimen existing, SpecimenDetail detail, Specimen parent, Specimen poolHd) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		if (parent == null) {
@@ -79,7 +88,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (parent != null && !parent.getVisit().equals(visit)) {
 			ose.addError(SpecimenErrorCode.INVALID_VISIT);
-		}		
+		}
+
 		ose.checkAndThrow();
 		
 		Specimen specimen = null;
@@ -95,7 +105,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setCollectionStatus(detail, existing, specimen, ose);
 		setLineage(detail, existing, specimen, ose);
 		setParentSpecimen(detail, existing, parent, specimen, ose);
-				
+
 		setLabel(detail, existing, specimen, ose);
 		setBarcode(detail, existing, specimen, ose);
 		setActivityStatus(detail, existing, specimen, ose);
@@ -120,6 +130,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setCollectionDetail(detail, existing, specimen, ose);
 		setReceiveDetail(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
+		setPooledSpecimenHd(detail, existing, poolHd, specimen, ose);
 
 		ose.checkAndThrow();
 		return specimen;
@@ -811,5 +822,46 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		return user;
+	}
+
+	private void setPooledSpecimenHd(SpecimenDetail detail, Specimen poolHd, Specimen specimen, OpenSpecimenException ose) {
+		if (!specimen.isPrimary() || specimen.getParentSpecimen() != null) {
+			return;
+		}
+
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		if (sr == null || !sr.isPooledSpecimen()) {
+			return;
+		}
+
+		if (poolHd != null) {
+			specimen.setPooledSpecimensHead(poolHd);
+			return;
+		}
+
+		Long poolHdId = detail.getPooledSpecimenHeadId();
+		if (poolHdId != null) {
+			poolHd = daoFactory.getSpecimenDao().getById(poolHdId);
+			if (poolHd == null) {
+				ose.addError(SpecimenErrorCode.NOT_FOUND, poolHdId);
+			}
+		} else if (sr != null && sr.getPooledSpecimensHead() != null) {
+			Long visitId = specimen.getVisit().getId();
+			Long poolHdSrId = sr.getPooledSpecimensHead().getId();
+			poolHd = daoFactory.getSpecimenDao().getSpecimenByVisitAndSr(visitId, poolHdSrId);
+			if (poolHd == null) {
+				ose.addError(SpecimenErrorCode.NO_SPMN_POOL_HD);
+			}
+		}
+
+		specimen.setPooledSpecimensHead(poolHd);
+	}
+
+	private void setPooledSpecimenHd(SpecimenDetail detail, Specimen existing, Specimen poolHd, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("pooledSpecimensHeadId")) {
+			setPooledSpecimenHd(detail, poolHd, specimen, ose);
+		} else {
+			specimen.setPooledSpecimensHead(existing.getPooledSpecimensHead());
+		}
 	}
 }

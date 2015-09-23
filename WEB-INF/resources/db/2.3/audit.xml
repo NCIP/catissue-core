@@ -21,4 +21,15 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add a column to group pooled specimens">
+    <addColumn tableName="catissue_specimen">
+      <column name="pooled_spmn_head_id" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in pooled specimens">
+    <addColumn tableName="catissue_specimen">
+      <column name="pooledSpecimensHead_MOD" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

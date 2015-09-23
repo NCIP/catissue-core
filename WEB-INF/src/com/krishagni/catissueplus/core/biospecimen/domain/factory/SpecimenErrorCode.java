@@ -110,7 +110,11 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	NO_PATH_STATUS_ABBR,
 	
-	NO_TYPE_ABBR;
+	NO_TYPE_ABBR,
+
+	NO_POOLED_SPMN_COLLECTED,
+	
+	NO_SPMN_POOL_HD;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();
