@@ -77,14 +77,14 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="mysql">
-    <validCheckSum>7:60cb2e9abc6ff0909f3419066f4d81b3</validCheckSum>
+    <validCheckSum>7:302a0a6df58f62d59d1fb55560da6c5a</validCheckSum>
     <sql>
       select identifier into @sys_usr_id from catissue_user where email_address like '$system';
       
       insert into os_storage_containers(
         identifier, name, barcode, temperature, 
         no_of_rows, no_of_cols,
-        column_labeling_scheme, row_labeling_scheme, site_id, 
+        row_labeling_scheme, column_labeling_scheme, site_id, 
         parent_container_id, activity_status, comments, created_by)
       select 
         cc.identifier, cc.name, cc.barcode, csc.temperature, 
@@ -145,7 +145,7 @@
   </changeSet> 
   
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="oracle">
-    <validCheckSum>7:a45c7aed532534a5d35af4f54576a62c</validCheckSum>
+    <validCheckSum>7:1aa1b72ffb2e8483197d38bdca60f625</validCheckSum>
     <sql endDelimiter="//">
       declare 
         sys_usr_id number;
@@ -155,7 +155,7 @@
         insert into os_storage_containers(
           identifier, name, barcode, temperature, 
           no_of_rows, no_of_cols, 
-          column_labeling_scheme, row_labeling_scheme, site_id, 
+          row_labeling_scheme, column_labeling_scheme, site_id, 
           parent_container_id, activity_status, comments, created_by)
         select 
           cc.identifier, cc.name, cc.barcode, csc.temperature, 
@@ -174,7 +174,7 @@
     <sql>
       merge into os_storage_containers osc using (
         select 
-          ccp.container_id as old_cntr_id, osc.identifier as new_cntr_id, ccp.parent_container_id as parent_id
+          osc.identifier as new_cntr_id, ccp.parent_container_id as parent_id
         from 
           catissue_container_position ccp 
           join os_storage_containers osc on osc.identifier = ccp.container_id
