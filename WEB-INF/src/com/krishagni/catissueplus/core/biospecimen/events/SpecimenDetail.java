@@ -132,6 +132,10 @@ public class SpecimenDetail extends SpecimenInfo {
 		if (sr == null) {
 			result.setChildren(from(children));
 		} else {
+			if (sr.isPooledSpmnsHead()) {
+				result.setPooledSpecimens(getSpecimens(sr.getPooledSpecimenReqs(), specimen.getPooledSpecimens()));
+			}
+			
 			Collection<SpecimenRequirement> anticipated = sr.getChildSpecimenRequirements();
 			result.setChildren(getSpecimens(anticipated, children));
 		}
@@ -157,9 +161,13 @@ public class SpecimenDetail extends SpecimenInfo {
 	}
 	
 	public static SpecimenDetail from(SpecimenRequirement anticipated) {
-		SpecimenDetail result = new SpecimenDetail();
+		SpecimenDetail result = new SpecimenDetail();		
+		SpecimenInfo.fromTo(anticipated, result);
 		
-		SpecimenInfo.fromTo(anticipated, result);		
+		if (anticipated.isPooledSpmnsHead()) {
+			result.setPooledSpecimens(fromAnticipated(anticipated.getPooledSpecimenReqs()));
+		}
+		
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
 		result.setLabelFmt(anticipated.getLabelTmpl());
 		return result;		

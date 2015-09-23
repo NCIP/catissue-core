@@ -306,7 +306,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		return getLineage().equals(Specimen.DERIVED);
 	}
 	
-	public boolean isPooledSpecimensHead() {
+	public boolean isPooledSpmnsHead() {
 		return CollectionUtils.isNotEmpty(pooledSpecimenReqs);
 	}
 

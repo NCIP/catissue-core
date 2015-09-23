@@ -206,7 +206,7 @@ public class Visit {
 		}
 		
 		for (Specimen specimen : specimens) {
-			if (specimen.getParentSpecimen() == null) {
+			if (specimen.getParentSpecimen() == null && specimen.getPooledSpecimensHead() == null) {
 				result.add(specimen);
 			}
 		}

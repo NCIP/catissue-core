@@ -825,7 +825,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setPooledSpecimenHd(SpecimenDetail detail, Specimen poolHd, Specimen specimen, OpenSpecimenException ose) {
-		if (!specimen.isPrimary() || specimen.getParentSpecimen() != null) {
+		if (!specimen.isPrimary()) {
 			return;
 		}
 

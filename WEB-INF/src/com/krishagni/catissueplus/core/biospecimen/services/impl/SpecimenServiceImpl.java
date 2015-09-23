@@ -643,7 +643,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			return;
 		}
 
-		if (sr.isPooledSpecimensHead()) {
+		if (sr.isPooledSpmnsHead()) {
 			boolean atLeastOneColl = false;
 			if (CollectionUtils.isNotEmpty(detail.getPooledSpecimens())) {
 				for (SpecimenDetail pooledSpmnDetail : detail.getPooledSpecimens()) {

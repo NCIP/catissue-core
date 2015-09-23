@@ -56,7 +56,7 @@
     "build_date": "Build date",
     "build_commit_revision": "Revision",
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
-    "footer_note": "OpenSpecimen - powered by Krishagni",
+    "footer_note": "<a href=\"http://www.openspecimen.org\" target=\"_blank\">OpenSpecimen</a> - powered by <a href=\"http://www.krishagni.com\" target=\"_blank\">Krishagni</a>",
 
     "buttons": {
       "add": "Add",

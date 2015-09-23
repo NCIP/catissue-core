@@ -32,4 +32,5 @@
   <include file="db/2.2/audit.xml"/>
 
   <include file="db/2.3/schema.xml"/>
+  <include file="db/2.3/audit.xml"/>
 </databaseChangeLog> 

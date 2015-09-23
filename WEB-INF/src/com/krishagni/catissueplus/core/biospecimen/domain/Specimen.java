@@ -602,6 +602,9 @@ public class Specimen extends BaseEntity {
 		checkQtyConstraints();
 	}
 	
+	//
+	// TODO: Modify to accommodate pooled specimens
+	//	
 	public void updateStatus(String activityStatus, String reason) {
 		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
 			return;
@@ -632,8 +635,6 @@ public class Specimen extends BaseEntity {
 			} else {
 				updateHierarchyStatus(collectionStatus);
 				createMissedChildSpecimens();
-
-				updatePooledSpecimensStatus(collectionStatus);
 			}
 		} else if (isPending(collectionStatus)) {
 			if (!getVisit().isCompleted() && !getVisit().isPending()) {
@@ -642,7 +643,6 @@ public class Specimen extends BaseEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.COLL_OR_PENDING_PARENT_REQ);
 			} else {
 				updateHierarchyStatus(collectionStatus);
-				updatePooledSpecimensStatus(collectionStatus);
 			}
 		} else if (isCollected(collectionStatus)) {
 			if (!getVisit().isCompleted()) {
@@ -654,7 +654,9 @@ public class Specimen extends BaseEntity {
 				decAliquotedQtyFromParent();
 				addOrUpdateCollRecvEvents();
 			}
-		}			
+		}
+		
+		updatePooledSpecimensStatus(collectionStatus);
 	}
 		
 	public void distribute(User distributor, Date time, BigDecimal quantity, boolean closeAfterDistribution) {
@@ -1010,7 +1012,7 @@ public class Specimen extends BaseEntity {
 			if (pooledSpecimensHead != null) {
 				pooledSpecimensHead.setCollectionStatus(COLLECTED);
 				pooledSpecimensHead.addOrUpdateCollRecvEvents();
-			} else if (specimenRequirement != null && specimenRequirement.isPooledSpecimensHead()) {
+			} else if (specimenRequirement != null && specimenRequirement.isPooledSpmnsHead()) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN_COLLECTED, getLabel());
 			}
 		} else {
@@ -1058,7 +1060,7 @@ public class Specimen extends BaseEntity {
 		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(specimenRequirement.getPooledSpecimenReqs());
 		for (Specimen pooled : getPooledSpecimens()) {
 			if (pooled.getSpecimenRequirement() != null) {
-				anticipated.remove(pooled);
+				anticipated.remove(pooled.getSpecimenRequirement());
 			}
 		}
 
