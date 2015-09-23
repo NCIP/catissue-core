@@ -111,7 +111,7 @@
       <userField>
         <name>missedBy</name>
         <udn>missedBy</udn>
-        <caption>#getMessage("missed_by")</caption>
+        <caption>#getMessage("visit_missed_by")</caption>
         <column>MISSED_BY</column>
       </userField>
     </row>
