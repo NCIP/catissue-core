@@ -1,21 +1,11 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
-  .controller('SiteAddEditCtrl', function($scope, $state, site, extensionCtxt, Institute, PvManager) {
+  .controller('SiteAddEditCtrl', function($scope, $state, site, extensionCtxt, Institute, PvManager, Util) {
 
     function init() {
       $scope.site = site;
       $scope.deFormCtrl = {};
+      $scope.extnOpts = Util.getExtnOpts(site, extensionCtxt);
       loadPvs();
-
-      if (!!extensionCtxt) {
-        $scope.extnOpts = {
-          formId: extensionCtxt.formId,
-          recordId: !!site.id && !!site.extensionDetail ? site.extensionDetail.id : undefined,
-          formCtxtId: parseInt(extensionCtxt.formCtxtId),
-          objectId: site.id,
-          showActionBtns: false,
-          labelAlignment: 'horizontal'
-        }
-      }
     }
 
     function loadPvs() {

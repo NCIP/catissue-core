@@ -8,12 +8,10 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolExtension;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -27,9 +25,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
 	private DaoFactory daoFactory;
@@ -240,22 +236,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	}
 	
 	private void setCollectionProtocolExtension(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
-		ExtensionDetail extDetail = input.getExtensionDetail();
-		if (extDetail == null) {
-			return;
-		}
-		
-		CollectionProtocolExtension extension = CollectionProtocolExtension.getFor(result);
-		if (extension == null) {
-			return;
-		}
-		
-		for (AttrDetail attrDetail: extDetail.getAttrs()) {
-			Attr attr = new Attr();
-			BeanUtils.copyProperties(attrDetail, attr);
-			extension.getAttrs().add(attr);
-		}
-		
+		DeObject extension = DeObject.createExtension(input.getExtensionDetail(), result);
 		result.setExtension(extension);
 	}
 }

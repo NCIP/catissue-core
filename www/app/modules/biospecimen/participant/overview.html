@@ -105,6 +105,10 @@
       </li>
     </ul>
 
+    <div ng-if="!!cpr.participant.extensionDetail">
+      <div os-extension-overview ext-object="cpr.participant.extensionDetail" show-column="2"></div>
+    </div>
+
     <div class="os-section" ng-init="ovCollapsed=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
         <span ng-if="!ovCollapsed" class="fa fa-chevron-circle-down"></span>

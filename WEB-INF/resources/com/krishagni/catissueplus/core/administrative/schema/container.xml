@@ -84,6 +84,7 @@
     </field>
 
     <field>
+      <type>boolean</type>
       <caption>#getMessage("container_stores_specimen")</caption>
       <attribute>storeSpecimensEnabled</attribute>
     </field>

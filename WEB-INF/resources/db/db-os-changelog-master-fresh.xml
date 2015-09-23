@@ -33,4 +33,6 @@
 
   <include file="db/2.3/schema.xml"/>
   <include file="db/2.3/seed-data.xml"/>
+  <include file="db/2.3/config.xml"/>
+  
 </databaseChangeLog> 

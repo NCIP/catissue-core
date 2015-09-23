@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
 @ListenAttributeChanges
 public class ParticipantDetail extends AttributeModifiedSupport {
@@ -47,6 +48,8 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	private boolean phiAccess;
 	
 	private Set<String> registeredCps;
+	
+	private ExtensionDetail extensionDetail;
 	
 	public Long getId() {
 		return id;
@@ -184,6 +187,14 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		this.registeredCps = registeredCps;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+	
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());
@@ -208,6 +219,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 			cps.add(cpr.getCollectionProtocol().getShortTitle());
 		}
 		result.setRegisteredCps(cps);
+		result.setExtensionDetail(ExtensionDetail.from(participant.getExtension()));
 		return result;
 	}
 	

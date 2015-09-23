@@ -8,13 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.InitializingBean;
 
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
+import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
+import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
 
-public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
+
+public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, InitializingBean {
 	private TemplateService templateService;
 	
 	private Map<String, ObjectSchema> schemaMap = new HashMap<String, ObjectSchema>();
@@ -37,6 +42,16 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		for (String schemaResource : schemaResources) {
 			ObjectSchema schema = parseSchema(schemaResource);
 			schemaMap.put(schema.getName(), schema);
+		}
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		for (ObjectSchema schema : schemaMap.values()) {
+			Record extnRecord = schema.getExtensionRecord();
+			if (extnRecord != null) {
+				populateExtensionRecord(extnRecord);
+			}
 		}
 	}
 	
@@ -79,4 +94,24 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory {
 		String template = templateService.render(schemaResource, new HashMap<String, Object>());
 		return new ByteArrayInputStream( template.getBytes() );
 	}
+	
+	private void populateExtensionRecord(Record extnRecord) {
+		String entityType = extnRecord.getEntityType();
+		if (entityType == null) {
+			throw OpenSpecimenException.userError(FormErrorCode.ENTITY_TYPE_REQUIRED);
+		}
+
+		ObjectSchema extension = null;
+		ObjectSchemaBuilder builder = schemaBuilders.get(extnRecord.getType());
+		if (builder != null) {
+			extension = builder.getObjectSchema(entityType);
+		}
+		
+		if (extension != null) {
+			Record record = extension.getRecord();
+			extnRecord.setCaption(record.getCaption());
+			extnRecord.setSubRecords(record.getSubRecords());
+		}
+	}
+	
 }

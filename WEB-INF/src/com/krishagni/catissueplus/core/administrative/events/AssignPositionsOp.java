@@ -8,6 +8,8 @@ public class AssignPositionsOp {
 	
 	private String containerName;
 	
+	private boolean vacateOccupant;
+	
 	private List<StorageContainerPositionDetail> positions = new ArrayList<StorageContainerPositionDetail>();
 
 	public Long getContainerId() {
@@ -25,12 +27,20 @@ public class AssignPositionsOp {
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
-
+	
 	public List<StorageContainerPositionDetail> getPositions() {
 		return positions;
 	}
 
 	public void setPositions(List<StorageContainerPositionDetail> positions) {
 		this.positions = positions;
+	}
+
+	public boolean getVacateOccupant() {
+		return vacateOccupant;
+	}
+
+	public void setVacateOccupant(boolean vacateOccupant) {
+		this.vacateOccupant = vacateOccupant;
 	}
 }

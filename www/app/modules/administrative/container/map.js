@@ -25,6 +25,10 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
           if (locationMatrix[i][j].occupied) {
             td.addClass(!!locationMatrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
+
+            if (!!locationMatrix[i][j].occupied.oldOccupant) {
+              td.addClass('slot-vacated');
+            }
           }
 
           tr.append(td);
@@ -38,7 +42,6 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
     function getLocationsMatrix(container, occupancyMap) {
       var matrix = new Array(container.noOfRows);
-
       for (var i = 0; i < container.noOfRows; ++i) {
         matrix[i] = new Array(container.noOfColumns);
 
