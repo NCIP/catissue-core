@@ -258,7 +258,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private List<Specimen> getValidSpecimens(DistributionProtocol dp, List<String> specimenLabels) {
 		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
-			return Collections.<Specimen>emptyList();
+			return null;
 		}
 		
 		SpecimenListCriteria crit = new SpecimenListCriteria()
