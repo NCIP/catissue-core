@@ -266,8 +266,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			.siteCps(siteCpPairs);
 		
 		List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
+		if (CollectionUtils.isEmpty(specimens)) {
+			return null;
+		}
 		
+		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
 		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
 		Set<Long> orderAllowedIds = AccessCtrlMgr.getInstance().getDistributionOrderAllowedSites(dp);
 		for (Map.Entry<String, Set<Long>> specimenSitesMapEntry: specimenSiteIdsMap.entrySet()) {
