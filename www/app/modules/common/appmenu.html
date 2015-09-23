@@ -11,7 +11,7 @@
         </a>
 
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-          <li><a>{{currentUser.lastName + ' ' + currentUser.firstName}}</a></li>
+          <li><a>{{currentUser | osUserDisplayName}}</a></li>
           <li class="divider"></li>
           <li ng-if="currentUser.domain == global.defaultDomain">
              <a ui-sref="user-password({userId: currentUser.id})" translate="user.change_password.change_password">Change Password</a>

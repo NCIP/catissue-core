@@ -83,7 +83,7 @@
                 <label class="os-md-input-label">
                   <span translate="participant.consent.witness">Consent Witness</span>
                 </label>
-                <span ng-if="consent.witness">{{consent.witness.lastName}}, {{consent.witness.firstName}}</span>
+                <span ng-if="consent.witness">{{consent.witness | osUserDisplayName}}</span>
                 <span ng-if="!consent.witness" translate="common.not_specified">Not Specified</span>
               </div>
             </div>

@@ -7,6 +7,7 @@ angular.module('os.administrative.user',
     'os.administrative.user.detail',
     'os.administrative.user.roles',
     'os.administrative.user.password',
+    'os.administrative.user.displayname',
     'os.common.import'
   ])
 
