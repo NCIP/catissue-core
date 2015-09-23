@@ -103,6 +103,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 		
 		order.setRequester(requester);
+		
 		Long siteId = detail.getSiteId();
 		String siteName = detail.getSiteName();		
 		if (siteId == null && StringUtils.isBlank(siteName)) {
