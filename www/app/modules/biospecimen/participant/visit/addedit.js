@@ -23,6 +23,20 @@ angular.module('os.biospecimen.visit.addedit', [])
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
       }
+
+      createExtensionFieldMap(currVisit);
+    }
+
+    function createExtensionFieldMap(visit) {
+      var extensionDetail = visit.extensionDetail;
+      if (extensionDetail) {
+        extensionDetail.attrsMap = {};
+        angular.forEach(extensionDetail.attrs, function(attr) {
+          extensionDetail.attrsMap[attr.name] = attr.value;
+        });
+
+        delete extensionDetail.attrs
+      }
     }
 
     $scope.saveVisit = function() {

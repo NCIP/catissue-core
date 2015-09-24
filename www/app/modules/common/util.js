@@ -179,6 +179,16 @@ angular.module('openspecimen')
       };
     }
 
+    function getTemplate(template) {
+      var plugins = $rootScope.global.appProps['plugins'];
+      var pluginUrl = 'plugin-ui-resources/';
+      if (plugins && plugins.length > 0) {
+        template =  pluginUrl + plugins[0] + "/" + template;
+      }
+
+      return template;
+    }
+
     return {
       clear: clear,
 
@@ -198,6 +208,8 @@ angular.module('openspecimen')
 
       parseDate: parseDate,
 
-      getExtnOpts: getExtnOpts
+      getExtnOpts: getExtnOpts,
+
+      getTemplate: getTemplate
     };
   });

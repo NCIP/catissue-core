@@ -199,7 +199,7 @@
                 </div>
               </div>
               <div class="row content" ng-if="rptVisitIdx == $index">
-                <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
+                <div ng-include="addVisitTmpl"></div>
               </div>
             </div>
           </div>
@@ -302,7 +302,7 @@
                 </div>
               </div>
               <div class="row content" ng-if="addVisitIdx == $index">
-                <div ng-include="'modules/biospecimen/participant/add-visit.html'"></div>
+                <div ng-include="addVisitTmpl"></div>
               </div>
             </div>
           </div>

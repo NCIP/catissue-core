@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -376,6 +375,7 @@ public class VisitServiceImpl implements VisitService {
 		
 		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
+		existing.addOrUpdateExtension();
 		return VisitDetail.from(existing);		
 	}
 

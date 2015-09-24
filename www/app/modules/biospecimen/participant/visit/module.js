@@ -33,7 +33,13 @@ angular.module('os.biospecimen.visit', [
       })
       .state('visit-addedit', {
         url: '/addedit-visit',
-        templateUrl: 'modules/biospecimen/participant/visit/addedit.html',
+        templateProvider: function(Util, $q) {
+          return $q.when(Util.getTemplate('modules/biospecimen/participant/visit/addedit.html')).then(
+            function(tmpl) {
+              return '<div ng-include src="\'' + tmpl + '\'"></div>';
+            }
+          );
+        },
         controller: 'AddEditVisitCtrl',
         parent: 'visit-root'
       })

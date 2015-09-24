@@ -3,7 +3,7 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
     $scope, $q, cpr, visits, 
     CollectionProtocol, SpecimenLabelPrinter, PvManager, 
-    RegisterToNewCpsHolder, DeleteUtil) {
+    RegisterToNewCpsHolder, DeleteUtil, Util) {
 
     function loadPvs() {
       $scope.genders = PvManager.getPvs('gender');
@@ -11,6 +11,7 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
       $scope.cohorts = PvManager.getPvs('cohort');
+      $scope.addVisitTmpl = Util.getTemplate('modules/biospecimen/participant/add-visit.html');
 
       var siteNames = cpr.getMrnSites();
       $scope.cpsForReg = [];

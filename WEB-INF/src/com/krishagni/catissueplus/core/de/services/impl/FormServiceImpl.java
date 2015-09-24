@@ -76,6 +76,8 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String PARTICIPANT_EXTENSION = "ParticipantExtension";
 	
+	private static final String VISIT_EXTENSION = "VisitExtension";
+	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
 	private static Map<String, String> customExtensionForms = new HashMap<String, String>();
@@ -87,6 +89,7 @@ public class FormServiceImpl implements FormService {
 		
 		customExtensionForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
 		customExtensionForms.put("Participant", PARTICIPANT_EXTENSION);
+		customExtensionForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
 	}
 	
 	private FormDao formDao;
@@ -294,6 +297,10 @@ public class FormServiceImpl implements FormService {
 			    case PARTICIPANT_EXTN:
 			    	forms = formDao.getFormContexts(-1L, "ParticipantExtension");
 			    	break;
+			    	
+			    case VISIT_EXTN:
+			    	 forms = formDao.getFormContexts(-1L, "VisitExtension");
+			    	 break;
 			}
 			
 			return ResponseEvent.response(forms);			
