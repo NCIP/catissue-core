@@ -14,19 +14,19 @@
         <caption>#getMessage("transfer_event_from_container")</caption>
         <column>FROM_STORAGE_CONTAINER_ID</column>
       </storageContainer>
-      
-      <numberField>
-        <name>fromDimensionOne</name>
-        <udn>fromDimensionOne</udn>
-        <caption>#getMessage("transfer_event_dim_one")</caption>
-        <column>FROM_POSITION_DIMENSION_ONE</column>
-      </numberField>
 
       <numberField>
         <name>fromDimensionTwo</name>
         <udn>fromDimensionTwo</udn>
         <caption>#getMessage("transfer_event_dim_two")</caption>
         <column>FROM_POSITION_DIMENSION_Two</column>
+      </numberField>
+
+      <numberField>
+        <name>fromDimensionOne</name>
+        <udn>fromDimensionOne</udn>
+        <caption>#getMessage("transfer_event_dim_one")</caption>
+        <column>FROM_POSITION_DIMENSION_ONE</column>
       </numberField>
     </row>
 
@@ -37,19 +37,19 @@
         <caption>#getMessage("transfer_event_to_container")</caption>
         <column>TO_STORAGE_CONTAINER_ID</column>
       </storageContainer>
-      
-      <numberField>
-        <name>toDimensionOne</name>
-        <udn>toDimensionOne</udn>
-        <caption>#getMessage("transfer_event_dim_one")</caption>
-        <column>TO_POSITION_DIMENSION_ONE</column>
-      </numberField>
 
       <numberField>
         <name>toDimensionTwo</name>
         <udn>toDimensionTwo</udn>
         <caption>#getMessage("transfer_event_dim_two")</caption>
         <column>TO_POSITION_DIMENSION_Two</column>
+      </numberField>
+
+      <numberField>
+        <name>toDimensionOne</name>
+        <udn>toDimensionOne</udn>
+        <caption>#getMessage("transfer_event_dim_one")</caption>
+        <column>TO_POSITION_DIMENSION_ONE</column>
       </numberField>
     </row>
 
