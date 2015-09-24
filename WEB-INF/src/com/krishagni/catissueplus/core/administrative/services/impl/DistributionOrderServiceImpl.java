@@ -131,12 +131,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraints(null, order, ose);
+			
 			List<String> specimenLabels = Utility.<List<String>>collect(order.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(order.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
 				ose.addError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
-			ensureUniqueConstraints(null, order, ose);
+			
 			ose.checkAndThrow();
 			
 			Status inputStatus = Status.valueOf(detail.getStatus());
@@ -170,12 +172,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraints(existingOrder, newOrder, ose);
+			
 			List<String> specimenLabels = Utility.<List<String>>collect(newOrder.getOrderItems(), "specimen.label");
 			List<Specimen> specimens = getValidSpecimens(newOrder.getDistributionProtocol(), specimenLabels);
 			if (specimens == null) {
 				ose.addError(DistributionOrderErrorCode.INVALID_SPECIMENS_FOR_DP);
 			}
-			ensureUniqueConstraints(existingOrder, newOrder, ose);
+			
 			ose.checkAndThrow();
 			
 			Status oldStatus = existingOrder.getStatus();
@@ -254,7 +258,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private List<Specimen> getValidSpecimens(DistributionProtocol dp, List<String> specimenLabels) {
 		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
-			return Collections.<Specimen>emptyList();
+			return null;
 		}
 		
 		SpecimenListCriteria crit = new SpecimenListCriteria()
@@ -262,8 +266,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			.siteCps(siteCpPairs);
 		
 		List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
+		if (CollectionUtils.isEmpty(specimens)) {
+			return null;
+		}
 		
+		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
 		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
 		Set<Long> orderAllowedIds = AccessCtrlMgr.getInstance().getDistributionOrderAllowedSites(dp);
 		for (Map.Entry<String, Set<Long>> specimenSitesMapEntry: specimenSiteIdsMap.entrySet()) {

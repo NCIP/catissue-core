@@ -230,10 +230,10 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			
 			List<StorageContainerPosition> positions = new ArrayList<StorageContainerPosition>();
 			for (StorageContainerPositionDetail posDetail : op.getPositions()) {
-				positions.add(createPosition(container, posDetail));				
+				positions.add(createPosition(container, posDetail, op.getVacateOccupant()));
 			}
 			
-			container.assignPositions(positions);
+			container.assignPositions(positions, op.getVacateOccupant());
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerPositionDetail.from(container.getOccupiedPositions()));
 		} catch (OpenSpecimenException ose) {
@@ -242,7 +242,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
@@ -394,8 +394,8 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		return container == null;
 	}
 	
-	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos) {
-		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {
+	private StorageContainerPosition createPosition(StorageContainer container, StorageContainerPositionDetail pos, boolean vacateOccupant) {
+		if (StringUtils.isBlank(pos.getPosOne()) ^ StringUtils.isBlank(pos.getPosTwo())) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_POSITIONS);
 		}
 		
@@ -411,7 +411,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		}
 		
 		if (entityType.equalsIgnoreCase("specimen")) {
-			return createSpecimenPosition(container, pos, entityId, entityName);
+			return createSpecimenPosition(container, pos, entityId, entityName, vacateOccupant);
 		} else if (entityType.equalsIgnoreCase("container")) {
 			return createChildContainerPosition(container, pos, entityId, entityName);
 		}
@@ -423,9 +423,38 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			StorageContainer container, 
 			StorageContainerPositionDetail pos, 
 			Long specimenId, 
-			String label) {
+			String label,
+			boolean vacateOccupant) {
 		
+		Specimen specimen = getSpecimen(specimenId, label);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+		
+		StorageContainerPosition position = null;
+		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {
+			position = container.createVirtualPosition();
+			position.setOccupyingSpecimen(specimen);
+			return position;
+		}
+
+		if (!container.canContain(specimen)) {
+			throw OpenSpecimenException.userError(
+					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
+					container.getName(), 
+					specimen.getLabelOrDesc());
+		}
+		
+		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo(), vacateOccupant)) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+		}
+		
+		position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
+		position.setOccupyingSpecimen(specimen);
+		return position;		
+	}
+	
+	private Specimen getSpecimen(Long specimenId, String label) {
 		Specimen specimen = null;
+
 		Object key = null;
 		if (specimenId != null) {
 			key = specimenId;
@@ -434,26 +463,16 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			key = label;
 			specimen = daoFactory.getSpecimenDao().getByLabel(label);
 		}
+
+		if (key == null) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.LABEL_REQUIRED);
+		}
 		
 		if (specimen == null) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, key);
 		}
-		
-		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);		
-		if (!container.canContain(specimen)) {
-			throw OpenSpecimenException.userError(
-					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
-					container.getName(), 
-					specimen.getLabelOrDesc());
-		}
-		
-		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo())) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
-		}
-		
-		StorageContainerPosition position = container.createPosition(pos.getPosOne(), pos.getPosTwo());
-		position.setOccupyingSpecimen(specimen);
-		return position;		
+
+		return specimen;
 	}
 	
 	private StorageContainerPosition createChildContainerPosition(
@@ -521,5 +540,5 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		copy.setStoreSpecimenEnabled(source.isStoreSpecimenEnabled());
 		copy.setCreatedBy(AuthUtil.getCurrentUser());
 		return copy;
-	}	
+	}
 }

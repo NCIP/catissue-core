@@ -304,17 +304,16 @@
           </div>
         </div>
 
-        <div class="os-col-30" ng-if="derivative.specimenClass == 'Molecular'">
+        <div class="os-col-30">
           <div class="form-group">
             <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
-              type="text" placeholder="{{'specimens.concentration' | translate}}" 
-              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
+              type="text" placeholder="{{'specimens.concentration' | translate}}"
+              ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
             <div os-field-error field="derivativeForm.concentration"></div>
           </div>
         </div>
 
-        <div ng-class="{'os-col-50': derivative.specimenClass != 'Molecular', 
-                        'os-col-40': derivative.specimenClass == 'Molecular'}">
+        <div class="os-col-40">
           <div class="form-group">
             <os-storage-position os-md-input entity="derivative" cp-id="cpr.cpId"></os-storage-position>
           </div>

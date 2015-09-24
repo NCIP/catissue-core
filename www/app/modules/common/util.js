@@ -164,6 +164,21 @@ angular.module('openspecimen')
       return value;
     }
 
+    function getExtnOpts(entity, extnCtxt) {
+      if (!extnCtxt) {
+        return undefined;
+      }
+
+      return {
+        formId: extnCtxt.formId,
+        recordId: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.id : undefined,
+        formCtxtId: parseInt(extnCtxt.formCtxtId),
+        objectId: entity.id,
+        showActionBtns: false,
+        labelAlignment: 'horizontal'
+      };
+    }
+
     return {
       clear: clear,
 
@@ -181,6 +196,8 @@ angular.module('openspecimen')
 
       getNumberInScientificNotation: getNumberInScientificNotation,
 
-      parseDate: parseDate
+      parseDate: parseDate,
+
+      getExtnOpts: getExtnOpts
     };
   });

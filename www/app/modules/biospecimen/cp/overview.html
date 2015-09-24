@@ -20,7 +20,7 @@
       <li class="item">
         <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
         <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">
-          <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue.lastName}}, {{piEditor.viewValue.firstName}}</span>
+          <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue | osUserDisplayName}}</span>
           <os-users ng-if="piEditor.isEditMode()" ng-model="piEditor.editValue"></os-users>
         </os-inline-edit>
       </li>
@@ -119,7 +119,7 @@
     </div>
   
     <div ng-if="!!cp.extensionDetail">
-      <div os-extension-overview ext-object="cp.extensionDetail" show-column="1"></div>
+      <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
     </div>
   </div>
 

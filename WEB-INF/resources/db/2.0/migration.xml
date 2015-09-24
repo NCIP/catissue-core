@@ -77,25 +77,33 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="mysql">
-    <validCheckSum>7:c1fd34a4dfd6b7e0a135e7cb80666a46</validCheckSum>
+    <validCheckSum>7:302a0a6df58f62d59d1fb55560da6c5a</validCheckSum>
     <sql>
       select identifier into @sys_usr_id from catissue_user where email_address like '$system';
       
-      insert into os_storage_containers 
-        (identifier, name, barcode, temperature, 
-         no_of_rows, no_of_cols,
-         column_labeling_scheme, row_labeling_scheme, site_id, 
-         parent_container_id, activity_status, comments, created_by)
+      insert into os_storage_containers(
+        identifier, name, barcode, temperature, 
+        no_of_rows, no_of_cols,
+        row_labeling_scheme, column_labeling_scheme, site_id, 
+        parent_container_id, activity_status, comments, created_by)
       select 
         cc.identifier, cc.name, cc.barcode, csc.temperature, 
         c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
         csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
-        ccp.parent_container_id, cc.activity_status, cc.comments, @sys_usr_id
+        null, cc.activity_status, cc.comments, @sys_usr_id
       from 
         catissue_storage_container csc 
         inner join catissue_container cc ON cc.identifier=csc.identifier 
         inner join catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
         left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
+    </sql>
+    
+    <sql>
+      update 
+        os_storage_containers osc
+        join catissue_container_position ccp on osc.identifier = ccp.container_id
+      set 
+        osc.parent_container_id = ccp.parent_container_id
     </sql>
     
     <sql>
@@ -108,10 +116,10 @@
     </sql>
     
     <sql>
-      insert into os_container_positions
-        (pos_one, pos_two, 
-         pos_one_str, pos_two_str, 
-         storage_container_id, occupying_specimen_id) 
+      insert into os_container_positions(
+        pos_one, pos_two, 
+        pos_one_str, pos_two_str, 
+        storage_container_id, occupying_specimen_id) 
       select 
         cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,
@@ -122,10 +130,10 @@
     </sql>
     
     <sql>
-      insert into os_container_positions
-        (pos_one, pos_two, 
-         pos_one_str, pos_two_str,
-         storage_container_id, occupying_container_id) 
+      insert into os_container_positions(
+        pos_one, pos_two, 
+        pos_one_str, pos_two_str,
+        storage_container_id, occupying_container_id) 
       select 
         cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,
@@ -137,23 +145,23 @@
   </changeSet> 
   
   <changeSet author="nmarwaha" id="Migration script for container data" dbms="oracle">
-    <validCheckSum>7:afd2942539ed788af85cb6b48cbff9ce</validCheckSum>
+    <validCheckSum>7:1aa1b72ffb2e8483197d38bdca60f625</validCheckSum>
     <sql endDelimiter="//">
       declare 
         sys_usr_id number;
       begin 
         select identifier into sys_usr_id from catissue_user where email_address like '$system';
       
-        insert into os_storage_containers 
-          (identifier, name, barcode, temperature, 
-           no_of_rows, no_of_cols, 
-           column_labeling_scheme, row_labeling_scheme, site_id, 
-           parent_container_id, activity_status, comments, created_by)
+        insert into os_storage_containers(
+          identifier, name, barcode, temperature, 
+          no_of_rows, no_of_cols, 
+          row_labeling_scheme, column_labeling_scheme, site_id, 
+          parent_container_id, activity_status, comments, created_by)
         select 
           cc.identifier, cc.name, cc.barcode, csc.temperature, 
           c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
           csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
-          ccp.parent_container_id, cc.activity_status, cc.comments, sys_usr_id
+          null, cc.activity_status, cc.comments, sys_usr_id
         from 
           catissue_storage_container csc 
           inner join catissue_container cc ON cc.identifier=csc.identifier 
@@ -161,6 +169,17 @@
           left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
       end;
       //
+    </sql>
+    
+    <sql>
+      merge into os_storage_containers osc using (
+        select 
+          osc.identifier as new_cntr_id, ccp.parent_container_id as parent_id
+        from 
+          catissue_container_position ccp 
+          join os_storage_containers osc on osc.identifier = ccp.container_id
+      ) t on (osc.identifier = t.new_cntr_id) 
+      when matched then update set osc.parent_container_id = t.parent_id
     </sql>
    
     <sql>
@@ -173,10 +192,10 @@
     </sql>
     
     <sql>
-      insert into os_container_positions
-        (identifier, pos_one, pos_two, 
-         pos_one_str, pos_two_str, 
-         storage_container_id, occupying_specimen_id) 
+      insert into os_container_positions(
+        identifier, pos_one, pos_two, 
+        pos_one_str, pos_two_str, 
+        storage_container_id, occupying_specimen_id) 
       select 
         os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,
@@ -187,10 +206,10 @@
     </sql>
     
     <sql>
-      insert into os_container_positions
-        (identifier, pos_one, pos_two, 
-         pos_one_str, pos_two_str,
-         storage_container_id, occupying_container_id) 
+      insert into os_container_positions(
+        identifier, pos_one, pos_two, 
+        pos_one_str, pos_two_str,
+        storage_container_id, occupying_container_id) 
       select 
         os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
         cap.position_dimension_two_string, cap.position_dimension_one_string,

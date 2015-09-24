@@ -2,7 +2,6 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 

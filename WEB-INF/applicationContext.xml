@@ -124,7 +124,9 @@
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.CpCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
       </list>
@@ -246,9 +248,11 @@
   <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.CpCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.BarcodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventDateLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidLabelToken"/>
@@ -258,13 +262,14 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidSpecTypeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
-        <property name="cfgSvc" ref="cfgSvc"/>
+          <property name="cfgSvc" ref="cfgSvc"/>
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-type-abbr.csv"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken">
           <property name="cfgSvc" ref="cfgSvc"/>
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
         </bean>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
       </list>
     </property>
   </bean>
@@ -556,6 +561,7 @@
       <map>
         <entry key="extensions">
           <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+            <property name="formDao" ref="formDao"/>
           </bean>
         </entry>
       </map>

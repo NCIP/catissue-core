@@ -20,7 +20,6 @@ import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
@@ -29,20 +28,17 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUti
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
-import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
-import com.krishagni.catissueplus.core.common.util.RegexValidator;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Validator;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
+
 
 public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private DaoFactory daoFactory;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -87,7 +83,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setGender(detail, participant, partial, ose);
 		setRace(detail, participant, partial, ose);
 		setEthnicity(detail, participant, partial, ose);
-		setPmi(detail, participant, partial, ose);		
+		setPmi(detail, participant, partial, ose);
+		setExtension(detail, participant, partial, ose);
 	}
 
 	private void setUid(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
@@ -122,7 +119,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setEmpi(null);
 			return;
 		}
-		
+
 		if (!ParticipantUtil.isValidMpi(empi, ose)) {
 			return;
 		}
@@ -278,7 +275,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		
 		participant.setEthnicity(ethnicity);
 	}
-
+	
 	private void setPmi(
 			ParticipantDetail detail,
 			Participant participant, 	
@@ -343,5 +340,10 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		pmi.setMedicalRecordNumber(pmiDetail.getMrn());
 		return pmi;
 	}
-
+	
+	private void setExtension(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), participant);
+		participant.setExtension(extension);
+	}
+	
 }

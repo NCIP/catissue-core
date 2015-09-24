@@ -12,6 +12,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.MpiGenerator;
+import com.krishagni.catissueplus.core.common.service.impl.DefaultMpiGenerator;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.RegexValidator;
 import com.krishagni.catissueplus.core.common.util.Validator;
@@ -83,6 +85,20 @@ public class ParticipantUtil {
 				ose);
 	}
 	
+	public static MpiGenerator getMpiGenerator() {
+		String mpiFormat = getMpiCfgProp(ConfigParams.MPI_FORMAT);
+		if (StringUtils.isNotBlank(mpiFormat)) {
+			return new DefaultMpiGenerator(mpiFormat);
+		} 
+		
+		String mpiGeneratorBean = getMpiCfgProp(ConfigParams.MPI_GENERATOR);
+		if (StringUtils.isNotBlank(mpiGeneratorBean)) {
+	  		return (MpiGenerator)OpenSpecimenAppCtxProvider.getAppCtx().getBean(mpiGeneratorBean);
+		}
+		
+		return null;
+	}
+	
 	private static boolean isValidInput(String input, String patternCfg, String validatorCfg, ErrorCode error, OpenSpecimenException ose) {
 		String pattern = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, patternCfg, null);
 		
@@ -102,5 +118,10 @@ public class ParticipantUtil {
 		
 		Validator validator = OpenSpecimenAppCtxProvider.getBean(validatorName);
 		return validator.validate(input, ose);		
-	}	
+	}
+	
+	private static String getMpiCfgProp(String property) {
+		return ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, property, null);
+	}
+
 }

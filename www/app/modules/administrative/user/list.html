@@ -47,7 +47,7 @@
     <div class="os-card" ng-repeat="user in users" ng-click="showUserOverview(user)">
       <h4>
         <a title="{{'user.tooltip.view_details' | translate}}" ui-sref=".overview(user)">
-          <span>{{user.lastName}} {{user.firstName}}</span>
+          <span>{{user | osUserDisplayName}}</span>
         </a>
       </h4>
       <!--TODO insert email address here after getting it from backend  -->

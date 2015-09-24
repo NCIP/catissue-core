@@ -21,6 +21,10 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         order.orderItems = getOrderItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
       }
+      
+      if (!order.executionDate) {
+        order.executionDate = new Date();
+      }
     }
 
     function loadItemStatusPvs() {
