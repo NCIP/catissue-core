@@ -557,8 +557,8 @@ public class FormServiceImpl implements FormService {
 		}
 	}
 	
-   private FormFieldSummary getExtensionfield(String name, String caption, List<Long> extendedFormIds ) {
-    	FormFieldSummary field = new FormFieldSummary();
+	private FormFieldSummary getExtensionfield(String name, String caption, List<Long> extendedFormIds ) {
+		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);
 		field.setCaption(caption);
 		field.setType("SUBFORM");
@@ -578,7 +578,7 @@ public class FormServiceImpl implements FormService {
 
 		field.setSubFields(extensionFields);
 		return field;
-    }
+	}
 		
 	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
