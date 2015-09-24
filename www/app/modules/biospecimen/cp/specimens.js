@@ -117,6 +117,28 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       loadPvs();
     };
 
+    $scope.onCreatePooledSpmnsClick = function(createPooledSpmn) {
+      if (createPooledSpmn) {
+        $scope.sr.pooledSpmns = [
+          new SpecimenRequirement({eventId: $scope.eventId})
+        ];
+      } else {
+        $scope.sr.pooledSpmns = undefined;
+      }
+    }
+
+    $scope.addPooledSpmn = function() {
+      $scope.sr.pooledSpmns.push(new SpecimenRequirement({eventId: $scope.eventId}));
+    }
+
+    $scope.removePooledSpmn = function(pooledSpmn) {
+      var idx = $scope.sr.pooledSpmns.indexOf(pooledSpmn);
+      $scope.sr.pooledSpmns.splice(idx, 1);
+      if ($scope.sr.pooledSpmns.length == 0) {
+        $scope.addPooledSpmn();
+      }
+    }
+
     $scope.showEditSr = function(sr) {
       $scope.specimensCount = 0;
       $scope.sr = angular.copy(sr);

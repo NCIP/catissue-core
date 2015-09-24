@@ -84,6 +84,7 @@
       "upload": "Upload",
       "reset_password": "Reset Password",
       "add_new": "Add New",
+      "add_another": "Add Another",
       "download": "Download",
       "reset_password": "Reset Password"
     }
@@ -516,6 +517,7 @@
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
     "new_sr": "New Specimen Requirement",
+    "create_pooled_spmn": "Are you creating pooled specimen?",
 
     "name": "Name",
     "code": "Short Code",
