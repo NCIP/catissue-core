@@ -156,10 +156,10 @@
     </row>
     <row>
       <subForm>
-        <name>extensions</name>
-        <udn>extensions</udn>
-        <caption>Collection Protocol Extension</caption>
-        <table>os_cp_extn_records_view</table>
+        <name>fieldExtensions</name>
+        <udn>fieldExtensions</udn>
+        <caption>#getMessage("cp_field_extensions")</caption>
+        <table>OS_CP_FIELD_EXTN_RECORDS_VIEW</table>
         <foreignKey>CP_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
         <pathLink>true</pathLink>

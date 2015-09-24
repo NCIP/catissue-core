@@ -176,7 +176,14 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
-		if (!staticExtendedForms.contains(formName) && customExtensionForms.get(formName) == null) {
+		String extensionName = customExtensionForms.get(formName);
+		if (extensionName != null) {
+			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionName);
+			FormFieldSummary field = getExtensionfield("fieldExtensions", "Field Extensions", extendedFormIds);
+			fields.add(field);
+		}
+		
+		if (!staticExtendedForms.contains(formName)) {
 			return ResponseEvent.response(fields);
 		}
 		
@@ -185,35 +192,12 @@ public class FormServiceImpl implements FormService {
 			extendedFormIds.addAll(formDao.getFormIds(cpId, SPECIMEN_EVENT_FORM));
 		}
 		
-		String extensionName = customExtensionForms.get(formName);
-		if (extensionName != null) {
-			extendedFormIds.addAll(formDao.getFormIds(-1L, extensionName));
-		}
-
-		FormFieldSummary field = new FormFieldSummary();
-		field.setName("extensions");
-		field.setCaption("Extensions");
-		field.setType("SUBFORM");
-
-		List<FormFieldSummary> extensionFields = new ArrayList<FormFieldSummary>();
-		for (Long extendedFormId : extendedFormIds) {
-			form = Container.getContainer(extendedFormId);
-
-			FormFieldSummary extensionField = new FormFieldSummary();
-			extensionField.setName(form.getName());
-			extensionField.setCaption(form.getCaption());
-			extensionField.setType("SUBFORM");
-			extensionField.setSubFields(getFormFields(form));
-
-			extensionFields.add(extensionField);
-		}
-
-		field.setSubFields(extensionFields);
+		FormFieldSummary field = getExtensionfield("extensions", "Extensions", extendedFormIds);
 		fields.add(field);
 
 		return ResponseEvent.response(fields);
 	}
-	
+    
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<FormContextDetail>> getFormContexts(RequestEvent<Long> req) {
@@ -572,6 +556,29 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+   private FormFieldSummary getExtensionfield(String name, String caption, List<Long> extendedFormIds ) {
+    	FormFieldSummary field = new FormFieldSummary();
+		field.setName(name);
+		field.setCaption(caption);
+		field.setType("SUBFORM");
+
+		List<FormFieldSummary> extensionFields = new ArrayList<FormFieldSummary>();
+		for (Long extendedFormId : extendedFormIds) {
+			Container form = Container.getContainer(extendedFormId);
+
+			FormFieldSummary extensionField = new FormFieldSummary();
+			extensionField.setName(form.getName());
+			extensionField.setCaption(form.getCaption());
+			extensionField.setType("SUBFORM");	
+			extensionField.setSubFields(getFormFields(form));
+
+			extensionFields.add(extensionField);
+		}
+
+		field.setSubFields(extensionFields);
+		return field;
+    }
 		
 	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();

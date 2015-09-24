@@ -310,6 +310,18 @@
     </row>
     <row>
       <subForm>
+        <name>fieldExtensions</name>
+        <udn>fieldExtensions</udn>
+        <caption>#getMessage("participant_field_extensions")</caption>
+        <table>OS_PART_FIELD_EXTN_RECORDS_VIEW</table>
+        <foreignKey>PID</foreignKey>
+        <parentKey>PARTICIPANT_ID</parentKey>
+        <pathLink>true</pathLink>
+        <extnFkCol>RECORD_ID</extnFkCol>
+      </subForm>
+    </row>
+    <row>
+      <subForm>
         <name>extensions</name>
         <udn>extensions</udn>
         <caption>#getMessage("participant_extensions")</caption>

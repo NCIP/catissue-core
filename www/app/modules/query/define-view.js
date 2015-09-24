@@ -460,7 +460,7 @@ angular.module('os.query.defineview', ['os.query.models'])
     function processFields(formCaption, prefix, fields, extnForm) {
       var result = [];
       for (var i = 0; i < fields.length; ++i) {
-        if (fields[i].type == 'SUBFORM' && fields[i].name == 'extensions') {
+        if (fields[i].type == 'SUBFORM' && (fields[i].name == 'extensions' || fields[i].name == "fieldExtensions")) {
           var extnForms = processFields(formCaption, prefix + fields[i].name + ".", fields[i].subFields, true);
           result = result.concat(extnForms);
         } else if (fields[i].type == 'SUBFORM') {
@@ -570,7 +570,7 @@ angular.module('os.query.defineview', ['os.query.models'])
           fieldParts = selectedFields[i].name.split(".", 2);
         }
 
-        if (fieldParts[1] == "extensions") {
+        if (fieldParts[1] == "extensions" || fieldParts[1] == "fieldExtensions") {
           currLevel++;
         }
 
