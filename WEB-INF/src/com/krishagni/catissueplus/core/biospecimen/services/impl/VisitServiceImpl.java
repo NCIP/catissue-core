@@ -2,8 +2,8 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsNameSprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.SprPdfGenerator;
@@ -337,7 +338,25 @@ public class VisitServiceImpl implements VisitService {
 		
 		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
 	}
-	
+
+	@PlusTransactional
+	@Override
+	public ResponseEvent<List<VisitDetail>> getVisits(RequestEvent<VisitsNameSprListCriteria> criteria) {
+		VisitsNameSprListCriteria crit = criteria.getPayload();
+		List<Visit> visits = new ArrayList<Visit>();
+
+		if (StringUtils.isNotEmpty(crit.name())) {
+			visits.add(getVisit(null, crit.name()));
+		} else if (StringUtils.isNotEmpty(crit.sprNumber())) {
+			visits.addAll(daoFactory.getVisitsDao().getBySpr(crit.sprNumber()));
+		}
+
+		for (Visit visit : visits) {
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+		}
+
+		return ResponseEvent.response(VisitDetail.from(visits));
+	}
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
 		Visit existing = null;
@@ -386,7 +405,7 @@ public class VisitServiceImpl implements VisitService {
 			visit = daoFactory.getVisitsDao().getById(visitId);
 		} else if (StringUtils.isNotBlank(visitName)) {
 			visit = daoFactory.getVisitsDao().getByName(visitName);
-		}		
+		}
 		
 		if (visit == null) {
 			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);

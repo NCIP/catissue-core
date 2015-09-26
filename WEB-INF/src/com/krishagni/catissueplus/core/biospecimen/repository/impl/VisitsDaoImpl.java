@@ -88,7 +88,13 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				.setParameterList("names", names)
 				.list();
 	}
-	
+
+	public List<Visit> getBySpr(String sprNumber) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_VISIT_BY_SPR)
+				.setString("sprNumber", sprNumber)
+				.list();
+	}
 	private String getVisitKey(Long visitId, Long cpeId) {
 		String key = "";
 		if (visitId != null) {
@@ -155,4 +161,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	private static final String GET_VISITS_UNPLANNED_SPECIMENS_STAT = FQN + ".getVisitsUnplannedSpecimenCount";
 
 	private static final String GET_VISIT_BY_NAME = FQN + ".getVisitByName";
+
+	private static final String GET_VISIT_BY_SPR = FQN + ".getVisitBySpr";
+
 }
+

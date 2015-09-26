@@ -15,4 +15,6 @@ public interface VisitsDao extends Dao<Visit> {
 	public Visit getByName(String name);
 	
 	public List<Visit> getByName(Collection<String> names);
+
+	public List<Visit> getBySpr(String sprNumber);
 }

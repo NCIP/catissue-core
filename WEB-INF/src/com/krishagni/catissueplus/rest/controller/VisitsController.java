@@ -23,12 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsNameSprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -96,6 +97,26 @@ public class VisitsController {
 	@ResponseBody
 	public VisitDetail getVisitByName(@PathVariable("name") String visitName) {
 		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitName));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/bynamespr")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<VisitDetail> getVisits(
+		@RequestParam(value = "visitName", required = false)
+		String visitName,
+
+		 @RequestParam(value = "sprNumber", required = false)
+		 String sprNumber) {
+		VisitsNameSprListCriteria criteria = new VisitsNameSprListCriteria()
+		.name(visitName)
+		.sprNumber(sprNumber);
+
+		ResponseEvent<List<VisitDetail>> resp = visitService.getVisits(getRequest(criteria));
+
+
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -197,6 +197,10 @@ angular.module('os.biospecimen.participant',
         resolve: {
           participants: function(ParticipantSearchSvc) {
             return ParticipantSearchSvc.getParticipants();
+          },
+
+          searchKey: function(ParticipantSearchSvc) {
+            return ParticipantSearchSvc.getSearchKey();
           }
         },
         controller: 'ParticipantResultsView',

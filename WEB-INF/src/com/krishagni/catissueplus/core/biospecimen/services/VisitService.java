@@ -10,6 +10,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsNameSprListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -42,4 +43,6 @@ public interface VisitService {
 	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req);
 	
 	public LabelPrinter<Visit> getLabelPrinter();
+
+	public ResponseEvent<List<VisitDetail>> getVisits(RequestEvent<VisitsNameSprListCriteria> criteria);
 }

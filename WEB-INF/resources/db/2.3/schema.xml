@@ -77,4 +77,10 @@
       columnDataType="${int.type}"/>
   </changeSet>
 
+  <changeSet author="ahegade" id="Add index on spr " dbms="mysql">
+    <createIndex indexName="OS_SPR_NO_IDX" tableName="CATISSUE_SPECIMEN_COLL_GROUP" unique="false">
+      <column name="SURGICAL_PATHOLOGY_NUMBER"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>
