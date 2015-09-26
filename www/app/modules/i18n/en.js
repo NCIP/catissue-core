@@ -247,7 +247,7 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
-    "search_results": "Participant's Search Result for {{key}}",
+    "search_results": "Participant Search Result for {{key}}",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -336,7 +336,7 @@
     "spr_pdf": "PDF",
     "spr_text": "Text",
     "reason": "Reason",
-    "search_results": "Visit's Search Result for {{key}}",
+    "search_results": "Visit Search Result for {{key}}",
 
     "status": {
       "pending": "Pending",
