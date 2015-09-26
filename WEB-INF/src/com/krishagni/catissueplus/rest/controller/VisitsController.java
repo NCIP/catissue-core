@@ -108,8 +108,8 @@ public class VisitsController {
 		@RequestParam(value = "visitName", required = false)
 		String visitName,
 
-		 @RequestParam(value = "sprNumber", required = false)
-		 String sprNumber) {
+		@RequestParam(value = "sprNumber", required = false)
+		String sprNumber) {
 		VisitsNameSprListCriteria criteria = new VisitsNameSprListCriteria()
 		.name(visitName)
 		.sprNumber(sprNumber);
