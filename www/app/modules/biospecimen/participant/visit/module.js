@@ -33,10 +33,10 @@ angular.module('os.biospecimen.visit', [
       })
       .state('visit-addedit', {
         url: '/addedit-visit',
-        templateProvider: function(Util, $q) {
-          return $q.when(Util.getTemplate('modules/biospecimen/participant/visit/addedit.html')).then(
-            function(tmpl) {
-              return '<div ng-include src="\'' + tmpl + '\'"></div>';
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("visit-addedit", "page-body", "modules/biospecimen/participant/visit/addedit.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
             }
           );
         },
