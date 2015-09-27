@@ -545,12 +545,12 @@ angular.module('os.query.util', [])
 
       var filters = queryCtx.filters;
       for (var i = 0; i < filters.length; ++i) {
-        if (filters[i].expr && (filters[i].expr.indexOf('.extensions.') != -1 || filters[i].expr.indexOf('.fieldExtensions.') != -1)) { 
+        if (filters[i].expr && (filters[i].expr.indexOf('.extensions.') != -1 || filters[i].expr.indexOf('.customFields.') != -1)) { 
           queryCtx.disableCpSelection = true;
           return;
         }
 
-        if (!filters[i].expr && (filters[i].field.name.indexOf('extensions.') == 0 || filters[i].field.name.indexOf('fieldExtensions.') == 0)) {
+        if (!filters[i].expr && (filters[i].field.name.indexOf('extensions.') == 0 || filters[i].field.name.indexOf('customFields.') == 0)) {
           queryCtx.disableCpSelection = true;
           return;
         }
@@ -565,7 +565,7 @@ angular.module('os.query.util', [])
           fieldName = selectedFields[i].name;
         } 
 
-        if (fieldName.split(".")[1] == 'extensions' || fieldName.split(".")[1] == "fieldExtensions") {
+        if (fieldName.split(".")[1] == 'extensions' || fieldName.split(".")[1] == "customFields") {
           queryCtx.disableCpSelection = true;
           return;
         }

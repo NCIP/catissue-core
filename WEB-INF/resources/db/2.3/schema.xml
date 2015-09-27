@@ -85,44 +85,44 @@
   </changeSet>
 
   <changeSet author="vlonushte" id="Creating cp field extensions view">
-    <createView viewName="os_cp_field_extn_records_view">
+    <createView viewName="os_cp_cust_field_extns_view">
       select 
-        re.OBJECT_ID AS CP_ID, re.RECORD_ID AS RECORD_ID 
+        re.object_id as cp_id, re.record_id as record_id 
       from 
         catissue_form_record_entry re 
-        join catissue_form_context fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
       where 
-        fc.ENTITY_TYPE = 'CollectionProtocolExtension'
+        fc.entity_type = 'CollectionProtocolExtension'
         and fc.deleted_on is null 
-        and re.ACTIVITY_STATUS = 'ACTIVE'
+        and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
 
   <changeSet author="vlonushte" id="Creating participant field extensions view">
-    <createView viewName="os_part_field_extn_records_view">
+    <createView viewName="os_part_cust_field_extns_view">
       select 
-        re.OBJECT_ID AS PID, re.RECORD_ID AS RECORD_ID 
+        re.object_id as pid, re.record_id as record_id 
       from 
         catissue_form_record_entry re 
-        join catissue_form_context fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
       where 
-        fc.ENTITY_TYPE = 'ParticipantExtension'
+        fc.entity_type = 'ParticipantExtension'
         and fc.deleted_on is null 
-        and re.ACTIVITY_STATUS = 'ACTIVE'
+        and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
 
   <changeSet author="vlonushte" id="Creating visit field extensions view">
-    <createView viewName="os_scg_field_extn_records_view"> 
+    <createView viewName="os_visit_cust_field_extns_View"> 
       select 
-        re.OBJECT_ID AS SCG_ID, re.RECORD_ID AS RECORD_ID 
+        re.object_id as scg_id, re.record_id as record_id 
       from 
         catissue_form_record_entry re 
-        join catissue_form_context fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
       where 
-        fc.ENTITY_TYPE = 'VisitExtension'
+        fc.entity_type = 'VisitExtension'
         and fc.deleted_on is null 
-        and re.ACTIVITY_STATUS = 'ACTIVE'
+        and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
 </databaseChangeLog>

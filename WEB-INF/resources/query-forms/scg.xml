@@ -215,10 +215,10 @@
     </row>
     <row>
       <subForm>
-        <name>fieldExtensions</name>
-        <udn>fieldExtensions</udn>
+        <name>customFields</name>
+        <udn>customFields</udn>
         <caption>#getMessage("visit_field_extensions")</caption>
-        <table>OS_SCG_FIELD_EXTN_RECORDS_VIEW</table>
+        <table>OS_VISIT_CUST_FIELD_EXTNS_VIEW</table>
         <foreignKey>SCG_ID</foreignKey>
         <parentKey>IDENTIFIER</parentKey>
         <pathLink>true</pathLink>

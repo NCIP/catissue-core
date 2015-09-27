@@ -1,13 +1,12 @@
 
 angular.module('os.biospecimen.visit.addedit', [])
-  .controller('AddEditVisitCtrl', function($scope, $state, cpr, visit, PvManager) {
+  .controller('AddEditVisitCtrl', function($scope, $state, cpr, visit, PvManager, ExtensionsUtil) {
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
       $scope.missedReasons = PvManager.getPvs('missed-visit-reason');
       $scope.sites = PvManager.getSites();
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
       $scope.cohorts = PvManager.getPvs('cohort');
-      $scope.anatomicSites = PvManager.getLeafPvs('anatomic-site');
 
       $scope.searchClinicalDiagnoses = function(searchTerm) {
         $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
@@ -25,19 +24,7 @@ angular.module('os.biospecimen.visit.addedit', [])
         delete currVisit.anticipatedVisitDate;
       }
 
-      createExtensionFieldMap(currVisit);
-    }
-
-    function createExtensionFieldMap(visit) {
-      var extensionDetail = visit.extensionDetail;
-      if (extensionDetail) {
-        extensionDetail.attrsMap = {};
-        angular.forEach(extensionDetail.attrs, function(attr) {
-          extensionDetail.attrsMap[attr.name] = attr.value;
-        });
-
-        delete extensionDetail.attrs
-      }
+      ExtensionsUtil.createExtensionFieldMap(currVisit);
     }
 
     $scope.saveVisit = function() {

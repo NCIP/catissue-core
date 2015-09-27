@@ -80,16 +80,16 @@ public class FormServiceImpl implements FormService {
 	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
-	private static Map<String, String> customExtensionForms = new HashMap<String, String>();
+	private static Map<String, String> customFieldForms = new HashMap<String, String>();
 	
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
 		
-		customExtensionForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
-		customExtensionForms.put("Participant", PARTICIPANT_EXTENSION);
-		customExtensionForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
+		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
+		customFieldForms.put("Participant", PARTICIPANT_EXTENSION);
+		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
 	}
 	
 	private FormDao formDao;
@@ -176,10 +176,10 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
-		String extensionName = customExtensionForms.get(formName);
+		String extensionName = customFieldForms.get(formName);
 		if (extensionName != null) {
 			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionName);
-			FormFieldSummary field = getExtensionfield("fieldExtensions", "Field Extensions", extendedFormIds);
+			FormFieldSummary field = getExtensionField("customFields", "Custom Fields", extendedFormIds);
 			fields.add(field);
 		}
 		
@@ -192,7 +192,7 @@ public class FormServiceImpl implements FormService {
 			extendedFormIds.addAll(formDao.getFormIds(cpId, SPECIMEN_EVENT_FORM));
 		}
 		
-		FormFieldSummary field = getExtensionfield("extensions", "Extensions", extendedFormIds);
+		FormFieldSummary field = getExtensionField("extensions", "Extensions", extendedFormIds);
 		fields.add(field);
 
 		return ResponseEvent.response(fields);
@@ -557,7 +557,7 @@ public class FormServiceImpl implements FormService {
 		}
 	}
 	
-	private FormFieldSummary getExtensionfield(String name, String caption, List<Long> extendedFormIds ) {
+	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);
 		field.setCaption(caption);
