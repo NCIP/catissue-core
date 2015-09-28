@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -111,8 +112,16 @@ public class VisitServiceImpl implements VisitService {
 			visits.addAll(daoFactory.getVisitsDao().getBySpr(crit.sprNumber()));
 		}
 
-		for (Visit visit : visits) {
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+		Iterator<Visit> iterator = visits.iterator();
+		while (iterator.hasNext()) {
+			Visit visit = iterator.next();
+			try {
+				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			} catch (OpenSpecimenException ose) {
+				if (ose.getErrorType().equals(ErrorType.USER_ERROR)) {
+					visits.remove(visit);
+				}
+			}
 		}
 
 		return ResponseEvent.response(VisitDetail.from(visits));
