@@ -76,5 +76,9 @@
       columnName="SITE_ID"
       columnDataType="${int.type}"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated the phone number column size in audit table to match with the on in the schema">
+    <modifyDataType tableName="CATISSUE_USER_AUD" columnName="PHONE_NUMBER" newDataType="${text.type}(63)" />
+  </changeSet>
 
 </databaseChangeLog>
