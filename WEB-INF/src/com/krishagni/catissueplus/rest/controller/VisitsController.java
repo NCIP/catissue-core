@@ -29,7 +29,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
-import com.krishagni.catissueplus.core.biospecimen.repository.VisitsNameSprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -68,35 +67,17 @@ public class VisitsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<VisitSummary> getVisits(
-		@RequestParam(value = "cprId", required = true) 
+		@RequestParam(value = "cprId", required = true)
 		Long cprId,
-		
+
 		@RequestParam(value = "includeStats", required = false, defaultValue = "false") 
 		boolean includeStats) {
 		
 		VisitsListCriteria crit = new VisitsListCriteria()
 			.cprId(cprId)
 			.includeStat(includeStats);
-		
-		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(crit));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value="/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public VisitDetail getVisit(@PathVariable("id") Long visitId) {
-		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitId));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
-	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/byname/{name}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public VisitDetail getVisitByName(@PathVariable("name") String visitName) {
-		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitName));
+		ResponseEvent<List<VisitSummary>> resp = cprSvc.getVisits(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -110,13 +91,20 @@ public class VisitsController {
 
 		@RequestParam(value = "sprNumber", required = false)
 		String sprNumber) {
-		VisitsNameSprListCriteria criteria = new VisitsNameSprListCriteria()
+		VisitsListCriteria criteria = new VisitsListCriteria()
 		.name(visitName)
 		.sprNumber(sprNumber);
 
 		ResponseEvent<List<VisitDetail>> resp = visitService.getVisits(getRequest(criteria));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 
-
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail getVisit(@PathVariable("id") Long visitId) {
+		ResponseEvent<VisitDetail> resp = visitService.getVisit(getVisitQueryReq(visitId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

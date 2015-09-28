@@ -73,9 +73,9 @@
 
     <query name="getVisitBySpr">
       from
-      com.krishagni.catissueplus.core.biospecimen.domain.Visit
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit
       where
-      surgicalPathologyNumber = :sprNumber
+        surgicalPathologyNumber = :sprNumber
     </query>
 
     <sql-query name="getVisitsSummaryByCprId">

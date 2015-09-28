@@ -24,7 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.repository.VisitsNameSprListCriteria;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.SprPdfGenerator;
@@ -97,8 +97,27 @@ public class VisitServiceImpl implements VisitService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
-	}	
-	
+	}
+
+	@PlusTransactional
+	@Override
+	public ResponseEvent<List<VisitDetail>> getVisits(RequestEvent<VisitsListCriteria> criteria) {
+		VisitsListCriteria crit = criteria.getPayload();
+		List<Visit> visits = new ArrayList<Visit>();
+
+		if (StringUtils.isNotEmpty(crit.name())) {
+			visits.add(getVisit(null, crit.name()));
+		} else if (StringUtils.isNotEmpty(crit.sprNumber())) {
+			visits.addAll(daoFactory.getVisitsDao().getBySpr(crit.sprNumber()));
+		}
+
+		for (Visit visit : visits) {
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+		}
+
+		return ResponseEvent.response(VisitDetail.from(visits));
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req) {
@@ -337,25 +356,6 @@ public class VisitServiceImpl implements VisitService {
 				"defaultVisitLabelPrinter");
 		
 		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
-	}
-
-	@PlusTransactional
-	@Override
-	public ResponseEvent<List<VisitDetail>> getVisits(RequestEvent<VisitsNameSprListCriteria> criteria) {
-		VisitsNameSprListCriteria crit = criteria.getPayload();
-		List<Visit> visits = new ArrayList<Visit>();
-
-		if (StringUtils.isNotEmpty(crit.name())) {
-			visits.add(getVisit(null, crit.name()));
-		} else if (StringUtils.isNotEmpty(crit.sprNumber())) {
-			visits.addAll(daoFactory.getVisitsDao().getBySpr(crit.sprNumber()));
-		}
-
-		for (Visit visit : visits) {
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
-		}
-
-		return ResponseEvent.response(VisitDetail.from(visits));
 	}
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
