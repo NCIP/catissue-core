@@ -5,14 +5,21 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       function(sr) {
         sr.copyAttrsIfNotPresent(getDefaultProps())
 
-        if (!sr.children) {
-          return;
+        if (sr.pooledSpmns) {
+          sr.pooledSpmns = sr.pooledSpmns.map(
+            function(ps) {
+              return new Sr(ps);
+            }
+          );
         }
 
-        sr.children = sr.children.map(function(child) {
-            return new Sr(child);
-        });
-
+        if (sr.children) {
+          sr.children = sr.children.map(
+            function(child) {
+              return new Sr(child);
+            }
+          );
+        }
       }
     );
 

@@ -398,6 +398,7 @@
     "qty": "Quantity",
     "aliquot": "Aliquot",
     "derived": "Derived",
+    "pooled": "Pooled",
     "from": "from",
     "collected_in": "collected in",
     "description": "Description",

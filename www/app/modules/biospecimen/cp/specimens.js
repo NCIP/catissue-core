@@ -270,6 +270,12 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       );
     };
 
+    $scope.showCreatePooledSpmns = function(sr) {
+      $scope.parentSr = sr;
+      $scope.view = 'addedit_pool';
+      $scope.poolReq = {};
+    };
+
     $scope.copyRequirement = function(sr) {
       var aliquotReq = {noOfAliquots: 1, qtyPerAliquot: sr.initialQty};
       if (sr.isAliquot() && !sr.parent.hasSufficientQty(aliquotReq)) {

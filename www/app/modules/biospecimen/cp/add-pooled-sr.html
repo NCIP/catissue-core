@@ -1,0 +1,110 @@
+<div>
+  <form name="srPoolForm" os-form-validator="srPoolForm" novalidate>
+    <div class="clearfix">
+      <div class="col-xs-3" ng-if="codingEnabled">
+        <div class="form-group">
+          <input name="code" ng-model="childReq.code" os-md-input class="form-control" type="text" 
+            ng-model-options="{allowInvalid: true}" ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+          <div os-field-error field="derivativeForm.code"></div>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="specimenClass" on-select="loadSpecimenTypes(childReq.specimenClass)" 
+            ng-model="childReq.specimenClass" list="specimenClasses"
+            os-md-input placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="specimensCount > 0"
+            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
+          </os-select>
+          <div os-field-error field="derivativeForm.specimenClass"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="specimenType" ng-model="childReq.type" list="specimenTypes"
+            os-md-input placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="specimensCount > 0"  
+            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
+          </os-select>
+          <div os-field-error field="derivativeForm.specimenType"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <div class="os-input-addon-grp" ng-if="!childReq.id">
+            <input name="quantity" ng-model="childReq.quantity" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+              required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
+            <div class="os-input-addon-right">
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div class="os-input-addon-grp" ng-if="!!childReq.id">
+            <input name="quantity" ng-model="childReq.initialQty" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+              required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
+            <div class="os-input-addon-right">
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div os-field-error field="derivativeForm.quantity"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <div class="os-input-addon-grp">
+            <input name="concentration" ng-model="childReq.concentration" 
+              os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
+              ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-right">
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type" measure="concentration">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div os-field-error field="derivativeForm.concentration"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="storageType" ng-model="childReq.storageType" list="storageTypes"
+            os-md-input placeholder="{{'srs.storage_type' | translate}}" required>
+          </os-select>
+          <div os-field-error field="derivativeForm.storageType"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.name" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.name' | translate}}">
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.labelFmt" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.label_fmt' | translate}}">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="createDerivative()" ng-if="!childReq.id">
+          <span translate="srs.buttons.create_derivative">Create Derivative</span>
+        </button>
+        <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!childReq.id">
+          <span translate="srs.buttons.update_derivative">Update Derivative</span>
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

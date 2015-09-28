@@ -1,4 +1,18 @@
 
+<style>
+  .os-pooled-specimen {
+    background: #ebf2f9;
+  }
+
+  .os-inplace-form-edit-po.os-pooled-specimen {
+    background: transparent;
+  }
+
+  /*.os-inplace-form-edit-po.os-pooled-specimen .title {
+    background: #ebf2f9;
+  }*/
+</style>
+
 <div class="list-group" ng-if="view != 'addedit_sr'">
   <div class="list-group-item os-section-hdr" translate="srs.list">
     Specimen Requirements
@@ -14,7 +28,7 @@
   </div>
 
   <div class="list-group-item" ng-if="specimenRequirements.length > 0">
-    <div class="os-table os-table-fixed os-table-tree">
+    <div class="os-table os-table-tree">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-6" translate="srs.name">Name</div>
@@ -24,7 +38,10 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-class="{'os-inplace-form-edit-po': (!childReq.id && parentSr == sr) || (childReq.id == sr.id)}" 
+        <div 
+          ng-class="{
+            'os-inplace-form-edit-po': (!childReq.id && parentSr == sr) || (childReq.id == sr.id),
+            'os-pooled-specimen': !!sr.poolHd}" 
           ng-repeat="sr in specimenRequirements | openedTreeNodes">
           <div class="row title">
             <div class="col col-xs-6 os-ellipsis">
@@ -45,7 +62,6 @@
                 <a ng-click="viewSr(sr)">
                   <os-specimen-desc specimen="sr"></os-specimen-desc>
                 </a>
-
               </div>
             </div>
             <div class="col col-xs-3 os-ellipsis">
@@ -97,6 +113,14 @@
                       </span>
                     </a>
                   </li>
+                  <li ng-if="sr.pooledSpmns.length > 0">
+                    <a ng-click="showCreatePooledSpmns(sr)">
+                      <i class="fa fa-clone"></i>
+                      <span>
+                        Add Specimens to Pool
+                      </span>
+                    </a>
+                  </li>
                   <li class="divider"></li>
                   <li>
                     <a ng-click="deleteRequirement(sr)">
@@ -120,6 +144,9 @@
             </div>
             <div ng-if="view == 'addedit_derived'"  
               ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
+            </div>
+            <div ng-if="view == 'addedit_pool'"
+              ng-include="'modules/biospecimen/cp/add-pooled-sr.html'">
             </div>
           </div>
         </div>

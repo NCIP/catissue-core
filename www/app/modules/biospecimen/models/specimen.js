@@ -25,22 +25,34 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Specimen.query({label: labels, dpId: dpId});
     }
 
-    Specimen.flatten = function(specimens, parent, depth) {
+    Specimen.flatten = function(specimens, parent, depth, poolHd) {
       var result = [];
       if (!specimens) {
         return result;
       }
 
       depth = depth || 0;
-      for (var i = 0; i < specimens.length; ++i) {
-        result.push(specimens[i]);
-        specimens[i].depth = depth || 0;
-        specimens[i].parent = parent;
-        specimens[i].hasChildren = (!!specimens[i].children && specimens[i].children.length > 0);
-        if (specimens[i].hasChildren) {
-          result = result.concat(Specimen.flatten(specimens[i].children, specimens[i], depth +1));
+      angular.forEach(specimens, function(specimen) {
+        result.push(specimen);
+        specimen.depth = depth || 0;
+
+        specimen.parent = parent;
+        specimen.poolHd = poolHd;
+
+        var hasPooledSpmns = false;
+        if (depth == 0) {
+          hasPooledSpmns = !!specimen.pooledSpmns && specimen.pooledSpmns.length > 0;
+          if (hasPooledSpmns) {
+            result = result.concat(Specimen.flatten(specimen.pooledSpmns, specimen, depth + 1, specimen));
+          }
         }
-      }
+
+        var hasChildren = (!!specimen.children && specimen.children.length > 0);
+        specimen.hasChildren = hasPooledSpmns || hasChildren;
+        if (hasChildren) {
+          result = result.concat(Specimen.flatten(specimen.children, specimen, depth +1));
+        }
+      });
 
       return result;
     };
