@@ -57,7 +57,13 @@ angular.module('os.biospecimen.visit', [
       })
       .state('visit-detail.overview', {
         url: '/overview',
-        templateUrl: 'modules/biospecimen/participant/visit/overview.html',
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("visit-detail", "overview", "modules/biospecimen/participant/visit/overview.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         controller: function() {
           // 'ParticipantOverviewCtrl',
         },
