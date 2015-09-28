@@ -228,6 +228,7 @@
           <option><value>Pending</value></option>
           <option><value>Collected</value></option>
           <option><value>Not Collected</value></option>
+          <option><value>Missed Collection</value></option>
         </options>
       </dropDown>
     </row>

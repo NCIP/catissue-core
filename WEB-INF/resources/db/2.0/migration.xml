@@ -459,4 +459,20 @@
     <dropTable tableName="report_job_details"/>
   </changeSet>
   
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11" dbms="mysql">
+    <sql>drop trigger if exists specimen_coll_event_trg</sql>
+    <sql>drop trigger if exists specimen_rcvd_event_trg</sql>
+    <sql>drop trigger if exists specimen_transfer_event_trg</sql>
+    <sql>drop trigger if exists specimen_distri_event_trg</sql>
+    <sql>drop trigger if exists specimen_disposal_event_trg</sql>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11" dbms="oracle">
+    <sql>drop trigger specimen_coll_event_trg</sql>
+    <sql>drop trigger specimen_rcvd_event_trg</sql>
+    <sql>drop trigger specimen_transfer_event_trg</sql>
+    <sql>drop trigger specimen_distri_event_trg</sql>
+    <sql>drop trigger specimen_disposal_event_trg</sql>
+  </changeSet>
+  
 </databaseChangeLog>

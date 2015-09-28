@@ -132,6 +132,10 @@ body {
   height: initial!important;
 }
 
+.os-signin-footer a {
+  color: #fff;
+}
+
 .os-custom-banner {
   text-align: center;
   color: #fff;
@@ -1030,6 +1034,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding: 15px;
   color: #333;
   font-weight: normal;
+}
+
+.os-about-po .footer {
+  font-style: italic;
+}
+
+.os-about-po .footer a {
+  color: #333;
 }
 
 .os-command-bar {

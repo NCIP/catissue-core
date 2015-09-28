@@ -108,6 +108,14 @@
       </dropDown>
     </row>
     <row>
+      <userField>
+        <name>missedBy</name>
+        <udn>missedBy</udn>
+        <caption>#getMessage("visit_missed_by")</caption>
+        <column>MISSED_BY</column>
+      </userField>
+    </row>
+    <row>
       <dropDown>
         <name>clinicalDiagnosis</name>
         <udn>clinicalDiagnosis</udn>
