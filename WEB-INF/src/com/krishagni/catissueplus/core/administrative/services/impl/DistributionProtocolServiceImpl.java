@@ -12,8 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecReqDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecReqListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -216,10 +216,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DistributionOrderSpecReqDetails>> getOrderSpecifications(
-			RequestEvent<DistributionOrderSpecReqListCriteria> req) {
+	public ResponseEvent<List<DistributionOrderStat>> getOrderStats(
+			RequestEvent<DistributionOrderStatListCriteria> req) {
 		try {
-			DistributionOrderSpecReqListCriteria crit = req.getPayload();
+			DistributionOrderStatListCriteria crit = req.getPayload();
 			
 			if (crit.dpId() != null) {
 				DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
@@ -239,7 +239,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				}
 			}
 			
-			List<DistributionOrderSpecReqDetails> details = daoFactory.getDistributionProtocolDao().getOrderSpecifications(crit);
+			List<DistributionOrderStat> details = daoFactory.getDistributionProtocolDao().getOrderStats(crit);
 			return ResponseEvent.response(details);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

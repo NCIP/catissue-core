@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecReqDetails;
-import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSpecReqListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -153,28 +153,19 @@ public class DistributionProtocolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/orders")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<DistributionOrderSpecReqDetails> getOrderSpecifications(
+	public List<DistributionOrderStat> getOrderStats(
 			@RequestParam(value = "dpId", required = false)
 			Long dpId,
 			
 			@RequestParam(value = "groupBy", required = false, defaultValue = "")
-			List<String> groupBy) {
+			List<String> groupByAttrs) {
 		
-		DistributionOrderSpecReqListCriteria crit = new DistributionOrderSpecReqListCriteria().dpId(dpId);
-		if (groupBy.contains("specimenType")) {
-			crit.specimenType(true);
-		}
+		DistributionOrderStatListCriteria crit = new DistributionOrderStatListCriteria()
+				.dpId(dpId)
+				.groupByAttrs(groupByAttrs);
 		
-		if (groupBy.contains("anatomicSite")) {
-			crit.anatomicSite(true);
-		}
-		
-		if (groupBy.contains("pathologyStatus")) {
-			crit.pathologyStatus(true);
-		}
-		
-		RequestEvent<DistributionOrderSpecReqListCriteria> req = new RequestEvent<DistributionOrderSpecReqListCriteria>(crit);
-		ResponseEvent<List<DistributionOrderSpecReqDetails>> resp = dpSvc.getOrderSpecifications(req);
+		RequestEvent<DistributionOrderStatListCriteria> req = new RequestEvent<DistributionOrderStatListCriteria>(crit);
+		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

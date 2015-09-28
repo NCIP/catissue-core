@@ -100,12 +100,9 @@ public class DistributionProtocolSummary {
 		detail.setId(dp.getId());
 		detail.setTitle(dp.getTitle());
 		detail.setShortTitle(dp.getShortTitle());
-		detail.setPrincipalInvestigator(getPrincipleInvestigatorInfo(dp.getPrincipalInvestigator()));
+		detail.setPrincipalInvestigator(UserSummary.from(dp.getPrincipalInvestigator()));
 		detail.setStartDate(dp.getStartDate());
 		detail.setEndDate(dp.getEndDate());
 	}
 	
-	private static UserSummary getPrincipleInvestigatorInfo(User principleInvestigator) {
-		return UserSummary.from(principleInvestigator);
-	}
 }

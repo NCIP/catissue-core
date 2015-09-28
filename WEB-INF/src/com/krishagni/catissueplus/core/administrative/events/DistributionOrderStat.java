@@ -1,8 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class DistributionOrderSpecReqDetails {
+public class DistributionOrderStat {
 	private Long id;
 	
 	private String name;
@@ -10,12 +12,8 @@ public class DistributionOrderSpecReqDetails {
 	private DistributionProtocolSummary distributionProtocol;
 
 	private Date executionDate;
-	
-	private String specimenType;
-	
-	private String anatomicSite;
-	
-	private String pathologyStatus;
+
+	private Map<String, Object> groupByAttrVals = new HashMap<String, Object>();
 	
 	private Long distributedSpecimenCount;
 
@@ -51,28 +49,12 @@ public class DistributionOrderSpecReqDetails {
 		this.executionDate = executionDate;
 	}
 
-	public String getSpecimenType() {
-		return specimenType;
+	public Map<String, Object> getGroupByAttrVals() {
+		return groupByAttrVals;
 	}
-
-	public void setSpecimenType(String specimenType) {
-		this.specimenType = specimenType;
-	}
-
-	public String getAnatomicSite() {
-		return anatomicSite;
-	}
-
-	public void setAnatomicSite(String anatomicSite) {
-		this.anatomicSite = anatomicSite;
-	}
-
-	public String getPathologyStatus() {
-		return pathologyStatus;
-	}
-
-	public void setPathologyStatus(String pathologyStatus) {
-		this.pathologyStatus = pathologyStatus;
+	
+	public void setGroupByAttrVals(Map<String, Object> groupByAttrVals) {
+		this.groupByAttrVals = groupByAttrVals;
 	}
 
 	public Long getDistributedSpecimenCount() {

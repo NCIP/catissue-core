@@ -687,7 +687,7 @@
     "history": {
       "order_name": "Order Name",
       "dist_date": "Distribution Date",
-      "specimen_type": "Speciment Type",
+      "specimen_type": "Specimen Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
       "specimens_cnt": "Specimens Distributed"
