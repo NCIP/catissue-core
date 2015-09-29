@@ -153,7 +153,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.toggleSpecimenSelect = function(specimen) {
-          selectParentSpecimen(specimen);
+          if (specimen.status != 'Collected') {
+            selectParentSpecimen(specimen);
+          }
+
           toggleAllSelected(scope.selection, scope.specimens, specimen);
 
           scope.selection.any = specimen.selected ? true : isAnySelected(scope.specimens);
