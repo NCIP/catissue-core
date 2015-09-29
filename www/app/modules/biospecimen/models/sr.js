@@ -90,5 +90,10 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       );
     }
 
+    Sr.prototype.addPooledSpmns = function(poolSpmn) {
+      return $http.post(Sr.url() + this.$id() + '/pooled-specimens', poolSpmn)
+        .then(Sr.modelArrayRespTransform);
+    }
+
     return Sr;
   });
