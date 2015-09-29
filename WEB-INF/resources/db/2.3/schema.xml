@@ -135,4 +135,10 @@
         and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
+
+  <changeSet author="ahegade" id="Adding description column for specimen lists">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="DESCRIPTION" type="${clob.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

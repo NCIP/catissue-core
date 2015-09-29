@@ -62,6 +62,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		
 		setOwner(details, specimenList, partial , ose);
 		setName(details, specimenList, partial , ose);
+		setDescription(details, specimenList, partial, ose);
 		setSpecimens(details, specimenList, partial, ose);
 		setSharedUsers(details, specimenList, partial, ose);
 	}
@@ -96,6 +97,14 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		} else {
 			specimenList.setName(name);
 		}		
+	}
+
+	private void setDescription(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
+		if (partial && !details.isAttrModified("description")) {
+			return;
+		}
+
+		specimenList.setDescription(details.getDescription());
 	}
     
 	private void setSpecimens(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
