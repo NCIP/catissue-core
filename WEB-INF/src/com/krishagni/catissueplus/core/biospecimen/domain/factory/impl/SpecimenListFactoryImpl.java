@@ -20,7 +20,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriter
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	private DaoFactory daoFactory;
@@ -105,18 +104,8 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 			return;
 		}
 
-		User currentUser = AuthUtil.getCurrentUser();
 		String description = details.getDescription();
-		List<Long> sharedUserIds = new ArrayList<Long>();
-		for (UserSummary sharedUser : details.getSharedWith()) {
-			sharedUserIds.add(sharedUser.getId());
-		}
-
-		if (details.getOwner().getId() == currentUser.getId() || sharedUserIds.contains(currentUser.getId())) {
-			specimenList.setDescription(description);
-		} else {
-			ose.addError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
-		}
+		specimenList.setDescription(description);
 	}
     
 	private void setSpecimens(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
