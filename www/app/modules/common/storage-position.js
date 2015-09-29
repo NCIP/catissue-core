@@ -27,7 +27,13 @@ angular.module('openspecimen')
         angular.extend(params, {site: scope.entity.siteName});
       }
 
-      return Container.query(params).then(
+      var q = scope.containerListCache[JSON.stringify(params)];
+      if (!q) {
+        q = Container.query(params);
+        scope.containerListCache[JSON.stringify(params)] = q;
+      }
+
+      return q.then(
         function(containers) {
           scope.containers = containers.map(
             function(container) { 
@@ -51,6 +57,7 @@ angular.module('openspecimen')
 
     function linker(scope, element, attrs) {
       var entity = scope.entity;
+      scope.containerListCache = scope.containerListCache || {};
 
       scope.onContainerChange = function() {
         entity.storageLocation = {name: entity.storageLocation.name};
@@ -101,7 +108,8 @@ angular.module('openspecimen')
 
       scope: {
         entity: '=',
-        cpId: '='
+        cpId: '=',
+        containerListCache: '=?'
       },
 
       compile: function(tElem, tAttrs) {

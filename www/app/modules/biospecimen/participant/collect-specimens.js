@@ -61,6 +61,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;
+        $scope.containerListCache = {};
         
         $scope.collDetail = {
           collector: undefined,
