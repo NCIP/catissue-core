@@ -29,6 +29,7 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 
 public class VisitFactoryImpl implements VisitFactory {
 
@@ -68,6 +69,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
 		visit.setDefNameTmpl(defaultNameTmpl);
+		setVisitExtension(visitDetail, visit, ose);
 		
 		ose.checkAndThrow();
 		return visit;
@@ -101,6 +103,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setMissedBy(detail, existing, visit, ose);
 		setCohort(detail, existing, visit, ose);
 		visit.setDefNameTmpl(defaultNameTmpl);
+		setVisitExtension(detail, existing, visit, ose);
 
 		ose.checkAndThrow();
 		return visit;
@@ -406,6 +409,19 @@ public class VisitFactoryImpl implements VisitFactory {
 			setCohort(detail, visit, ose);
 		} else {
 			visit.setCohort(existing.getCohort());
+		}
+	}
+	
+	private void setVisitExtension(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
+		DeObject extension = DeObject.createExtension(visitDetail.getExtensionDetail(), visit);
+		visit.setExtension(extension);
+	}
+	
+	private void setVisitExtension(VisitDetail detail, Visit existing, Visit visit, OpenSpecimenException ose) {
+		if (detail.isAttrModified("extensionDetail")) {
+			setVisitExtension(detail, visit, ose);
+		} else {
+			visit.setExtension(existing.getExtension());
 		}
 	}
 }

@@ -31,7 +31,7 @@ angular.module('openspecimen')
        return pluginViews[pluginName] || {};
      }
 
-     function getTmpls(viewName, secName) {
+     function getTmpls(viewName, secName, defaultTmpl) {
        var tmpls = [];
        angular.forEach(pluginViews, function(pViews, pName) {
          if (activePlugins.indexOf(pName) == -1) {
@@ -55,6 +55,10 @@ angular.module('openspecimen')
            });
          });
        });
+
+       if (tmpls.length == 0 && !!defaultTmpl) {
+         tmpls.push(defaultTmpl);
+       }
 
        return tmpls;
      }
@@ -98,15 +102,17 @@ angular.module('openspecimen')
       scope: {
         viewName: '=',
 
-        secName: '='     
+        secName: '=',
+
+        defaultTmpl: '='
       },
 
       template: '<ng-include src="tmpl" ng-repeat="tmpl in hookTmpls"></ng-include>',
 
       link: function(scope, element, attrs) {
         scope.hookTmpls = [];
-        scope.$watchGroup(['viewName', 'secName'], function(newVals) {
-          scope.hookTmpls = PluginReg.getTmpls(scope.viewName, scope.secName);
+        scope.$watchGroup(['viewName', 'secName', 'defaultTmpl'], function(newVals) {
+          scope.hookTmpls = PluginReg.getTmpls(scope.viewName, scope.secName, scope.defaultTmpl);
         });
       }
     };

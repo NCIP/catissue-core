@@ -27,7 +27,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Configurable
 @Audited
 @AuditTable(value="CAT_SPECIMEN_COLL_GROUP_AUD")
-public class Visit {
+public class Visit extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "visit";
 	
 	public static final String VISIT_STATUS_PENDING = "Pending";
@@ -35,8 +35,6 @@ public class Visit {
 	public static final String VISIT_STATUS_COMPLETED = "Complete";
 
 	public static final String VISIT_STATUS_MISSED = "Missed Collection";
-
-	private Long id;
 
 	private String name;
 	
@@ -82,14 +80,6 @@ public class Visit {
 		return ENTITY_NAME;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -318,6 +308,7 @@ public class Visit {
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 		setCohort(visit.getCohort());
+		setExtension(visit.getExtension());
 	}
 
 	public void updateSprName(String sprName) {
@@ -399,6 +390,11 @@ public class Visit {
 		return Visit.VISIT_STATUS_MISSED.equals(status);
 	}	
 		
+	@Override
+	public String getEntityType() {
+		return "VisitExtension";
+	}
+	
 	private void ensureNoActiveChildObjects() {
 		for (Specimen specimen : getSpecimens()) {
 			if (specimen.isActiveOrClosed() && specimen.isCollected()) {

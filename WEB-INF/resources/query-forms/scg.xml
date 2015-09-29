@@ -215,6 +215,18 @@
     </row>
     <row>
       <subForm>
+        <name>customFields</name>
+        <udn>customFields</udn>
+        <caption>#getMessage("visit_field_extensions")</caption>
+        <table>OS_VISIT_CUST_FIELD_EXTNS_VIEW</table>
+        <foreignKey>SCG_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <pathLink>true</pathLink>
+        <extnFkCol>RECORD_ID</extnFkCol>
+      </subForm>
+    </row>
+    <row>
+      <subForm>
         <name>extensions</name>
         <udn>extensions</udn>
         <caption>#getMessage("visit_extensions")</caption>

@@ -404,6 +404,7 @@ public class VisitServiceImpl implements VisitService {
 		
 		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
+		existing.addOrUpdateExtension();
 		return VisitDetail.from(existing);		
 	}
 

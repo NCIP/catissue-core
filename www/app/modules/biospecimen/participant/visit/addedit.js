@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.visit.addedit', [])
-  .controller('AddEditVisitCtrl', function($scope, $state, cpr, visit, PvManager) {
+  .controller('AddEditVisitCtrl', function($scope, $state, cpr, visit, PvManager, ExtensionsUtil) {
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
       $scope.missedReasons = PvManager.getPvs('missed-visit-reason');
@@ -23,6 +23,8 @@ angular.module('os.biospecimen.visit.addedit', [])
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
       }
+
+      ExtensionsUtil.createExtensionFieldMap(currVisit);
     }
 
     $scope.saveVisit = function() {
