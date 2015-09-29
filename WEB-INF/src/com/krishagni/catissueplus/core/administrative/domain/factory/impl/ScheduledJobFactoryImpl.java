@@ -16,7 +16,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.ScheduledJo
 import com.krishagni.catissueplus.core.administrative.domain.factory.ScheduledJobFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ScheduledJobDetail;
-import com.krishagni.catissueplus.core.administrative.services.ScheduledTask;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -136,6 +135,9 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 
 	private void setScheduledMinute(ScheduledJobDetail detail, ScheduledJob job, OpenSpecimenException ose) {
 		Integer scheduledMinute = detail.getScheduledMinute();
+		if(job.getRepeatSchedule() == RepeatSchedule.MINUTELY){
+			return;
+		}
 		if (scheduledMinute == null || scheduledMinute < 0 || scheduledMinute > 59) {
 			ose.addError(ScheduledJobErrorCode.INVALID_SCHEDULED_TIME);
 			return;
@@ -145,7 +147,7 @@ public class ScheduledJobFactoryImpl implements ScheduledJobFactory {
 	}
 	
 	private void setScheduledHour(ScheduledJobDetail detail, ScheduledJob job, OpenSpecimenException ose) {
-		if (job.getRepeatSchedule() == RepeatSchedule.HOURLY) {
+		if (job.getRepeatSchedule() == RepeatSchedule.MINUTELY || job.getRepeatSchedule() == RepeatSchedule.HOURLY) {
 			return;
 		}
 		
