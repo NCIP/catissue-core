@@ -81,4 +81,10 @@
     <modifyDataType tableName="CATISSUE_USER_AUD" columnName="PHONE_NUMBER" newDataType="${text.type}(63)" />
   </changeSet>
 
+  <changeSet author="ahegade" id="Add index on spr">
+    <createIndex indexName="OS_SPR_NO_IDX" tableName="CATISSUE_SPECIMEN_COLL_GROUP" unique="false">
+      <column name="SURGICAL_PATHOLOGY_NUMBER"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>

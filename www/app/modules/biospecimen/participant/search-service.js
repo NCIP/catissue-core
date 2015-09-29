@@ -1,6 +1,7 @@
 angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
   .factory('ParticipantSearchSvc', function($state, CollectionProtocolRegistration, Alerts) {
     var matchingParticipants =[];
+    var searchKey = undefined;
 
     function search(searchData) {
       var filterOpts = {
@@ -16,6 +17,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
             return;
           } else if (participants.length > 1) {
             matchingParticipants = participants;
+            searchKey = searchData.ppid || searchData.uid;
             $state.go('participant-search', {}, {reload: true});
           } else {
             $state.go('participant-detail.overview', {cprId: participants[0].cprId});
@@ -28,15 +30,26 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
       return matchingParticipants;
     }
 
+    function getSearchKey() {
+      return searchKey;
+    }
+
     return {
-      getParticipants : getParticipants,
+      getParticipants :getParticipants,
+
+      getSearchKey: getSearchKey,
 
       search: search
     };
   })
-  .controller('ParticipantResultsView', function($scope, $state, participants) {
+  .controller('ParticipantResultsView', function($scope, $state, participants, searchKey) {
     function init() {
       $scope.cprs = participants;
+      $scope.searchKey = searchKey;
+    }
+
+    $scope.participantDetail = function(cpr) {
+      $state.go('participant-detail.overview', {cprId: cpr.cprId});
     }
 
     init();
