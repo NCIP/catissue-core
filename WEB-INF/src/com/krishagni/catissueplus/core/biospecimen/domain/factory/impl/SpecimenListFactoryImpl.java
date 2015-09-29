@@ -104,8 +104,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 			return;
 		}
 
-		String description = details.getDescription();
-		specimenList.setDescription(description);
+		specimenList.setDescription(details.getDescription());
 	}
     
 	private void setSpecimens(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
