@@ -14,4 +14,14 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Config property to set participant uid mandatory">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'uid_mandatory',
+        'uid_mandatory', 'uid_mandatory_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

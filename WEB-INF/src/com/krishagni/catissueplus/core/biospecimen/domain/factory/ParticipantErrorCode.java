@@ -20,6 +20,8 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	INVALID_MPI,
 	
+	UID_REQUIRED,
+	
 	DUP_UID,
 	
 	DUP_EMPI,
