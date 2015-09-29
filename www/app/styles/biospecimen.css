@@ -257,3 +257,16 @@
   font-weight: normal;
 }
 
+.os-list-container .os-key-values .item {
+  float: none;
+}
+
+.os-list-container .os-key-values .item .value {
+  white-space: pre-line;
+  float: none;
+  padding: 0px 5px;
+}
+
+.os-list-container .os-key-values .item .key {
+  padding: 0px 5px;
+}

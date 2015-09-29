@@ -15,6 +15,8 @@ public class SpecimenList {
 	private String name;
 	
 	private User owner;
+
+	private String description;
 	
 	private Set<User> sharedWith = new HashSet<User>();
 	
@@ -44,6 +46,14 @@ public class SpecimenList {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Set<User> getSharedWith() {
@@ -134,6 +144,7 @@ public class SpecimenList {
 	
 	public void update(SpecimenList specimenList) {
 		this.setName(specimenList.getName());
+		this.setDescription(specimenList.getDescription());
 		this.setSpecimens(specimenList.getSpecimens());
 		this.updateSharedUsers(specimenList.getSharedWith());
 	}

@@ -24,6 +24,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       var specimenList =  new SpecimenList({
         id: $scope.list.id,
         name: $scope.list.name,
+        description: $scope.list.description,
         sharedWith: sharedWith
       }); 
 
