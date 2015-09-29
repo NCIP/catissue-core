@@ -107,7 +107,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 
 		User currentUser = AuthUtil.getCurrentUser();
 		String description = details.getDescription();
-		List<Long> sharedUserIds = new ArrayList<>();
+		List<Long> sharedUserIds = new ArrayList<Long>();
 		for (UserSummary sharedUser : details.getSharedWith()) {
 			sharedUserIds.add(sharedUser.getId());
 		}
