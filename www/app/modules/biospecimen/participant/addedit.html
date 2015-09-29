@@ -63,7 +63,8 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.uid">Social Security Number</label>
           <div class="col-xs-6">
-            <input type="text" ng-model="cpr.participant.uid" class="form-control">
+            <input name="uid" type="text" ng-model="cpr.participant.uid" class="form-control" ng-required="uid_mandatory">
+            <div os-field-error field="pform.uid"></div>
           </div>
         </div>
 

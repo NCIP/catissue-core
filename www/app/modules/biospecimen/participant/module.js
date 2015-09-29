@@ -27,6 +27,7 @@ angular.module('os.biospecimen.participant',
         template: '<div ui-view></div>',
         controller: function($scope, cp) {
           $scope.cp = cp;
+          $scope.uid_mandatory = $scope.global.appProps.uid_mandatory;
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
