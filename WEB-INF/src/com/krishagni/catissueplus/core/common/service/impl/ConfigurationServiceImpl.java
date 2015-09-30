@@ -264,13 +264,14 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getAppProps() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("plugins",               PluginManager.getInstance().getPluginNames());
-		props.put("build_version",         appProps.getProperty("buildinfo.version"));
-		props.put("build_date",            appProps.getProperty("buildinfo.date"));
-		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
-		props.put("cp_coding_enabled",     getBoolSetting("biospecimen", "cp_coding_enabled", false));
-		props.put("auto_empi_enabled",     isAutoEmpiEnabled());
-		props.put("uid_mandatory",         getBoolSetting("biospecimen", "uid_mandatory", false));
+		props.put("plugins",                 PluginManager.getInstance().getPluginNames());
+		props.put("build_version",           appProps.getProperty("buildinfo.version"));
+		props.put("build_date",              appProps.getProperty("buildinfo.date"));
+		props.put("build_commit_revision",   appProps.getProperty("buildinfo.commit_revision"));
+		props.put("cp_coding_enabled",       getBoolSetting("biospecimen", "cp_coding_enabled", false));
+		props.put("auto_empi_enabled",       isAutoEmpiEnabled());
+		props.put("uid_mandatory",           getBoolSetting("biospecimen", "uid_mandatory", false));
+		props.put("mrn_restriction_enabled", getBoolSetting("biospecimen", "mrn_restriction_enabled", false));
 		return props;
 	}
 
