@@ -7,7 +7,7 @@ public class ConfigParams {
 	
 	public static final String PARTICIPANT_UID_VALIDATOR = "participant_uid_validator";
 	
-	public static final String MRN_RESTRICTION_ENABLED = "mrn_restriction_enabled";
+	public static final String MRN_RESTRICTION_ENABLED   = "mrn_restriction_enabled";
 		
 	public static final String MPI_PATTERN               = "mpi_pattern";
 	
@@ -32,5 +32,4 @@ public class ConfigParams {
 	public static final String SP_TYPE_ABBR_MAP          = "specimen_type_abbr_map";
 
 	public static final String SP_PATH_STATUS_ABBR_MAP   = "spmn_path_status_abbr_map";
-	
 }
