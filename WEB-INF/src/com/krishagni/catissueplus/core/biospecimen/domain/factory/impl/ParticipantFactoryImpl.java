@@ -31,7 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 
@@ -40,14 +40,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 
 	private DaoFactory daoFactory;
 	
-	private ConfigurationService cfgSvc;
-	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-
-	public void setCfgSvc(ConfigurationService cfgSvc) {
-		this.cfgSvc = cfgSvc;
 	}
 
 	@Override
@@ -99,9 +93,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return;
 		}
 		
-		String uid = detail.getUid();		
-		if (StringUtils.isBlank(uid)) { 
-			if (cfgSvc.getBoolSetting("biospecimen", "uid_mandatory", false)) {
+		String uid = detail.getUid();
+		if (StringUtils.isBlank(uid)) {
+			if (ConfigUtil.getInstance().getBoolSetting("biospecimen", "uid_mandatory", false)) {
 				oce.addError(ParticipantErrorCode.UID_REQUIRED);
 			} else {
 				participant.setUid(null);
