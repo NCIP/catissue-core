@@ -30,13 +30,7 @@ public class ObjectSchema {
 	}
 	
 	public Record getExtensionRecord() {
-		for (Record rec: record.getSubRecords()) {
-			if (rec.getType() != null && rec.getType().equals("extensions")) {
-				return rec;
-			}
-		}
-		
-		return null;
+		return getExtensionRecord(record);
 	}
 	
 	public static ObjectSchema parseSchema(String filePath) {
@@ -63,6 +57,21 @@ public class ObjectSchema {
 		xstream.addImplicitCollection(Record.class, "fields", "field", Field.class);
 		
 		return xstream;
+	}
+	
+	private Record getExtensionRecord(Record record) {
+		for (Record rec: record.getSubRecords()) {
+			if (rec.getType() != null && rec.getType().equals("extensions")) {
+				return rec;
+			}
+			
+			Record extnRec = getExtensionRecord(rec);
+			if (extnRec != null) {
+				return extnRec;
+			}
+		}
+		
+		return null;
 	}
 
 	public static class Record {
