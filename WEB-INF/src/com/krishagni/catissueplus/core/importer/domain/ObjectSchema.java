@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.importer.domain;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ObjectSchema {
 		this.record = record;
 	}
 	
-	public Record getExtensionRecord() {
+	public List<Record> getExtensionRecord() {
 		return getExtensionRecord(record);
 	}
 	
@@ -59,19 +60,17 @@ public class ObjectSchema {
 		return xstream;
 	}
 	
-	private Record getExtensionRecord(Record record) {
-		for (Record rec: record.getSubRecords()) {
-			if (rec.getType() != null && rec.getType().equals("extensions")) {
-				return rec;
+	private List<Record> getExtensionRecord(Record record) {
+		List<Record> extnRecords = new ArrayList<Record>();
+		for (Record subRecord : record.getSubRecords()) {
+			if (subRecord.getType() != null && subRecord.getType().equals("extensions")) {
+				extnRecords.add(subRecord);
 			}
 			
-			Record extnRec = getExtensionRecord(rec);
-			if (extnRec != null) {
-				return extnRec;
-			}
+			extnRecords.addAll(getExtensionRecord(subRecord));
 		}
 		
-		return null;
+		return extnRecords;
 	}
 
 	public static class Record {
