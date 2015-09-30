@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.FeedbackDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -245,4 +246,12 @@ public class UserController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/feedback")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public boolean sendFeedback(@RequestBody FeedbackDetail feedbackDetail) {
+		ResponseEvent<Boolean> resp = userService.sendFeedback(new RequestEvent<FeedbackDetail>(feedbackDetail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 }

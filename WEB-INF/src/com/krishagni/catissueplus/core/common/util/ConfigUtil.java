@@ -55,4 +55,8 @@ public class ConfigUtil {
 	public Boolean getBoolSetting(String module, String name, Boolean defValue) {
 		return cfgSvc.getBoolSetting(module, name, defValue);
 	}
+	
+	public String getSupportEmail() {
+		return cfgSvc.getStrSetting("common", "support_email");
+	}
 }

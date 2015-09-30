@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.krishagni.catissueplus.core.administrative.events.FeedbackDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -43,4 +44,5 @@ public interface UserService extends UserDetailsService {
 
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req);
 	
+	public ResponseEvent<Boolean> sendFeedback(RequestEvent<FeedbackDetail> req);
 }

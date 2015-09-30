@@ -781,6 +781,13 @@
       "change_password": "Change Password"
     },
     
+    "feedback": {
+      "title": "Your feedback counts!",
+      "info": "Please let us know how we can improve, missing features, complaints, bugs, or compliments.",
+      "subject": "Subject",
+      "feedback": "Feedback"
+    },
+    
     "proceed_sign_up": "Proceed to Sign Up",
     "welcome_title": "OpenSpecimen Introduction in One Minute"
   },

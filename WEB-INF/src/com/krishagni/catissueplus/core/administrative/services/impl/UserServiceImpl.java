@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
+import com.krishagni.catissueplus.core.administrative.events.FeedbackDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -53,6 +54,8 @@ public class UserServiceImpl implements UserService {
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
 	
+	private static final String FEEDBACK_EMAIL_TMPL = "feedback";
+	
 	private DaoFactory daoFactory;
 
 	private UserFactory userFactory;
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService {
 	private EmailService emailService;
 	
 	private RbacService rbacSvc;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -400,6 +403,20 @@ public class UserServiceImpl implements UserService {
 		}		
 	}
 	
+	@Override
+	public ResponseEvent<Boolean> sendFeedback(RequestEvent<FeedbackDetail> req) {
+		FeedbackDetail detail = req.getPayload();
+		return ResponseEvent.response(sendFeedbackEmail(AuthUtil.getCurrentUser(), detail));
+	}
+	
+	private boolean sendFeedbackEmail(User user, FeedbackDetail detail) {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("feedback", detail);
+		
+		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, new String[]{ConfigUtil.getInstance().getSupportEmail()}, props);
+	}
+	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
@@ -502,5 +519,4 @@ public class UserServiceImpl implements UserService {
 		}
 		return token;
 	}
-
 }
