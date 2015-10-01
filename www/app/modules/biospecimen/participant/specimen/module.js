@@ -124,13 +124,6 @@ angular.module('os.biospecimen.specimen',
         templateUrl: 'modules/biospecimen/participant/specimen/add-derivative.html',
         controller: 'AddDerivativeCtrl',
         parent: 'specimen-root'
-      })
-
-      .state('specimen-create-aliquots', {
-        url: '/aliquots',
-        templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
-        controller: 'AddAliquotsCtrl',
-        parent: 'specimen-root'
       });
   })
 

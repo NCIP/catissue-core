@@ -14,17 +14,14 @@ angular.module('os.biospecimen.specimen.addderivatives',
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
     }
 
-    $scope.revertEdit = function() {
-    }
-
     $scope.loadSpecimenTypes = function(specimenClass, notclear) {
       SpecimenUtil.loadSpecimenTypes($scope, specimenClass, notclear);
     };
 
     $scope.createDerivative = function() {
       SpecimenUtil.createDerivatives($scope);
-       var params = {specimenId:  $scope.parentSpecimen.id, srId:  $scope.parentSpecimen.reqId};
-       $state.go('specimen-detail.overview', params);
+      var params = {specimenId:  $scope.parentSpecimen.id, srId:  $scope.parentSpecimen.reqId};
+      $state.go('specimen-detail.overview', params);
     };
 
     init();
