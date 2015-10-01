@@ -410,11 +410,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	private boolean sendFeedbackEmail(User user, FeedbackDetail detail) {
+		String[] rcpt = new String[]{ConfigUtil.getInstance().getStrSetting("common", "support_email", "")};
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("user", user);
 		props.put("feedback", detail);
 		
-		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, new String[]{ConfigUtil.getInstance().getSupportEmail()}, props);
+		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, rcpt, props);
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {

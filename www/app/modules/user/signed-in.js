@@ -3,17 +3,7 @@ angular.module('openspecimen')
      function init() {
        $scope.alerts = Alerts.messages;
        $rootScope.currentUser = currentUser;
-       $scope.feedback_enabled = true;
-       
-       Setting.query({module: 'common'}).then(
-         function(result) {
-           angular.forEach(result, function(item) {
-             if(item.name == "feedback_enabled" && item.value == "false") {
-               $scope.feedback_enabled = false;
-             }
-           });
-         }
-       );
+       $scope.feedback_enabled = $rootScope.global.appProps.feedback_enabled;
      }
 
      $scope.userCreateUpdateOpts = {resource: 'User', operations: ['Create', 'Update']};
