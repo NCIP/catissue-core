@@ -29,7 +29,8 @@
       name="occupyingSpecimen"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
       column="OCCUPYING_SPECIMEN_ID"
-      unique="true"/>
+      unique="true"
+      cascade="save-update"/>
 
     <many-to-one
       name="occupyingContainer"
