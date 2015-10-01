@@ -231,28 +231,21 @@ angular.module('os.biospecimen.models.form', ['os.common.models'])
     };
 
     function getExtnForms(fqn, fields) {
-      var extnSubForm = undefined;
+      var extnForms = [];
       for (var i = 0; i < fields.length; ++i) {
         if (fields[i].type != 'SUBFORM' || !Form.isExtendedField(fields[i].name)) { 
           continue;
         }
 
-        extnSubForm = fields[i];
-        break;
-      }
-
-      if (!extnSubForm) {
-        return [];
-      }
-
-      var extnForms = [];
-      for (var i = 0; i < extnSubForm.subFields.length; ++i) {
-        var subForm = extnSubForm.subFields[i];
-        var extnFields = flattenFields(fqn + extnSubForm.name + "." + subForm.name + ".", subForm.subFields);
-        for (var j = 0; j < extnFields.length; ++j) {
-          extnFields[j].extensionForm = subForm.caption;
+        var extnSubForm = fields[i];
+        for (var j = 0; j < extnSubForm.subFields.length; ++j) {
+          var subForm = extnSubForm.subFields[j];
+          var extnFields = flattenFields(fqn + extnSubForm.name + "." + subForm.name + ".", subForm.subFields);
+          for (var k = 0; k < extnFields.length; ++k) {
+            extnFields[k].extensionForm = subForm.caption;
+          }
+          extnForms.push({name: subForm.name, caption: subForm.caption, fields: extnFields});
         }
-        extnForms.push({name: subForm.name, caption: subForm.caption, fields: extnFields});
       }
 
       return extnForms;
