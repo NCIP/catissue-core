@@ -551,6 +551,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ensureValidAndUniqueLabel(existing, specimen, ose);
 		ensureUniqueBarcode(existing, specimen, ose);
+		specimen.setLabelIfEmpty();
 		ose.checkAndThrow();
 
 		if (existing != null) {
@@ -567,7 +568,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 			specimen.occupyPosition();
 		}
 
-		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 		addOrUpdateEvents(specimen);
 		return specimen;
