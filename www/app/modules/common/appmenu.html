@@ -35,8 +35,8 @@
           </li>
         </ul>
       </li>
-      <li ng-if="feedback_enabled">
-        <a ng-click="openFeedbackForm()">
+      <li ng-if="global.appProps.feedback_enabled">
+        <a ng-controller="FeedbackCtrl" ng-click="openFeedbackForm()">
           <span class="fa fa-bullhorn"></span>
         </a>
       </li>
