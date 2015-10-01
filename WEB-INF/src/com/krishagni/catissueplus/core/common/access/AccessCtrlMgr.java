@@ -38,13 +38,9 @@ import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
 import com.krishagni.rbac.repository.DaoFactory;
-import com.krishagni.rbac.service.RbacService;
 
 @Configurable
 public class AccessCtrlMgr {
-
-	@Autowired
-	private RbacService rbacService;
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -248,8 +244,7 @@ public class AccessCtrlMgr {
 			result.phiAccess = false;
 		}
 		
-		Boolean mrnRestrictionEnabled = isMrnRestrictionEnabled();
-		if (!mrnRestrictionEnabled) {
+		if (!isAccessRestrictedBasedOnMrn()) {
 			return result;
 		}
 
@@ -334,8 +329,7 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 		
-		Boolean mrnRestrictionEnabled = isMrnRestrictionEnabled();
-		if (!mrnRestrictionEnabled) {
+		if (!isAccessRestrictedBasedOnMrn()) {
 			return true;
 		}
 
@@ -860,8 +854,7 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
-		Boolean mrnRestrictionEnabled = isMrnRestrictionEnabled();
-		if (!mrnRestrictionEnabled) {
+		if (!isAccessRestrictedBasedOnMrn()) {
 			return;
 		}
 		
@@ -933,7 +926,7 @@ public class AccessCtrlMgr {
 		}
 	}
 	
-	private Boolean isMrnRestrictionEnabled() {
+	private Boolean isAccessRestrictedBasedOnMrn() {
 		return ConfigUtil.getInstance().getBoolSetting(
 				ConfigParams.MODULE,
 				ConfigParams.MRN_RESTRICTION_ENABLED, 

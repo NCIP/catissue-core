@@ -24,7 +24,7 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Config property to enable/disable participant MRN site restrictions">
+  <changeSet author="vgaikwad" id="Config property to enable/disable participant/visit/specimen access restrictions based on MRN sites">
     <sql>
       call add_cfg_prop(
         'biospecimen', 'mrn_restriction_enabled',

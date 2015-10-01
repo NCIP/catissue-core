@@ -11,9 +11,8 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
     }
 
     function initAuthorizationOpts() {
-      var mrnRestrictionEnabled =  $scope.global.appProps.mrn_restriction_enabled;
       var sites = undefined;
-      if (mrnRestrictionEnabled) {
+      if ($scope.global.appProps.mrn_restriction_enabled) {
         sites = $scope.cpr.getMrnSites();
         if (sites && sites.length == 0) {
           sites = undefined;
