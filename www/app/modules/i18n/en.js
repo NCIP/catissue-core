@@ -783,7 +783,7 @@
     
     "feedback": {
       "title": "Your feedback counts!",
-      "info": "Please let us know how we can improve, missing features, complaints, bugs, or compliments.",
+      "info": "Please let us know what you think of the new OpenSpecimen. Any suggestions on improvements, new features, or bugs are most welcome.",
       "subject": "Subject",
       "feedback": "Feedback"
     },
