@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -30,19 +31,16 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.domain.Subject;
 import com.krishagni.rbac.domain.SubjectAccess;
 import com.krishagni.rbac.domain.SubjectRole;
 import com.krishagni.rbac.repository.DaoFactory;
-import com.krishagni.rbac.service.RbacService;
 
 @Configurable
 public class AccessCtrlMgr {
-
-	@Autowired
-	private RbacService rbacService;
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -245,6 +243,10 @@ public class AccessCtrlMgr {
 			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
 			result.phiAccess = false;
 		}
+		
+		if (!isAccessRestrictedBasedOnMrn()) {
+			return result;
+		}
 
 		Set<Long> siteIds = new HashSet<Long>();
 		for (SubjectAccess access : accessList) {
@@ -325,6 +327,10 @@ public class AccessCtrlMgr {
 
 		if (accessList.isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		if (!isAccessRestrictedBasedOnMrn()) {
+			return true;
 		}
 
 		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
@@ -848,6 +854,10 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
+		if (!isAccessRestrictedBasedOnMrn()) {
+			return;
+		}
+		
 		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
 		if (mrnSites.isEmpty()) {
 			return;
@@ -914,5 +924,12 @@ public class AccessCtrlMgr {
 		if (!canUserPerformOp(user.getId(), Resource.SCHEDULED_JOB, ops)) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
+	}
+	
+	private Boolean isAccessRestrictedBasedOnMrn() {
+		return ConfigUtil.getInstance().getBoolSetting(
+				ConfigParams.MODULE,
+				ConfigParams.MRN_RESTRICTION_ENABLED, 
+				false);
 	}
 }

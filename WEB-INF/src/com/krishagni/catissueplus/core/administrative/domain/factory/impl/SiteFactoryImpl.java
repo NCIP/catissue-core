@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -25,14 +24,11 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
-import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 
 public class SiteFactoryImpl implements SiteFactory {
 
 	private DaoFactory daoFactory;
-
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -217,22 +213,7 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 	
 	private void setSiteExtension(SiteDetail detail, Site site, OpenSpecimenException ose) {
-		ExtensionDetail extDetail = detail.getExtensionDetail();
-		if (extDetail == null) {
-			return;
-		}
-		
-		DeObject extension = site.createExtension();
-		if (extension == null) {
-			return;
-		}
-		
-		for (AttrDetail attrDetail: extDetail.getAttrs()) {
-			Attr attr = new Attr();
-			BeanUtils.copyProperties(attrDetail, attr);
-			extension.getAttrs().add(attr);
-		}
-		
+		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), site);
 		site.setExtension(extension);
 	}
 	

@@ -63,8 +63,11 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 		detail.setName(order.getName());
 		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
 		detail.setInstituteName(order.getInstitute().getName());
-		detail.setSiteId(order.getSite().getId());
-		detail.setSiteName(order.getSite().getName());
+		if (order.getSite() != null) {
+			detail.setSiteId(order.getSite().getId());
+			detail.setSiteName(order.getSite().getName());
+		}
+		
 		detail.setRequester(UserSummary.from(order.getRequester()));
 		detail.setCreationDate(order.getCreationDate());
 		detail.setExecutionDate(order.getExecutionDate());

@@ -11,9 +11,12 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
     }
 
     function initAuthorizationOpts() {
-      var sites = $scope.cpr.getMrnSites();
-      if (sites && sites.length == 0) {
-        sites = undefined;
+      var sites = undefined;
+      if ($scope.global.appProps.mrn_restriction_enabled) {
+        sites = $scope.cpr.getMrnSites();
+        if (sites && sites.length == 0) {
+          sites = undefined;
+        }
       }
 
       // Participant Authorization Options

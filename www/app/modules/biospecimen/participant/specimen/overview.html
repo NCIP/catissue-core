@@ -152,7 +152,7 @@
         </div>
         <div class="info">
           <span>
-            {{activity.updatedBy.lastName}}, {{activity.updatedBy.firstName}} - 
+            {{activity.updatedBy | osUserDisplayName}} -
             {{activity.updateTime | date: dateFmt}}
           </span>
         </div>

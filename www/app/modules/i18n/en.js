@@ -248,7 +248,7 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
-    "search_results": "Participant Search Results",
+    "search_results": "Participant Search Result for {{key}}",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -337,6 +337,8 @@
     "spr_pdf": "PDF",
     "spr_text": "Text",
     "reason": "Reason",
+    "search_results": "Visit Search Result for {{key}}",
+
     "status": {
       "pending": "Pending",
       "complete": "Complete",
@@ -833,6 +835,7 @@
     "stores_specimens": "Stores Specimens",
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
     "assign_positions": "Assign Positions",
+    "vacate_positions": "Vacate existing specimens",
     "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
@@ -1257,7 +1260,8 @@
     "specimens_removed": "Specimens successfully removed from {{name}} list",
     "distribute": "Distribute",
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
-    "no_specimens_for_distribution": "Please select at least one specimen to create distribution order"
+    "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
+    "created_by": "Created By"
    },
 
    "orders": {

@@ -27,7 +27,8 @@ angular.module('os.common.search.service', [])
         results.push({name: key, caption: $translate.instant(value.caption), order: value.order});
       });
 
-      results = results.sort(function(a, b) {return b.order < a.order});
+      results = results.sort(function(a, b) {return (a.order > b.order) - (b.order > a.order);});
+
       return results;
     }
 

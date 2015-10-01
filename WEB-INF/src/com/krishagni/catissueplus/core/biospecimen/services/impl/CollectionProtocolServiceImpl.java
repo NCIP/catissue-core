@@ -166,7 +166,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		try { 
 			CprListCriteria listCrit = req.getPayload();
 			ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(listCrit.cpId());
-			if (!access.admin && CollectionUtils.isEmpty(access.siteIds)) {
+			//When siteIds is null, access restriction is not enforced based on MRN sites
+			if (!access.admin && access.siteIds != null && access.siteIds.isEmpty()) {
 				return ResponseEvent.response(Collections.<CprSummary>emptyList());
 			} 
 			

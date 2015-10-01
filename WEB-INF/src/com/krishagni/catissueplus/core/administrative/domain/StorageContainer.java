@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -414,6 +415,10 @@ public class StorageContainer extends BaseEntity {
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
+	public StorageContainerPosition createVirtualPosition() {
+		return createPosition(0, null, 0, null);
+	}
+
 	public void removePosition(StorageContainerPosition position) {
 		Iterator<StorageContainerPosition> iter = getOccupiedPositions().iterator();
 		while (iter.hasNext()) {
@@ -480,13 +485,17 @@ public class StorageContainer extends BaseEntity {
 
 		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
 	}
-
+	
 	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo) {
-		return canOccupyPosition(true, specimenId, posOne, posTwo);
+		return canOccupyPosition(true, specimenId, posOne, posTwo, false);
+	}
+
+	public boolean canSpecimenOccupyPosition(Long specimenId, String posOne, String posTwo, boolean vacateOccupant) {
+		return canOccupyPosition(true, specimenId, posOne, posTwo, vacateOccupant);
 	}
 
 	public boolean canContainerOccupyPosition(Long containerId, String posOne, String posTwo) {
-		return canOccupyPosition(false, containerId, posOne, posTwo);
+		return canOccupyPosition(false, containerId, posOne, posTwo, false);
 	}
 	
 	public boolean canContain(Specimen specimen) {
@@ -625,18 +634,49 @@ public class StorageContainer extends BaseEntity {
 		names.delete(names.length() - 2, names.length());
 		return names.toString();
 	}
-		
+
 	//
 	// Assign unoccupied positions in container
 	//
 	public void assignPositions(Collection<StorageContainerPosition> positions) {
+		assignPositions(positions, false);
+	}
+
+	//
+	// Two cases:
+	// case #1: vacateOccupant: true - Assign unoccupied positions
+	// case #2: Otherwise - Vacate occupant before assigning position to new occupant
+	//
+	public void assignPositions(Collection<StorageContainerPosition> positions, boolean vacateOccupant) {
+		Set<Long> specimenIds = Collections.emptySet();
+		if (vacateOccupant) {
+			specimenIds = new HashSet<Long>();
+			for (StorageContainerPosition position : positions) {
+				if (position.getOccupyingSpecimen() != null) {
+					specimenIds.add(position.getOccupyingSpecimen().getId());
+				}
+			}
+		}
+
 		for (StorageContainerPosition position : positions) {
-			StorageContainerPosition existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
-			if (existing != null) {
+			StorageContainerPosition existing = null;
+			if (position.getPosOneOrdinal() != 0 && position.getPosTwoOrdinal() != 0) {
+				existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
+			}
+
+			if (existing != null && !vacateOccupant) {
 				continue; 
 			}
 						
 			if (position.getOccupyingSpecimen() != null) {
+				if (existing != null && !specimenIds.contains(existing.getOccupyingSpecimen().getId())) {
+					//
+					// The occupant that is being vacated is not assigned any new position
+					// in this transaction. Therefore virtualise it.
+					//
+					existing.getOccupyingSpecimen().updatePosition(null);
+				}
+
 				position.getOccupyingSpecimen().updatePosition(position);
 			} else {
 				StorageContainer childContainer = position.getOccupyingContainer();
@@ -724,7 +764,13 @@ public class StorageContainer extends BaseEntity {
 		return result;
 	}
 	
-	private boolean canOccupyPosition(boolean isSpecimenEntity, Long entityId, String posOne, String posTwo) {
+	private boolean canOccupyPosition(
+			boolean isSpecimenEntity,
+			Long entityId, 
+			String posOne, 
+			String posTwo, 
+			boolean vacateOccupant) {
+		
 		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
 		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
 		
@@ -738,7 +784,8 @@ public class StorageContainer extends BaseEntity {
 		} else if (entityId == null) { 
 			return false; // position is not vacant and entity is new
 		} else if (isSpecimenEntity) {
-			return pos.getOccupyingSpecimen() != null && pos.getOccupyingSpecimen().getId().equals(entityId); 
+			return (vacateOccupant && pos.getOccupyingContainer() == null) ||
+					pos.getOccupyingSpecimen() != null && pos.getOccupyingSpecimen().getId().equals(entityId);
 		} else {
 			return pos.getOccupyingContainer() != null && pos.getOccupyingContainer().getId().equals(entityId);
 		}

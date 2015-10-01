@@ -33,7 +33,7 @@
         <strong class="key key-sm" translate="dp.pi">Principle Investigator</strong>
         <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="distributionProtocol.principalInvestigator">
           <span ng-if="piEditor.isDisplayMode()">
-            {{piEditor.viewValue.lastName + ', ' + piEditor.viewValue.firstName | osNoValue}}
+            {{piEditor.viewValue | osUserDisplayName}}
           </span>
           <div ng-if="piEditor.isEditMode()">
             <os-users name="pi" ng-model="piEditor.editValue" placeholder="{{'dp.pi' | translate}}" required></os-users>

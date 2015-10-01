@@ -10,16 +10,24 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantUtil;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.service.MpiGenerator;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
+@Configurable
 @Audited
-public class Participant extends BaseEntity {
+public class Participant extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "participant";
 	
 	private String lastName;
@@ -47,10 +55,13 @@ public class Participant extends BaseEntity {
 	protected String vitalStatus;
 	
 	protected String empi;
-
+	
 	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
 
 	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
+	
+	@Autowired
+	private DaoFactory daoFactory;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -171,7 +182,7 @@ public class Participant extends BaseEntity {
 	public void setEmpi(String empi) {
 		this.empi = empi;
 	}
-
+	
 	public Set<ParticipantMedicalIdentifier> getPmis() {
 		return pmis;
 	}
@@ -188,7 +199,7 @@ public class Participant extends BaseEntity {
 	public void setCprs(Set<CollectionProtocolRegistration> cprs) {
 		this.cprs = cprs;
 	}
-
+	
 	public void update(Participant participant) {
 		setFirstName(participant.getFirstName());
 		setLastName(participant.getLastName());
@@ -202,6 +213,7 @@ public class Participant extends BaseEntity {
 		setEthnicity(participant.getEthnicity());
 		setBirthDate(participant.getBirthDate());
 		setDeathDate(participant.getDeathDate());
+		setExtension(participant.getExtension());	
 		CollectionUpdater.update(getRaces(), participant.getRaces());
 		updatePmis(participant);
 	}
@@ -243,6 +255,24 @@ public class Participant extends BaseEntity {
 		}
 		
 		return result;
+	}
+	
+	public void setEmpiIfEmpty() {
+		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
+		if (generator == null) {
+			return;
+		}
+
+		if (StringUtils.isNotBlank(empi)) {
+			throw OpenSpecimenException.userError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		}
+		
+		setEmpi(generator.generateMpi());
+	}
+
+	@Override
+	public String getEntityType() {
+		return "ParticipantExtension";
 	}
 	
 	private void updatePmis(Participant participant) {
@@ -294,4 +324,9 @@ public class Participant extends BaseEntity {
 		
 		return result;
 	}
+	
+	private String getMpiCfgProp(String property) {
+		return ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, property, null);
+	}
+	
 }

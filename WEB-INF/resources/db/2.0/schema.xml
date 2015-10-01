@@ -709,14 +709,6 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11" failOnError="false">
-    <sql>drop trigger if exists specimen_coll_event_trg</sql>
-    <sql>drop trigger if exists specimen_rcvd_event_trg</sql>
-    <sql>drop trigger if exists specimen_transfer_event_trg</sql>
-    <sql>drop trigger if exists specimen_distri_event_trg</sql>
-    <sql>drop trigger if exists specimen_disposal_event_trg</sql>
-  </changeSet>
-
   <changeSet author="vpawar" id="Drop parent event id from collection event table">
     <dropColumn columnName="SPE_ID" tableName="CATISSUE_COLL_EVENT_PARAM"/>
   </changeSet>
@@ -1594,7 +1586,7 @@
         select
           u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
           u.email_address as email_address,
-          concat(u.last_name, concat(', ', u.first_name)) as name,
+          concat(u.first_name, concat(' ', u.last_name)) as name,
           d.name as department_name
         from
           catissue_user u

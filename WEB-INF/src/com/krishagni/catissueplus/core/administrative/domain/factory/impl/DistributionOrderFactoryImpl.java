@@ -102,13 +102,14 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return;
 		}
 		
+		order.setRequester(requester);
+		
 		Long siteId = detail.getSiteId();
 		String siteName = detail.getSiteName();		
 		if (siteId == null && StringUtils.isBlank(siteName)) {
-			ose.addError(DistributionOrderErrorCode.RECV_SITE_REQUIRED);
-			return;			
+			return;
 		}
-		
+
 		Site site = null;
 		if (siteId != null) {
 			site = daoFactory.getSiteDao().getById(siteId);
@@ -120,13 +121,12 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
-		
+
 		if (!requester.getInstitute().equals(site.getInstitute())) {
 			ose.addError(DistributionOrderErrorCode.INVALID_REQUESTER_RECV_SITE_INST, requester.formattedName(), site.getName());
 			return;
 		}
 		
-		order.setRequester(requester);
 		order.setSite(site);
 	}
 

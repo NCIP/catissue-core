@@ -102,6 +102,11 @@
       </field>
     </record>
 
+    <field>
+      <caption>#getMessage("specimen_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+    
     <record>
       <caption>#getMessage("specimen_coll_event")</caption>
       <attribute>collectionEvent</attribute>

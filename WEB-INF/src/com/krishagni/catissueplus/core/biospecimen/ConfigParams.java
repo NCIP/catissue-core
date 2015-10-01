@@ -6,10 +6,16 @@ public class ConfigParams {
 	public static final String PARTICIPANT_UID_PATTERN   = "participant_uid_pattern";
 	
 	public static final String PARTICIPANT_UID_VALIDATOR = "participant_uid_validator";
+	
+	public static final String MRN_RESTRICTION_ENABLED   = "mrn_restriction_enabled";
 		
 	public static final String MPI_PATTERN               = "mpi_pattern";
 	
 	public static final String MPI_VALIDATOR             = "mpi_validator";
+	
+	public static final String MPI_FORMAT                = "mpi_format";
+	
+	public static final String MPI_GENERATOR             = "mpi_generator";
 	
 	public static final String SPECIMEN_LABEL_PRINTER    = "specimen_label_printer";
 	

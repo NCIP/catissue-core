@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.importer.domain;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +30,10 @@ public class ObjectSchema {
 		this.record = record;
 	}
 	
+	public List<Record> getExtensionRecord() {
+		return getExtensionRecord(record);
+	}
+	
 	public static ObjectSchema parseSchema(String filePath) {
 		XStream parser = getSchemaParser();		
 		return (ObjectSchema)parser.fromXML(new File(filePath));
@@ -45,12 +50,27 @@ public class ObjectSchema {
 		xstream.alias("object-schema", ObjectSchema.class);
 		
 		xstream.alias("record", Record.class);
+		xstream.aliasAttribute(Record.class, "type", "type");
+		xstream.aliasAttribute(Record.class, "entityType", "entityType");
 		xstream.addImplicitCollection(Record.class, "subRecords", "record", Record.class);
 		
 		xstream.alias("field", Field.class);
 		xstream.addImplicitCollection(Record.class, "fields", "field", Field.class);
 		
 		return xstream;
+	}
+	
+	private List<Record> getExtensionRecord(Record record) {
+		List<Record> extnRecords = new ArrayList<Record>();
+		for (Record subRecord : record.getSubRecords()) {
+			if (subRecord.getType() != null && subRecord.getType().equals("extensions")) {
+				extnRecords.add(subRecord);
+			}
+			
+			extnRecords.addAll(getExtensionRecord(subRecord));
+		}
+		
+		return extnRecords;
 	}
 
 	public static class Record {
@@ -59,6 +79,10 @@ public class ObjectSchema {
 		private String attribute;
 		
 		private String caption;
+		
+		private String type;
+		
+		private String entityType;
 		
 		private boolean multiple;
 		
@@ -88,6 +112,22 @@ public class ObjectSchema {
 
 		public void setCaption(String caption) {
 			this.caption = caption;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
+		public String getEntityType() {
+			return entityType;
+		}
+
+		public void setEntityType(String entityType) {
+			this.entityType = entityType;
 		}
 
 		public boolean isMultiple() {

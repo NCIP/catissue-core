@@ -71,6 +71,9 @@ angular.module('os.biospecimen.participant',
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
+          extensionCtxt: function(Participant) {
+            return Participant.getExtensionCtxt();
+          }
         },
         parent: 'participant-root'
       })
@@ -194,6 +197,10 @@ angular.module('os.biospecimen.participant',
         resolve: {
           participants: function(ParticipantSearchSvc) {
             return ParticipantSearchSvc.getParticipants();
+          },
+
+          searchKey: function(ParticipantSearchSvc) {
+            return ParticipantSearchSvc.getSearchKey();
           }
         },
         controller: 'ParticipantResultsView',

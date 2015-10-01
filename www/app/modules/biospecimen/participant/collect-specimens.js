@@ -61,6 +61,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;
+        $scope.containerListCache = {};
         
         $scope.collDetail = {
           collector: undefined,
@@ -394,14 +395,18 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
       };
 
-      function descendentCount(specimen) { 
+      function descendentCount(specimen, onlySelected) {
+        onlySelected = (onlySelected != false);
         var count = 0;
         for (var i = 0; i < specimen.children.length; ++i) {
           if (specimen.children[i].removed) {
             continue;
           }
+          if (!specimen.children[i].selected && onlySelected) {
+            continue;
+          }
 
-          count += 1 + descendentCount(specimen.children[i]);
+          count += 1+ descendentCount(specimen.children[i]);
         }
 
         return count;

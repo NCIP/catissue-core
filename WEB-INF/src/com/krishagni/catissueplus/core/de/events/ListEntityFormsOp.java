@@ -13,7 +13,11 @@ public class ListEntityFormsOp  {
 		
 		SITE_EXTN,
 		
-		CP_EXTN
+		CP_EXTN,
+		
+		PARTICIPANT_EXTN,
+		
+		VISIT_EXTN
 	};
 
 	private Long entityId;

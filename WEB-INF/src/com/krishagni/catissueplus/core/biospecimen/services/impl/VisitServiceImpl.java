@@ -2,8 +2,9 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.SprPdfGenerator;
@@ -96,8 +98,35 @@ public class VisitServiceImpl implements VisitService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
-	}	
-	
+	}
+
+	@PlusTransactional
+	@Override
+	public ResponseEvent<List<VisitDetail>> getVisits(RequestEvent<VisitsListCriteria> criteria) {
+		VisitsListCriteria crit = criteria.getPayload();
+		List<Visit> visits = new ArrayList<Visit>();
+
+		if (StringUtils.isNotEmpty(crit.name())) {
+			visits.add(getVisit(null, crit.name()));
+		} else if (StringUtils.isNotEmpty(crit.sprNumber())) {
+			visits.addAll(daoFactory.getVisitsDao().getBySpr(crit.sprNumber()));
+		}
+
+		Iterator<Visit> iterator = visits.iterator();
+		while (iterator.hasNext()) {
+			Visit visit = iterator.next();
+			try {
+				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			} catch (OpenSpecimenException ose) {
+				if (ose.getErrorType().equals(ErrorType.USER_ERROR)) {
+					visits.remove(visit);
+				}
+			}
+		}
+
+		return ResponseEvent.response(VisitDetail.from(visits));
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<VisitDetail> addVisit(RequestEvent<VisitDetail> req) {
@@ -337,7 +366,6 @@ public class VisitServiceImpl implements VisitService {
 		
 		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
 	}
-	
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
 		Visit existing = null;
@@ -376,6 +404,7 @@ public class VisitServiceImpl implements VisitService {
 		
 		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
+		existing.addOrUpdateExtension();
 		return VisitDetail.from(existing);		
 	}
 
@@ -386,7 +415,7 @@ public class VisitServiceImpl implements VisitService {
 			visit = daoFactory.getVisitsDao().getById(visitId);
 		} else if (StringUtils.isNotBlank(visitName)) {
 			visit = daoFactory.getVisitsDao().getByName(visitName);
-		}		
+		}
 		
 		if (visit == null) {
 			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);

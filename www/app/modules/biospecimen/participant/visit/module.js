@@ -5,7 +5,8 @@ angular.module('os.biospecimen.visit', [
     'os.biospecimen.extensions',
     'os.biospecimen.visit.addedit',
     'os.biospecimen.visit.spr',
-    'os.biospecimen.visit.detail'
+    'os.biospecimen.visit.detail',
+    'os.biospecimen.visit.search'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -33,7 +34,13 @@ angular.module('os.biospecimen.visit', [
       })
       .state('visit-addedit', {
         url: '/addedit-visit',
-        templateUrl: 'modules/biospecimen/participant/visit/addedit.html',
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("visit-addedit", "page-body", "modules/biospecimen/participant/visit/addedit.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         controller: 'AddEditVisitCtrl',
         parent: 'visit-root'
       })
@@ -51,7 +58,13 @@ angular.module('os.biospecimen.visit', [
       })
       .state('visit-detail.overview', {
         url: '/overview',
-        templateUrl: 'modules/biospecimen/participant/visit/overview.html',
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("visit-detail", "overview", "modules/biospecimen/participant/visit/overview.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         controller: function() {
           // 'ParticipantOverviewCtrl',
         },
@@ -92,26 +105,30 @@ angular.module('os.biospecimen.visit', [
         templateUrl: 'modules/biospecimen/participant/visit/spr.html',
         controller: 'VisitSprCtrl',
         parent: 'visit-detail'
-      });
+      })
+
+      .state('visit-search', {
+        url: '/visit-search',
+        templateUrl: 'modules/biospecimen/participant/visit/search-result.html',
+          resolve: {
+            visits: function(VisitSearchSvc) {
+              return VisitSearchSvc.getVisits();
+            },
+            searchKey: function(VisitSearchSvc) {
+              return VisitSearchSvc.getSearchKey();
+            }
+          },
+          controller: 'VisitResultsView',
+          parent: 'visit-root'
+       });
   })
 
-  .run(function($state, QuickSearchSvc, Visit, Alerts) {
+  .run(function(QuickSearchSvc, VisitSearchSvc) {
     var opts = {
       template: 'modules/biospecimen/participant/visit/quick-search.html',
       caption: 'entities.visit',
-      order: 2,
-      search: function(searchData) {
-        Visit.getByName(searchData.visitName).then(
-          function(visit) {
-            if (visit == undefined) {
-              Alerts.error('search.error', {entity: 'Visit', key: searchData.visitName});
-              return;
-            }
-
-            $state.go('visit-detail.overview', {cpId: visit.cpId, cprId: visit.cprId, visitId: visit.id, eventId: visit.eventId});
-          }
-        );
-      }
+      order : 2,
+      search: VisitSearchSvc.search
     };
 
     QuickSearchSvc.register('visit', opts);

@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
 @ListenAttributeChanges
 public class VisitDetail extends AttributeModifiedSupport {
@@ -63,6 +64,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String code;
 	
 	private String cohort;
+	
+	private ExtensionDetail extensionDetail;
 
 	public Long getCprId() {
 		return cprId;
@@ -256,6 +259,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.cohort = cohort;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+
 	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
@@ -290,6 +301,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setEventId(visit.getCpEvent().getId());
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
 		detail.setEventPoint(visit.getCpEvent().getEventPoint());
+		
+		detail.setExtensionDetail(ExtensionDetail.from(visit.getExtension()));
 		return detail;
 	}
 	

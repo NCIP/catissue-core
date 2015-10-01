@@ -21,6 +21,10 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         order.orderItems = getOrderItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
       }
+      
+      if (!order.executionDate) {
+        order.executionDate = new Date();
+      }
     }
 
     function loadItemStatusPvs() {
@@ -35,8 +39,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       );
     }
 
-    function loadDps() {
-      var filterOpts = {activityStatus: 'Active'};
+    function loadDps(name) {
+      var filterOpts = {activityStatus: 'Active', query: name};
       DistributionProtocol.query(filterOpts).then(
         function(dps) {
           $scope.dpList = dps;
@@ -155,6 +159,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     $scope.passThrough = function() {
       return true;
     }
+    
+    $scope.searchDp = loadDps;
     
     init();
   });
