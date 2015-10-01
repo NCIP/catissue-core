@@ -1,0 +1,85 @@
+<style>
+  .aliquot-derivative-modal .modal-dialog{
+  width: 700px;
+  }
+</style>
+<div class="os-modal">
+  <div class="os-modal-header" ng-if="modal">
+    <span>
+      <span>Create Aliquots</span>
+    </span>
+  </div>
+  <div ng-class="{'os-modal-body': modal}">
+    <form name="aliquotForm" os-form-validator="aliquotForm" novalidate>
+      <div class="clearfix">
+        <div class="col-xs-12">
+          <ul class="os-key-values os-two-cols">
+            <li class="item">
+              <strong class="key key-sm" translate="specimens.available_qty">Available Quantity:</strong>
+              <span class="value value-md">{{parentSpecimen.availableQty}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
+              os-md-input class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
+              ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
+            <div os-field-error field="aliquotForm.noOfAliquots"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div class="form-group">
+            <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
+              os-md-input class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
+              ng-required="!aliquotSpec.noOfAliquots"
+              ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/"
+              ng-model-options="{allowInvalid: 'true'}">
+            <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
+          </div>
+        </div>
+
+        <div class="col-xs-3">
+          <div os-md-input ng-model="aliquotSpec.createdOn" placeholder="{{'specimens.created_on' | translate}}">
+            <input name="createdOn" ng-model="aliquotSpec.createdOn" class="form-control" type="text"
+              datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
+              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
+              required placeholder="{{'specimens.created_on' | translate}}">
+            <div os-field-error field="aliquotForm.createdOn"></div>
+          </div>
+        </div>
+
+      <!--<div class="col-xs-2">-->
+        <!--<timepicker class="os-time-no-wheels" os-md-input ng-model="aliquotSpec.createdOn" show-meridian="false">-->
+        <!--</timepicker>-->
+      <!--</div>-->
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-12 os-spmn-close-parent">
+          <div class="checkbox">
+            <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+          </div>
+          <div class="message">
+            <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix" ng-class="{'os-modal-footer': modal}">
+        <div class="col-xs-12">
+          <button type="submit" class="btn" ng-class="{'btn-primary': modal, 'btn-success': !modal}" os-form-submit="collectAliquots()" local-form="true">
+            <span translate="specimens.buttons.collect_aliquots">Collect Aliquots</span>
+          </button>
+          <a class="btn os-btn-text-secondary" os-form-cancel="revertEdit()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
