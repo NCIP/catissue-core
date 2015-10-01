@@ -417,7 +417,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				detail.setReceivedEvent(receivedEvent);
 			}
 
-			setCreatedOn(detail.getPooledSpecimens(), createdOn);
+			setCreatedOn(detail.getPooledSpmns(), createdOn);
 		}
 
 		setCreatedOn(detail.getChildren(), createdOn);
@@ -502,21 +502,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 			specimen = saveOrUpdate(detail, existing, parent, false);
 		}
 		
-		//
-		// if (specimen is pooled) {
-		//    return specimen;
-		// }
-		//
-		
-		//
-		// if (specimen is new and have pooled specimens) {
-		//    for (SpecimenDetail spmn : detail.getPooledSpmns()) {
-		//        collectSpecimen(spmn, null);
-		//    }
-		// }
-		//
-		//
-				
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
 				collectSpecimen(childDetail, specimen);
@@ -645,8 +630,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		if (sr.isPooledSpmnsHead()) {
 			boolean atLeastOneColl = false;
-			if (CollectionUtils.isNotEmpty(detail.getPooledSpecimens())) {
-				for (SpecimenDetail pooledSpmnDetail : detail.getPooledSpecimens()) {
+			if (CollectionUtils.isNotEmpty(detail.getPooledSpmns())) {
+				for (SpecimenDetail pooledSpmnDetail : detail.getPooledSpmns()) {
 					Specimen pooledSpmn = specimenFactory.createPooledSpecimen(pooledSpmnDetail, specimen);
 					specimen.getPooledSpecimens().add(pooledSpmn);
 

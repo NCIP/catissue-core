@@ -21,7 +21,7 @@ import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
-public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
+public class SpecimenRequirement implements Comparable<SpecimenRequirement> {
 	private Long id;
 	
 	private String name;

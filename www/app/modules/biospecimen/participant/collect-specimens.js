@@ -319,6 +319,33 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
+      function handlePooledSpmnsStatus(specimen) {
+        var poolHd = specimen.poolHd;
+        if (!poolHd) {
+          return;
+        }
+
+        var allSameStatus = poolHd.pooledSpmns.every(
+          function(s) {
+            return s.status == specimen.status;
+          }
+        );
+
+        if (allSameStatus|| poolHd.status == 'Missed Collection') {
+          poolHd.status = specimen.status;
+        } else if (specimen.status != 'Collected' && poolHd.status == 'Collected') {
+          var atLeastOneColl = poolHd.pooledSpmns.some(
+            function(s) {
+              return s.status == 'Collected';
+            }
+          );
+
+          if (!atLeastOneColl) {
+            poolHd.status = specimen.status;
+          }
+        }
+      }  
+
       $scope.statusChanged = function(specimen) {
         setDescendentStatus(specimen); 
 
@@ -329,6 +356,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
             curr = curr.parent;
           }
         }
+        
+        handlePooledSpmnsStatus(specimen);
 
         if (!specimen.expanded) {
           angular.forEach(specimen.aliquotGrp, function(sibling) {
@@ -379,6 +408,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
       };
 
       function setDescendentStatus(specimen) {
+        if (specimen.pooledSpmns) {
+          for (var i = 0; i < specimen.pooledSpmns.length; ++i) {
+            specimen.pooledSpmns[i].status = specimen.status;
+          }
+        }
+
         for (var i = 0; i < specimen.children.length; ++i) {
           specimen.children[i].status = specimen.status;
           setDescendentStatus(specimen.children[i]);
@@ -423,6 +458,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
           var specimen = getSpecimenToSave(uiSpecimen);
           specimen.children = getSpecimensToSave(cp, uiSpecimen.children, visited);
+          if (uiSpecimen.pooledSpmns) {
+            specimen.pooledSpmns = getSpecimensToSave(cp, uiSpecimen.pooledSpmns, visited);
+          }
+
           result.push(specimen);
           return result;
         });

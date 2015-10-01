@@ -34,7 +34,7 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	private Long pooledSpecimenHeadId;
 
-	private List<SpecimenDetail> pooledSpecimens;
+	private List<SpecimenDetail> pooledSpmns;
 
 	// This is needed for creation of derivatives from BO for closing parent specimen.
 	private Boolean closeParent;
@@ -79,12 +79,12 @@ public class SpecimenDetail extends SpecimenInfo {
 		this.pooledSpecimenHeadId = pooledSpecimenHeadId;
 	}
 
-	public List<SpecimenDetail> getPooledSpecimens() {
-		return pooledSpecimens;
+	public List<SpecimenDetail> getPooledSpmns() {
+		return pooledSpmns;
 	}
 
-	public void setPooledSpecimens(List<SpecimenDetail> pooledSpecimens) {
-		this.pooledSpecimens = pooledSpecimens;
+	public void setPooledSpmns(List<SpecimenDetail> pooledSpmns) {
+		this.pooledSpmns = pooledSpmns;
 	}
 
 	public Set<String> getBiohazards() {
@@ -133,7 +133,7 @@ public class SpecimenDetail extends SpecimenInfo {
 			result.setChildren(from(children));
 		} else {
 			if (sr.isPooledSpmnsHead()) {
-				result.setPooledSpecimens(getSpecimens(sr.getPooledSpecimenReqs(), specimen.getPooledSpecimens()));
+				result.setPooledSpmns(getSpecimens(sr.getPooledSpecimenReqs(), specimen.getPooledSpecimens()));
 			}
 			
 			Collection<SpecimenRequirement> anticipated = sr.getChildSpecimenRequirements();
@@ -165,7 +165,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		SpecimenInfo.fromTo(anticipated, result);
 		
 		if (anticipated.isPooledSpmnsHead()) {
-			result.setPooledSpecimens(fromAnticipated(anticipated.getPooledSpecimenReqs()));
+			result.setPooledSpmns(fromAnticipated(anticipated.getPooledSpecimenReqs()));
 		}
 		
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));

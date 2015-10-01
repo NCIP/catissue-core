@@ -3,6 +3,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     var Specimen = osModel(
       'specimens',
       function(specimen) {
+        if (specimen.pooledSpmns) {
+          specimen.pooledSpmns = specimen.pooledSpmns.map(
+            function(pooledSpmn) {
+              return new Specimen(pooledSpmn);
+            }
+          );
+        }
+
         if (specimen.children) {
           specimen.children = specimen.children.map(
             function(child) {
