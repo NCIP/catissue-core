@@ -11,7 +11,8 @@ import java.util.Map;
 import krishagni.catissueplus.beans.FormContextBean;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.ClassPathResource;
+
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ImportDeForms extends ImportForms  {
 	private Map<String, String> formsInfo = new HashMap<String, String>();
@@ -28,7 +29,7 @@ public class ImportDeForms extends ImportForms  {
 		BufferedReader reader = null;
 		InputStream in = null;
 		try {
-			in = new ClassPathResource("/de-forms/list.csv").getInputStream();
+			in = Utility.getResourceInputStream("de-forms/list.csv");
 			
 			formsInfo.clear();
 			
@@ -36,8 +37,8 @@ public class ImportDeForms extends ImportForms  {
 				reader = new BufferedReader(new InputStreamReader(in));
 				String line = null;
 				while ((line = reader.readLine()) != null) {
-					String[] tokens = line.replace(" ", "").split(",");
-					formsInfo.put("de-forms/" + tokens[0], tokens[1]);
+					String[] tokens = line.split(",");
+					formsInfo.put("de-forms/" + tokens[0].trim(), tokens[1].trim());
 				}
 			}
 			
