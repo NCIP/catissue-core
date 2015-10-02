@@ -7,16 +7,14 @@ angular.module('openspecimen')
        });
      }
      
-     var modalCtrl = function($scope, $modalInstance, User, Alerts) {
+     var modalCtrl = function($scope, $translate, $modalInstance, User, Alerts) {
        $scope.feedbackDetail = {};
        $scope.submit = function() {
          User.sendFeedback($scope.feedback).then(
            function(resp) {
              $modalInstance.close('ok');
              if(resp.status == 'ok') {
-               Alerts.success('Feedback sent successfully');
-             } else {
-               Alerts.error('Something went wrong, please contact system administrator');
+               Alerts.success($translate.instant('feedback.success_message'));
              }
            }
          );

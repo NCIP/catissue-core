@@ -361,6 +361,12 @@ public class UserServiceImpl implements UserService {
 		Institute institute = getInstitute(req.getPayload());
 		return ResponseEvent.response(InstituteDetail.from(institute));
 	}
+	
+	@Override
+	public ResponseEvent<Boolean> sendFeedback(RequestEvent<FeedbackDetail> req) {
+		FeedbackDetail detail = req.getPayload();
+		return ResponseEvent.response(sendFeedbackEmail(AuthUtil.getCurrentUser(), detail));
+	}
 
 	private ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req, boolean partial) {
 		try {
@@ -401,21 +407,6 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}		
-	}
-	
-	@Override
-	public ResponseEvent<Boolean> sendFeedback(RequestEvent<FeedbackDetail> req) {
-		FeedbackDetail detail = req.getPayload();
-		return ResponseEvent.response(sendFeedbackEmail(AuthUtil.getCurrentUser(), detail));
-	}
-	
-	private boolean sendFeedbackEmail(User user, FeedbackDetail detail) {
-		String[] rcpt = new String[]{ConfigUtil.getInstance().getStrSetting("common", "support_email", "")};
-		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("user", user);
-		props.put("feedback", detail);
-		
-		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, rcpt, props);
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
@@ -519,5 +510,14 @@ public class UserServiceImpl implements UserService {
 			daoFactory.getUserDao().saveFpToken(token);
 		}
 		return token;
+	}
+	
+	private boolean sendFeedbackEmail(User user, FeedbackDetail detail) {
+		String[] rcpt = new String[]{ConfigUtil.getInstance().getStrSetting("common", "support_email", "")};
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("user", user);
+		props.put("feedback", detail);
+		
+		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, rcpt, props);
 	}
 }
