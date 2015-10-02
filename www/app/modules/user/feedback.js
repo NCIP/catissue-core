@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .controller('FeedbackCtrl', function($scope, $modal, User, Alerts) {
+  .controller('FeedbackCtrl', function($scope, $translate, $modal, User, Alerts) {
 
     function sendFeedback(feedback) {
       User.sendFeedback(feedback).then(
