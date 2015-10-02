@@ -231,20 +231,20 @@ public class VisitServiceImpl implements VisitService {
 			
 			AccessCtrlMgr.getInstance().ensureReadSprRights(visit);
 		
-			String fileName = visit.getSprName();
+			String fileName = visit.getName() + ".txt";
 			if (StringUtils.isBlank(fileName)) {
-				return ResponseEvent.userError(VisitErrorCode.NO_SPR_UPLOADED);
+				throw OpenSpecimenException.userError(VisitErrorCode.NO_SPR_UPLOADED);
 			}
 			
 			File file = getSprFile(visit.getId());
 			if (!file.exists()) {
-				return ResponseEvent.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
+				throw OpenSpecimenException.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
 			
 			if (detail.getType() != null && detail.getType().equals(FileType.PDF)) {
 				Map<String, Object> props = Collections.<String, Object>singletonMap("visit", visit);
 				file = sprText2PdfGenerator.generate(file, props);
-				fileName = fileName.split("\\.")[0] + ".pdf";
+				fileName = visit.getName() + ".pdf";
 			}
 
 			FileDetail fileDetail = new FileDetail();
