@@ -41,6 +41,11 @@ angular.module('os.biospecimen.visit', [
             }
           );
         },
+        resolve: {
+          extensionCtxt: function(Visit) {
+            return Visit.getExtensionCtxt();
+          }
+        },
         controller: 'AddEditVisitCtrl',
         parent: 'visit-root'
       })
