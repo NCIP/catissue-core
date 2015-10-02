@@ -25,7 +25,7 @@
                     <td>First Name </td><td> : $user.firstName </td>
                   </tr>
                   <tr>
-                    <td>Login Name  </td> <td>: $user.loginName </td>
+                    <td>Login Name </td> <td>: $user.loginName </td>
                   </tr>
                   <tr>
                     <td>Email Address </td><td> : $user.emailAddress </td>
