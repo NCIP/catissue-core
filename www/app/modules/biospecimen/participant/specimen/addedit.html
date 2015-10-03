@@ -200,7 +200,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label"  translate="specimens.col_event.user_time">User and Time</label>
             <div class="col-xs-3">
-              <os-users  name="collector" ng-model="currSpecimen.collectionEvent.user" 
+              <os-users  name="collector" ng-model="currSpecimen.collectionEvent.user" filter-opts="userFilterOpts" 
                 placeholder="{{'specimens.col_event.user' | translate}}" required> 
               </os-users>
               <div os-field-error field="sform.collector"></div>
@@ -249,7 +249,7 @@
           <div class="form-group">
             <label class="col-xs-3 control-label"  translate="specimens.recv_event.user">User and Time</label>
             <div class="col-xs-3">
-              <os-users name="receiver" ng-model="currSpecimen.receivedEvent.user" 
+              <os-users name="receiver" ng-model="currSpecimen.receivedEvent.user" filter-opts="userFilterOpts" 
                 placeholder="{{'specimens.recv_event.user_time' | translate}}" required> 
               </os-users>
               <div os-field-error field="sform.receiver"></div>
