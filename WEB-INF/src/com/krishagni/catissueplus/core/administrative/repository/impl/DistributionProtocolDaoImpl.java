@@ -93,13 +93,10 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		query.add(Restrictions.eq("status", DistributionOrder.Status.EXECUTED));
 		if (listCrit.dpId() != null) {
 			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
-		}
-		else {
-			if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
-				query.createAlias("distributionProtocol", "dp")
-					.createAlias("dp.distributingSites", "distSite")
-					.add(Restrictions.in("distSite.id", listCrit.siteIds()));
-			}
+		} else if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
+			query.createAlias("distributionProtocol", "dp")
+				.createAlias("dp.distributingSites", "distSite")
+				.add(Restrictions.in("distSite.id", listCrit.siteIds()));
 		}
 		
 		addOrderStatProjections(query, listCrit);
@@ -186,25 +183,23 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		projs.add(Projections.groupProperty("executionDate"));
 		projs.add(Projections.count("specimen.specimenType"));
 		
+		Map<String, String> props = getProps();
+		
 		for (String attr: crit.groupByAttrs()) {
-			String prop = getProp(attr);
+			String prop = props.get(attr);
 			projs.add(Projections.groupProperty(prop));
 		}
 		
 		query.setProjection(projs);
 	}
 	
-	private String getProp(String attr) {
-		String prop = "specimen.";
-		if (attr.equals("specimenType")) {
-			prop += "specimenType";
-		} else if (attr.equals("anatomicSite")) {
-			prop += "tissueSite";
-		} else if (attr.equals("pathologyStatus")) {
-			prop += "pathologicalStatus";
-		}
+	private Map<String, String> getProps() {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("specimenType", "specimen.specimenType");
+		props.put("anatomicSite", "specimen.tissueSite");
+		props.put("pathologyStatus", "specimen.pathologicalStatus");
 		
-		return prop;
+		return props;
 	}
 	
 	private DistributionOrderStat getDOStats(Object[] row, DistributionOrderStatListCriteria crit) {

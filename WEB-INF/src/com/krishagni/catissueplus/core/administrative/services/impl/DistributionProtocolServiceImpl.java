@@ -230,7 +230,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
 			} else {
 				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
-				if (siteIds != null & CollectionUtils.isEmpty(siteIds)) {
+				if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
 					return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 				}
 				
