@@ -51,7 +51,8 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
           <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
-            <a ng-click="createAliquots(specimen)">
+            <a ui-sref="specimen-create-aliquots({eventId: visit.eventId, visitId: visit.id,
+              specimenId: specimen.id, srId: specimen.reqId})">
               <i class="fa fa-share-alt"></i>
               <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
             </a>

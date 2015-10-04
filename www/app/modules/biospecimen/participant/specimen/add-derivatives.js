@@ -5,13 +5,15 @@ angular.module('os.biospecimen.specimen.addderivatives',
     'os.biospecimen.models',
     'os.biospecimen.specimen'
   ])
-  .controller('AddDerivativeCtrl', function($scope, $state, $stateParams, PvManager, specimen, cpr, visit, CollectSpecimensSvc, Specimen, SpecimenUtil) {
+  .controller('AddDerivativeCtrl', function(
+    $scope, $state, $stateParams, specimen, cpr, visit, SpecimenUtil) {
     function init() {
       $scope.parentSpecimen = specimen;
       $scope.cpr = cpr;
       $scope.visit = visit;
       SpecimenUtil.loadSpecimenClasses($scope);
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
+
     }
 
     $scope.loadSpecimenTypes = function(specimenClass, notclear) {

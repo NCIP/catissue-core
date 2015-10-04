@@ -349,6 +349,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           Specimen.save(specimensToSave).then(
             function() {
               CollectSpecimensSvc.clear();
+              $state.previous = $state.current;
               $scope.back();
             });
         } else {

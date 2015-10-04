@@ -8,6 +8,7 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.visit = visit;
       $scope.specimen = specimen;
       $scope.childSpecimens = $scope.specimen.children;
+      $state.previous = $state.current;
     }
 
     $scope.reload = function() {
@@ -45,25 +46,6 @@ angular.module('os.biospecimen.specimen.detail', [])
           }     
         }
       );
-    }
-
-    $scope.createAliquots = function(specimen) {
-
-      var modalInstance = $modal.open({
-        templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
-        controller: 'AddAliquotsCtrl',
-        resolve: {
-          specimen: function() {
-            return specimen;
-          },
-          cpr: function() {
-            return cpr;
-          },
-          visit: function() {
-            return visit;
-          }
-        }
-      });
     }
 
     $scope.closeSpecimen = function() {

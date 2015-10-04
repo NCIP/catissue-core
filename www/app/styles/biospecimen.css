@@ -270,3 +270,11 @@
 .os-list-container .os-key-values .item .key {
   padding: 0px 5px;
 }
+
+os-no-left-padding {
+  padding-left: 0px !important;
+}
+
+.os-padding-top {
+  padding-top: 8px;
+}

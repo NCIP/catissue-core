@@ -1,83 +1,105 @@
-<style>
-  .aliquot-derivative-modal .modal-dialog{
-  width: 700px;
-  }
-</style>
-<div class="os-modal">
-  <div class="os-modal-header" ng-if="modal">
-    <span>
-      <span>Create Aliquots</span>
-    </span>
-  </div>
-  <div ng-class="{'os-modal-body': modal}">
-    <form name="aliquotForm" os-form-validator="aliquotForm" novalidate>
-      <div class="clearfix">
-        <div class="col-xs-12">
-          <ul class="os-key-values os-two-cols">
-            <li class="item">
-              <strong class="key key-sm" translate="specimens.available_qty">Available Quantity:</strong>
-              <span class="value value-md">{{parentSpecimen.availableQty}}</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
+          {{cpr.cpTitle}}
+        </a>
+      </li>
+      <li>
+        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+            <span ng-switch-when="false" translate="common.na"> N/A </span>
+          </ng-switch>
+          <span>({{cpr.ppid}})</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+          T{{visit.eventPoint}}: {{visit.eventLabel}}
+        </a>
+      </li>
+      <li>
+        <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+          {{parentSpecimen.label}}
+        </a>
+      </li>
+    </ul>
 
-      <div class="form-group clearfix">
-        <div class="col-xs-3">
+    <h3>
+      <span translate="specimens.create_aliquots_for">Create Aliquots for</span>
+      <span>{{parentSpecimen.label}} (</span>
+      <span translate="specimens.available_qty">Available Quantity</span>
+      <span>: {{parentSpecimen.availableQty}})</span>
+    </h3>
+  </div>
+
+  <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
+    <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.aliquot_cnt">No of Aliquots</label>
+        <div class="col-xs-6">
           <div class="form-group">
             <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
-              os-md-input class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
+              class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
               ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
             <div os-field-error field="aliquotForm.noOfAliquots"></div>
           </div>
         </div>
+      </div>
 
-        <div class="col-xs-3">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.qty_per_aliquot">Quantity per Aliquot</label>
+        <div class="col-xs-6">
           <div class="form-group">
             <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
-              os-md-input class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
-              ng-required="!aliquotSpec.noOfAliquots"
-              ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/"
-              ng-model-options="{allowInvalid: 'true'}">
+               class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
+               ng-required="!aliquotSpec.noOfAliquots"
+               ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
             <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
           </div>
         </div>
+      </div>
 
-        <div class="col-xs-3">
-          <div os-md-input ng-model="aliquotSpec.createdOn" placeholder="{{'specimens.created_on' | translate}}">
-            <input name="createdOn" ng-model="aliquotSpec.createdOn" class="form-control" type="text"
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true"
-              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-              required placeholder="{{'specimens.created_on' | translate}}">
-            <div os-field-error field="aliquotForm.createdOn"></div>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
+        <div class="os-date-time clearfix">
+          <div class="col-xs-4 input os-no-left-padding">
+            <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
           </div>
+          <div class="col-xs-2">
+            <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
+          </div>
+          <div os-field-error field="aliquotForm.createdOn"></div>
         </div>
-
-      <!--<div class="col-xs-2">-->
-        <!--<timepicker class="os-time-no-wheels" os-md-input ng-model="aliquotSpec.createdOn" show-meridian="false">-->
-        <!--</timepicker>-->
-      <!--</div>-->
       </div>
 
       <div class="form-group clearfix">
-        <div class="col-xs-12 os-spmn-close-parent">
+        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent os-no-left-padding"">
           <div class="checkbox">
             <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
           </div>
-          <div class="message">
+          <div class="message os-padding-top">
             <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
           </div>
         </div>
       </div>
 
-      <div class="form-group clearfix" ng-class="{'os-modal-footer': modal}">
-        <div class="col-xs-12">
-          <button type="submit" class="btn" ng-class="{'btn-primary': modal, 'btn-success': !modal}" os-form-submit="collectAliquots()" local-form="true">
-            <span translate="specimens.buttons.collect_aliquots">Collect Aliquots</span>
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="collectAliquots()"
+            translate="common.buttons.create" local-form="true">
+            Create
           </button>
-          <a class="btn os-btn-text-secondary" os-form-cancel="revertEdit()">
-            <span translate="common.buttons.cancel">Cancel</span>
-          </a>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">
+            Discard
+          </button>
         </div>
       </div>
     </form>

@@ -106,16 +106,16 @@
             <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
             </timepicker>
           </div>
-          <div os-field-error field="sform.createdOn"></div>
+          <div os-field-error field="derivativeForm.createdOn"></div>
         </div>
       </div>
 
       <div class="form-group clearfix">
-        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent">
+        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent os-no-left-padding"">
           <div class="checkbox">
             <os-checkbox ng-model="derivative.closeParent"></os-checkbox>
           </div>
-          <div class="message">
+          <div class="message os-padding-top">
             <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
           </div>
         </div>
