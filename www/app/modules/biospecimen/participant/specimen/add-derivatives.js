@@ -11,13 +11,12 @@ angular.module('os.biospecimen.specimen.addderivatives',
       $scope.parentSpecimen = specimen;
       $scope.cpr = cpr;
       $scope.visit = visit;
-      SpecimenUtil.loadSpecimenClasses($scope);
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
-
+      SpecimenUtil.loadSpecimenClasses($scope);
     }
 
-    $scope.loadSpecimenTypes = function(specimenClass, notclear) {
-      SpecimenUtil.loadSpecimenTypes($scope, specimenClass, notclear);
+    $scope.loadSpecimenTypes = function(specimenClass, notClear) {
+      SpecimenUtil.loadSpecimenTypes($scope, specimenClass, notClear);
     };
 
     $scope.createDerivative = function() {

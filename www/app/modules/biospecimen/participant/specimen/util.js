@@ -124,8 +124,8 @@ angular.module('os.biospecimen.specimen')
       scope.classesLoaded = true;
     }
 
-    function loadSpecimenTypes(scope, specimenClass, notclear) {
-      if (!notclear) {
+    function loadSpecimenTypes(scope, specimenClass, notClear) {
+      if (!notClear) {
         scope.derivative.type = '';
       }
 

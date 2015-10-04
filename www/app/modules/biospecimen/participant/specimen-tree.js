@@ -262,8 +262,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
           CollectSpecimensSvc.collect(getState(), scope.visit, specimens, parent);
         };
 
-        scope.loadSpecimenTypes = function(specimenClass, notclear) {
-          SpecimenUtil.loadSpecimenTypes(scope, specimenClass, notclear);
+        scope.loadSpecimenTypes = function(specimenClass, notClear) {
+          SpecimenUtil.loadSpecimenTypes(scope, specimenClass, notClear);
         };
 
         scope.showCreateDerivative = function(specimen) {
