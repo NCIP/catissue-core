@@ -28,42 +28,59 @@
     </ul>
 
     <h3>
-      <span translate="specimens.create_aliquots_for">Create Aliquots for</span>
-      <span>{{parentSpecimen.label}}</span>
+      <span translate="specimens.create_aliquots">Create Aliquots</span>
+     
     </h3>
   </div>
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
       <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
+        <div class="col-xs-2 os-padding-top">
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            {{parentSpecimen.label}}
+          </a>
+        </div>
         <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
-        <div class="col-xs-6 os-padding-top">
-          <div class="form-group">
-            {{parentSpecimen.availableQty}}
-          </div>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.availableQty}}
+          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="srs.specimen_type">Specimen Type</label>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.type}}
+        </div>
+        <label class="col-xs-3 control-label" translate="srs.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.anatomicSite}}
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.aliquot_cnt">No of Aliquots</label>
-        <div class="col-xs-6">
-          <div class="form-group">
+        <div class="col-xs-2">
+          <div>
             <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
               class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
               ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
             <div os-field-error field="aliquotForm.noOfAliquots"></div>
           </div>
         </div>
-      </div>
-
-      <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.qty_per_aliquot">Quantity per Aliquot</label>
-        <div class="col-xs-6">
-          <div class="form-group">
+        <div class="col-xs-2">
+          <div class="input-group">
             <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
-               class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
-               ng-required="!aliquotSpec.noOfAliquots"
-               ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
+              class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
+              ng-required="!aliquotSpec.noOfAliquots"
+              ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
+            <div class="input-group-addon">
+              <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
+              </os-specimen-unit>
+            </div>
             <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
           </div>
         </div>
@@ -72,7 +89,7 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
         <div class="os-date-time clearfix">
-          <div class="col-xs-4 input os-no-left-padding">
+          <div class="col-xs-2 input">
             <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
               placeholder="{{'specimens.created_on' | translate}}" required>
             </os-date-picker>
@@ -86,7 +103,7 @@
       </div>
 
       <div class="form-group clearfix">
-        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent os-no-left-padding"">
+        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent">
           <div class="checkbox">
             <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
           </div>

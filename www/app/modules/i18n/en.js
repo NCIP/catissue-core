@@ -457,7 +457,7 @@
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
     "create_derivative_for": "Create Derivative for",
-    "create_aliquots_for": "Create Aliquots of",
+    "create_aliquots": "Create Aliquots",
 
 
     "col_event": {
