@@ -27,5 +27,17 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       );
     }
     
+    DistributionProtocol.getOrders = function(params) {
+      return $http.get(DistributionProtocol.url() + 'orders', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+    
+    DistributionProtocol.prototype.historyExportUrl = function() {
+      return DistributionProtocol.url() + this.$id() + '/orders-report';
+    }
+    
     return DistributionProtocol;
   });

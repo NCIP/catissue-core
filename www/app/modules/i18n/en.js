@@ -668,7 +668,8 @@
     },
     
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "history": "History"
     },
 
     "filter": {
@@ -683,6 +684,15 @@
       "delete": "Delete",
       "close": "Close",
       "reopen": "Reopen"
+    },
+    
+    "history": {
+      "order_name": "Order Name",
+      "dist_date": "Distribution Date",
+      "specimen_type": "Specimen Type",
+      "anatomic_site": "Anatomic Site",
+      "pathology_status": "Pathology Status",
+      "specimens_cnt": "Specimens Distributed"
     }
   },
 
