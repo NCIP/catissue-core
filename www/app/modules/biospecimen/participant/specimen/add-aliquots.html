@@ -29,14 +29,21 @@
 
     <h3>
       <span translate="specimens.create_aliquots_for">Create Aliquots for</span>
-      <span>{{parentSpecimen.label}} (</span>
-      <span translate="specimens.available_qty">Available Quantity</span>
-      <span>: {{parentSpecimen.availableQty}})</span>
+      <span>{{parentSpecimen.label}}</span>
     </h3>
   </div>
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
+        <div class="col-xs-6 os-padding-top">
+          <div class="form-group">
+            {{parentSpecimen.availableQty}}
+          </div>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.aliquot_cnt">No of Aliquots</label>
         <div class="col-xs-6">
