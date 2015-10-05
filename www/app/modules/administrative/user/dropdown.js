@@ -38,7 +38,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
           }
 
           loadUsers($scope);
-        });
+        }, true);
       },
   
       link: function(scope, element, attrs, ctrl) {

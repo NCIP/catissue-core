@@ -8,6 +8,7 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.extnOpts = Util.getExtnOpts(cp, extensionCtxt);
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
+      $scope.userFilterOpts = {listAll: true};
 
       loadPvs();
 

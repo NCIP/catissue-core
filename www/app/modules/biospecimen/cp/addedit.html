@@ -90,7 +90,8 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.pi">Principal Investigator</label>
         <div class="col-xs-6">
-          <os-users name="pi" ng-model="cp.principalInvestigator" placeholder="{{'cp.pi' | translate}}" required></os-users>
+          <os-users name="pi" ng-model="cp.principalInvestigator" filter-opts="userFilterOpts"
+            placeholder="{{'cp.pi' | translate}}" required></os-users>
           <div os-field-error field="cpForm.pi"></div>
         </div>
       </div>
@@ -98,7 +99,8 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.coordinators">Protocol Coordinators</label>
         <div class="col-xs-6">
-          <os-users multiple ng-model="cp.coordinators" placeholder="{{'cp.coordinators' | translate}}"></os-users>
+          <os-users multiple ng-model="cp.coordinators" filter-opts="userFilterOpts"
+            placeholder="{{'cp.coordinators' | translate}}"></os-users>
         </div>
       </div>
 

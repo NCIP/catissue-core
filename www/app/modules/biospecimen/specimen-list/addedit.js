@@ -8,6 +8,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       $scope.list.isAllowedToDeleteList = isAllowedToDeleteList(); 
       $scope.isQueryOrSpecimenPage =  SpecimensHolder.getSpecimens() != undefined;
       SpecimensHolder.setSpecimens(undefined);
+      $scope.userFilterOpts = {listAll: true};
     }
 
     function isAllowedToDeleteList() {
