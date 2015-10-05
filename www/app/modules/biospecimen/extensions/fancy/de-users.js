@@ -9,7 +9,7 @@ openspecimen.ui.fancy.Users = edu.common.de.LookupSvc.extend({
   },
 
   searchRequest: function(searchTerm) {
-    return {searchString: searchTerm, sortBy: 'lastName,firstName'};
+    return {searchString: searchTerm, sortBy: 'lastName,firstName', listAll: true};
   },
 
   formatResults: function(users) {
