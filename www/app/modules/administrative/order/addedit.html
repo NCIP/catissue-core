@@ -41,7 +41,7 @@
       <div class="col-xs-6">
         <os-select name="dp" ng-model="order.distributionProtocol" 
           list="dpList" display-prop="title" on-select="onDpSelect()"
-          placeholder="{{'orders.dp' | translate}}" required>
+          placeholder="{{'orders.dp' | translate}}" required refresh="searchDp">
         </os-select>       
         <div os-field-error field="ordForm.dp"></div>
       </div>
