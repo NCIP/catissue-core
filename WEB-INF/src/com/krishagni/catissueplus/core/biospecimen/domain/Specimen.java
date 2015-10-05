@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 @Audited
-public class Specimen extends BaseEntity {
+public class Specimen extends BaseExtensionEntity {
 	public static final String NEW = "New";
 	
 	public static final String ALIQUOT = "Aliquot";
@@ -575,7 +575,8 @@ public class Specimen extends BaseEntity {
 		setAvailableQuantity(specimen.getAvailableQuantity());
 		setIsAvailable(specimen.getIsAvailable());
 				
-		setComment(specimen.getComment());		
+		setComment(specimen.getComment());
+		setExtension(specimen.getExtension());
 		updatePosition(specimen.getPosition());
 
 		checkQtyConstraints();
@@ -860,6 +861,11 @@ public class Specimen extends BaseEntity {
 		}
 			
 		return desc.toString();		
+	}
+	
+	@Override
+	public String getEntityType() {
+		return "SpecimenExtension";
 	}
 
 	private void ensureNoActiveChildSpecimens() {
