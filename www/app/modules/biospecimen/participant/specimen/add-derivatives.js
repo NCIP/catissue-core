@@ -21,9 +21,11 @@ angular.module('os.biospecimen.specimen.addderivatives',
 
     $scope.createDerivative = function() {
       SpecimenUtil.createDerivatives($scope);
-      var params = {specimenId:  $scope.parentSpecimen.id, srId:  $scope.parentSpecimen.reqId};
-      $state.go('specimen-detail.overview', params);
     };
+
+    $scope.revertEdit = function () {
+      $scope.back();
+    }
 
     init();
   });

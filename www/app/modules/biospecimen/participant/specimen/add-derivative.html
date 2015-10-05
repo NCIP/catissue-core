@@ -28,13 +28,37 @@
     </ul>
 
     <h3>
-      <span translate="specimens.create_derivative_for">Create Derivative for</span>
-      <span>{{parentSpecimen.label}}</span>
+      <span translate="specimens.create_derivative">Create Derivative</span>
     </h3>
   </div>
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="derivativeForm" class="form-horizontal" os-form-validator="derivativeForm" validator="derivativeFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
+        <div class="col-xs-2 os-padding-top">
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            {{parentSpecimen.label}}
+          </a>
+        </div>
+        <label class="col-xs-2 control-label" translate="specimens.available_qty">Available Quantity</label>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.availableQty}}
+          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="srs.specimen_type">Specimen Type</label>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.type}}
+        </div>
+        <label class="col-xs-2 control-label" translate="srs.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-2 os-padding-top">
+          {{parentSpecimen.anatomicSite}}
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.class">Class</label>
         <div class="col-xs-6">

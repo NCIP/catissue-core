@@ -87,7 +87,7 @@ angular.module('os.biospecimen.specimen')
         specimensToSave = [scope.derivative];
       }
 
-      Specimen.save(specimensToSave).then(
+      return Specimen.save(specimensToSave).then(
         function(result) {
           if (closeParent) {
             scope.parentSpecimen.activityStatus = result[0].activityStatus;
