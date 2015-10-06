@@ -458,7 +458,8 @@
     "specimen_closed": "Specimen is closed successfully",
     "create_derivative": "Create Derivative",
     "create_aliquots": "Create Aliquots",
-
+    "specimen_type": "Specimen Type",
+    "anatomic_site": "Anatomic Site",
 
     "col_event": {
       "title": "Collection Details",

@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimen')
-  .factory('SpecimenUtil', function(Specimen, PvManager) {
+  .factory('SpecimenUtil', function(Specimen, PvManager, Alerts) {
 
     function collectAliquots(scope) {
       var spec = scope.aliquotSpec;
@@ -151,7 +151,6 @@ angular.module('os.biospecimen.specimen')
       loadSpecimenTypes: loadSpecimenTypes,
 
       getNewDerivative: getNewDerivative
-
     }
 
   });

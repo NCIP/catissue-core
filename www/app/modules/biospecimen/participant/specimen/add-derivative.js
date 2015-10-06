@@ -1,10 +1,5 @@
 
-angular.module('os.biospecimen.specimen.addderivatives',
-  [
-    'os.biospecimen.common',
-    'os.biospecimen.models',
-    'os.biospecimen.specimen'
-  ])
+angular.module('os.biospecimen.specimen.addderivative', [])
   .controller('AddDerivativeCtrl', function(
     $scope, $state, $stateParams, specimen, cpr, visit, SpecimenUtil) {
     function init() {

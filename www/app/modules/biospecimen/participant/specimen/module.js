@@ -6,8 +6,8 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.detail',
     'os.biospecimen.specimen.overview',
     'os.biospecimen.specimen.close',
-    'os.biospecimen.specimen.addaliquot',
-    'os.biospecimen.specimen.addderivatives'
+    'os.biospecimen.specimen.addaliquots',
+    'os.biospecimen.specimen.addderivative'
   ])
   .config(function($stateProvider) {
     $stateProvider

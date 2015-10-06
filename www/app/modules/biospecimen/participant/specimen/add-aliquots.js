@@ -1,12 +1,7 @@
 
-angular.module('os.biospecimen.specimen.addaliquot',
-  [
-    'os.biospecimen.common',
-    'os.biospecimen.models',
-    'os.biospecimen.participant.collect-specimens'
-  ])
+angular.module('os.biospecimen.specimen.addaliquots', [])
   .controller('AddAliquotsCtrl', function(
-    $scope, $state, $stateParams, specimen, cpr, visit,
+    $scope, $rootScope, $state, $stateParams, specimen, cpr, visit,
     CollectSpecimensSvc, SpecimenUtil) {
     function init() {
       $scope.parentSpecimen = specimen;
@@ -14,7 +9,11 @@ angular.module('os.biospecimen.specimen.addaliquot',
       $scope.visit = visit;
       $scope.aliquotSpec = {createdOn : new Date()};
 
-      if (!!$state.previous && $state.previous.url.indexOf("collect-specimens") == 1   ) {
+      console.warn("$rootScope.stateChangeInfo " + $rootScope.stateChangeInfo);
+      // After collecting specimens, control will come to add-aliquot page
+      // because of the collect-specimen implementation,
+      // where, on success control is returning to previous state
+      if ($rootScope.stateChangeInfo.fromState.url.indexOf("collect-specimens") == 1) {
          var params = {specimenId:  $scope.parentSpecimen.id, srId:  $scope.parentSpecimen.reqId};
          $state.go('specimen-detail.overview', params);
       }

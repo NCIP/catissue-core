@@ -3,7 +3,7 @@
     <ul os-breadcrumbs>
       <li>
         <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
-          {{cpr.cpTitle}}
+          {{cpr.cpShortTitle}}
         </a>
       </li>
       <li>
@@ -32,29 +32,29 @@
     </h3>
   </div>
 
-  <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
+  <div class="container os-margin-top">
     <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
-        <div class="col-xs-2 os-padding-top">
+        <div class="col-xs-2 os-ctrl-padding-top">
           <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
-            {{parentSpecimen.label}}
+            <span>{{parentSpecimen.label}}</span>
           </a>
         </div>
         <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
-        <div class="col-xs-2 os-padding-top">
-          {{parentSpecimen.availableQty}}
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.availableQty}}</span>
           <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="srs.specimen_type">Specimen Type</label>
-        <div class="col-xs-2 os-padding-top">
+        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
           {{parentSpecimen.type}}
         </div>
-        <label class="col-xs-3 control-label" translate="srs.anatomic_site">Anatomic Site</label>
-        <div class="col-xs-2 os-padding-top">
+        <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
           {{parentSpecimen.anatomicSite}}
         </div>
       </div>
@@ -106,7 +106,7 @@
           <div class="checkbox">
             <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
           </div>
-          <div class="message os-padding-top">
+          <div class="message os-ctrl-padding-top">
             <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
           </div>
         </div>
