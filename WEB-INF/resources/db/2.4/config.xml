@@ -20,7 +20,7 @@
       call add_cfg_prop(
         'common', 'support_email',
         'common_support_email', 'common_support_email_desc',
-        'STRING', 'support@openspecimen.org'
+        'STRING', 'support@krishagni.com'
       );
     </sql>
   </changeSet>
