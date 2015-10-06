@@ -14,7 +14,6 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserFactory;
-import com.krishagni.catissueplus.core.administrative.events.FeedbackDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -53,8 +52,6 @@ public class UserServiceImpl implements UserService {
 	private static final String USER_REQUEST_REJECTED_TMPL = "users_request_rejected";
 	
 	private static final String USER_CREATED_EMAIL_TMPL = "users_created";
-	
-	private static final String FEEDBACK_EMAIL_TMPL = "feedback";
 	
 	private DaoFactory daoFactory;
 
@@ -361,12 +358,6 @@ public class UserServiceImpl implements UserService {
 		Institute institute = getInstitute(req.getPayload());
 		return ResponseEvent.response(InstituteDetail.from(institute));
 	}
-	
-	@Override
-	public ResponseEvent<Boolean> sendFeedback(RequestEvent<FeedbackDetail> req) {
-		FeedbackDetail detail = req.getPayload();
-		return ResponseEvent.response(sendFeedbackEmail(AuthUtil.getCurrentUser(), detail));
-	}
 
 	private ResponseEvent<UserDetail> updateUser(RequestEvent<UserDetail> req, boolean partial) {
 		try {
@@ -510,14 +501,5 @@ public class UserServiceImpl implements UserService {
 			daoFactory.getUserDao().saveFpToken(token);
 		}
 		return token;
-	}
-	
-	private boolean sendFeedbackEmail(User user, FeedbackDetail detail) {
-		String[] rcpt = new String[]{ConfigUtil.getInstance().getStrSetting("common", "support_email", "")};
-		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("user", user);
-		props.put("feedback", detail);
-		
-		return emailService.sendEmail(FEEDBACK_EMAIL_TMPL, rcpt, props);
 	}
 }

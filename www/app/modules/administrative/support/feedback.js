@@ -1,8 +1,8 @@
 angular.module('openspecimen')
-  .controller('FeedbackCtrl', function($scope, $translate, $modal, User, Alerts) {
+  .controller('FeedbackCtrl', function($scope, $translate, $modal, Support, Alerts) {
 
     function sendFeedback(feedback) {
-      User.sendFeedback(feedback).then(
+      Support.sendFeedback(feedback).then(
         function(resp) {
           Alerts.success($translate.instant('feedback.success_message'));
         }
@@ -11,7 +11,7 @@ angular.module('openspecimen')
 
     $scope.openFeedbackForm = function() {
        var modalInstance = $modal.open({
-         templateUrl: 'modules/user/feedback.html',
+         templateUrl: 'modules/administrative/support/feedback.html',
          controller: function ($scope, $modalInstance) {
            $scope.submit = function() {
              $modalInstance.close($scope.feedback);

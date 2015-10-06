@@ -1,4 +1,4 @@
-package com.krishagni.catissueplus.core.administrative.events;
+package com.krishagni.catissueplus.core.support.events;
 
 public class FeedbackDetail {
 	private String subject;

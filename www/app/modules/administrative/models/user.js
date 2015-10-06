@@ -84,10 +84,6 @@ angular.module('os.administrative.models.user', ['os.common.models'])
         }
       );
     }
-    
-    User.sendFeedback = function(feedback) {
-      return $http.post(User.url() + 'feedback', feedback).then(ApiUtil.processResp);
-    }
 
     return User;
   });
