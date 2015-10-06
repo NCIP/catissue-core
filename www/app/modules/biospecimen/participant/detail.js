@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
-    $scope, $q, $state, cpr, visits, 
+    $scope, $q, cpr, visits, 
     CollectionProtocol, SpecimenLabelPrinter, PvManager, 
     RegisterToNewCpsHolder, DeleteUtil) {
 
