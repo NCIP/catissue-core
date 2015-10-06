@@ -266,7 +266,7 @@ public class Specimen extends BaseEntity {
 	}
 
 	public Date getCreatedOn() {
-		return createdOn;
+		return  Utility.chopSeconds(createdOn);
 	}
 
 	public void setCreatedOn(Date createdOn) {
@@ -540,7 +540,7 @@ public class Specimen extends BaseEntity {
 
 		if (isCollected()) {
 			if (isPrimary()) {
-				updateCreatedOn(getReceivedEvent().getTime());
+				updateCreatedOn(Utility.chopSeconds(getReceivedEvent().getTime()));
 			} else {
 				updateCreatedOn(specimen.getCreatedOn());
 			}
