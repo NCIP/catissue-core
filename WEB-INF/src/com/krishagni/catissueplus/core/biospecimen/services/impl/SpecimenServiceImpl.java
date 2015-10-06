@@ -569,6 +569,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+		specimen.addOrUpdateExtension();
 		addOrUpdateEvents(specimen);
 		return specimen;
 	}

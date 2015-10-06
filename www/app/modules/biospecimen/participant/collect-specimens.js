@@ -40,6 +40,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
       CollectSpecimensSvc, Container, Alerts, Util) {
 
       function init() {
+        $scope.userFilterOpts = {listAll: true};
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
           function(specimen) {
             specimen.existingStatus = specimen.status;

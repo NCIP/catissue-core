@@ -78,6 +78,8 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String VISIT_EXTENSION = "VisitExtension";
 	
+	private static final String SPECIMEN_EXTENSION = "SpecimenExtension";
+	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
 	private static Map<String, String> customFieldForms = new HashMap<String, String>();
@@ -90,6 +92,7 @@ public class FormServiceImpl implements FormService {
 		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
 		customFieldForms.put("Participant", PARTICIPANT_EXTENSION);
 		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
+		customFieldForms.put("Specimen", SPECIMEN_EXTENSION);
 	}
 	
 	private FormDao formDao;
@@ -283,8 +286,12 @@ public class FormServiceImpl implements FormService {
 			    	break;
 			    	
 			    case VISIT_EXTN:
-			    	 forms = formDao.getFormContexts(-1L, "VisitExtension");
-			    	 break;
+			    	forms = formDao.getFormContexts(-1L, "VisitExtension");
+			    	break;
+			    	 
+			    case SPECIMEN_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "SpecimenExtension");
+			    	break;
 			}
 			
 			return ResponseEvent.response(forms);			

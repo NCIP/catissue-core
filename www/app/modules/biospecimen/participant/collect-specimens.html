@@ -201,7 +201,8 @@
           <label class="col-xs-2 control-label" translate="specimens.col_event.title">Collection Details</label>
           <div class="col-xs-3 input">
             <div os-md-input ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}">
-              <os-users ng-model="collDetail.collector" placeholder="{{'specimens.col_event.user' | translate}}"> </os-users>
+              <os-users ng-model="collDetail.collector" filter-opts="userFilterOpts"
+                placeholder="{{'specimens.col_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">
@@ -223,7 +224,8 @@
           <label class="col-xs-2 control-label" translate="specimens.recv_event.title">Receive Details</label>
           <div class="col-xs-3 input">
             <div os-md-input ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}">
-              <os-users ng-model="collDetail.receiver" placeholder="{{'specimens.recv_event.user' | translate}}"> </os-users>
+              <os-users ng-model="collDetail.receiver" filter-opts="userFilterOpts"
+                placeholder="{{'specimens.recv_event.user' | translate}}"> </os-users>
             </div>
           </div>
           <div class="col-xs-2 input">

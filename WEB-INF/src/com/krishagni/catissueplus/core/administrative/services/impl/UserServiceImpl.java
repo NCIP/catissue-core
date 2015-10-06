@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
 		UserListCriteria crit = req.getPayload();		
-		if (!AuthUtil.isAdmin()) {
+		if (!AuthUtil.isAdmin() && !crit.listAll()) {
 			crit.instituteName(getCurrUserInstitute().getName());
 		} 
 		

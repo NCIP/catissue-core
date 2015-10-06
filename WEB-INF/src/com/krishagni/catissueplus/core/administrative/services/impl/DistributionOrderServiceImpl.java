@@ -245,7 +245,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+	
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
 			DistributionOrder order = daoFactory.getDistributionOrderDao().getOrder(newOrder.getName());

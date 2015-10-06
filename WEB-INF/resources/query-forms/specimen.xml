@@ -427,5 +427,18 @@
         </row>
       </subForm>
     </row>
+
+    <row>
+      <subForm>
+        <name>customFields</name>
+        <udn>customFields</udn>
+        <caption>#getMessage("specimen_field_extensions")</caption>
+        <table>OS_SPEC_CUST_FIELD_EXTNS_VIEW</table>
+        <foreignKey>SPEC_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <pathLink>true</pathLink>
+        <extnFkCol>RECORD_ID</extnFkCol>
+      </subForm>
+    </row>
   </view>
 </form>
