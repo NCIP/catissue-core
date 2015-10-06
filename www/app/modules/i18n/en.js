@@ -1406,6 +1406,13 @@
      "error": "Could not find any {{entity}} matching search key {{key}}",
      "quick_search": "Quick Search",
      "search_for": "Search for"
-   }
-
+   },
+   
+   "feedback": {
+      "title": "Your feedback counts!",
+      "info": "Please let us know what you think of the new OpenSpecimen. Any suggestions on improvements, new features, or bugs are most welcome.",
+      "subject": "Subject",
+      "feedback": "Feedback",
+      "success_message": "Feedback sent successfully"
+    }
 }

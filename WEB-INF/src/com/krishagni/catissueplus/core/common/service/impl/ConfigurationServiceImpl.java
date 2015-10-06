@@ -271,6 +271,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		props.put("cp_coding_enabled",       getBoolSetting("biospecimen", "cp_coding_enabled", false));
 		props.put("auto_empi_enabled",       isAutoEmpiEnabled());
 		props.put("uid_mandatory",           getBoolSetting("biospecimen", "uid_mandatory", false));
+		props.put("feedback_enabled",        getBoolSetting("common", "feedback_enabled", true));
 		props.put("mrn_restriction_enabled", getBoolSetting("biospecimen", "mrn_restriction_enabled", false));
 		return props;
 	}

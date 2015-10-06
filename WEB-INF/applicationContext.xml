@@ -682,6 +682,10 @@
     <property name="userDao" ref="userDao"/>
   </bean>
   
+  <bean id="supportService" class="com.krishagni.catissueplus.core.support.services.impl.SupportServiceImpl">
+    <property name="emailService" ref="emailService"/>
+  </bean>
+  
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>
   </bean>

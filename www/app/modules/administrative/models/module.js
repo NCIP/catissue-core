@@ -10,7 +10,8 @@ angular.module('os.administrative.models',
     'os.administrative.models.role',
     'os.administrative.models.setting',
     'os.administrative.models.authdomain',
-    'os.administrative.models.job'
+    'os.administrative.models.job',
+    'os.administrative.models.support'
   ]
 );
  

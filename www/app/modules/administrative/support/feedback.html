@@ -1,0 +1,40 @@
+
+<div>
+  <div class="os-modal-header">
+    <span translate="feedback.title">Your feedback counts!</span>
+  </div>
+  <div class="os-modal-body">
+    <div class="os-alert-container show">
+      <div class="alert alert-info">
+        <span translate="feedback.info">
+          Please let us know what you think of the new OpenSpecimen. Any suggestions on improvements, 
+          new features, or bugs are most welcome.
+        </span>
+      </div>
+    </div>
+    
+    <form name="feedbackForm" os-form-validator="feedbackForm" novalidate>
+      <div class="form-group">
+        <label translate="feedback.subject">Subject</label>
+        <input type="text" name="subject" class="form-control" placeholder="{{'feedback.subject' | translate}}" 
+          ng-model="feedback.subject" required></input>
+        <div os-field-error field="feedbackForm.subject"></div>
+      </div>
+      <div class="form-group">
+        <label translate="feedback.feedback">Feedback</label>
+        <textarea rows="3" name="feedback" class="form-control" placeholder="{{'feedback.feedback' | translate}}" 
+          ng-model="feedback.feedback" required></textarea>
+        <div os-field-error field="feedbackForm.feedback"></div>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" os-form-submit="submit()">
+          <span translate="common.buttons.submit">Submit</span>
+        </button>
+        <button class="btn os-btn-text" os-form-cancel="cancel()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
