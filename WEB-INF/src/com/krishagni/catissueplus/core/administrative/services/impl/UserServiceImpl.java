@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	private EmailService emailService;
 	
 	private RbacService rbacSvc;
-	
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -502,4 +502,5 @@ public class UserServiceImpl implements UserService {
 		}
 		return token;
 	}
+
 }

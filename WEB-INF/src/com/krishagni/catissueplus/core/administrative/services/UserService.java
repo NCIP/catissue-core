@@ -42,4 +42,5 @@ public interface UserService extends UserDetailsService {
 	public ResponseEvent<List<SubjectRoleDetail>> getCurrentUserRoles();
 
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req);
+
 }
