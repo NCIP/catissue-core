@@ -108,19 +108,23 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in catissue_specimen table">
-    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(16,6)" />
+    <validCheckSum>7:ff0fa5028cf6472252cc5abdb49b9597</validCheckSum>
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify available quantity from double to big decimal in catissue_specimen table">
-    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE_QUANTITY" newDataType="${decimal.type}(16,6)" />
+    <validCheckSum>7:1f012a0c182e8ea1354684d3eda47ceb</validCheckSum>
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify quantity from double to big decimal in os_order_items table">
-    <modifyDataType tableName="OS_ORDER_ITEMS" columnName="QUANTITY" newDataType="${decimal.type}(16,6)" />
+    <validCheckSum>7:0f5b826dd54303a145a68941ba09f861</validCheckSum>
+    <modifyDataType tableName="OS_ORDER_ITEMS" columnName="QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify quantity from double to big decimal in catissue_cp_req_specimen table">
-    <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(16,6)" />
+    <validCheckSum>7:ecbb35ad1bc1dc02ee26f4883e5c6e10</validCheckSum>
+    <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="vpawar" id="Add covering index to record entry table for use in views">

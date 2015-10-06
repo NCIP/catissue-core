@@ -773,7 +773,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void setLabelIfEmpty() {
-		if (StringUtils.isNotBlank(label)) {
+		if (StringUtils.isNotBlank(label) || isMissed()) {
 			return;
 		}
 		

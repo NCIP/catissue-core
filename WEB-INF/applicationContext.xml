@@ -657,6 +657,14 @@
     <property name="deInitializer" ref="deInitializer"/>
     <property name="templateService" ref="templateService"/>
   </bean>
+  
+  <bean id="importDeForms" class="com.krishagni.catissueplus.core.init.ImportDeForms">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
+  </bean>
 
   <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
     <property name="cfgSvc" ref="cfgSvc"/>
