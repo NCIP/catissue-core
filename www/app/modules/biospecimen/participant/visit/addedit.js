@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.visit.addedit', [])
   .controller('AddEditVisitCtrl', function(
-    $scope, $state, cpr, visit, extensionCtxt,
+    $scope, $state, $stateParams, cpr, visit, extensionCtxt,
     PvManager, Util, ExtensionsUtil) {
 
     function loadPvs() {
@@ -21,15 +21,23 @@ angular.module('os.biospecimen.visit.addedit', [])
 
       var currVisit = $scope.currVisit = angular.copy(visit);
       angular.extend(currVisit, {cprId: cpr.id, cpTitle: cpr.cpTitle});
+
+      $scope.deFormCtrl = {};
+      $scope.extnOpts = Util.getExtnOpts(currVisit, extensionCtxt);
+      ExtensionsUtil.createExtensionFieldMap(currVisit);
       
       if (!currVisit.id && currVisit.anticipatedVisitDate) {
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
       }
 
-      $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(currVisit, extensionCtxt);
-      ExtensionsUtil.createExtensionFieldMap(currVisit);
+      if ($stateParams.missedVisit == 'true') {
+        angular.extend(currVisit, {status: 'Missed Collection'});
+      } 
+
+      if ($stateParams.repeatVisit == 'true') {
+        angular.extend(currVisit, {id: undefined, name: undefined, status: 'Complete'});
+      }
     }
 
     $scope.saveVisit = function() {
@@ -47,7 +55,12 @@ angular.module('os.biospecimen.visit.addedit', [])
           angular.extend($scope.visit, result);
 
           var params = {visitId: result.id, eventId: result.eventId};
-          $state.go('visit-detail.overview', params);
+          var fromState = $scope.stateChangeInfo.fromState;
+          if (!!fromState && fromState.name == 'participant-detail.overview') {
+            $state.go('participant-detail.visits', params);
+          } else {
+            $state.go('visit-detail.overview', params);
+          }
         }
       );
     };
