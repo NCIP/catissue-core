@@ -41,4 +41,18 @@
     <addPrimaryKey columnNames="PARTICIPANT_ID, RACE_NAME" tableName="CATISSUE_RACE"/>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Creating specimen field extensions view">
+    <createView viewName="os_spec_cust_field_extns_view"> 
+      select 
+        re.object_id as spec_id, re.record_id as record_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
+      where 
+        fc.entity_type = 'SpecimenExtension'
+        and fc.deleted_on is null 
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
 </databaseChangeLog>
