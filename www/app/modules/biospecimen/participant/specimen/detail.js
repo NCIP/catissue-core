@@ -8,7 +8,7 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.visit = visit;
       $scope.specimen = specimen;
       $scope.childSpecimens = $scope.specimen.children;
-      }
+    }
 
     $scope.reload = function() {
       var promise = null;
