@@ -3,7 +3,7 @@
     <ul os-breadcrumbs>
       <li> 
         <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
-          {{cpr.cpShortTitle}}
+          <span>{{cpr.cpShortTitle}}</span>
         </a>
       </li>
       <li>
@@ -17,12 +17,12 @@
       </li>
       <li>
         <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          T{{visit.eventPoint}}: {{visit.eventLabel}}
+          <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
         </a>
       </li>
       <li>
         <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
-          {{parentSpecimen.label}}
+          <span>{{parentSpecimen.label}}</span>
         </a>
       </li>
     </ul>
@@ -49,13 +49,13 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="srs.specimen_type">Specimen Type</label>
+        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
         <div class="col-xs-2 os-ctrl-padding-top">
-          {{parentSpecimen.type}}
+          <span>{{parentSpecimen.type}}</span>
         </div>
-        <label class="col-xs-2 control-label" translate="srs.anatomic_site">Anatomic Site</label>
+        <label class="col-xs-2 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
         <div class="col-xs-2 os-ctrl-padding-top">
-          {{parentSpecimen.anatomicSite}}
+          <span>{{parentSpecimen.anatomicSite}}</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.type"></label>
+        <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
         <div class="col-xs-6">
           <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
             placeholder="{{'specimens.type' | translate}}" required>
@@ -148,12 +148,11 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="createDerivative()"
-            translate="common.buttons.create" local-form="true">
-            Create
+          <button class="btn btn-primary" os-form-submit="createDerivative()">
+            <span translate="common.buttons.create">Create</span>
           </button>
-          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">
-            Discard
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
           </button>
         </div>
       </div>
