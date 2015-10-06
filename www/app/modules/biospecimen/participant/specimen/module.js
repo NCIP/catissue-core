@@ -5,7 +5,9 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.addedit',
     'os.biospecimen.specimen.detail',
     'os.biospecimen.specimen.overview',
-    'os.biospecimen.specimen.close'
+    'os.biospecimen.specimen.close',
+    'os.biospecimen.specimen.addaliquots',
+    'os.biospecimen.specimen.addderivative'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -116,6 +118,18 @@ angular.module('os.biospecimen.specimen',
           }
         },
         parent: 'specimen-detail'
+      })
+      .state('specimen-create-derivative', {
+        url: '/derivative',
+        templateUrl: 'modules/biospecimen/participant/specimen/add-derivative.html',
+        controller: 'AddDerivativeCtrl',
+        parent: 'specimen-root'
+      })
+     .state('specimen-create-aliquots', {
+        url: '/aliquots',
+        templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
+        controller: 'AddAliquotsCtrl',
+        parent: 'specimen-root'
       });
   })
 
