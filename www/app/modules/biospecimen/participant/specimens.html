@@ -22,13 +22,13 @@
               <span translate="specimens.buttons.print"> Print </span>
             </a>
           </li>
-          <li show-if-allowed="participantResource.deleteOpts">
+          <li ng-if="!allowedOps || allowedOps.delete">
             <a ng-click="deleteSpecimens()">
               <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete"> Delete </span>
             </a>
           </li>
-          <li show-if-allowed="participantResource.deleteOpts">
+          <li ng-if="!allowedOps || allowedOps.update">
             <a ng-click="closeSpecimens()">
               <span class="fa fa-remove"></span>
               <span translate="common.buttons.close"> Close </span>
