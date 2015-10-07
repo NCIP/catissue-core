@@ -294,7 +294,8 @@ public class Visit extends BaseExtensionEntity {
 		if (!isActive()) {
 			return;
 		}
-				
+		
+		super.update(visit);
 		setName(visit.getName());
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());
@@ -308,7 +309,6 @@ public class Visit extends BaseExtensionEntity {
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 		setCohort(visit.getCohort());
-		setExtension(visit.getExtension());
 	}
 
 	public void updateSprName(String sprName) {

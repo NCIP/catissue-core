@@ -113,8 +113,12 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setExtensionDetail(ExtensionDetail extensionDetail) {
 		this.extensionDetail = extensionDetail;
 	}
-
+	
 	public static SpecimenDetail from(Specimen specimen) {
+		return from(specimen, true);
+	}
+
+	public static SpecimenDetail from(Specimen specimen, boolean partial) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);
 		
@@ -130,7 +134,11 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setLabelFmt(specimen.getLabelTmpl());
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
-		result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension()));
+		
+		if (!partial) {
+			result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension()));
+		}
+		
 		return result;
 	}
 	

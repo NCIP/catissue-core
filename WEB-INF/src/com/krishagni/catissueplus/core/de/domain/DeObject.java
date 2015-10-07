@@ -26,7 +26,6 @@ import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
-import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
@@ -271,7 +270,7 @@ public abstract class DeObject {
 		
 		List<Attr> attrs = new ArrayList<Attr>();
 		for (AttrDetail attrDetail : detail.getAttrs()) {
-			Attr attr = existingAttrs.get(attrDetail.getName());
+			Attr attr = existingAttrs.remove(attrDetail.getName());
 			if (attr == null) {
 				attr = new Attr();
 			} 
@@ -280,6 +279,7 @@ public abstract class DeObject {
 			attrs.add(attr);
 		}
 		
+		attrs.addAll(existingAttrs.values());
 		extension.setAttrs(attrs);
 		return extension;
 	}

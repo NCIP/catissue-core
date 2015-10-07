@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 
@@ -21,6 +22,14 @@ public abstract class BaseExtensionEntity extends BaseEntity {
 
 	public void setExtension(DeObject extension) {
 		this.extension = extension;
+	}
+	
+	public void update(BaseExtensionEntity other) {
+		if (extension == null) {
+			extension = createExtension();
+		}
+		
+		BeanUtils.copyProperties(other.getExtension(), extension);
 	}
 	
 	public void addOrUpdateExtension() {
