@@ -33,7 +33,7 @@ angular.module('os.biospecimen.visit', [
         parent: 'participant-root'
       })
       .state('visit-addedit', {
-        url: '/addedit-visit?missedVisit&repeatVisit',
+        url: '/addedit-visit?missedVisit&repeatVisit&redirectTo',
         templateProvider: function(PluginReg, $q) {
           return $q.when(PluginReg.getTmpls("visit-addedit", "page-body", "modules/biospecimen/participant/visit/addedit.html")).then(
             function(tmpls) {

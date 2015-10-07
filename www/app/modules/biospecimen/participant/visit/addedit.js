@@ -33,9 +33,7 @@ angular.module('os.biospecimen.visit.addedit', [])
 
       if ($stateParams.missedVisit == 'true') {
         angular.extend(currVisit, {status: 'Missed Collection'});
-      } 
-
-      if ($stateParams.repeatVisit == 'true') {
+      } else if ($stateParams.repeatVisit == 'true') {
         angular.extend(currVisit, {id: undefined, name: undefined, status: 'Complete'});
       }
     }
@@ -55,9 +53,8 @@ angular.module('os.biospecimen.visit.addedit', [])
           angular.extend($scope.visit, result);
 
           var params = {visitId: result.id, eventId: result.eventId};
-          var fromState = $scope.stateChangeInfo.fromState;
-          if (!!fromState && fromState.name == 'participant-detail.overview') {
-            $state.go('participant-detail.visits', params);
+          if (!!$stateParams.redirectTo) {
+            $state.go($stateParams.redirectTo, params);
           } else {
             $state.go('visit-detail.overview', params);
           }
