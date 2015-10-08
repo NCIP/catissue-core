@@ -9,7 +9,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.dpList = [];
       $scope.instituteNames = [];
       $scope.siteList = [];
-      $scope.userFilterOpts = {};
+      $scope.userFilterOpts = {listAll: true};
       $scope.input = {labelText: ''};
 
       loadItemStatusPvs();
@@ -65,7 +65,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
     
     function setUserFilterOpts(institute) {
-      $scope.userFilterOpts = {institute: institute};
+      $scope.userFilterOpts.institute = institute;
     }
 
     function setUserAndSiteList(order) {
