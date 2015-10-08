@@ -53,6 +53,9 @@ angular.module('os.biospecimen.visit.addedit', [])
           angular.extend($scope.visit, result);
 
           var params = {visitId: result.id, eventId: result.eventId};
+          //
+          // For now, redirectTo works to participant child states
+          //
           if (!!$stateParams.redirectTo) {
             $state.go($stateParams.redirectTo, params);
           } else {

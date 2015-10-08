@@ -526,7 +526,6 @@ public class Specimen extends BaseExtensionEntity {
 	}
 
 	public void update(Specimen specimen) {	
-		super.update(specimen); 
 		updateStatus(specimen.getActivityStatus(), null);
 		if (!isActive()) {
 			return;
@@ -577,6 +576,7 @@ public class Specimen extends BaseExtensionEntity {
 		setIsAvailable(specimen.getIsAvailable());
 				
 		setComment(specimen.getComment());
+		setExtension(specimen.getExtension());
 		updatePosition(specimen.getPosition());
 
 		checkQtyConstraints();

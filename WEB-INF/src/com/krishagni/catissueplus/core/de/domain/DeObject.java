@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -423,8 +424,13 @@ public abstract class DeObject {
 			Attr attr = new Attr();
 			attr.setName(cv.getControl().getName()); 
 			attr.setUdn(cv.getControl().getUserDefinedName());
-			attr.setCaption(cv.getControl().getCaption()); 
-			attr.setValue(cv.getValue());
+			attr.setCaption(cv.getControl().getCaption());
+			
+			Object value = cv.getValue();
+			if (value != null && value.getClass().isArray()) {
+				value = new ArrayList<String>(Arrays.asList((String[])value));
+			}
+			attr.setValue(value);
 			
 			return attr;
 		}

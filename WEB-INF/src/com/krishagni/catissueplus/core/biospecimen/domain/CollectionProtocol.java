@@ -317,7 +317,6 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	}
 	
 	public void update(CollectionProtocol cp) {
-		super.update(cp);
 		setTitle(cp.getTitle()); 
 		setShortTitle(cp.getShortTitle());
 		setCode(cp.getCode());
@@ -337,6 +336,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setAliquotLabelFormat(cp.getAliquotLabelFormat());
 		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
+		setExtension(cp.getExtension());
 		
 		updateCollectionProtocolSites(cp.getSites());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());

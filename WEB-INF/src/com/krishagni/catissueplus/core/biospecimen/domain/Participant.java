@@ -201,7 +201,6 @@ public class Participant extends BaseExtensionEntity {
 	}
 	
 	public void update(Participant participant) {
-		super.update(participant);
 		setFirstName(participant.getFirstName());
 		setLastName(participant.getLastName());
 		setMiddleName(participant.getMiddleName());
@@ -214,6 +213,7 @@ public class Participant extends BaseExtensionEntity {
 		setEthnicity(participant.getEthnicity());
 		setBirthDate(participant.getBirthDate());
 		setDeathDate(participant.getDeathDate());
+		setExtension(participant.getExtension());
 		CollectionUpdater.update(getRaces(), participant.getRaces());
 		updatePmis(participant);
 	}

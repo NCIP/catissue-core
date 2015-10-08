@@ -167,12 +167,12 @@ public class Site extends BaseExtensionEntity {
 	}
 
 	public void update(Site other) {
-		super.update(other);
 		setName(other.getName());
 		setInstitute(other.getInstitute());
 		setCode(other.getCode());
 		setType(other.getType());
 		setAddress(other.getAddress());
+		setExtension(other.getExtension());
 		updateActivityStatus(other.getActivityStatus());
 		CollectionUpdater.update(this.getCoordinators(), other.getCoordinators());
 	}

@@ -91,6 +91,9 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		specimen.setId(detail.getId());
+		if (existing != null) {
+			specimen.setId(existing.getId());
+		}
 		specimen.setVisit(visit);
 		
 		setCollectionStatus(detail, existing, specimen, ose);
