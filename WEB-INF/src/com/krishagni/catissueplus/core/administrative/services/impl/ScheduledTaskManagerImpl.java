@@ -201,6 +201,10 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 			recipients.add(user.getEmailAddress());
 		}
 		
+		if (recipients.size() == 0) {
+			return;
+		}
+		
 		emailSvc.sendEmail(emailTmpl, recipients.toArray(new String[0]), props);
 	}	
 }
