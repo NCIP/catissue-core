@@ -201,7 +201,7 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 			recipients.add(user.getEmailAddress());
 		}
 		
-		if (recipients.size() == 0) {
+		if (recipients.isEmpty()) {
 			return;
 		}
 		
