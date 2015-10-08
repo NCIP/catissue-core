@@ -1,13 +1,22 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.MessageSource;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -26,13 +35,17 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
+	
+	private MessageSource messageSource;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -40,6 +53,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	public void setDistributionProtocolFactory(DistributionProtocolFactory distributionProtocolFactory) {
 		this.distributionProtocolFactory = distributionProtocolFactory;
+	}
+	
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
 	}
 	
 	@Override
@@ -248,6 +265,55 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 	}
 	
+	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req) {
+		File tempFile = null;
+		CSVWriter csvWriter = null;
+		try {
+			DistributionOrderStatListCriteria crit = req.getPayload();
+			ResponseEvent<List<DistributionOrderStat>> resp = getOrderStats(req);
+			resp.throwErrorIfUnsuccessful();
+			List<DistributionOrderStat> orderStats = resp.getPayload();
+			
+			tempFile = File.createTempFile("dp-order-stats", null);
+			csvWriter = new CSVWriter(new FileWriter(tempFile));
+			
+			if (crit.dpId() != null && !orderStats.isEmpty()) {
+				DistributionOrderStat orderStat = orderStats.get(0);
+				csvWriter.writeNext(new String[] {
+					getMessage("dist_dp_title"),
+					orderStat.getDistributionProtocol().getTitle()
+				});
+			}
+			
+			csvWriter.writeNext(new String[] {
+				getMessage("dist_exported_by"),
+				AuthUtil.getCurrentUser().formattedName()
+			});
+			csvWriter.writeNext(new String[] {
+				getMessage("dist_exported_on"),
+				Utility.getDateString(Calendar.getInstance().getTime())
+			});
+			csvWriter.writeNext(new String[1]);
+			
+			String[] headers = DistributionOrderStat.getOrderStatsReportHeaders(crit);
+			csvWriter.writeNext(headers);
+			List<String []> csvData = new ArrayList<String []>();
+			for (DistributionOrderStat stat: orderStats) {
+				csvData.add(stat.getOrderStatsReportData(crit));
+			}
+			
+			csvWriter.writeAll(csvData);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(csvWriter);
+		}
+		
+		return ResponseEvent.response(tempFile);
+	}
+	
 	private void addDpStats(List<DistributionProtocolDetail> dps) {
 		if (CollectionUtils.isEmpty(dps)) {
 			return;
@@ -304,6 +370,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		return true;
+	}
+	
+	private String getMessage(String code) {
+		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
 }

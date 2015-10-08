@@ -2,15 +2,11 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
@@ -164,10 +158,30 @@ public class DistributionProtocolController {
 				.dpId(dpId)
 				.groupByAttrs(groupByAttrs);
 		
-		RequestEvent<DistributionOrderStatListCriteria> req = new RequestEvent<DistributionOrderStatListCriteria>(crit);
-		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(req);
+		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/orders-report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void exportOrderStats(
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
+			@RequestParam(value = "groupBy", required = false, defaultValue = "")
+			List<String> groupByAttrs,
+			
+			HttpServletResponse response) {
+		
+		DistributionOrderStatListCriteria crit = new DistributionOrderStatListCriteria()
+		.dpId(dpId)
+		.groupByAttrs(groupByAttrs);
+		
+		ResponseEvent<File> resp = dpSvc.exportOrderStats(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		Utility.sendToClient(response, "dp-order-stat.csv", resp.getPayload());
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

@@ -1,8 +1,12 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class DistributionOrderStat {
 	private Long id;
@@ -16,6 +20,13 @@ public class DistributionOrderStat {
 	private Map<String, Object> groupByAttrVals = new HashMap<String, Object>();
 	
 	private Long distributedSpecimenCount;
+	
+	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
+	static {
+		attrDisplayVals.put("specimenType", "Specimen Type");
+		attrDisplayVals.put("anatomicSite", "Anatomic Site");
+		attrDisplayVals.put("pathologyStatus", "Pathology Status");
+	};
 
 	public Long getId() {
 		return id;
@@ -63,6 +74,40 @@ public class DistributionOrderStat {
 
 	public void setDistributedSpecimenCount(Long distributedSpecimenCount) {
 		this.distributedSpecimenCount = distributedSpecimenCount;
+	}
+	
+	public String [] getOrderStatsReportData(DistributionOrderStatListCriteria crit) {
+		List<String> data = new ArrayList<String>();
+		if (crit.dpId() == null) {
+			data.add(getDistributionProtocol().getShortTitle());
+		}
+		
+		data.add(getName());
+		data.add(Utility.getDateString(getExecutionDate()));
+		for (String attr: crit.groupByAttrs()) {
+			data.add(getGroupByAttrVals().get(attr).toString());
+		}
+		
+		data.add(getDistributedSpecimenCount().toString());
+		
+		return data.toArray(new String[1]);
+	}
+	
+	public static String [] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
+		List<String> data = new ArrayList<String>();
+		if (crit.dpId() == null) {
+			data.add("Distribution Protocol");
+		}
+		
+		data.add("Order Name");
+		data.add("Distribution Date");
+		for (String attr: crit.groupByAttrs()) {
+			data.add(attrDisplayVals.get(attr));
+		}
+		
+		data.add("Specimen Distributed");
+		
+		return data.toArray(new String[1]);
 	}
 	
 }

@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
+import java.io.File;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
@@ -28,4 +29,6 @@ public interface DistributionProtocolService {
 	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req);
 	
 	public ResponseEvent<List<DistributionOrderStat>> getOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
+	
+	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
 }
