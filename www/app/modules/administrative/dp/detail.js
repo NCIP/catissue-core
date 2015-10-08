@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil, $modal) {
+  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil, $modal, $translate) {
     $scope.distributionProtocol = distributionProtocol;
     
     $scope.editDp = function(property, value) {
@@ -13,9 +13,25 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
       DeleteUtil.delete($scope.distributionProtocol, {onDeleteState: 'dp-list'});
     }
     
-    $scope.getDistSiteText = function (site) {
-      return site.name;
-    }
+    $scope.getDistSiteText = function(distSites) {
+      var str = '';
+      var allSites = [];
+      angular.forEach(distSites,
+        function(sites, inst) {
+          str = '('+ inst +': ';
+          if (sites.length > 0) {
+            str += sites.join(', ');
+          } else {
+            str += $translate.instant('dp.all_sites');
+          }
+          
+          str += ')';
+          allSites.push(str);
+        }
+      );
+      
+      return allSites.join(', ');
+    };
     
     $scope.closeDp = function () {
       DeleteUtil.confirmDelete({

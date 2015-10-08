@@ -18,6 +18,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -95,8 +96,14 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
 		} else if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
 			query.createAlias("distributionProtocol", "dp")
-				.createAlias("dp.distributingSites", "distSite")
-				.add(Restrictions.in("distSite.id", listCrit.siteIds()));
+				.createAlias("dp.distributingSites", "distSites")
+				.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("distSites.institute", "distInst")
+				.createAlias("distInst.sites", "instSite")
+				.add(Restrictions.or(
+						Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", listCrit.siteIds())),
+						Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", listCrit.siteIds()))
+				));
 		}
 		
 		addOrderStatProjections(query, listCrit);
@@ -160,8 +167,15 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			return;
 		}
 		
-		query.createAlias("distributingSites", "distSite")
-			.add(Restrictions.in("distSite.id", siteIds));
+		query.createAlias("distributingSites", "distSites")
+			.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("distSites.institute", "distInst")
+			.createAlias("distInst.sites", "instSite")
+			.add(Restrictions.or(
+				Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", crit.siteIds())),
+				Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", crit.siteIds()))
+			));
+		
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	}
 	

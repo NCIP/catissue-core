@@ -49,9 +49,9 @@
       <filter name="activeEntity"/>
     </set>
     
-    <set name="distributingSites" table="OS_DISTRIBUTION_PROTOCOL_SITES">
+    <set name="distributingSites" inverse="true" cascade="all-delete-orphan">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
-      <many-to-many column="SITE_ID" class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite"/>
     </set>
     
     <filter name="activeEntity"/>

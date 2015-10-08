@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,15 +67,21 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Institute getInstituteByName(String name) {
-		List<Institute> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_INSTITUTE_BY_NAME)
-				.setString("name", name)
+	public List<Institute> getInstituteByNames(List<String> names) {
+		return sessionFactory.getCurrentSession()
+				.createCriteria(Institute.class)
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+				.add(Restrictions.in("name", names))
 				.list();
+	}
+	
+	@Override
+	public Institute getInstituteByName(String name) {
+		List<Institute> result = getInstituteByNames(Collections.singletonList(name));
 		
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
 	}
-
+	
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public Department getDepartment(Long id, Long instituteId ) {

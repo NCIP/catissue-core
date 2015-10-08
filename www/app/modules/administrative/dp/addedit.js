@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.query.models'])
   .controller('DpAddEditCtrl', function(
-    $scope, $state, distributionProtocol, DistributionProtocol, Institute, User, SavedQuery, Site) {
+    $scope, $state, distributionProtocol, DistributionProtocol, Institute, User, SavedQuery, Site, $translate) {
     
     var availableInstituteNames = [];
     
@@ -10,6 +10,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.sites = [];
       $scope.queryList = [];
+      $scope.all_sites = $translate.instant('dp.all_sites');
       loadInstitutes();
       loadSites($scope.distributionProtocol.instituteName);
       loadQueries();
@@ -34,27 +35,28 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     function loadDistInstSites() {
       var dp = $scope.distributionProtocol;
       getInstSiteMapFromDistSites(dp);
-      $scope.instSiteMap = {};
+      $scope.instSiteMap = dp.distributingSites;
       angular.forEach(dp.distributingSites, function (site, index) {
-        $scope.instSiteMap[site.instituteName] = getSites(site.instituteName);
+        if (site.sites.indexOf($scope.all_sites) == -1) {
+          getSites(site.instituteName).then(
+            function(sites) {
+              $scope.instSiteMap[site.instituteName] = [$scope.all_sites].concat(sites);
+            }
+          );
+        }
       });
       
       filterAvailableInstituteNames();
     }
         
     function getInstSiteMapFromDistSites (dp) {
-      var map = {};
-      angular.forEach(dp.distributingSites, function (site) {
-        if (!map[site.instituteName]) {
-          map[site.instituteName] = {instituteName: site.instituteName, sites: []};
-        }
-        
-        map[site.instituteName].sites.push(site.name);
-      });
-      
       var result = [];
-      angular.forEach(map, function (instituteSites) {
-        result.push(instituteSites);
+      angular.forEach(dp.distributingSites, function (instituteSites, institute) {
+        if (!instituteSites || instituteSites.length == 0) {
+          result.push({instituteName: institute, sites: [$scope.all_sites]});
+        } else {
+          result.push({instituteName: institute, sites: instituteSites});
+        }
       });
       
       if (result.length == 0) {
@@ -87,20 +89,19 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     function loadSites(instituteName) {
-      $scope.sites = getSites(instituteName);
+      getSites(instituteName).then(
+        function (sites) {
+          $scope.sites = sites;
+        }
+      );
     }
     
     function getSites(instituteName) {
-      var sites = [];
-      Site.listForInstitute(instituteName).then(
-        function (result) {
-          angular.forEach(result, function (site) {
-            sites.push(site);
-          });
+      return Site.listForInstitute(instituteName).then(
+        function(result) {
+          return result;
         }
       );
-      
-      return sites;
     }
     
     function newDistSite () {
@@ -113,11 +114,13 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     function updateDistSites (dp) {
-      var sites = [];
+      var sites = {};
       angular.forEach(dp.distributingSites, function (distSite) {
-        angular.forEach(distSite.sites, function (siteName) {
-          sites.push({name: siteName});
-        });
+        if (distSite.sites.indexOf($scope.all_sites) > -1) {
+          sites[distSite.instituteName] = [];
+        } else {
+          sites[distSite.instituteName] = distSite.sites;
+        }
       });
       
       dp.distributingSites = sites;
@@ -145,11 +148,50 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       var instituteName = dp.distributingSites[index].instituteName;
       var sites = $scope.instSiteMap[instituteName];
       if (!sites || sites.length == 0) {
-        $scope.instSiteMap[instituteName] = getSites(instituteName);
+        getSites(instituteName).then(
+          function(sites) {
+            $scope.instSiteMap[instituteName] = [$scope.all_sites].concat(sites);
+          }
+        );
       }
       
       dp.distributingSites[index].sites = [];
       filterAvailableInstituteNames();
+    }
+    
+    $scope.onDistSiteSelect = function(index) {
+      var dp = $scope.distributionProtocol;
+      var institute = dp.distributingSites[index].instituteName;
+      var sites = dp.distributingSites[index].sites;
+      var presentAllSites = false;
+      if (sites.indexOf($scope.all_sites) > -1) {
+        presentAllSites = true;
+      }
+      
+      if (presentAllSites) {
+        dp.distributingSites[index].sites = [$scope.all_sites];
+        $scope.instSiteMap[institute] = [];
+      }
+    }
+    
+    $scope.onDistSiteRemove = function(index) {
+      var dp = $scope.distributionProtocol;
+      var institute = dp.distributingSites[index].instituteName;
+      var sites = dp.distributingSites[index].sites;
+      var absentAllSites = false;
+      if (sites.indexOf($scope.all_sites) == -1) {
+        absentAllSites = true;
+      }
+      
+      if (absentAllSites) {
+        if (!$scope.instSiteMap[institute] || $scope.instSiteMap[institute].length == 0) {
+          getSites(institute).then(
+            function(sites) {
+              $scope.instSiteMap[institute] = [$scope.all_sites].concat(sites);
+            }
+          );
+        }
+      }
     }
     
     $scope.removeDistSite = function (index) {

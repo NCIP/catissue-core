@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -129,9 +130,22 @@ public class AccessCtrlMgr {
 		}
 		
 		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-		if (CollectionUtils.intersection(userSites, dp.getDistributingSites()).isEmpty()) {
+		if (CollectionUtils.intersection(userSites, getAllDistributingSites(dp)).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
+	}
+	
+	private Set<Site> getAllDistributingSites(DistributionProtocol dp) {
+		Set<Site> sites = new HashSet<Site>();
+		for (DistributionProtocolDistSite distSite: dp.getDistributingSites()) {
+			if (distSite.getSite() != null) {
+				sites.add(distSite.getSite());
+			} else {
+				sites.addAll(distSite.getInstitute().getSites());
+			}
+		}
+		
+		return sites;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -622,19 +636,19 @@ public class AccessCtrlMgr {
 			return null;
 		}
 		
-		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
+		return Utility.<Set<Long>>collect(getSites(Resource.ORDER,
+				new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public Set<Long> getDistributionOrderAllowedSites(DistributionProtocol dp) {
-		Set<Site> allowedSites = null;
 		if (AuthUtil.isAdmin()) {
-			allowedSites = dp.getDistributingSites();
-		} else {
-			Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getDistributingSites()));
+			return Utility.<Set<Long>>collect(getAllDistributingSites(dp), "id", true);
 		}
 		
+		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		Set<Site> allowedSites = new HashSet<Site>(CollectionUtils.intersection(
+				userSites, getAllDistributingSites(dp)));
 		return Utility.<Set<Long>>collect(allowedSites, "id", true);
 	}
 
@@ -659,10 +673,8 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		if (CollectionUtils.intersection(
-				getSites(Resource.ORDER, operation),
-				order.getDistributionProtocol().getDistributingSites()).isEmpty()) {
-			
+		if (CollectionUtils.intersection(getSites(Resource.ORDER, operation),
+				getAllDistributingSites(order.getDistributionProtocol())).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}

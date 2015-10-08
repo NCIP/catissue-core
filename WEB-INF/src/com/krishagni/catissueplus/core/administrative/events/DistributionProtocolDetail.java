@@ -2,9 +2,13 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public class DistributionProtocolDetail extends DistributionProtocolSummary {
@@ -19,7 +23,7 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 
 	private SavedQuerySummary report;
 	
-	private List<SiteDetail> distributingSites = new ArrayList<SiteDetail>();
+	private Map<String, List<String>> distributingSites = new HashMap<String, List<String>>();
 
 	public String getInstituteName() {
 		return instituteName;
@@ -61,11 +65,11 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		this.report = report;
 	}
 	
-	public List<SiteDetail> getDistributingSites() {
+	public Map<String, List<String>> getDistributingSites() {
 		return distributingSites;
 	}
 	
-	public void setDistributingSites(List<SiteDetail> distributingSites) {
+	public void setDistributingSites(Map<String, List<String>> distributingSites) {
 		this.distributingSites = distributingSites;
 	}
 
@@ -79,12 +83,13 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		}
 		
 		detail.setIrbId(distributionProtocol.getIrbId());
+		detail.setPrincipalInvestigator(UserSummary.from(distributionProtocol.getPrincipalInvestigator()));
 		detail.setActivityStatus(distributionProtocol.getActivityStatus());
 		if (distributionProtocol.getReport() != null) {
 			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
 		}
 		
-		detail.setDistributingSites(SiteDetail.from(distributionProtocol.getDistributingSites()));
+		setDistributingSites(detail, distributionProtocol);
 		
 		return detail;
 	}
@@ -97,5 +102,20 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		}
 		
 		return list;
+	}
+	
+	private static void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp) {
+		for (DistributionProtocolDistSite distSite: dp.getDistributingSites()) {
+			String instituteName = distSite.getInstitute().getName();
+			List<String> siteNames = detail.getDistributingSites().get(instituteName);
+			if (siteNames == null) {
+				siteNames = new ArrayList<String>();
+				detail.distributingSites.put(instituteName, siteNames);
+			}
+			
+			if (distSite.getSite() != null) {
+				siteNames.add(distSite.getSite().getName());
+			}
+		}
 	}
 }
