@@ -79,13 +79,13 @@ osApp.config(function(
     $httpProvider.interceptors.push('httpRespInterceptor');
 
     /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;*/
+    ApiUrlsProvider.port = 9090;
     ApiUrlsProvider.secure = false;
-    ApiUrlsProvider.app = "/openspecimen";
+    ApiUrlsProvider.app = "/openspecimen";*/
     ApiUrlsProvider.urls = {
-      'sessions': '/rest/ng/sessions',
-      'sites': '/rest/ng/sites',
-      'form-files': '/rest/ng/form-files'
+      'sessions': 'rest/ng/sessions',
+      'sites': 'rest/ng/sites',
+      'form-files': 'rest/ng/form-files'
     };
 
     uiSelectConfig.theme = 'bootstrap';
@@ -192,10 +192,10 @@ osApp.config(function(
           var prefix = '';
           if (this.hostname) {
             var protocol = this.secure ? 'https://' : 'http://';
-            prefix = protocol + this.hostname + ':' + this.port;
+            prefix = protocol + this.hostname + ':' + this.port + this.app + '/';
           }
 
-          return prefix + this.app + '/rest/ng/';
+          return prefix + 'rest/ng/';
         },
 
         getUrl: function(key) {
@@ -207,10 +207,10 @@ osApp.config(function(
           var prefix = "";
           if (this.hostname) {
             var protocol = this.secure ? 'https://' : 'http://';
-            prefix = protocol + this.hostname + ":" + this.port;
+            prefix = protocol + this.hostname + ":" + this.port + this.app + '/';
           }
 
-          return prefix + this.app + url;
+          return prefix + url;
         }
       };
     }
