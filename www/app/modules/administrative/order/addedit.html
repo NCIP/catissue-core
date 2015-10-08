@@ -40,7 +40,7 @@
       <label class="control-label col-xs-3" translate="orders.dp">Distribution Protocol</label>
       <div class="col-xs-6">
         <os-select name="dp" ng-model="order.distributionProtocol" 
-          list="dpList" display-prop="title" on-select="onDpSelect()"
+          list="dpList" display-prop="shortTitle" on-select="onDpSelect()"
           placeholder="{{'orders.dp' | translate}}" required refresh="searchDp">
         </os-select>       
         <div os-field-error field="ordForm.dp"></div>
