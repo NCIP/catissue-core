@@ -514,10 +514,21 @@
     <property name="WaitForTasksToCompleteOnShutdown" value="true"/>
   </bean>
 
+  <bean id="receivedEventFilter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenReceivedEventFilter">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="deInitializer" class="com.krishagni.catissueplus.core.init.DeInitializer">
     <property name="transactionManager" ref="transactionManager"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="dataSource" ref="dataSource"/>
+    <property name="formDataMgr" ref="formDataMgr"/>
+
+    <property name="postFormSaveFilters">
+      <map>
+        <entry key="SpecimenReceivedEvent" value-ref="receivedEventFilter"/>
+      </map>
+    </property>
   </bean>
 
   <bean id="importQueryForms" class="com.krishagni.catissueplus.core.init.ImportQueryForms">

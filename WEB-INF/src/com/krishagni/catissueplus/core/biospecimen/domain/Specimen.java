@@ -1011,7 +1011,7 @@ public class Specimen extends BaseEntity {
 		}
 	}
 
-	private void updateCreatedOn(Date createdOn) {
+	public void updateCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 
 		if (createdOn == null) { 
