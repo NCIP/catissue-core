@@ -193,6 +193,10 @@
   padding-left: 0px;
 }
 
+.os-md-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
+  padding-top: 10px;
+}
+
 .os-spmn-coll-detail label {
   color: #666;
 }
