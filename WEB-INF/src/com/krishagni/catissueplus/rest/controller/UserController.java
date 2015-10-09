@@ -67,7 +67,7 @@ public class UserController {
 			@RequestParam(value = "activityStatus", required = false)
 			String activityStatus,
 			
-			@RequestParam(value = "listAll", required = false, defaultValue = "false")
+			@RequestParam(value = "listAll", required = false, defaultValue = "true")
 			boolean listAll,
 
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")

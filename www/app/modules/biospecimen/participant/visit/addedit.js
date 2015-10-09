@@ -25,7 +25,6 @@ angular.module('os.biospecimen.visit.addedit', [])
       }
 
       ExtensionsUtil.createExtensionFieldMap(currVisit);
-      $scope.userFilterOpts = {listAll: true};
     }
 
     $scope.saveVisit = function() {

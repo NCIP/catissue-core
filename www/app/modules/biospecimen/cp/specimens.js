@@ -15,7 +15,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.events = events;
       $scope.eventId = $stateParams.eventId;
       $scope.selectEvent({id: $stateParams.eventId});
-      $scope.userFilterOpts = {listAll: true};
 
       $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
 

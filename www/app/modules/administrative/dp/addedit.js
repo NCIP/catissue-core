@@ -7,7 +7,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     
     function init() {
       $scope.distributionProtocol = distributionProtocol;
-      $scope.piFilterOpts = {institute: distributionProtocol.instituteName, listAll: true};
+      $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.sites = [];
       $scope.queryList = [];
       loadInstitutes();

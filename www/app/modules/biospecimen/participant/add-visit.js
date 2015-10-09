@@ -49,7 +49,6 @@ angular.module('os.biospecimen.participant.addvisit', ['os.biospecimen.participa
     function init() {
       loadPvs();
       $scope.visit = getVisit();
-      $scope.userFilterOpts = {listAll: true};
     }
 
     $scope.addVisit = function() {

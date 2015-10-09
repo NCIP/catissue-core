@@ -9,7 +9,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.dpList = [];
       $scope.instituteNames = [];
       $scope.siteList = [];
-      $scope.userFilterOpts = {listAll: true};
+      $scope.userFilterOpts = {};
       $scope.input = {labelText: ''};
 
       loadItemStatusPvs();

@@ -102,10 +102,6 @@ public class UserServiceImpl implements UserService {
 			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 		}
 		
-		if (!AuthUtil.isAdmin() && !user.getInstitute().equals(getCurrUserInstitute())) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
-		}
-		
 		return ResponseEvent.response(UserDetail.from(user));
 	}
 	
