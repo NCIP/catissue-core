@@ -15,8 +15,9 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return getSites(opts);
     }
 
-    Site.listForParticipants = function(opName) {
-      var opts = {resource: 'ParticipantPhi', operation: opName};
+    Site.listForParticipants = function(opName, listAll) {
+      listAll = listAll || false;
+      var opts = {resource: 'ParticipantPhi', operation: opName, listAll: listAll};
       return getSites(opts);
     }
 
