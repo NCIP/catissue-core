@@ -428,7 +428,7 @@ public abstract class DeObject {
 			
 			Object value = cv.getValue();
 			if (value != null && value.getClass().isArray()) {
-				value = new ArrayList<String>(Arrays.asList((String[])value));
+				value = Arrays.asList((String[])value);
 			}
 			attr.setValue(value);
 			
