@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.init;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -18,8 +19,9 @@ import com.krishagni.catissueplus.core.de.ui.StorageContainerControlFactory;
 import com.krishagni.catissueplus.core.de.ui.StorageContainerMapper;
 import com.krishagni.catissueplus.core.de.ui.UserControlFactory;
 import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
-
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
+import edu.common.dynamicextensions.napi.FormDataFilter;
+import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.nutility.DEApp;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
@@ -33,17 +35,35 @@ public class DeInitializer implements InitializingBean {
 	private ConfigurationService cfgSvc;
 	
 	private DataSource dataSource;
-	
+
+	private FormDataManager formDataMgr;
+
+	private Map<String, FormDataFilter> preFormSaveFilters = new HashMap<String, FormDataFilter>();
+
+	private Map<String, FormDataFilter> postFormSaveFilters = new HashMap<String, FormDataFilter>();
+
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
-	
+
 	public void setCfgSvc(ConfigurationService cfgSvc) {
-		this.cfgSvc = cfgSvc;		 
+		this.cfgSvc = cfgSvc;
 	}
-	
+
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
+	}
+
+	public void setFormDataMgr(FormDataManager formDataMgr) {
+		this.formDataMgr = formDataMgr;
+	}
+
+	public void setPreFormSaveFilters(Map<String, FormDataFilter> preFormSaveFilters) {
+		this.preFormSaveFilters = preFormSaveFilters;
+	}
+
+	public void setPostFormSaveFilters(Map<String, FormDataFilter> postFormSaveFilters) {
+		this.postFormSaveFilters = postFormSaveFilters;
 	}
 
 	@Override
@@ -92,6 +112,26 @@ public class DeInitializer implements InitializingBean {
 				DEApp.setDateFormat((String)localeSettings.get("deBeDateFmt"));
 				DEApp.setTimeFormat((String)localeSettings.get("timeFmt"));				
 			}
-		});		
+		});
+
+		setFormFilters();
+	}
+
+	private void setFormFilters() {
+		for (Map.Entry<String, FormDataFilter> filterEntry : preFormSaveFilters.entrySet()) {
+			if (filterEntry.getKey().equals("all")) {
+				formDataMgr.getFilterMgr().addPreFilter(filterEntry.getValue());
+			} else {
+				formDataMgr.getFilterMgr().addPreFilter(filterEntry.getKey(), filterEntry.getValue());
+			}
+		}
+
+		for (Map.Entry<String, FormDataFilter> filterEntry : postFormSaveFilters.entrySet()) {
+			if (filterEntry.getKey().equals("all")) {
+				formDataMgr.getFilterMgr().addPostFilter(filterEntry.getValue());
+			} else {
+				formDataMgr.getFilterMgr().addPostFilter(filterEntry.getKey(), filterEntry.getValue());
+			}
+		}
 	}
 }

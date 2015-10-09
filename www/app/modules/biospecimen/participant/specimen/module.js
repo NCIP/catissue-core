@@ -90,6 +90,16 @@ angular.module('os.biospecimen.specimen',
         resolve: {
           formDef: function($stateParams, Form) {
             return Form.getDefinition($stateParams.formId);
+          },
+          postSaveFilters: function() {
+            return [
+              function(specimen, formName, formData) {
+                if (formName == "SpecimenReceivedEvent") {
+                  specimen.createdOn = formData.time
+                }
+                return formData
+              }
+            ];
           }
         },
         controller: 'FormRecordAddEditCtrl',
