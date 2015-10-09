@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.specimen.overview', ['os.biospecimen.models'])
-  .controller('SpecimenOverviewCtrl', function($scope, $rootScope, $state, specimen) {
+  .controller('SpecimenOverviewCtrl', function($scope, $rootScope, specimen) {
     function init() {
       loadActivities();
 
