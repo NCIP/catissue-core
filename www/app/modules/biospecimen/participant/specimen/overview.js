@@ -4,14 +4,6 @@ angular.module('os.biospecimen.specimen.overview', ['os.biospecimen.models'])
     function init() {
       loadActivities();
 
-      //
-      // On changing received event detail page should be reloaded, so that field changed in event are reflected.
-      //
-      if ($rootScope.stateChangeInfo.fromState.url.indexOf("formCtxId") >= 1) {
-        var params = {specimenId:  $scope.specimen.id, srId:  $scope.specimen.reqId};
-        $state.go('specimen-detail.overview', params, {reload: true});
-      }
-
       $scope.$watch('specimen.activityStatus', function(newVal, oldVal) {
         if (newVal == oldVal) {
           return;

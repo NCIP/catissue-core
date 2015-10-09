@@ -42,8 +42,16 @@ public class DeInitializer implements InitializingBean {
 
 	private Map<String, FormDataFilter> postFormSaveFilters = new HashMap<String, FormDataFilter>();
 
-	public FormDataManager getFormDataMgr() {
-		return formDataMgr;
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
+	}
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
 	}
 
 	public void setFormDataMgr(FormDataManager formDataMgr) {
@@ -56,17 +64,6 @@ public class DeInitializer implements InitializingBean {
 
 	public void setPostFormSaveFilters(Map<String, FormDataFilter> postFormSaveFilters) {
 		this.postFormSaveFilters = postFormSaveFilters;
-	}
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionManager = transactionManager;
-	}
-	
-	public void setCfgSvc(ConfigurationService cfgSvc) {
-		this.cfgSvc = cfgSvc;		 
-	}
-	
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
 	}
 
 	@Override

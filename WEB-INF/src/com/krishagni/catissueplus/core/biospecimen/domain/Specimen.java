@@ -648,7 +648,38 @@ public class Specimen extends BaseEntity {
 			close(distributor, time, "Distributed");
 		}
 	}
-	
+
+	public void updateCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+
+		if (createdOn == null) {
+			for (Specimen childSpecimen : getChildCollection()) {
+				childSpecimen.updateCreatedOn(createdOn);
+			}
+
+			return;
+		}
+
+		if (createdOn.after(Calendar.getInstance().getTime())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
+		}
+
+		// The below code is commented for now, so that there will not be any issue for the legacy data.
+		// In legacy data created on was simple date field, but its been changed to timestamp in v20.
+		// While migrating time part of the date is set as 00:00:00,
+		// but the created on of primary specimen(fetched from received event time stamp) will have time part within.
+		// So there is large possibility of below 2 exceptions.
+		/*if (!isPrimary() && createdOn.before(getParentSpecimen().getCreatedOn())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
+		}
+
+		for (Specimen childSpecimen : getChildCollection()) {
+			if (childSpecimen.getCreatedOn() != null && createdOn.after(childSpecimen.getCreatedOn())) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
+			}
+		}*/
+	}
+
 	private void addDistributionEvent(User user, Date time, BigDecimal quantity) {
 		SpecimenDistributionEvent event = new SpecimenDistributionEvent(this);
 		event.setQuantity(quantity);
@@ -1011,34 +1042,4 @@ public class Specimen extends BaseEntity {
 		}
 	}
 
-	public void updateCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-
-		if (createdOn == null) { 
-			for (Specimen childSpecimen : getChildCollection()) {
-				childSpecimen.updateCreatedOn(createdOn);
-			}
-
-			return;
-		}
-
-		if (createdOn.after(Calendar.getInstance().getTime())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
-		}
-
-		// The below code is commented for now, so that there will not be any issue for the legacy data.
-		// In legacy data created on was simple date field, but its been changed to timestamp in v20.
-		// While migrating time part of the date is set as 00:00:00,
-		// but the created on of primary specimen(fetched from received event time stamp) will have time part within.
-		// So there is large possibility of below 2 exceptions.
-		/*if (!isPrimary() && createdOn.before(getParentSpecimen().getCreatedOn())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
-		}
-
-		for (Specimen childSpecimen : getChildCollection()) {
-			if (childSpecimen.getCreatedOn() != null && createdOn.after(childSpecimen.getCreatedOn())) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
-			}
-		}*/
-	}
 }

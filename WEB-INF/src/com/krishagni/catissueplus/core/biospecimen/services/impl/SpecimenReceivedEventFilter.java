@@ -13,10 +13,6 @@ import edu.common.dynamicextensions.napi.FormDataFilter;
 public class SpecimenReceivedEventFilter implements FormDataFilter {
 	private DaoFactory daoFactory;
 
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
