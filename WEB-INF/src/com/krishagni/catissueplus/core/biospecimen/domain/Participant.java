@@ -213,7 +213,7 @@ public class Participant extends BaseExtensionEntity {
 		setEthnicity(participant.getEthnicity());
 		setBirthDate(participant.getBirthDate());
 		setDeathDate(participant.getDeathDate());
-		setExtension(participant.getExtension());	
+		setExtension(participant.getExtension());
 		CollectionUpdater.update(getRaces(), participant.getRaces());
 		updatePmis(participant);
 	}

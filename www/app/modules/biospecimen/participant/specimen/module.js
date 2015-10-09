@@ -52,6 +52,11 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-addedit', {
         url: '/addedit-specimen',
         templateUrl: 'modules/biospecimen/participant/specimen/addedit.html',
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt();
+          }
+        },
         controller: 'AddEditSpecimenCtrl',
         parent: 'specimen-root'
       })

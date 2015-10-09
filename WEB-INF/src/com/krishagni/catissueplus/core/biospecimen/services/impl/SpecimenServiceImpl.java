@@ -55,7 +55,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private SpecimenFactory specimenFactory;
 	
 	private ConfigurationService cfgSvc;
-	
+		
 	private LabelGenerator labelGenerator;
 
 	private int precision = 6;
@@ -90,7 +90,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 
-			SpecimenDetail detail = SpecimenDetail.from(specimen);
+			SpecimenDetail detail = SpecimenDetail.from(specimen, false);
 			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(Collections.singletonList(specimen.getId()));
 
 			if (CollectionUtils.isNotEmpty(distributedSpecimenIds)) {
@@ -138,7 +138,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		try {
 			SpecimenDetail detail = req.getPayload();
 			Specimen specimen = saveOrUpdate(detail, null, null, false);
-			return ResponseEvent.response(SpecimenDetail.from(specimen));
+			return ResponseEvent.response(SpecimenDetail.from(specimen, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception ex) {
@@ -526,7 +526,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
 			saveOrUpdate(detail, existing, null, partial);
-			return ResponseEvent.response(SpecimenDetail.from(existing));			
+			return ResponseEvent.response(SpecimenDetail.from(existing, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -569,6 +569,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+		specimen.addOrUpdateExtension();
 		addOrUpdateEvents(specimen);
 		return specimen;
 	}

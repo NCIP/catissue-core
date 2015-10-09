@@ -172,7 +172,7 @@
                         </a>
                       </li>
                       <li show-if-allowed="specimenResource.updateOpts">
-                        <a ng-click="showRepeatVisit(visit, $index)">
+                        <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, repeatVisit: true, redirectTo: 'participant-detail.visits'})"> 
                           <i class="fa fa-repeat"></i>
                           <span translate="visits.ctx_menu.repeat_visit">Repeat Visit</span>
                         </a>
@@ -197,11 +197,6 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="row content" ng-if="rptVisitIdx == $index">
-                <os-plugin-hooks view-name="'participant-overview'" sec-name="'add-visit'" 
-                  default-tmpl="'modules/biospecimen/participant/add-visit.html'">
-                </os-plugin-hooks>
               </div>
             </div>
           </div>
@@ -282,13 +277,13 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                       <li show-if-allowed="specimenResource.updateOpts">
-                        <a ng-click="showAddVisit(visit, $index)">
+                        <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, redirectTo: 'participant-detail.visits'})">
                           <i class="fa fa-plus"></i>
                           <span translate="visits.ctx_menu.add_visit">Add Visit</span>
                         </a> 
                       </li>
                       <li show-if-allowed="specimenResource.updateOpts">
-                        <a ng-click="showMissedVisit(visit, $index)">
+                        <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, missedVisit: true, redirectTo: 'participant-detail.visits'})">
                           <i class="fa fa-ban"></i>
                           <span translate="visits.ctx_menu.missed_visit">Missed Visit</span>
                         </a>
@@ -302,11 +297,6 @@
                     </ul>
                   </div>
                 </div>
-              </div>
-              <div class="row content" ng-if="addVisitIdx == $index">
-                <os-plugin-hooks view-name="'participant-overview'" sec-name="'add-visit'" 
-                  default-tmpl="'modules/biospecimen/participant/add-visit.html'">
-                </os-plugin-hooks>
               </div>
             </div>
           </div>

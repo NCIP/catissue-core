@@ -294,7 +294,7 @@ public class Visit extends BaseExtensionEntity {
 		if (!isActive()) {
 			return;
 		}
-				
+		
 		setName(visit.getName());
 		setClinicalDiagnosis(visit.getClinicalDiagnosis());
 		setClinicalStatus(visit.getClinicalStatus());

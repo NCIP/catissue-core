@@ -33,13 +33,18 @@ angular.module('os.biospecimen.visit', [
         parent: 'participant-root'
       })
       .state('visit-addedit', {
-        url: '/addedit-visit',
+        url: '/addedit-visit?missedVisit&repeatVisit&redirectTo',
         templateProvider: function(PluginReg, $q) {
           return $q.when(PluginReg.getTmpls("visit-addedit", "page-body", "modules/biospecimen/participant/visit/addedit.html")).then(
             function(tmpls) {
               return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
             }
           );
+        },
+        resolve: {
+          extensionCtxt: function(Visit) {
+            return Visit.getExtensionCtxt();
+          }
         },
         controller: 'AddEditVisitCtrl',
         parent: 'visit-root'

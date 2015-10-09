@@ -10,7 +10,6 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.ethnicities = PvManager.getPvs('ethnicity');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
-      $scope.cohorts = PvManager.getPvs('cohort');
 
       var siteNames = cpr.getMrnSites();
       $scope.cpsForReg = [];
@@ -50,35 +49,6 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
     $scope.deleteReg = function() {
       DeleteUtil.delete($scope.cpr, {onDeleteState: 'participant-list'});
     }
-
-    /**
-     * Add visit logic
-     */
-    $scope.addVisitIdx = -1;
-    $scope.rptVisitIdx = -1;
-
-    $scope.showAddVisit = function(visit, index) {
-      $scope.addVisitIdx = index;
-      $scope.rptVisitIdx = -1;
-      $scope.visitToAdd = visit;
-    };
-
-    $scope.revertAddVisit = function() {
-      $scope.addVisitIdx = $scope.rptVisitIdx = -1;
-      $scope.visitToAdd = {};
-    };
-
-    $scope.showRepeatVisit = function(visit, index) {
-      $scope.addVisitIdx = -1;
-      $scope.rptVisitIdx = index;
-      $scope.visitToAdd = angular.copy(visit);
-    };
-
-    $scope.showMissedVisit = function(visit, index) {
-      $scope.addVisitIdx = index;
-      $scope.rptVisitIdx = -1;
-      $scope.visitToAdd = angular.extend(angular.copy(visit), {status: 'Missed Collection'});
-    };
 
     init();
   });
