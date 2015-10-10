@@ -135,7 +135,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
 
     $scope.onInstituteSelect = function() {
       $scope.distributionProtocol.principalInvestigator = undefined;
-      $scope.piFilterOpts.institute = $scope.distributionProtocol.instituteName;
+      $scope.piFilterOpts = {institute: $scope.distributionProtocol.instituteName};
       $scope.distributionProtocol.defReceivingSiteName = undefined;
       loadSites($scope.distributionProtocol.instituteName);
     }

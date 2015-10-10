@@ -65,7 +65,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
     
     function setUserFilterOpts(institute) {
-      $scope.userFilterOpts.institute = institute;
+      $scope.userFilterOpts = {institute: institute};
     }
 
     function setUserAndSiteList(order) {
