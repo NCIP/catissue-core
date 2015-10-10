@@ -16,7 +16,7 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
 
       onSave: function(formData) {
         angular.forEach(postSaveFilters, function(filter) {
-          savedFormData = filter($scope.object, formDef.name, formData);
+          filter($scope.object, formDef.name, formData);
         });
 
         $scope.back();
