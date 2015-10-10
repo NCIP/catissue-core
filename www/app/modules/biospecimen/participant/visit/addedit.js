@@ -23,7 +23,6 @@ angular.module('os.biospecimen.visit.addedit', [])
       angular.extend(currVisit, {cprId: cpr.id, cpTitle: cpr.cpTitle});
 
       $scope.deFormCtrl = {};
-      $scope.userFilterOpts = {listAll: true};
       $scope.extnOpts = Util.getExtnOpts(currVisit, extensionCtxt);
       ExtensionsUtil.createExtensionFieldMap(currVisit);
       

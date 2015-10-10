@@ -76,7 +76,6 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.currSpecimen.availableQty = Util.getNumberInScientificNotation($scope.currSpecimen.availableQty);
       $scope.currSpecimen.concentration = Util.getNumberInScientificNotation($scope.currSpecimen.concentration);
 
-      $scope.userFilterOpts = {listAll: true};
       $scope.deFormCtrl = {};
       $scope.extnOpts = Util.getExtnOpts(currSpecimen, extensionCtxt);
     }

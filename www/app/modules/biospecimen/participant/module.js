@@ -171,6 +171,9 @@ angular.module('os.biospecimen.participant',
         resolve: {
           formDef: function($stateParams, Form) {
             return Form.getDefinition($stateParams.formId);
+          },
+          postSaveFilters: function() {
+            return [];
           }
         },
         controller: 'FormRecordAddEditCtrl',
