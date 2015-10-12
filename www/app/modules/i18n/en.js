@@ -1285,6 +1285,7 @@
      "dp": "Distribution Protocol",
      "date": "Date",
      "status": "Status",
+     "dispose_all": "Dispose All",
      "specimens": "Specimens",
      "distributor": "Distributor",
      "dist_date": "Distribution Date",
