@@ -176,8 +176,8 @@ public class DistributionProtocolController {
 			HttpServletResponse response) {
 		
 		DistributionOrderStatListCriteria crit = new DistributionOrderStatListCriteria()
-		.dpId(dpId)
-		.groupByAttrs(groupByAttrs);
+				.dpId(dpId)
+				.groupByAttrs(groupByAttrs);
 		
 		ResponseEvent<File> resp = dpSvc.exportOrderStats(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();

@@ -23,9 +23,9 @@ public class DistributionOrderStat {
 	
 	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
 	static {
-		attrDisplayVals.put("specimenType", "Specimen Type");
-		attrDisplayVals.put("anatomicSite", "Anatomic Site");
-		attrDisplayVals.put("pathologyStatus", "Pathology Status");
+		attrDisplayVals.put("specimenType", "dist_specimen_type");
+		attrDisplayVals.put("anatomicSite", "dist_anatomic_site");
+		attrDisplayVals.put("pathologyStatus", "dist_pathology_status");
 	};
 
 	public Long getId() {
@@ -67,13 +67,17 @@ public class DistributionOrderStat {
 	public void setGroupByAttrVals(Map<String, Object> groupByAttrVals) {
 		this.groupByAttrVals = groupByAttrVals;
 	}
-
+	
 	public Long getDistributedSpecimenCount() {
 		return distributedSpecimenCount;
 	}
 
 	public void setDistributedSpecimenCount(Long distributedSpecimenCount) {
 		this.distributedSpecimenCount = distributedSpecimenCount;
+	}
+
+	public static Map<String, String> getAttrDisplayVals() {
+		return attrDisplayVals;
 	}
 	
 	public String [] getOrderStatsReportData(DistributionOrderStatListCriteria crit) {
@@ -90,24 +94,7 @@ public class DistributionOrderStat {
 		
 		data.add(getDistributedSpecimenCount().toString());
 		
-		return data.toArray(new String[1]);
-	}
-	
-	public static String [] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
-		List<String> data = new ArrayList<String>();
-		if (crit.dpId() == null) {
-			data.add("Distribution Protocol");
-		}
-		
-		data.add("Order Name");
-		data.add("Distribution Date");
-		for (String attr: crit.groupByAttrs()) {
-			data.add(attrDisplayVals.get(attr));
-		}
-		
-		data.add("Specimen Distributed");
-		
-		return data.toArray(new String[1]);
+		return data.toArray(new String[0]);
 	}
 	
 }
