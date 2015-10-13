@@ -22,7 +22,7 @@ Gastric Fluid,GF
 Lavage,La
 Microdissected,Md
 Milk,Mi
-Not Specified,NS
+Not Specified,
 Pericardial Fluid,PF
 Plasma,Pl
 protein,Pr
@@ -42,3 +42,4 @@ Vitreous Fluid,VF
 Whole Blood,WB
 Whole Bone Marrow,WBM
 Whole Genome Amplified DNA,WGAD
+Buffy Coat,BC

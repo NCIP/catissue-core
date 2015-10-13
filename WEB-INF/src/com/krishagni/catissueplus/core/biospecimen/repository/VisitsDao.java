@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -11,5 +12,9 @@ public interface VisitsDao extends Dao<Visit> {
 	
 	public List<VisitSummary> getVisits(VisitsListCriteria crit);
 	
-	public Visit getByName(String name);	
+	public Visit getByName(String name);
+	
+	public List<Visit> getByName(Collection<String> names);
+
+	public List<Visit> getBySpr(String sprNumber);
 }

@@ -119,15 +119,21 @@ body {
   flex-direction: column;
 }
 
-.os-footer {
+.os-signin-footer {
   position: absolute;
   left: 0px;
   bottom: 0px;
-  color: #c0c0c0;
+  color: #fff;
   border-top: 1px solid #82a3c7;
   text-align: center;
   width: 100%;
-  padding: 20px 5px;
+  padding: 15px 5px;
+  height: auto!important;
+  height: initial!important;
+}
+
+.os-signin-footer a {
+  color: #fff;
 }
 
 .os-custom-banner {
@@ -1030,6 +1036,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   font-weight: normal;
 }
 
+.os-about-po .footer {
+  font-style: italic;
+}
+
+.os-about-po .footer a {
+  color: #333;
+}
+
 .os-command-bar {
   padding: 0px 15px 10px 15px;
   margin-bottom: 30px;
@@ -1037,4 +1051,9 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 .os-command-bar button {
   margin-right: 10px;
+}
+
+.os-modal-body .os-alert-container.show {
+  position: initial;
+  width: 100%;
 }

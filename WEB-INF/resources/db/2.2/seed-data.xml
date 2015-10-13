@@ -16,4 +16,5 @@
         ('cohort', 'Cohort', 'Cohort', '2.2', ${now})
     </sql>
   </changeSet>
+
 </databaseChangeLog>

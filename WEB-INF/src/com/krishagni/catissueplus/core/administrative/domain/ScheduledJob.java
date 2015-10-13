@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ScheduledJob extends BaseEntity {
 	public enum RepeatSchedule { 
+		MINUTELY,
 		HOURLY,
 		DAILY,
 		WEEKLY,
@@ -247,11 +248,14 @@ public class ScheduledJob extends BaseEntity {
 
 	public Date getNextRunOn() {
 		switch (repeatSchedule) {
-			case DAILY:
-				return getNextDailyOccurence();
-			
+			case MINUTELY:
+				return getNextMinutelyOccurence();
+				
 			case HOURLY:
 				return getNextHourlyOccurence();
+			
+			case DAILY:
+				return getNextDailyOccurence();
 
 			case MONTHLY:
 				return getNextMonthlyOccurence();
@@ -267,6 +271,12 @@ public class ScheduledJob extends BaseEntity {
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		setName(Utility.getDisabledValue(name, 255));
+	}
+	
+	private Date getNextMinutelyOccurence() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MINUTE, 1);
+		return calendar.getTime();
 	}
 	
 	private Date getNextHourlyOccurence() {

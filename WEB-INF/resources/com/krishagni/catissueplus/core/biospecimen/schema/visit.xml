@@ -71,5 +71,9 @@
       <caption>#getMessage("visit_activity_status")</caption>
       <attribute>activityStatus</attribute>
     </field>  
+
+    <record type="extensions" entityType="VisitExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
   </record>
 </object-schema>

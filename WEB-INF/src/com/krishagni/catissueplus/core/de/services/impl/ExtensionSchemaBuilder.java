@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
+import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Field;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema.Record;
@@ -21,6 +22,11 @@ import edu.common.dynamicextensions.domain.nui.MultiSelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 
 public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
+	private FormDao formDao;
+	
+	public void setFormDao(FormDao formDao) {
+		this.formDao = formDao;
+	}
 
 	@Override
 	@PlusTransactional	
@@ -43,7 +49,27 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		return getObjectSchema(form, entityType);
 	}
 	
-	private ObjectSchema getObjectSchema(Container form, String entityType) {
+	@PlusTransactional
+	public ObjectSchema getObjectSchema(String entityType) {
+		List<Long> ids = formDao.getFormIds(-1L, entityType);
+		if (ids.isEmpty()) {
+			return null;
+		}
+		
+		Container form = Container.getContainer(ids.get(0));
+		Record attrs = getFormRecord(form, false);
+		attrs.setAttribute("attrsMap");
+		
+		Record record = new Record();
+		record.setCaption(form.getCaption());
+		record.setSubRecords(Collections.singletonList(attrs));
+		
+		ObjectSchema objectSchema = new ObjectSchema();
+		objectSchema.setRecord(record);
+		return objectSchema;
+	}
+	
+	private  ObjectSchema getObjectSchema(Container form, String entityType) {
 		Record record = new Record();  
 		
 		List<Field> fields = new ArrayList<Field>();
@@ -70,14 +96,18 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 	}
 	
 	private Record getFormRecord(Container form) {
+		return getFormRecord(form, true);
+	}
+	
+	private Record getFormRecord(Container form, boolean useUdn) {
 		List<Field> fields = new ArrayList<Field>();
 		List<Record> subRecords = new ArrayList<Record>();
 		
 		for (Control ctrl : form.getAllControls()) {
 			if (ctrl instanceof SubFormControl) {
-				subRecords.add(getSubRecord((SubFormControl)ctrl));
+				subRecords.add(getSubRecord((SubFormControl)ctrl, useUdn));
 			} else {
-				fields.add(getField(ctrl));
+				fields.add(getField(ctrl, useUdn));
 			}
 		}
 		
@@ -93,16 +123,16 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		return getField(attr, caption, false);		
 	}
 	
-	private Field getField(Control ctrl) {
+	private Field getField(Control ctrl, boolean useUdn) {
 		return getField(
-				ctrl.getUserDefinedName(),
+				useUdn ? ctrl.getUserDefinedName() : ctrl.getName() ,
 				ctrl.getCaption(),
 				ctrl instanceof MultiSelectControl);
 	}
 	
-	private Record getSubRecord(SubFormControl ctrl) {
-		Record subRec = getFormRecord(ctrl.getSubContainer());
-		subRec.setAttribute(ctrl.getUserDefinedName());
+	private Record getSubRecord(SubFormControl ctrl, boolean useUdn) {
+		Record subRec = getFormRecord(ctrl.getSubContainer(), useUdn);
+		subRec.setAttribute(useUdn ? ctrl.getUserDefinedName() : ctrl.getName());
 		subRec.setCaption(ctrl.getCaption());
 		subRec.setMultiple(true);
 		return subRec;		

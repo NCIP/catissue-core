@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.container.map', ['os.administrative.container.util'])
   .directive('osContainerMap', function($compile, ContainerUtil) {
-    function drawMap(scope, element) {
+    function drawMap(scope, element, allowClicks) {
       var locationMatrix = getLocationsMatrix(scope.container, scope.occupancyMap);
 
       var width = element.width();
@@ -21,10 +21,14 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
         for (var j = 0; j < locationMatrix[i].length; ++j) {
           var td = $("<td/>")
             .css("min-width", slotWidth)
-            .append(getContainerSlot(scope.container, locationMatrix[i][j]));
+            .append(getContainerSlot(scope.container, locationMatrix[i][j], allowClicks));
 
           if (locationMatrix[i][j].occupied) {
             td.addClass(!!locationMatrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
+
+            if (!!locationMatrix[i][j].occupied.oldOccupant) {
+              td.addClass('slot-vacated');
+            }
           }
 
           tr.append(td);
@@ -38,7 +42,6 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
     function getLocationsMatrix(container, occupancyMap) {
       var matrix = new Array(container.noOfRows);
-
       for (var i = 0; i < container.noOfRows; ++i) {
         matrix[i] = new Array(container.noOfColumns);
 
@@ -58,7 +61,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       return "(" + posY + ", " + posX + ")";
     };
 
-    function getContainerSlotEl(container, slot) {
+    function getContainerSlotEl(container, slot, allowClicks) {
       var el = $("<div class='slot-element'/>");
 
       var posOne = ContainerUtil.fromOrdinal(container.columnLabelingScheme, slot.posX);
@@ -70,14 +73,17 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
           .attr('title', slot.occupied.occupyingEntityName)
           .append(slot.occupied.occupyingEntityName);
 
-        var entityId = slot.occupied.occupyingEntityId;
-        if (slot.occupied.occuypingEntity == 'specimen') {
-          slotDesc.attr('ui-sref', 'specimen({specimenId: ' + entityId + '})');
-        } else {
-          slotDesc.attr('ui-sref', 'container-detail.locations({containerId: ' + entityId + '})');
+        if (allowClicks) {
+          var entityId = slot.occupied.occupyingEntityId;
+          if (slot.occupied.occuypingEntity == 'specimen') {
+            slotDesc.attr('ui-sref', 'specimen({specimenId: ' + entityId + '})');
+          } else {
+            slotDesc.attr('ui-sref', 'container-detail.locations({containerId: ' + entityId + '})');
+          }
         }
+
         el.append(slotDesc);
-      } else {
+      } else if (allowClicks) {
         el.append(getAddContainerMarker())
           .addClass("os-pointer-cursor")
           .attr({'data-pos-x': posOne, 'data-pos-y': posTwo})
@@ -87,10 +93,10 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
       return el;
     }
 
-    function getContainerSlot(container, slot) {
+    function getContainerSlot(container, slot, allowClicks) {
       return $("<div class='slot'/>")
         .append("<div class='slot-dummy'></div>")
-        .append(getContainerSlotEl(container, slot));
+        .append(getContainerSlotEl(container, slot, allowClicks));
     };
 
     function getAddContainerMarker() {
@@ -123,7 +129,7 @@ angular.module('os.administrative.container.map', ['os.administrative.container.
 
         scope.$watch('occupancyMap', function() {
           element.children().remove();
-          drawMap(scope, element);
+          drawMap(scope, element, angular.isDefined(attrs.onAddEvent));
           $compile(element)(scope);
         });
       },

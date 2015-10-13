@@ -34,32 +34,35 @@
           <div class="os-input-addon-grp" ng-if="!childReq.id">
             <input name="quantity" ng-model="childReq.quantity" 
               os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-              required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="os-input-addon-right">
-              <os-specimen-qty-unit specimen-class="childReq.specimenClass" type="childReq.type">
-              </os-specimen-qty-unit>
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+              </os-specimen-unit>
             </div>
           </div>
           <div class="os-input-addon-grp" ng-if="!!childReq.id">
             <input name="quantity" ng-model="childReq.initialQty" 
               os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-              required ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
             <div class="os-input-addon-right">
-              <os-specimen-qty-unit specimen-class="childReq.specimenClass" type="childReq.type">
-              </os-specimen-qty-unit>
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+              </os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="derivativeForm.quantity"></div>
         </div>
       </div>
 
-      <div class="col-xs-3" ng-if="childReq.specimenClass == 'Molecular'">
+      <div class="col-xs-3">
         <div class="form-group">
           <div class="os-input-addon-grp">
             <input name="concentration" ng-model="childReq.concentration" 
               os-md-input class="form-control" type="text" placeholder="{{'srs.concentration' | translate}}"
-              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
-            <span class="os-input-addon-right">µg/µl</span>
+              ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-right">
+              <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type" measure="concentration">
+              </os-specimen-unit>
+            </div>
           </div>
           <div os-field-error field="derivativeForm.concentration"></div>
         </div>

@@ -55,7 +55,7 @@
             <span>{{order.requester.firstName}} {{order.requester.lastName}}</span>
           </div>
           <div class="col os-col-15">
-            <span>{{order.siteName}}</span>
+            <span>{{order.siteName | osNoValue}}</span>
           </div>
           <div class="col os-col-15">
             <span>{{order.distributionProtocol.shortTitle}}</span>

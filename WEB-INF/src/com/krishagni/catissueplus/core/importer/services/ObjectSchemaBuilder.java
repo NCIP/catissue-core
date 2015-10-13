@@ -6,4 +6,6 @@ import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 
 public interface ObjectSchemaBuilder {
 	public ObjectSchema getObjectSchema(Map<String, Object> params);
+	
+	public ObjectSchema getObjectSchema(String entityType);
 }

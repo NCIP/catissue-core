@@ -102,6 +102,11 @@
       </field>
     </record>
 
+    <field>
+      <caption>#getMessage("specimen_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+    
     <record>
       <caption>#getMessage("specimen_coll_event")</caption>
       <attribute>collectionEvent</attribute>
@@ -167,6 +172,10 @@
         <caption>#getMessage("specimen_received_event_quality")</caption>
         <attribute>receivedQuality</attribute>
       </field>
+    </record>
+
+    <record type="extensions" entityType="SpecimenExtension">
+      <attribute>extensionDetail</attribute>
     </record>
   </record>
 </object-schema>

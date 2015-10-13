@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.dp', ['os.common.models'])
-  .factory('DistributionProtocol', function(osModel, $q, $http) {
+  .factory('DistributionProtocol', function(osModel, $http) {
     var DistributionProtocol = osModel('distribution-protocols');
 
     DistributionProtocol.prototype.getType = function() {
@@ -27,29 +27,8 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       );
     }
     
-    function getHistory() {
-      var def = $q.defer();
-      
-      def.resolve({
-        "data": [{
-          "name": "Distributed to Prof Tin",
-          "executionDate": "1441174401000",
-          "specimens": {"type": "DNA", "anatomicSite": "Lung", "pathology": "Malignant"},
-          "specimenCnt": 20
-        },
-        {
-          "name": "Distributed to Prof Tin",
-          "executionDate": "1362002400000",
-          "specimens": {"type": "RNA", "anatomicSite": "Lung", "pathology": "Malignant"},
-          "specimenCnt": 508
-        }]
-      })
-      
-      return def.promise;
-    }
-    
-    DistributionProtocol.prototype.getOrderHistory = function() {
-      return getHistory().then(
+    DistributionProtocol.getOrders = function(params) {
+      return $http.get(DistributionProtocol.url() + 'orders', {params: params}).then(
         function(resp) {
           return resp.data;
         }

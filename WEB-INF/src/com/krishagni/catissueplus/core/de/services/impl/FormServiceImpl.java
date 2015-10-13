@@ -72,12 +72,27 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String SPECIMEN_EVENT_FORM = "SpecimenEvent";
 	
+	private static final String COLLECTION_PROTOCOL_EXTENSION = "CollectionProtocolExtension";
+	
+	private static final String PARTICIPANT_EXTENSION = "ParticipantExtension";
+	
+	private static final String VISIT_EXTENSION = "VisitExtension";
+	
+	private static final String SPECIMEN_EXTENSION = "SpecimenExtension";
+	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
+	
+	private static Map<String, String> customFieldForms = new HashMap<String, String>();
 	
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
+		
+		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
+		customFieldForms.put("Participant", PARTICIPANT_EXTENSION);
+		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
+		customFieldForms.put("Specimen", SPECIMEN_EXTENSION);
 	}
 	
 	private FormDao formDao;
@@ -164,6 +179,13 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
+		String extensionName = customFieldForms.get(formName);
+		if (extensionName != null) {
+			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionName);
+			FormFieldSummary field = getExtensionField("customFields", "Custom Fields", extendedFormIds);
+			fields.add(field);
+		}
+		
 		if (!staticExtendedForms.contains(formName)) {
 			return ResponseEvent.response(fields);
 		}
@@ -172,31 +194,13 @@ public class FormServiceImpl implements FormService {
 		if (formName.equals(SPECIMEN_FORM)) {
 			extendedFormIds.addAll(formDao.getFormIds(cpId, SPECIMEN_EVENT_FORM));
 		}
-
-		FormFieldSummary field = new FormFieldSummary();
-		field.setName("extensions");
-		field.setCaption("Extensions");
-		field.setType("SUBFORM");
-
-		List<FormFieldSummary> extensionFields = new ArrayList<FormFieldSummary>();
-		for (Long extendedFormId : extendedFormIds) {
-			form = Container.getContainer(extendedFormId);
-
-			FormFieldSummary extensionField = new FormFieldSummary();
-			extensionField.setName(form.getName());
-			extensionField.setCaption(form.getCaption());
-			extensionField.setType("SUBFORM");
-			extensionField.setSubFields(getFormFields(form));
-
-			extensionFields.add(extensionField);
-		}
-
-		field.setSubFields(extensionFields);
+		
+		FormFieldSummary field = getExtensionField("extensions", "Extensions", extendedFormIds);
 		fields.add(field);
 
 		return ResponseEvent.response(fields);
 	}
-	
+    
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<FormContextDetail>> getFormContexts(RequestEvent<Long> req) {
@@ -275,6 +279,18 @@ public class FormServiceImpl implements FormService {
 			    	
 			    case CP_EXTN:
 			    	forms = formDao.getFormContexts(-1L, "CollectionProtocolExtension");
+			    	break;
+			    	
+			    case PARTICIPANT_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "ParticipantExtension");
+			    	break;
+			    	
+			    case VISIT_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "VisitExtension");
+			    	break;
+			    	 
+			    case SPECIMEN_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "SpecimenExtension");
 			    	break;
 			}
 			
@@ -547,6 +563,29 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
+		FormFieldSummary field = new FormFieldSummary();
+		field.setName(name);
+		field.setCaption(caption);
+		field.setType("SUBFORM");
+
+		List<FormFieldSummary> extensionFields = new ArrayList<FormFieldSummary>();
+		for (Long extendedFormId : extendedFormIds) {
+			Container form = Container.getContainer(extendedFormId);
+
+			FormFieldSummary extensionField = new FormFieldSummary();
+			extensionField.setName(form.getName());
+			extensionField.setCaption(form.getCaption());
+			extensionField.setType("SUBFORM");	
+			extensionField.setSubFields(getFormFields(form));
+
+			extensionFields.add(extensionField);
+		}
+
+		field.setSubFields(extensionFields);
+		return field;
+	}
 		
 	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
 		Map<String, Object> appData = formData.getAppData();
@@ -610,7 +649,6 @@ public class FormServiceImpl implements FormService {
 		formData.setRecordId(recordId);
 		return formData;
 	}
-	
 	
 	private List<FormFieldSummary> getFormFields(Container container) {
         List<FormFieldSummary> fields = new ArrayList<FormFieldSummary>();

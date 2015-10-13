@@ -307,8 +307,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setConcentration(detail.getConcentration(), sr, ose);
 	}
 	
-	private void setConcentration(Double concentration, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (concentration != null && concentration < 0) { 
+	private void setConcentration(BigDecimal concentration, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (concentration != null && NumUtil.lessThanZero(concentration)) {
 			ose.addError(CONCENTRATION_MUST_BE_POSITIVE);
 			return;
 		}

@@ -31,9 +31,18 @@
           Share list with following users
         </label>
         <div class="col-xs-6">
-          <os-users multiple ng-model="list.sharedWith" 
-            placeholder="{{'specimen_list.users' | translate}}">
+          <os-users multiple ng-model="list.sharedWith" placeholder="{{'specimen_list.users' | translate}}">
           </os-users>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class= "col-xs-3 control-label" translate="specimen_list.description">
+          Description
+        </label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'specimen_list.description' | translate}}" ng-model="list.description" class="form-control">
+          </textarea>
         </div>
       </div>
 

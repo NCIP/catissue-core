@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -21,6 +22,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.MpiGenerator;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class ParticipantServiceImpl implements ParticipantService {
 	private DaoFactory daoFactory;
@@ -137,13 +140,16 @@ public class ParticipantServiceImpl implements ParticipantService {
 	public void createParticipant(Participant participant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ParticipantUtil.ensureUniqueUid(daoFactory, participant.getUid(), ose);
+		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);
 		ParticipantUtil.ensureUniqueEmpi(daoFactory, participant.getEmpi(), ose);
-		ParticipantUtil.ensureUniquePmis(daoFactory, PmiDetail.from(participant.getPmis(), false), participant, ose);		
+
 		ose.checkAndThrow();
-		
+
+		participant.setEmpiIfEmpty();
 		daoFactory.getParticipantDao().saveOrUpdate(participant, true);
+		participant.addOrUpdateExtension();
 	}
-	
+
 	public void updateParticipant(Participant existing, Participant newParticipant) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
@@ -155,7 +161,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 		
 		String existingEmpi = existing.getEmpi();
 		String newEmpi = newParticipant.getEmpi();
-		if (StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)) {
+		MpiGenerator generator = ParticipantUtil.getMpiGenerator();
+		if (generator != null && !existingEmpi.equals(newEmpi)){
+			ose.addError(ParticipantErrorCode.MANUAL_MPI_NOT_ALLOWED);
+		} else if (generator == null && StringUtils.isNotBlank(newEmpi) && !newEmpi.equals(existingEmpi)){
 			ParticipantUtil.ensureUniqueEmpi(daoFactory, newEmpi, ose);
 		}
 		
@@ -164,7 +173,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ose.checkAndThrow();
 		
 		existing.update(newParticipant);
-		daoFactory.getParticipantDao().saveOrUpdate(existing);			
+		daoFactory.getParticipantDao().saveOrUpdate(existing);	
+		existing.addOrUpdateExtension();
 	}
 
 	@Override
@@ -215,5 +225,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 		
 		return result;
+	}
+	
+	private String getMpiFormat() {
+		return ConfigUtil.getInstance()
+				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
 	}
 }

@@ -16,6 +16,8 @@
 
     <property name="name" column="TAG_LABEL"/>
 
+    <property name="description" column="DESCRIPTION"/>
+
     <many-to-one 
       name="owner"
       class="com.krishagni.catissueplus.core.administrative.domain.User"

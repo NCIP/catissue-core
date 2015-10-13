@@ -264,14 +264,18 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	public Map<String, Object> getAppProps() {
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put("plugins",               PluginManager.getInstance().getPluginNames());
-		props.put("build_version",         appProps.getProperty("buildinfo.version"));
-		props.put("build_date",            appProps.getProperty("buildinfo.date"));
-		props.put("build_commit_revision", appProps.getProperty("buildinfo.commit_revision"));
-		props.put("cp_coding_enabled",     getBoolSetting("biospecimen", "cp_coding_enabled", false));
+		props.put("plugins",                 PluginManager.getInstance().getPluginNames());
+		props.put("build_version",           appProps.getProperty("buildinfo.version"));
+		props.put("build_date",              appProps.getProperty("buildinfo.date"));
+		props.put("build_commit_revision",   appProps.getProperty("buildinfo.commit_revision"));
+		props.put("cp_coding_enabled",       getBoolSetting("biospecimen", "cp_coding_enabled", false));
+		props.put("auto_empi_enabled",       isAutoEmpiEnabled());
+		props.put("uid_mandatory",           getBoolSetting("biospecimen", "uid_mandatory", false));
+		props.put("feedback_enabled",        getBoolSetting("common", "feedback_enabled", true));
+		props.put("mrn_restriction_enabled", getBoolSetting("biospecimen", "mrn_restriction_enabled", false));
 		return props;
 	}
-	
+
 	@Override
 	public String getDataDir() {		
 		String dataDir = appProps.getProperty("app.data_dir");
@@ -350,5 +354,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		if (!existingLocale.equals(newLocale)) {
 			Locale.setDefault(newLocale);
 		}
+	}
+	
+	private boolean isAutoEmpiEnabled() {
+		return StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_format", "")) || 
+				StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_generator", ""));
 	}
 }

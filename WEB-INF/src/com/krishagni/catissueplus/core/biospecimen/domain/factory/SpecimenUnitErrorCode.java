@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum SpecimenQtyUnitErrorCode implements ErrorCode {
+public enum SpecimenUnitErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
 	CLASS_REQUIRED,
@@ -13,7 +13,7 @@ public enum SpecimenQtyUnitErrorCode implements ErrorCode {
 
 	@Override
 	public String code() {
-		return "SPEC_QTY_UNIT_" + this.name();
+		return "SPEC_UNIT_" + this.name();
 	}
 
 }

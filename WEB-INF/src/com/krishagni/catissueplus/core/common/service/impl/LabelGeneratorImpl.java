@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.common.service.impl;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplTokenRegistrar;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -42,25 +44,41 @@ public class LabelGeneratorImpl implements LabelGenerator {
 		
 		StringBuilder result = new StringBuilder();
 		int lastIdx = 0;
-		
-		while (matcher.find()) {			
+		boolean nextFreeTextAppend = true;
+
+		while (matcher.find()) {
 			LabelTmplToken token = tokenRegistrar.getToken(matcher.group(1));
 			String replacement = null;
+
 			if (token != null) {
 				replacement = token.getReplacement(object);
 			}
-			
-			result.append(labelTmpl.substring(lastIdx, matcher.start()));
+
 			if (replacement == null) {
-				result.append(matcher.group(0));
-			} else {
-				result.append(replacement);
+				replacement = matcher.group(0);
 			}
 			
+			if (StringUtils.isNotEmpty(replacement)) {
+				if (nextFreeTextAppend) {
+					result.append(labelTmpl.substring(lastIdx, matcher.start()));
+				}
+
+				if (!replacement.equals(token.EMPTY_VALUE)) {
+					result.append(replacement);
+				}
+
+				nextFreeTextAppend = true;
+			} else {
+				nextFreeTextAppend = false;
+			}
+
 			lastIdx = matcher.end();
 		}
-		
-		result.append(labelTmpl.substring(lastIdx, labelTmpl.length()));
+
+		if (nextFreeTextAppend) {
+			result.append(labelTmpl.substring(lastIdx, labelTmpl.length()));
+		}
+
 		return result.toString();
 	}
 	

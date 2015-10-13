@@ -167,4 +167,28 @@
         join catissue_distribution distribution on distribution.identifier = distributed_item.distribution_id
     </sql>
   </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          select count(*) from catissue_permissible_value where value = 'Missed Collection'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (default, "Missed Collection", "scg_collection_status")
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, 'Missed Collection', 'scg_collection_status')
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

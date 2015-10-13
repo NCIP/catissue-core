@@ -28,24 +28,6 @@
     <sql>commit;</sql>
   </changeSet>
 
-  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="mysql">
-    <sql>
-      insert into catissue_permissible_value
-        (identifier, value, public_id)
-      values
-        (default, "Missed Collection", "scg_collection_status")
-    </sql>
-  </changeSet>
-
-  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="oracle">
-    <sql>
-      insert into catissue_permissible_value
-        (identifier, value, public_id)
-      values
-        (catissue_permi_value_seq.nextval, 'Missed Collection', 'scg_collection_status')
-    </sql>
-  </changeSet>
-  
   <changeSet author="vgaikwad" id="Assign permissions on SPR resource to PI, Coordinator and Tissue Banker">
     <sql>
       call assign_to_role('Tissue Banker', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');

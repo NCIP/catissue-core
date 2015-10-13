@@ -1,12 +1,12 @@
-angular.module('os.biospecimen.common.specimenqtyunit', [])
-  .factory('SpecimenQtyUnitSvc', function($http, $q, ApiUrls) {
+angular.module('os.biospecimen.common.specimenunit', [])
+  .factory('SpecimenUnitSvc', function($http, $q, ApiUrls) {
     var callQ = undefined;
     
     // { 'Cell': {'default': 'Cells'}, 'Tissue': {'default': 'gm', 'Fixed Tissue Block': 'blocks'}}
     var unitsMap = undefined; 
 
     function initCall() {
-      callQ = $http.get(ApiUrls.getBaseUrl() + '/specimen-quantity-units');
+      callQ = $http.get(ApiUrls.getBaseUrl() + '/specimen-units');
       return callQ;
     }
 
@@ -75,7 +75,7 @@ angular.module('os.biospecimen.common.specimenqtyunit', [])
       getUnit: getUnit
     }
   })
-  .directive('osSpecimenQtyUnit', function(SpecimenQtyUnitSvc) {
+  .directive('osSpecimenUnit', function(SpecimenUnitSvc) {
     return {
       restrict: 'E',
 
@@ -89,14 +89,19 @@ angular.module('os.biospecimen.common.specimenqtyunit', [])
       },
 
       link: function(scope, element, attrs) {
-        scope.$watchGroup(['specimenClass', 'type'], function(newVals) { 
+        scope.$watchGroup(['specimenClass', 'type'], function(newVals) {
           if (!scope.specimenClass) {
             return;
           }
 
-          SpecimenQtyUnitSvc.getUnit(scope.specimenClass, scope.type).then(
+          var measure = attrs.measure || 'quantity';
+          SpecimenUnitSvc.getUnit(scope.specimenClass, scope.type).then(
             function(unit) {
-              element.html(unit.htmlDisplayCode || unit.unit);
+              if (measure == "quantity") {
+                element.html(unit.qtyHtmlDisplayCode || unit.qtyUnit);
+              } else {
+                element.html(unit.concHtmlDisplayCode || unit.concUnit);
+              }
             }
           );
         });

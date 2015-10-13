@@ -46,7 +46,7 @@ ul.os-side-menu li:after {
   display: block;
 }
 
-ul.os-side-menu li:first-child {
+ul.os-side-menu > li:first-child {
   border-top: none;
 }
 
@@ -54,7 +54,7 @@ ul.os-side-menu li:last-child {
   border-bottom: 1px solid #fff;
 }
 
-ul.os-side-menu > li a {
+ul.os-side-menu li a {
   display: block;
   color: #232323;
   height: 100%;
@@ -68,21 +68,21 @@ ul.os-side-menu > li a {
   padding-left: 10px;
 }
 
-ul.os-side-menu > li a > .fa {
+ul.os-side-menu li a > .fa {
   display: inline-block;
   font-size: 20px; 
   text-decoration: none;
 }
 
-ul.os-side-menu > li:hover {
+ul.os-side-menu li:hover {
   background: #e0e0e0;
 }
 
-ul.os-side-menu > li:hover a {
+ul.os-side-menu li:hover a {
   text-decoration: none;
 }
 
-ul.os-side-menu > li.active:before {
+ul.os-side-menu li.active:before {
   content: ' ';
   display: block;
   position: absolute;
@@ -90,7 +90,7 @@ ul.os-side-menu > li.active:before {
   height: 100%;
 }
 
-ul.os-side-menu > li.active a {
+ul.os-side-menu li.active a {
   color: rgb(66, 139, 202);
   padding-left: 0px;
   text-decoration: none;

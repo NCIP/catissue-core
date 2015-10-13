@@ -66,6 +66,9 @@ public class UserController {
 			
 			@RequestParam(value = "activityStatus", required = false)
 			String activityStatus,
+			
+			@RequestParam(value = "listAll", required = false, defaultValue = "true")
+			boolean listAll,
 
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
 			boolean includeStats) {
@@ -78,6 +81,7 @@ public class UserController {
 			.loginName(loginName)
 			.instituteName(institute)
 			.activityStatus(activityStatus)
+			.listAll(listAll)
 			.includeStat(includeStats);
 		
 		

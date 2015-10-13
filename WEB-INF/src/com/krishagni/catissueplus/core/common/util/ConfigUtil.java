@@ -51,5 +51,8 @@ public class ConfigUtil {
 	public String getStrSetting(String module, String name, String defValue) {
 		return cfgSvc.getStrSetting(module, name, defValue);
 	}
-
+	
+	public Boolean getBoolSetting(String module, String name, Boolean defValue) {
+		return cfgSvc.getBoolSetting(module, name, defValue);
+	}
 }

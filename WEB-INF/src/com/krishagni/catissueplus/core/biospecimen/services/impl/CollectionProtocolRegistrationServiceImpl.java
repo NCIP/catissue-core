@@ -542,26 +542,40 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 
 	private void checkDistributedSpecimens(List<SpecimenDetail> specimens) {
-		List<Long> specimenIds = new ArrayList<Long>();
-		for (SpecimenDetail detail : specimens) {
-			if (detail.getId() != null) {
-				specimenIds.add(detail.getId());
-			}
-		}
-
+		List<Long> specimenIds = getSpecimenIds(specimens);
 		if (CollectionUtils.isEmpty(specimenIds)) {
 			return;
 		}
 		
 		List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(specimenIds);
+		setDistributedStatus(specimens, distributedSpecimenIds);
+	}
 
+	private void setDistributedStatus(List<SpecimenDetail> specimens, List<Long> distributedSpecimenIds) {
 		for (SpecimenDetail detail : specimens) {
-			if (detail.getId() == null) {
-				continue;
+			if (distributedSpecimenIds.contains(detail.getId())) {
+				detail.setDistributed(true);
 			}
 
-			detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
+			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
+				setDistributedStatus(detail.getChildren(), distributedSpecimenIds);
+			}
 		}
+	}
+
+	private List<Long> getSpecimenIds(List<SpecimenDetail> specimens) {
+		List<Long> ids = new ArrayList<Long>();
+		for (SpecimenDetail detail : specimens) {
+			if (detail.getId() != null) {
+				ids.add(detail.getId());
+			}
+
+			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
+				ids.addAll(getSpecimenIds(detail.getChildren()));
+			}
+		}
+
+		return ids;
 	}
 
 	private String getConsentDirPath() {

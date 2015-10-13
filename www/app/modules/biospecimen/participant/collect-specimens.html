@@ -119,15 +119,15 @@
                   name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
                   ng-model-options="{allowInvalid: 'true'}" ng-change="changeQuantity(specimen, specimen.initialQty)">
                 <div class="os-input-addon-right os-md-input-addon">
-                  <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                  </os-specimen-qty-unit>
+                  <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                  </os-specimen-unit>
                 </div>
               </div>
               <div os-field-error field="sform.qty"></div>
             </td>
             <td class="col os-col-25" style="overflow: visible;">
               <os-storage-position os-md-input edit-when="entity.existingStatus != 'Collected'"
-                entity="specimen" cp-id="cpr.cpId" hide-placeholder>
+                entity="specimen" cp-id="cpr.cpId" container-list-cache="containerListCache" hide-placeholder>
               </os-storage-position>
             </td>
             <td class="col os-col-10" style="overflow: visible;">
@@ -210,7 +210,7 @@
             </os-date-picker>
             <div os-field-error field="collectionForm.collDate"></div>
           </div>
-          <div class="col-xs-1 input">
+          <div class="col-xs-1 input os-md-time">
             <timepicker class="os-time-no-wheels" os-md-input ng-model="collDetail.collectionDate" show-meridian="false"></timepicker>
           </div>
         </div>

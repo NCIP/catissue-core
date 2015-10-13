@@ -40,8 +40,8 @@
       <label class="control-label col-xs-3" translate="orders.dp">Distribution Protocol</label>
       <div class="col-xs-6">
         <os-select name="dp" ng-model="order.distributionProtocol" 
-          list="dpList" display-prop="title" on-select="onDpSelect()"
-          placeholder="{{'orders.dp' | translate}}" required>
+          list="dpList" display-prop="shortTitle" on-select="onDpSelect()"
+          placeholder="{{'orders.dp' | translate}}" required refresh="searchDp">
         </os-select>       
         <div os-field-error field="ordForm.dp"></div>
       </div>
@@ -64,9 +64,8 @@
       <label class="col-xs-3 control-label" translate="orders.receiving_site">Receiving Site</label>
       <div class="col-xs-6">
         <os-select name="site" ng-model="order.siteName" 
-          list="siteList" placeholder="{{'orders.receiving_site' | translate}}" required>
+          list="siteList" placeholder="{{'orders.receiving_site' | translate}}">
         </os-select>
-        <div os-field-error field="ordForm.site"></div>
       </div>
     </div>
     
@@ -202,7 +201,7 @@
           </div>
           <div class="col os-col-10">
             <span> {{specimen.availableQty}} </span>
-            <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-qty-unit>
+            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
           </div>
           <div class="col os-col-10">
             <div class="os-input-addon-grp">
@@ -213,8 +212,8 @@
                 ]" 
                 ng-model-options="{allowInvalid: 'true'}">
               <div class="os-input-addon-right os-md-input-addon">
-                <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                </os-specimen-qty-unit>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-unit>
               </div>
             </div>
             <div os-field-error field="sform.qty"></div>

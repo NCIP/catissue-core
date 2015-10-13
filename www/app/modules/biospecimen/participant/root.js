@@ -11,9 +11,12 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
     }
 
     function initAuthorizationOpts() {
-      var sites = $scope.cpr.getMrnSites();
-      if (sites && sites.length == 0) {
-        sites = undefined;
+      var sites = undefined;
+      if ($scope.global.appProps.mrn_restriction_enabled) {
+        sites = $scope.cpr.getMrnSites();
+        if (sites && sites.length == 0) {
+          sites = undefined;
+        }
       }
 
       // Participant Authorization Options
@@ -52,7 +55,8 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
 
       // Specimen Tree Authorization Options
       var update = AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
-      $scope.specimenAllowedOps = {update: update};
+      var del = AuthorizationService.isAllowed($scope.specimenResource.deleteOpts);
+      $scope.specimenAllowedOps = {update: update, delete: del};
 
       // Surgical Pathology Report Authorization Options
       $scope.sprResource = {

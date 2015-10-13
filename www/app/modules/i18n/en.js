@@ -56,6 +56,7 @@
     "build_date": "Build date",
     "build_commit_revision": "Revision",
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
+    "footer_note": "<a href=\"http://www.openspecimen.org\" target=\"_blank\">OpenSpecimen</a> - powered by <a href=\"http://www.krishagni.com\" target=\"_blank\">Krishagni</a>",
 
     "buttons": {
       "add": "Add",
@@ -116,7 +117,8 @@
 
     "cp_def_file": "Collection Protocol Definition File",
   
-    "repositories": "Repositories", 
+    "repositories": "Repositories",
+    "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
     "code": "Short Code",
@@ -166,6 +168,9 @@
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
+
+    "show_site_coding": "Show Site Code Information",
+    "hide_site_coding": "Hide Site Code Information",
 
     "tab": {
       "overview": "Overview",
@@ -242,7 +247,7 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
-    "search_results": "Participant Search Results",
+    "search_results": "Participant Search Result for {{key}}",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -331,6 +336,8 @@
     "spr_pdf": "PDF",
     "spr_text": "Text",
     "reason": "Reason",
+    "search_results": "Visit Search Result for {{key}}",
+
     "status": {
       "pending": "Pending",
       "complete": "Complete",
@@ -449,6 +456,10 @@
     "delete_specimens":  "Are you sure you want to delete selected specimens ?",
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
+    "create_derivative": "Create Derivative",
+    "create_aliquots": "Create Aliquots",
+    "specimen_type": "Specimen Type",
+    "anatomic_site": "Anatomic Site",
 
     "col_event": {
       "title": "Collection Details",
@@ -684,7 +695,7 @@
     "distribution_order": {
       "order_name": "Order Name",
       "dist_date": "Distribution Date",
-      "specimen_type": "Speciment Type",
+      "specimen_type": "Specimen Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
       "specimens_cnt": "Specimens Distributed",
@@ -747,7 +758,7 @@
        "cp": "Collection Protocol",
        "role": "Role",
        "no_roles": "There are no roles to show. Add a new role by clicking Add Role...",
-       "all": "All Current & Future"
+       "all": "All Current and Future"
     },
 
     "create_account": "Create your OpenSpecimen Account",
@@ -843,6 +854,7 @@
     "stores_specimens": "Stores Specimens",
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
     "assign_positions": "Assign Positions",
+    "vacate_positions": "Vacate existing specimens",
     "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
@@ -1267,7 +1279,8 @@
     "specimens_removed": "Specimens successfully removed from {{name}} list",
     "distribute": "Distribute",
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
-    "no_specimens_for_distribution": "Please select at least one specimen to create distribution order"
+    "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
+    "created_by": "Created By"
    },
 
    "orders": {
@@ -1401,6 +1414,13 @@
      "error": "Could not find any {{entity}} matching search key {{key}}",
      "quick_search": "Quick Search",
      "search_for": "Search for"
-   }
-
+   },
+   
+   "feedback": {
+      "title": "Your feedback counts!",
+      "info": "Please let us know what you think of the new OpenSpecimen. Any suggestions on improvements, new features, or bugs are most welcome.",
+      "subject": "Subject",
+      "feedback": "Feedback",
+      "success_message": "Feedback sent successfully"
+    }
 }

@@ -17,7 +17,7 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Participant.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ParticipantMedicalIdentifier.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Specimen.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenQuantityUnit.hbm.xml" />
+		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenUnit.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenList.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Visit.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />

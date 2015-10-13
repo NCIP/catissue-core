@@ -10,7 +10,6 @@ angular.module('os.biospecimen.participant',
     'os.biospecimen.participant.visits',
     'os.biospecimen.participant.addedit',
     'os.biospecimen.participant.newreg',
-    'os.biospecimen.participant.addvisit',
     'os.biospecimen.participant.collect-specimens',
     'os.biospecimen.participant.consents',
     'os.biospecimen.participant.search',
@@ -71,6 +70,9 @@ angular.module('os.biospecimen.participant',
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
+          extensionCtxt: function(Participant) {
+            return Participant.getExtensionCtxt();
+          }
         },
         parent: 'participant-root'
       })
@@ -169,6 +171,9 @@ angular.module('os.biospecimen.participant',
         resolve: {
           formDef: function($stateParams, Form) {
             return Form.getDefinition($stateParams.formId);
+          },
+          postSaveFilters: function() {
+            return [];
           }
         },
         controller: 'FormRecordAddEditCtrl',
@@ -194,6 +199,10 @@ angular.module('os.biospecimen.participant',
         resolve: {
           participants: function(ParticipantSearchSvc) {
             return ParticipantSearchSvc.getParticipants();
+          },
+
+          searchKey: function(ParticipantSearchSvc) {
+            return ParticipantSearchSvc.getSearchKey();
           }
         },
         controller: 'ParticipantResultsView',
@@ -205,6 +214,7 @@ angular.module('os.biospecimen.participant',
     var opts = {
       template: 'modules/biospecimen/participant/quick-search.html',
       caption: 'entities.participant',
+      order : 1,
       search: ParticipantSearchSvc.search
     };
 

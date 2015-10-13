@@ -30,7 +30,7 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
     }
 
     $scope.getCoordinatorDisplayText = function(coordinator) {
-      return coordinator.lastName + ' ' + coordinator.firstName;
+      return coordinator.firstName + ' ' + coordinator.lastName;
     }
 
     init();

@@ -15,6 +15,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
@@ -80,7 +81,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 				.createCriteria(DistributionOrder.class)
 				.createAlias("distributionProtocol", "dp")
 				.createAlias("requester", "user")
-				.createAlias("site", "site")
+				.createAlias("site", "site", JoinType.LEFT_OUTER_JOIN)
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));

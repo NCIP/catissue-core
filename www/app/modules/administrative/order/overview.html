@@ -8,7 +8,7 @@
 
       <li class="item">
         <strong class="key key-sm" translate="orders.receiving_site">Receiving Site</strong>
-        <span class="value value-md">{{order.siteName}}</span>
+        <span class="value value-md">{{order.siteName | osNoValue}}</span>
       </li>
         
       <li class="item">
@@ -87,8 +87,8 @@
               </div>
               <div class="col os-col-15">
                 <span>{{item.quantity}}</span>
-                <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                </os-specimen-qty-unit>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-unit>
               </div>
               <div class="col os-col-15">
                 <span>{{'orders.item_statuses.' + item.status | translate}}</span>

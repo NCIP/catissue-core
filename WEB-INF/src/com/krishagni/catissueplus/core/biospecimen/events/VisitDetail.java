@@ -13,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
 @ListenAttributeChanges
 public class VisitDetail extends AttributeModifiedSupport {
@@ -25,9 +26,11 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String eventLabel;
 
 	private Double eventPoint;
-	
+
+	private Long cpId;
+
 	private String cpTitle;
-	
+
 	private String cpShortTitle;
 
 	private Long id;
@@ -61,6 +64,8 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String code;
 	
 	private String cohort;
+	
+	private ExtensionDetail extensionDetail;
 
 	public Long getCprId() {
 		return cprId;
@@ -100,6 +105,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	public void setEventPoint(Double eventPoint) {
 		this.eventPoint = eventPoint;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
 	}
 
 	public String getCpTitle() {
@@ -246,6 +259,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 		this.cohort = cohort;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+
 	public static VisitDetail from(Visit visit) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
@@ -273,12 +294,15 @@ public class VisitDetail extends AttributeModifiedSupport {
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		detail.setCprId(cpr.getId());
 		detail.setPpid(cpr.getPpid());
+		detail.setCpId(cpr.getCollectionProtocol().getId());
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setCpShortTitle(cpr.getCollectionProtocol().getShortTitle());
 		
 		detail.setEventId(visit.getCpEvent().getId());
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
 		detail.setEventPoint(visit.getCpEvent().getEventPoint());
+		
+		detail.setExtensionDetail(ExtensionDetail.from(visit.getExtension()));
 		return detail;
 	}
 	

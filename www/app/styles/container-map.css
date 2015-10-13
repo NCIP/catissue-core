@@ -12,9 +12,30 @@
 }
 
 .os-container-locations .map {
-  flex: 9;
+  flex: 5;
   width: 100%;
   overflow: auto;
+}
+
+.os-container-vacate-cb {
+  margin-top: 10px;
+}
+
+.os-container-vacate-cb:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+.os-container-vacate-cb .checkbox {
+  float: left;
+  height: 16px;
+  margin-top: 4px;
+}
+
+.os-container-vacate-cb .message {
+  float: left;
+  color: #707070;
 }
 
 .os-container-map-wrapper {
@@ -103,6 +124,14 @@
   color: #fff;
   font-weight: bold;
   text-align: center;
+}
+
+.os-container-map .slot-vacated .slot-desc {
+  background: #d9534f;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  min-height: 24px;
 }
 
 .os-container-map .slot-assigned,

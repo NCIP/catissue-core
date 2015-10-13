@@ -15,56 +15,60 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.label_fmt">Label Format</strong>
       <div class="value value-md">
-        <span>{{childReq.labelFmt | osNoValue}}
+        <span>{{childReq.labelFmt | osNoValue}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.specimen_class">Specimen Class</strong>
       <div class="value value-md">
-        <span>{{childReq.specimenClass}}
+        <span>{{childReq.specimenClass}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.specimen_type">Specimen Type</strong>
       <div class="value value-md">
-        <span>{{childReq.type}}
+        <span>{{childReq.type}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.anatomic_site">Anatomic Site</strong>
       <div class="value value-md">
-        <span>{{childReq.anatomicSite}}
+        <span>{{childReq.anatomicSite}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.laterality">Laterality</strong>
       <div class="value value-md">
-        <span>{{childReq.laterality}}
+        <span>{{childReq.laterality}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.pathology">Pathology</strong>
       <div class="value value-md">
-        <span>{{childReq.pathology | osNoValue}}
+        <span>{{childReq.pathology | osNoValue}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.storage_type">Storage Type</strong>
       <div class="value value-md">
-        <span>{{childReq.storageType | osNoValue}}
+        <span>{{childReq.storageType | osNoValue}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.initial_qty">Initial Quantity</strong>
       <div class="value value-md">
-        <span>{{childReq.initialQty}}</span>
-        <os-specimen-qty-unit specimen-class="childReq.specimenClass" type="childReq.type"></os-specimen-qty-unit>
+        <span>{{childReq.initialQty | osNumberInScientificNotation}}</span>
+        <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+        </os-specimen-unit>
       </div>
     </li>
-    <li class="item" ng-if="childReq.specimenClass == 'Molecular'">
+    <li class="item">
       <strong class="key key-sm" translate="srs.concentration">Concentration</strong>
       <div class="value value-md">
-        <span>{{childReq.concentration}} <span>&#181;g/&#181;l</span></span>
+        <span>{{childReq.concentration | osNumberInScientificNotation}}</span>
+        <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type"
+          measure="concentration">
+        </os-specimen-unit>
       </div>
     </li>
     <li class="item" ng-if="childReq.specimenClass == 'Molecular' ? codingEnabled : !codingEnabled"> 
@@ -76,13 +80,13 @@
     <li class="item">
       <strong class="key key-sm" translate="srs.collector">Collector</strong>
       <div class="value value-md">
-        <span>{{childReq.collector.lastName}}, {{childReq.collector.firstName}}</span>
+        <span>{{childReq.collector | osUserDisplayName}}</span>
       </div>
     </li>
     <li class="item">
       <strong class="key key-sm" translate="srs.receiver">Receiver</strong>
       <div class="value value-md">
-        <span>{{childReq.receiver.lastName}}, {{childReq.receiver.firstName}}</span>
+        <span>{{childReq.receiver | osUserDisplayName}}</span>
       </div>
     </li>
     <li class="item">

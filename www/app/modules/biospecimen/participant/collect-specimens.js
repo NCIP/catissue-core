@@ -43,6 +43,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
           function(specimen) {
             specimen.existingStatus = specimen.status;
+            specimen.initialQty = Util.getNumberInScientificNotation(specimen.initialQty);
             if (specimen.status != 'Collected') {
               specimen.status = 'Collected';
             }
@@ -60,6 +61,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;
+        $scope.containerListCache = {};
         
         $scope.collDetail = {
           collector: undefined,
@@ -242,7 +244,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       function loadPvs() {
         $scope.notSpecified = $translate.instant('pvs.not_specified');
-        $scope.sites = PvManager.getSites();
+        $scope.sites = PvManager.getSites({listAll: true});
         $scope.specimenStatuses = PvManager.getPvs('specimen-status');
       };
 
@@ -364,14 +366,18 @@ angular.module('os.biospecimen.participant.collect-specimens',
         }
       };
 
-      function descendentCount(specimen) { 
+      function descendentCount(specimen, onlySelected) {
+        onlySelected = (onlySelected != false);
         var count = 0;
         for (var i = 0; i < specimen.children.length; ++i) {
           if (specimen.children[i].removed) {
             continue;
           }
+          if (!specimen.children[i].selected && onlySelected) {
+            continue;
+          }
 
-          count += 1 + descendentCount(specimen.children[i]);
+          count += 1+ descendentCount(specimen.children[i]);
         }
 
         return count;

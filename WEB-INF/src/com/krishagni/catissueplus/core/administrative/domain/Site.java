@@ -9,7 +9,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -22,7 +22,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
-public class Site extends BaseEntity {
+public class Site extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "site";
 
 	private String name;
@@ -37,8 +37,6 @@ public class Site extends BaseEntity {
 
 	private String address;
 	
-	private SiteExtension extension;
-    
 	private Set<User> coordinators = new HashSet<User>();
 
 	private Set<Visit> visits = new HashSet<Visit>();
@@ -103,19 +101,6 @@ public class Site extends BaseEntity {
 
 	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	@NotAudited
-	public SiteExtension getExtension() {
-		if (extension == null) {
-			extension = SiteExtension.getFor(this);
-		}
-		
-		return extension;
-	}
-
-	public void setExtension(SiteExtension extension) {
-		this.extension = extension;
 	}
 
 	public Set<User> getCoordinators() {
@@ -220,12 +205,9 @@ public class Site extends BaseEntity {
 		setActivityStatus(activityStatus);
 	}
 	
-	public void addOrUpdateExtension() {
-		if (extension == null) {
-			return;
-		}
-		
-		extension.saveOrUpdate();
+	@Override
+	public String getEntityType() {
+		return "SiteExtension";
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {
@@ -246,5 +228,4 @@ public class Site extends BaseEntity {
 			throw new OpenSpecimenException(ErrorType.USER_ERROR, SiteErrorCode.REF_ENTITY_FOUND);
 		}
 	}
-
 }

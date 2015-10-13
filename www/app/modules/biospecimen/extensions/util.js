@@ -35,9 +35,21 @@ angular.module('os.biospecimen.extensions.util', [])
         }
       );
     };
+    
+    function createExtensionFieldMap(entity) {
+      var extensionDetail = entity.extensionDetail;
+      if (extensionDetail) {
+        extensionDetail.attrsMap = {};
+        angular.forEach(extensionDetail.attrs, function(attr) {
+          extensionDetail.attrsMap[attr.name] = attr.value;
+        });
+      }
+    }
  
     return {
-      deleteRecord: deleteRecord
+      deleteRecord: deleteRecord,
+
+      createExtensionFieldMap: createExtensionFieldMap
     }
  
   });

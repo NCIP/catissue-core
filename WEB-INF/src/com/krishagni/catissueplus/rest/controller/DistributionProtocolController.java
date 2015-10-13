@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -148,43 +150,24 @@ public class DistributionProtocolController {
 		return resp.getPayload();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/{id}/orders-report")
-	@ResponseBody
+	@RequestMapping(method = RequestMethod.GET, value = "/orders")
 	@ResponseStatus(HttpStatus.OK)
-	public void exportHistory (@PathVariable Long id, HttpServletResponse response) {
-		File file = generateCSVFile();
-		Utility.sendToClient(response, "dp-history.csv", file);
-	}
-	
-	/**
-	 * TODO:: This method is for temporary use.
-	 * Remove this method once back-end api's ready for exporting dp-history data.
-	 **/
-	
-	private File generateCSVFile() {
-		List<String[]> data = new ArrayList<String[]>();
-		String[] header = {"Order Name", "Distribution Date", "Specimen Type", "Anatomic Site", 
-				           "Pathology Status", "Specimen Distributed"};
-		String[] row1 = {"Distributed to Prof Tin", "Sep 02 2015", "DNA", "Lung", "Malignant", "20"};
-		String[] row2 = {"Distributed to Prof Tin", "Feb 28 2013", "RNA", "Lung", "Malignant", "508"};
-		data.add(header);
-		data.add(row1);
-		data.add(row2);
+	@ResponseBody
+	public List<DistributionOrderStat> getOrderStats(
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
+			@RequestParam(value = "groupBy", required = false, defaultValue = "")
+			List<String> groupByAttrs) {
 		
-		File file;
-		FileWriter csvFile;
-		CSVWriter csvWriter = null;
-		try {
-			file = File.createTempFile("dp-history", null);
-			csvFile = new FileWriter(file);
-			csvWriter = new CSVWriter(csvFile);
-			csvWriter.writeAll(data);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-				IOUtils.closeQuietly(csvWriter);
-		}
-		return file;
+		DistributionOrderStatListCriteria crit = new DistributionOrderStatListCriteria()
+				.dpId(dpId)
+				.groupByAttrs(groupByAttrs);
+		
+		RequestEvent<DistributionOrderStatListCriteria> req = new RequestEvent<DistributionOrderStatListCriteria>(crit);
+		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

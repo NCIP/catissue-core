@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 @Audited
-public class Specimen extends BaseEntity {
+public class Specimen extends BaseExtensionEntity {
 	public static final String NEW = "New";
 	
 	public static final String ALIQUOT = "Aliquot";
@@ -59,7 +59,7 @@ public class Specimen extends BaseEntity {
 
 	private String specimenType;
 
-	private Double concentration;
+	private BigDecimal concentration;
 
 	private String label;
 
@@ -199,11 +199,11 @@ public class Specimen extends BaseEntity {
 		this.specimenType = specimenType;
 	}
 
-	public Double getConcentration() {
+	public BigDecimal getConcentration() {
 		return concentration;
 	}
 
-	public void setConcentration(Double concentration) {
+	public void setConcentration(BigDecimal concentration) {
 		if (concentrationInit) {
 			if (this.concentration == concentration) {
 				return;
@@ -266,7 +266,7 @@ public class Specimen extends BaseEntity {
 	}
 
 	public Date getCreatedOn() {
-		return createdOn;
+		return  Utility.chopSeconds(createdOn);
 	}
 
 	public void setCreatedOn(Date createdOn) {
@@ -525,7 +525,7 @@ public class Specimen extends BaseEntity {
 		return getVisit().getRegistration();
 	}
 
-	public void update(Specimen specimen) {		
+	public void update(Specimen specimen) {	
 		updateStatus(specimen.getActivityStatus(), null);
 		if (!isActive()) {
 			return;
@@ -540,7 +540,7 @@ public class Specimen extends BaseEntity {
 
 		if (isCollected()) {
 			if (isPrimary()) {
-				updateCreatedOn(getReceivedEvent().getTime());
+				updateCreatedOn(Utility.chopSeconds(getReceivedEvent().getTime()));
 			} else {
 				updateCreatedOn(specimen.getCreatedOn());
 			}
@@ -575,7 +575,8 @@ public class Specimen extends BaseEntity {
 		setAvailableQuantity(specimen.getAvailableQuantity());
 		setIsAvailable(specimen.getIsAvailable());
 				
-		setComment(specimen.getComment());		
+		setComment(specimen.getComment());
+		setExtension(specimen.getExtension());
 		updatePosition(specimen.getPosition());
 
 		checkQtyConstraints();
@@ -648,7 +649,38 @@ public class Specimen extends BaseEntity {
 			close(distributor, time, "Distributed");
 		}
 	}
-	
+
+	public void updateCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+
+		if (createdOn == null) {
+			for (Specimen childSpecimen : getChildCollection()) {
+				childSpecimen.updateCreatedOn(createdOn);
+			}
+
+			return;
+		}
+
+		if (createdOn.after(Calendar.getInstance().getTime())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
+		}
+
+		// The below code is commented for now, so that there will not be any issue for the legacy data.
+		// In legacy data created on was simple date field, but its been changed to timestamp in v20.
+		// While migrating time part of the date is set as 00:00:00,
+		// but the created on of primary specimen(fetched from received event time stamp) will have time part within.
+		// So there is large possibility of below 2 exceptions.
+		/*if (!isPrimary() && createdOn.before(getParentSpecimen().getCreatedOn())) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
+		}
+
+		for (Specimen childSpecimen : getChildCollection()) {
+			if (childSpecimen.getCreatedOn() != null && createdOn.after(childSpecimen.getCreatedOn())) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
+			}
+		}*/
+	}
+
 	private void addDistributionEvent(User user, Date time, BigDecimal quantity) {
 		SpecimenDistributionEvent event = new SpecimenDistributionEvent(this);
 		event.setQuantity(quantity);
@@ -773,7 +805,7 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void setLabelIfEmpty() {
-		if (StringUtils.isNotBlank(label)) {
+		if (StringUtils.isNotBlank(label) || isMissed()) {
 			return;
 		}
 		
@@ -830,6 +862,10 @@ public class Specimen extends BaseEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition) {
+		if (newPosition != null && newPosition.getPosOneOrdinal() == 0 && newPosition.getPosTwoOrdinal() == 0) {
+			newPosition = null;
+		}
+
 		transferTo(newPosition, null);
 	}
 	
@@ -856,6 +892,11 @@ public class Specimen extends BaseEntity {
 		}
 			
 		return desc.toString();		
+	}
+	
+	@Override
+	public String getEntityType() {
+		return "SpecimenExtension";
 	}
 
 	private void ensureNoActiveChildSpecimens() {
@@ -1007,29 +1048,4 @@ public class Specimen extends BaseEntity {
 		}
 	}
 
-	private void updateCreatedOn(Date createdOn) {
-		this.createdOn = createdOn;
-
-		if (createdOn == null) { 
-			for (Specimen childSpecimen : getChildCollection()) {
-				childSpecimen.updateCreatedOn(createdOn);
-			}
-
-			return;
-		}
-
-		if (createdOn.after(Calendar.getInstance().getTime())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CREATED_ON_GT_CURRENT);
-		}
-
-		if (!isPrimary() && createdOn.before(getParentSpecimen().getCreatedOn())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
-		}
-
-		for (Specimen childSpecimen : getChildCollection()) {
-			if (childSpecimen.getCreatedOn() != null && createdOn.after(childSpecimen.getCreatedOn())) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
-			}
-		}
-	}
 }

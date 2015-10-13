@@ -32,7 +32,7 @@
             <a ui-sref="form-addedit({formId: form.formId})" 
               title="{{'form.tooltip.edit' | translate}}">{{form.caption}}</a>
           </div>
-          <div class="col col-xs-3">{{form.createdBy.lastName}} {{form.createdBy.firstName}}</div>
+          <div class="col col-xs-3">{{form.createdBy | osUserDisplayName}}</div>
           <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
           <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
           <div class="col col-xs-2 clearfix">

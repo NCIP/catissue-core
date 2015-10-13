@@ -42,5 +42,5 @@ public interface ConfigurationService {
 	
 	public Map<String, Object> getAppProps();
 	
-	public String getDataDir();	
+	public String getDataDir();
 }

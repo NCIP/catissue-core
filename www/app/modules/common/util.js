@@ -1,6 +1,7 @@
 
 angular.module('openspecimen')
   .factory('Util', function($rootScope, $timeout, $document) {
+    var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
     };
@@ -141,6 +142,43 @@ angular.module('openspecimen')
       });
     }
 
+    function getNumberInScientificNotation(input, minRange, fractionDigits) {
+      minRange = minRange || 1000000;
+      fractionDigits = fractionDigits || 6;
+      
+      if (angular.isNumber(input) && input > minRange) {
+        input = input.toExponential(fractionDigits);
+      }
+
+      return input;
+    }
+
+    function parseDate(value) {
+      if (typeof value === 'string') {
+        var matches = isoDateRe.exec(value);
+        if (matches) {
+          return new Date(value);
+        }
+      }
+
+      return value;
+    }
+
+    function getExtnOpts(entity, extnCtxt) {
+      if (!extnCtxt) {
+        return undefined;
+      }
+
+      return {
+        formId: extnCtxt.formId,
+        recordId: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.id : undefined,
+        formCtxtId: parseInt(extnCtxt.formCtxtId),
+        objectId: entity.id,
+        showActionBtns: false,
+        labelAlignment: 'horizontal'
+      };
+    }
+
     return {
       clear: clear,
 
@@ -154,6 +192,12 @@ angular.module('openspecimen')
 
       getDupObjects: getDupObjects,
 
-      hidePopovers: hidePopovers
+      hidePopovers: hidePopovers,
+
+      getNumberInScientificNotation: getNumberInScientificNotation,
+
+      parseDate: parseDate,
+
+      getExtnOpts: getExtnOpts
     };
   });

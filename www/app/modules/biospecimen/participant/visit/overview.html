@@ -57,7 +57,11 @@
       </li>
     </ul>
 
-    <os-specimen-tree cpr="cpr" visit="visit" specimens="specimens" allowed-ops="specimenAllowedOps" reload="reload()"></div>
+    <div ng-if="!!visit.extensionDetail">
+      <div os-extension-overview ext-object="visit.extensionDetail" show-column="2"></div>
+    </div>
+
+    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="specimens" allowed-ops="specimenAllowedOps" reload="reload()"></div>
   </div>
 
   <div class="col-xs-4">

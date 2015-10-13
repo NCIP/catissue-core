@@ -124,7 +124,9 @@
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.CpCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
       </list>
@@ -239,16 +241,18 @@
     <property name="labelGenerator" ref="specimenLabelGenerator"/>
   </bean>
 
-  <bean id="specQtyUnitsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenQuantityUnitServiceImpl">
+  <bean id="specUnitsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenUnitServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="specimenTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.CpCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.BarcodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventDateLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.ParentSpecimenUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidLabelToken"/>
@@ -256,6 +260,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidSpecTypeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
           <property name="cfgSvc" ref="cfgSvc"/>
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-type-abbr.csv"/>
@@ -264,6 +269,7 @@
           <property name="cfgSvc" ref="cfgSvc"/>
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
         </bean>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
       </list>
     </property>
   </bean>
@@ -475,6 +481,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPpidPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitNamePrintToken"/>
       </list>
     </property>
   </bean>
@@ -513,6 +520,17 @@
     <property name="transactionManager" ref="transactionManager"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="dataSource" ref="dataSource"/>
+    <property name="formDataMgr" ref="formDataMgr"/>
+
+    <property name="postFormSaveFilters">
+      <map>
+        <entry key="SpecimenReceivedEvent">
+          <bean id="receivedEventFilter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenReceivedEventFilter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean id="importQueryForms" class="com.krishagni.catissueplus.core.init.ImportQueryForms">
@@ -558,6 +576,7 @@
       <map>
         <entry key="extensions">
           <bean class="com.krishagni.catissueplus.core.de.services.impl.ExtensionSchemaBuilder">
+            <property name="formDao" ref="formDao"/>
           </bean>
         </entry>
       </map>
@@ -652,6 +671,14 @@
     <property name="deInitializer" ref="deInitializer"/>
     <property name="templateService" ref="templateService"/>
   </bean>
+  
+  <bean id="importDeForms" class="com.krishagni.catissueplus.core.init.ImportDeForms">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
+  </bean>
 
   <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
     <property name="cfgSvc" ref="cfgSvc"/>
@@ -667,6 +694,10 @@
     <property name="txnMgr" ref="transactionManager"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
+  </bean>
+  
+  <bean id="supportService" class="com.krishagni.catissueplus.core.support.services.impl.SupportServiceImpl">
+    <property name="emailService" ref="emailService"/>
   </bean>
   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
