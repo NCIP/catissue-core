@@ -178,4 +178,16 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
+	public Set<Site> getAllDistributingSites() {
+		Set<Site> sites = new HashSet<Site>();
+		for (DistributionProtocolDistSite distSite : getDistributingSites()) {
+			if (distSite.getSite() != null) {
+				sites.add(distSite.getSite());
+			} else {
+				sites.addAll(distSite.getInstitute().getSites());
+			}
+		}
+		
+		return sites;
+	}
 }

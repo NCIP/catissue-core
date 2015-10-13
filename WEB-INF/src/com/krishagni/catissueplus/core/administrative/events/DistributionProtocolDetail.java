@@ -105,12 +105,12 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 	}
 	
 	private static void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp) {
-		for (DistributionProtocolDistSite distSite: dp.getDistributingSites()) {
+		for (DistributionProtocolDistSite distSite : dp.getDistributingSites()) {
 			String instituteName = distSite.getInstitute().getName();
 			List<String> siteNames = detail.getDistributingSites().get(instituteName);
 			if (siteNames == null) {
 				siteNames = new ArrayList<String>();
-				detail.distributingSites.put(instituteName, siteNames);
+				detail.getDistributingSites().put(instituteName, siteNames);
 			}
 			
 			if (distSite.getSite() != null) {

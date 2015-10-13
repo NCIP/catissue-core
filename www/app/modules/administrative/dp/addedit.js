@@ -1,9 +1,10 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.query.models'])
-  .controller('DpAddEditCtrl', function(
-    $scope, $state, distributionProtocol, DistributionProtocol, Institute, User, SavedQuery, Site, $translate) {
+  .controller('DpAddEditCtrl', function($scope, $state, distributionProtocol, DistributionProtocol, Institute, User,
+      SavedQuery, Site, $translate, $q) {
     
     var availableInstituteNames = [];
+    var availableInstSites = {};
     
     function init() {
       $scope.distributionProtocol = distributionProtocol;
@@ -97,8 +98,15 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     function getSites(instituteName) {
+      if (availableInstSites[instituteName] && availableInstSites[instituteName].length != 0) {
+        var deferred = $q.defer();
+        deferred.resolve(availableInstSites[instituteName]);
+        return deferred.promise;
+      }
+      
       return Site.listForInstitute(instituteName).then(
         function(result) {
+          availableInstSites[instituteName] = result;
           return result;
         }
       );
@@ -147,13 +155,11 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       var dp = $scope.distributionProtocol;
       var instituteName = dp.distributingSites[index].instituteName;
       var sites = $scope.instSiteMap[instituteName];
-      if (!sites || sites.length == 0) {
-        getSites(instituteName).then(
-          function(sites) {
-            $scope.instSiteMap[instituteName] = [$scope.all_sites].concat(sites);
-          }
-        );
-      }
+      getSites(instituteName).then(
+        function(sites) {
+          $scope.instSiteMap[instituteName] = [$scope.all_sites].concat(sites);
+        }
+      );
       
       dp.distributingSites[index].sites = [];
       filterAvailableInstituteNames();
@@ -184,13 +190,11 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       }
       
       if (absentAllSites) {
-        if (!$scope.instSiteMap[institute] || $scope.instSiteMap[institute].length == 0) {
-          getSites(institute).then(
-            function(sites) {
-              $scope.instSiteMap[institute] = [$scope.all_sites].concat(sites);
-            }
-          );
-        }
+        getSites(institute).then(
+          function(sites) {
+            $scope.instSiteMap[institute] = [$scope.all_sites].concat(sites);
+          }
+        );
       }
     }
     

@@ -183,7 +183,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		
 		List<String> distSiteNames = new ArrayList<String>();
 		List<String> distInstituteNames = new ArrayList<String>();
-		for (Map.Entry<String, List<String>> site: detail.getDistributingSites().entrySet()) {
+		for (Map.Entry<String, List<String>> site : detail.getDistributingSites().entrySet()) {
 			if (CollectionUtils.isNotEmpty(site.getValue())) {
 				distSiteNames.addAll(site.getValue());
 			} else if (site.getKey() != null) {
@@ -200,7 +200,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 				return;
 			}
 			
-			for (Site site: distributingSites) {
+			for (Site site : distributingSites) {
 				DistributionProtocolDistSite distSite = new DistributionProtocolDistSite();
 				distSite.setDistributionProtocol(dp);
 				distSite.setInstitute(site.getInstitute());
@@ -216,7 +216,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 				return;
 			}
 			
-			for (Institute inst: distInstitutes) {
+			for (Institute inst : distInstitutes) {
 				DistributionProtocolDistSite distSite = new DistributionProtocolDistSite();
 				distSite.setDistributionProtocol(dp);
 				distSite.setInstitute(inst);

@@ -110,7 +110,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		List<Object []> rows = query.list();
 		List<DistributionOrderStat> result = new ArrayList<DistributionOrderStat>();
-		for (Object[] row: rows) {
+		for (Object[] row : rows) {
 			DistributionOrderStat detail = getDOStats(row, listCrit);
 			result.add(detail);
 		}
@@ -199,7 +199,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		Map<String, String> props = getProps();
 		
-		for (String attr: crit.groupByAttrs()) {
+		for (String attr : crit.groupByAttrs()) {
 			String prop = props.get(attr);
 			projs.add(Projections.groupProperty(prop));
 		}
@@ -226,7 +226,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		stat.setExecutionDate((Date)row[index++]);
 		stat.setDistributedSpecimenCount((Long)row[index++]);
 		
-		for (String attr: crit.groupByAttrs()) {
+		for (String attr : crit.groupByAttrs()) {
 			stat.getGroupByAttrVals().put(attr, row[index++]);
 		}
 		

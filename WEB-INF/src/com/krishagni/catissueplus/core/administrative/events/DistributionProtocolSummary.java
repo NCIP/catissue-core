@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionProtocolSummary {
@@ -89,7 +88,7 @@ public class DistributionProtocolSummary {
 	public static List<DistributionProtocolSummary> from(Collection<DistributionProtocol> dps) {
 		List<DistributionProtocolSummary> result = new ArrayList<DistributionProtocolSummary>();
 		
-		for (DistributionProtocol dp: dps) {
+		for (DistributionProtocol dp : dps) {
 			result.add(from(dp));
 		}
 		
