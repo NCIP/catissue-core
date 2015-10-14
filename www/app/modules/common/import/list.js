@@ -24,7 +24,10 @@ angular.module('os.common.import.list', ['os.common.import.importjob'])
         function(importJobs) {
           pagingOpts.totalJobs = (pagingOpts.currPage - 1) * pagingOpts.jobsPerPage + importJobs.length;
  
-          importJobs.splice(importJobs.length - 1, 1);
+          if (importJobs.length >= maxResults) {
+            importJobs.splice(importJobs.length - 1, 1);
+          }
+
           $scope.importJobs = importJobs;
           angular.forEach(importJobs, function(job) {
             job.outputFileUrl = ImportJob.url() + job.$id() + '/output';
