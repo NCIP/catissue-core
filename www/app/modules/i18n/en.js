@@ -187,6 +187,8 @@
 
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
+      "add": "Click to add new Collection Protocol",
+      "edit": "Click to edit Collection Protocol",
       "reg_participants_count": "Count of Registered Participants",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to search Collection Protocols"
