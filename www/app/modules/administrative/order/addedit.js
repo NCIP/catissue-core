@@ -25,6 +25,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       if (!order.executionDate) {
         order.executionDate = new Date();
       }
+      
+      $scope.allItems = {status: false};
     }
 
     function loadItemStatusPvs() {
@@ -158,6 +160,31 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
 
     $scope.passThrough = function() {
       return true;
+    }
+    
+    $scope.setStatus = function(item) {
+      if (item.quantity == item.specimen.availableQty) {
+        item.status = 'DISTRIBUTED_AND_CLOSED';
+      } else {
+        item.status = 'DISTRIBUTED';
+      }
+    }
+    
+    $scope.toggleAllItemStatus = function() {
+      var allStatus;
+      if ($scope.allItems.status) {
+        allStatus = 'DISTRIBUTED_AND_CLOSED';
+      } else {
+        allStatus = 'DISTRIBUTED';
+      }
+      
+      angular.forEach($scope.order.orderItems,
+        function(item) {
+          if (item.quantity != item.specimen.availableQty) {
+            item.status = allStatus;
+          }
+        }
+      );
     }
     
     $scope.searchDp = loadDps;
