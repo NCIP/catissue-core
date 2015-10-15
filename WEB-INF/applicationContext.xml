@@ -401,6 +401,7 @@
   </bean>
        
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
+    <constructor-arg value="${plugin.dir}"/>
     <property name="basenames">
       <list>
         <value>classpath*:errors/messages*</value>
