@@ -1,0 +1,10 @@
+<div class="os-tab-container">
+  <ul class="os-tabs">
+    <li ng-class="{'active': tab.selected}" ng-repeat="tab in tabs" ng-click="selectTab($index)">
+      <span>{{tab.title}}</span>
+    </li>
+  </ul>
+
+  <div ng-transclude class="os-tab-content">
+  </div>
+</div>

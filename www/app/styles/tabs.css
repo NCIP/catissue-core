@@ -1,0 +1,33 @@
+.os-tab-container ul.os-tabs {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.os-tab-container ul.os-tabs:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+.os-tab-container ul.os-tabs li {
+  text-align: center;
+  font-size: 16px;
+  padding: 6px 12px;
+  float: left;
+  opacity: 0.5;
+  margin-bottom: -1px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.os-tab-container ul.os-tabs li.active {
+  opacity: 1;
+  color: rgb(66, 139, 202);
+  border-color: rgb(66, 139, 202);
+  border-bottom: 4px solid; 
+  transition-property: border-color;
+}
