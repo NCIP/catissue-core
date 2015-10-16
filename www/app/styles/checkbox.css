@@ -30,3 +30,22 @@
   border-bottom: 2px solid #777;
   transform: rotate(-45deg);
 }
+
+.os-table .os-table-head .row .col .os-checkbox-container {
+  height: 17px;
+}
+
+.os-table .os-table-head .row .col .os-checkbox-container .os-checkbox {
+  position: relative;
+  top: 2px;
+}
+
+.os-table .os-table-head .row .col .os-checkbox-container .os-checkbox-label {
+  position: relative;
+  top: -4px;
+}
+
+.os-table .os-table-body .row .col .os-checkbox-container {
+  padding-top: 6px;
+}
+

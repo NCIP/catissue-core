@@ -163,9 +163,11 @@
           <div class="col os-col-10">
             <span translate="orders.spec.quantity">Quantity</span>
           </div>
-          <div class="col os-col-10 os-table-header-checkbox">
-            <os-checkbox ng-model="allItems.status" ng-change="toggleAllItemStatus()"></os-checkbox>
-            <span translate="orders.dispose_all">Dispose All</span>
+          <div class="col os-col-10">
+            <div class="os-checkbox-container">
+              <os-checkbox ng-model="input.allItemStatus" ng-change="toggleAllItemStatus()"></os-checkbox>
+              <span class="os-checkbox-label" translate="orders.dispose_all">Dispose All</span>
+            </div>
           </div>
           <div class="col os-col-5">
             <span>&nbsp;</span>
@@ -219,9 +221,11 @@
             </div>
             <div os-field-error field="sform.qty"></div>
           </div>
-          <div class="col os-col-10 os-order-item-checkbox">
-            <os-checkbox ng-model="item.status" ng-true-value="'DISTRIBUTED_AND_CLOSED'"
-              ng-false-value="'DISTRIBUTED'" ng-disabled="item.quantity == specimen.availableQty"></os-checkbox>
+          <div class="col os-col-10">
+            <div class="os-checkbox-container">
+              <os-checkbox ng-model="item.status" ng-true-value="'DISTRIBUTED_AND_CLOSED'" ng-change="setHeaderStatus()"
+                ng-false-value="'DISTRIBUTED'" ng-disabled="item.quantity == specimen.availableQty"></os-checkbox>
+            </div>
           </div>
           <div class="col os-col-5">
             <button class="btn btn-xs btn-default" ng-click="removeOrderItem(item)">
