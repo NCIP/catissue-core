@@ -228,6 +228,15 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		return CollectionUtils.isEmpty(srs) ? null : srs.iterator().next();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CpWorkflowConfig> getCpWorkflows(Collection<Long> cpIds) {
+		return sessionFactory.getCurrentSession()
+			.createCriteria(CpWorkflowConfig.class)
+			.add(Restrictions.in("id", cpIds))
+			.list();
+	}
+
 	@Override
 	public void saveCpWorkflows(CpWorkflowConfig cfg) {
 		sessionFactory.getCurrentSession().saveOrUpdate(cfg);
@@ -236,12 +245,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	@Override
 	@SuppressWarnings("unchecked")
 	public CpWorkflowConfig getCpWorkflows(Long cpId) {		
-		List<CpWorkflowConfig> cfgs = sessionFactory.getCurrentSession()
-				.createCriteria(CpWorkflowConfig.class)
-				.add(Restrictions.eq("id", cpId))
-				.list();
-		
-		return cfgs.isEmpty() ? null : cfgs.iterator().next();
+		List<CpWorkflowConfig> cfgs = getCpWorkflows(Collections.singleton(cpId));
+		return CollectionUtils.isEmpty(cfgs) ? null : cfgs.iterator().next();
 	}
 
 	@Override
