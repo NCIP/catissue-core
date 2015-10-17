@@ -96,16 +96,16 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
 		}
 		
-		Set<Site> sites = getSites(Resource.USER, op);
-		for (Site site : sites) {
-			if (site.getInstitute().equals(user.getInstitute())) {
-				return;
-			}
+		String[] ops = {op.getName()};
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(
+				AuthUtil.getCurrentUser().getId(), 
+				Resource.USER.getName(),	
+				ops);
+		if (CollectionUtils.isEmpty(accessList)) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
-
-		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
-
+	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
 	//          Distribution Protocol object access control helper methods              //
@@ -194,12 +194,10 @@ public class AccessCtrlMgr {
 				allowed = true;
 			} else if (accessSite == null && (accessCp == null || accessCp.equals(cp))) {
 				//
-				// All CPs or specific CP of all user institute sites
+				// All CPs or specific CP 
 				//
-				Set<Site> instituteSites = getUserInstituteSites(userId);
-				if (CollectionUtils.containsAny(instituteSites, cp.getRepositories())) {
-					allowed = true;
-				}
+				
+				allowed = true;
 			}
 			
 			if (allowed) {
