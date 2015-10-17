@@ -824,8 +824,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {
 		ensureCreatorBelongToCpSites(cp);
-		ensurePiBelongToCpSites(cp);
-		ensureCoodBelongToCpSites(cp);		
+		//ensurePiBelongToCpSites(cp);
+		//ensureCoodBelongToCpSites(cp);		
 	}
 	
 	private void ensureCreatorBelongToCpSites(CollectionProtocol cp) {
