@@ -86,7 +86,8 @@
       "add_new": "Add New",
       "add_another": "Add Another",
       "download": "Download",
-      "reset_password": "Reset Password"
+      "reset_password": "Reset Password",
+      "print": "Print"
     }
   },
 
