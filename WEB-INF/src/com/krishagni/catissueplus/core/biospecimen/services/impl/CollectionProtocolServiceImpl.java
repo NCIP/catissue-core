@@ -824,8 +824,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	
 	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {
 		ensureCreatorBelongToCpSites(cp);
-		ensurePiBelongToCpSites(cp);
-		ensureCoodBelongToCpSites(cp);		
 	}
 	
 	private void ensureCreatorBelongToCpSites(CollectionProtocol cp) {
@@ -847,35 +845,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 		return daoFactory.getUserDao().getById(user.getId());
 	}
 
-	private void ensurePiBelongToCpSites(CollectionProtocol cp) {
-		if (cp.getPrincipalInvestigator().isAdmin()) {
-			return;
-		}
-		
-		Set<Site> piSites = cp.getPrincipalInvestigator().getInstitute().getSites();
-		Set<Site> cpSites = cp.getRepositories();
-		
-		if (!CollectionUtils.containsAny(cpSites, piSites)) {
-			throw OpenSpecimenException.userError(CpErrorCode.PI_DOES_NOT_BELONG_CP_REPOS);
-		}
-	}
-	
-	private void ensureCoodBelongToCpSites(CollectionProtocol cp) {
-		Set<Site> cpSites = cp.getRepositories();
-		Set<User> coordinators = cp.getCoordinators();
-		
-		for (User coordinator : coordinators) {
-			if (coordinator.isAdmin()) {
-				continue;
-			}
-			
-			Set<Site> coordinatorSites = coordinator.getInstitute().getSites();
-			if (!CollectionUtils.containsAny(cpSites, coordinatorSites)) {
-				throw OpenSpecimenException.userError(CpErrorCode.CO_ORD_DOES_NOT_BELONG_CP_REPOS);
-			}
-		}
-	}
-	
 	private void ensureUniqueTitle(CollectionProtocol existingCp, CollectionProtocol cp, OpenSpecimenException ose) {
 		String title = cp.getTitle();
 		if (existingCp != null && existingCp.getTitle().equals(title)) {
