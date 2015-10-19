@@ -215,15 +215,16 @@
         <div class="os-table os-table-muted-hdr os-border" ng-if="missedVisits.length > 0">
           <div class="os-table-head">
             <div class="row">
-              <div class="col col-xs-5" translate="visits.title">Visit</div>
+              <div class="col col-xs-4" translate="visits.title">Visit</div>
               <div class="col col-xs-3" translate="common.date">Date</div>
               <div class="col col-xs-4" translate="visits.reason">Reason</div>
+              <div class="col os-xs-1">&nbsp;</div>
             </div>
           </div>
           <div class="os-table-body">
             <div ng-repeat="visit in missedVisits">
               <div class="row title">
-                <div class="col col-xs-5">
+                <div class="col col-xs-4">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
                     T{{visit.eventPoint}}: {{visit.eventLabel}}
                   </a>
@@ -233,6 +234,27 @@
                 </div>
                 <div class="col col-xs-4">
                   {{visit.missedReason | osNoValue}}
+                </div>
+                <div class="col col-xs-1 os-more-options">
+                  <div dropdown>
+                    <button class="dropdown-toggle">
+                      <span class="fa fa-ellipsis-v"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>
+                        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+                          <i class="fa fa-eye"></i>
+                          <span translate="visits.ctx_menu.view_visit">View Visit</span>
+                        </a>
+                      </li>
+                      <li show-if-allowed="specimenResource.updateOpts">
+                        <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, repeatVisit: true, redirectTo: 'participant-detail.visits'})"> 
+                          <i class="fa fa-repeat"></i>
+                          <span translate="visits.ctx_menu.repeat_visit">Repeat Visit</span>
+                        </a>
+                      </li>
+                    </u>
+                  </div>
                 </div>
               </div>
             </div>
