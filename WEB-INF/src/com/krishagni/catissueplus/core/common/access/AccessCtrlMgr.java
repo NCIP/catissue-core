@@ -96,12 +96,7 @@ public class AccessCtrlMgr {
 			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
 		}
 		
-		String[] ops = {op.getName()};
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(
-				AuthUtil.getCurrentUser().getId(), 
-				Resource.USER.getName(),	
-				ops);
-		if (CollectionUtils.isEmpty(accessList)) {
+		if (!canUserPerformOp(AuthUtil.getCurrentUser().getId(), Resource.USER, new Operation[] {op})) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
