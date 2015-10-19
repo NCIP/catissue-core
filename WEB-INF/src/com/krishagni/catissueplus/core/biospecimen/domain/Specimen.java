@@ -2,7 +2,11 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -897,6 +901,101 @@ public class Specimen extends BaseExtensionEntity {
 	@Override
 	public String getEntityType() {
 		return "SpecimenExtension";
+	}
+
+	//
+	// Useful for sorting specimens at same level
+	//
+	public static List<Specimen> sort(Collection<Specimen> specimens) {
+		List<Specimen> result = new ArrayList<Specimen>(specimens);
+		Collections.sort(result, new Comparator<Specimen>() {
+			@Override
+			public int compare(Specimen s1, Specimen s2) {
+				Integer s1SortOrder = sortOrder(s1);
+				Integer s2SortOrder = sortOrder(s2);
+
+				Long s1ReqId = reqId(s1);
+				Long s2ReqId = reqId(s2);
+
+				if (s1SortOrder != null && s2SortOrder != null) {
+					return s1SortOrder.compareTo(s2SortOrder);
+				} else if (s1SortOrder != null) {
+					return -1;
+				} else if (s2SortOrder != null) {
+					return 1;
+				} else if (s1ReqId != null && s2ReqId != null) {
+					if (!s1ReqId.equals(s2ReqId)) {
+						return s1ReqId.compareTo(s2ReqId);
+					} else {
+						return compareById(s1, s2);
+					}
+				} else if (s1ReqId != null) {
+					return -1;
+				} else if (s2ReqId != null) {
+					return 1;
+				} else {
+					return compareById(s1, s2);
+				}
+			}
+
+			private int compareById(Specimen s1, Specimen s2) {
+				if (s1.getId() != null && s2.getId() != null) {
+					return s1.getId().compareTo(s2.getId());
+				} else if (s1.getId() != null) {
+					return -1;
+				} else if (s2.getId() != null) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+
+			private Integer sortOrder(Specimen s) {
+				if (s.getSpecimenRequirement() != null) {
+					return s.getSpecimenRequirement().getSortOrder();
+				}
+
+				return null;
+			}
+
+			private Long reqId(Specimen s) {
+				if (s.getSpecimenRequirement() != null) {
+					return s.getSpecimenRequirement().getId();
+				}
+
+				return null;
+			}
+		});
+
+		return result;
+	}
+
+	public static List<Specimen> sortByLabels(Collection<Specimen> specimens, final List<String> labels) {
+		List<Specimen> result = new ArrayList<Specimen>(specimens);
+		Collections.sort(result, new Comparator<Specimen>() {
+			@Override
+			public int compare(Specimen s1, Specimen s2) {
+				int s1Idx = labels.indexOf(s1.getLabel());
+				int s2Idx = labels.indexOf(s2.getLabel());
+				return s1Idx - s2Idx;
+			}
+		});
+
+		return result;
+	}
+
+	public static List<Specimen> sortByIds(Collection<Specimen> specimens, final List<Long> ids) {
+		List<Specimen> result = new ArrayList<Specimen>(specimens);
+		Collections.sort(result, new Comparator<Specimen>() {
+			@Override
+			public int compare(Specimen s1, Specimen s2) {
+				int s1Idx = ids.indexOf(s1.getId());
+				int s2Idx = ids.indexOf(s2.getId());
+				return s1Idx - s2Idx;
+			}
+		});
+
+		return result;
 	}
 
 	private void ensureNoActiveChildSpecimens() {

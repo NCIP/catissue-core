@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +17,10 @@ import com.krishagni.catissueplus.core.administrative.events.StorageLocationSumm
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
@@ -27,7 +30,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
@@ -55,7 +57,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	private SpecimenFactory specimenFactory;
 	
 	private ConfigurationService cfgSvc;
-		
+
 	private LabelGenerator labelGenerator;
 
 	private int precision = 6;
@@ -122,9 +124,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				.siteCps(siteCpPairs);
 			
 			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
-			SpecimenInfo.orderByLabels(result, labels);
-			return ResponseEvent.response(result);
+			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, labels)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -583,22 +583,44 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
-		SpecimenDao specimenDao = daoFactory.getSpecimenDao();
-		
 		List<Specimen> specimens = null;
 		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {
-			specimens = specimenDao.getSpecimensByIds(detail.getSpecimenIds());
+			specimens = daoFactory.getSpecimenDao().getSpecimensByIds(detail.getSpecimenIds());
+			specimens = Specimen.sortByIds(specimens, detail.getSpecimenIds());
 		} else if (CollectionUtils.isNotEmpty(detail.getSpecimenLabels())) {
-			specimens = specimenDao.getSpecimens(new SpecimenListCriteria().labels(detail.getSpecimenLabels()));
+			specimens = daoFactory.getSpecimenDao().getSpecimens(new SpecimenListCriteria().labels(detail.getSpecimenLabels()));
+			specimens = Specimen.sortByLabels(specimens, detail.getSpecimenLabels());
 		} else if (detail.getVisitId() != null) {
-			specimens = specimenDao.getSpecimensByVisitId(detail.getVisitId());
+			Visit visit = daoFactory.getVisitsDao().getById(detail.getVisitId());
+			if (visit == null) {
+				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitId());
+			}
+
+			specimens = getSpecimensToPrint(visit.getTopLevelSpecimens());
 		} else if (StringUtils.isNotBlank(detail.getVisitName())) {
-			specimens = specimenDao.getSpecimensByVisitName(detail.getVisitName());
+			Visit visit = daoFactory.getVisitsDao().getByName(detail.getVisitName());
+			if (visit == null) {
+				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitName());
+			}
+
+			specimens = getSpecimensToPrint(visit.getTopLevelSpecimens());
 		}
 		
 		return specimens;		
 	}
 	
+	private List<Specimen> getSpecimensToPrint(Collection<Specimen> specimens) {
+		List<Specimen> sortedSpecimens = Specimen.sort(specimens);
+
+		List<Specimen> result = new ArrayList<Specimen>();
+		for (Specimen specimen : sortedSpecimens) {
+			result.add(specimen);
+			result.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+		}
+
+		return result;
+	}
+
 	private Specimen getSpecimen(Long specimenId, String label, OpenSpecimenException ose) {
 		Specimen specimen = null;
 		Object key = null;

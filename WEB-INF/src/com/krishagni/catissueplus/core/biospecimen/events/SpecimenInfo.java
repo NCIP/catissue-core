@@ -447,16 +447,4 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		//
 		return 0;
 	}	
-		
-	public static void orderByLabels(final List<SpecimenInfo> list, final List<String> labels) {
-		Collections.sort(list, new Comparator<SpecimenInfo>() {
-			@Override
-			public int compare(SpecimenInfo o1, SpecimenInfo o2) {
-				// Don't think indexOf will have perf impact as long as input labels list is within 500 limit
-				int idx1 = labels.indexOf(o1.getLabel()); 
-				int idx2 = labels.indexOf(o2.getLabel());
-				return idx1 - idx2;
-			}			
-		});
-	}
 }
