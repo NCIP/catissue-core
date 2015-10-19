@@ -1,0 +1,8 @@
+package com.krishagni.catissueplus.core.administrative.domain.factory;
+
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementDetail;
+
+public interface DistributionProtocolRequirementFactory {
+	public DistributionProtocolRequirement createDistributionProtocolRequirement(DistributionProtocolRequirementDetail detail);
+}

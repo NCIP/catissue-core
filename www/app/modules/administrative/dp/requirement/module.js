@@ -1,5 +1,5 @@
-angular.module('os.administrative.dp.requirement', 
-  [ 
+angular.module('os.administrative.dp.requirement',
+  [
     'ui.router',
     'os.administrative.dp.requirement.list',
     'os.administrative.dp.requirement.addedit'
@@ -9,7 +9,7 @@ angular.module('os.administrative.dp.requirement',
     $stateProvider
       .state('req-list', {
         url: '/requirement',
-        templateUrl: 'modules/administrative/dp/requirement/list.html',     
+        templateUrl: 'modules/administrative/dp/requirement/list.html',
         controller: 'DprListCtrl',
         parent: 'dp-detail'
       })
@@ -28,3 +28,4 @@ angular.module('os.administrative.dp.requirement',
         }
       });
   });
+

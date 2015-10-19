@@ -1,5 +1,5 @@
 angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.models'])
-  .controller('DprAddEditCtrl', function($scope, $state, dpr, PvManager) {
+  .controller('DprAddEditCtrl', function($scope, $state, distributionProtocol, dpr, PvManager) {
     $scope.dpr = dpr;
 
     function loadPvs() {
@@ -28,6 +28,7 @@ angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.m
     
     $scope.save = function() {
       var dpr = angular.copy($scope.dpr);
+      dpr.dp = {id : distributionProtocol.id};
       dpr.$saveOrUpdate().then(
         function(saveReq) {
           $state.go('req-list');
@@ -37,3 +38,4 @@ angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.m
     
     loadPvs();
   });
+

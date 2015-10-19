@@ -3,7 +3,7 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_type">Specimen Type</label>
       <div class="col-xs-6">
-        <os-select name="type" ng-model="dpr.type" list="specimenTypes"
+        <os-select name="type" ng-model="dpr.specimenType" list="specimenTypes"
           required placeholder="{{'dp.distribution_order.specimen_type' | translate}}">
         </os-select>
         <div os-field-error field="dprForm.type"></div>
@@ -23,7 +23,7 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.pathology_status">Pathology Status</label>
       <div class="col-xs-6">
-        <os-select name="pathology" ng-model="dpr.pathology" list="pathologyStatuses"
+        <os-select name="pathology" ng-model="dpr.pathologyStatus" list="pathologyStatuses"
           required placeholder="{{'dp.distribution_order.pathology_status' | translate}}">
         </os-select>
         <div os-field-error field="dprForm.pathology"></div>
@@ -33,7 +33,7 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.specimens_req">Specimens Required</label>
       <div class="col-xs-6">
-        <input type="number" name="requirement" class="form-control" ng-model="dpr.specimenReq" required
+        <input type="number" name="requirement" class="form-control" ng-model="dpr.specimenRequired" required
           placeholder="{{'dp.distribution_order.specimens_req' | translate}}">
         <div os-field-error field="dprForm.requirement"></div>
       </div>
@@ -42,8 +42,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.unit_price">Price Per Unit</label>
       <div class="col-xs-6">
-        <input type="number" name="price" class="form-control" ng-model="dpr.price"
+        <input type="number" name="price" class="form-control" ng-model="dpr.price" required
           placeholder="{{'dp.distribution_order.unit_price' | translate}}">
+        <div os-field-error field="dprForm.price"></div>
       </div>
     </div>
     
@@ -71,3 +72,4 @@
     </div>
   </form>
 </div>
+

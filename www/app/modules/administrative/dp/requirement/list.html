@@ -12,13 +12,13 @@
         <div class="col os-col-15">
           <span translate="dp.distribution_order.specimen_type">Specimen Type</span>
         </div>
-        <div class="col os-col-15">
+        <div class="col os-col-20">
           <span translate="dp.distribution_order.anatomic_site">Anatomic Site</span>
         </div>
         <div class="col os-col-15">
           <span translate="dp.distribution_order.pathology_status">Pathology Status</span>
         </div>
-        <div class="col os-col-10">
+        <div class="col os-col-5">
           <span translate="dp.distribution_order.target">Target</span>
         </div>
         <div class="col os-col-10">
@@ -34,19 +34,19 @@
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="dpr in dprs">
-        <div class="col os-col-15">{{dpr.type}}</div>
-        <div class="col os-col-15">{{dpr.anatomicSite}}</div>
-        <div class="col os-col-15">{{dpr.pathology}}</div>
-        <div class="col os-col-10">{{dpr.specimenReq}}</div>
+        <div class="col os-col-15">{{dpr.specimenType}}</div>
+        <div class="col os-col-20">{{dpr.anatomicSite}}</div>
+        <div class="col os-col-15">{{dpr.pathologyStatus}}</div>
+        <div class="col os-col-5">{{dpr.specimenRequired}}</div>
         <div class="col os-col-10">{{dpr.specimenDistributed}}</div>
-        <div class="col os-col-5">{{dpr.price || 'N/A'}}</div>
+        <div class="col os-col-5">{{dpr.price}}</div>
         <div class="col os-col-25 os-ellipsis" title="{{dpr.comments}}">{{dpr.comments}}</div>
         <div class="col os-col-5">
           <div class="pull-right btn-group btn-group-xs">
             <button class="btn btn-default" ui-sref="req-addedit({reqId: dpr.id})">
               <span class="fa fa-pencil"></span>
             </button>
-            <button class="btn btn-default" ng-click="delete(dpr)">
+            <button class="btn btn-default" ng-click="deleteDpr(dpr)">
               <span class="fa fa-trash"></span>
             </button>
           </div>
@@ -55,3 +55,4 @@
     </div>
   </div>
 </div>
+

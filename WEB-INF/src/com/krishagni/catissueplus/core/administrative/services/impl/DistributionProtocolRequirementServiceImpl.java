@@ -1,113 +1,161 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import com.krishagni.catissueplus.core.administrative.events.RequirementDetail;
+import org.apache.commons.collections.CollectionUtils;
+
+import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolRequirementErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolRequirementFactory;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolRequirementDao;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolRequirementService;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public class DistributionProtocolRequirementServiceImpl implements DistributionProtocolRequirementService {
 
-	private List<RequirementDetail> data = getRequirementList();
+	private DaoFactory daoFactory;
 	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<List<RequirementDetail>> getRequirements(RequestEvent<Long> req) {
-		return ResponseEvent.response(data);
+	private DistributionProtocolRequirementFactory dprFactory;
+	
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+	
+	public void setDprFactory(DistributionProtocolRequirementFactory dprFactory) {
+		this.dprFactory = dprFactory;
+	}
+	
+	private DistributionProtocolRequirementDao getDprDao() {
+		return daoFactory.getDistributionProtocolRequirementDao();
 	}
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RequirementDetail> getRequirement(RequestEvent<Long> req) {
-		return ResponseEvent.response(getRequirementById(req.getPayload()));
+	public ResponseEvent<List<DistributionProtocolRequirementDetail>> getRequirements(
+			RequestEvent<DistributionProtocolRequirementListCriteria> req) {
+		
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			List<DistributionProtocolRequirement> result = getDprDao().getRequirements(req.getPayload());
+			
+			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(result));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DistributionProtocolRequirementDetail> getRequirement(RequestEvent<Long> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DistributionProtocolRequirement existing = getDprDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolRequirementErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RequirementDetail> addRequirement(RequestEvent<RequirementDetail> detail) {
-		RequirementDetail request = detail.getPayload();
-		RequirementDetail req = createRequirement(request.getType(), request.getAnatomicSite(), request.getPathology(),
-			request.getSpecimenReq(), request.getSpecimenDistributed(), request.getPrice(), request.getComments());
-		data.add(req);
-		return ResponseEvent.response(req);
+	public ResponseEvent<DistributionProtocolRequirementDetail> createRequirement(
+			RequestEvent<DistributionProtocolRequirementDetail> req) {
+		
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DistributionProtocolRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraint(null, dpr, ose);
+			ose.checkAndThrow();
+			
+			getDprDao().saveOrUpdate(dpr);
+			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(dpr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<RequirementDetail> updateRequirement(RequestEvent<RequirementDetail> req) {
-		RequirementDetail request = req.getPayload();
-		RequirementDetail detail = null;
-		for (RequirementDetail requirementDetail : data) {
-			if(requirementDetail.getId().equals(request.getId())) {
-				requirementDetail.setAnatomicSite(request.getAnatomicSite());
-				requirementDetail.setComments(request.getComments());
-				requirementDetail.setPathology(request.getPathology());
-				requirementDetail.setPrice(request.getPrice());
-				requirementDetail.setSpecimenDistributed(request.getSpecimenDistributed());
-				requirementDetail.setSpecimenReq(request.getSpecimenReq());
-				requirementDetail.setType(request.getType());
-				detail = requirementDetail;
-			}
-			break;
-		}
+	public ResponseEvent<DistributionProtocolRequirementDetail> updateRequirement(
+			RequestEvent<DistributionProtocolRequirementDetail> req) {
 		
-		return ResponseEvent.response(detail);
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			Long dpReqId = req.getPayload().getId();
+			DistributionProtocolRequirement existing = getDprDao().getById(dpReqId);
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolRequirementErrorCode.NOT_FOUND);
+			}
+			
+			DistributionProtocolRequirement newDpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueConstraint(existing, newDpr, ose);
+			ose.checkAndThrow();
+			
+			existing.update(newDpr);
+			getDprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Long> deleteRequirement(RequestEvent<Long> req) {
-		Long id = null;
+	public ResponseEvent<DistributionProtocolRequirementDetail> deleteRequirement(RequestEvent<Long> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DistributionProtocolRequirement existing = getDprDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DistributionProtocolRequirementErrorCode.NOT_FOUND);
+			}
+			
+			existing.delete();
+			getDprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	private void ensureUniqueConstraint(DistributionProtocolRequirement oldDpr,
+			DistributionProtocolRequirement newDpr, OpenSpecimenException ose) {
 		
-		for (RequirementDetail requirementDetail : data) {
-			if(requirementDetail.getId().equals(req.getPayload())) {
-				id = requirementDetail.getId();
-				data.remove(requirementDetail);
-				break;
+		if (oldDpr == null || !oldDpr.equalsSpecimenGroup(newDpr)) {
+			DistributionProtocolRequirementListCriteria crit = new DistributionProtocolRequirementListCriteria()
+					.dpId(newDpr.getDp().getId())
+					.specimenType(newDpr.getSpecimenType())
+					.anatomicSite(newDpr.getAnatomicSite())
+					.pathologyStatus(newDpr.getPathologyStatus());
+	
+			List<DistributionProtocolRequirement> existing = getDprDao().getRequirements(crit);
+			if (!CollectionUtils.isEmpty(existing)) {
+				ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_ALREADY_EXISTS);
 			}
 		}
-		return ResponseEvent.response(id);
 	}
 	
-	private RequirementDetail getRequirementById(Long id) {
-		RequirementDetail resp = null;
-		
-		for (RequirementDetail requirementDetail : data) {
-			if (requirementDetail.getId().equals(id)) {
-				resp = requirementDetail;
-				break;
-			}
-		}
-		return resp;
-	}
-	
-	private List<RequirementDetail> getRequirementList() {
-		List<RequirementDetail> data = new ArrayList<RequirementDetail>();
-		data.add(createRequirement("Body Cavity Fluid", "Jejunum", "Metastatic", 20L, 0L, 34.78, ""));
-		data.add(createRequirement("cDNA", "Cornea, NOS", "Malignant, Invasive", 56L, 0L, 75, "Sample comment"));
-		data.add(createRequirement("Feces", "Ileum", "Not Specified", 150L, 0L, 150, ""));
-		data.add(createRequirement("RNA", "Lower gum", "Pre-Malignant", 6L, 0L, 3, ""));
-		data.add(createRequirement("Sweat", "Ovary", "Non-Malignant", 100L, 0L, 45, ""));
-		data.add(createRequirement("Whole Blood", "Pelvis, NOS", "Metastatic", 75L, 0L, 65, ""));
-		return data;
-	}
-	
-	private RequirementDetail createRequirement(String type, String site, String pathology, Long req, Long dis, double price, String comment) {
-		RequirementDetail detail = new RequirementDetail();
-		Long id = (long)new Random().nextInt(500-1) + 1;
-		detail.setId(id);
-		detail.setType(type);
-		detail.setAnatomicSite(site);
-		detail.setPathology(pathology);
-		detail.setSpecimenReq(req);
-		detail.setSpecimenDistributed(dis != null ? dis : 0);
-		detail.setPrice(price);
-		detail.setComments(comment);
-		
-		return detail;
-	}
 }

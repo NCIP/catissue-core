@@ -376,7 +376,17 @@
     <property name="emailService" ref="emailService"/>
   </bean>
   
-  <bean id="distributionProtocolRequirementService" class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolRequirementServiceImpl">
+  <bean id="distributionProtocolRequirementFactory"
+      class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolRequirementFactoryImpl">
+  
+    <property name="daoFactory" ref="biospecimenDaoFactory" />
+  </bean>
+  
+  <bean id="distributionProtocolRequirementService"
+      class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionProtocolRequirementServiceImpl">
+      
+    <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="dprFactory" ref="distributionProtocolRequirementFactory" />
   </bean>
   
   <bean id="scheduledJobFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ScheduledJobFactoryImpl">

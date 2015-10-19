@@ -54,5 +54,62 @@
         and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
-
+  
+  <changeSet author="ckhilosiya" id="DP requirements table">
+    <createTable tableName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="SPECIMEN_TYPE" type="${text.type}(50)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="ANATOMIC_SITE" type="${text.type}(150)">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="PATHOLOGY_STATUS" type="${text.type}(50)">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="SPECIMEN_REQUIRED" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="PRICE" type="${double.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="COMMENTS" type="${text.type}(255)">
+        <constraints nullable="true" />
+      </column>
+      
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="DP requirements table sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK to distribution protocol in DP requirements table">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_DP_REQ_DP_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
 </databaseChangeLog>
