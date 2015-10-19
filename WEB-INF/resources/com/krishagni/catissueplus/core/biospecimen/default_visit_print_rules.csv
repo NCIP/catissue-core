@@ -1,2 +1,2 @@
-#CP Short Title	Login	IPRange	LType	Tokens	Printer
-*	*	*	Std	visit_name,visit_cp_title,visit_date	default
+#CpShortTitle	VisitSite	Login	IpRange	LabelType	LabelTokens	LabelDesign	Printer	CmdFilesDir
+*	*	*	*	Std	visit_name,visit_cp_title,visit_date	*	default	*

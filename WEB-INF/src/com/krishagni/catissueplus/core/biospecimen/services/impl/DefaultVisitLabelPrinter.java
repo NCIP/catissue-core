@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -14,23 +15,22 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
-import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
+import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem.Status;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplTokenRegistrar;
-import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem.Status;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
-import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, InitializingBean, ConfigChangeListener {
+public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implements InitializingBean, ConfigChangeListener {
 	private static final Logger logger = Logger.getLogger(DefaultVisitLabelPrinter.class);
 	
 	private List<VisitLabelPrintRule> rules = new ArrayList<VisitLabelPrintRule>();
@@ -71,6 +71,7 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 			job.setItemType(Visit.getEntityName());
 			job.setNumCopies(numCopies <= 0 ? 1 : numCopies);
 	
+			List<Map<String, Object>> labelDataList = new ArrayList<Map<String,Object>>();
 			for (Visit visit : visits) {
 				boolean found = false;
 				for (VisitLabelPrintRule rule : rules) {
@@ -78,15 +79,18 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 						continue;
 					}
 					
+					Map<String, String> labelDataItems = rule.getDataItems(visit);
+
 					LabelPrintJobItem item = new LabelPrintJobItem();
 					item.setJob(job);
 					item.setPrinterName(rule.getPrinterName());
 					item.setItemLabel(visit.getName());
 					item.setStatus(Status.QUEUED);
 					item.setLabelType(rule.getLabelType());
-					item.setData(rule.formatPrintData(visit));
+					item.setData(new ObjectMapper().writeValueAsString(labelDataItems));
 
 					job.getItems().add(item);
+					labelDataList.add(makeLabelData(item, rule, labelDataItems));
 					found = true;
 					break;
 				}
@@ -100,6 +104,7 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 				return null;
 			}
 
+			generateCmdFiles(labelDataList);
 			daoFactory.getLabelPrintJobDao().saveOrUpdate(job);
 			return job;
 		} catch (Exception e) {
@@ -167,6 +172,10 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 		}
 	}
 	
+	//
+	// Format of each rule
+	// cp_short_title	visit_site	user_login	ip_address	label_type	label_tokens	label_design	printer_name	dir_path
+	//
 	private VisitLabelPrintRule parseRule(String ruleLine) {
 		try {
 			if (ruleLine.startsWith("#")) {
@@ -174,21 +183,23 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 			}
 			
 			String[] ruleLineFields = ruleLine.split("\\s+");
-			if (ruleLineFields == null || ruleLineFields.length != 6) {
+			if (ruleLineFields == null || ruleLineFields.length != 9) {
 				logger.error("Invalid rule: " + ruleLine);
 				return null;
 			}
 			
+			int idx = 0;
 			VisitLabelPrintRule rule = new VisitLabelPrintRule();
-			rule.setCpShortTitle(ruleLineFields[0]);
-			rule.setUserLogin(ruleLineFields[1]);
+			rule.setCpShortTitle(ruleLineFields[idx++]);
+			rule.setVisitSite(ruleLineFields[idx++]);
+			rule.setUserLogin(ruleLineFields[idx++]);
 			
-			if (!ruleLineFields[2].equals("*")) {
-				rule.setIpAddressMatcher(new IpAddressMatcher(ruleLineFields[2]));
+			if (!ruleLineFields[idx++].equals("*")) {
+				rule.setIpAddressMatcher(new IpAddressMatcher(ruleLineFields[idx - 1]));
 			}
-			rule.setLabelType(ruleLineFields[3]);
+			rule.setLabelType(ruleLineFields[idx++]);
 
-			String[] labelTokens = ruleLineFields[4].split(",");
+			String[] labelTokens = ruleLineFields[idx++].split(",");
 			boolean badTokens = false;			
 			
 			List<LabelTmplToken> tokens = new ArrayList<LabelTmplToken>();
@@ -208,7 +219,9 @@ public class DefaultVisitLabelPrinter implements LabelPrinter<Visit>, Initializi
 			}
 			
 			rule.setDataTokens(tokens);
-			rule.setPrinterName(ruleLineFields[5]);
+			rule.setLabelDesign(ruleLineFields[idx++]);
+			rule.setPrinterName(ruleLineFields[idx++]);
+			rule.setCmdFilesDir(ruleLineFields[idx++]);
 			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {
