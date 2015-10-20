@@ -17,7 +17,9 @@ public class ListEntityFormsOp  {
 		
 		PARTICIPANT_EXTN,
 		
-		VISIT_EXTN
+		VISIT_EXTN,
+		
+		SPECIMEN_EXTN
 	};
 
 	private Long entityId;

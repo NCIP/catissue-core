@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <changeSet author="slakhani" id="Config settings for feedback-email enable/disable">
+    <sql>
+      call add_cfg_prop(
+        'common', 'feedback_enabled',
+        'common_feedback_enabled', 'common_feedback_enabled_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding support email">
+    <sql>
+      call add_cfg_prop(
+        'common', 'support_email',
+        'common_support_email', 'common_support_email_desc',
+        'STRING', 'support@krishagni.com'
+      );
+    </sql>
+  </changeSet>
+  
+</databaseChangeLog>

@@ -22,13 +22,13 @@
               <span translate="specimens.buttons.print"> Print </span>
             </a>
           </li>
-          <li show-if-allowed="participantResource.deleteOpts">
+          <li ng-if="!allowedOps || allowedOps.delete">
             <a ng-click="deleteSpecimens()">
               <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete"> Delete </span>
             </a>
           </li>
-          <li show-if-allowed="participantResource.deleteOpts">
+          <li ng-if="!allowedOps || allowedOps.update">
             <a ng-click="closeSpecimens()">
               <span class="fa fa-remove"></span>
               <span translate="common.buttons.close"> Close </span>
@@ -223,17 +223,14 @@
         </div>
 
         <div class="col-xs-3">
-          <div os-md-input ng-model="aliquotSpec.createdOn" placeholder="{{'specimens.created_on' | translate}}">
-            <input name="createdOn" ng-model="aliquotSpec.createdOn" class="form-control" type="text"
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-              required placeholder="{{'specimens.created_on' | translate}}">
-            <div os-field-error field="aliquotForm.createdOn"></div>
-          </div>
+          <os-date-picker name="createdOn" date="aliquotSpec.createdOn" md-type="true"
+            placeholder="{{'specimens.created_on' | translate}}" required>
+          </os-date-picker>
+          <div os-field-error field="aliquotForm.createdOn"></div>
         </div>
 
-        <div class="col-xs-2">
-          <timepicker class="os-time-no-wheels" os-md-input ng-model="aliquotSpec.createdOn" show-meridian="false">
+        <div class="col-xs-2 os-md-time">
+          <timepicker ng-model="aliquotSpec.createdOn" os-md-input  class="os-time-no-wheels" show-meridian="false">
           </timepicker>
         </div>
       </div>
@@ -300,18 +297,31 @@
       <div class="clearfix">
         <div class="os-col-30">
           <div class="form-group">
-            <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control" 
-              type="text" placeholder="{{'specimens.qty' | translate}}" required 
-              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+            <div class="os-input-addon-grp">
+              <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control"
+                type="text" placeholder="{{'specimens.qty' | translate}}" required
+                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              <div class="os-input-addon-right os-md-input-addon">
+                <os-specimen-unit specimen-class="derivative.specimenClass" type="derivative.type">
+                </os-specimen-unit>
+              </div>
+            </div>
             <div os-field-error field="derivativeForm.quantity"></div>
           </div>
         </div>
 
         <div class="os-col-30">
           <div class="form-group">
-            <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
-              type="text" placeholder="{{'specimens.concentration' | translate}}"
-              ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-grp">
+              <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
+                type="text" placeholder="{{'specimens.concentration' | translate}}"
+                ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+              <div class="os-input-addon-right os-md-input-addon">
+                <os-specimen-unit specimen-class="derivative.specimenClass" type="derivative.type" 
+                  measure="concentration">
+                </os-specimen-unit>
+              </div>
+            </div>
             <div os-field-error field="derivativeForm.concentration"></div>
           </div>
         </div>
@@ -325,17 +335,13 @@
 
       <div class="form-group clearfix">
         <div class="os-col-30">
-          <div os-md-input ng-model="derivative.createdOn" placeholder="{{'specimens.created_on' | translate}}">
-            <input name="createdOn" ng-model="derivative.createdOn" class="form-control" type="text"
-              datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
-              is-open="createdOn.isOpen" ng-focus="createdOn.isOpen=true"
-              required placeholder="{{'specimens.created_on' | translate}}">
-            <div os-field-error field="derivativeForm.createdOn"></div>
-          </div>
+          <os-date-picker name="createdOn" date="derivative.createdOn" md-type="true"
+            placeholder="{{'specimens.created_on' | translate}}" required>
+          </os-date-picker>
+          <div os-field-error field="derivativeForm.createdOn"></div>
         </div>
-
-        <div class="os-col-15">
-          <timepicker class="os-time-no-wheels" os-md-input ng-model="derivative.createdOn" show-meridian="false">
+        <div class="os-col-15 os-md-time">
+          <timepicker ng-model="derivative.createdOn" os-md-input class="os-time-no-wheels" show-meridian="false">
           </timepicker>
         </div>
       </div>

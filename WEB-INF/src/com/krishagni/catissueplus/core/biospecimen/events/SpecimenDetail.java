@@ -13,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -38,6 +39,8 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	// This is needed for creation of derivatives from BO for closing parent specimen.
 	private Boolean closeParent;
+	
+	private ExtensionDetail extensionDetail;
 	
 	public CollectionEventDetail getCollectionEvent() {
 		return collectionEvent;
@@ -123,7 +126,19 @@ public class SpecimenDetail extends SpecimenInfo {
 		return closeParent == null ? false : closeParent;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+	
 	public static SpecimenDetail from(Specimen specimen) {
+		return from(specimen, true);
+	}
+
+	public static SpecimenDetail from(Specimen specimen, boolean partial) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);
 		
@@ -143,6 +158,11 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setLabelFmt(specimen.getLabelTmpl());
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
+		
+		if (!partial) {
+			result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension()));
+		}
+		
 		return result;
 	}
 	

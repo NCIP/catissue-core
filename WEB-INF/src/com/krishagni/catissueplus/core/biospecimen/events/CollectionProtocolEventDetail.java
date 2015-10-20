@@ -173,7 +173,7 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 		Double otherEventPoint = other.eventPoint == null ? 0d : other.eventPoint;
 
 		if (thisEventPoint.equals(otherEventPoint)) {
-			return eventLabel.compareTo(other.eventLabel);
+			return id.compareTo(other.id);
 		} else {
 			return thisEventPoint.compareTo(otherEventPoint);
 		}		

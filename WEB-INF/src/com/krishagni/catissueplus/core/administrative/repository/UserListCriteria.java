@@ -11,6 +11,8 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 	
 	private String instituteName;
 	
+	private boolean listAll;
+	
 	@Override
 	public UserListCriteria self() {
 		return this;
@@ -51,4 +53,13 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 	public String instituteName() {
 		return instituteName;
 	}	
+	
+	public boolean listAll() {
+		return listAll;
+	}
+	
+	public UserListCriteria listAll(boolean listAll) {
+		this.listAll = listAll;
+		return self();
+	}
 }

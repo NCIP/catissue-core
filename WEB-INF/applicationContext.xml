@@ -121,6 +121,10 @@
     <property name="emailService" ref="emailService"/>
   </bean>
 	
+  <bean id="extnPvLabelToken" class="com.krishagni.catissueplus.core.common.domain.ExtensionPvAttrLabelToken">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
@@ -129,6 +133,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
+        <bean ref="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
@@ -270,6 +275,7 @@
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
+        <bean ref="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
@@ -400,6 +406,7 @@
   </bean>
        
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
+    <constructor-arg value="${plugin.dir}"/>
     <property name="basenames">
       <list>
         <value>classpath*:errors/messages*</value>
@@ -517,6 +524,17 @@
     <property name="transactionManager" ref="transactionManager"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="dataSource" ref="dataSource"/>
+    <property name="formDataMgr" ref="formDataMgr"/>
+
+    <property name="postFormSaveFilters">
+      <map>
+        <entry key="SpecimenReceivedEvent">
+          <bean id="receivedEventFilter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenReceivedEventFilter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+          </bean>
+        </entry>
+      </map>
+    </property>
   </bean>
 
   <bean id="importQueryForms" class="com.krishagni.catissueplus.core.init.ImportQueryForms">
@@ -657,6 +675,14 @@
     <property name="deInitializer" ref="deInitializer"/>
     <property name="templateService" ref="templateService"/>
   </bean>
+  
+  <bean id="importDeForms" class="com.krishagni.catissueplus.core.init.ImportDeForms">
+    <property name="txnMgr" ref="transactionManager"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="deInitializer" ref="deInitializer"/>
+    <property name="templateService" ref="templateService"/>
+  </bean>
 
   <bean id="importObjectsSvc" class="com.krishagni.catissueplus.core.importer.services.impl.ImportServiceImpl">
     <property name="cfgSvc" ref="cfgSvc"/>
@@ -672,6 +698,10 @@
     <property name="txnMgr" ref="transactionManager"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
+  </bean>
+  
+  <bean id="supportService" class="com.krishagni.catissueplus.core.support.services.impl.SupportServiceImpl">
+    <property name="emailService" ref="emailService"/>
   </bean>
   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  

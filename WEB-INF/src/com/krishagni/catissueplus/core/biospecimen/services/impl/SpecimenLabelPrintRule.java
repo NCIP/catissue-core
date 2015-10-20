@@ -5,10 +5,30 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintRule;
 
 public class SpecimenLabelPrintRule extends LabelPrintRule {
+	private String cpShortTitle;
+
+	private String visitSite;
+
 	private String specimenClass;
 	
 	private String specimenType;
 	
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
+	public String getVisitSite() {
+		return visitSite;
+	}
+
+	public void setVisitSite(String visitSite) {
+		this.visitSite = visitSite;
+	}
+
 	public String getSpecimenClass() {
 		return specimenClass;
 	}
@@ -30,6 +50,14 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 			return false;
 		}
 		
+		if (!isWildCard(cpShortTitle) && !specimen.getCollectionProtocol().getShortTitle().equals(cpShortTitle)) {
+			return false;
+		}
+
+		if (!isWildCard(visitSite) && !specimen.getVisit().getSite().getName().equals(visitSite)) {
+			return false;
+		}
+
 		if (!isWildCard(specimenClass) && !specimen.getSpecimenClass().equals(specimenClass)) {
 			return false;
 		}

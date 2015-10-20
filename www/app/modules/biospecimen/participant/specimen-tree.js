@@ -7,22 +7,13 @@ angular.module('os.biospecimen.participant.specimen-tree',
   .directive('osSpecimenTree', function(
     $state, $stateParams, $modal, $timeout,
     CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimensHolder,
-    Alerts, PvManager, Util, DeleteUtil) {
+    Alerts, PvManager, Util, DeleteUtil, SpecimenUtil) {
 
     function openSpecimenTree(specimens) {
       angular.forEach(specimens, function(specimen) {
         specimen.isOpened = true;
         openSpecimenTree(specimen.children);
       });
-    }
-
-    function loadSpecimenClasses(scope) {
-      if (scope.classesLoaded) {
-        return;
-      }
-
-      scope.specimenClasses = PvManager.getPvs('specimen-class');
-      scope.classesLoaded = true;
     }
 
     function toggleAllSelected(selection, specimens, specimen) {
@@ -275,139 +266,23 @@ angular.module('os.biospecimen.participant.specimen-tree',
         };
 
         scope.collectAliquots = function() {
-          var spec = scope.aliquotSpec;
-          var parent = scope.parentSpecimen;
-
-          if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
-            var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
-            if (requiredQty > parent.availableQty) {
-              Alerts.error("specimens.errors.insufficient_qty");
-              return;
-            }
-          } else if (!!spec.qtyPerAliquot) {
-            spec.noOfAliquots = Math.floor(parent.availableQty / spec.qtyPerAliquot);
-          } else if (!!spec.noOfAliquots) {
-            spec.qtyPerAliquot = Math.round(parent.availableQty / spec.noOfAliquots * 10000) / 10000;
-          }
-
-          if (scope.aliquotSpec.createdOn.getTime() < scope.parentSpecimen.createdOn) {
-            Alerts.error("specimens.errors.created_on_lt_parent");
-            return;
-          } else if (scope.aliquotSpec.createdOn > new Date()) {
-            Alerts.error("specimens.errors.created_on_gt_curr_time");
-            return;
-          }
-
-          parent.isOpened = parent.hasChildren = true;
-          parent.hasChildren = true;
-          parent.depth = 0;
-          parent.closeAfterChildrenCreation = spec.closeParent;
-
-          var aliquot = new Specimen({
-            lineage: 'Aliquot',
-            specimenClass: parent.specimenClass,
-            type: parent.type,
-            parentId: parent.id,
-            initialQty: spec.qtyPerAliquot,
-            storageLocation: {name: '', positionX:'', positionY: ''},
-            status: 'Pending', 
-            children: [],
-            cprId: scope.cpr.id,
-            visitId: parent.visitId,
-            createdOn: spec.createdOn,
-
-            selected: true,
-            parent: parent,
-            depth: 1,
-            isOpened: true,
-            hasChildren: false,
-            labelFmt: scope.cpr.aliquotLabelFmt
-          });
-
-          var aliquots = [];
-          for (var i = 0; i < spec.noOfAliquots; ++i) {
-            aliquots.push(angular.copy(aliquot));
-          }
-
-          parent.children = [].concat(aliquots);
-          var specimens = aliquots;
-          specimens.unshift(parent);
+          var specimens = SpecimenUtil.collectAliquots(scope);
           CollectSpecimensSvc.collect(getState(), scope.visit, specimens, parent);
         };
 
-        scope.loadSpecimenTypes = function(specimenClass, notclear) {
-          if (!notclear) {
-            scope.derivative.type = '';
-          }
-
-          if (!specimenClass) {
-            scope.specimenTypes = [];
-            return;
-          }
-
-          if (!scope.specimenClasses[specimenClass]) {
-            scope.specimenClasses[specimenClass] = 
-              PvManager.getPvsByParent('specimen-class', specimenClass);
-          }
-
-          scope.specimenTypes = scope.specimenClasses[specimenClass];
+        scope.loadSpecimenTypes = function(specimenClass, notClear) {
+          SpecimenUtil.loadSpecimenTypes(scope, specimenClass, notClear);
         };
 
         scope.showCreateDerivative = function(specimen) {
           scope.view = 'create_derivatives';      
           scope.parentSpecimen = specimen;
-          scope.derivative = new Specimen({
-            parentId: scope.parentSpecimen.id, 
-            lineage: 'Derived',
-            storageLocation: {},
-            status: 'Collected',
-            visitId: scope.visit.id,
-            pathology: scope.parentSpecimen.pathology,
-            closeParent: false,
-            createdOn : new Date()
-          });
-
-          loadSpecimenClasses(scope);
+          scope.derivative = SpecimenUtil.getNewDerivative(scope);
+          SpecimenUtil.loadSpecimenClasses(scope);
         };
 
         scope.createDerivative = function() {
-          var closeParent = scope.derivative.closeParent;
-          delete scope.derivative.closeParent;
-
-          if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
-            Alerts.error("specimens.errors.created_on_lt_parent");
-            return;
-          } else if (scope.derivative.createdOn > new Date()) {
-            Alerts.error("specimens.errors.created_on_gt_curr_time");
-            return;
-          }
-
-          var specimensToSave = undefined;
-          if (closeParent) {
-            specimensToSave = [new Specimen({
-              id: scope.parentSpecimen.id,
-              lineage: scope.parentSpecimen.lineage,
-              visitId: scope.visit.id,
-              closeAfterChildrenCreation: true,
-              children: [scope.derivative]
-            })];
-          } else {
-            specimensToSave = [scope.derivative];
-          }
- 
-          Specimen.save(specimensToSave).then(
-            function(result) {
-              if (closeParent) {
-                scope.parentSpecimen.activityStatus = result[0].activityStatus;
-                scope.parentSpecimen.children = result[0].children;
-              } else {
-                scope.parentSpecimen.children.push(result[0]);
-              }
-              scope.parentSpecimen.isOpened = true;
-              scope.specimens = Specimen.flatten(scope.specimenTree);
-              scope.revertEdit();
-            }
-          );
+          SpecimenUtil.createDerivatives(scope);
         };
 
         scope.showCloseSpecimen = function(specimen) {

@@ -34,7 +34,8 @@
         <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
-            required ng-disabled="currSpecimen.labelFmt && !cp.manualSpecLabelEnabled"
+            ng-disabled="currSpecimen.labelFmt && !cp.manualSpecLabelEnabled"
+            ng-required="currSpecimen.status != 'Missed Collection'"
             placeholder="{{'specimens.label' | translate}}"/>
           <div os-field-error field="sform.label"></div>
         </div>
@@ -287,6 +288,10 @@
             <span ng-if="showAdvAttrs" translate="specimens.less_info">Less Specimen Information</span>
           </a>
         </div>
+      </div>
+
+      <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl"></div>
       </div>
 
       <div class="os-divider"></div>

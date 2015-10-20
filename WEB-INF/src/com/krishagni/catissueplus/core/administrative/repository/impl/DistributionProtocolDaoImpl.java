@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +15,15 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
+import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolSummary;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -75,6 +83,34 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		return DistributionProtocol.class;
 	}
 	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria listCrit) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionOrder.class)
+				.createAlias("orderItems", "item")
+				.createAlias("item.specimen", "specimen");
+
+		query.add(Restrictions.eq("status", DistributionOrder.Status.EXECUTED));
+		if (listCrit.dpId() != null) {
+			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
+		} else if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
+			query.createAlias("distributionProtocol", "dp")
+				.createAlias("dp.distributingSites", "distSite")
+				.add(Restrictions.in("distSite.id", listCrit.siteIds()));
+		}
+		
+		addOrderStatProjections(query, listCrit);
+		
+		List<Object []> rows = query.list();
+		List<DistributionOrderStat> result = new ArrayList<DistributionOrderStat>();
+		for (Object[] row: rows) {
+			DistributionOrderStat detail = getDOStats(row, listCrit);
+			result.add(detail);
+		}
+		
+		return result;
+	}
+
 	private void addSearchConditions(Criteria query, DpListCriteria crit) {
 		String searchTerm = crit.query();
 		
@@ -136,6 +172,51 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		}
 		
 		query.add(Restrictions.eq("activityStatus", activityStatus));
+	}
+	
+	private void addOrderStatProjections(Criteria query, DistributionOrderStatListCriteria crit) {
+		ProjectionList projs = Projections.projectionList();
+		
+		projs.add(Projections.groupProperty("id"));
+		projs.add(Projections.groupProperty("name"));
+		projs.add(Projections.groupProperty("distributionProtocol"));
+		projs.add(Projections.groupProperty("executionDate"));
+		projs.add(Projections.count("specimen.specimenType"));
+		
+		Map<String, String> props = getProps();
+		
+		for (String attr: crit.groupByAttrs()) {
+			String prop = props.get(attr);
+			projs.add(Projections.groupProperty(prop));
+		}
+		
+		query.setProjection(projs);
+	}
+	
+	private Map<String, String> getProps() {
+		Map<String, String> props = new HashMap<String, String>();
+		props.put("specimenType", "specimen.specimenType");
+		props.put("anatomicSite", "specimen.tissueSite");
+		props.put("pathologyStatus", "specimen.pathologicalStatus");
+		
+		return props;
+	}
+	
+	private DistributionOrderStat getDOStats(Object[] row, DistributionOrderStatListCriteria crit) {
+		DistributionOrderStat stat = new DistributionOrderStat();
+		int index = 0;
+		
+		stat.setId((Long)row[index++]);
+		stat.setName((String)row[index++]);
+		stat.setDistributionProtocol(DistributionProtocolSummary.from((DistributionProtocol)row[index++]));
+		stat.setExecutionDate((Date)row[index++]);
+		stat.setDistributedSpecimenCount((Long)row[index++]);
+		
+		for (String attr: crit.groupByAttrs()) {
+			stat.getGroupByAttrVals().put(attr, row[index++]);
+		}
+		
+		return stat;
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();

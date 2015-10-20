@@ -43,8 +43,6 @@ angular.module('os.biospecimen.extensions.util', [])
         angular.forEach(extensionDetail.attrs, function(attr) {
           extensionDetail.attrsMap[attr.name] = attr.value;
         });
-
-        delete extensionDetail.attrs
       }
     }
  

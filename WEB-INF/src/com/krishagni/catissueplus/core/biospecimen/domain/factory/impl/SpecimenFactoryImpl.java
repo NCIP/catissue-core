@@ -46,6 +46,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 
 public class SpecimenFactoryImpl implements SpecimenFactory {
 
@@ -99,7 +100,13 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen = new Specimen();
 		}
 		
-		specimen.setId(detail.getId());
+		
+		if (existing != null) {
+			specimen.setId(existing.getId());
+		} else {
+			specimen.setId(detail.getId());
+		}
+		
 		specimen.setVisit(visit);
 		
 		setCollectionStatus(detail, existing, specimen, ose);
@@ -131,6 +138,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setReceiveDetail(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
 		setPooledSpecimenHd(detail, existing, poolHd, specimen, ose);
+		setExtension(detail, existing, specimen, ose);
 
 		ose.checkAndThrow();
 		return specimen;
@@ -786,7 +794,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setReceivedEvent(existing.getReceivedEvent());
 		}
 	}
-
+	
 	private void setEventAttrs(SpecimenEventDetail detail, SpecimenEvent event, OpenSpecimenException ose) {
 		User user = getUser(detail, ose);
 		if (user != null) {
@@ -800,6 +808,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (StringUtils.isNotBlank(detail.getComments())) {
 			event.setComments(detail.getComments());
 		}		
+	}
+	
+	private void setExtension(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), specimen);
+		specimen.setExtension(extension);
 	}
 	
 	private User getUser(SpecimenEventDetail detail, OpenSpecimenException ose) {

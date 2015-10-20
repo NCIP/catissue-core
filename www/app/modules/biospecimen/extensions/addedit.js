@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.extensions.addedit-record', [])
-  .controller('FormRecordAddEditCtrl', function($scope, $state, $stateParams, formDef, ExtensionsUtil, Alerts) {
+  .controller('FormRecordAddEditCtrl', function($scope, $state, $stateParams, formDef, postSaveFilters, ExtensionsUtil, Alerts) {
     var recId = $stateParams.recordId;
     if (!!recId) {
       recId = parseInt(recId);
@@ -14,7 +14,11 @@ angular.module('os.biospecimen.extensions.addedit-record', [])
       objectId: $scope.object.id,
       showActionBtns: true,
 
-      onSave: function() {
+      onSave: function(formData) {
+        angular.forEach(postSaveFilters, function(filter) {
+          filter($scope.object, formDef.name, formData);
+        });
+
         $scope.back();
         Alerts.success("extensions.record_saved");
       },

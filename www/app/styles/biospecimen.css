@@ -31,6 +31,14 @@
   font-weight: bold;
 }
 
+.os-visits .list-group-item-text .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  padding-bottom: 4px;
+}
+
 .fa.os-status-collected:before {
   color: #5cb85c;
   padding: 0px 4px;
@@ -193,6 +201,10 @@
   padding-left: 0px;
 }
 
+.os-md-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
+  padding-top: 10px;
+}
+
 .os-spmn-coll-detail label {
   color: #666;
 }
@@ -277,4 +289,8 @@
 
 .os-list-container .os-key-values .item .key {
   padding: 0px 5px;
+}
+
+.os-ctrl-padding-top {
+  padding-top: 8px;
 }

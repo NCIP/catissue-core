@@ -1,0 +1,127 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="cp-detail.overview({cpId: cpr.cpId})">
+          <span>{{cpr.cpShortTitle}}</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+            <span ng-switch-when="false" translate="common.na"> N/A </span>
+          </ng-switch>
+          <span>({{cpr.ppid}})</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+          <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+          <span>{{parentSpecimen.label}}</span>
+        </a>
+      </li>
+    </ul>
+
+    <h3>
+      <span translate="specimens.create_aliquots">Create Aliquots</span>
+    </h3>
+  </div>
+
+  <div class="container os-margin-top">
+    <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            <span>{{parentSpecimen.label}}</span>
+          </a>
+        </div>
+        <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.availableQty}}</span>
+          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.type}}</span>
+        </div>
+        <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.anatomicSite}}</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.aliquot_cnt">No of Aliquots</label>
+        <div class="col-xs-2">
+          <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
+            class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
+            ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
+          <div os-field-error field="aliquotForm.noOfAliquots"></div>
+        </div>
+        <label class="col-xs-3 control-label" translate="specimens.qty_per_aliquot">Quantity per Aliquot</label>
+        <div class="col-xs-2">
+          <div class="input-group">
+            <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
+              class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
+              ng-required="!aliquotSpec.noOfAliquots"
+              ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
+            <div class="input-group-addon">
+              <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
+        <div class="os-date-time clearfix">
+          <div class="col-xs-2 input">
+            <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="col-xs-2">
+            <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
+          </div>
+          <div os-field-error field="aliquotForm.createdOn"></div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent">
+          <div class="checkbox">
+            <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+          </div>
+          <div class="message os-ctrl-padding-top">
+            <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="collectAliquots()" local-form="true">
+            <span translate="common.buttons.create">Create</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -173,5 +173,9 @@
         <attribute>receivedQuality</attribute>
       </field>
     </record>
+
+    <record type="extensions" entityType="SpecimenExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
   </record>
 </object-schema>

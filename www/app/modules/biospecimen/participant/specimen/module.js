@@ -5,7 +5,9 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.addedit',
     'os.biospecimen.specimen.detail',
     'os.biospecimen.specimen.overview',
-    'os.biospecimen.specimen.close'
+    'os.biospecimen.specimen.close',
+    'os.biospecimen.specimen.addaliquots',
+    'os.biospecimen.specimen.addderivative'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -50,6 +52,11 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-addedit', {
         url: '/addedit-specimen',
         templateUrl: 'modules/biospecimen/participant/specimen/addedit.html',
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt();
+          }
+        },
         controller: 'AddEditSpecimenCtrl',
         parent: 'specimen-root'
       })
@@ -90,6 +97,16 @@ angular.module('os.biospecimen.specimen',
         resolve: {
           formDef: function($stateParams, Form) {
             return Form.getDefinition($stateParams.formId);
+          },
+          postSaveFilters: function() {
+            return [
+              function(specimen, formName, formData) {
+                if (formName == "SpecimenReceivedEvent") {
+                  specimen.createdOn = formData.time
+                }
+                return formData
+              }
+            ];
           }
         },
         controller: 'FormRecordAddEditCtrl',
@@ -116,6 +133,18 @@ angular.module('os.biospecimen.specimen',
           }
         },
         parent: 'specimen-detail'
+      })
+      .state('specimen-create-derivative', {
+        url: '/derivative',
+        templateUrl: 'modules/biospecimen/participant/specimen/add-derivative.html',
+        controller: 'AddDerivativeCtrl',
+        parent: 'specimen-root'
+      })
+     .state('specimen-create-aliquots', {
+        url: '/aliquots',
+        templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
+        controller: 'AddAliquotsCtrl',
+        parent: 'specimen-root'
       });
   })
 

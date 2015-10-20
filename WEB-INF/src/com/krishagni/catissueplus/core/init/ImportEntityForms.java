@@ -2,9 +2,8 @@ package com.krishagni.catissueplus.core.init;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import krishagni.catissueplus.beans.FormContextBean;
@@ -14,8 +13,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.StringUtils;
 
 public class ImportEntityForms extends ImportForms {
-	private int order = 1;
-	
 	private Map<String, String> entityMap = new HashMap<String, String>();
 	
 	@Override
@@ -25,7 +22,7 @@ public class ImportEntityForms extends ImportForms {
 	}
 
 	@Override 
-	protected List<String> listFormFiles() 
+	protected Collection<String> listFormFiles() 
 	throws IOException {
 		try {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
@@ -39,7 +36,7 @@ public class ImportEntityForms extends ImportForms {
 		} catch (FileNotFoundException e) {
 
 		}
-		return new ArrayList<String>(entityMap.keySet());
+		return entityMap.keySet();
 	}
 
 	@Override
@@ -54,13 +51,13 @@ public class ImportEntityForms extends ImportForms {
 		formCtx.setCpId(-1L);
 		formCtx.setEntityType(entityType);
 		formCtx.setMultiRecord(false);
-		formCtx.setSortOrder(order);
+		formCtx.setSortOrder(null);
 		formCtx.setSysForm(true);
 		return formCtx;		
 	}
 
 	@Override
 	protected void cleanup() {
-		order = 1;
+		entityMap.clear();
 	}
 }

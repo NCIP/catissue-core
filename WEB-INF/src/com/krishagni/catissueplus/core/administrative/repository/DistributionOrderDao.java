@@ -11,4 +11,5 @@ public interface DistributionOrderDao extends Dao<DistributionOrder> {
 	public List<DistributionOrderSummary> getOrders(DistributionOrderListCriteria criteria);
 	
 	public DistributionOrder getOrder(String name);
+	
 }

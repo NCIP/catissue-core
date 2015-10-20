@@ -20,15 +20,18 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in specimen audit table">
-    <modifyDataType tableName="catissue_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
+    <validCheckSum>7:c1cd56e7425aa23a507e216e70dad38f</validCheckSum>
+    <modifyDataType tableName="catissue_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify available quantity from double to big decimal in specimen audit table">
-    <modifyDataType tableName="catissue_specimen_aud" columnName="AVAILABLE_QUANTITY" newDataType="decimal(16,6)" />
+    <validCheckSum>7:628ff24e9431b43ed170e2e93b24d378</validCheckSum>
+    <modifyDataType tableName="catissue_specimen_aud" columnName="AVAILABLE_QUANTITY" newDataType="decimal(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify quantity from double to big decimal in specimel requirement audit table">
-    <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(16,6)" />
+    <validCheckSum>7:e41826bbf381b424ead2c91ebbe50e4a</validCheckSum>
+    <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="decimal(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Column for specifying person who has missed the visit">

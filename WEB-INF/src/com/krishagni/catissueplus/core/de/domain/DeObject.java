@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,6 @@ import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
-import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
@@ -147,18 +147,14 @@ public abstract class DeObject {
 	}
 	
 	protected void loadRecordIfNotLoaded() {
-		if (recordLoaded) {
+		Long recordId = getId();
+		if (recordLoaded || recordId == null) {
 			return;
 		}
 		
 		recordLoaded = true;
 		attrs.clear();
-		
-		Long recordId = getId();
-		if (recordId == null) {
-			return;
-		}
-		
+
 		FormData formData = formDataMgr.getFormData(getForm(), recordId);
 		if (formData == null) {
 			return;
@@ -271,7 +267,7 @@ public abstract class DeObject {
 		
 		List<Attr> attrs = new ArrayList<Attr>();
 		for (AttrDetail attrDetail : detail.getAttrs()) {
-			Attr attr = existingAttrs.get(attrDetail.getName());
+			Attr attr = existingAttrs.remove(attrDetail.getName());
 			if (attr == null) {
 				attr = new Attr();
 			} 
@@ -280,6 +276,7 @@ public abstract class DeObject {
 			attrs.add(attr);
 		}
 		
+		attrs.addAll(existingAttrs.values());
 		extension.setAttrs(attrs);
 		return extension;
 	}
@@ -423,8 +420,13 @@ public abstract class DeObject {
 			Attr attr = new Attr();
 			attr.setName(cv.getControl().getName()); 
 			attr.setUdn(cv.getControl().getUserDefinedName());
-			attr.setCaption(cv.getControl().getCaption()); 
-			attr.setValue(cv.getValue());
+			attr.setCaption(cv.getControl().getCaption());
+			
+			Object value = cv.getValue();
+			if (value != null && value.getClass().isArray()) {
+				value = Arrays.asList((String[])value);
+			}
+			attr.setValue(value);
 			
 			return attr;
 		}

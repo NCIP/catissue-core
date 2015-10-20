@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,6 +24,10 @@ public class LabelPrintRule {
 	
 	private String printerName;
 	
+	private String cmdFilesDir;
+
+	private String labelDesign;
+
 	private List<LabelTmplToken> dataTokens = new ArrayList<LabelTmplToken>();
 	
 	private MessageSource messageSource;
@@ -59,6 +64,22 @@ public class LabelPrintRule {
 		this.printerName = printerName;
 	}
 
+	public String getCmdFilesDir() {
+		return cmdFilesDir;
+	}
+
+	public void setCmdFilesDir(String cmdFilesDir) {
+		this.cmdFilesDir = cmdFilesDir;
+	}
+
+	public String getLabelDesign() {
+		return labelDesign;
+	}
+
+	public void setLabelDesign(String labelDesign) {
+		this.labelDesign = labelDesign;
+	}
+
 	public List<LabelTmplToken> getDataTokens() {
 		return dataTokens;
 	}
@@ -87,21 +108,36 @@ public class LabelPrintRule {
 		return true;
 	}
 	
-	public String formatPrintData(Object obj) {
+	public Map<String, String> getDataItems(Object obj) {
 		try {
-			Map<String, String> dataItems = new HashMap<String, String>();
-			for (LabelTmplToken token : dataTokens) {
-				String propName = messageSource.getMessage(token.getName(), null, Locale.getDefault());
-				dataItems.put(propName, token.getReplacement(obj));
+			Map<String, String> dataItems = new LinkedHashMap<String, String>();
+			if (!isWildCard(labelDesign)) {
+				dataItems.put(getMessageStr("LABELDESIGN"), labelDesign);
 			}
-			
-			return new ObjectMapper().writeValueAsString(dataItems);			
+
+			if (!isWildCard(labelType)) {
+				dataItems.put(getMessageStr("LABELTYPE"), labelType);
+			}
+
+			if (!isWildCard(printerName)) {
+				dataItems.put(getMessageStr("PRINTER"), printerName);
+			}
+
+			for (LabelTmplToken token : dataTokens) {
+				dataItems.put(getMessageStr(token.getName()), token.getReplacement(obj));
+			}
+
+			return dataItems;
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		}
 	}
-	
+
 	protected boolean isWildCard(String str) {
 		return StringUtils.isNotBlank(str) && str.trim().equals("*");
+	}
+
+	private String getMessageStr(String name) {
+		return messageSource.getMessage("print_" + name, null, Locale.getDefault());
 	}
 }

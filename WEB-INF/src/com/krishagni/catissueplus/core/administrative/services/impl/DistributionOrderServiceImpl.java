@@ -236,16 +236,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			ose.checkAndThrow();
 			
-			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
-			SpecimenInfo.orderByLabels(result, specimenLabels);
-			return ResponseEvent.response(result);
+			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, specimenLabels)));
 		} catch(OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+	
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
 			DistributionOrder order = daoFactory.getDistributionOrderDao().getOrder(newOrder.getName());

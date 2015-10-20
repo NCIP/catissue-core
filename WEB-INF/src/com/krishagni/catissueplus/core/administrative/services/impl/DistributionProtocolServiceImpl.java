@@ -12,6 +12,8 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -210,6 +212,40 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(e);
 		}
 		
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DistributionOrderStat>> getOrderStats(
+			RequestEvent<DistributionOrderStatListCriteria> req) {
+		try {
+			DistributionOrderStatListCriteria crit = req.getPayload();
+			
+			if (crit.dpId() != null) {
+				DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
+				if (dp == null) {
+					return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+				}
+				
+				AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
+			} else {
+				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+				if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
+					return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+				}
+				
+				if (siteIds != null) {
+					crit.siteIds(siteIds);
+				}
+			}
+			
+			List<DistributionOrderStat> details = daoFactory.getDistributionProtocolDao().getOrderStats(crit);
+			return ResponseEvent.response(details);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	private void addDpStats(List<DistributionProtocolDetail> dps) {

@@ -17,7 +17,8 @@ angular.module('openspecimen')
           cpId: scope.cpId,
           specimenClass: scope.entity.specimenClass,
           specimenType: scope.entity.type,
-          storeSpecimensEnabled: true
+          storeSpecimensEnabled: true,
+          maxRecords: 10
         });
       } else {
         if (!scope.entity.siteName) {
@@ -128,7 +129,10 @@ angular.module('openspecimen')
             button.attr('ng-if', tAttrs.editWhen);
           }
 
-          tElem.find('button').addClass('btn-xs');
+          tElem.find('button')
+            .addClass('btn-xs')         // make button smaller in size
+            .css('margin-top', '15px'); // ensure button is aligned with other text fields; 
+                                        // 15 px is used to display labels for os-md-input fields
         }
 
         if (tAttrs.hasOwnProperty('hidePlaceholder')) {

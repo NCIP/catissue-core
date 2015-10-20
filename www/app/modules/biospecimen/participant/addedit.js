@@ -25,7 +25,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       var op = !!$scope.cpr.id ? 'Update' : 'Create';
 
       $scope.sites = [];
-      Site.listForParticipants(op).then(function(sites) {
+      Site.listForParticipants(op, true).then(function(sites) {
         availableSites = sites;
         filterAvailableSites();
       });

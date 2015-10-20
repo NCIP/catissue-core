@@ -34,7 +34,6 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.service.RbacService;
 
@@ -81,7 +80,7 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
 		UserListCriteria crit = req.getPayload();		
-		if (!AuthUtil.isAdmin()) {
+		if (!AuthUtil.isAdmin() && !crit.listAll()) {
 			crit.instituteName(getCurrUserInstitute().getName());
 		} 
 		
@@ -100,10 +99,6 @@ public class UserServiceImpl implements UserService {
 		User user = daoFactory.getUserDao().getById(req.getPayload());
 		if (user == null) {
 			return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
-		}
-		
-		if (!AuthUtil.isAdmin() && !user.getInstitute().equals(getCurrUserInstitute())) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 		
 		return ResponseEvent.response(UserDetail.from(user));

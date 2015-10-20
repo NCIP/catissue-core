@@ -22,7 +22,13 @@ angular.module('openspecimen')
       })
       .state('sign-up', {
         url: '/sign-up',
-        templateUrl: 'modules/user/signup.html',
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("sign-up", "page-body", "modules/user/signup.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         resolve: {
           user: function(User) {
             return new User();

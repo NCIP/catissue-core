@@ -189,6 +189,8 @@
 
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
+      "add": "Click to add new Collection Protocol",
+      "edit": "Click to edit Collection Protocol",
       "reg_participants_count": "Count of Registered Participants",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to search Collection Protocols"
@@ -459,6 +461,10 @@
     "delete_specimens":  "Are you sure you want to delete selected specimens ?",
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
+    "create_derivative": "Create Derivative",
+    "create_aliquots": "Create Aliquots",
+    "specimen_type": "Specimen Type",
+    "anatomic_site": "Anatomic Site",
 
     "col_event": {
       "title": "Collection Details",
@@ -672,7 +678,8 @@
     },
     
     "menu": {
-      "overview": "Overview"
+      "overview": "Overview",
+      "history": "History"
     },
 
     "filter": {
@@ -687,6 +694,15 @@
       "delete": "Delete",
       "close": "Close",
       "reopen": "Reopen"
+    },
+    
+    "history": {
+      "order_name": "Order Name",
+      "dist_date": "Distribution Date",
+      "specimen_type": "Specimen Type",
+      "anatomic_site": "Anatomic Site",
+      "pathology_status": "Pathology Status",
+      "specimens_cnt": "Specimens Distributed"
     }
   },
 
@@ -1275,6 +1291,7 @@
      "dp": "Distribution Protocol",
      "date": "Date",
      "status": "Status",
+     "dispose_all": "Dispose All",
      "specimens": "Specimens",
      "distributor": "Distributor",
      "dist_date": "Distribution Date",
@@ -1396,6 +1413,13 @@
      "error": "Could not find any {{entity}} matching search key {{key}}",
      "quick_search": "Quick Search",
      "search_for": "Search for"
-   }
-
+   },
+   
+   "feedback": {
+      "title": "Your feedback counts!",
+      "info": "Please let us know what you think of OpenSpecimen. Your feedback to improve the product is most welcome.",
+      "subject": "Subject",
+      "feedback": "Feedback",
+      "success_message": "Feedback sent successfully"
+    }
 }

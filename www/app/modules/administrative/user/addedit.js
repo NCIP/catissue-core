@@ -20,22 +20,11 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
       );
 
       $scope.institutes = [];
-      var q = undefined;
-      if (!$rootScope.currentUser || $rootScope.currentUser.admin) {
-        q = Institute.query();
-      } else {
-        q = $rootScope.currentUser.getInstitute();
-      }
-
-      q.then(
+      Institute.query().then(
         function(result) {
-          if (result instanceof Array) {
-            angular.forEach(result, function(institute) {
-              $scope.institutes.push(institute.name);
-            });
-          } else {
-            $scope.institutes.push(result.name);
-          }
+          angular.forEach(result, function(institute) {
+            $scope.institutes.push(institute.name);
+          });
 
           if (!$scope.user.id && $scope.institutes.length == 1) {
             $scope.user.instituteName = $scope.institutes[0];

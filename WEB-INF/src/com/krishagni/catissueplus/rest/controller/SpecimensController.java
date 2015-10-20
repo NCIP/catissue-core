@@ -299,6 +299,20 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public FormCtxtSummary getForm() {
+		ListEntityFormsOp op = new ListEntityFormsOp();
+		op.setEntityType(EntityType.SPECIMEN_EXTN); 
+        
+		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+	}
+	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
 	}
