@@ -124,28 +124,28 @@
           <textField>
             <name>email</name>
             <udn>email</udn>
-            <caption>Coordinator Email Address</caption>
+            <caption>#getMessage("cp_coordinator_email")</caption>
             <column>EMAIL_ADDRESS</column>
           </textField>
 
           <textField>
             <name>firstName</name>
             <udn>firstName</udn>
-            <caption>Coordinator First Name</caption>
+            <caption>#getMessage("cp_coordinator_first_name")</caption>
             <column>FIRST_NAME</column>
           </textField>
           
           <textField>
             <name>lastName</name>
             <udn>lastName</udn>
-            <caption>Coordinator Last Name</caption>
+            <caption>#getMessage("cp_coordinator_last_name")</caption>
             <column>LAST_NAME</column>
           </textField>
                     
           <dropDown>
             <name>department</name>
             <udn>department</udn>
-            <caption>Coordinator Department</caption>
+            <caption>#getMessage("cp_coordinator_department")</caption>
             <column>DEPARTMENT_NAME</column>
             <options>
               <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>

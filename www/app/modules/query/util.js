@@ -431,13 +431,13 @@ angular.module('os.query.util', [])
                 " where " + query;
     }
 
-    function getDataAql(selectedFields, filtersMap, exprNodes, reporting) {
+    function getDataAql(selectedFields, filtersMap, exprNodes, reporting, addLimit) {
       var selectList = getSelectList(selectedFields, filtersMap);
       var where = getWhereExpr(filtersMap, exprNodes);
       var rptExpr = getRptExpr(selectedFields, reporting);
       return "select " + selectList + 
-             " where " + where + 
-             " limit 0, 10000 " + rptExpr;
+             " where " + where +
+             (addLimit ? " limit 0, 10000 " : " ")  + rptExpr;
     }
 
     function getDefSelectedFields() {

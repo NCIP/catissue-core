@@ -1,8 +1,15 @@
 package com.krishagni.catissueplus.core.common.domain;
 
 public abstract class AbstractLabelTmplToken implements LabelTmplToken {
-	public int validate(Object object, String input, int startIdx) {
-		String label = getReplacement(object);
+
+	@Override
+	public String getReplacement(Object object, String ... args) {
+		return getReplacement(object);
+	}
+
+	@Override
+	public int validate(Object object, String input, int startIdx, String ... args) {
+		String label = getReplacement(object, args);
 		
 		int endIdx = startIdx + label.length();
 		if (startIdx >= input.length() || endIdx > input.length()) {

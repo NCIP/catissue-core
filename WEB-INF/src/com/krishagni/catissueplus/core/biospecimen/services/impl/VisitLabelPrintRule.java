@@ -7,12 +7,22 @@ import com.krishagni.catissueplus.core.common.domain.LabelPrintRule;
 public class VisitLabelPrintRule extends LabelPrintRule {
 	private String cpShortTitle;
 	
+	private String visitSite;
+
 	public String getCpShortTitle() {
 		return cpShortTitle;
 	}
 	
 	public void setCpShortTitle(String cpShortTitle) {
 		this.cpShortTitle = cpShortTitle;
+	}
+
+	public String getVisitSite() {
+		return visitSite;
+	}
+
+	public void setVisitSite(String visitSite) {
+		this.visitSite = visitSite;
 	}
 
 	public boolean isApplicableFor(Visit visit, User user, String ipAddr) {
@@ -24,6 +34,10 @@ public class VisitLabelPrintRule extends LabelPrintRule {
 			return false;
 		}
 		
+		if (!isWildCard(visitSite) && !visit.getSite().getName().equals(visitSite)) {
+			return false;
+		}
+
 		return true;
 	}	
 }

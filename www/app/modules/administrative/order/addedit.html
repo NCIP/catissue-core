@@ -148,7 +148,7 @@
           <div class="col os-col-10">
             <span translate="orders.spec.label">Label</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-25">
             <span translate="orders.spec.desc">Description</span>
           </div>
           <div class="col os-col-15">
@@ -163,8 +163,11 @@
           <div class="col os-col-10">
             <span translate="orders.spec.quantity">Quantity</span>
           </div>
-          <div class="col os-col-15">
-            <span translate="orders.status">Status</span>
+          <div class="col os-col-10">
+            <div class="os-checkbox-container">
+              <os-checkbox ng-model="input.allItemStatus" ng-change="toggleAllItemStatus()"></os-checkbox>
+              <span class="os-checkbox-label" translate="orders.dispose_all">Dispose All</span>
+            </div>
           </div>
           <div class="col os-col-5">
             <span>&nbsp;</span>
@@ -180,7 +183,7 @@
               <span>{{specimen.label}}</span>
             </a>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-25">
             <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
           </div>
           <div class="col os-col-15">
@@ -210,7 +213,7 @@
                   {tgt: specimen.availableQty, cmp: 'le', errorKey: 'distQtyGtAvailableQty'},
                   {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
                 ]" 
-                ng-model-options="{allowInvalid: 'true'}">
+                ng-model-options="{allowInvalid: 'true'}" ng-change="setStatus(item)">
               <div class="os-input-addon-right os-md-input-addon">
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>
@@ -218,10 +221,11 @@
             </div>
             <div os-field-error field="sform.qty"></div>
           </div>
-          <div class="col os-col-15" style="overflow: visible;">
-            <os-select os-md-input ng-model="item.status" 
-              list="orderItemStatuses" select-prop="id" display-prop="name">
-            </os-select>
+          <div class="col os-col-10">
+            <div class="os-checkbox-container">
+              <os-checkbox ng-model="item.status" ng-true-value="'DISTRIBUTED_AND_CLOSED'" ng-change="setHeaderStatus()"
+                ng-false-value="'DISTRIBUTED'" ng-disabled="item.quantity == specimen.availableQty"></os-checkbox>
+            </div>
           </div>
           <div class="col os-col-5">
             <button class="btn btn-xs btn-default" ng-click="removeOrderItem(item)">

@@ -147,18 +147,14 @@ public abstract class DeObject {
 	}
 	
 	protected void loadRecordIfNotLoaded() {
-		if (recordLoaded) {
+		Long recordId = getId();
+		if (recordLoaded || recordId == null) {
 			return;
 		}
 		
 		recordLoaded = true;
 		attrs.clear();
-		
-		Long recordId = getId();
-		if (recordId == null) {
-			return;
-		}
-		
+
 		FormData formData = formDataMgr.getFormData(getForm(), recordId);
 		if (formData == null) {
 			return;

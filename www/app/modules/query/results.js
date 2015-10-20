@@ -83,7 +83,7 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
-      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
+      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), 'DEEP').then(
         function(result) {
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {
@@ -102,13 +102,14 @@ angular.module('os.query.results', ['os.query.models'])
       );
     }
 
-    function getAql() { 
+    function getAql(addLimit) { 
       var qc = $scope.queryCtx;
       return QueryUtil.getDataAql(
         qc.selectedFields, 
         qc.filtersMap, 
         qc.exprNodes, 
-        qc.reporting);
+        qc.reporting,
+        addLimit);
     }
 
     function preparePivotTable(result) {
@@ -281,7 +282,7 @@ angular.module('os.query.results', ['os.query.models'])
       var qc = $scope.queryCtx;
 
       var alert = Alerts.info('queries.export_initiated', {}, false);  
-      QueryExecutor.exportQueryResultsData(undefined, qc.selectedCp.id, getAql(), 'DEEP').then(
+      QueryExecutor.exportQueryResultsData(undefined, qc.selectedCp.id, getAql(false), 'DEEP').then(
         function(result) {
           Alerts.remove(alert);
           if (result.completed) {

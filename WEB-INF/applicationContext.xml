@@ -121,6 +121,10 @@
     <property name="emailService" ref="emailService"/>
   </bean>
 	
+  <bean id="extnPvLabelToken" class="com.krishagni.catissueplus.core.common.domain.ExtensionPvAttrLabelToken">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
   <bean id="visitTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
     <property name="tokens">
       <list>
@@ -129,6 +133,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
+        <bean ref="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
@@ -270,6 +275,7 @@
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
+        <bean ref="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
@@ -413,6 +419,7 @@
   </bean>
        
   <bean id="messageSource" class="com.krishagni.catissueplus.core.common.WildcardReloadableResourceBundle">
+    <constructor-arg value="${plugin.dir}"/>
     <property name="basenames">
       <list>
         <value>classpath*:errors/messages*</value>

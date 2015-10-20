@@ -59,10 +59,11 @@ angular.module('os.biospecimen.participant',
       })
       .state('participant-addedit', {
         url: '/addedit-participant',
-        templateProvider: function($stateParams, $q, CpConfigSvc) {
+        templateProvider: function($stateParams, $q, CpConfigSvc, PluginReg) {
           return $q.when(CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
             function(tmpl) {
-              return '<div ng-include src="\'' + tmpl + '\'"></div>';
+              var tmpls = PluginReg.getTmpls("participant-addedit", "page-body", tmpl); 
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
             }
           );
         },
@@ -95,7 +96,13 @@ angular.module('os.biospecimen.participant',
       })
       .state('participant-detail.overview', {
         url: '/overview',
-        templateUrl: 'modules/biospecimen/participant/overview.html',
+        templateProvider: function(PluginReg, $q) {
+          return $q.when(PluginReg.getTmpls("participant-detail", "overview", "modules/biospecimen/participant/overview.html")).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         controller: 'ParticipantOverviewCtrl',
         parent: 'participant-detail'
       })

@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplTokenRegistrar;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -12,7 +13,15 @@ import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 public class LabelGeneratorImpl implements LabelGenerator {
 	private LabelTmplTokenRegistrar tokenRegistrar;
 	
-	private Pattern labelPattern = Pattern.compile("%(.+?)%"); 
+	//
+	// %token1%-%token2%
+	//
+	private Pattern labelPattern = Pattern.compile("%(.+?)%");
+
+	//
+	// %token1(arg1)
+	//
+	private Pattern fnTokenPattern = Pattern.compile("(.+?)\\((.+?)\\)");
 
 	public LabelTmplTokenRegistrar getTokenRegistrar() {
 		return tokenRegistrar;
@@ -28,7 +37,8 @@ public class LabelGeneratorImpl implements LabelGenerator {
 		
 		Matcher matcher = labelPattern.matcher(labelTmpl);		
 		while (matcher.find()) {
-			LabelTmplToken token = tokenRegistrar.getToken(matcher.group(1));
+			Pair<String, String[]> tokenArgs = getTokenNameArgs(matcher.group(1));
+			LabelTmplToken token = tokenRegistrar.getToken(tokenArgs.first());
 			if (token == null) {
 				valid = false;
 				break;
@@ -47,11 +57,12 @@ public class LabelGeneratorImpl implements LabelGenerator {
 		boolean nextFreeTextAppend = true;
 
 		while (matcher.find()) {
-			LabelTmplToken token = tokenRegistrar.getToken(matcher.group(1));
-			String replacement = null;
+			Pair<String, String[]> tokenArgs = getTokenNameArgs(matcher.group(1));
 
+			LabelTmplToken token = tokenRegistrar.getToken(tokenArgs.first());
+			String replacement = null;
 			if (token != null) {
-				replacement = token.getReplacement(object);
+				replacement = token.getReplacement(object, tokenArgs.second());
 			}
 
 			if (replacement == null) {
@@ -63,7 +74,7 @@ public class LabelGeneratorImpl implements LabelGenerator {
 					result.append(labelTmpl.substring(lastIdx, matcher.start()));
 				}
 
-				if (!replacement.equals(token.EMPTY_VALUE)) {
+				if (!replacement.equals(LabelTmplToken.EMPTY_VALUE)) {
 					result.append(replacement);
 				}
 
@@ -88,8 +99,6 @@ public class LabelGeneratorImpl implements LabelGenerator {
 		int lastTmplIdx = 0, lastLabelIdx = 0;
 		
 		while (matcher.find()) {
-			LabelTmplToken token = tokenRegistrar.getToken(matcher.group(1));
-			
 			String tmplStr = labelTmpl.substring(lastTmplIdx, matcher.start());
 			if (!matchesTmplStr(label, lastLabelIdx, tmplStr)) {
 				return false;
@@ -97,6 +106,8 @@ public class LabelGeneratorImpl implements LabelGenerator {
 			
 			lastLabelIdx += tmplStr.length();
 			
+			Pair<String, String[]> tokenArgs = getTokenNameArgs(matcher.group(1));
+			LabelTmplToken token = tokenRegistrar.getToken(tokenArgs.first());
 			if (token == null) {
 				if (!matchesTmplStr(label, lastLabelIdx, matcher.group(0))) {
 					return false;
@@ -104,7 +115,7 @@ public class LabelGeneratorImpl implements LabelGenerator {
 				
 				lastLabelIdx += matcher.group(0).length();
 			} else {
-				int newLabelIdx = token.validate(object, label, lastLabelIdx);
+				int newLabelIdx = token.validate(object, label, lastLabelIdx, tokenArgs.second());
 				if (newLabelIdx == lastLabelIdx) {
 					return false;
 				}
@@ -143,5 +154,20 @@ public class LabelGeneratorImpl implements LabelGenerator {
 		}
 		
 		return true;		
+	}
+
+	private Pair<String, String[]> getTokenNameArgs(String input) {
+		String tokenName = null;
+		String[] args = null;
+
+		Matcher fnMatcher = fnTokenPattern.matcher(input);
+		if (fnMatcher.matches()) {
+			tokenName = fnMatcher.group(1);
+			args = fnMatcher.group(2).split(",");
+		} else {
+			tokenName = input;
+		}
+
+		return Pair.make(tokenName, args);
 	}
 }

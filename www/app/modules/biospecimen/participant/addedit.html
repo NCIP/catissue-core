@@ -88,20 +88,10 @@
           </div>
 
           <div class="form-group">
-            <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
-            <div class="col-xs-9">
-              <label class="radio-inline" ng-repeat="ethnicity in ethnicities">
-                <input type="radio" name="ethnicity" ng-model="cpr.participant.ethnicity" ng-value="ethnicity"> 
-                <span>{{ethnicity}}</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
             <label class="col-xs-3 control-label" translate="participant.vital_status">Vital Status</label>
             <div class="col-xs-9">
               <label class="radio-inline" ng-repeat="vitalStatus in vitalStatuses">
-                <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus"> 
+                <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus">
                 <span>{{vitalStatus}}</span>
               </label>
             </div>
@@ -114,6 +104,15 @@
                 ng-disabled="cpr.participant.vitalStatus != 'Dead'" 
                 placeholder="{{'participant.death_date' | translate}}">
               </os-date-picker>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
+            <div class="col-xs-6">
+              <os-select name="ethnicity" ng-model="cpr.participant.ethnicity" list="ethnicities"
+                placeholder="{{'participant.ethnicity' | translate}}">
+              </os-select>
             </div>
           </div>
 
@@ -248,12 +247,12 @@
         Register Selected Participant 
       </span>
     </button>
-    <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()"
+    <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()">
       <span translate="participant.buttons.ignore_matches"> 
         Ignore Matches and Register Participant 
       </span>
     </button>
-    <button class="btn btn-warning" ng-click="lookupAgain()"
+    <button class="btn btn-warning" ng-click="lookupAgain()">
       <span translate="participant.buttons.lookup_again"> 
         Lookup Again  
       </span>

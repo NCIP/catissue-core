@@ -31,6 +31,14 @@
   font-weight: bold;
 }
 
+.os-visits .list-group-item-text .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  padding-bottom: 4px;
+}
+
 .fa.os-status-collected:before {
   color: #5cb85c;
   padding: 0px 4px;

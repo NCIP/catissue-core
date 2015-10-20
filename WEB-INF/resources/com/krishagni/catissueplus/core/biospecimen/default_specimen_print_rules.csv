@@ -1,2 +1,2 @@
-#Class	Type	Login	IPRange	LType	Tokens	Printer
-*	*	*	*	Std	specimen_label,specimen_type,specimen_type,specimen_location	default
+#CpShortTitle	VisitSite	SpecimenClass	SpecimenType	Login	IpRange	LableType	LabelTokens	LabelDesign	Printer	CmdFilesDir
+*	*	*	*	*	*	Std	specimen_label,specimen_type,specimen_type,specimen_location	*	default	*

@@ -7,19 +7,14 @@ angular.module('openspecimen')
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        scope.$watch(function() {
-            return element[0].innerHTML;
+        scope.$watch(
+          function() {
+            return element.find("ul.dropdown-menu > li").
+	      filter(function() {
+                return isElementDisplayed(this);
+              }).length;
           }, function(val) {
-            var menuItems = element.find("ul.dropdown-menu li");
-            var displayMenu = false;
-            for (var i = 0; i < menuItems.length; i++) {
-              if (isElementDisplayed(menuItems[i])) {
-                displayMenu = true;
-                break;
-              }
-            }
-
-            if (!displayMenu) {
+            if (val == 0) {
               element.hide();
             } else {
               element.show();

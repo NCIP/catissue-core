@@ -10,9 +10,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.instituteNames = [];
       $scope.siteList = [];
       $scope.userFilterOpts = {};
-      $scope.input = {labelText: ''};
+      $scope.input = {labelText: '', allItemStatus: false};
 
-      loadItemStatusPvs();
       loadDps();
       loadInstitutes();
       setUserAndSiteList(order);
@@ -25,18 +24,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       if (!order.executionDate) {
         order.executionDate = new Date();
       }
-    }
-
-    function loadItemStatusPvs() {
-      $translate('common.home').then(
-        function() {
-          $scope.orderItemStatuses = DistributionOrder.getItemStatusPvs().map(
-            function(status) {
-              return {id: status, name: $translate.instant('orders.item_statuses.' + status)};
-            }
-          );
-        }
-      );
+      
+      setHeaderStatus();
     }
 
     function loadDps(name) {
@@ -94,6 +83,23 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         }
       );
     };
+    
+    function setHeaderStatus() {
+      var isOpenPresent = false;
+      angular.forEach($scope.order.orderItems,
+        function(item) {
+          if (item.status == 'DISTRIBUTED') {
+            isOpenPresent = true;
+          }
+        }
+      );
+
+      if (isOpenPresent) {
+        $scope.input.allItemStatus = false;
+      } else {
+        $scope.input.allItemStatus = true;
+      }
+    }
 
     $scope.onDpSelect = function() {
       $scope.order.instituteName = $scope.order.distributionProtocol.instituteName;
@@ -158,6 +164,35 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
 
     $scope.passThrough = function() {
       return true;
+    }
+    
+    $scope.setStatus = function(item) {
+      if (item.quantity == item.specimen.availableQty) {
+        item.status = 'DISTRIBUTED_AND_CLOSED';
+      } else {
+        item.status = 'DISTRIBUTED';
+      }
+      
+      setHeaderStatus();
+    }
+    
+    $scope.setHeaderStatus = setHeaderStatus;
+
+    $scope.toggleAllItemStatus = function() {
+      var allStatus;
+      if ($scope.input.allItemStatus) {
+        allStatus = 'DISTRIBUTED_AND_CLOSED';
+      } else {
+        allStatus = 'DISTRIBUTED';
+      }
+      
+      angular.forEach($scope.order.orderItems,
+        function(item) {
+          if (item.quantity != item.specimen.availableQty) {
+            item.status = allStatus;
+          }
+        }
+      );
     }
     
     $scope.searchDp = loadDps;

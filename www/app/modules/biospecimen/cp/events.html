@@ -11,7 +11,7 @@
         <span translate="cp.cpe_list">Events</span>
       </div>
 
-      <div ng-repeat="evt in events | orderBy:['eventPoint', 'eventLabel']" class="os-cpe-item">
+      <div ng-repeat="evt in events | orderBy:['eventPoint', 'id']" class="os-cpe-item">
         <div ng-if="evt.id != event.id">
           <div class="list-group-item" ng-class="{'active': selected.id == evt.id}">
             <div ng-click="selectEvent(evt)">

@@ -8,7 +8,8 @@
     </h3>
 
     <div class="os-btns right">
-      <button show-if-allowed="cpResource.updateOpts" class="primary" ui-sref="cp-addedit({cpId:cp.id})">
+      <button show-if-allowed="cpResource.updateOpts" class="primary" title="{{'cp.tooltip.edit' | translate}}" 
+        ui-sref="cp-addedit({cpId:cp.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>

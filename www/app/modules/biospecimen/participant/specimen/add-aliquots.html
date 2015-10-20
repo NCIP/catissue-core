@@ -78,8 +78,8 @@
               <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
               </os-specimen-unit>
             </div>
-            <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
           </div>
+          <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
       </div>
 
@@ -114,7 +114,7 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="collectAliquots()">
+          <button class="btn btn-primary" os-form-submit="collectAliquots()" local-form="true">
             <span translate="common.buttons.create">Create</span>
           </button>
           <button class="btn os-btn-text" ng-click="back()">

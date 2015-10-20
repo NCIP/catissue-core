@@ -1,7 +1,7 @@
 package com.krishagni.catissueplus.core.common.domain;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -16,7 +16,7 @@ public class LabelPrintJob extends BaseEntity {
 	
 	private int numCopies = 1;
 	
-	private Set<LabelPrintJobItem> items = new HashSet<LabelPrintJobItem>();
+	private Set<LabelPrintJobItem> items = new LinkedHashSet<LabelPrintJobItem>();
 
 	public String getItemType() {
 		return itemType;

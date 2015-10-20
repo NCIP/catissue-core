@@ -236,9 +236,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			ose.checkAndThrow();
 			
-			List<SpecimenInfo> result = SpecimenInfo.from(specimens);
-			SpecimenInfo.orderByLabels(result, specimenLabels);
-			return ResponseEvent.response(result);
+			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, specimenLabels)));
 		} catch(OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

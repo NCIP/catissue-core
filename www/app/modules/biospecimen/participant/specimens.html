@@ -294,18 +294,31 @@
       <div class="clearfix">
         <div class="os-col-30">
           <div class="form-group">
-            <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control" 
-              type="text" placeholder="{{'specimens.qty' | translate}}" required 
-              ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+            <div class="os-input-addon-grp">
+              <input name="quantity" ng-model="derivative.initialQty" os-md-input class="form-control"
+                type="text" placeholder="{{'specimens.qty' | translate}}" required
+                ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+              <div class="os-input-addon-right os-md-input-addon">
+                <os-specimen-unit specimen-class="derivative.specimenClass" type="derivative.type">
+                </os-specimen-unit>
+              </div>
+            </div>
             <div os-field-error field="derivativeForm.quantity"></div>
           </div>
         </div>
 
         <div class="os-col-30">
           <div class="form-group">
-            <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
-              type="text" placeholder="{{'specimens.concentration' | translate}}"
-              ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-grp">
+              <input name="concentration" ng-model="derivative.concentration" os-md-input class="form-control" 
+                type="text" placeholder="{{'specimens.concentration' | translate}}"
+                ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+              <div class="os-input-addon-right os-md-input-addon">
+                <os-specimen-unit specimen-class="derivative.specimenClass" type="derivative.type" 
+                  measure="concentration">
+                </os-specimen-unit>
+              </div>
+            </div>
             <div os-field-error field="derivativeForm.concentration"></div>
           </div>
         </div>

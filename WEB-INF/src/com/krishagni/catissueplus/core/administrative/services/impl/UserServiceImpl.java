@@ -34,7 +34,6 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.service.RbacService;
 

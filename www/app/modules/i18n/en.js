@@ -187,6 +187,8 @@
 
     "tooltip": {
       "view_details": "Click to view/edit Collection Protocol details",
+      "add": "Click to add new Collection Protocol",
+      "edit": "Click to edit Collection Protocol",
       "reg_participants_count": "Count of Registered Participants",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to search Collection Protocols"
@@ -1293,6 +1295,7 @@
      "dp": "Distribution Protocol",
      "date": "Date",
      "status": "Status",
+     "dispose_all": "Dispose All",
      "specimens": "Specimens",
      "distributor": "Distributor",
      "dist_date": "Distribution Date",
@@ -1418,7 +1421,7 @@
    
    "feedback": {
       "title": "Your feedback counts!",
-      "info": "Please let us know what you think of the new OpenSpecimen. Any suggestions on improvements, new features, or bugs are most welcome.",
+      "info": "Please let us know what you think of OpenSpecimen. Your feedback to improve the product is most welcome.",
       "subject": "Subject",
       "feedback": "Feedback",
       "success_message": "Feedback sent successfully"

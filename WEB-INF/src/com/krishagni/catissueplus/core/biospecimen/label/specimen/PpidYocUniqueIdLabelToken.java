@@ -48,7 +48,7 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 	}
 	
 	@Override
-	public int validate(Object object, String input, int startIdx) {
+	public int validate(Object object, String input, int startIdx, String ... args) {
 		return super.validateNumber(input, startIdx);
 	}	
 }
