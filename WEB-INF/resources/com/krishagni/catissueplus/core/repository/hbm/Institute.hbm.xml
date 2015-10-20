@@ -34,13 +34,6 @@
     </set>
 
     <filter name="activeEntity"/>
-	
-    <query name="getInstituteByName">
-      from
-        com.krishagni.catissueplus.core.administrative.domain.Institute institute 
-      where
-        institute.name = :name and institute.activityStatus != 'Disabled' 
-    </query>
 
     <query name="getInstituteStats">
       select

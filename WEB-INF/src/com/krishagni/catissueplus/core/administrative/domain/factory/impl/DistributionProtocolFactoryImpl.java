@@ -212,7 +212,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		if (CollectionUtils.isNotEmpty(distInstituteNames)) {
 			List<Institute> distInstitutes = daoFactory.getInstituteDao().getInstituteByNames(distInstituteNames);
 			if (distInstitutes.size() != distInstituteNames.size()) {
-				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
+				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_INSTITUTE);
 				return;
 			}
 			

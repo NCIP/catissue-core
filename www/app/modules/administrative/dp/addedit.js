@@ -39,11 +39,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       $scope.instSiteMap = dp.distributingSites;
       angular.forEach(dp.distributingSites, function (site, index) {
         if (site.sites.indexOf($scope.all_sites) == -1) {
-          getSites(site.instituteName).then(
-            function(sites) {
-              $scope.instSiteMap[site.instituteName] = [$scope.all_sites].concat(sites);
-            }
-          );
+          $scope.instSiteMap[site.instituteName] = getSites(site.instituteName, true);
         }
       });
       
@@ -90,26 +86,27 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     function loadSites(instituteName) {
-      getSites(instituteName).then(
-        function (sites) {
-          $scope.sites = sites;
-        }
-      );
+      $scope.sites = getSites(instituteName, false);
     }
     
-    function getSites(instituteName) {
+    function getSites(instituteName, isAddAll) {
+      var sites = isAddAll ? [$scope.all_sites] : [];
       if (availableInstSites[instituteName] && availableInstSites[instituteName].length != 0) {
-        var deferred = $q.defer();
-        deferred.resolve(availableInstSites[instituteName]);
-        return deferred.promise;
+        angular.forEach(availableInstSites[instituteName], function(site) {
+          sites.push(site);
+        });
+      } else {
+        Site.listForInstitute(instituteName).then(
+          function(result) {
+            availableInstSites[instituteName] = result;
+            angular.forEach(result, function(site) {
+              sites.push(site);
+            });
+          }
+        );
       }
       
-      return Site.listForInstitute(instituteName).then(
-        function(result) {
-          availableInstSites[instituteName] = result;
-          return result;
-        }
-      );
+      return sites;
     }
     
     function newDistSite () {
@@ -134,6 +131,16 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       dp.distributingSites = sites;
     }
     
+    function isAllSitesPresent(index) {
+      var dp = $scope.distributionProtocol;
+      var sites = dp.distributingSites[index].sites;
+      if (sites.indexOf($scope.all_sites) > -1) {
+        return true;
+      }
+      
+      return false;
+    }
+    
     $scope.createDp = function() {
       var dp = angular.copy($scope.distributionProtocol);
       updateDistSites(dp);
@@ -155,11 +162,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       var dp = $scope.distributionProtocol;
       var instituteName = dp.distributingSites[index].instituteName;
       var sites = $scope.instSiteMap[instituteName];
-      getSites(instituteName).then(
-        function(sites) {
-          $scope.instSiteMap[instituteName] = [$scope.all_sites].concat(sites);
-        }
-      );
+      $scope.instSiteMap[instituteName] = getSites(instituteName, true);
       
       dp.distributingSites[index].sites = [];
       filterAvailableInstituteNames();
@@ -168,13 +171,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     $scope.onDistSiteSelect = function(index) {
       var dp = $scope.distributionProtocol;
       var institute = dp.distributingSites[index].instituteName;
-      var sites = dp.distributingSites[index].sites;
-      var presentAllSites = false;
-      if (sites.indexOf($scope.all_sites) > -1) {
-        presentAllSites = true;
-      }
-      
-      if (presentAllSites) {
+      if (isAllSitesPresent(index)) {
         dp.distributingSites[index].sites = [$scope.all_sites];
         $scope.instSiteMap[institute] = [];
       }
@@ -183,18 +180,8 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     $scope.onDistSiteRemove = function(index) {
       var dp = $scope.distributionProtocol;
       var institute = dp.distributingSites[index].instituteName;
-      var sites = dp.distributingSites[index].sites;
-      var absentAllSites = false;
-      if (sites.indexOf($scope.all_sites) == -1) {
-        absentAllSites = true;
-      }
-      
-      if (absentAllSites) {
-        getSites(institute).then(
-          function(sites) {
-            $scope.instSiteMap[institute] = [$scope.all_sites].concat(sites);
-          }
-        );
+      if (!isAllSitesPresent(index)) {
+        $scope.instSiteMap[institute] = getSites(institute, true);
       }
     }
     

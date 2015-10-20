@@ -34,7 +34,6 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit) {
 		Criteria query = sessionFactory.getCurrentSession()
 			.createCriteria(Institute.class, "institute")
-			.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());
@@ -146,8 +145,6 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	private static final String INSTITUTE_FQN = Institute.class.getName();
 	
 	private static final String DEPARTMENT_FQN = Department.class.getName();
-	
-	private static final String GET_INSTITUTE_BY_NAME = INSTITUTE_FQN + ".getInstituteByName";
 	
 	private static final String GET_INSTITUTE_STATS = INSTITUTE_FQN + ".getInstituteStats";
 	
