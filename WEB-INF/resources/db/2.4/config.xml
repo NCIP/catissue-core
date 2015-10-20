@@ -25,4 +25,41 @@
     </sql>
   </changeSet>
   
+  <changeSet author="slakhani" id="Adding email notification module">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'notifications', 'Email notification service');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification config properties for objects in os">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_user_enable',
+        'noti_email_user_enable', 'email_user_enable_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_query_enable',
+        'noti_email_query_enable', 'email_query_enable_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_order_enable',
+        'noti_email_order_enable', 'email_order_enable_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_specimenlist_enable',
+        'noti_email_specimenlist_enable', 'email_specimenlist_enabld_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.common.service.impl;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -49,7 +50,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	private ThreadPoolTaskExecutor taskExecutor;
 	
 	private ConfigurationService cfgSvc;
-
+	
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
 	}
@@ -103,7 +104,21 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props) {
-		return sendEmail(emailTmplKey, to, null, props);
+		Map<String, Boolean> emailNotificationConfig = getEmailNotificationConfigurations();
+		boolean enabled = false;
+		boolean sent = false;
+		
+		for (String object : emailNotificationConfig.keySet()) {
+			if (emailTmplKey.contains(object)) {
+				enabled = emailNotificationConfig.get(object);
+				break;
+			}
+		}
+		
+		if (enabled) {
+			sent = sendEmail(emailTmplKey, to, null, props);
+		}
+		return sent;
 	}
 	
 	@Override
@@ -240,5 +255,15 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private String getAppUrl() {
 		return cfgSvc.getStrSetting("common", "app_url");
+	}
+	
+	private Map<String, Boolean> getEmailNotificationConfigurations() {
+		Map<String, Boolean> emailEnabledList = new HashMap<String, Boolean>();
+		emailEnabledList.put("users", cfgSvc.getBoolSetting("notifications", "email_user_enable", true));
+		emailEnabledList.put("order", cfgSvc.getBoolSetting("notifications", "email_order_enable", true));
+		emailEnabledList.put("query", cfgSvc.getBoolSetting("notifications", "email_query_enable", true));
+		emailEnabledList.put("specimen_list", cfgSvc.getBoolSetting("notifications", "email_specimenlist_enable", true));
+		
+		return emailEnabledList;
 	}
 }
