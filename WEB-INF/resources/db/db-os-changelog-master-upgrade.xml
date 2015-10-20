@@ -33,5 +33,6 @@
 
   <include file="db/2.4/schema.xml"/>
   <include file="db/2.4/config.xml"/>
+  <include file="db/2.4/migration.xml"/>
 
 </databaseChangeLog> 
