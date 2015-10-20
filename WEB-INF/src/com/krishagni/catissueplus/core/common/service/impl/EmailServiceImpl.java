@@ -104,26 +104,13 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props) {
-		Map<String, Boolean> emailNotificationConfig = getEmailNotificationConfigurations();
-		boolean enabled = false;
-		boolean sent = false;
-		
-		for (String object : emailNotificationConfig.keySet()) {
-			if (emailTmplKey.contains(object)) {
-				enabled = emailNotificationConfig.get(object);
-				break;
-			}
-		}
-		
-		if (enabled) {
-			sent = sendEmail(emailTmplKey, to, null, props);
-		}
-		return sent;
+		return sendEmail(emailTmplKey, to, null, props);
 	}
 	
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {		
 		String adminEmailId = getAdminEmailId();
+		boolean sent = false;
 		
 		props.put("template", getTemplate(emailTmplKey));
 		props.put("footer", getFooterTmpl());
@@ -141,7 +128,11 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		email.setCcAddress(new String[] {adminEmailId});
 		email.setAttachments(attachments);
 		
-		return sendEmail(email);
+		if (cfgSvc.getBoolSetting("notifications", "email_" + emailTmplKey, true)) {
+			sent = sendEmail(email);
+		}
+		
+		return sent;
 	}
 
 	@Override
@@ -255,15 +246,5 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private String getAppUrl() {
 		return cfgSvc.getStrSetting("common", "app_url");
-	}
-	
-	private Map<String, Boolean> getEmailNotificationConfigurations() {
-		Map<String, Boolean> emailEnabledList = new HashMap<String, Boolean>();
-		emailEnabledList.put("users", cfgSvc.getBoolSetting("notifications", "email_user_enable", true));
-		emailEnabledList.put("order", cfgSvc.getBoolSetting("notifications", "email_order_enable", true));
-		emailEnabledList.put("query", cfgSvc.getBoolSetting("notifications", "email_query_enable", true));
-		emailEnabledList.put("specimen_list", cfgSvc.getBoolSetting("notifications", "email_specimenlist_enable", true));
-		
-		return emailEnabledList;
-	}
+	}	
 }
