@@ -133,7 +133,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
-        <bean ref="extnPvLabelToken"/>
+        <ref bean="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
@@ -275,7 +275,7 @@
           <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
         </bean>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
-        <bean ref="extnPvLabelToken"/>
+        <ref bean="extnPvLabelToken"/>
       </list>
     </property>
   </bean>
