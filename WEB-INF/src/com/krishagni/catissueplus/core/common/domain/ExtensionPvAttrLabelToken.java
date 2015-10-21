@@ -18,6 +18,10 @@ public class ExtensionPvAttrLabelToken extends AbstractLabelTmplToken {
 		this.daoFactory = daoFactory;
 	}
 
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
 	@Override
 	public String getName() {
 		return "EXTN_PV";
