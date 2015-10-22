@@ -700,13 +700,14 @@
       "specimen_type": "Specimen Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
-      "specimens_cnt": "Specimens Distributed",
-      "specimens_req": "Specimens Required",
+      "specimens_dist": "Specimens Distributed",
+      "specimen_cnt": "Specimen Count",
       "target": "Target",
       "distributed": "Distributed",
-      "price": "Price",
-      "unit_price": "Price Per Unit",
-      "comments": "Comments"
+      "quantity_specimen": "Quantity Per Specimen",
+      "comments": "Comments",
+      "confirm_delete_req_title": "Deleting requirement confirmation",
+      "confirm_delete_req": "Are you sure you want to delete this requirement ?"
     }
   },
 

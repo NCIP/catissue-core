@@ -18,14 +18,11 @@
         <div class="col os-col-15">
           <span translate="dp.distribution_order.pathology_status">Pathology Status</span>
         </div>
-        <div class="col os-col-5">
+        <div class="col os-col-10">
           <span translate="dp.distribution_order.target">Target</span>
         </div>
         <div class="col os-col-10">
           <span translate="dp.distribution_order.distributed">Distributed</span>
-        </div>
-        <div class="col os-col-5">
-          <span translate="dp.distribution_order.price">Price</span>
         </div>
         <div class="col os-col-30">
           <span translate="dp.distribution_order.comments">Comments</span>
@@ -37,9 +34,8 @@
         <div class="col os-col-15">{{dpr.specimenType}}</div>
         <div class="col os-col-20">{{dpr.anatomicSite}}</div>
         <div class="col os-col-15">{{dpr.pathologyStatus}}</div>
-        <div class="col os-col-5">{{dpr.specimenRequired}}</div>
-        <div class="col os-col-10">{{dpr.specimenDistributed}}</div>
-        <div class="col os-col-5">{{dpr.price}}</div>
+        <div class="col os-col-10">{{input.targets[$index]}}</div>
+        <div class="col os-col-10">{{dpr.distributedQty}}</div>
         <div class="col os-col-25 os-ellipsis" title="{{dpr.comments}}">{{dpr.comments}}</div>
         <div class="col os-col-5">
           <div class="pull-right btn-group btn-group-xs">

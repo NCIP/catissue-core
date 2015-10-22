@@ -56,12 +56,12 @@
   </changeSet>
   
   <changeSet author="ckhilosiya" id="DP requirements table">
-    <createTable tableName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS">
+    <createTable tableName="OS_DP_REQUIREMENTS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false" />
       </column>
       
-      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+      <column name="DP_ID" type="${int.type}">
         <constraints nullable="false" />
       </column>
       
@@ -77,11 +77,11 @@
         <constraints nullable="false" />
       </column>
       
-      <column name="SPECIMEN_REQUIRED" type="${int.type}">
+      <column name="SPECIMEN_COUNT" type="${int.type}">
         <constraints nullable="false" />
       </column>
       
-      <column name="PRICE" type="${double.type}">
+      <column name="QUANTITY" type="${decimal.type}(24,8)">
         <constraints nullable="false" />
       </column>
       
@@ -97,7 +97,7 @@
   
   <changeSet author="ckhilosiya" id="DP requirements table sequence" dbms="oracle">
     <createSequence
-      sequenceName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS_SEQ"
+      sequenceName="OS_DP_REQUIREMENTS_SEQ"
       startValue="1"
       incrementBy="1"
       ordered="true" />
@@ -106,8 +106,8 @@
   <changeSet author="ckhilosiya" id="Add FK to distribution protocol in DP requirements table">
     <addForeignKeyConstraint
       constraintName="FK_OS_DP_REQ_DP_ID"
-      baseTableName="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS"
-      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      baseTableName="OS_DP_REQUIREMENTS"
+      baseColumnNames="DP_ID"
       referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>

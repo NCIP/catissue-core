@@ -44,9 +44,9 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 		
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			List<DistributionProtocolRequirement> result = getDprDao().getRequirements(req.getPayload());
+			List<DistributionProtocolRequirementDetail> result = getDprDao().getRequirements(req.getPayload());
 			
-			return ResponseEvent.response(DistributionProtocolRequirementDetail.from(result));
+			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -149,9 +149,10 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 					.dpId(newDpr.getDp().getId())
 					.specimenType(newDpr.getSpecimenType())
 					.anatomicSite(newDpr.getAnatomicSite())
-					.pathologyStatus(newDpr.getPathologyStatus());
+					.pathologyStatus(newDpr.getPathologyStatus())
+					.includeDistQty(false);
 	
-			List<DistributionProtocolRequirement> existing = getDprDao().getRequirements(crit);
+			List<DistributionProtocolRequirementDetail> existing = getDprDao().getRequirements(crit);
 			if (!CollectionUtils.isEmpty(existing)) {
 				ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_ALREADY_EXISTS);
 			}

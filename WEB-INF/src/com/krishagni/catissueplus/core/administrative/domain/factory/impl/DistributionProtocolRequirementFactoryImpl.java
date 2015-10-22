@@ -5,6 +5,8 @@ import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATO
 import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -39,8 +41,8 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		setSpecimenType(detail, dpr, ose);
 		setAnatomicSite(detail, dpr, ose);
 		setPathologyStatus(detail, dpr, ose);
-		setSpecimenRequired(detail, dpr, ose);
-		setPrice(detail, dpr, ose);
+		setSpecimenCount(detail, dpr, ose);
+		setQuantity(detail, dpr, ose);
 		setComments(detail, dpr, ose);
 		setActivityStatus(detail, dpr, ose);
 		
@@ -126,28 +128,28 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setPathologyStatus(pathologyStatus);
 	}
 	
-	private void setSpecimenRequired(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setSpecimenCount(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
 		
-		Long specimenRequired = detail.getSpecimenRequired();
-		if (specimenRequired == null) {
-			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_REQUESTED_REQUIRED);
+		Long specimenCount = detail.getSpecimenCount();
+		if (specimenCount == null) {
+			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_COUNT_REQUIRED);
 			return;
 		}
 		
-		dpr.setSpecimenRequired(specimenRequired);
+		dpr.setSpecimenCount(specimenCount);
 	}
 	
-	private void setPrice(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setQuantity(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
 		
-		Double price = detail.getPrice();
-		if (price == null) {
-			ose.addError(DistributionProtocolRequirementErrorCode.PRICE_REQUIRED);
+		BigDecimal quantity = detail.getQuantity();
+		if (quantity == null) {
+			ose.addError(DistributionProtocolRequirementErrorCode.QUANTITY_REQUIRED);
 			return;
 		}
 		
-		dpr.setPrice(price);
+		dpr.setQuantity(quantity);
 	}
 	
 	private void setComments(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,

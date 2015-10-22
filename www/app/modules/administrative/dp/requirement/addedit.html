@@ -31,20 +31,20 @@
     </div>
      
     <div class="form-group">
-      <label class="col-xs-3 control-label" translate="dp.distribution_order.specimens_req">Specimens Required</label>
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_cnt">Specimen Count</label>
       <div class="col-xs-6">
-        <input type="number" name="requirement" class="form-control" ng-model="dpr.specimenRequired" required
-          placeholder="{{'dp.distribution_order.specimens_req' | translate}}">
-        <div os-field-error field="dprForm.requirement"></div>
+        <input type="number" name="count" class="form-control" ng-model="dpr.specimenCount" required
+          placeholder="{{'dp.distribution_order.specimen_cnt' | translate}}">
+        <div os-field-error field="dprForm.count"></div>
       </div>
     </div>
     
     <div class="form-group">
-      <label class="col-xs-3 control-label" translate="dp.distribution_order.unit_price">Price Per Unit</label>
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.quantity_specimen">Quantity</label>
       <div class="col-xs-6">
-        <input type="number" name="price" class="form-control" ng-model="dpr.price" required
-          placeholder="{{'dp.distribution_order.unit_price' | translate}}">
-        <div os-field-error field="dprForm.price"></div>
+        <input type="number" name="quantity" class="form-control" ng-model="dpr.quantity" required
+          placeholder="{{'dp.distribution_order.quantity_specimen' | translate}}">
+        <div os-field-error field="dprForm.quantity"></div>
       </div>
     </div>
     

@@ -5,11 +5,11 @@
 
 <hibernate-mapping auto-import="false">
   <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement"
-      table="OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS">
+      table="OS_DP_REQUIREMENTS">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_DISTRIBUTION_PROTOCOL_REQUIREMENTS_SEQ</param>
+        <param name="sequence">OS_DP_REQUIREMENTS_SEQ</param>
       </generator>
     </id>
     
@@ -17,22 +17,46 @@
       name="dp"
       cascade="none"
       class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
-      column="DISTRIBUTION_PROTOCOL_ID" />
-      
+      column="DP_ID" />
+    
     <property name="specimenType" column="SPECIMEN_TYPE" />
     
     <property name="anatomicSite" column="ANATOMIC_SITE" />
     
     <property name="pathologyStatus" column="PATHOLOGY_STATUS" />
     
-    <property name="specimenRequired" column="SPECIMEN_REQUIRED" />
+    <property name="specimenCount" column="SPECIMEN_COUNT" />
     
-    <property name="price" column="PRICE" />
+    <property name="quantity" column="QUANTITY" />
     
     <property name="comments" column="COMMENTS" />
     
     <property name="activityStatus" column="ACTIVITY_STATUS" />
     
     <filter name="activeEntity" />
+    
+    <query name="getDistributionQty">
+      select
+        dpr.id, sum(i.quantity)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement dpr,
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem i
+      join
+        i.specimen s
+      where
+        dpr.dp.id = :dpId
+      and
+        i.order.distributionProtocol.id = :dpId
+      and
+        i.order.status = 'EXECUTED'
+      and
+        dpr.specimenType = s.specimenType
+      and
+        dpr.anatomicSite = s.tissueSite
+      and
+        dpr.pathologyStatus = s.pathologicalStatus
+      group by
+        s.specimenType, s.tissueSite, s.pathologicalStatus, dpr.id, i.quantity
+    </query>
   </class>
 </hibernate-mapping>

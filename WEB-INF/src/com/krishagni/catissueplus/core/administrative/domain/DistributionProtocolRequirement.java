@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.math.BigDecimal;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -12,9 +14,9 @@ public class DistributionProtocolRequirement extends BaseEntity{
 	
 	private String pathologyStatus;
 	
-	private Long specimenRequired;
+	private Long specimenCount;
 	
-	private Double price;
+	private BigDecimal quantity;
 	
 	private String comments;
 	
@@ -52,20 +54,20 @@ public class DistributionProtocolRequirement extends BaseEntity{
 		this.pathologyStatus = pathologyStatus;
 	}
 	
-	public Long getSpecimenRequired() {
-		return specimenRequired;
+	public Long getSpecimenCount() {
+		return specimenCount;
 	}
 	
-	public void setSpecimenRequired(Long specimenRequired) {
-		this.specimenRequired = specimenRequired;
+	public void setSpecimenCount(Long specimenCount) {
+		this.specimenCount = specimenCount;
 	}
 	
-	public Double getPrice() {
-		return price;
+	public BigDecimal getQuantity() {
+		return quantity;
 	}
 	
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setQuantity(BigDecimal quantity) {
+		this.quantity = quantity;
 	}
 	
 	public String getComments() {
@@ -89,8 +91,8 @@ public class DistributionProtocolRequirement extends BaseEntity{
 		setSpecimenType(dpr.getSpecimenType());
 		setAnatomicSite(dpr.getAnatomicSite());
 		setPathologyStatus(dpr.getPathologyStatus());
-		setSpecimenRequired(dpr.getSpecimenRequired());
-		setPrice(dpr.getPrice());
+		setSpecimenCount(dpr.getSpecimenCount());
+		setQuantity(dpr.getQuantity());
 		setComments(dpr.getComments());
 		setActivityStatus(dpr.getActivityStatus());
 	}

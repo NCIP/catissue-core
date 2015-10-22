@@ -13,6 +13,8 @@ public class DistributionProtocolRequirementListCriteria
 	
 	private String pathologyStatus;
 	
+	private boolean includeDistQty;
+	
 	@Override
 	public DistributionProtocolRequirementListCriteria self() {
 		return this;
@@ -51,6 +53,15 @@ public class DistributionProtocolRequirementListCriteria
 	
 	public DistributionProtocolRequirementListCriteria pathologyStatus(String pathologyStatus) {
 		this.pathologyStatus = pathologyStatus;
+		return self();
+	}
+	
+	public boolean includeDistQty() {
+		return includeDistQty;
+	}
+	
+	public DistributionProtocolRequirementListCriteria includeDistQty(boolean includeDistQty) {
+		this.includeDistQty = includeDistQty;
 		return self();
 	}
 }

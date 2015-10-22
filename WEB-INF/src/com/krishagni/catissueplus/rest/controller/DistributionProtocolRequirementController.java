@@ -34,19 +34,23 @@ public class DistributionProtocolRequirementController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<DistributionProtocolRequirementDetail> getAllRequirements(
-			@RequestParam(value = "dpId", required = false)
+			@RequestParam(value = "dpId", required = true)
 			Long dpId,
 			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
 			@RequestParam(value = "maxResult", required = false, defaultValue = "50")
-			int maxResult) {
+			int maxResult,
+			
+			@RequestParam(value = "includeDistQty", required = false, defaultValue = "false")
+			boolean includeDistQty) {
 		
 		DistributionProtocolRequirementListCriteria crit = new DistributionProtocolRequirementListCriteria()
 			.dpId(dpId)
 			.startAt(startAt)
-			.maxResults(maxResult);
+			.maxResults(maxResult)
+			.includeDistQty(includeDistQty);
 		
 		ResponseEvent<List<DistributionProtocolRequirementDetail>> resp = dprSvc.getRequirements(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();

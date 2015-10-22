@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,9 +18,11 @@ public class DistributionProtocolRequirementDetail {
 	
 	private String pathologyStatus;
 	
-	private Long specimenRequired;
+	private Long specimenCount;
 	
-	private Double price;
+	private BigDecimal quantity;
+	
+	private BigDecimal distributedQty;
 	
 	private String comments;
 	
@@ -65,22 +68,30 @@ public class DistributionProtocolRequirementDetail {
 		this.pathologyStatus = pathologyStatus;
 	}
 
-	public Long getSpecimenRequired() {
-		return specimenRequired;
+	public Long getSpecimenCount() {
+		return specimenCount;
 	}
 
-	public void setSpecimenRequired(Long specimenRequired) {
-		this.specimenRequired = specimenRequired;
+	public void setSpecimenCount(Long specimenCount) {
+		this.specimenCount = specimenCount;
 	}
-
-	public Double getPrice() {
-		return price;
+	
+	public BigDecimal getQuantity() {
+		return quantity;
 	}
-
-	public void setPrice(Double price) {
-		this.price = price;
+	
+	public void setQuantity(BigDecimal quantity) {
+		this.quantity = quantity;
 	}
-
+	
+	public BigDecimal getDistributedQty() {
+		return distributedQty;
+	}
+	
+	public void setDistributedQty(BigDecimal distributedQty) {
+		this.distributedQty = distributedQty;
+	}
+	
 	public String getComments() {
 		return comments;
 	}
@@ -105,8 +116,8 @@ public class DistributionProtocolRequirementDetail {
 		detail.setSpecimenType(dpr.getSpecimenType());
 		detail.setAnatomicSite(dpr.getAnatomicSite());
 		detail.setPathologyStatus(dpr.getPathologyStatus());
-		detail.setSpecimenRequired(dpr.getSpecimenRequired());
-		detail.setPrice(dpr.getPrice());
+		detail.setSpecimenCount(dpr.getSpecimenCount());
+		detail.setQuantity(dpr.getQuantity());
 		detail.setComments(dpr.getComments());
 		detail.setActivityStatus(dpr.getActivityStatus());
 		
