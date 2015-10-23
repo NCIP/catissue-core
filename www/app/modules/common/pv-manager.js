@@ -114,8 +114,10 @@ angular.module('openspecimen')
 
     function loadPvs(attr, srchTerm, transformFn, incOnlyLeaf) {
       var pvId = pvIdMap[attr];
-      if (!pvId) {
+      if (!pvId && pvMap[attr]) {
         return _getPvs(attr);
+      } else if (!pvId) {
+        pvId = attr;
       }
 
       var params = {
@@ -134,7 +136,7 @@ angular.module('openspecimen')
     function loadPvsByParent(parentAttr, parentVal, incParentVal, transformFn) {
       var pvId = pvIdMap[parentAttr];
       if (!pvId) {
-        return [];
+        pvId = parentAttr;
       }
 
       var params = {
