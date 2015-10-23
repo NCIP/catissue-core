@@ -20,7 +20,6 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class InstituteDaoImpl extends AbstractDao<Institute> implements InstituteDao {
 	
@@ -37,7 +36,7 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());
-				
+		
 		addSearchConditions(query, listCrit);
 		addProjectionFields(query);
 		
@@ -69,7 +68,6 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	public List<Institute> getInstituteByNames(List<String> names) {
 		return sessionFactory.getCurrentSession()
 				.createCriteria(Institute.class)
-				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 				.add(Restrictions.in("name", names))
 				.list();
 	}

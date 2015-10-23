@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.query.models'])
-  .controller('DpAddEditCtrl', function($scope, $state, distributionProtocol, DistributionProtocol, Institute, User,
-      SavedQuery, Site, $translate, $q) {
+  .controller('DpAddEditCtrl', function($scope, $state, $translate, $q, distributionProtocol,
+    DistributionProtocol, Institute, User, SavedQuery, Site) {
     
     var availableInstituteNames = [];
     var availableInstSites = {};
@@ -92,16 +92,12 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     function getSites(instituteName, isAddAll) {
       var sites = isAddAll ? [$scope.all_sites] : [];
       if (availableInstSites[instituteName] && availableInstSites[instituteName].length != 0) {
-        angular.forEach(availableInstSites[instituteName], function(site) {
-          sites.push(site);
-        });
+        Array.prototype.push.apply(sites, availableInstSites[instituteName]);
       } else {
         Site.listForInstitute(instituteName).then(
           function(result) {
             availableInstSites[instituteName] = result;
-            angular.forEach(result, function(site) {
-              sites.push(site);
-            });
+            Array.prototype.push.apply(sites, result);
           }
         );
       }

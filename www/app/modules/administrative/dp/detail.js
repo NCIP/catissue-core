@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, distributionProtocol, DeleteUtil, $modal, $translate) {
+  .controller('DpDetailCtrl', function($scope, $q, $modal, $translate, distributionProtocol, DeleteUtil) {
     $scope.distributionProtocol = distributionProtocol;
     $scope.distributingSites = '';
 
