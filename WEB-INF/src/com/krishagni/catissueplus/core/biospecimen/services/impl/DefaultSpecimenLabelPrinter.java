@@ -186,7 +186,7 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			}
 			
 			String[] ruleLineFields = ruleLine.split("\\s+");
-			if (ruleLineFields == null || ruleLineFields.length != 11) {
+			if (ruleLineFields == null || ruleLineFields.length != 12) {
 				logger.error("Invalid rule: " + ruleLine);
 				return null;
 			}
@@ -227,6 +227,11 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			rule.setLabelDesign(ruleLineFields[idx++]);
 			rule.setPrinterName(ruleLineFields[idx++]);
 			rule.setCmdFilesDir(ruleLineFields[idx++]);
+
+			if (!ruleLineFields[idx++].equals("*")) {
+				rule.setCmdFileFmt(ruleLineFields[idx - 1]);
+			}
+
 			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {

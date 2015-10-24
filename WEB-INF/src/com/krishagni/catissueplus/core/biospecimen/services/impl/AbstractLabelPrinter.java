@@ -46,15 +46,47 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 			String file = rule.getCmdFilesDir() + File.separator + jobItem.getItemLabel() + ".cmd";
 			writer = new PrintWriter(new FileWriter(file));
 
-			for (Map.Entry<String, String> item : dataItems.entrySet()) {
-				writer.println(String.format("%s=%s", item.getKey(), item.getValue()));
+			switch (rule.getCmdFileFmt()) {
+				case CSV:
+					writer.println(getCommaSeparatedValueFields(dataItems));
+					break;
+
+				case KEY_VALUE:
+					writer.println(getKeyValueFields(dataItems));
+					break;
 			}
 
-			jobItem.setStatus(Status.PRINTED);
+			jobItem.setStatus(Status.QUEUED);
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		} finally {
 			IOUtils.closeQuietly(writer);
 		}
+	}
+
+	private String getCommaSeparatedValueFields(Map<String, String> dataItems) {
+		StringBuilder content = new StringBuilder();
+		for (String dataItem : dataItems.values()) {
+			content.append("\"").append(dataItem).append("\",");
+		}
+
+		if (!dataItems.isEmpty()) {
+			content.deleteCharAt(content.length() - 1);
+		}
+
+		return content.toString();
+	}
+
+	private String getKeyValueFields(Map<String, String> dataItems) {
+		StringBuilder content = new StringBuilder();
+		for (Map.Entry<String, String> dataItem : dataItems.entrySet()) {
+			content.append(String.format("%s=%s\n", dataItem.getKey(), dataItem.getValue()));
+		}
+
+		if (!dataItems.isEmpty()) {
+			content.deleteCharAt(content.length() - 1);
+		}
+
+		return content.toString();
 	}
 }

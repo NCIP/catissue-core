@@ -98,8 +98,7 @@
   </changeSet>
   
   <changeSet author="vratnaparkhi" id="Migrate specimen order data">
-    <validCheckSum>7:62bf05142d54c8a90c7bb96ce1f9a991</validCheckSum>
-    <validCheckSum>7:69ac63e73e11e9d659765be351e9204e</validCheckSum>
+    <validCheckSum>7:4d45d8cf2e2a26cbc0b67bb970516827</validCheckSum>
     <sql>
       insert into os_orders (
         identifier, 
@@ -117,8 +116,8 @@
       select 
         distribution.identifier as identifier, 
         case
-          when orders.name is null then distribution.event_timestamp
-          else orders.name
+          when orders.name is null then concat('',distribution.event_timestamp)
+          else substr(orders.name, 1, 255)
         end as name,
         case
           when orders.requester_id is null then distribution.user_id
