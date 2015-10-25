@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.audit.repository.UserAuditLogDao;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
@@ -53,4 +54,6 @@ public interface DaoFactory {
 	public LabelPrintJobDao getLabelPrintJobDao();
 	
 	public SpecimenUnitDao getSpecimenUnitDao();
+	
+	public UserAuditLogDao getUserAuditLogDao();
 }

@@ -25,4 +25,14 @@
     </sql>
   </changeSet>
   
+  <changeSet author="vgaikwad" id="Auth module config settings: session expiry time interval in minutes">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'session_expire_time_intvl', 
+        'auth_session_expire_time_intvl', 'auth_session_expire_time_intvl', 
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

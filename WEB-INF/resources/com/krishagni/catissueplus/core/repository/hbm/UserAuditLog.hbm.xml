@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.audit.domain.UserAuditLog"
+    table="OS_USER_AUDIT_LOGS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_USER_AUDIT_LOGS_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="user" column="USER_ID" />
+    
+    <property name="url" column="URL" />
+    
+    <property name="method" column="METHOD" />
+    
+    <property name="responseCode" column="RESPONSE_CODE" />
+    
+    <property name="authToken" column="AUTH_TOKEN" />
+    
+    <property name="reqStartTime" column="REQ_START_TIME" />
+    
+    <property name="reqEndTime" column="REQ_END_TIME" />
+    
+    <query name="getUsersLastActivityTime">
+        select 
+          reqStartTime
+        from 
+          com.krishagni.catissueplus.core.audit.domain.UserAuditLog al 
+        where 
+          al.authToken = :authToken and
+          al.user.id = :userId
+        order by 
+          reqStartTime desc
+    </query>
+    
+  </class>  
+</hibernate-mapping>    

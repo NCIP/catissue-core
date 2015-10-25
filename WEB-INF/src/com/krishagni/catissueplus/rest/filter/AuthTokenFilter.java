@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.rest.filter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +25,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.audit.domain.UserAuditLog;
+import com.krishagni.catissueplus.core.audit.services.UserAuditLogService;
 import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 import com.krishagni.catissueplus.core.auth.events.TokenDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class AuthTokenFilter extends GenericFilterBean {
 	private static final String OS_AUTH_TOKEN_HDR = "X-OS-API-TOKEN";
@@ -41,6 +46,8 @@ public class AuthTokenFilter extends GenericFilterBean {
 	private UserAuthenticationService authService;
 	
 	private Map<String, List<String>> excludeUrls;
+	
+	private UserAuditLogService userAuditLogService;
 	
 	public UserAuthenticationService getAuthService() {
 		return authService;
@@ -56,6 +63,10 @@ public class AuthTokenFilter extends GenericFilterBean {
 
 	public void setExcludeUrls(Map<String, List<String>> excludeUrls) {
 		this.excludeUrls = excludeUrls;
+	}
+
+	public void setUserAuditLogService(UserAuditLogService userAuditLogService) {
+		this.userAuditLogService = userAuditLogService;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) 
@@ -123,8 +134,36 @@ public class AuthTokenFilter extends GenericFilterBean {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
 		token.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpReq));
 		SecurityContextHolder.getContext().setAuthentication(token);
+		Date reqStartTime = Calendar.getInstance().getTime();
 		chain.doFilter(req, resp);
 		SecurityContextHolder.clearContext();
+	
+		UserAuditLog userAuditLog = new UserAuditLog();
+		userAuditLog.setUser(userDetails);
+		userAuditLog.setUrl(httpReq.getRequestURI().toString());
+		userAuditLog.setMethod(httpReq.getMethod());
+		userAuditLog.setAuthToken(AuthUtil.decodeToken(authToken));
+		userAuditLog.setReqStartTime(reqStartTime);
+		userAuditLog.setReqEndTime(Calendar.getInstance().getTime());
+		userAuditLog.setResponseCode(getResponseCode(httpResp.getStatus()));
+		userAuditLogService.insertUserAuditLog(userAuditLog);
+	}
+	
+	private String getResponseCode(int responseStatus) {
+		switch (responseStatus / 100) {
+			case 2:
+				return "SUCCESS";
+		
+			case 4:
+				return "USER_ERROR";
+			
+			case 5: 
+				return "SERVER_ERROR";
+			
+			default:
+				return "UNKNOWN_ERROR";
+		}	
+		
 	}
 	
 	private User doBasicAuthentication(HttpServletRequest httpReq, HttpServletResponse httpResp) throws UnsupportedEncodingException {

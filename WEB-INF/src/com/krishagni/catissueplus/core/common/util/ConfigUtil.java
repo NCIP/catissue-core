@@ -55,4 +55,8 @@ public class ConfigUtil {
 	public Boolean getBoolSetting(String module, String name, Boolean defValue) {
 		return cfgSvc.getBoolSetting(module, name, defValue);
 	}
+	
+	public Integer getIntSetting(String module, String name, Integer defValue) {
+		return cfgSvc.getIntSetting(module, name, defValue);
+	}
 }

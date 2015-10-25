@@ -54,5 +54,75 @@
         and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
+  
+  <changeSet author="vgaikwad" id="User audit log table">
+    <createTable tableName="OS_USER_AUDIT_LOGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+     
+      <column name="URL" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="METHOD" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="RESPONSE_CODE" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="AUTH_TOKEN" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="REQ_START_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+     
+      <column name="REQ_END_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>  
+    
+  <changeSet author="vgaikwad" id="User audit logs table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_USER_AUDIT_LOGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on user of user audit log">
+    <addForeignKeyConstraint 
+      constraintName="FK_USER_AUDIT_LOGS_USER_ID"
+      baseTableName="OS_USER_AUDIT_LOGS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add index to user audit table on user identifier">
+    <createIndex indexName="OS_USER_AUDIT_USER_IDX" tableName="OS_USER_AUDIT_LOGS">
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add index to user audit table on auth token">
+    <createIndex indexName="OS_USER_AUDIT_AUTH_IDX" tableName="OS_USER_AUDIT_LOGS">
+      <column name="AUTH_TOKEN"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Drop expires on column from auth token table">
+    <dropColumn tableName="OS_AUTH_TOKENS" columnName="EXPIRES_ON"/>
+  </changeSet>
+  
 
 </databaseChangeLog>
