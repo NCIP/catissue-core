@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+    
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.audit.domain.UserApiCallLog"
+    table="OS_USER_API_CALLS_LOG">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_USER_API_CALLS_LOG_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="user" column="USER_ID" />
+    
+    <property name="url" column="URL" />
+    
+    <property name="method" column="METHOD" />
+    
+    <property name="responseCode" column="RESPONSE_CODE" />
+    
+    <property name="authToken" column="AUTH_TOKEN" />
+    
+    <property name="callStartTime" column="CALL_START_TIME" />
+    
+    <property name="callEndTime" column="CALL_END_TIME" />
+    
+    <query name="getLatestApiCallTime">
+      select 
+        max(callStartTime)
+      from 
+        com.krishagni.catissueplus.core.audit.domain.UserApiCallLog l
+      where 
+        l.user.id = :userId and l.authToken = :authToken   
+    </query>
+   
+  </class>  
+</hibernate-mapping>    

@@ -101,7 +101,16 @@
         'specimen_list_shared', 'specimen_list_shared_desc',
         'BOOLEAN', 'true'
       );
+    </sql>
+  </changeSet>
       
+  <changeSet author="vgaikwad" id="Auth module config setting: Token inactive interval in minutes">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'token_inactive_interval', 
+        'auth_token_inactive_interval', 'auth_token_inactive_interval', 
+        'INT', '60'
+      );
     </sql>
   </changeSet>
   

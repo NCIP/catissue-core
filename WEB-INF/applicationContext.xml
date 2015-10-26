@@ -234,9 +234,14 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="domainRegFactory" ref="domainFact"/>	
   </bean>
+  
+  <bean id="auditService" class="com.krishagni.catissueplus.core.audit.services.impl.AuditServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean> 
 
   <bean id="userAuthService" class="com.krishagni.catissueplus.core.auth.services.impl.UserAuthenticationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="auditService" ref="auditService"/>
   </bean>
 
   <bean id="specimenSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenServiceImpl">
@@ -424,6 +429,7 @@
   
   <bean id="authTokenFilter" class="com.krishagni.catissueplus.rest.filter.AuthTokenFilter">
     <property name="authService" ref="userAuthService"/>
+    <property name="auditService" ref="auditService"/>
     <property name="excludeUrls">
       <map>
         <entry key="POST">
