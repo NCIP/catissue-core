@@ -1300,7 +1300,7 @@
      "sender_comments": "Sender Comments",
      "details": "Order Details",
      "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
-     "enter_specimen_label": "Enter specimen labels separated by comma/tab/newline",
+     "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
      "report_gen_initiated": "Generating distribution order report...",
