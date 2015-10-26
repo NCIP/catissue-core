@@ -320,29 +320,29 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
-      function handlePooledSpmnsStatus(specimen) {
-        var poolHd = specimen.poolHd;
-        if (!poolHd) {
+      function handleSpecimensPoolStatus(specimen) {
+        var pooledSpmn = specimen.pooledSpecimen;
+        if (!pooledSpmn) {
           return;
         }
 
-        var allSameStatus = poolHd.pooledSpmns.every(
+        var allSameStatus = pooledSpmn.specimensPool.every(
           function(s) {
             return s.status == specimen.status;
           }
         );
 
-        if (allSameStatus|| poolHd.status == 'Missed Collection') {
-          poolHd.status = specimen.status;
-        } else if (specimen.status != 'Collected' && poolHd.status == 'Collected') {
-          var atLeastOneColl = poolHd.pooledSpmns.some(
+        if (allSameStatus|| pooledSpmn.status == 'Missed Collection') {
+          pooledSpmn.status = specimen.status;
+        } else if (specimen.status != 'Collected' && pooledSpmn.status == 'Collected') {
+          var atLeastOneColl = pooledSpmn.specimensPool.some(
             function(s) {
               return s.status == 'Collected';
             }
           );
 
           if (!atLeastOneColl) {
-            poolHd.status = specimen.status;
+            pooledSpmn.status = specimen.status;
           }
         }
       }  
@@ -358,7 +358,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           }
         }
         
-        handlePooledSpmnsStatus(specimen);
+        handleSpecimensPoolStatus(specimen);
 
         if (!specimen.expanded) {
           angular.forEach(specimen.aliquotGrp, function(sibling) {
@@ -379,7 +379,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
             function() {
               CollectSpecimensSvc.clear();
               $scope.back();
-            });
+            }
+          );
         } else {
           var visitToSave = angular.copy($scope.visit);
           visitToSave.status = 'Complete';
@@ -391,38 +392,47 @@ angular.module('os.biospecimen.participant.collect-specimens',
               var sd = CollectSpecimensSvc.getStateDetail();
               CollectSpecimensSvc.clear();
               $state.go(sd.state.name, angular.extend(sd.params, {visitId: visitId}));
-            });
+            }
+          );
         }
       };
 
       function descendentCount(specimen, onlySelected) {
         onlySelected = (onlySelected != false);
+
         var count = 0;
-        for (var i = 0; i < specimen.children.length; ++i) {
-          if (specimen.children[i].removed) {
-            continue;
-          }
-          if (!specimen.children[i].selected && onlySelected) {
-            continue;
+        angular.forEach(specimen.children, function(child) {
+          if (child.removed || (!child.selected && onlySelected)) {
+            return;
           }
 
-          count += 1+ descendentCount(specimen.children[i]);
-        }
+          count += 1 + descendentCount(child);
+        });
+
+        angular.forEach(specimen.specimensPool, function(poolSpmn) {
+          if (poolSpmn.removed || (!poolSpmn.selected && onlySelected)) {
+            return;
+          }
+
+          count += 1 + descendentCount(poolSpmn);
+        });
 
         return count;
       };
 
       function setDescendentStatus(specimen) {
-        if (specimen.pooledSpmns) {
-          for (var i = 0; i < specimen.pooledSpmns.length; ++i) {
-            specimen.pooledSpmns[i].status = specimen.status;
+        angular.forEach(specimen.specimensPool, 
+          function(poolSpmn) {
+            poolSpmn.status = specimen.status;
           }
-        }
+        );
 
-        for (var i = 0; i < specimen.children.length; ++i) {
-          specimen.children[i].status = specimen.status;
-          setDescendentStatus(specimen.children[i]);
-        }
+        angular.forEach(specimen.children,
+          function(child) {
+            child.status = specimen.status;
+            setDescendentStatus(child);
+          }
+        );
       };
 
       function areDuplicateLabelsPresent(input) {
@@ -440,36 +450,34 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       function getSpecimensToSave(cp, uiSpecimens, visited) {
         var result = [];
-        angular.forEach(uiSpecimens, function(uiSpecimen) {
-          if (visited.indexOf(uiSpecimen) >= 0 || // already visited
-              !uiSpecimen.selected || // not selected
-              (uiSpecimen.existingStatus == 'Collected' && 
+        angular.forEach(uiSpecimens, 
+          function(uiSpecimen) {
+            if (visited.indexOf(uiSpecimen) >= 0 || // already visited
+                !uiSpecimen.selected || // not selected
+                (uiSpecimen.existingStatus == 'Collected' && 
                 !uiSpecimen.closeAfterChildrenCreation)) { // collected and not close after children creation
-            return;
-          }
-
-          visited.push(uiSpecimen);
-
-          if ((cp.manualSpecLabelEnabled || !uiSpecimen.labelFmt) && !uiSpecimen.label) {
-            if (!uiSpecimen.grpLeader.expanded) {
-              //
-              // Specimen label is not specified when expected but aliquot group is
-              // in collapsed state. Therefore ignore the specimen or do not save
-              //
               return;
             }
+
+            visited.push(uiSpecimen);
+
+            if ((cp.manualSpecLabelEnabled || !uiSpecimen.labelFmt) && !uiSpecimen.label) {
+              if (!uiSpecimen.grpLeader.expanded) {
+                //
+                // Specimen label is not specified when expected but aliquot group is
+                // in collapsed state. Therefore ignore the specimen or do not save
+                //
+                return;
+              }
+            }
+
+            var specimen = getSpecimenToSave(uiSpecimen);
+            specimen.children = getSpecimensToSave(cp, uiSpecimen.children, visited);
+            specimen.specimensPool = getSpecimensToSave(cp, uiSpecimen.specimensPool, visited);
+            result.push(specimen);
+            return result;
           }
-
-
-          var specimen = getSpecimenToSave(uiSpecimen);
-          specimen.children = getSpecimensToSave(cp, uiSpecimen.children, visited);
-          if (uiSpecimen.pooledSpmns) {
-            specimen.pooledSpmns = getSpecimensToSave(cp, uiSpecimen.pooledSpmns, visited);
-          }
-
-          result.push(specimen);
-          return result;
-        });
+        );
 
         return result;
       };

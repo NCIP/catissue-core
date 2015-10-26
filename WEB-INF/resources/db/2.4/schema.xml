@@ -55,4 +55,15 @@
     </createView>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add a column to pool specimen requirements">
+    <addColumn tableName="catissue_cp_req_specimen">
+      <column name="pooled_spmn_req_id" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add a column to pool specimens">
+    <addColumn tableName="catissue_specimen">
+      <column name="pooled_specimen_id" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

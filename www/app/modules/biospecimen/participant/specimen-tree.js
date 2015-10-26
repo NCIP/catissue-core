@@ -54,10 +54,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
       return false;
     }
 
-    function isAnyChildOrPooledSpecimenSelected(specimen) {
-      if (!!specimen.pooledSpmns) {
-        for (var i = 0; i < specimen.pooledSpmns.length; ++i) {
-          if (specimen.pooledSpmns[i].selected) {
+    function isAnyChildOrPoolSpecimenSelected(specimen) {
+      if (!!specimen.specimensPool) {
+        for (var i = 0; i < specimen.specimensPool.length; ++i) {
+          if (specimen.specimensPool[i].selected) {
             return true;
           }
         }
@@ -72,7 +72,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           return true;
         }
 
-        if (isAnyChildOrPooledSpecimenSelected(specimen.children[i])) {
+        if (isAnyChildOrPoolSpecimenSelected(specimen.children[i])) {
           return true;
         }
       }
@@ -172,7 +172,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             if (specimen.selected) {
               specimen.isOpened = true;
               specimensToCollect.push(specimen);
-            } else if (isAnyChildOrPooledSpecimenSelected(specimen)) {
+            } else if (isAnyChildOrPoolSpecimenSelected(specimen)) {
               if (specimen.status != 'Collected') {
                 // a parent needs to be collected first
                 specimen.selected = true;

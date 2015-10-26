@@ -64,12 +64,12 @@
       <filter name="activeEntity"/>
     </set>
 
-    <many-to-one name="pooledSpecimensHead"
+    <many-to-one name="pooledSpecimen"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
-      column="POOLED_SPMN_HEAD_ID" />
+      column="POOLED_SPECIMEN_ID" />
 
-    <set name="pooledSpecimens" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
-      <key column="POOLED_SPMN_HEAD_ID"/>
+    <set name="specimensPool" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
+      <key column="POOLED_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
       <filter name="activeEntity"/>
     </set>

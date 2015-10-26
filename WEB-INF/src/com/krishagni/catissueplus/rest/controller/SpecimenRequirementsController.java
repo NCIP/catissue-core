@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.events.PooledSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -79,21 +79,21 @@ public class SpecimenRequirementsController {
 		return resp.getPayload();		
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value="/{id}/pooled-specimens")
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/specimen-pool")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenRequirementDetail> addPooledSpmns(
+	public List<SpecimenRequirementDetail> addSpecimenPoolReqs(
 			@PathVariable("id")
-			Long pooledSpmnHeadId,
+			Long pooledSpecimenReqId,
 
 			@RequestBody
-			List<SpecimenRequirementDetail> pooledSpmnReqs) {
+			List<SpecimenRequirementDetail> specimenPoolReqs) {
 
-		PooledSpecimensRequirement detail = new PooledSpecimensRequirement();
-		detail.setPooledSpmnHeadId(pooledSpmnHeadId);
-		detail.setPooledSpmnReqs(pooledSpmnReqs);
+		SpecimenPoolRequirements detail = new SpecimenPoolRequirements();
+		detail.setPooledSpecimenReqId(pooledSpecimenReqId);
+		detail.setSpecimenPoolReqs(specimenPoolReqs);
 
-		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.addPooledSpecimenReqs(getRequest(detail));
+		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.addSpecimenPoolReqs(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

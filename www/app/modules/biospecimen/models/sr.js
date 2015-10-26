@@ -5,8 +5,8 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       function(sr) {
         sr.copyAttrsIfNotPresent(getDefaultProps())
 
-        if (sr.pooledSpmns) {
-          sr.pooledSpmns = sr.pooledSpmns.map(
+        if (sr.specimensPool) {
+          sr.specimensPool = sr.specimensPool.map(
             function(ps) {
               return new Sr(ps);
             }
@@ -90,8 +90,8 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       );
     }
 
-    Sr.prototype.addPooledSpmns = function(poolSpmn) {
-      return $http.post(Sr.url() + this.$id() + '/pooled-specimens', poolSpmn)
+    Sr.prototype.addPoolSpecimens = function(poolSpmn) {
+      return $http.post(Sr.url() + this.$id() + '/specimen-pool', poolSpmn)
         .then(Sr.modelArrayRespTransform);
     }
 

@@ -78,14 +78,14 @@
     </set>
 
     <many-to-one
-      name="pooledSpecimensHead"
+      name="pooledSpecimenRequirement"
       class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"
       cascade="none"
       update="true"
-      column="POOLED_SPMN_HEAD_ID"/>
+      column="POOLED_SPMN_REQ_ID"/>
 
-    <set name="pooledSpecimenReqs" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all">
-      <key column="POOLED_SPMN_HEAD_ID"/>
+    <set name="specimenPoolReqs" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all">
+      <key column="POOLED_SPMN_REQ_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
       <filter name="activeEntity"/>
     </set>
@@ -117,4 +117,3 @@
     </query>
   </class>
 </hibernate-mapping>
-

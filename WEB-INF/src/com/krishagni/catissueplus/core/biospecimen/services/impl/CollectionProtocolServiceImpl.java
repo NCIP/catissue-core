@@ -35,7 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
-import com.krishagni.catissueplus.core.biospecimen.events.PooledSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
@@ -620,27 +620,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenRequirementDetail>> addPooledSpecimenReqs(RequestEvent<PooledSpecimensRequirement> req) {
+	public ResponseEvent<List<SpecimenRequirementDetail>> addSpecimenPoolReqs(RequestEvent<SpecimenPoolRequirements> req) {
 		try {
-			List<SpecimenRequirement> pooledSpmnReqs = srFactory.createPooledSpecimens(req.getPayload());
+			List<SpecimenRequirement> spmnPoolReqs = srFactory.createSpecimenPoolReqs(req.getPayload());
 
-			SpecimenRequirement head = pooledSpmnReqs.iterator().next().getPooledSpecimensHead();
-			AccessCtrlMgr.getInstance().ensureUpdateCpRights(head.getCollectionProtocol());
+			SpecimenRequirement pooledReq = spmnPoolReqs.iterator().next().getPooledSpecimenRequirement();
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(pooledReq.getCollectionProtocol());
 
-			CollectionProtocolEvent cpe = head.getCollectionProtocolEvent();
-			for (SpecimenRequirement pooledSpmn : pooledSpmnReqs) {
-				if (StringUtils.isBlank(pooledSpmn.getCode())) {
-					continue;
-				}
-
-				if (cpe.getSrByCode(pooledSpmn.getCode()) != null) {
-					throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, pooledSpmn.getCode());
+			CollectionProtocolEvent cpe = pooledReq.getCollectionProtocolEvent();
+			for (SpecimenRequirement spmnPoolReq : spmnPoolReqs) {
+				if (StringUtils.isNotBlank(spmnPoolReq.getCode()) && cpe.getSrByCode(spmnPoolReq.getCode()) != null) {
+					throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, spmnPoolReq.getCode());
 				}
 			}
 
-			head.addPooledRequirements(pooledSpmnReqs);
-			daoFactory.getSpecimenRequirementDao().saveOrUpdate(head, true);
-			return ResponseEvent.response(SpecimenRequirementDetail.from(pooledSpmnReqs));
+			pooledReq.addSpecimenPoolReqs(spmnPoolReqs);
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(pooledReq, true);
+			return ResponseEvent.response(SpecimenRequirementDetail.from(spmnPoolReqs));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

@@ -25,7 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.PooledSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
@@ -88,7 +88,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 
 		ose.checkAndThrow();
 
-		setPooledSpmns(detail, requirement, ose);
+		setSpecimenPoolReqs(detail, requirement, ose);
 		return requirement;
 	}
 
@@ -207,35 +207,33 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	@Override
-	public List<SpecimenRequirement> createPooledSpecimens(PooledSpecimensRequirement req) {
+	public List<SpecimenRequirement> createSpecimenPoolReqs(SpecimenPoolRequirements req) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
-		Long headId = req.getPooledSpmnHeadId();
-		if (headId == null) {
-			ose.addError(POOLED_SPMN_HEAD_REQ);
+		Long pooledSpmnReqId = req.getPooledSpecimenReqId();
+		if (pooledSpmnReqId == null) {
+			ose.addError(POOLED_SPMN_REQ);
 			throw ose;
 		}
 
-		SpecimenRequirement head = daoFactory.getSpecimenRequirementDao().getById(headId);
-		if (head == null) {
-			ose.addError(POOLED_SPMN_HEAD_NOT_FOUND, headId);
+		SpecimenRequirement pooledSpecimenReq = daoFactory.getSpecimenRequirementDao().getById(pooledSpmnReqId);
+		if (pooledSpecimenReq == null) {
+			ose.addError(POOLED_SPMN_REQ_NOT_FOUND, pooledSpmnReqId);
 			throw ose;
 		}
 
-		if (head.getParentSpecimenRequirement() != null || head.getPooledSpecimensHead() != null) {
-			ose.addError(INVALID_POOLED_SPMN_HEAD, headId);
+		if (pooledSpecimenReq.getParentSpecimenRequirement() != null || pooledSpecimenReq.getPooledSpecimenRequirement() != null) {
+			ose.addError(INVALID_POOLED_SPMN, pooledSpmnReqId);
 			throw ose;
 		}
 
-		List<SpecimenRequirement> pooledSpmnReqs = new ArrayList<SpecimenRequirement>();
-		for (SpecimenRequirementDetail detail : req.getPooledSpmnReqs()) {
-			SpecimenRequirement pooledSpmn = createPooledSpmn(head, detail, ose);
-			pooledSpmnReqs.add(pooledSpmn);
-
+		List<SpecimenRequirement> specimenPoolReqs = new ArrayList<SpecimenRequirement>();
+		for (SpecimenRequirementDetail detail : req.getSpecimenPoolReqs()) {
+			specimenPoolReqs.add(createSpecimenPoolReq(pooledSpecimenReq, detail, ose));
 			ose.checkAndThrow();
 		}
 
-		return pooledSpmnReqs;
+		return specimenPoolReqs;
 	}
 
 	private void setCode(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
@@ -387,29 +385,27 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		sr.setCollectionProtocolEvent(cpe);
 	}
 
-	private void setPooledSpmns(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		if (sr.getParentSpecimenRequirement() != null || sr.getPooledSpecimensHead() != null) {
+	private void setSpecimenPoolReqs(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (sr.getParentSpecimenRequirement() != null || sr.getPooledSpecimenRequirement() != null) {
 			return;
 		}
 
-		if (CollectionUtils.isEmpty(detail.getPooledSpmns())) {
+		if (CollectionUtils.isEmpty(detail.getSpecimensPool())) {
 			return;
 		}
 
-		for (SpecimenRequirementDetail pooledReqDetail : detail.getPooledSpmns()) {
-			SpecimenRequirement pooledSpmn = createPooledSpmn(sr, pooledReqDetail, ose);
-			sr.getPooledSpecimenReqs().add(pooledSpmn);
-
+		for (SpecimenRequirementDetail specimenPoolReqDetail : detail.getSpecimensPool()) {
+			sr.getSpecimenPoolReqs().add(createSpecimenPoolReq(sr, specimenPoolReqDetail, ose));
 			ose.checkAndThrow();
 		}
 	}
 
-	private SpecimenRequirement createPooledSpmn(SpecimenRequirement head, SpecimenRequirementDetail req, OpenSpecimenException ose) {
-		SpecimenRequirement pooledSpmn = head.copy();
-		setInitialQty(req, pooledSpmn, ose);
-		setCode(req, pooledSpmn, ose);
-		pooledSpmn.setPooledSpecimensHead(head);
-		return pooledSpmn;
+	private SpecimenRequirement createSpecimenPoolReq(SpecimenRequirement pooledSpmnReq, SpecimenRequirementDetail req, OpenSpecimenException ose) {
+		SpecimenRequirement specimenPoolReq = pooledSpmnReq.copy();
+		setInitialQty(req, specimenPoolReq, ose);
+		setCode(req, specimenPoolReq, ose);
+		specimenPoolReq.setPooledSpecimenRequirement(pooledSpmnReq);
+		return specimenPoolReq;
 	}
 		
 	private String ensureNotEmptyAndValid(String attr, String value, ErrorCode req, ErrorCode invalid, OpenSpecimenException ose) {

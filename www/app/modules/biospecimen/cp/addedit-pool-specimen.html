@@ -1,0 +1,38 @@
+<div>
+  <form name="poolSpmnForm" os-form-validator="poolSpmnForm" novalidate>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <div class="os-input-addon-grp">
+          <input name="quantity" ng-model="poolReq.initialQty" 
+            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
+            required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
+          <div class="os-input-addon-right">
+            <os-specimen-unit specimen-class="parentSr.specimenClass" type="parentSr.type">
+            </os-specimen-unit>
+          </div>
+          <div os-field-error field="poolSpmnForm.quantity"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3" ng-if="codingEnabled">
+      <div class="form-group">
+        <input name="code" ng-model="poolReq.code" os-md-input class="form-control" type="text"
+          placeholder="{{'srs.code' | translate}}">
+        <div os-field-error field="poolSpmnForm.code"></div>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="addToSpmnPool()" ng-if="!poolReq.id">
+          <span>Add</span>
+        </button>
+        <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!poolReq.id">
+          <span>Update</span>
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

@@ -134,7 +134,7 @@ public class CollectionProtocolEvent {
 		}
 		
 		for (SpecimenRequirement sr : getSpecimenRequirements()) {
-			if (sr.getParentSpecimenRequirement() == null && sr.getPooledSpecimensHead() == null) {
+			if (sr.getParentSpecimenRequirement() == null && sr.getPooledSpecimenRequirement() == null) {
 				anticipated.add(sr);
 			}
 		}
@@ -204,15 +204,18 @@ public class CollectionProtocolEvent {
 		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
 			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
 		}
-		
-		if (sr.getParentSpecimenRequirement() != null || sr.getPooledSpecimensHead() != null) {
-			return;
-		}
 
-		for (SpecimenRequirement pooledSpmn : sr.getPooledSpecimenReqs()) {
-			if (StringUtils.isNotBlank(pooledSpmn.getCode()) && getSrByCode(pooledSpmn.getCode()) != null) {
-				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, pooledSpmn.getCode());
-			}
-		}
+		//
+		// TODO: Suspicious code
+		//
+//		if (sr.getParentSpecimenRequirement() != null || sr.getPooledSpecimenRequirement() != null) {
+//			return;
+//		}
+//
+//		for (SpecimenRequirement pooledSpmn : sr.getSpecimenPoolReqs()) {
+//			if (StringUtils.isNotBlank(pooledSpmn.getCode()) && getSrByCode(pooledSpmn.getCode()) != null) {
+//				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, pooledSpmn.getCode());
+//			}
+//		}
 	}
 }

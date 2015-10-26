@@ -123,7 +123,7 @@
     "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
-    "code": "Short Code",
+    "code": "Code",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
     "date": "Date",
@@ -355,7 +355,7 @@
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels",
-      "new_visit": "New Visit",
+      "repeat_visit": "Repeat Visit",
       "missed_visit": "Missed Visit"
     },
 
@@ -403,7 +403,8 @@
     "qty": "Quantity",
     "aliquot": "Aliquot",
     "derived": "Derived",
-    "pooled": "Pooled",
+    "pool_specimen": "Pool Specimen",
+    "pooled_specimen": "Pooled Specimen",
     "from": "from",
     "collected_in": "collected in",
     "description": "Description",
@@ -527,10 +528,9 @@
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
     "new_sr": "New Specimen Requirement",
-    "create_pooled_spmn": "Are you creating pooled specimen?",
-
+    "create_pooled_spmn": "Creating pooled specimen?",
     "name": "Name",
-    "code": "Short Code",
+    "code": "Code",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",
@@ -556,8 +556,10 @@
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
+      "copy_sr": "Copy Requirement",
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives",
+      "create_pool_spmn": "Create Pool Specimen",
       "delete": "Delete Requirement"
     },
  

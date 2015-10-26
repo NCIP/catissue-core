@@ -417,7 +417,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				detail.setReceivedEvent(receivedEvent);
 			}
 
-			setCreatedOn(detail.getPooledSpmns(), createdOn);
+			setCreatedOn(detail.getSpecimensPool(), createdOn);
 		}
 
 		setCreatedOn(detail.getChildren(), createdOn);
@@ -565,28 +565,20 @@ public class SpecimenServiceImpl implements SpecimenService {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
 			}
 
-			specimen.getParentSpecimen().addSpecimen(specimen);
+			specimen.getParentSpecimen().addChildSpecimen(specimen);
 		} else {
 			specimen.checkQtyConstraints();
 			specimen.occupyPosition();
-			createPooledSpecimens(detail, specimen, ose);
+			createPoolSpecimens(detail, specimen, ose);
 		}
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-		specimen.addOrUpdateExtension();
-		addOrUpdateEvents(specimen);
+		specimen.addOrUpdateCollRecvEvents();
+		specimen.addOrUpdateExtension();		
 		return specimen;
 	}
 
-	private void addOrUpdateEvents(Specimen specimen) {
-		if (!specimen.isCollected()) {
-			return;
-		}
-		
-		specimen.addOrUpdateCollRecvEvents();
-	}
-	
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
 		List<Specimen> specimens = null;
 		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {
@@ -645,60 +637,63 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return specimen;
 	}
 
-	private void createPooledSpecimens(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+	private void createPoolSpecimens(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();
 		if (sr == null) {
+			//
+			// At present, specimen pool is available only for planned/anticipated requirements
+			//
 			return;
 		}
 
-		if (sr.isPooledSpmnsHead()) {
+		if (sr.isPooledSpecimenReq()) {
 			boolean atLeastOneColl = false;
-			if (CollectionUtils.isNotEmpty(detail.getPooledSpmns())) {
-				for (SpecimenDetail pooledSpmnDetail : detail.getPooledSpmns()) {
-					Specimen pooledSpmn = specimenFactory.createPooledSpecimen(pooledSpmnDetail, specimen);
-					specimen.getPooledSpecimens().add(pooledSpmn);
+			if (CollectionUtils.isNotEmpty(detail.getSpecimensPool())) {
+				for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
+					Specimen poolSpmn = specimenFactory.createPoolSpecimen(poolSpmnDetail, specimen);
+					poolSpmn.setLabelIfEmpty();
+					specimen.addPoolSpecimen(poolSpmn);
+					//addOrUpdateEvents(poolSpmn);
 
 					if (specimen.isMissed()) {
-						pooledSpmn.updateCollectionStatus(Specimen.MISSED_COLLECTION);
+						poolSpmn.updateCollectionStatus(Specimen.MISSED_COLLECTION);
 					} else if (specimen.isPending()) {
-						pooledSpmn.updateCollectionStatus(Specimen.PENDING);
+						poolSpmn.updateCollectionStatus(Specimen.PENDING);
 					}
 
-					if (pooledSpmn.isCollected()) {
+					if (poolSpmn.isCollected()) {
 						atLeastOneColl = true;
 					}
 				}
 			}
 
 			if (specimen.isCollected() && !atLeastOneColl) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN_COLLECTED, specimen.getLabel());
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOL_SPMN_COLLECTED);
 			}
 
 			if (specimen.isMissed()) {
-				Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(sr.getPooledSpecimenReqs());
-				for (Specimen pooledSpmn : specimen.getPooledSpecimens()) {
-					anticipated.remove(pooledSpmn.getSpecimenRequirement());
+				Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(sr.getSpecimenPoolReqs());
+				for (Specimen poolSpmn : specimen.getSpecimensPool()) {
+					anticipated.remove(poolSpmn.getSpecimenRequirement());
 				}
 
-				for (SpecimenRequirement pooledSr : anticipated) {
-					Specimen pooledSpmn = pooledSr.getSpecimen();
-					pooledSpmn.setVisit(specimen.getVisit());
-					pooledSpmn.setCollectionStatus(Specimen.MISSED_COLLECTION);
-					specimen.getPooledSpecimens().add(pooledSpmn);
+				for (SpecimenRequirement poolSpmnReq : anticipated) {
+					Specimen poolSpmn = poolSpmnReq.getSpecimen();
+					poolSpmn.setVisit(specimen.getVisit());
+					poolSpmn.setCollectionStatus(Specimen.MISSED_COLLECTION);
+					specimen.addPoolSpecimen(poolSpmn);
 				}
 			}
-		} else if (sr.isPooledSpecimen()) {
-			Specimen poolHd = specimen.getPooledSpecimensHead();
-			if (poolHd == null) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_SPMN_POOL_HD, specimen.getLabel());
+		} else if (sr.isSpecimenPoolReq()) {
+			Specimen pooledSpmn = specimen.getPooledSpecimen();
+			if (pooledSpmn == null) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN);
 			}
 
-			if (specimen.isCollected()) {
-				if (!poolHd.isCollected()) {
-					poolHd.updateCollectionStatus(Specimen.COLLECTED);
-					addOrUpdateEvents(poolHd);
-				}
-			} // TODO: if pending, missed
+			if (specimen.isCollected() && !pooledSpmn.isCollected()) {
+				throw OpenSpecimenException.userError(SpecimenErrorCode.POOLED_SPMN_NOT_COLLECTED);
+			}
+			// TODO: if pending, missed
 		}
 	}
 }

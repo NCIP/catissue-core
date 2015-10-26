@@ -9,5 +9,5 @@ public interface SpecimenFactory {
 	
 	public Specimen createSpecimen(Specimen existing, SpecimenDetail specimenDetail, Specimen parent);
 
-	public Specimen createPooledSpecimen(SpecimenDetail specimenDetail, Specimen poolHead);
+	public Specimen createPoolSpecimen(SpecimenDetail specimenDetail, Specimen pooledSpecimen);
 }

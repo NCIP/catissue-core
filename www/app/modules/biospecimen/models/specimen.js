@@ -3,10 +3,11 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     var Specimen = osModel(
       'specimens',
       function(specimen) {
-        if (specimen.pooledSpmns) {
-          specimen.pooledSpmns = specimen.pooledSpmns.map(
-            function(pooledSpmn) {
-              return new Specimen(pooledSpmn);
+        console.log(specimen);
+        if (specimen.specimensPool) {
+          specimen.specimensPool = specimen.specimensPool.map(
+            function(poolSpmn) {
+              return new Specimen(poolSpmn);
             }
           );
         }
@@ -33,7 +34,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Specimen.query({label: labels, dpId: dpId});
     }
 
-    Specimen.flatten = function(specimens, parent, depth, poolHd) {
+    Specimen.flatten = function(specimens, parent, depth, pooledSpecimen) {
       var result = [];
       if (!specimens) {
         return result;
@@ -44,19 +45,19 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
         result.push(specimen);
         specimen.depth = depth || 0;
 
-        specimen.parent = parent;
-        specimen.poolHd = poolHd;
+        specimen.parent = specimen.parent || parent;
+        specimen.pooledSpecimen = specimen.pooledSpecimen || pooledSpecimen;
 
-        var hasPooledSpmns = false;
+        var hasSpecimensPool = false;
         if (depth == 0) {
-          hasPooledSpmns = !!specimen.pooledSpmns && specimen.pooledSpmns.length > 0;
-          if (hasPooledSpmns) {
-            result = result.concat(Specimen.flatten(specimen.pooledSpmns, specimen, depth + 1, specimen));
+          hasSpecimensPool = !!specimen.specimensPool && specimen.specimensPool.length > 0;
+          if (hasSpecimensPool) {
+            result = result.concat(Specimen.flatten(specimen.specimensPool, specimen, depth + 1, specimen));
           }
         }
 
         var hasChildren = (!!specimen.children && specimen.children.length > 0);
-        specimen.hasChildren = hasPooledSpmns || hasChildren;
+        specimen.hasChildren = hasSpecimensPool || hasChildren;
         if (hasChildren) {
           result = result.concat(Specimen.flatten(specimen.children, specimen, depth +1));
         }
@@ -172,7 +173,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     };
 
     Specimen.prototype.$saveProps = function() {
-      var props = ['children', 'depth', 'hasChildren', 'isOpened'];
+      var props = ['children', 'depth', 'hasChildren', 'isOpened', 'specimensPool'];
       var that = this;
       props.forEach(function(prop) { delete that[prop]; });
       return this;

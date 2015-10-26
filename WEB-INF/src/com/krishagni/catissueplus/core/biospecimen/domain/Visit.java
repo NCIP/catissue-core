@@ -196,7 +196,7 @@ public class Visit extends BaseExtensionEntity {
 		}
 		
 		for (Specimen specimen : specimens) {
-			if (specimen.getParentSpecimen() == null && specimen.getPooledSpecimensHead() == null) {
+			if (specimen.getParentSpecimen() == null && specimen.getPooledSpecimen() == null) {
 				result.add(specimen);
 			}
 		}

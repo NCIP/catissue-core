@@ -21,7 +21,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.view = 'list_sr';
       $scope.sr = {};
       $scope.childReq = {};
-      $scope.pooledReq = {};
+      $scope.poolReq = {};
       $scope.errorCode = '';
     }
 
@@ -56,7 +56,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
           return result;
         }
 
-        result = findSr(srList[i].pooledSpmns, srId);
+        result = findSr(srList[i].specimensPool, srId);
         if (!!result) {
           return result;
         }
@@ -125,35 +125,37 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
     $scope.onCreatePooledSpmnsClick = function(createPooledSpmn) {
       if (createPooledSpmn) {
-        $scope.sr.pooledSpmns = [
+        $scope.sr.specimensPool = [
           new SpecimenRequirement({eventId: $scope.eventId})
         ];
       } else {
-        $scope.sr.pooledSpmns = undefined;
+        $scope.sr.specimensPool = undefined;
       }
     }
 
-    $scope.addPooledSpmn = function() {
-      $scope.sr.pooledSpmns.push(new SpecimenRequirement({eventId: $scope.eventId}));
+    $scope.addSpecimenPoolReq = function() {
+      $scope.sr.specimensPool.push(new SpecimenRequirement({eventId: $scope.eventId}));
     }
 
-    $scope.removePooledSpmn = function(pooledSpmn) {
-      var idx = $scope.sr.pooledSpmns.indexOf(pooledSpmn);
-      $scope.sr.pooledSpmns.splice(idx, 1);
-      if ($scope.sr.pooledSpmns.length == 0) {
-        $scope.addPooledSpmn();
+    $scope.removeSpecimenPoolReq = function(poolSpmn) {
+      var idx = $scope.sr.specimensPool.indexOf(poolSpmn);
+      $scope.sr.specimensPool.splice(idx, 1);
+      if ($scope.sr.specimensPool.length == 0) {
+        $scope.addSpecimenPoolReq();
       }
     }
 
     $scope.showEditSr = function(sr) {
+      var delAttrs = [
+        'depth', 'hasChildren', 'children', 'isOpened', 'parent',
+        'pooledSpecimen', 'specimensPool'
+      ];
+        
       $scope.specimensCount = 0;
       $scope.sr = angular.copy(sr);
-      delete $scope.sr.depth;
-      delete $scope.sr.hasChildren;
-      delete $scope.sr.children;
-      delete $scope.sr.isOpened;
-      delete $scope.sr.parent;
-      delete $scope.sr.poolHd;
+      angular.forEach(delAttrs, function(attr) {
+        delete $scope.sr[attr];
+      });
 
       if (sr.isAliquot()) {
         $scope.view = 'addedit_aliquot';
@@ -163,10 +165,10 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         $scope.view = 'addedit_derived';
         $scope.parentSr = sr.parent;
         $scope.childReq = $scope.sr;
-      } else if (!!sr.poolHd) {
+      } else if (!!sr.pooledSpecimen) {
         $scope.view = 'addedit_pool';
-        $scope.parentSr = sr.poolHd;
-        $scope.pooledReq.spmn = $scope.sr;
+        $scope.parentSr = sr.pooledSpecimen;
+        $scope.poolReq = $scope.sr;
       } else {
         $scope.view = 'addedit_sr';
       }
@@ -190,7 +192,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.view = 'list_sr';
       $scope.parentSr = null;
       $scope.childReq = {};
-      $scope.pooledReq = {};
+      $scope.poolReq= {};
       $scope.sr = {};
     };
 
@@ -282,10 +284,10 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       );
     };
 
-    $scope.showCreatePooledSpmn = function(sr) {
+    $scope.showCreatePoolSpecimen = function(sr) {
       $scope.parentSr = sr;
       $scope.view = 'addedit_pool';
-      $scope.pooledReq.spmn = new SpecimenRequirement({eventId: $scope.eventId});
+      $scope.poolReq = new SpecimenRequirement({eventId: $scope.eventId});
     };
 
     $scope.showEditPooledSpmn = function(sr) {
@@ -295,12 +297,12 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.addToSpmnPool = function() {
-      $scope.parentSr.addPooledSpmns([$scope.pooledReq.spmn]).then(
-        function(pooledSpmns) {
-          $scope.parentSr.pooledSpmns = $scope.parentSr.pooledSpmns.concat(pooledSpmns);
+      $scope.parentSr.addPoolSpecimens([$scope.poolReq]).then(
+        function(poolSpmns) {
+          $scope.parentSr.specimensPool = $scope.parentSr.specimensPool.concat(poolSpmns);
           $scope.parentSr.isOpened = true;
 
-          $scope.pooledReq = {};
+          $scope.poolReq = {};
           $scope.parentSr = undefined;
           $scope.view = 'list_sr';
           $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
@@ -317,8 +319,8 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       
       sr.copy().then(
         function(result) {
-          if (sr.poolHd) {
-            sr.poolHd.pooledSpmns.push(result);
+          if (sr.pooledSpecimen) {
+            sr.pooledSpecimen.specimensPool.push(result);
             $scope.specimenRequirements = Specimen.flatten(specimenRequirements);
           } else if (sr.parent) {
             addChildren(sr.parent, [result]);

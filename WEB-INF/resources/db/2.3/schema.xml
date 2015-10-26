@@ -9,18 +9,6 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext 
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet author="vpawar" id="Add a column to group pooled specimen requirements">
-    <addColumn tableName="catissue_cp_req_specimen">
-      <column name="pooled_spmn_head_id" type="${int.type}"/>
-    </addColumn>
-  </changeSet>
-
-  <changeSet author="vpawar" id="Add a column to group pooled specimens">
-    <addColumn tableName="catissue_specimen">
-      <column name="pooled_spmn_head_id" type="${int.type}"/>
-    </addColumn>
-  </changeSet>
-
   <changeSet author="ahegade" id="Modify concentration from double to big decimal in catissue_specimen table">
     <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="CONCENTRATION" newDataType="${decimal.type}(24,8)" />
   </changeSet>
