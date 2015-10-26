@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.common.service.impl;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -66,7 +65,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
-	
+
 	@Override
 	public void onConfigChange(String name, String value) {
 		initializeMailSender();		
@@ -245,5 +244,5 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private String getAppUrl() {
 		return cfgSvc.getStrSetting("common", "app_url");
-	}	
+	}
 }
