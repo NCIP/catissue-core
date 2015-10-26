@@ -13,7 +13,7 @@ public class AuthConfig {
 	
 	public static final String VERIFY_TOKEN_IP   = "verify_token_ip_address";
 	
-	public static final String SESSION_EXPIRE_TIME_INTERVAL = "session_expire_time_intvl";
+	public static final String TOKEN_EXPIRY_INTERVAL = "token_expiry_interval";
 	
 	private static AuthConfig instance = null;
 	
@@ -41,6 +41,6 @@ public class AuthConfig {
 	}
 	
 	public int getSessionExpiryTimeInterval() {
-		return cfgSvc.getIntSetting(MODULE, SESSION_EXPIRE_TIME_INTERVAL, 60);
+		return cfgSvc.getIntSetting(MODULE, TOKEN_EXPIRY_INTERVAL, 60);
 	}
 }

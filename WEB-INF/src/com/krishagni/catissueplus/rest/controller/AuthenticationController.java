@@ -40,6 +40,8 @@ public class AuthenticationController {
 	@ResponseBody
 	public Map<String, Object> authenticate(@RequestBody LoginDetail loginDetail) {
 		loginDetail.setIpAddress(httpReq.getRemoteAddr());
+		loginDetail.setApiUrl(httpReq.getRequestURI());
+		loginDetail.setRequestMethod(RequestMethod.POST.name());
 		RequestEvent<LoginDetail> req = new RequestEvent<LoginDetail>(loginDetail);
 		ResponseEvent<Map<String, Object>> resp = userAuthService.authenticateUser(req);
 		resp.throwErrorIfUnsuccessful();

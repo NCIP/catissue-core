@@ -19,5 +19,30 @@
     <query name="getByKey">
         from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.token = :token
     </query>
+    
+    <query name="deleteExpiredAuthTokens">
+      <![CDATA[
+        delete
+        from 
+          com.krishagni.catissueplus.core.auth.domain.AuthToken t
+        where 
+          t.token in (
+            select 
+              al1.authToken
+            from
+              com.krishagni.catissueplus.core.audit.domain.UserApiCallLog al1
+            where 
+              al1.authToken = t.token and 
+              ( 
+                select 
+                  max (al2.callStartTime)
+                from 
+                  com.krishagni.catissueplus.core.audit.domain.UserApiCallLog al2 
+                where
+                  al2.authToken = t.token ) < :accessedUpto        
+	      )
+	  ]]>
+    </query>
+         
   </class>
 </hibernate-mapping>

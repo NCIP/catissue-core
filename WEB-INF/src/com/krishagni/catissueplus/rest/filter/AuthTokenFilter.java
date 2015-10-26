@@ -25,8 +25,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.audit.domain.UserAuditLog;
-import com.krishagni.catissueplus.core.audit.services.UserAuditLogService;
+import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
+import com.krishagni.catissueplus.core.audit.services.AuditService;
 import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 import com.krishagni.catissueplus.core.auth.events.TokenDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
@@ -47,7 +47,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 	
 	private Map<String, List<String>> excludeUrls;
 	
-	private UserAuditLogService userAuditLogService;
+	private AuditService auditService;
 	
 	public UserAuthenticationService getAuthService() {
 		return authService;
@@ -65,8 +65,8 @@ public class AuthTokenFilter extends GenericFilterBean {
 		this.excludeUrls = excludeUrls;
 	}
 
-	public void setUserAuditLogService(UserAuditLogService userAuditLogService) {
-		this.userAuditLogService = userAuditLogService;
+	public void setAuditService(AuditService auditService) {
+		this.auditService = auditService;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) 
@@ -134,36 +134,19 @@ public class AuthTokenFilter extends GenericFilterBean {
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
 		token.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpReq));
 		SecurityContextHolder.getContext().setAuthentication(token);
-		Date reqStartTime = Calendar.getInstance().getTime();
+		Date callStartTime = Calendar.getInstance().getTime();
 		chain.doFilter(req, resp);
 		SecurityContextHolder.clearContext();
 	
-		UserAuditLog userAuditLog = new UserAuditLog();
+		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(userDetails);
 		userAuditLog.setUrl(httpReq.getRequestURI().toString());
 		userAuditLog.setMethod(httpReq.getMethod());
 		userAuditLog.setAuthToken(AuthUtil.decodeToken(authToken));
-		userAuditLog.setReqStartTime(reqStartTime);
-		userAuditLog.setReqEndTime(Calendar.getInstance().getTime());
-		userAuditLog.setResponseCode(getResponseCode(httpResp.getStatus()));
-		userAuditLogService.insertUserAuditLog(userAuditLog);
-	}
-	
-	private String getResponseCode(int responseStatus) {
-		switch (responseStatus / 100) {
-			case 2:
-				return "SUCCESS";
-		
-			case 4:
-				return "USER_ERROR";
-			
-			case 5: 
-				return "SERVER_ERROR";
-			
-			default:
-				return "UNKNOWN_ERROR";
-		}	
-		
+		userAuditLog.setCallStartTime(callStartTime);
+		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
+		userAuditLog.setResponseCode(Integer.toString(httpResp.getStatus()));
+		auditService.insertUserApiCallLog(userAuditLog);
 	}
 	
 	private User doBasicAuthentication(HttpServletRequest httpReq, HttpServletResponse httpResp) throws UnsupportedEncodingException {

@@ -5,12 +5,12 @@
     
 <hibernate-mapping auto-import="false">
   <class
-    name="com.krishagni.catissueplus.core.audit.domain.UserAuditLog"
-    table="OS_USER_AUDIT_LOGS">
+    name="com.krishagni.catissueplus.core.audit.domain.UserApiCallLog"
+    table="OS_USER_API_CALLS_LOG">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_USER_AUDIT_LOGS_SEQ</param>
+        <param name="sequence">OS_USER_API_CALLS_LOG_SEQ</param>
       </generator>
     </id>
     
@@ -24,21 +24,9 @@
     
     <property name="authToken" column="AUTH_TOKEN" />
     
-    <property name="reqStartTime" column="REQ_START_TIME" />
+    <property name="callStartTime" column="CALL_START_TIME" />
     
-    <property name="reqEndTime" column="REQ_END_TIME" />
-    
-    <query name="getUsersLastActivityTime">
-        select 
-          reqStartTime
-        from 
-          com.krishagni.catissueplus.core.audit.domain.UserAuditLog al 
-        where 
-          al.authToken = :authToken and
-          al.user.id = :userId
-        order by 
-          reqStartTime desc
-    </query>
-    
+    <property name="callEndTime" column="CALL_END_TIME" />
+   
   </class>  
 </hibernate-mapping>    

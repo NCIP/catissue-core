@@ -19,8 +19,8 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.ScheduledJ
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
-import com.krishagni.catissueplus.core.audit.repository.UserAuditLogDao;
-import com.krishagni.catissueplus.core.audit.repository.impl.UserAuditLogDaoImpl;
+import com.krishagni.catissueplus.core.audit.repository.AuditDao;
+import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.auth.repository.impl.AuthDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -196,8 +196,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 
 	@Override
-	public UserAuditLogDao getUserAuditLogDao() {
-		UserAuditLogDaoImpl dao = new UserAuditLogDaoImpl();
+	public AuditDao getAuditDao() {
+		AuditDaoImpl dao = new AuditDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

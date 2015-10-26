@@ -2,20 +2,20 @@
 package com.krishagni.catissueplus.core.auth.services.impl;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.audit.domain.UserAuditLog;
-import com.krishagni.catissueplus.core.audit.services.UserAuditLogService;
+import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
+import com.krishagni.catissueplus.core.audit.services.AuditService;
 import com.krishagni.catissueplus.core.auth.AuthConfig;
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthToken;
@@ -36,14 +36,14 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 	private DaoFactory daoFactory;
 	
-	private UserAuditLogService userAuditLogService;
+	private AuditService auditService;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
-	public void setUserAuditLogService(UserAuditLogService userAuditLogService) {
-		this.userAuditLogService = userAuditLogService;
+	public void setAuditService(AuditService auditService) {
+		this.auditService = auditService;
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				authToken.setLoginAuditLog(loginAuditLog);
 				daoFactory.getAuthDao().saveAuthToken(authToken);
 				
-				insertUserAuditLog(user, token);
+				insertUserAuditLog(loginDetail, user, token);
 				authDetail.put("token", AuthUtil.encodeToken(token));
 			}
 			
@@ -111,11 +111,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			}
 			
 			User user = authToken.getUser();
-			Date usersLastActivityTime = userAuditLogService.getUsersLastActivityTime(user.getId(), token);
-			long lastActivitySinceInMili = Calendar.getInstance().getTime().getTime() - usersLastActivityTime.getTime();
-			long lastActivitySinceInMin =  lastActivitySinceInMili / (60 * 1000) % 60;
+			long timeSinceLastApiCall = auditService.getTimeSinceLastApiCall(user.getId(), token);
 			int sessionExpiryTimeInterval = AuthConfig.getInstance().getSessionExpiryTimeInterval();
-			if (lastActivitySinceInMin > sessionExpiryTimeInterval) {
+			if (timeSinceLastApiCall > sessionExpiryTimeInterval) {
 				daoFactory.getAuthDao().deleteAuthToken(authToken);
 				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
 			}
@@ -148,9 +146,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@PlusTransactional
 	public ResponseEvent<String> removeToken(RequestEvent<String> req) {
 		String userToken = AuthUtil.decodeToken(req.getPayload());
-		String[] parts = userToken.split(":");
 		try {
-			AuthToken token = daoFactory.getAuthDao().getAuthTokenByKey(parts[0]);
+			AuthToken token = daoFactory.getAuthDao().getAuthTokenByKey(userToken);
 			LoginAuditLog loginAuditLog = token.getLoginAuditLog();
 			loginAuditLog.setLogoutTime(Calendar.getInstance().getTime());
 			
@@ -164,7 +161,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	@Scheduled(cron="0 0 12 ? * *")
 	@PlusTransactional
 	public void deleteExpiredTokens() {
-		daoFactory.getAuthDao().deleteExpiredAuthToken(Calendar.getInstance().getTime());
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -AuthConfig.getInstance().getSessionExpiryTimeInterval());
+		daoFactory.getAuthDao().deleteExpiredAuthToken(cal.getTime());
 	}
 	
 	private LoginAuditLog insertLoginAudit(User user, String ipAddress, boolean loginSuccessful) {
@@ -197,15 +196,15 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		user.setActivityStatus(Status.ACTIVITY_STATUS_LOCKED.getStatus());
 	}
 	
-	private void insertUserAuditLog(User user, String token) {
-		UserAuditLog userAuditLog = new UserAuditLog();
+	private void insertUserAuditLog(LoginDetail loginDetail, User user, String token) {
+		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(user);
-		userAuditLog.setUrl("/sessions");
-		userAuditLog.setMethod("POST");
+		userAuditLog.setUrl(loginDetail.getApiUrl());
+		userAuditLog.setMethod(loginDetail.getRequestMethod());
 		userAuditLog.setAuthToken(token);
-		userAuditLog.setResponseCode("SUCCESS");
-		userAuditLog.setReqStartTime(Calendar.getInstance().getTime());
-		userAuditLog.setReqEndTime(Calendar.getInstance().getTime());
-		userAuditLogService.insertUserAuditLog(userAuditLog);
+		userAuditLog.setResponseCode(Integer.toString(HttpStatus.OK.value()));
+		userAuditLog.setCallStartTime(Calendar.getInstance().getTime());
+		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
+		auditService.insertUserApiCallLog(userAuditLog);
 	}
 }

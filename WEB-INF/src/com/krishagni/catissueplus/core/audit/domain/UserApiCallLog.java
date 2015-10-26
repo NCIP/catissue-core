@@ -5,7 +5,7 @@ import java.util.Date;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
-public class UserAuditLog extends BaseEntity {
+public class UserApiCallLog extends BaseEntity {
 	private User user;
 	
 	private String url;
@@ -16,9 +16,9 @@ public class UserAuditLog extends BaseEntity {
 	
 	private String authToken;
 	
-	private Date reqStartTime;
+	private Date callStartTime;
 	
-	private Date reqEndTime;
+	private Date callEndTime;
 
 	public User getUser() {
 		return user;
@@ -60,19 +60,20 @@ public class UserAuditLog extends BaseEntity {
 		this.authToken = authToken;
 	}
 
-	public Date getReqStartTime() {
-		return reqStartTime;
+	public Date getCallStartTime() {
+		return callStartTime;
 	}
 
-	public void setReqStartTime(Date reqStartTime) {
-		this.reqStartTime = reqStartTime;
+	public void setCallStartTime(Date callStartTime) {
+		this.callStartTime = callStartTime;
 	}
 
-	public Date getReqEndTime() {
-		return reqEndTime;
+	public Date getCallEndTime() {
+		return callEndTime;
 	}
 
-	public void setReqEndTime(Date reqEndTime) {
-		this.reqEndTime = reqEndTime;
+	public void setCallEndTime(Date callEndTime) {
+		this.callEndTime = callEndTime;
 	}
+
 }
