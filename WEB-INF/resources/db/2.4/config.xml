@@ -25,4 +25,84 @@
     </sql>
   </changeSet>
   
+  <changeSet author="slakhani" id="Adding email notification module">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'notifications', 'Email notification service');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification config properties for objects in os">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_users_created',
+        'users_created', 'users_created_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_forgot_password_link',
+        'users_forgot_password_link', 'users_forgot_password_link_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_new_user_request',
+        'users_new_user_request', 'users_new_user_request_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_passwd_changed',
+        'users_passwd_changed', 'users_passwd_changed_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_request_rejected',
+        'users_request_rejected', 'users_request_rejected_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_role_updated',
+        'users_role_updated', 'users_role_updated_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_signed_up',
+        'users_signed_up', 'users_signed_up_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_order_distributed',
+        'order_distributed', 'order_distributed_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_query_export_data',
+        'query_export_data', 'query_export_data_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_query_share_query_folder',
+        'query_share_query_folder', 'query_share_query_folder_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_specimen_list_shared',
+        'specimen_list_shared', 'specimen_list_shared_desc',
+        'BOOLEAN', 'true'
+      );
+      
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>
