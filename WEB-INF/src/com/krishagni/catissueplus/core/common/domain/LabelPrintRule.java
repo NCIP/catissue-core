@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.common.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -11,11 +10,31 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class LabelPrintRule {
+	public enum CmdFileFmt {
+		CSV("csv"),
+		KEY_VALUE("key-value");
+
+		private String fmt;
+
+		private CmdFileFmt(String fmt) {
+			this.fmt = fmt;
+		}
+
+		public static CmdFileFmt get(String input) {
+			for (CmdFileFmt cfFmt : values()) {
+				if (cfFmt.fmt.equals(input)) {
+					return cfFmt;
+				}
+			}
+
+			return null;
+		}
+	};
+
 	private String labelType;
 	
 	private IpAddressMatcher ipAddressMatcher;
@@ -31,6 +50,8 @@ public class LabelPrintRule {
 	private List<LabelTmplToken> dataTokens = new ArrayList<LabelTmplToken>();
 	
 	private MessageSource messageSource;
+
+	private CmdFileFmt cmdFileFmt = CmdFileFmt.KEY_VALUE;
 
 	public String getLabelType() {
 		return labelType;
@@ -96,6 +117,21 @@ public class LabelPrintRule {
 		this.messageSource = messageSource;
 	}
 	
+	public CmdFileFmt getCmdFileFmt() {
+		return cmdFileFmt;
+	}
+
+	public void setCmdFileFmt(CmdFileFmt cmdFileFmt) {
+		this.cmdFileFmt = cmdFileFmt;
+	}
+
+	public void setCmdFileFmt(String fmt) {
+		this.cmdFileFmt = CmdFileFmt.get(fmt);
+		if (this.cmdFileFmt == null) {
+			throw new IllegalArgumentException("Invalid command file format: " + fmt);
+		}
+	}
+
 	public boolean isApplicableFor(User user, String ipAddr) {
 		if (!isWildCard(userLogin) && !user.getLoginName().equals(userLogin)) {
 			return false;

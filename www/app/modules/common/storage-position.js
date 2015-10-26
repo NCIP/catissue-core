@@ -129,10 +129,15 @@ angular.module('openspecimen')
             button.attr('ng-if', tAttrs.editWhen);
           }
 
-          tElem.find('button')
-            .addClass('btn-xs')         // make button smaller in size
-            .css('margin-top', '15px'); // ensure button is aligned with other text fields; 
-                                        // 15 px is used to display labels for os-md-input fields
+          //
+          // make button smaller in size
+          // ensure button is aligned with other text fields;
+          // 15 px is used to display labels for os-md-input fields
+          //
+          button.addClass('btn-xs');
+          if (!tAttrs.hasOwnProperty('hidePlaceholder')) {
+            button.css('margin-top', '15px');
+          }
         }
 
         if (tAttrs.hasOwnProperty('hidePlaceholder')) {

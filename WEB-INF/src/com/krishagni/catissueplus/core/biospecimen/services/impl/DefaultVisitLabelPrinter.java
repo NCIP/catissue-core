@@ -183,7 +183,7 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 			}
 			
 			String[] ruleLineFields = ruleLine.split("\\s+");
-			if (ruleLineFields == null || ruleLineFields.length != 9) {
+			if (ruleLineFields == null || ruleLineFields.length != 10) {
 				logger.error("Invalid rule: " + ruleLine);
 				return null;
 			}
@@ -222,6 +222,11 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 			rule.setLabelDesign(ruleLineFields[idx++]);
 			rule.setPrinterName(ruleLineFields[idx++]);
 			rule.setCmdFilesDir(ruleLineFields[idx++]);
+
+			if (!ruleLineFields[idx++].equals("*")) {
+				rule.setCmdFileFmt(ruleLineFields[idx - 1]);
+			}
+
 			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {
