@@ -146,7 +146,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		userAuditLog.setCallStartTime(callStartTime);
 		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
 		userAuditLog.setResponseCode(Integer.toString(httpResp.getStatus()));
-		auditService.insertUserApiCallLog(userAuditLog);
+		auditService.insertApiCallLog(userAuditLog);
 	}
 	
 	private User doBasicAuthentication(HttpServletRequest httpReq, HttpServletResponse httpResp) throws UnsupportedEncodingException {

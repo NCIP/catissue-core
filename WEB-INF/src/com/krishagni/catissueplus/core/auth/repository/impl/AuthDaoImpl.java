@@ -87,10 +87,10 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	}
 	
 	@Override
-	public void deleteExpiredAuthToken(Date accessedUpto) {
+	public void deleteInactiveAuthTokens(Date latestAccessTime) {
 		sessionFactory.getCurrentSession()
-			.getNamedQuery(DELETE_EXPIRED_AUTH_TOKENS)
-			.setTimestamp("accessedUpto", accessedUpto)
+			.getNamedQuery(DELETE_INACTIVE_AUTH_TOKENS)
+			.setTimestamp("latestCallTime", latestAccessTime)
 			.executeUpdate();
 	}
 	
@@ -109,7 +109,7 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	
 	private static final String GET_AUTH_TOKEN_BY_KEY = AuthToken.class.getName() + ".getByKey";
 	
-	private static final String DELETE_EXPIRED_AUTH_TOKENS = AuthToken.class.getName() + ".deleteExpiredAuthTokens";
+	private static final String DELETE_INACTIVE_AUTH_TOKENS = AuthToken.class.getName() + ".deleteInactiveAuthTokens";
 
 	private static final String GET_LOGIN_AUDIT_LOGS_BY_USER_ID = LoginAuditLog.class.getName() + ".getLogsByUserId";
 	

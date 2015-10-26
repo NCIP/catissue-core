@@ -83,7 +83,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				authToken.setLoginAuditLog(loginAuditLog);
 				daoFactory.getAuthDao().saveAuthToken(authToken);
 				
-				insertUserAuditLog(loginDetail, user, token);
+				insertApiCallLog(loginDetail, user, token);
 				authDetail.put("token", AuthUtil.encodeToken(token));
 			}
 			
@@ -112,8 +112,8 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 			
 			User user = authToken.getUser();
 			long timeSinceLastApiCall = auditService.getTimeSinceLastApiCall(user.getId(), token);
-			int sessionExpiryTimeInterval = AuthConfig.getInstance().getSessionExpiryTimeInterval();
-			if (timeSinceLastApiCall > sessionExpiryTimeInterval) {
+			int tokenInactiveInterval = AuthConfig.getInstance().getTokenInactiveIntervalInMinutes();
+			if (timeSinceLastApiCall > tokenInactiveInterval) {
 				daoFactory.getAuthDao().deleteAuthToken(authToken);
 				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
 			}
@@ -160,10 +160,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	
 	@Scheduled(cron="0 0 12 ? * *")
 	@PlusTransactional
-	public void deleteExpiredTokens() {
+	public void deleteInactiveAuthTokens() {
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MINUTE, -AuthConfig.getInstance().getSessionExpiryTimeInterval());
-		daoFactory.getAuthDao().deleteExpiredAuthToken(cal.getTime());
+		cal.add(Calendar.MINUTE, -AuthConfig.getInstance().getTokenInactiveIntervalInMinutes());
+		daoFactory.getAuthDao().deleteInactiveAuthTokens(cal.getTime());
 	}
 	
 	private LoginAuditLog insertLoginAudit(User user, String ipAddress, boolean loginSuccessful) {
@@ -196,7 +196,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		user.setActivityStatus(Status.ACTIVITY_STATUS_LOCKED.getStatus());
 	}
 	
-	private void insertUserAuditLog(LoginDetail loginDetail, User user, String token) {
+	private void insertApiCallLog(LoginDetail loginDetail, User user, String token) {
 		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(user);
 		userAuditLog.setUrl(loginDetail.getApiUrl());
@@ -205,6 +205,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		userAuditLog.setResponseCode(Integer.toString(HttpStatus.OK.value()));
 		userAuditLog.setCallStartTime(Calendar.getInstance().getTime());
 		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
-		auditService.insertUserApiCallLog(userAuditLog);
+		auditService.insertApiCallLog(userAuditLog);
 	}
 }

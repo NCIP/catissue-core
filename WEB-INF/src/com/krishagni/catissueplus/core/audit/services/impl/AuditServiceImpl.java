@@ -19,14 +19,14 @@ public class AuditServiceImpl implements AuditService {
 
 	@Override
 	@PlusTransactional
-	public void insertUserApiCallLog(UserApiCallLog userAuditLog) {
+	public void insertApiCallLog(UserApiCallLog userAuditLog) {
 		daoFactory.getAuditDao().saveOrUpdate(userAuditLog);
 	}
 
 	@Override
 	@PlusTransactional
 	public long getTimeSinceLastApiCall(Long userId, String token) {
-		Date lastApiCallTime = daoFactory.getAuditDao().getUserLastApiCallTime(userId, token);
+		Date lastApiCallTime = daoFactory.getAuditDao().getLatestApiCallTime(userId, token);
 		long timeSinceLastApiCallInMilli = Calendar.getInstance().getTime().getTime() - lastApiCallTime.getTime();
 		return TimeUnit.MILLISECONDS.toMinutes(timeSinceLastApiCallInMilli);
 	}

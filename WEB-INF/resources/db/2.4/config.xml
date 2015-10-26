@@ -25,11 +25,11 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Auth module config settings: session expiry time interval in minutes">
+  <changeSet author="vgaikwad" id="Auth module config setting: Token inactive interval in minutes">
     <sql>
       call add_cfg_prop(
-        'auth', 'token_expiry_interval', 
-        'auth_token_expiry_interval', 'auth_token_expiry_interval', 
+        'auth', 'token_inactive_interval', 
+        'auth_token_inactive_interval', 'auth_token_inactive_interval', 
         'INT', '60'
       );
     </sql>

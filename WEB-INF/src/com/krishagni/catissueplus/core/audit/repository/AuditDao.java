@@ -7,7 +7,7 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface AuditDao extends Dao<UserApiCallLog> {
 	
-	public Date getUserLastApiCallTime(Long userId, String token);
+	public Date getLatestApiCallTime(Long userId, String token);
 
 }
 

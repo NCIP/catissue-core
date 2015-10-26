@@ -13,7 +13,7 @@ public class AuthConfig {
 	
 	public static final String VERIFY_TOKEN_IP   = "verify_token_ip_address";
 	
-	public static final String TOKEN_EXPIRY_INTERVAL = "token_expiry_interval";
+	public static final String TOKEN_INACTIVE_INTERVAL = "token_inactive_interval";
 	
 	private static AuthConfig instance = null;
 	
@@ -40,7 +40,7 @@ public class AuthConfig {
 		return cfgSvc.getBoolSetting(MODULE, VERIFY_TOKEN_IP, false);
 	}
 	
-	public int getSessionExpiryTimeInterval() {
-		return cfgSvc.getIntSetting(MODULE, TOKEN_EXPIRY_INTERVAL, 60);
+	public int getTokenInactiveIntervalInMinutes() {
+		return cfgSvc.getIntSetting(MODULE, TOKEN_INACTIVE_INTERVAL, 60);
 	}
 }

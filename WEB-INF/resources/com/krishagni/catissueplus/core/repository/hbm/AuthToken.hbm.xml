@@ -20,29 +20,25 @@
         from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.token = :token
     </query>
     
-    <query name="deleteExpiredAuthTokens">
-      <![CDATA[
-        delete
+    <sql-query name="deleteInactiveAuthTokens">
+      <![CDATA[ 
+        delete 
         from 
-          com.krishagni.catissueplus.core.auth.domain.AuthToken t
-        where 
-          t.token in (
-            select 
-              al1.authToken
-            from
-              com.krishagni.catissueplus.core.audit.domain.UserApiCallLog al1
-            where 
-              al1.authToken = t.token and 
-              ( 
-                select 
-                  max (al2.callStartTime)
-                from 
-                  com.krishagni.catissueplus.core.audit.domain.UserApiCallLog al2 
-                where
-                  al2.authToken = t.token ) < :accessedUpto        
-	      )
-	  ]]>
-    </query>
+          os_auth_tokens 
+        where token in (
+          select
+            auth_token
+          from
+            os_user_api_calls_log l
+          where
+            l.auth_token = os_auth_tokens.token
+          group by
+            auth_token
+          having
+            max(call_start_time) < :latestCallTime
+        )
+      ]]>    
+    </sql-query>
          
   </class>
 </hibernate-mapping>

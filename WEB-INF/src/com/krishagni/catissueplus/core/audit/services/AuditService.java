@@ -4,9 +4,9 @@ import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
 
 public interface AuditService {
 	
-	// Internal API's
+	// Internal APIs
 	
-	public void insertUserApiCallLog(UserApiCallLog userAuditLog);
+	public void insertApiCallLog(UserApiCallLog userAuditLog);
 	
 	public long getTimeSinceLastApiCall(Long userId, String token);
 }

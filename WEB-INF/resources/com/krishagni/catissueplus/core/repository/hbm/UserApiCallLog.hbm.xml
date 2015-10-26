@@ -27,6 +27,15 @@
     <property name="callStartTime" column="CALL_START_TIME" />
     
     <property name="callEndTime" column="CALL_END_TIME" />
+    
+    <query name="getLatestApiCallTime">
+      select 
+        max(callStartTime)
+      from 
+        com.krishagni.catissueplus.core.audit.domain.UserApiCallLog l
+      where 
+        l.user.id = :userId and l.authToken = :authToken   
+    </query>
    
   </class>  
 </hibernate-mapping>    
