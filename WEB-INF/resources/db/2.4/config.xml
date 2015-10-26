@@ -38,67 +38,67 @@
     <sql>
       call add_cfg_prop(
         'notifications', 'email_users_created',
-        'noti_email_users_created', 'users_created_desc',
+        'users_created', 'users_created_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_forgot_password_link',
-        'noti_users_forgot_password_link', 'users_forgot_password_link_desc',
+        'users_forgot_password_link', 'users_forgot_password_link_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_new_user_request',
-        'noti_users_new_user_request', 'users_new_user_request_desc',
+        'users_new_user_request', 'users_new_user_request_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_passwd_changed',
-        'noti_users_passwd_changed', 'users_passwd_changed_desc',
+        'users_passwd_changed', 'users_passwd_changed_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_request_rejected',
-        'noti_users_request_rejected', 'users_request_rejected_desc',
+        'users_request_rejected', 'users_request_rejected_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_role_updated',
-        'noti_users_role_updated', 'users_role_updated_desc',
+        'users_role_updated', 'users_role_updated_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_users_signed_up',
-        'noti_users_signed_up', 'users_signed_up_desc',
+        'users_signed_up', 'users_signed_up_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_order_distributed',
-        'noti_order_distributed', 'order_distributed_desc',
+        'order_distributed', 'order_distributed_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_query_export_data',
-        'noti_query_export_data', 'query_export_data_desc',
+        'query_export_data', 'query_export_data_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_query_share_query_folder',
-        'noti_query_share_query_folder', 'query_share_query_folder_desc',
+        'query_share_query_folder', 'query_share_query_folder_desc',
         'BOOLEAN', 'true'
       );
       
       call add_cfg_prop(
         'notifications', 'email_specimen_list_shared',
-        'noti_specimen_list_shared', 'specimen_list_shared_desc',
+        'specimen_list_shared', 'specimen_list_shared_desc',
         'BOOLEAN', 'true'
       );
       
