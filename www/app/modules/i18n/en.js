@@ -72,6 +72,7 @@
       "more": "More",
       "next": "Next",
       "previous": "Previous",
+      "print": "Print",
       "ok": "Ok",
       "select": "Select",
       "unselect": "Unselect",
