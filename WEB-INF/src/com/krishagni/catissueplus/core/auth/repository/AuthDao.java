@@ -24,7 +24,7 @@ public interface AuthDao extends Dao<AuthDomain> {
 	
 	public void saveAuthToken(AuthToken token);
 	
-	public void deleteExpiredAuthToken(Date expiresOn);
+	public void deleteInactiveAuthTokens(Date expiresOn);
 	
 	public void deleteAuthToken(AuthToken token);
 	

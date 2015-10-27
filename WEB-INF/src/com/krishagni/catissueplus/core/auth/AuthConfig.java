@@ -13,6 +13,8 @@ public class AuthConfig {
 	
 	public static final String VERIFY_TOKEN_IP   = "verify_token_ip_address";
 	
+	public static final String TOKEN_INACTIVE_INTERVAL = "token_inactive_interval";
+	
 	private static AuthConfig instance = null;
 	
 	@Autowired
@@ -36,5 +38,9 @@ public class AuthConfig {
 	
 	public boolean isTokenIpVerified() {
 		return cfgSvc.getBoolSetting(MODULE, VERIFY_TOKEN_IP, false);
+	}
+	
+	public int getTokenInactiveIntervalInMinutes() {
+		return cfgSvc.getIntSetting(MODULE, TOKEN_INACTIVE_INTERVAL, 60);
 	}
 }

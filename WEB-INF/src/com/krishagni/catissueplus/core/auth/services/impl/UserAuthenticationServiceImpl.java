@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.hibernate.Hibernate;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.codec.Base64;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
+import com.krishagni.catissueplus.core.audit.services.AuditService;
 import com.krishagni.catissueplus.core.auth.AuthConfig;
 import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
 import com.krishagni.catissueplus.core.auth.domain.AuthToken;
@@ -28,13 +30,20 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
 	private DaoFactory daoFactory;
 	
+	private AuditService auditService;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+	
+	public void setAuditService(AuditService auditService) {
+		this.auditService = auditService;
 	}
 
 	@Override
@@ -66,20 +75,16 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
  
 			if (!loginDetail.isDoNotGenerateToken()) {
 				String token = UUID.randomUUID().toString();
-				Calendar cal = Calendar.getInstance();
-				cal.add(Calendar.HOUR, 8); // valid for 8 hrs
-
+				
 				AuthToken authToken = new AuthToken();
-				authToken.setExpiresOn(cal.getTime());
 				authToken.setIpAddress(loginDetail.getIpAddress());
 				authToken.setToken(token);
 				authToken.setUser(user);
 				authToken.setLoginAuditLog(loginAuditLog);
-
 				daoFactory.getAuthDao().saveAuthToken(authToken);
-
-				String userToken = token + ":" + cal.getTime().getTime();
-				authDetail.put("token", encodeToken(userToken));
+				
+				insertApiCallLog(loginDetail, user, token);
+				authDetail.put("token", AuthUtil.encodeToken(token));
 			}
 			
 			return ResponseEvent.response(authDetail);
@@ -98,24 +103,17 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	public ResponseEvent<User> validateToken(RequestEvent<TokenDetail> req) {
 		try {
 			TokenDetail tokenDetail = req.getPayload();
-			String userToken = decodeToken(tokenDetail.getToken());
-			String[] parts = userToken.split(":");
-			if (parts.length != 2) {
-				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_TOKEN);
-			}
+			String token = AuthUtil.decodeToken(tokenDetail.getToken());
 
-			long expiresOn = Long.parseLong(parts[1]);
-			if (expiresOn < System.currentTimeMillis()) {
-				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
-			}
-
-			String token = parts[0];
 			AuthToken authToken = daoFactory.getAuthDao().getAuthTokenByKey(token);
 			if (authToken == null) {
 				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_TOKEN);
 			}
-
-			if (authToken.getExpiresOn().getTime() < System.currentTimeMillis()) {
+			
+			User user = authToken.getUser();
+			long timeSinceLastApiCall = auditService.getTimeSinceLastApiCall(user.getId(), token);
+			int tokenInactiveInterval = AuthConfig.getInstance().getTokenInactiveIntervalInMinutes();
+			if (timeSinceLastApiCall > tokenInactiveInterval) {
 				daoFactory.getAuthDao().deleteAuthToken(authToken);
 				throw OpenSpecimenException.userError(AuthErrorCode.TOKEN_EXPIRED);
 			}
@@ -126,11 +124,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				}
 			}
 
-			User user = authToken.getUser();
 			if (!Hibernate.isInitialized(user)) {
 				Hibernate.initialize(user);
 			}
-
+			
 			return ResponseEvent.response(user);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -148,10 +145,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
 	@PlusTransactional
 	public ResponseEvent<String> removeToken(RequestEvent<String> req) {
-		String userToken = decodeToken(req.getPayload());
-		String[] parts = userToken.split(":");
+		String userToken = AuthUtil.decodeToken(req.getPayload());
 		try {
-			AuthToken token = daoFactory.getAuthDao().getAuthTokenByKey(parts[0]);
+			AuthToken token = daoFactory.getAuthDao().getAuthTokenByKey(userToken);
 			LoginAuditLog loginAuditLog = token.getLoginAuditLog();
 			loginAuditLog.setLogoutTime(Calendar.getInstance().getTime());
 			
@@ -164,8 +160,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	
 	@Scheduled(cron="0 0 12 ? * *")
 	@PlusTransactional
-	public void deleteExpiredTokens() {
-		daoFactory.getAuthDao().deleteExpiredAuthToken(Calendar.getInstance().getTime());
+	public void deleteInactiveAuthTokens() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -AuthConfig.getInstance().getTokenInactiveIntervalInMinutes());
+		daoFactory.getAuthDao().deleteInactiveAuthTokens(cal.getTime());
 	}
 	
 	private LoginAuditLog insertLoginAudit(User user, String ipAddress, boolean loginSuccessful) {
@@ -198,11 +196,15 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		user.setActivityStatus(Status.ACTIVITY_STATUS_LOCKED.getStatus());
 	}
 	
-	private String encodeToken(String token) {
-		return new String(Base64.encode(token.getBytes()));
-	}
-	
-	private String decodeToken(String token) {
-		return new String(Base64.decode(token.getBytes()));
+	private void insertApiCallLog(LoginDetail loginDetail, User user, String token) {
+		UserApiCallLog userAuditLog = new UserApiCallLog();
+		userAuditLog.setUser(user);
+		userAuditLog.setUrl(loginDetail.getApiUrl());
+		userAuditLog.setMethod(loginDetail.getRequestMethod());
+		userAuditLog.setAuthToken(token);
+		userAuditLog.setResponseCode(Integer.toString(HttpStatus.OK.value()));
+		userAuditLog.setCallStartTime(Calendar.getInstance().getTime());
+		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
+		auditService.insertApiCallLog(userAuditLog);
 	}
 }

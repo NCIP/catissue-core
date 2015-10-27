@@ -135,7 +135,7 @@
         placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab rows="2">
       </textarea>
       <span class="input-group-btn">
-        <button class="btn btn-primary" ng-click="addSpecimens()">
+        <button class="btn btn-primary" ng-click="addSpecimens()" ng-disabled="!input.labelText">
           <span translate="common.buttons.add">Add</span>
         </button>
       </span>

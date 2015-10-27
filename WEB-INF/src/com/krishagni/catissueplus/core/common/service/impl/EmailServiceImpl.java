@@ -65,7 +65,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
-	
+
 	@Override
 	public void onConfigChange(String name, String value) {
 		initializeMailSender();		
@@ -107,9 +107,14 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	}
 	
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {		
-		String adminEmailId = getAdminEmailId();
+	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {	
+		boolean emailEnabled = cfgSvc.getBoolSetting("notifications", "email_" + emailTmplKey, true);
+		if(!emailEnabled) {
+			return false;
+		}
 		
+		String adminEmailId = getAdminEmailId();
+
 		props.put("template", getTemplate(emailTmplKey));
 		props.put("footer", getFooterTmpl());
 		props.put("appUrl", getAppUrl());
@@ -118,14 +123,14 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		props.put("dateFmt", new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()));
 		String subject = getSubject(emailTmplKey, (String[]) props.get("$subject"));
 		String content = templateService.render(getBaseTmpl(), props);
-		
+			
 		Email email = new Email();
 		email.setSubject(subject);
 		email.setBody(content);
 		email.setToAddress(to);
 		email.setCcAddress(new String[] {adminEmailId});
 		email.setAttachments(attachments);
-		
+
 		return sendEmail(email);
 	}
 

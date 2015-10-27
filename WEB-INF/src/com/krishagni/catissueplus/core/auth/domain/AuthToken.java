@@ -1,15 +1,11 @@
 package com.krishagni.catissueplus.core.auth.domain;
 
-import java.util.Date;
-
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthToken {
 	private String token;
 	
 	private User user;
-	
-	private Date expiresOn;
 	
 	private String ipAddress;
 	
@@ -31,14 +27,6 @@ public class AuthToken {
 		this.user = user;
 	}
 
-	public Date getExpiresOn() {
-		return expiresOn;
-	}
-
-	public void setExpiresOn(Date expiresOn) {
-		this.expiresOn = expiresOn;
-	}
-
 	public String getIpAddress() {
 		return ipAddress;
 	}
@@ -54,5 +42,4 @@ public class AuthToken {
 	public void setLoginAuditLog(LoginAuditLog loginAuditLog) {
 		this.loginAuditLog = loginAuditLog;
 	}
-    
 }
