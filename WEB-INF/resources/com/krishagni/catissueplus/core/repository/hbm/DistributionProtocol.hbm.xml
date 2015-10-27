@@ -51,7 +51,7 @@
     
     <set name="distributingSites" inverse="true" cascade="all-delete-orphan">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
-      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite"/>
     </set>
     
     <filter name="activeEntity"/>

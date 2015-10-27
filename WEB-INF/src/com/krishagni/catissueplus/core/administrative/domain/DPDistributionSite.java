@@ -1,11 +1,17 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
-public class DistributionProtocolDistSite extends BaseEntity {
+public class DPDistributionSite extends BaseEntity {
 	private DistributionProtocol distributionProtocol;
 	
 	private Institute institute;
@@ -54,7 +60,7 @@ public class DistributionProtocolDistSite extends BaseEntity {
 			return false;
 		}
 		
-		DistributionProtocolDistSite other = (DistributionProtocolDistSite) obj;
+		DPDistributionSite other = (DPDistributionSite) obj;
 
 		if (ObjectUtils.notEqual(getDistributionProtocol(), other.getDistributionProtocol())) {
 			return false;
@@ -69,5 +75,24 @@ public class DistributionProtocolDistSite extends BaseEntity {
 		}
 		
 		return true;
+	}
+	
+	public static Map<String, List<String>> getInstituteSitesMap(Collection<DPDistributionSite> distSites) {
+		Map<String, List<String>> instSiteMap = new HashMap<String, List<String>>();
+		
+		for (DPDistributionSite distSite : distSites) {
+			String instituteName = distSite.getInstitute().getName();
+			List<String> siteNames = instSiteMap.get(instituteName);
+			if (siteNames == null) {
+				siteNames = new ArrayList<String>();
+				instSiteMap.put(instituteName, siteNames);
+			}
+			
+			if (distSite.getSite() != null) {
+				siteNames.add(distSite.getSite().getName());
+			}
+		}
+		
+		return instSiteMap;
 	}
 }

@@ -622,8 +622,8 @@ public class AccessCtrlMgr {
 			return null;
 		}
 		
-		return Utility.<Set<Long>>collect(getSites(Resource.ORDER,
-				new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
+		Set<Site> sites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		return Utility.<Set<Long>>collect(sites, "id", true);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -660,8 +660,9 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		if (CollectionUtils.intersection(getSites(Resource.ORDER, operation),
-				order.getDistributionProtocol().getAllDistributingSites()).isEmpty()) {
+		Set<Site> allowedSites = getSites(Resource.ORDER, operation);
+		Set<Site> distributingSites = order.getDistributionProtocol().getAllDistributingSites();
+		if (CollectionUtils.intersection(allowedSites, distributingSites).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}

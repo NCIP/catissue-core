@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -238,6 +239,14 @@ public class Utility {
 		}
 		
 		return age;
+	}
+	
+	public static boolean isEmpty(Map<?, ?> map) {
+		if (map == null) {
+			return true;
+		}
+		
+		return map.isEmpty();
 	}
 
 }

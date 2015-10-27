@@ -40,7 +40,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 				.add(Restrictions.ne("activityStatus", "Disabled"))
 				.addOrder(Order.asc("title"));
 
-		addSearchConditions(query, crit);		
+		addSearchConditions(query, crit);
 		return query.list();
 	}
 
@@ -96,14 +96,9 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
 		} else if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
 			query.createAlias("distributionProtocol", "dp")
-				.createAlias("dp.distributingSites", "distSites")
-				.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
-				.createAlias("distSites.institute", "distInst")
-				.createAlias("distInst.sites", "instSite")
-				.add(Restrictions.or(
-						Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", listCrit.siteIds())),
-						Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", listCrit.siteIds()))
-				));
+				.createAlias("dp.distributingSites", "distSites");
+			
+			addSitesCondition(query, listCrit.siteIds());
 		}
 		
 		addOrderStatProjections(query, listCrit);
@@ -167,15 +162,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			return;
 		}
 		
-		query.createAlias("distributingSites", "distSites")
-			.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
-			.createAlias("distSites.institute", "distInst")
-			.createAlias("distInst.sites", "instSite")
-			.add(Restrictions.or(
-				Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", crit.siteIds())),
-				Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", crit.siteIds()))
-			));
-		
+		query.createAlias("distributingSites", "distSites");
+		addSitesCondition(query, siteIds);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	}
 	
@@ -231,6 +219,16 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		}
 		
 		return stat;
+	}
+	
+	private void addSitesCondition(Criteria query, Set<Long> siteIds) {
+		query.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("distSites.institute", "distInst")
+			.createAlias("distInst.sites", "instSite")
+			.add(Restrictions.or(
+				Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", siteIds)),
+				Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", siteIds))
+			));
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();

@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite;
+import com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
@@ -89,7 +90,8 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
 		}
 		
-		setDistributingSites(detail, distributionProtocol);
+		Set<DPDistributionSite> distSites = distributionProtocol.getDistributingSites();
+		detail.setDistributingSites(DPDistributionSite.getInstituteSitesMap(distSites));
 		
 		return detail;
 	}
@@ -104,18 +106,4 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		return list;
 	}
 	
-	private static void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp) {
-		for (DistributionProtocolDistSite distSite : dp.getDistributingSites()) {
-			String instituteName = distSite.getInstitute().getName();
-			List<String> siteNames = detail.getDistributingSites().get(instituteName);
-			if (siteNames == null) {
-				siteNames = new ArrayList<String>();
-				detail.getDistributingSites().put(instituteName, siteNames);
-			}
-			
-			if (distSite.getSite() != null) {
-				siteNames.add(distSite.getSite().getName());
-			}
-		}
-	}
 }

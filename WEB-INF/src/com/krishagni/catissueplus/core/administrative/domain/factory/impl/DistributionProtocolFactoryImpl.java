@@ -11,7 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite;
+import com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
@@ -176,54 +177,56 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 	}
 		
 	private void setDistributingSites(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
-		if (CollectionUtils.isEmpty(detail.getDistributingSites().entrySet())) {
+		if (Utility.isEmpty(detail.getDistributingSites())) {
 			ose.addError(DistributionProtocolErrorCode.DISTRIBUTING_SITES_REQUIRED);
 			return;
 		}
 		
-		List<String> distSiteNames = new ArrayList<String>();
-		List<String> distInstituteNames = new ArrayList<String>();
+		List<String> siteNames = new ArrayList<String>();
+		List<String> instituteNames = new ArrayList<String>();
 		for (Map.Entry<String, List<String>> site : detail.getDistributingSites().entrySet()) {
 			if (CollectionUtils.isNotEmpty(site.getValue())) {
-				distSiteNames.addAll(site.getValue());
+				siteNames.addAll(site.getValue());
 			} else if (site.getKey() != null) {
-				distInstituteNames.add(site.getKey());
+				instituteNames.add(site.getKey());
 			}
 		}
 		
-		Set<DistributionProtocolDistSite> distSites = new HashSet<DistributionProtocolDistSite>();
+		Set<DPDistributionSite> distSites = new HashSet<DPDistributionSite>();
 		
-		if (CollectionUtils.isNotEmpty(distSiteNames)) {
-			List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(distSiteNames);
-			if (distributingSites.size() != distSiteNames.size()) {
+		if (CollectionUtils.isNotEmpty(siteNames)) {
+			List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(siteNames);
+			if (distributingSites.size() != siteNames.size()) {
 				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_SITES);
 				return;
 			}
 			
 			for (Site site : distributingSites) {
-				DistributionProtocolDistSite distSite = new DistributionProtocolDistSite();
-				distSite.setDistributionProtocol(dp);
-				distSite.setInstitute(site.getInstitute());
-				distSite.setSite(site);
-				distSites.add(distSite);
+				distSites.add(makeDistributingSite(dp, site.getInstitute(), site));
 			}
 		}
 		
-		if (CollectionUtils.isNotEmpty(distInstituteNames)) {
-			List<Institute> distInstitutes = daoFactory.getInstituteDao().getInstituteByNames(distInstituteNames);
-			if (distInstitutes.size() != distInstituteNames.size()) {
+		if (CollectionUtils.isNotEmpty(instituteNames)) {
+			List<Institute> distInstitutes = daoFactory.getInstituteDao().getInstituteByNames(instituteNames);
+			if (distInstitutes.size() != instituteNames.size()) {
 				ose.addError(DistributionProtocolErrorCode.INVALID_DISTRIBUTING_INSTITUTE);
 				return;
 			}
 			
 			for (Institute inst : distInstitutes) {
-				DistributionProtocolDistSite distSite = new DistributionProtocolDistSite();
-				distSite.setDistributionProtocol(dp);
-				distSite.setInstitute(inst);
-				distSites.add(distSite);
+				distSites.add(makeDistributingSite(dp, inst, null));
 			}
 		}
 		
 		dp.setDistributingSites(distSites);
+	}
+	
+	private DPDistributionSite makeDistributingSite(DistributionProtocol dp, Institute inst, Site site) {
+		DPDistributionSite distSite = new DPDistributionSite();
+		distSite.setDistributionProtocol(dp);
+		distSite.setInstitute(inst);
+		distSite.setSite(site);
+		
+		return distSite;
 	}
 }

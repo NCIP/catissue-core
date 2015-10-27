@@ -4,12 +4,12 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolDistSite"
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite"
     table="OS_DISTRIBUTION_PROTOCOL_SITES">
     
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_DISTRI_PROTO_DIST_SITE_SEQ</param>
+        <param name="sequence">OS_DP_DIST_SITE_SEQ</param>
       </generator>
     </id>
     

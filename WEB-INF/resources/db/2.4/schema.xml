@@ -74,7 +74,7 @@
   
   <changeSet author="ckhilosiya" id="DP sites table sequence" dbms="oracle">
     <createSequence
-      sequenceName="OS_DISTRI_PROTO_DIST_SITE_SEQ"
+      sequenceName="OS_DP_DIST_SITE_SEQ"
       startValue="1"
       incrementBy="1"
       ordered="true" />
@@ -82,7 +82,7 @@
   
   <changeSet author="ckhilosiya" id="Update identifier with generated values from sequence in DP sites table" dbms="oracle">
     <sql>
-      update OS_DISTRIBUTION_PROTOCOL_SITES set IDENTIFIER = OS_DISTRI_PROTO_DIST_SITE_SEQ.nextval;
+      update OS_DISTRIBUTION_PROTOCOL_SITES set IDENTIFIER = OS_DP_DIST_SITE_SEQ.nextval;
     </sql>
   </changeSet>
   
@@ -102,10 +102,7 @@
     <sql>
       update
         OS_DISTRIBUTION_PROTOCOL_SITES dist
-      join
-        CATISSUE_SITE site
-      on
-        dist.SITE_ID = site.IDENTIFIER
+        join CATISSUE_SITE site on dist.SITE_ID = site.IDENTIFIER
       set
         dist.INSTITUTE_ID = site.INSTITUTE_ID
     </sql>
@@ -113,14 +110,14 @@
   
   <changeSet author="ckhilosiya" id="Update the institute_id according to site institutes in DP sites table" dbms="oracle">
     <sql>
-      merge into
-        OS_DISTRIBUTION_PROTOCOL_SITES dist
-      using
-        (select IDENTIFIER, INSTITUTE_ID from CATISSUE_SITE) site
-      on
-        (dist.SITE_ID = site.IDENTIFIER)
-      when matched then update set
-        dist.INSTITUTE_ID = site.INSTITUTE_ID
+      merge into OS_DISTRIBUTION_PROTOCOL_SITES dist using (
+        select
+          IDENTIFIER, INSTITUTE_ID
+        from
+          CATISSUE_SITE
+      ) site on (dist.SITE_ID = site.IDENTIFIER)
+      when matched then
+        update set dist.INSTITUTE_ID = site.INSTITUTE_ID
     </sql>
   </changeSet>
   

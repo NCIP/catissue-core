@@ -66,9 +66,8 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Institute> getInstituteByNames(List<String> names) {
-		return sessionFactory.getCurrentSession()
-				.createCriteria(Institute.class)
-				.add(Restrictions.in("name", names))
+		return sessionFactory.getCurrentSession().getNamedQuery(GET_INSTITUTES_BY_NAMES)
+				.setParameterList("names", names)
 				.list();
 	}
 	
@@ -143,6 +142,8 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	private static final String INSTITUTE_FQN = Institute.class.getName();
 	
 	private static final String DEPARTMENT_FQN = Department.class.getName();
+	
+	private static final String GET_INSTITUTES_BY_NAMES = INSTITUTE_FQN + ".getInstitutesByNames";
 	
 	private static final String GET_INSTITUTE_STATS = INSTITUTE_FQN + ".getInstituteStats";
 	
