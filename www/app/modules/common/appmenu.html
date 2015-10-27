@@ -92,7 +92,9 @@
           <li show-if-allowed="scheduledJobReadOpts">
             <a ui-sref="job-list" translate="menu.jobs">Jobs</a>
           </li>
-          <!-- li><a href="#" translate="menu.settings">Settings</a></li -->
+          <li show-if-admin>
+            <a ui-sref="configuration" translate="menu.settings">Settings</a>
+          </li>
         </ul>
       </div>
       <div>

@@ -2,16 +2,17 @@ package com.krishagni.catissueplus.core.common.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
+import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
 
-public class ConfigSettingDetail {
+public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 	private String module;
 	
 	private String name;
@@ -82,6 +83,11 @@ public class ConfigSettingDetail {
 		this.descCode = descCode;
 	}
 	
+	@Override
+	public int compareTo(ConfigSettingDetail o) {
+		return module.compareTo(o.module);
+	}
+	
 	public static ConfigSettingDetail from(ConfigSetting setting) {
 		ConfigSettingDetail result = new ConfigSettingDetail();
 		
@@ -105,6 +111,7 @@ public class ConfigSettingDetail {
 			result.add(from(cs));
 		}
 		
+		Collections.sort(result);
 		return result;
 	}
 }

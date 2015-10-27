@@ -1418,5 +1418,68 @@
       "subject": "Subject",
       "feedback": "Feedback",
       "success_message": "Feedback sent successfully"
+    },
+    
+    "configuration": {
+      "title": "Configuration",
+      "category": "Category",
+      "name": "Name",
+      "value": "Value",
+      
+      "modules" : {
+        "auth": "Authentication",
+        "biospecimen": "Biospecimen",
+        "common": "Common",
+        "email": "Email",
+        "notifications": "Notifications"
+      },
+      
+      "props" : {
+        "email_account_id": "Email account id",
+        "email_account_password": "Email account password",
+        "email_server_host": "Email server host",
+        "email_server_port": "Email server port",
+        "email_starttls_enabled": "Email starttls enabled",
+        "email_auth_enabled": "Email authentication enabled",
+        "email_admin_email_id": "Email admin id",
+        "common_app_url": "Application url",
+        "common_locale": "Locale",
+        "participant_consent_dir": "Participant consent directory",
+        "spr_deidentifier": "Spr de-identification",
+        "spr_dir": "SPR directory",
+        "participant_uid_pattern": "Participant uid pattern",
+        "participant_uid_validator": "Participant uid validator",
+        "mpi_pattern": "Mpi pattern",
+        "mpi_validator": "Mpi validator",
+        "specimen_label_printer": "Specimen label printer",
+        "specimen_label_print_rules": "Specimen label print rules",
+        "visit_label_printer": "Visit label printer",
+        "visit_label_print_rules": "Visit label print rules",
+        "common_welcome_video_source": "Welcome video source",
+        "common_welcome_video_url": "Welcome video url",
+        "specimen_type_abbr_map": "Specimen type abbreviation map",
+        "common_data_dir": "Common data directory",
+        "auth_allowed_failed_logins": "Allowed failed login attempts",
+        "auth_verify_token_ip_addr": "Verify token IP address",
+        "spmn_path_status_abbr_map": "Specimen path status abbreviation map",
+        "cp_coding_enabled": "Cp codding enabled",
+        "mpi_format": "Mpi format",
+        "mpi_generator": "Mpi generator",
+        "uid_mandatory": "UID mandatory",
+        "common_feedback_enabled": "Feedback enabled",
+        "common_support_email": "Feedbck support email",
+        "mrn_restriction_enabled": "Mrn restriction enabled",
+        "users_created": "User created notification enabled",
+        "users_forgot_password_link": "Forgot password link notification enabled",
+        "users_new_user_request": "New user request notification enabled",
+        "users_passwd_changed": "User password changes notification enabled",
+        "users_request_rejected": "User's request rejected notification enabled",
+        "users_role_updated": "User's role updated notification enabled",
+        "users_signed_up": "User signup notification enabled",
+        "order_distributed": "Order distributed notification enabled",
+        "query_export_data": "Query data export notification enabled",
+        "query_share_query_folder": "Query folder shared notification enabled",
+        "specimen_list_shared": "Specimen list shared notification enabled"
+      }
     }
 }

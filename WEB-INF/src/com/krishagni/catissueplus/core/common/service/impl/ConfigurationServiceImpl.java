@@ -63,7 +63,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@PlusTransactional
 	public ResponseEvent<List<ConfigSettingDetail>> getSettings(RequestEvent<String> req) {
 		String module = req.getPayload();
-		Map<String, ConfigSetting> moduleSettings = configSettings.get(module);
+		Map<String, ConfigSetting> moduleSettings = new HashMap<String, ConfigSetting>();
+		if(StringUtils.isBlank(module)) {
+			for (String moduleName : configSettings.keySet()) {
+				for (Map.Entry<String, ConfigSetting> item: configSettings.get(moduleName).entrySet()) {
+					moduleSettings.put(item.getKey(), item.getValue());
+				}
+			}
+		} else {
+			moduleSettings = configSettings.get(module);
+		}
+		
 		if (moduleSettings == null) {
 			moduleSettings = Collections.emptyMap();
 		}
