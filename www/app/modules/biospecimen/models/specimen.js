@@ -192,10 +192,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;
+      sr.poolSpecimen = !!sr.pooledSpecimenReqId;
 
-      var attrs = ['id', 'name',
-                   'collector', 'collectionProcedure', 'collectionContainer', 
-                   'receiver'];
+      var attrs = [
+        'id', 'name', 'pooledSpecimenReqId',
+        'collector', 'collectionProcedure', 'collectionContainer',
+        'receiver'
+      ];
+
       attrs.forEach(function(attr) {
         delete sr[attr];
       });

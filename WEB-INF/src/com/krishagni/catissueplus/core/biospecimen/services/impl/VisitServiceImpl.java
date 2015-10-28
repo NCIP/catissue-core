@@ -471,6 +471,7 @@ public class VisitServiceImpl implements VisitService {
 		
 		for (SpecimenDetail specimen : specimens) {
 			specimen.setVisitId(visitId);
+			setVisitId(visitId, specimen.getSpecimensPool());
 			setVisitId(visitId, specimen.getChildren());
 		}
 	}

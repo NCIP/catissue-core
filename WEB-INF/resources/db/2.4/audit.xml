@@ -10,25 +10,25 @@
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet author="vpawar" id="Column to identify pooled specimen requirement">
-    <addColumn tableName="catissue_cp_req_specimen_aud">
-      <column name="pooled_spmn_req_id" type="${int.type}"/>
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="POOLED_SPMN_REQ_ID" type="${int.type}"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="vpawar" id="Track changes in pooled specimen requirement">
-    <addColumn tableName="catissue_cp_req_specimen_aud">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
       <column name="pooledSpecimenRequirement_MOD" type="${boolean.type}"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="vpawar" id="Column to identify pooled specimen">
-    <addColumn tableName="catissue_specimen_aud">
-      <column name="pooled_specimen_id" type="${int.type}"/>
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="POOLED_SPECIMEN_ID" type="${int.type}"/>
     </addColumn>
   </changeSet>
 
   <changeSet author="vpawar" id="Track changes in pooled specimen">
-    <addColumn tableName="catissue_specimen_aud">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
       <column name="pooledSpecimen_MOD" type="${boolean.type}"/>
     </addColumn>
   </changeSet>

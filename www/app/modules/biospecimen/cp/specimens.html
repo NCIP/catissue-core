@@ -27,7 +27,7 @@
           ng-class="{
             'os-inplace-form-edit-po': (!childReq.id && parentSr == sr && !poolReq.id) || 
                                        (childReq.id == sr.id || poolReq.id == sr.id),
-            'os-pooled-specimen': !!sr.pooledSpecimen}" 
+            'os-pool-specimen': !!sr.pooledSpecimen}"
           ng-repeat="sr in specimenRequirements | openedTreeNodes">
           <div class="row title">
             <div class="col col-xs-6 os-ellipsis">

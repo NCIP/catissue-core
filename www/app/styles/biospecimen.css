@@ -269,11 +269,11 @@
   font-weight: normal;
 }
 
-.os-pooled-specimen {
+.os-pool-specimen {
   background: #ebf2f9;
 }
 
-.os-inplace-form-edit-po.os-pooled-specimen {
+.os-inplace-form-edit-po.os-pool-specimen {
   background: transparent;
 }
 

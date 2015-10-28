@@ -64,7 +64,7 @@
       <div class="os-table-body">
         <div ng-class="{
           'os-inplace-form-edit-po': parentSpecimen == specimen,
-          'os-pooled-specimen': !!specimen.pooledSpecimen}"
+          'os-pool-specimen': !!specimen.pooledSpecimen}"
           ng-repeat="specimen in specimens | openedTreeNodes">
           <div class="row title" ng-class="{'selected': specimen.selected}">
             <div class="col col-xs-5">

@@ -54,6 +54,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	
 	private List<SpecimenRequirementDetail> children;
 
+	private Long pooledSpecimenReqId;
+
 	private List<SpecimenRequirementDetail> specimensPool;
 
 	public Long getId() {
@@ -216,6 +218,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		this.children = children;
 	}
 
+	public Long getPooledSpecimenReqId() {
+		return pooledSpecimenReqId;
+	}
+
+	public void setPooledSpecimenReqId(Long pooledSpecimenReqId) {
+		this.pooledSpecimenReqId = pooledSpecimenReqId;
+	}
+
 	public List<SpecimenRequirementDetail> getSpecimensPool() {
 		return specimensPool;
 	}
@@ -298,7 +308,12 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 			detail.setChildren(from(sr.getChildSpecimenRequirements()));
 		}
 		
-		detail.setSpecimensPool(from(sr.getOrderedSpecimenPoolReqs()));
+		if (sr.getPooledSpecimenRequirement() != null) {
+			detail.setPooledSpecimenReqId(sr.getPooledSpecimenRequirement().getId());
+		} else {
+			detail.setSpecimensPool(from(sr.getOrderedSpecimenPoolReqs()));
+		}
+
 		return detail;
 	}
 	
