@@ -50,7 +50,8 @@
           </tr>
         </thead>
         <tbody class="os-table-body">
-          <tr class="row" ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
+          <tr class="row" ng-class="{'os-pool-specimen': !!specimen.pooledSpecimen}"
+            ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
             <td class="col os-col-30">
               <div ng-style="{'padding-left': (specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16) + 'px'}">
                 <a ng-if="specimen.hasChildren && specimen.isOpened" 

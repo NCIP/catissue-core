@@ -32,10 +32,10 @@
   <include file="db/2.2/audit.xml"/>
 
   <include file="db/2.3/schema.xml"/>
-  <include file="db/2.3/seed-data.xml"/>
   <include file="db/2.3/config.xml"/>
+  <include file="db/2.3/seed-data.xml"/>
 
   <include file="db/2.4/schema.xml"/>
   <include file="db/2.4/config.xml"/>
-
+  <include file="db/2.4/audit.xml"/>
 </databaseChangeLog> 

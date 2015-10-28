@@ -124,4 +124,15 @@
     <dropColumn tableName="OS_AUTH_TOKENS" columnName="EXPIRES_ON"/>
   </changeSet>
 
+  <changeSet author="vpawar" id="Add a column to pool specimen requirements">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="POOLED_SPMN_REQ_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add a column to pool specimens">
+    <addColumn tableName="CATISSUE_SPECIMEN">
+      <column name="POOLED_SPECIMEN_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

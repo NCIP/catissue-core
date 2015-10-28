@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -20,9 +21,7 @@ import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 @Audited
-public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
-	private Long id;
-	
+public class SpecimenRequirement extends BaseEntity implements Comparable<SpecimenRequirement> {
 	private String name;
 	
 	private String code;
@@ -65,15 +64,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	
 	private Set<SpecimenRequirement> childSpecimenRequirements = new HashSet<SpecimenRequirement>();
 
+	private SpecimenRequirement pooledSpecimenRequirement;
+
+	private Set<SpecimenRequirement> specimenPoolReqs = new HashSet<SpecimenRequirement>();
+
 	private Set<Specimen> specimens = new HashSet<Specimen>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -257,6 +252,30 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 	}
 
 	@NotAudited
+	public SpecimenRequirement getPooledSpecimenRequirement() {
+		return pooledSpecimenRequirement;
+	}
+
+	public void setPooledSpecimenRequirement(SpecimenRequirement pooledSpecimenRequirement) {
+		this.pooledSpecimenRequirement = pooledSpecimenRequirement;
+	}
+
+	@NotAudited
+	public Set<SpecimenRequirement> getSpecimenPoolReqs() {
+		return specimenPoolReqs;
+	}
+
+	public void setSpecimenPoolReqs(Set<SpecimenRequirement> specimenPoolReqs) {
+		this.specimenPoolReqs = specimenPoolReqs;
+	}
+
+	public List<SpecimenRequirement> getOrderedSpecimenPoolReqs() {
+		List<SpecimenRequirement> pool = new ArrayList<SpecimenRequirement>(getSpecimenPoolReqs());
+		Collections.sort(pool);
+		return pool;
+	}
+
+	@NotAudited
 	public Set<Specimen> getSpecimens() {
 		return specimens;
 	}
@@ -277,8 +296,16 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		return getLineage().equals(Specimen.DERIVED);
 	}
 	
+	public boolean isPooledSpecimenReq() {
+		return CollectionUtils.isNotEmpty(getSpecimenPoolReqs());
+	}
+
+	public boolean isSpecimenPoolReq() {
+		return getPooledSpecimenRequirement() != null;
+	}
+
 	public void update(SpecimenRequirement sr) {
-		if (!isAliquot() && !isDerivative()) {
+		if (isPrimary() && !isSpecimenPoolReq()) {
 			updateRequirementAttrs(sr);
 		}
 
@@ -295,7 +322,7 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
 		
-		if (!isAliquot()) {
+		if (!isAliquot() && !isSpecimenPoolReq()) {
 			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType());
 		}
 
@@ -324,8 +351,8 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 				throw OpenSpecimenException.userError(SrErrorCode.INSUFFICIENT_QTY);
 			}
 		}
-				
-		return deepCopy(cpe, getParentSpecimenRequirement());
+		
+		return deepCopy(cpe, getParentSpecimenRequirement(), getPooledSpecimenRequirement());
 	}
 		
 	public void addChildRequirement(SpecimenRequirement childReq) {
@@ -339,6 +366,17 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 	}
 	
+	public void addSpecimenPoolReq(SpecimenRequirement spmnPoolReq) {
+		spmnPoolReq.setPooledSpecimenRequirement(this);
+		getSpecimenPoolReqs().add(spmnPoolReq);
+	}
+
+	public void addSpecimenPoolReqs(Collection<SpecimenRequirement> spmnPoolReqs) {
+		for (SpecimenRequirement req : spmnPoolReqs) {
+			addSpecimenPoolReq(req);
+		}
+	}
+
 	public BigDecimal getQtyAfterAliquotsUse() {
 		BigDecimal available = getInitialQuantity();
 		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
@@ -385,6 +423,10 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
 			childReq.delete();
 		}
+		
+		for (SpecimenRequirement poolReq : getSpecimenPoolReqs()) {
+			poolReq.delete();
+		}
 	}
 		
 	@Override
@@ -406,20 +448,35 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		}
 	}
 
-	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent) {
+	private SpecimenRequirement deepCopy(CollectionProtocolEvent cpe, SpecimenRequirement parent, SpecimenRequirement pooledReq) {
 		SpecimenRequirement result = copy();
 		result.setCollectionProtocolEvent(cpe);
 		result.setParentSpecimenRequirement(parent);
+		result.setPooledSpecimenRequirement(pooledReq);
 		
 		Set<SpecimenRequirement> childSrs = new HashSet<SpecimenRequirement>();
 		int order = 1;
 		for (SpecimenRequirement childSr : getOrderedChildRequirements()) {
-			SpecimenRequirement copiedSr = childSr.deepCopy(cpe, result);
+			SpecimenRequirement copiedSr = childSr.deepCopy(cpe, result, null);
 			copiedSr.setSortOrder(order++);
 			childSrs.add(copiedSr);
 		}
 		
 		result.setChildSpecimenRequirements(childSrs);
+
+		if (!Specimen.NEW.equals(getLineage())) {
+			return result;
+		}
+
+		order = 1;
+		Set<SpecimenRequirement> specimenPoolReqs = new HashSet<SpecimenRequirement>();
+		for (SpecimenRequirement specimenPoolReq : getSpecimenPoolReqs()) {
+			SpecimenRequirement copiedSr = specimenPoolReq.deepCopy(cpe, null, result);			
+			copiedSr.setSortOrder(order++);
+			specimenPoolReqs.add(copiedSr);
+		}
+
+		result.setSpecimenPoolReqs(specimenPoolReqs);
 		return result;
 	}
 	
@@ -434,7 +491,11 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		
 		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
 			childSr.updateRequirementAttrs(sr);
-		}		
+		}
+		
+		for (SpecimenRequirement poolSr : getSpecimenPoolReqs()) {
+			poolSr.updateRequirementAttrs(sr);
+		}
 	}
 	
 	private void update(BigDecimal concentration, String specimenClass, String specimenType) {
@@ -446,6 +507,10 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 				childSr.update(concentration, specimenClass, specimenType);
 			}
 		}
+		
+		for (SpecimenRequirement poolSr : getSpecimenPoolReqs()) {
+			poolSr.update(concentration, specimenClass, specimenType);
+		}
 	}
 
 	private static final String[] EXCLUDE_COPY_PROPS = {
@@ -454,6 +519,8 @@ public class SpecimenRequirement implements Comparable<SpecimenRequirement>{
 		"code",
 		"parentSpecimenRequirement",
 		"childSpecimenRequirements",
+		"pooledSpecimenRequirement",
+		"specimenPoolReqs",
 		"specimens"		
 	};
 }

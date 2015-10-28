@@ -64,15 +64,14 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
+	public Specimen getSpecimenByVisitAndSr(Long visitId, Long srId) {
+		return getByVisitAndSrId(GET_BY_VISIT_AND_SR, visitId, srId);
+	}
+
 	@Override
 	public Specimen getParentSpecimenByVisitAndSr(Long visitId, Long srId) {
-		List<Specimen> specimens = sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_PARENT_BY_VISIT_AND_SR)
-			.setLong("visitId", visitId)
-			.setLong("srId", srId)
-			.list();
-		return specimens.isEmpty() ? null : specimens.iterator().next();
+		return getByVisitAndSrId(GET_PARENT_BY_VISIT_AND_SR, visitId, srId);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -221,10 +220,23 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		query.add(cpSitesCond);
 	}
+
+	@SuppressWarnings("unchecked")
+	private Specimen getByVisitAndSrId(String hql, Long visitId, Long srId) {
+		List<Specimen> specimens = sessionFactory.getCurrentSession()
+				.getNamedQuery(hql)
+				.setLong("visitId", visitId)
+				.setLong("srId", srId)
+				.list();
+		return specimens.isEmpty() ? null : specimens.iterator().next();
+	}
+
 	private static final String FQN = Specimen.class.getName();
 	
 	private static final String GET_BY_LABEL = FQN + ".getByLabel";
 	
+	private static final String GET_BY_VISIT_AND_SR = FQN + ".getByVisitAndReq";
+
 	private static final String GET_PARENT_BY_VISIT_AND_SR = FQN + ".getParentByVisitAndReq";
 	
 	private static final String GET_BY_IDS = FQN + ".getByIds";
@@ -236,5 +248,4 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
 
 	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
-
 }

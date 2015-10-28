@@ -64,6 +64,17 @@
       <filter name="activeEntity"/>
     </set>
 
+    <many-to-one name="pooledSpecimen"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+      column="POOLED_SPECIMEN_ID"
+      cascade="save-update"/>
+
+    <set name="specimensPool" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
+      <key column="POOLED_SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
+      <filter name="activeEntity"/>
+    </set>
+
     <many-to-one name="visit"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"
       column="SPECIMEN_COLLECTION_GROUP_ID" />
@@ -87,6 +98,18 @@
         com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
       where
         s.label = :label
+    </query>
+
+    <query name="getByVisitAndReq">
+      select
+        s
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
+        join s.visit v
+        join s.specimenRequirement sr
+      where
+        v.id = :visitId and
+        sr.id = :srId
     </query>
 
     <query name="getParentByVisitAndReq">

@@ -155,7 +155,7 @@
   display: inline-block;
   white-space: initial;
   vertical-align: top;
-  padding-right: 32px;
+  padding-right: 8px;
 }
 
 .os-storage-position > div {
@@ -267,6 +267,14 @@
 
 .os-cp-site-code .os-table-body .control-label {
   font-weight: normal;
+}
+
+.os-pool-specimen {
+  background: #ebf2f9;
+}
+
+.os-inplace-form-edit-po.os-pool-specimen {
+  background: transparent;
 }
 
 .os-list-container .os-key-values .item {

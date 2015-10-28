@@ -62,9 +62,10 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-class="{'os-inplace-form-edit-po': parentSpecimen == specimen}"
-          ng-repeat="specimen in specimens | openedTreeNodes">        
-
+        <div ng-class="{
+          'os-inplace-form-edit-po': parentSpecimen == specimen,
+          'os-pool-specimen': !!specimen.pooledSpecimen}"
+          ng-repeat="specimen in specimens | openedTreeNodes">
           <div class="row title" ng-class="{'selected': specimen.selected}">
             <div class="col col-xs-5">
               <div class="clearfix">
@@ -84,12 +85,13 @@
                     </a>
 
                     <span class="fa fa-circle"
-                      ng-class="{'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId && !specimen.distributed,
-                                 'os-status-collected': specimen.status == 'Collected',
-                                 'os-status-pending': specimen.status == 'Pending' || !specimen.status,
-                                 'os-status-not-collected': specimen.status == 'Missed Collection',
-                                 'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributed,
-                                 'os-status-distributed': !!specimen.distributed}">
+                      ng-class="{
+                        'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId && !specimen.distributed,
+                        'os-status-collected': specimen.status == 'Collected',
+                        'os-status-pending': specimen.status == 'Pending' || !specimen.status,
+                        'os-status-not-collected': specimen.status == 'Missed Collection',
+                        'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributed,
+                        'os-status-distributed': !!specimen.distributed}">
                     </span>
 
                     <a ui-sref="specimen-detail.overview(
@@ -139,13 +141,17 @@
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+                  <li ng-if="(!allowedOps || allowedOps.update) && 
+                             specimen.activityStatus == 'Active' && 
+                             !specimen.pooledSpecimen">
                     <a ng-click="showCreateAliquots(specimen)">
                       <i class="fa fa-share-alt"></i>
                       <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+                  <li ng-if="(!allowedOps || allowedOps.update) && 
+                             specimen.activityStatus == 'Active' &&
+                             !specimen.pooledSpecimen">
                     <a ng-click="showCreateDerivative(specimen)">
                       <i class="fa fa-flask"></i>
                       <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>

@@ -7,7 +7,19 @@ angular.module('os.biospecimen.specimen.detail', [])
       $scope.cpr = cpr;
       $scope.visit = visit;
       $scope.specimen = specimen;
-      $scope.childSpecimens = $scope.specimen.children;
+      $scope.treeSpecimens = getTreeSpecimens(specimen);
+    }
+
+    function getTreeSpecimens(specimen) {
+      var result = [];
+      angular.forEach(specimen.specimensPool,
+        function(poolSpecimen) {
+          poolSpecimen.pooledSpecimen = specimen;
+          result.push(poolSpecimen);
+        }
+      );
+
+      return result.concat($scope.specimen.children);
     }
 
     $scope.reload = function() {
@@ -20,7 +32,7 @@ angular.module('os.biospecimen.specimen.detail', [])
 
       return promise.then(
         function(specimen) {
-          $scope.childSpecimens = specimen.children;
+          $scope.treeSpecimens = getTreeSpecimens(specimen);
         }
       );
     }

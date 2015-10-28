@@ -60,7 +60,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	public Specimen createSpecimen(SpecimenDetail detail, Specimen parent) {
 		return createSpecimen(null, detail, parent);
 	}
-	
+
 	@Override
 	public Specimen createSpecimen(Specimen existing, SpecimenDetail detail, Specimen parent) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -80,7 +80,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (parent != null && !parent.getVisit().equals(visit)) {
 			ose.addError(SpecimenErrorCode.INVALID_VISIT);
-		}		
+		}
+
 		ose.checkAndThrow();
 		
 		Specimen specimen = null;
@@ -102,7 +103,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setCollectionStatus(detail, existing, specimen, ose);
 		setLineage(detail, existing, specimen, ose);
 		setParentSpecimen(detail, existing, parent, specimen, ose);
-				
+
 		setLabel(detail, existing, specimen, ose);
 		setBarcode(detail, existing, specimen, ose);
 		setActivityStatus(detail, existing, specimen, ose);
@@ -127,6 +128,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setCollectionDetail(detail, existing, specimen, ose);
 		setReceiveDetail(detail, existing, specimen, ose);
 		setCreatedOn(detail, existing, specimen, ose);
+		setPooledSpecimen(detail, existing, specimen, ose);
 		setExtension(detail, existing, specimen, ose);
 
 		ose.checkAndThrow();
@@ -824,5 +826,48 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		return user;
+	}
+
+	private void setPooledSpecimen(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		if (!specimen.isPrimary()) {
+			return;
+		}
+
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		if (sr == null || !sr.isSpecimenPoolReq()) {
+			return;
+		}
+
+		Specimen pooledSpecimen = null;
+		Long pooledSpecimenId = detail.getPooledSpecimenId();
+		if (pooledSpecimenId != null) {
+			pooledSpecimen = daoFactory.getSpecimenDao().getById(pooledSpecimenId);
+			if (pooledSpecimen == null) {
+				ose.addError(SpecimenErrorCode.NOT_FOUND, pooledSpecimenId);
+			}
+		} else if (sr != null && sr.getPooledSpecimenRequirement() != null) {
+			Long visitId = specimen.getVisit().getId();
+			Long pooledSpecimenReqId = sr.getPooledSpecimenRequirement().getId();
+			pooledSpecimen = daoFactory.getSpecimenDao().getSpecimenByVisitAndSr(visitId, pooledSpecimenReqId);
+			if (pooledSpecimen == null) {
+				if (specimen.getId() != null) {
+					ose.addError(SpecimenErrorCode.NO_POOLED_SPMN);
+				} else {
+					pooledSpecimen = sr.getPooledSpecimenRequirement().getSpecimen();
+					pooledSpecimen.setVisit(specimen.getVisit());
+					pooledSpecimen.setCollectionStatus(Specimen.PENDING);
+				}
+			}
+		}
+
+		specimen.setPooledSpecimen(pooledSpecimen);
+	}
+
+	private void setPooledSpecimen(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("pooledSpecimenId")) {
+			setPooledSpecimen(detail, specimen, ose);
+		} else {
+			specimen.setPooledSpecimen(existing.getPooledSpecimen());
+		}
 	}
 }
