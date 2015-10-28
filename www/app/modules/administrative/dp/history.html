@@ -1,6 +1,6 @@
 <div class="clearfix">
   <div class="os-btns pull-right">
-    <a class="btn default" ng-href="{{exportUrl}}" target="_blank">
+    <a class="btn default" ng-href="{{exportUrl}}" target="_blank" ng-disabled="!orders[0]">
       <span class="fa fa-download"></span>
       <span translate="common.buttons.export">Export</span>
     </a>

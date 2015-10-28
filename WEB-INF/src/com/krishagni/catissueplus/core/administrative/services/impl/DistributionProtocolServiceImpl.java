@@ -45,8 +45,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	private DistributionProtocolFactory distributionProtocolFactory;
 	
-	private MessageSource messageSource;
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -232,13 +230,12 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	}
 	
 	@Override
+	@PlusTransactional
 	public ResponseEvent<List<DistributionOrderStat>> getOrderStats(
 			RequestEvent<DistributionOrderStatListCriteria> req) {
 		try {
 			DistributionOrderStatListCriteria crit = req.getPayload();
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			List<DistributionOrderStat> stats = getOrderStats(crit, ose);
-			ose.checkAndThrow();
+			List<DistributionOrderStat> stats = getOrderStats(crit);
 			
 			return ResponseEvent.response(stats);
 		} catch (OpenSpecimenException ose) {
@@ -249,14 +246,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	}
 	
 	@Override
+	@PlusTransactional
 	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req) {
 		File tempFile = null;
 		CSVWriter csvWriter = null;
 		try {
 			DistributionOrderStatListCriteria crit = req.getPayload();
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			List<DistributionOrderStat> orderStats = getOrderStats(crit, ose);
-			ose.checkAndThrow();
+			List<DistributionOrderStat> orderStats = getOrderStats(crit);
 			
 			tempFile = File.createTempFile("dp-order-stats", null);
 			csvWriter = new CSVWriter(new FileWriter(tempFile));
@@ -283,7 +279,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			csvWriter.writeNext(headers);
 			List<String []> csvData = new ArrayList<String []>();
 			for (DistributionOrderStat stat: orderStats) {
-				csvData.add(stat.getOrderStatsReportData(crit));
+				csvData.add(getOrderStatsReportData(stat, crit));
 			}
 			
 			csvWriter.writeAll(csvData);
@@ -355,21 +351,18 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return true;
 	}
 
-	@PlusTransactional
-	private List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria crit, OpenSpecimenException ose) {
+	private List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria crit) {
 		if (crit.dpId() != null) {
 			DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
 			if (dp == null) {
-				 ose.addError(DistributionProtocolErrorCode.NOT_FOUND);
-				 return null;
+				throw OpenSpecimenException.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
 			AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
 		} else {
 			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
-				ose.addError(RbacErrorCode.ACCESS_DENIED);
-				return null;
+				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 			}
 			
 			if (siteIds != null) {
@@ -384,7 +377,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
-	public String[] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
+	private String[] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
 		List<String> headers = new ArrayList<String>();
 		if (crit.dpId() == null) {
 			headers.add(getMessage("dist_dp_title"));
@@ -392,13 +385,37 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		
 		headers.add(getMessage("dist_order_name"));
 		headers.add(getMessage("dist_distribution_date"));
-		Map<String, String> attrVals = DistributionOrderStat.getAttrDisplayVals();
 		for (String attr: crit.groupByAttrs()) {
-			headers.add(getMessage(attrVals.get(attr)));
+			headers.add(getMessage(attrDisplayVals.get(attr)));
 		}
 		
 		headers.add(getMessage("dist_specimen_distributed"));
 		return headers.toArray(new String[0]);
 	}
 	
+	private String [] getOrderStatsReportData(DistributionOrderStat stat, DistributionOrderStatListCriteria crit) {
+		List<String> data = new ArrayList<String>();
+		if (crit.dpId() == null) {
+			data.add(stat.getDistributionProtocol().getShortTitle());
+		}
+		
+		data.add(stat.getName());
+		data.add(Utility.getDateString(stat.getExecutionDate()));
+		for (String attr: crit.groupByAttrs()) {
+			data.add(stat.getGroupByAttrVals().get(attr).toString());
+		}
+		
+		data.add(stat.getDistributedSpecimenCount().toString());
+		
+		return data.toArray(new String[0]);
+	}
+	
+	private MessageSource messageSource;
+	
+	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
+	static {
+		attrDisplayVals.put("specimenType", "dist_specimen_type");
+		attrDisplayVals.put("anatomicSite", "dist_anatomic_site");
+		attrDisplayVals.put("pathologyStatus", "dist_pathology_status");
+	};
 }
