@@ -696,7 +696,7 @@ public class Specimen extends BaseExtensionEntity {
 			}
 		}
 		
-		updateSpecimensPoolStatus(collectionStatus);
+		checkPoolStatusConstraints();
 	}
 		
 	public void distribute(User distributor, Date time, BigDecimal quantity, boolean closeAfterDistribution) {
@@ -876,11 +876,7 @@ public class Specimen extends BaseExtensionEntity {
 		}
 		
 		addOrUpdateCollectionEvent();
-		addOrUpdateReceivedEvent();	
-
-		for (Specimen poolSpecimen : getSpecimensPool()) {
-			poolSpecimen.addOrUpdateCollRecvEvents();
-		}		
+		addOrUpdateReceivedEvent();
 	}
 	
 	public void setLabelIfEmpty() {
@@ -1196,23 +1192,36 @@ public class Specimen extends BaseExtensionEntity {
 		}
 	}
 
-	private void updateSpecimensPoolStatus(String status) {
-		if (Specimen.isCollected(status)) {
-			if (getPooledSpecimen() != null) {
-				if (!getPooledSpecimen().isCollected()) {
-					throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN);
-				}
-			} else if (getSpecimenRequirement() != null && getSpecimenRequirement().isPooledSpecimenReq()) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOL_SPMN_COLLECTED, getLabel());
-			}
-		} else {
-			for (Specimen poolSpecimen : getSpecimensPool()) {
-				poolSpecimen.updateCollectionStatus(status);
+	public void checkPoolStatusConstraints() {
+		if (!isPooled() && !isPoolSpecimen()) {
+			return;
+		}
+
+		Specimen pooledSpmn = null;
+		if (isPooled()) {
+			if (isMissed() || isPending()) {
+				return;
 			}
 
-			if (Specimen.isMissed(status)) {
-				createMissedPoolSpecimens();
+			pooledSpmn = this;
+		} else if (isPoolSpecimen()) {
+			if (isCollected()) {
+				return;
 			}
+
+			pooledSpmn = getPooledSpecimen();
+		}
+
+		boolean atLeastOneColl = false;
+		for (Specimen poolSpmn : pooledSpmn.getSpecimensPool()) {
+			if (poolSpmn.isCollected()) {
+				atLeastOneColl = true;
+				break;
+			}
+		}
+
+		if (!atLeastOneColl && pooledSpmn.isCollected()) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOL_SPMN_COLLECTED, getLabel());
 		}
 	}
 
@@ -1238,28 +1247,6 @@ public class Specimen extends BaseExtensionEntity {
 			getChildCollection().add(specimen);
 
 			specimen.createMissedChildSpecimens();
-		}
-	}
-
-	private void createMissedPoolSpecimens() {
-		if (getSpecimenRequirement() == null) {
-			return;
-		}
-
-		Set<SpecimenRequirement> anticipated = 
-				new HashSet<SpecimenRequirement>(getSpecimenRequirement().getSpecimenPoolReqs());
-		for (Specimen poolSpecimen : getSpecimensPool()) {
-			if (poolSpecimen.getSpecimenRequirement() != null) {
-				anticipated.remove(poolSpecimen.getSpecimenRequirement());
-			}
-		}
-
-		for (SpecimenRequirement sr : anticipated) {
-			Specimen specimen = sr.getSpecimen();
-			specimen.setVisit(getVisit());
-			specimen.setPooledSpecimen(this);
-			specimen.setCollectionStatus(Specimen.MISSED_COLLECTION);
-			getSpecimensPool().add(specimen);
 		}
 	}
 }

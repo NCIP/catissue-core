@@ -19,7 +19,6 @@ import com.krishagni.catissueplus.core.administrative.events.StorageLocationSumm
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -499,6 +498,19 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		Specimen specimen = existing;
 		if (existing == null || !existing.isCollected()) {
+			if (CollectionUtils.isNotEmpty(detail.getSpecimensPool())) {
+				Set<Specimen> specimensPool = new HashSet<Specimen>();
+				for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
+					specimensPool.add(collectSpecimen(poolSpmnDetail, null));
+				}
+
+				if (existing == null) {
+					existing = specimensPool.iterator().next().getPooledSpecimen();
+				}
+
+				existing.getSpecimensPool().addAll(specimensPool);
+			}
+
 			specimen = saveOrUpdate(detail, existing, parent, false);
 		}
 		
@@ -569,11 +581,12 @@ public class SpecimenServiceImpl implements SpecimenService {
 		} else {
 			specimen.checkQtyConstraints();
 			specimen.occupyPosition();
-			createPoolSpecimens(detail, specimen, ose);
+			specimen.checkPoolStatusConstraints();
 		}
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+
 		specimen.addOrUpdateCollRecvEvents();
 		specimen.addOrUpdateExtension();		
 		return specimen;
@@ -635,65 +648,5 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 		
 		return specimen;
-	}
-
-	private void createPoolSpecimens(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		SpecimenRequirement sr = specimen.getSpecimenRequirement();
-		if (sr == null) {
-			//
-			// At present, specimen pool is available only for planned/anticipated requirements
-			//
-			return;
-		}
-
-		if (sr.isPooledSpecimenReq()) {
-			boolean atLeastOneColl = false;
-			if (CollectionUtils.isNotEmpty(detail.getSpecimensPool())) {
-				for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
-					Specimen poolSpmn = specimenFactory.createPoolSpecimen(poolSpmnDetail, specimen);
-					poolSpmn.setLabelIfEmpty();
-					specimen.addPoolSpecimen(poolSpmn);
-					//addOrUpdateEvents(poolSpmn);
-
-					if (specimen.isMissed()) {
-						poolSpmn.updateCollectionStatus(Specimen.MISSED_COLLECTION);
-					} else if (specimen.isPending()) {
-						poolSpmn.updateCollectionStatus(Specimen.PENDING);
-					}
-
-					if (poolSpmn.isCollected()) {
-						atLeastOneColl = true;
-					}
-				}
-			}
-
-			if (specimen.isCollected() && !atLeastOneColl) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOL_SPMN_COLLECTED);
-			}
-
-			if (specimen.isMissed()) {
-				Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(sr.getSpecimenPoolReqs());
-				for (Specimen poolSpmn : specimen.getSpecimensPool()) {
-					anticipated.remove(poolSpmn.getSpecimenRequirement());
-				}
-
-				for (SpecimenRequirement poolSpmnReq : anticipated) {
-					Specimen poolSpmn = poolSpmnReq.getSpecimen();
-					poolSpmn.setVisit(specimen.getVisit());
-					poolSpmn.setCollectionStatus(Specimen.MISSED_COLLECTION);
-					specimen.addPoolSpecimen(poolSpmn);
-				}
-			}
-		} else if (sr.isSpecimenPoolReq()) {
-			Specimen pooledSpmn = specimen.getPooledSpecimen();
-			if (pooledSpmn == null) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.NO_POOLED_SPMN);
-			}
-
-			if (specimen.isCollected() && !pooledSpmn.isCollected()) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.POOLED_SPMN_NOT_COLLECTED);
-			}
-			// TODO: if pending, missed
-		}
 	}
 }

@@ -66,7 +66,8 @@
 
     <many-to-one name="pooledSpecimen"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
-      column="POOLED_SPECIMEN_ID" />
+      column="POOLED_SPECIMEN_ID"
+      cascade="save-update"/>
 
     <set name="specimensPool" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
       <key column="POOLED_SPECIMEN_ID"/>
