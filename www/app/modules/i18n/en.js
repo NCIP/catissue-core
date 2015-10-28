@@ -355,7 +355,7 @@
       "collect_planned_specimens": "Collect Planned Specimens",
       "collect_unplanned_specimens": "Collect Unplanned Specimens",
       "print_specimen_labels": "Print Specimen Labels",
-      "repeat_visit": "Repeat Visit",
+      "new_visit": "New Visit",
       "missed_visit": "Missed Visit"
     },
 
