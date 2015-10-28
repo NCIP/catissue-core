@@ -119,7 +119,6 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			moduleSettings.put(prop, newSetting);
 			
 			notifyListeners(module, prop, setting);
-			
 			return ResponseEvent.response(ConfigSettingDetail.from(newSetting));
 		} catch (OpenSpecimenException ose) {
 			moduleSettings.put(prop, existing);

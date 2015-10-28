@@ -1427,6 +1427,8 @@
       "value": "Value",
       "edit_title": "Edit Configuration",
       "success_message": "Property updated successfully",
+      "true": "On",
+      "false": "Off",
       
       "modules" : {
         "auth": "Authentication",

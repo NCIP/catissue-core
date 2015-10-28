@@ -11,12 +11,14 @@
           <span translate="configuration.modules.{{config.module}}"></span>
         </div>
       </div>
+      
       <div class="form-group">
         <label class="col-xs-2 control-label" translate="configuration.name">Name</label>
         <div class="form-value col-xs-10">
           <span translate="configuration.props.{{config.displayNameCode}}"></span>
         </div>
       </div>
+      
       <div class="form-group">
         <label class="col-xs-2 control-label" translate="configuration.value">Value</label>
         <div class="col-xs-10">
@@ -24,18 +26,19 @@
           <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="config.value" required 
             ng-if="config.type == 'INT'"></input>
           <div ng-if="config.type == 'BOOLEAN'">
-            <label class="radio-inline">
-              <input type="radio" name="value" ng-model="config.value" ng-value="'true'" required>
-              <span>True</span>
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="value" ng-model="config.value" ng-value="'false'" required>
-              <span>False</span>
-            </label>
+            <div class="os-onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="os-onoffswitch-checkbox" id="os-switch" ng-model="config.value"
+                ng-true-value="'true'" ng-false-value="'false'"/>
+              <label class="os-onoffswitch-label" for="os-switch">
+                <span class="os-onoffswitch-switch"></span>
+                <span class="os-onoffswitch-inner"></span>
+              </label>
+            </div>
           </div>
           <div os-field-error field="configForm.value"></div>
         </div>
       </div>
+      
       <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
           <button type="submit" class="btn btn-primary" os-form-submit="submit()">
