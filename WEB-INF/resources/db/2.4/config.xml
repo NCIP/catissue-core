@@ -114,4 +114,40 @@
     </sql>
   </changeSet>
   
+  <changeSet author="slakhani" id="Updating datatype for email server port form string to int">
+    <sql>
+      update os_cfg_props
+        set data_type = 'INT'
+      where
+        name = 'server_port' and module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating datatype for email starttls enabled from string to boolean">
+    <sql>
+      update os_cfg_props
+        set data_type = 'BOOLEAN'
+      where
+        name = 'starttls_enabled' and module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating datatype for email authentication enabled from string to boolean">
+    <sql>
+      update os_cfg_props
+        set data_type = 'BOOLEAN'
+      where
+        name = 'auth_enabled' and module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating datatype for cp codding enabled from string to boolean">
+    <sql>
+      update os_cfg_props
+        set data_type = 'BOOLEAN'
+      where
+        name = 'cp_coding_enabled' and module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

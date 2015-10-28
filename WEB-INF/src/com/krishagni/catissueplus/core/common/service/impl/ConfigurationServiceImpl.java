@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -112,12 +113,20 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 				
 		existing.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 		
-		daoFactory.getConfigSettingDao().saveOrUpdate(existing);
-		daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);		
-		moduleSettings.put(prop, newSetting);
-		
-		notifyListeners(module, prop, setting);
-		return ResponseEvent.response(ConfigSettingDetail.from(newSetting));
+		try {
+			daoFactory.getConfigSettingDao().saveOrUpdate(existing);
+			daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);		
+			moduleSettings.put(prop, newSetting);
+			
+			notifyListeners(module, prop, setting);
+			
+			return ResponseEvent.response(ConfigSettingDetail.from(newSetting));
+		} catch (OpenSpecimenException ose) {
+			moduleSettings.put(prop, existing);
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	@Override

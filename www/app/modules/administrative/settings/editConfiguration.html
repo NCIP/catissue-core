@@ -1,0 +1,52 @@
+
+<div>
+  <div class="os-modal-header">
+    <span translate="configuration.edit_title">Edit Configuration</span>
+  </div>
+  <div class="os-modal-body">
+    <form class="form-horizontal" name="configForm" os-form-validator="configForm" novalidate>
+      <div class="form-group">
+        <label class="col-xs-2 control-label" translate="configuration.category">Category</label>
+        <div class="form-value col-xs-10">
+          <span translate="configuration.modules.{{config.module}}"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label" translate="configuration.name">Name</label>
+        <div class="form-value col-xs-10">
+          <span translate="configuration.props.{{config.displayNameCode}}"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label" translate="configuration.value">Value</label>
+        <div class="col-xs-10">
+          <input type="text" name="value" class="form-control" ng-model="config.value" required ng-if="config.type == 'STRING'"></input>
+          <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="config.value" required 
+            ng-if="config.type == 'INT'"></input>
+          <div ng-if="config.type == 'BOOLEAN'">
+            <label class="radio-inline">
+              <input type="radio" name="value" ng-model="config.value" ng-value="'true'" required>
+              <span>True</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="value" ng-model="config.value" ng-value="'false'" required>
+              <span>False</span>
+            </label>
+          </div>
+          <div os-field-error field="configForm.value"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          <button type="submit" class="btn btn-primary" os-form-submit="submit()">
+            <span translate="common.buttons.update">Update</span>
+          </button>
+          <button class="btn os-btn-text" os-form-cancel="cancel()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

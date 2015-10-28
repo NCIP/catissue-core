@@ -1425,6 +1425,8 @@
       "category": "Category",
       "name": "Name",
       "value": "Value",
+      "edit_title": "Edit Configuration",
+      "success_message": "Property updated successfully",
       
       "modules" : {
         "auth": "Authentication",
@@ -1461,6 +1463,7 @@
         "common_data_dir": "Common data directory",
         "auth_allowed_failed_logins": "Allowed failed login attempts",
         "auth_verify_token_ip_addr": "Verify token IP address",
+        "auth_token_inactive_interval": "Authentication token inactive interval",
         "spmn_path_status_abbr_map": "Specimen path status abbreviation map",
         "cp_coding_enabled": "Cp codding enabled",
         "mpi_format": "Mpi format",
