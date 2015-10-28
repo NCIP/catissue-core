@@ -114,9 +114,7 @@ public enum SpecimenErrorCode implements ErrorCode {
 
 	NO_POOL_SPMN_COLLECTED,
 	
-	NO_POOLED_SPMN,
-	
-	POOLED_SPMN_NOT_COLLECTED;
+	NO_POOLED_SPMN;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();
