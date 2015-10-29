@@ -25,12 +25,21 @@
     </sql>
   </changeSet>
   
-  <changeSet author="slakhani" id="Adding email notification module">
+  <changeSet author="slakhani" id="Adding email notification module" dbms="mysql">
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (default, 'notifications', 'Email notification service');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (OS_MODULES_SEQ.nextval, 'notifications', 'Email notification service');
     </sql>
   </changeSet>
   
