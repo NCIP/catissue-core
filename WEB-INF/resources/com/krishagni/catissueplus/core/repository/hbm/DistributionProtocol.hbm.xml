@@ -11,11 +11,23 @@
       </generator>	
     </id>
     
+    <property name="title" column="TITLE"/>
+
+    <property name="shortTitle"  column="SHORT_TITLE"/>
+
+    <property name="irbId" column="IRB_IDENTIFIER"/>
+
+    <property name="startDate" column="START_DATE"/>
+
+    <property name="endDate" column="END_DATE"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
     <many-to-one
       name="institute"
       class="com.krishagni.catissueplus.core.administrative.domain.Institute"
       column="INSTITUTE_ID"/>
-      
+
     <many-to-one
       name="defReceivingSite"
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
@@ -26,36 +38,24 @@
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="PRINCIPAL_INVESTIGATOR_ID"/>
     
-    <property name="title" column="TITLE"/>
-      
-    <property name="shortTitle"  column="SHORT_TITLE"/>
-        
-    <property name="irbId" column="IRB_IDENTIFIER"/>
-        
-    <property name="startDate" column="START_DATE"/>
-     
-    <property name="endDate" column="END_DATE"/>
-    
-    <property name="activityStatus" column="ACTIVITY_STATUS"/>
-    
     <many-to-one
       name="report"
       class="com.krishagni.catissueplus.core.de.domain.SavedQuery"
       column="REPORT_ID"/>
-      
+
     <set name="distributionOrders" inverse="false" cascade="none">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
       <filter name="activeEntity"/>
     </set>
-    
-    <set name="distributingSites" table="OS_DISTRIBUTION_PROTOCOL_SITES">
+
+    <set name="distributingSites" inverse="true" cascade="all-delete-orphan">
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
-      <many-to-many column="SITE_ID" class="com.krishagni.catissueplus.core.administrative.domain.Site"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite"/>
     </set>
-    
+
     <filter name="activeEntity"/>
-      
+
     <query name="getDistributionProtocolByTitle">
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 

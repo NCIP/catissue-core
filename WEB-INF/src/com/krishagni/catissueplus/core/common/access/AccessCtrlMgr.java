@@ -124,11 +124,11 @@ public class AccessCtrlMgr {
 		}
 		
 		Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-		if (CollectionUtils.intersection(userSites, dp.getDistributingSites()).isEmpty()) {
+		if (CollectionUtils.intersection(userSites, dp.getAllDistributingSites()).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
-
+	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
 	//          Collection Protocol object access control helper methods                //
@@ -615,17 +615,18 @@ public class AccessCtrlMgr {
 			return null;
 		}
 		
-		return Utility.<Set<Long>>collect(getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE}), "id", true);
+		Set<Site> sites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		return Utility.<Set<Long>>collect(sites, "id", true);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public Set<Long> getDistributionOrderAllowedSites(DistributionProtocol dp) {
 		Set<Site> allowedSites = null;
 		if (AuthUtil.isAdmin()) {
-			allowedSites = dp.getDistributingSites();
+			allowedSites = dp.getAllDistributingSites();
 		} else {
 			Set<Site> userSites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getDistributingSites()));
+			allowedSites = new HashSet<Site>(CollectionUtils.intersection(userSites, dp.getAllDistributingSites()));
 		}
 		
 		return Utility.<Set<Long>>collect(allowedSites, "id", true);
@@ -652,10 +653,9 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		if (CollectionUtils.intersection(
-				getSites(Resource.ORDER, operation),
-				order.getDistributionProtocol().getDistributingSites()).isEmpty()) {
-			
+		Set<Site> allowedSites = getSites(Resource.ORDER, operation);
+		Set<Site> distributingSites = order.getDistributionProtocol().getAllDistributingSites();
+		if (CollectionUtils.intersection(allowedSites, distributingSites).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}

@@ -40,6 +40,127 @@
   <changeSet author="ahegade" id="Adding composite primary key on Race table">
     <addPrimaryKey columnNames="PARTICIPANT_ID, RACE_NAME" tableName="CATISSUE_RACE"/>
   </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Drop FK on distribution_protocol_id in DP sites table">
+    <dropForeignKeyConstraint
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      constraintName="FK_DP_SITES_DP_ID" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Drop FK on site_id in DP sites table">
+    <dropForeignKeyConstraint
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      constraintName="FK_DP_SITES_SITE_ID" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Drop PK from DP sites table">
+    <dropPrimaryKey
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add PK identifier to DP sites table" dbms="mysql">
+    <addColumn tableName="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add identifier to DP sites table" dbms="oracle">
+    <addColumn tableName="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <column name="IDENTIFIER" type="${int.type}" />
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="DP sites table sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_DP_DIST_SITE_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Update identifier with generated values from sequence in DP sites table" dbms="oracle">
+    <sql>
+      update OS_DISTRIBUTION_PROTOCOL_SITES set IDENTIFIER = OS_DP_DIST_SITE_SEQ.nextval;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="PK on identifier in DP sites table" dbms="oracle">
+    <addPrimaryKey
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      columnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add column institute_id to DP sites table">
+    <addColumn tableName="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <column name="INSTITUTE_ID" type="${int.type}" />
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Update the institute_id according to site institutes in DP sites table" dbms="mysql">
+    <sql>
+      update
+        OS_DISTRIBUTION_PROTOCOL_SITES dist
+        join CATISSUE_SITE site on dist.SITE_ID = site.IDENTIFIER
+      set
+        dist.INSTITUTE_ID = site.INSTITUTE_ID
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Update the institute_id according to site institutes in DP sites table" dbms="oracle">
+    <sql>
+      merge into OS_DISTRIBUTION_PROTOCOL_SITES dist using (
+        select
+          IDENTIFIER, INSTITUTE_ID
+        from
+          CATISSUE_SITE
+      ) site on (dist.SITE_ID = site.IDENTIFIER)
+      when matched then
+        update set dist.INSTITUTE_ID = site.INSTITUTE_ID
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add not null constraint on institute_id in DP sites table">
+    <addNotNullConstraint
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      columnName="INSTITUTE_ID"
+      columnDataType="${int.type}" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Remove not null constraint on site_id in DP sites table">
+    <dropNotNullConstraint
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      columnName="SITE_ID"
+      columnDataType="${int.type}" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Regenerate FK on distribution protocol id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_DP_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Regenerate FK on site id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_SITE_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on institute_id of DP sites table">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_INSTITUTE_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 
   <changeSet author="vlonushte" id="Creating specimen field extensions view">
     <createView viewName="os_spec_cust_field_extns_view"> 

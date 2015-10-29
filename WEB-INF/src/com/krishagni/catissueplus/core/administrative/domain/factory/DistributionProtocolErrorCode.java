@@ -23,6 +23,8 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
+	INVALID_DISTRIBUTING_INSTITUTE,
+	
 	INVALID_DISTRIBUTING_SITES,
 	
 	DISTRIBUTING_SITES_REQUIRED;

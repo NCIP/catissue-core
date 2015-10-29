@@ -34,14 +34,14 @@
     </set>
 
     <filter name="activeEntity"/>
-	
-    <query name="getInstituteByName">
-      from
-        com.krishagni.catissueplus.core.administrative.domain.Institute institute 
-      where
-        institute.name = :name and institute.activityStatus != 'Disabled' 
-    </query>
 
+    <query name="getInstitutesByName">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Institute institute
+      where
+        institute.name in (:names) and institute.activityStatus != 'Disabled'
+    </query>
+    
     <query name="getInstituteStats">
       select
         institute.id, count(distinct dept.id), count(distinct user.id)
@@ -54,5 +54,7 @@
       group by
         institute.id
     </query>
+    
+    
   </class>
 </hibernate-mapping>

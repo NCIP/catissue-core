@@ -670,6 +670,7 @@
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
+    "all_sites": "All current and future sites",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",

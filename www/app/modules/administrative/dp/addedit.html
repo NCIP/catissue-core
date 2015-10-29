@@ -121,9 +121,9 @@
           </div>
           
           <div class="col-xs-3">
-            <os-select multiple name="distSites" ng-model="site.sites"
-              placeholder="{{'dp.sites' | translate}}" required
-              list="instSiteMap[site.instituteName]">
+            <os-select multiple name="distSites" ng-model="site.sites" placeholder="{{'dp.sites' | translate}}"
+              list="instSiteMap[site.instituteName]" on-select="onDistSiteSelect($index)"
+              on-remove="onDistSiteRemove($index)" required>
             </os-select>
             <div os-field-error field="dpSitesForm.distSites"></div>
           </div>

@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,6 @@ import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class InstituteDaoImpl extends AbstractDao<Institute> implements InstituteDao {
 	
@@ -33,11 +33,10 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit) {
 		Criteria query = sessionFactory.getCurrentSession()
 			.createCriteria(Institute.class, "institute")
-			.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
 			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());
-				
+		
 		addSearchConditions(query, listCrit);
 		addProjectionFields(query);
 		
@@ -66,15 +65,20 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	@Override
 	@SuppressWarnings("unchecked")
+	public List<Institute> getInstituteByNames(List<String> names) {
+		return sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_INSTITUTES_BY_NAME)
+			.setParameterList("names", names)
+			.list();
+	}
+	
+	@Override
 	public Institute getInstituteByName(String name) {
-		List<Institute> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_INSTITUTE_BY_NAME)
-				.setString("name", name)
-				.list();
+		List<Institute> result = getInstituteByNames(Collections.singletonList(name));
 		
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
 	}
-
+	
 	@Override
 	@SuppressWarnings(value = {"unchecked"})
 	public Department getDepartment(Long id, Long instituteId ) {
@@ -140,7 +144,7 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	private static final String DEPARTMENT_FQN = Department.class.getName();
 	
-	private static final String GET_INSTITUTE_BY_NAME = INSTITUTE_FQN + ".getInstituteByName";
+	private static final String GET_INSTITUTES_BY_NAME = INSTITUTE_FQN + ".getInstitutesByName";
 	
 	private static final String GET_INSTITUTE_STATS = INSTITUTE_FQN + ".getInstituteStats";
 	
