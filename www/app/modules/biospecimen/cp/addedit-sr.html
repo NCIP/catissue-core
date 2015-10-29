@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="form-group" ng-if="codingEnabled">
-        <label class="control-label col-xs-4" translate="srs.code">Short Code</label>
+        <label class="control-label col-xs-4" translate="srs.code">Code</label>
         <div class="col-xs-8">
           <input name="code" ng-model="sr.code" class="form-control" type="text" 
             ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
@@ -145,6 +145,76 @@
         </div>
       </div>
       <div class="os-divider"></div>
+      <div ng-if="!sr.id">
+        <div class="form-group">
+          <label class="control-label col-xs-4">
+            <span translate="srs.create_pooled_spmn">Do you want to create pooled specimen?</span>
+          </label>
+          <div class="col-xs-8">
+            <label class="radio-inline">
+              <input type="radio" name="pooledSpmns" ng-model="createPooledSpmns" ng-value="true"
+                ng-change="onCreatePooledSpmnsClick(true)">
+              <span translate="common.yes">Yes</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="pooledSpmns" ng-model="createPooledSpmns" ng-value="false"
+                ng-change="onCreatePooledSpmnsClick(false)">
+              <span translate="common.no">No</span>
+            </label>
+          </div>
+        </div>
+        <div ng-if="createPooledSpmns">
+          <div class="form-group clearfix">
+            <label class="control-label col-xs-4">
+              <span translate="specimens.list">Specimens</span>
+            </label>
+            <div class="col-xs-3" ng-if="codingEnabled">
+              <label class="control-label">
+                <span translate="srs.code">Code</span>
+              </label>
+            </div>
+            <div class="col-xs-4">
+              <label class="control-label">
+                <span translate="srs.initial_qty">Initial Quantity</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group clearfix" ng-form="psForm" ng-repeat="poolSpmn in sr.specimensPool">
+            <label class="control-label col-xs-4">
+              <span>{{$index + 1}}</span>
+            </label>
+            <div class="col-xs-3" ng-if="codingEnabled">
+              <input name="code" ng-model="poolSpmn.code" class="form-control" type="text"
+                ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+              <div os-field-error field="psForm.code"></div>
+            </div>
+            <div class="col-xs-4">
+              <div class="input-group">
+                <input name="initialQty" ng-model="poolSpmn.initialQty" class="form-control" type="text"
+                  placeholder="{{'srs.initial_qty' | translate}}" required
+                  ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
+                <div class="input-group-addon">
+                  <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
+                </div>
+              </div>
+              <div os-field-error field="psForm.initialQty"></div>
+            </div>
+            <div class="col-xs-1">
+              <button class="btn btn-default" ng-click="removeSpecimenPoolReq(poolSpmn)">
+                <span class="fa fa-trash"></span>
+              </button>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-xs-offset-4 col-xs-8">
+              <a ng-click="addSpecimenPoolReq()">
+                <span translate="common.buttons.add_another">Add Another</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="os-divider"></div>
+      </div>
       <div class="form-group">
         <div class="col-xs-offset-4 col-xs-8">
           <button type="submit" class="btn btn-success" os-form-submit="createSr()" ng-if="!sr.id">

@@ -72,6 +72,7 @@
       "more": "More",
       "next": "Next",
       "previous": "Previous",
+      "print": "Print",
       "ok": "Ok",
       "select": "Select",
       "unselect": "Unselect",
@@ -84,8 +85,10 @@
       "upload": "Upload",
       "reset_password": "Reset Password",
       "add_new": "Add New",
+      "add_another": "Add Another",
       "download": "Download",
-      "reset_password": "Reset Password"
+      "reset_password": "Reset Password",
+      "print": "Print"
     }
   },
 
@@ -121,7 +124,7 @@
     "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
-    "code": "Short Code",
+    "code": "Code",
     "pi": "Principal Investigator",
     "coordinators": "Protocol Coordinators",
     "date": "Date",
@@ -401,6 +404,8 @@
     "qty": "Quantity",
     "aliquot": "Aliquot",
     "derived": "Derived",
+    "pool_specimen": "Pool Specimen",
+    "pooled_specimen": "Pooled Specimen",
     "from": "from",
     "collected_in": "collected in",
     "description": "Description",
@@ -524,9 +529,9 @@
 
     "no_srs": "There are no specimen requirements to show. Create a new requirement by clicking Add Specimen Requirement ...",
     "new_sr": "New Specimen Requirement",
-
+    "create_pooled_spmn": "Creating pooled specimen?",
     "name": "Name",
-    "code": "Short Code",
+    "code": "Code",
     "type": "Type",
     "pathology": "Pathology",
     "storage_type": "Storage Type",
@@ -552,8 +557,10 @@
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
+      "copy_sr": "Copy Requirement",
       "create_aliquots": "Create Aliquots",
       "create_derivatives": "Create Derivatives",
+      "create_pool_spmn": "Create Pool Specimen",
       "delete": "Delete Requirement"
     },
  
@@ -663,6 +670,7 @@
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
+    "all_sites": "All current and future sites",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",

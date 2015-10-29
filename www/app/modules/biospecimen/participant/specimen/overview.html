@@ -86,6 +86,18 @@
         </ng-switch>
       </li>
 
+      <li class="item" ng-if="!!specimen.pooledSpecimenId">
+        <strong class="key key-sm" translate="specimens.pooled_specimen">Pooled Specimen</strong>
+        <span class="value value-md">
+          <a ui-sref="specimen-detail.overview(
+                        {eventId: visit.eventId, visitId: visit.id, 
+                         specimenId: specimen.pooledSpecimenId, srId: specimen.reqId})">
+            <span ng-if="!!specimen.pooledSpecimenLabel">{{specimen.pooledSpecimenLabel}}</span>
+            <span ng-if="!specimen.pooledSpecimenLabel" translate="specimens.pooled_specimen">Pooled Specimen</span>
+          </a>
+        </span>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="specimens.pathology">Pathology Status</strong>
         <span class="value value-md">{{specimen.pathology | osNoValue}}</span>
@@ -127,7 +139,7 @@
       <div os-extension-overview ext-object="specimen.extensionDetail" show-column="2"></div>
     </div>
 
-    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="childSpecimens" allowed-ops="specimenAllowedOps" reload="reload()">
+    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="treeSpecimens" allowed-ops="specimenAllowedOps" reload="reload()">
     </os-specimen-tree>
   </div>
 

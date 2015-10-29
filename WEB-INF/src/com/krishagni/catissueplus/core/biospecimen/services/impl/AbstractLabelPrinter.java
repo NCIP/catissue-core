@@ -43,7 +43,7 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 
 		PrintWriter writer = null;
 		try {
-			String file = rule.getCmdFilesDir() + File.separator + jobItem.getItemLabel() + ".cmd";
+			String file = rule.getCmdFilesDir() + File.separator + jobItem.getItemLabel() + ".txt";
 			writer = new PrintWriter(new FileWriter(file));
 
 			switch (rule.getCmdFileFmt()) {

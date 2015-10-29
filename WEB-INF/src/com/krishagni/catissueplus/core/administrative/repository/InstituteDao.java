@@ -11,6 +11,8 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface InstituteDao extends Dao<Institute> {
 	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit);
 	
+	public List<Institute> getInstituteByNames(List<String> names);
+	
 	public Institute getInstituteByName(String name);
 
 	public Department getDepartment(Long id, Long instituteId);

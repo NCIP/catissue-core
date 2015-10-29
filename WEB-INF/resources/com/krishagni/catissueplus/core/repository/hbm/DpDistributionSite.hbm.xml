@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite"
+    table="OS_DISTRIBUTION_PROTOCOL_SITES">
+    
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_DP_DIST_SITE_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="distributionProtocol"
+      class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
+      column="DISTRIBUTION_PROTOCOL_ID" />
+    
+    <many-to-one name="institute"
+      class="com.krishagni.catissueplus.core.administrative.domain.Institute"
+      column="INSTITUTE_ID" />
+      
+    <many-to-one name="site"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="SITE_ID" />
+  </class>
+</hibernate-mapping>

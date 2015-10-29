@@ -18,6 +18,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -39,7 +40,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 				.add(Restrictions.ne("activityStatus", "Disabled"))
 				.addOrder(Order.asc("title"));
 
-		addSearchConditions(query, crit);		
+		addSearchConditions(query, crit);
 		return query.list();
 	}
 
@@ -95,15 +96,16 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			query.add(Restrictions.eq("distributionProtocol.id", listCrit.dpId()));
 		} else if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
 			query.createAlias("distributionProtocol", "dp")
-				.createAlias("dp.distributingSites", "distSite")
-				.add(Restrictions.in("distSite.id", listCrit.siteIds()));
+				.createAlias("dp.distributingSites", "distSites");
+			
+			addSitesCondition(query, listCrit.siteIds());
 		}
 		
 		addOrderStatProjections(query, listCrit);
 		
 		List<Object []> rows = query.list();
 		List<DistributionOrderStat> result = new ArrayList<DistributionOrderStat>();
-		for (Object[] row: rows) {
+		for (Object[] row : rows) {
 			DistributionOrderStat detail = getDOStats(row, listCrit);
 			result.add(detail);
 		}
@@ -160,8 +162,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			return;
 		}
 		
-		query.createAlias("distributingSites", "distSite")
-			.add(Restrictions.in("distSite.id", siteIds));
+		query.createAlias("distributingSites", "distSites");
+		addSitesCondition(query, siteIds);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	}
 	
@@ -185,7 +187,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		
 		Map<String, String> props = getProps();
 		
-		for (String attr: crit.groupByAttrs()) {
+		for (String attr : crit.groupByAttrs()) {
 			String prop = props.get(attr);
 			projs.add(Projections.groupProperty(prop));
 		}
@@ -212,11 +214,21 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		stat.setExecutionDate((Date)row[index++]);
 		stat.setDistributedSpecimenCount((Long)row[index++]);
 		
-		for (String attr: crit.groupByAttrs()) {
+		for (String attr : crit.groupByAttrs()) {
 			stat.getGroupByAttrVals().put(attr, row[index++]);
 		}
 		
 		return stat;
+	}
+	
+	private void addSitesCondition(Criteria query, Set<Long> siteIds) {
+		query.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("distSites.institute", "distInst")
+			.createAlias("distInst.sites", "instSite")
+			.add(Restrictions.or(
+				Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", siteIds)),
+				Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", siteIds))
+			));
 	}
 	
 	private static final String FQN = DistributionProtocol.class.getName();

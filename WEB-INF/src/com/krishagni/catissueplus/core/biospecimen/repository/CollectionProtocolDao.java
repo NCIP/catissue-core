@@ -50,6 +50,8 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public SpecimenRequirement getSrByCode(String code);
 	
+	public List<CpWorkflowConfig> getCpWorkflows(Collection<Long> cpIds);
+
 	public void saveCpWorkflows(CpWorkflowConfig cfg);
 	
 	public CpWorkflowConfig getCpWorkflows(Long cpId);

@@ -40,15 +40,21 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="oracle">
-    <validCheckSum>7:9b747c0e6e8b8fc87f96fa2f7fd2c783</validCheckSum>
+    <validCheckSum>7:755315db33621a5e65c2293b664d2309</validCheckSum>
     <sql>
       insert into os_departments
         (identifier, name, institute_id)
       select 
-        os_departments_seq.nextval, d.name, u.institution_id 
-      from 
-        catissue_user u
-        inner join catissue_department d on d.identifier = u.department_id
+        os_departments_seq.nextval, t0.dept_name, t0.institution_id
+      from (
+        select
+          d.name as dept_name, u.institution_id as institution_id
+        from
+          catissue_user u
+          inner join catissue_department d on d.identifier = u.department_id
+        group by
+          d.name, u.institution_id
+        ) t0;
     </sql>
 
     <sql>

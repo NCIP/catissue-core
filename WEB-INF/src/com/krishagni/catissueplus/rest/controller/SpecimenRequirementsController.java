@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -65,7 +66,12 @@ public class SpecimenRequirementsController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenRequirementDetail updateRequirement(@PathVariable("id") Long id, @RequestBody SpecimenRequirementDetail requirement) {
+	public SpecimenRequirementDetail updateRequirement(
+			@PathVariable("id")
+			Long id,
+
+			@RequestBody
+			SpecimenRequirementDetail requirement) {
 		requirement.setId(id);
 		
 		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.updateSpecimenRequirement(getRequest(requirement));
@@ -73,12 +79,34 @@ public class SpecimenRequirementsController {
 		return resp.getPayload();		
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value="/{id}/specimen-pool")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenRequirementDetail> addSpecimenPoolReqs(
+			@PathVariable("id")
+			Long pooledSpecimenReqId,
+
+			@RequestBody
+			List<SpecimenRequirementDetail> specimenPoolReqs) {
+
+		SpecimenPoolRequirements detail = new SpecimenPoolRequirements();
+		detail.setPooledSpecimenReqId(pooledSpecimenReqId);
+		detail.setSpecimenPoolReqs(specimenPoolReqs);
+
+		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.addSpecimenPoolReqs(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value="/{id}/aliquots")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenRequirementDetail> createAliquots(
-			@PathVariable("id") Long parentSrId,
-			@RequestBody AliquotSpecimensRequirement requirement) {
+			@PathVariable("id")
+			Long parentSrId,
+
+			@RequestBody
+			AliquotSpecimensRequirement requirement) {
 		
 		requirement.setParentSrId(parentSrId);
 		ResponseEvent<List<SpecimenRequirementDetail>> resp = cpSvc.createAliquots(getRequest(requirement));
@@ -90,8 +118,11 @@ public class SpecimenRequirementsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenRequirementDetail createDerived(
-			@PathVariable("id") Long parentSrId,
-			@RequestBody DerivedSpecimenRequirement requirement) {
+			@PathVariable("id")
+			Long parentSrId,
+
+			@RequestBody
+			DerivedSpecimenRequirement requirement) {
 		
 		requirement.setParentSrId(parentSrId);
 		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.createDerived(getRequest(requirement));
@@ -103,7 +134,8 @@ public class SpecimenRequirementsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenRequirementDetail copySr(
-			@PathVariable("id") Long srId) {
+			@PathVariable("id")
+			Long srId) {
 		
 		ResponseEvent<SpecimenRequirementDetail> resp = cpSvc.copySpecimenRequirement(getRequest(srId));
 		resp.throwErrorIfUnsuccessful();

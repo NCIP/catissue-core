@@ -3,6 +3,15 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     var Specimen = osModel(
       'specimens',
       function(specimen) {
+        console.log(specimen);
+        if (specimen.specimensPool) {
+          specimen.specimensPool = specimen.specimensPool.map(
+            function(poolSpmn) {
+              return new Specimen(poolSpmn);
+            }
+          );
+        }
+
         if (specimen.children) {
           specimen.children = specimen.children.map(
             function(child) {
@@ -25,22 +34,34 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return Specimen.query({label: labels, dpId: dpId});
     }
 
-    Specimen.flatten = function(specimens, parent, depth) {
+    Specimen.flatten = function(specimens, parent, depth, pooledSpecimen) {
       var result = [];
       if (!specimens) {
         return result;
       }
 
       depth = depth || 0;
-      for (var i = 0; i < specimens.length; ++i) {
-        result.push(specimens[i]);
-        specimens[i].depth = depth || 0;
-        specimens[i].parent = parent;
-        specimens[i].hasChildren = (!!specimens[i].children && specimens[i].children.length > 0);
-        if (specimens[i].hasChildren) {
-          result = result.concat(Specimen.flatten(specimens[i].children, specimens[i], depth +1));
+      angular.forEach(specimens, function(specimen) {
+        result.push(specimen);
+        specimen.depth = depth || 0;
+
+        specimen.parent = specimen.parent || parent;
+        specimen.pooledSpecimen = specimen.pooledSpecimen || pooledSpecimen;
+
+        var hasSpecimensPool = false;
+        if (depth == 0) {
+          hasSpecimensPool = !!specimen.specimensPool && specimen.specimensPool.length > 0;
+          if (hasSpecimensPool) {
+            result = result.concat(Specimen.flatten(specimen.specimensPool, specimen, depth + 1, specimen));
+          }
         }
-      }
+
+        var hasChildren = (!!specimen.children && specimen.children.length > 0);
+        specimen.hasChildren = hasSpecimensPool || hasChildren;
+        if (hasChildren) {
+          result = result.concat(Specimen.flatten(specimen.children, specimen, depth +1));
+        }
+      });
 
       return result;
     };
@@ -152,7 +173,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     };
 
     Specimen.prototype.$saveProps = function() {
-      var props = ['children', 'depth', 'hasChildren', 'isOpened'];
+      var props = ['children', 'depth', 'hasChildren', 'isOpened', 'specimensPool'];
       var that = this;
       props.forEach(function(prop) { delete that[prop]; });
       return this;
@@ -171,10 +192,14 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;
+      sr.poolSpecimen = !!sr.pooledSpecimenReqId;
 
-      var attrs = ['id', 'name',
-                   'collector', 'collectionProcedure', 'collectionContainer', 
-                   'receiver'];
+      var attrs = [
+        'id', 'name', 'pooledSpecimenReqId',
+        'collector', 'collectionProcedure', 'collectionContainer',
+        'receiver'
+      ];
+
       attrs.forEach(function(attr) {
         delete sr[attr];
       });

@@ -12,8 +12,6 @@
 
     <many-to-one name="user" column="USER_ID"/>
 
-    <property name="expiresOn" not-null="true" column="EXPIRES_ON" type="timestamp"/>
-
     <property name="ipAddress" not-null="true" column="IP_ADDRESS"/>
     
     <many-to-one name="loginAuditLog" not-null="true" column="LOGIN_AUDIT_LOG_ID" unique-key="true"/>
@@ -21,5 +19,26 @@
     <query name="getByKey">
         from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.token = :token
     </query>
+    
+    <sql-query name="deleteInactiveAuthTokens">
+      <![CDATA[ 
+        delete 
+        from 
+          os_auth_tokens 
+        where token in (
+          select
+            auth_token
+          from
+            os_user_api_calls_log l
+          where
+            l.auth_token = os_auth_tokens.token
+          group by
+            auth_token
+          having
+            max(call_start_time) < :latestCallTime
+        )
+      ]]>    
+    </sql-query>
+         
   </class>
 </hibernate-mapping>

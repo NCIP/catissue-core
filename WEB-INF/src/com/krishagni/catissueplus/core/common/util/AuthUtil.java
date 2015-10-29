@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.util;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -37,5 +38,13 @@ public class AuthUtil {
 	
 	public static boolean isAdmin() {
 		return getCurrentUser().isAdmin();
+	}
+	
+	public static String encodeToken(String token) {
+		return new String(Base64.encode(token.getBytes()));
+	}
+	
+	public static String decodeToken(String token) {
+		return new String(Base64.decode(token.getBytes()));
 	}
 }

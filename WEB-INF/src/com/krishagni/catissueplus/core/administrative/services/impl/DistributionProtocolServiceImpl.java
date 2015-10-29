@@ -128,7 +128,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-						
+			
 			Long protocolId = req.getPayload().getId();
 			String title = req.getPayload().getTitle();
 			

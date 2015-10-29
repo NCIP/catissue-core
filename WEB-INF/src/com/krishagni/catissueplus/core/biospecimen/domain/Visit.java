@@ -191,12 +191,12 @@ public class Visit extends BaseExtensionEntity {
 	
 	public Set<Specimen> getTopLevelSpecimens() {
 		Set<Specimen> result = new HashSet<Specimen>();
-		if (specimens == null) {
-			return specimens;
+		if (getSpecimens() == null) {
+			return getSpecimens();
 		}
 		
-		for (Specimen specimen : specimens) {
-			if (specimen.getParentSpecimen() == null) {
+		for (Specimen specimen : getSpecimens()) {
+			if (specimen.getParentSpecimen() == null && specimen.getPooledSpecimen() == null) {
 				result.add(specimen);
 			}
 		}
@@ -353,31 +353,45 @@ public class Visit extends BaseExtensionEntity {
 	}
 	
 	public void updateSpecimenStatus(String status) {
-		for (Specimen specimen : getTopLevelSpecimens()) {
+		Set<Specimen> topLevelSpmns = getTopLevelSpecimens();
+		for (Specimen specimen : topLevelSpmns) {
 			specimen.updateCollectionStatus(status);
 		}
-		
+
 		if (Specimen.isMissed(status)) {
 			createMissedSpecimens();
+		} else if (Specimen.isPending(status)) {
+			for (Specimen specimen : topLevelSpmns) {
+				if (!specimen.isPooled()) {
+					continue;
+				}
+
+				for (Specimen poolSpmn : specimen.getSpecimensPool()) {
+					poolSpmn.updateCollectionStatus(status);
+				}
+			}
 		}
 	}
-	
+
 	public void createMissedSpecimens() {
 		Set<SpecimenRequirement> anticipated = getCpEvent().getTopLevelAnticipatedSpecimens();
 		for (Specimen specimen : getTopLevelSpecimens()) {
 			if (specimen.getSpecimenRequirement() != null) {
 				anticipated.remove(specimen.getSpecimenRequirement());
-			}			
+			}
+
+			addOrUpdateMissedPoolSpmns(specimen);
 		}
-		
+
 		for (SpecimenRequirement sr : anticipated) {
 			Specimen specimen = sr.getSpecimen();
 			specimen.setVisit(this);
 			specimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
 			addSpecimen(specimen);
-		}		
+			addOrUpdateMissedPoolSpmns(specimen);
+		}
 	}
-	
+
 	public static boolean isCompleted(String status) {
 		return Visit.VISIT_STATUS_COMPLETED.equals(status);
 	}
@@ -412,5 +426,25 @@ public class Visit extends BaseExtensionEntity {
 		}
 		
 		return count;
+	}
+
+	private void addOrUpdateMissedPoolSpmns(Specimen specimen) {
+		if (!specimen.isPooled()) {
+			return;
+		}
+
+		SpecimenRequirement sr = specimen.getSpecimenRequirement();
+		Set<SpecimenRequirement> anticipated = new HashSet<SpecimenRequirement>(sr.getSpecimenPoolReqs());
+		for (Specimen poolSpecimen : specimen.getSpecimensPool()) {
+			poolSpecimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
+			anticipated.remove(poolSpecimen.getSpecimenRequirement());
+		}
+
+		for (SpecimenRequirement poolSpecimenReq : anticipated) {
+			Specimen poolSpecimen = poolSpecimenReq.getSpecimen();
+			poolSpecimen.setVisit(this);
+			specimen.addPoolSpecimen(poolSpecimen);
+			poolSpecimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
+		}
 	}
 }

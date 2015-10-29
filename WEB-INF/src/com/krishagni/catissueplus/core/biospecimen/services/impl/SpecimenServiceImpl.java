@@ -7,8 +7,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -403,7 +405,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		Date createdOn = Calendar.getInstance().getTime();
 		if (Specimen.NEW.equals(detail.getLineage())) {
 			if (detail.getReceivedEvent() != null && detail.getReceivedEvent().getTime() != null) {
-				setCreatedOn(detail.getChildren(), detail.getReceivedEvent().getTime());
+				createdOn = detail.getReceivedEvent().getTime();
 			} else {
 				ReceivedEventDetail receivedEvent = detail.getReceivedEvent();
 				if (receivedEvent == null) {
@@ -412,11 +414,12 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 				receivedEvent.setTime(createdOn);
 				detail.setReceivedEvent(receivedEvent);
-				setCreatedOn(detail.getChildren(), createdOn);
 			}
-		} else {
-			setCreatedOn(detail.getChildren(), createdOn);
+
+			setCreatedOn(detail.getSpecimensPool(), createdOn);
 		}
+
+		setCreatedOn(detail.getChildren(), createdOn);
 	}
 
 	private void setCreatedOn(List<SpecimenDetail> details, Date createdOn) {
@@ -495,9 +498,22 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		Specimen specimen = existing;
 		if (existing == null || !existing.isCollected()) {
+			if (CollectionUtils.isNotEmpty(detail.getSpecimensPool())) {
+				Set<Specimen> specimensPool = new HashSet<Specimen>();
+				for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
+					specimensPool.add(collectSpecimen(poolSpmnDetail, null));
+				}
+
+				if (existing == null) {
+					existing = specimensPool.iterator().next().getPooledSpecimen();
+				}
+
+				existing.getSpecimensPool().addAll(specimensPool);
+			}
+
 			specimen = saveOrUpdate(detail, existing, parent, false);
 		}
-				
+		
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
 				collectSpecimen(childDetail, specimen);
@@ -561,27 +577,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
 			}
 
-			specimen.getParentSpecimen().addSpecimen(specimen);
+			specimen.getParentSpecimen().addChildSpecimen(specimen);
 		} else {
-			specimen.checkQtyConstraints(); // TODO: Should we be calling this at all?
+			specimen.checkQtyConstraints();
 			specimen.occupyPosition();
+			specimen.checkPoolStatusConstraints();
 		}
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-		specimen.addOrUpdateExtension();
-		addOrUpdateEvents(specimen);
+
+		specimen.addOrUpdateCollRecvEvents();
+		specimen.addOrUpdateExtension();		
 		return specimen;
 	}
 
-	private void addOrUpdateEvents(Specimen specimen) {
-		if (!specimen.isCollected()) {
-			return;
-		}
-		
-		specimen.addOrUpdateCollRecvEvents();
-	}
-	
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
 		List<Specimen> specimens = null;
 		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {

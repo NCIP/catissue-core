@@ -56,7 +56,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 			}
 		}
 		
-		return result;		
+		return result;
 	}
 	
 	@Override
@@ -91,7 +91,13 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		//
 		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
 			query.createAlias("dp.distributingSites", "distSites")
-				.add(Restrictions.in("distSites.id", crit.siteIds()));
+				.createAlias("distSites.site", "distSite", JoinType.LEFT_OUTER_JOIN)
+				.createAlias("distSites.institute", "distInst")
+				.createAlias("distInst.sites", "instSite")
+				.add(Restrictions.or(
+						Restrictions.and(Restrictions.isNull("distSites.site"), Restrictions.in("instSite.id", crit.siteIds())),
+						Restrictions.and(Restrictions.isNotNull("distSites.site"),Restrictions.in("distSite.id", crit.siteIds()))
+				));
 		}
 		
 		//
