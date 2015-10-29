@@ -35,11 +35,11 @@
 
     <filter name="activeEntity"/>
 
-    <query name="getInstitutesByNames">
+    <query name="getInstitutesByName">
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute
       where
-        institute.name in :names and institute.activityStatus != 'Disabled'
+        institute.name in (:names) and institute.activityStatus != 'Disabled'
     </query>
     
     <query name="getInstituteStats">

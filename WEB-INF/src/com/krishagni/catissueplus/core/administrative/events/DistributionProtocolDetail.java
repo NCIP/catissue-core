@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite;
+import com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
@@ -90,8 +90,8 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
 		}
 		
-		Set<DPDistributionSite> distSites = distributionProtocol.getDistributingSites();
-		detail.setDistributingSites(DPDistributionSite.getInstituteSitesMap(distSites));
+		Set<DpDistributionSite> distSites = distributionProtocol.getDistributingSites();
+		detail.setDistributingSites(DpDistributionSite.getInstituteSitesMap(distSites));
 		
 		return detail;
 	}

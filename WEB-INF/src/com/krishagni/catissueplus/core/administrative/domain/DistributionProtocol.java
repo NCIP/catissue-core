@@ -40,7 +40,7 @@ public class DistributionProtocol extends BaseEntity {
 	
 	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 	
-	private Set<DPDistributionSite> distributingSites = new HashSet<DPDistributionSite>();
+	private Set<DpDistributionSite> distributingSites = new HashSet<DpDistributionSite>();
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -134,11 +134,11 @@ public class DistributionProtocol extends BaseEntity {
 		this.distributionOrders = distributionOrders;
 	}
 	
-	public Set<DPDistributionSite> getDistributingSites() {
+	public Set<DpDistributionSite> getDistributingSites() {
 		return distributingSites;
 	}
 	
-	public void setDistributingSites(Set<DPDistributionSite> distributingSites) {
+	public void setDistributingSites(Set<DpDistributionSite> distributingSites) {
 		this.distributingSites = distributingSites;
 	}
 
@@ -180,7 +180,7 @@ public class DistributionProtocol extends BaseEntity {
 	
 	public Set<Site> getAllDistributingSites() {
 		Set<Site> sites = new HashSet<Site>();
-		for (DPDistributionSite distSite : getDistributingSites()) {
+		for (DpDistributionSite distSite : getDistributingSites()) {
 			if (distSite.getSite() != null) {
 				sites.add(distSite.getSite());
 			} else {

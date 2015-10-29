@@ -242,11 +242,6 @@ public class Utility {
 	}
 	
 	public static boolean isEmpty(Map<?, ?> map) {
-		if (map == null) {
-			return true;
-		}
-		
-		return map.isEmpty();
+		return map == null || map.isEmpty();
 	}
-
 }

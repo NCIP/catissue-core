@@ -11,7 +11,7 @@ import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
-public class DPDistributionSite extends BaseEntity {
+public class DpDistributionSite extends BaseEntity {
 	private DistributionProtocol distributionProtocol;
 	
 	private Institute institute;
@@ -45,8 +45,10 @@ public class DPDistributionSite extends BaseEntity {
 	@Override
 	public int hashCode() {
 		int prime = 31;
-		return prime + getDistributionProtocol().hashCode() + getInstitute().hashCode() +
-				(getSite() == null ? 0 : getSite().hashCode());
+		return prime + 
+			getDistributionProtocol().hashCode() + 
+			getInstitute().hashCode() +
+			(getSite() == null ? 0 : getSite().hashCode());
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class DPDistributionSite extends BaseEntity {
 			return false;
 		}
 		
-		DPDistributionSite other = (DPDistributionSite) obj;
+		DpDistributionSite other = (DpDistributionSite) obj;
 
 		if (ObjectUtils.notEqual(getDistributionProtocol(), other.getDistributionProtocol())) {
 			return false;
@@ -77,15 +79,15 @@ public class DPDistributionSite extends BaseEntity {
 		return true;
 	}
 	
-	public static Map<String, List<String>> getInstituteSitesMap(Collection<DPDistributionSite> distSites) {
-		Map<String, List<String>> instSiteMap = new HashMap<String, List<String>>();
+	public static Map<String, List<String>> getInstituteSitesMap(Collection<DpDistributionSite> distSites) {
+		Map<String, List<String>> instSitesMap = new HashMap<String, List<String>>();
 		
-		for (DPDistributionSite distSite : distSites) {
+		for (DpDistributionSite distSite : distSites) {
 			String instituteName = distSite.getInstitute().getName();
-			List<String> siteNames = instSiteMap.get(instituteName);
+			List<String> siteNames = instSitesMap.get(instituteName);
 			if (siteNames == null) {
 				siteNames = new ArrayList<String>();
-				instSiteMap.put(instituteName, siteNames);
+				instSitesMap.put(instituteName, siteNames);
 			}
 			
 			if (distSite.getSite() != null) {
@@ -93,6 +95,6 @@ public class DPDistributionSite extends BaseEntity {
 			}
 		}
 		
-		return instSiteMap;
+		return instSitesMap;
 	}
 }

@@ -11,7 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.DPDistributionSite;
+import com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -184,15 +184,15 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		
 		List<String> siteNames = new ArrayList<String>();
 		List<String> instituteNames = new ArrayList<String>();
-		for (Map.Entry<String, List<String>> site : detail.getDistributingSites().entrySet()) {
-			if (CollectionUtils.isNotEmpty(site.getValue())) {
-				siteNames.addAll(site.getValue());
-			} else if (site.getKey() != null) {
-				instituteNames.add(site.getKey());
+		for (Map.Entry<String, List<String>> instSites : detail.getDistributingSites().entrySet()) {
+			if (CollectionUtils.isNotEmpty(instSites.getValue())) {
+				siteNames.addAll(instSites.getValue());
+			} else if (instSites.getKey() != null) {
+				instituteNames.add(instSites.getKey());
 			}
 		}
 		
-		Set<DPDistributionSite> distSites = new HashSet<DPDistributionSite>();
+		Set<DpDistributionSite> distSites = new HashSet<DpDistributionSite>();
 		
 		if (CollectionUtils.isNotEmpty(siteNames)) {
 			List<Site> distributingSites = daoFactory.getSiteDao().getSitesByNames(siteNames);
@@ -221,8 +221,8 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		dp.setDistributingSites(distSites);
 	}
 	
-	private DPDistributionSite makeDistributingSite(DistributionProtocol dp, Institute inst, Site site) {
-		DPDistributionSite distSite = new DPDistributionSite();
+	private DpDistributionSite makeDistributingSite(DistributionProtocol dp, Institute inst, Site site) {
+		DpDistributionSite distSite = new DpDistributionSite();
 		distSite.setDistributionProtocol(dp);
 		distSite.setInstitute(inst);
 		distSite.setSite(site);
