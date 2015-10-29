@@ -29,6 +29,7 @@ public class ScheduledTaskWrapper implements Runnable {
 			job.newTask().doJob(jobRun);
 			callback.completed(jobRun); 
 		} catch (Exception e) {
+			e.printStackTrace();
 			callback.failed(jobRun, e);
 		} 
 	}

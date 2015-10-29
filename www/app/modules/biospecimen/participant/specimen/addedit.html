@@ -30,7 +30,7 @@
 
   <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
-      <div class="form-group" ng-if="currSpecimen.id || !currSpecimen.labelFmt || cp.manualSpecLabelEnabled">
+      <div class="form-group" ng-if="!!currSpecimen.label || !currSpecimen.labelFmt || cp.manualSpecLabelEnabled">
         <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
         <div class="col-xs-6">
           <input type="text" name="label" ng-model="currSpecimen.label" class="form-control" 
@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div ng-if="currSpecimen.lineage != 'Aliquot'">
+      <div ng-if="currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen">
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="specimens.class">Specimen Class</label>
           <div class="col-xs-6">
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot'">
+      <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen">
         <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
         <div class="col-xs-6"> 
           <div class="input-group">
@@ -143,7 +143,7 @@
       </div>
 
       <div class="form-group"  
-        ng-if="(currSpecimen.lineage == 'New' || currSpecimen.lineage == 'Derived') && biohazards.length > 0">
+        ng-if="(currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen) && biohazards.length > 0">
         <label class="col-xs-3 control-label" translate="specimens.biohazards">Biohazards</label>
         <div class="col-xs-6">
           <os-select name="biohazards" ng-model="currSpecimen.biohazards" list="biohazards"
@@ -281,7 +281,8 @@
         </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage == 'New' && (currSpecimen.reqId || currSpecimen.id)">
+      <div class="form-group" ng-if="currSpecimen.lineage == 'New' && !currSpecimen.poolSpecimen && 
+                                     (currSpecimen.reqId || currSpecimen.id)">
         <div class="col-xs-offset-3 col-xs-6">
           <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
             <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>

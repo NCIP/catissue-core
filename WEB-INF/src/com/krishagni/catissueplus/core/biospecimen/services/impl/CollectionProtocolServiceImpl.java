@@ -35,6 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
@@ -619,6 +620,26 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<List<SpecimenRequirementDetail>> addSpecimenPoolReqs(RequestEvent<SpecimenPoolRequirements> req) {
+		try {
+			List<SpecimenRequirement> spmnPoolReqs = srFactory.createSpecimenPoolReqs(req.getPayload());
+
+			SpecimenRequirement pooledReq = spmnPoolReqs.iterator().next().getPooledSpecimenRequirement();
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(pooledReq.getCollectionProtocol());
+
+			pooledReq.getCollectionProtocolEvent().ensureUniqueSrCodes(spmnPoolReqs);
+			pooledReq.addSpecimenPoolReqs(spmnPoolReqs);
+			daoFactory.getSpecimenRequirementDao().saveOrUpdate(pooledReq, true);
+			return ResponseEvent.response(SpecimenRequirementDetail.from(spmnPoolReqs));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<List<SpecimenRequirementDetail>> createAliquots(RequestEvent<AliquotSpecimensRequirement> req) {
 		try {
 			AliquotSpecimensRequirement requirement = req.getPayload();
@@ -629,6 +650,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			if (StringUtils.isNotBlank(requirement.getCode())) {
 				setAliquotCode(parent, aliquots, requirement.getCode());
 			}
+
 			parent.addChildRequirements(aliquots);			
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(aliquots));
@@ -1050,17 +1072,18 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	private void setAliquotCode(SpecimenRequirement parent, List<SpecimenRequirement> aliquots, String code) {
 		Set<String> codes = new HashSet<String>();
 		CollectionProtocolEvent cpe = parent.getCollectionProtocolEvent();
-		for (SpecimenRequirement sr:  cpe.getSpecimenRequirements()) {
+		for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
 			if (StringUtils.isNotBlank(sr.getCode())) {
 				codes.add(sr.getCode());
 			}
 		}
 
 		int count = 1;
-		for (SpecimenRequirement sr: aliquots) {
+		for (SpecimenRequirement sr : aliquots) {
 			while (!codes.add(code + count)) {
 				count++;
 			}
+
 			sr.setCode(code + count++);
 		}
 	}

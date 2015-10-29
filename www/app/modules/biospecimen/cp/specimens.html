@@ -1,4 +1,3 @@
-
 <div class="list-group" ng-if="view != 'addedit_sr'">
   <div class="list-group-item os-section-hdr" translate="srs.list">
     Specimen Requirements
@@ -14,7 +13,7 @@
   </div>
 
   <div class="list-group-item" ng-if="specimenRequirements.length > 0">
-    <div class="os-table os-table-fixed os-table-tree">
+    <div class="os-table os-table-tree">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-6" translate="srs.name">Name</div>
@@ -24,7 +23,11 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div ng-class="{'os-inplace-form-edit-po': (!childReq.id && parentSr == sr) || (childReq.id == sr.id)}" 
+        <div 
+          ng-class="{
+            'os-inplace-form-edit-po': (!childReq.id && parentSr == sr && !poolReq.id) || 
+                                       (childReq.id == sr.id || poolReq.id == sr.id),
+            'os-pool-specimen': !!sr.pooledSpecimen}"
           ng-repeat="sr in specimenRequirements | openedTreeNodes">
           <div class="row title">
             <div class="col col-xs-6 os-ellipsis">
@@ -45,7 +48,6 @@
                 <a ng-click="viewSr(sr)">
                   <os-specimen-desc specimen="sr"></os-specimen-desc>
                 </a>
-
               </div>
             </div>
             <div class="col col-xs-3 os-ellipsis">
@@ -77,27 +79,29 @@
                   <li>
                     <a ng-click="copyRequirement(sr)">
                       <i class="fa fa-copy"></i>
-                      <span>Copy Requirement</span>
+                      <span translate="srs.ctx_menu.copy_sr">Copy Requirement</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li>
+                  <li ng-if="!sr.pooledSpecimen">
                     <a ng-click="showCreateAliquots(sr)">
                       <i class="fa fa-share-alt"></i>
-                      <span translate="srs.ctx_menu.create_aliquots">
-                        Create Aliquots
-                      </span>
+                      <span translate="srs.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li>
+                  <li ng-if="!sr.pooledSpecimen">
                     <a ng-click="showCreateDerived(sr)">
                       <i class="fa fa-flask"></i>
-                      <span translate="srs.ctx_menu.create_derivatives">
-                        Create Derivatives
-                      </span>
+                      <span translate="srs.ctx_menu.create_derivatives">Create Derivative</span>
                     </a>
                   </li>
-                  <li class="divider"></li>
+                  <li ng-if="sr.specimensPool.length > 0">
+                    <a ng-click="showCreatePoolSpecimen(sr)">
+                      <i class="fa fa-plus-square-o"></i>
+                      <span translate="srs.ctx_menu.create_pool_spmn"> Create Pool Specimen </span>
+                    </a>
+                  </li>
+                  <li class="divider" ng-if="!sr.pooledSpecimen"></li>
                   <li>
                     <a ng-click="deleteRequirement(sr)">
                       <i class="fa fa-trash"></i>
@@ -111,7 +115,8 @@
             </div>
           </div>
           <div class="row content" ng-if="view != 'list_sr' && 
-                                          ((!childReq.id && parentSr == sr) || (childReq.id == sr.id))">
+                                          ((!childReq.id && parentSr == sr && !poolReq.id) || 
+                                           (childReq.id == sr.id || poolReq.id == sr.id))">
             <div ng-if="view == 'view_sr'"
               ng-include="'modules/biospecimen/cp/sr.html'">
             </div>
@@ -120,6 +125,9 @@
             </div>
             <div ng-if="view == 'addedit_derived'"  
               ng-include="'modules/biospecimen/cp/addedit-derived.html'"> 
+            </div>
+            <div ng-if="view == 'addedit_pool'"
+              ng-include="'modules/biospecimen/cp/addedit-pool-specimen.html'">
             </div>
           </div>
         </div>

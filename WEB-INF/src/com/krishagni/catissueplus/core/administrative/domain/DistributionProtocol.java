@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 
-public class DistributionProtocol {
+public class DistributionProtocol extends BaseEntity {
 	private static final String ENTITY_NAME = "distribution_protocol";
 
-	private Long id;
-	
 	private Institute institute;
 	
 	private Site defReceivingSite;
@@ -40,20 +40,12 @@ public class DistributionProtocol {
 	
 	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 	
-	private Set<Site> distributingSites = new HashSet<Site>();
+	private Set<DpDistributionSite> distributingSites = new HashSet<DpDistributionSite>();
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Institute getInstitute() {
 		return institute;
 	}
@@ -142,11 +134,11 @@ public class DistributionProtocol {
 		this.distributionOrders = distributionOrders;
 	}
 	
-	public Set<Site> getDistributingSites() {
+	public Set<DpDistributionSite> getDistributingSites() {
 		return distributingSites;
 	}
 	
-	public void setDistributingSites(Set<Site> distributingSites) {
+	public void setDistributingSites(Set<DpDistributionSite> distributingSites) {
 		this.distributingSites = distributingSites;
 	}
 
@@ -167,7 +159,7 @@ public class DistributionProtocol {
 		setEndDate(distributionProtocol.getEndDate());
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
-		setDistributingSites(distributionProtocol.getDistributingSites());
+		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -186,4 +178,16 @@ public class DistributionProtocol {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 	
+	public Set<Site> getAllDistributingSites() {
+		Set<Site> sites = new HashSet<Site>();
+		for (DpDistributionSite distSite : getDistributingSites()) {
+			if (distSite.getSite() != null) {
+				sites.add(distSite.getSite());
+			} else {
+				sites.addAll(distSite.getInstitute().getSites());
+			}
+		}
+		
+		return sites;
+	}
 }

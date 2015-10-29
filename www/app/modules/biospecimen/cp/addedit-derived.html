@@ -8,6 +8,7 @@
           <div os-field-error field="derivativeForm.code"></div>
         </div>
       </div>
+
       <div class="col-xs-3">
         <div class="form-group">
           <os-select name="specimenClass" on-select="loadSpecimenTypes(childReq.specimenClass)" 
@@ -67,9 +68,7 @@
           <div os-field-error field="derivativeForm.concentration"></div>
         </div>
       </div>
-    </div>
 
-    <div class="clearfix">
       <div class="col-xs-3">
         <div class="form-group">
           <os-select name="storageType" ng-model="childReq.storageType" list="storageTypes"

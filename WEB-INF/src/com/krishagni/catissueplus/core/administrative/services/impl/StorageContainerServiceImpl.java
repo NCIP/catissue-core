@@ -39,6 +39,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class StorageContainerServiceImpl implements StorageContainerService {
@@ -401,7 +402,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		
 		String entityType = pos.getOccuypingEntity();
 		if (StringUtils.isBlank(entityType)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_TYPE_REQUIRED);
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ENTITY_TYPE, "none");
 		}
 		
 		String entityName = pos.getOccupyingEntityName();

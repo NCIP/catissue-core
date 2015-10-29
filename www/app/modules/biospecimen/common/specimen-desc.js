@@ -21,7 +21,7 @@ angular.module('os.biospecimen.common.specimendesc', [])
             '{{specimen.reqLabel}}: ' +
           '</span>' +
 
-          '<span ng-if="specimen.lineage == \'New\' || detailed">' +
+          '<span ng-if="(specimen.lineage == \'New\' && !specimen.pooledSpecimen) || detailed">' +
             '<span ng-if="!!specimen.pathology && specimen.pathology != notSpecified">' +
               '{{specimen.pathology}} ' +
             '</span>' +
@@ -34,6 +34,9 @@ angular.module('os.biospecimen.common.specimendesc', [])
               '!!specimen.collectionContainer && specimen.collectionContainer != notSpecified">' +
               '<span translate="specimens.collected_in">collected in</span> {{specimen.collectionContainer}}' +
             '</span>' +
+          '</span>' +
+          '<span ng-if="specimen.lineage == \'New\' && !!specimen.pooledSpecimen && !detailed">' +
+            '<span translate="specimens.pool_specimen">Pool Specimen</span>' +
           '</span>' +
           '<span ng-if="specimen.lineage == \'Aliquot\' && !detailed">' +
             '<span translate="specimens.aliquot">Aliquot</span>' +

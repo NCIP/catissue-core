@@ -46,8 +46,6 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	INVALID_ENTITY_TYPE,
 	
-	OCCUPYING_ENTITY_TYPE_REQUIRED,
-	
 	OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED,
 	
 	INVALID_POSITIONS,

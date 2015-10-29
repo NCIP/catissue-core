@@ -45,6 +45,7 @@
     <set name="cprs" table="catissue_coll_prot_reg" inverse="true" cascade="all-delete-orphan">
       <key column="PARTICIPANT_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
+      <filter name="activeEntity"/>
     </set>
 
     <set name="races" table="CATISSUE_RACE" cascade="all-delete-orphan">
