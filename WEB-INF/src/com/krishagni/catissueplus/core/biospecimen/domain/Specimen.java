@@ -1075,6 +1075,14 @@ public class Specimen extends BaseExtensionEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
 			}
 		}
+
+		if (isPooled()) {
+			for (Specimen specimen : getSpecimensPool()) {
+				if (specimen.isActiveOrClosed() && specimen.isCollected()) {
+					throw OpenSpecimenException.userError(SpecimenErrorCode.REF_ENTITY_FOUND);
+				}
+			}
+		}
 	}
 	
 	private int getActiveChildSpecimens() {
@@ -1084,7 +1092,15 @@ public class Specimen extends BaseExtensionEntity {
 				++count;
 			}
 		}
-		
+
+		if (isPooled()) {
+			for (Specimen specimen : getSpecimensPool()) {
+				if (specimen.isActiveOrClosed() && specimen.isCollected()) {
+					++count;
+				}
+			}
+		}
+
 		return count;
 	}
 	

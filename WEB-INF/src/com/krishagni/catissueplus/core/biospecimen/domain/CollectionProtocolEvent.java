@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class CollectionProtocolEvent {
@@ -192,17 +194,39 @@ public class CollectionProtocolEvent {
 	}
 	
 	public void delete() {
-		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 		for (SpecimenRequirement sr : getSpecimenRequirements()) {
-			if (sr.getParentSpecimenRequirement() == null) {
+			if (sr.isPrimary() && !sr.isSpecimenPoolReq()) {
 				sr.delete();
 			}
 		}
+
+		setEventLabel(Utility.getDisabledValue(getEventLabel(), 255));
+		setCode(Utility.getDisabledValue(getCode(), 32));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	public void ensureUniqueSrCode(SpecimenRequirement sr) {
 		if (StringUtils.isNotBlank(sr.getCode()) && getSrByCode(sr.getCode()) != null) {
 			throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+		}
+
+		if (sr.isPooledSpecimenReq()) {
+			ensureUniqueSrCodes(sr.getSpecimenPoolReqs());
+		}
+	}
+
+	public void ensureUniqueSrCodes(Collection<SpecimenRequirement> srs) {
+		Set<String> codes = new HashSet<String>();
+		for (SpecimenRequirement sr : srs) {
+			if (StringUtils.isBlank(sr.getCode())) {
+				continue;
+			}
+
+			if (codes.contains(sr.getCode()) || getSrByCode(sr.getCode()) != null) {
+				throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, sr.getCode());
+			}
+
+			codes.add(sr.getCode());
 		}
 	}
 }

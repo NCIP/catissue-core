@@ -627,13 +627,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			SpecimenRequirement pooledReq = spmnPoolReqs.iterator().next().getPooledSpecimenRequirement();
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(pooledReq.getCollectionProtocol());
 
-			CollectionProtocolEvent cpe = pooledReq.getCollectionProtocolEvent();
-			for (SpecimenRequirement spmnPoolReq : spmnPoolReqs) {
-				if (StringUtils.isNotBlank(spmnPoolReq.getCode()) && cpe.getSrByCode(spmnPoolReq.getCode()) != null) {
-					throw OpenSpecimenException.userError(SrErrorCode.DUP_CODE, spmnPoolReq.getCode());
-				}
-			}
-
+			pooledReq.getCollectionProtocolEvent().ensureUniqueSrCodes(spmnPoolReqs);
 			pooledReq.addSpecimenPoolReqs(spmnPoolReqs);
 			daoFactory.getSpecimenRequirementDao().saveOrUpdate(pooledReq, true);
 			return ResponseEvent.response(SpecimenRequirementDetail.from(spmnPoolReqs));

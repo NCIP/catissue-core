@@ -200,6 +200,16 @@ public class CollectionProtocolRegistration {
 		setBarcode(Utility.getDisabledValue(getBarcode(), 255));
 		setPpid(Utility.getDisabledValue(getPpid(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+
+		//
+		// If participant is registered to only this deleted registration
+		// then delete participant as well
+		//
+		int regCount = getParticipant().getCprs().size();
+		CollectionProtocolRegistration cpr = getParticipant().getCprs().iterator().next();
+		if (regCount == 1 && this.equals(cpr)) {
+			getParticipant().delete();
+		}
 	}
 
 	public void update(CollectionProtocolRegistration cpr) {

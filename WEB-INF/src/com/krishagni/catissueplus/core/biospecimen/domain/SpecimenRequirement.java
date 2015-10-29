@@ -19,6 +19,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class SpecimenRequirement extends BaseEntity implements Comparable<SpecimenRequirement> {
@@ -419,7 +420,6 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 	}
 	
 	public void delete() {
-		this.activityStatus = Status.ACTIVITY_STATUS_DISABLED.getStatus();
 		for (SpecimenRequirement childReq : getChildSpecimenRequirements()) {
 			childReq.delete();
 		}
@@ -427,6 +427,9 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		for (SpecimenRequirement poolReq : getSpecimenPoolReqs()) {
 			poolReq.delete();
 		}
+
+		setCode(Utility.getDisabledValue(getCode(), 32));
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 		
 	@Override

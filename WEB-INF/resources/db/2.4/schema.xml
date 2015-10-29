@@ -135,4 +135,46 @@
       <column name="POOLED_SPECIMEN_ID" type="${int.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of CP code column to accommodate TS in delete state">
+    <modifyDataType
+      tableName="CATISSUE_COLLECTION_PROTOCOL"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add unique constraint on CP code">
+    <addUniqueConstraint
+      tableName="CATISSUE_COLLECTION_PROTOCOL"
+      columnNames="CODE"
+      constraintName="OS_CP_CODE_UQ"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of event code column to accommodate TS in delete state">
+    <modifyDataType
+      tableName="CATISSUE_COLL_PROT_EVENT"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add unique constraint on event code">
+    <addUniqueConstraint
+      tableName="CATISSUE_COLL_PROT_EVENT"
+      columnNames="COLLECTION_PROTOCOL_ID,CODE"
+      constraintName="OS_CP_EVENT_CODE_UQ"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of SR code column to accommodate TS in delete state">
+    <modifyDataType
+      tableName="CATISSUE_CP_REQ_SPECIMEN"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add unique constraint on SR code">
+    <addUniqueConstraint
+      tableName="CATISSUE_CP_REQ_SPECIMEN"
+      columnNames="COLLECTION_PROTOCOL_EVENT_ID,CODE"
+      constraintName="OS_EVENT_SR_CODE_UQ"/>
+  </changeSet>
 </databaseChangeLog>

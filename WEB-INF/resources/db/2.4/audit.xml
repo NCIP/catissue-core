@@ -32,4 +32,25 @@
       <column name="pooledSpecimen_MOD" type="${boolean.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of CP code">
+    <modifyDataType
+      tableName="CAT_COLLECTION_PROTOCOL_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of CP event code">
+    <modifyDataType
+      tableName="CATISSUE_COLL_PROT_EVENT_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of event SR code">
+    <modifyDataType
+      tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
 </databaseChangeLog>
