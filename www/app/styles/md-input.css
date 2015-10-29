@@ -48,7 +48,6 @@
 .os-md-input .ui-select-search {
   border: 0;
   height: auto!important;
-  padding: 2px 0px;
   box-shadow: none !important;
   border-radius: 0;;
   border-bottom: 2px solid #ddd;
@@ -56,6 +55,15 @@
   outline: none;
   display: block;
   width: 100%;
+}
+
+.os-md-input input {
+  padding: 2px 0px;
+}
+
+.os-md-input .ui-select-match,
+.os-md-input .ui-select-search {
+  padding: 2px 0px 1px 0px;
 }
 
 .os-md-input textarea {
