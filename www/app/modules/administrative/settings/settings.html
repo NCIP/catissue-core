@@ -1,0 +1,29 @@
+<div> 
+  <div os-page-header>
+    <h3>
+      <span translate="setting.title">Settings</span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <div class="os-table os-table-muted-hdr os-border">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-3" translate="setting.category">Category</div>
+          <div class="col col-xs-3" translate="setting.name">Name</div>
+          <div class="col col-xs-6" translate="setting.value">Value</div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div ng-repeat="setting in settings">
+          <div class="row os-pointer-cursor" ng-click="editSetting(setting)">
+            <div class="col col-xs-3" translate="setting.modules.{{setting.module}}"></div>
+            <div class="col col-xs-3" translate="setting.display_codes.{{setting.displayNameCode}}"></div>
+            <div ng-if="setting.type == 'BOOLEAN'" class="col col-xs-6" translate="setting.{{setting.value}}"></div>
+            <div ng-if="setting.type != 'BOOLEAN'" class="col col-xs-6">{{setting.value}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

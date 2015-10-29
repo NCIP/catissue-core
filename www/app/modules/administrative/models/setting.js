@@ -26,8 +26,8 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
       );
     };
 
-    Setting.updateProperty = function(config) {
-      return $http.put(Setting.url(), config).then(
+    Setting.updateSetting = function(setting) {
+      return $http.put(Setting.url(), setting).then(
         function(resp) {
           return resp.data;
         }

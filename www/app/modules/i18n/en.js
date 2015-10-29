@@ -1420,13 +1420,13 @@
       "success_message": "Feedback sent successfully"
     },
     
-    "configuration": {
-      "title": "Configuration",
+    "setting": {
+      "title": "Settings",
       "category": "Category",
       "name": "Name",
       "value": "Value",
-      "edit_title": "Edit Configuration",
-      "success_message": "Property updated successfully",
+      "edit_title": "Edit Setting",
+      "success_message": "Setting updated successfully",
       "true": "On",
       "false": "Off",
       
@@ -1438,7 +1438,7 @@
         "notifications": "Notifications"
       },
       
-      "props" : {
+      "display_codes" : {
         "email_account_id": "Email account id",
         "email_account_password": "Email account password",
         "email_server_host": "Email server host",

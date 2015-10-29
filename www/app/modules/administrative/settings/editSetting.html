@@ -1,33 +1,33 @@
 
 <div>
   <div class="os-modal-header">
-    <span translate="configuration.edit_title">Edit Configuration</span>
+    <span translate="setting.edit_title">Edit setting</span>
   </div>
   <div class="os-modal-body">
-    <form class="form-horizontal" name="configForm" os-form-validator="configForm" novalidate>
+    <form class="form-horizontal" name="settingForm" os-form-validator="settingForm" novalidate>
       <div class="form-group">
-        <label class="col-xs-2 control-label" translate="configuration.category">Category</label>
+        <label class="col-xs-2 control-label" translate="setting.category">Category</label>
         <div class="form-value col-xs-10">
-          <span translate="configuration.modules.{{config.module}}"></span>
+          <span translate="setting.modules.{{setting.module}}"></span>
         </div>
       </div>
       
       <div class="form-group">
-        <label class="col-xs-2 control-label" translate="configuration.name">Name</label>
+        <label class="col-xs-2 control-label" translate="setting.name">Name</label>
         <div class="form-value col-xs-10">
-          <span translate="configuration.props.{{config.displayNameCode}}"></span>
+          <span translate="setting.display_codes.{{setting.displayNameCode}}"></span>
         </div>
       </div>
       
       <div class="form-group">
-        <label class="col-xs-2 control-label" translate="configuration.value">Value</label>
+        <label class="col-xs-2 control-label" translate="setting.value">Value</label>
         <div class="col-xs-10">
-          <input type="text" name="value" class="form-control" ng-model="config.value" required ng-if="config.type == 'STRING'"></input>
-          <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="config.value" required 
-            ng-if="config.type == 'INT'"></input>
-          <div ng-if="config.type == 'BOOLEAN'">
+          <input type="text" name="value" class="form-control" ng-model="setting.value" required ng-if="setting.type == 'STRING'"></input>
+          <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="setting.value" required 
+            ng-if="setting.type == 'INT'"></input>
+          <div ng-if="setting.type == 'BOOLEAN'">
             <div class="os-onoffswitch">
-              <input type="checkbox" name="onoffswitch" class="os-onoffswitch-checkbox" id="os-switch" ng-model="config.value"
+              <input type="checkbox" name="onoffswitch" class="os-onoffswitch-checkbox" id="os-switch" ng-model="setting.value"
                 ng-true-value="'true'" ng-false-value="'false'"/>
               <label class="os-onoffswitch-label" for="os-switch">
                 <span class="os-onoffswitch-switch"></span>
@@ -35,7 +35,7 @@
               </label>
             </div>
           </div>
-          <div os-field-error field="configForm.value"></div>
+          <div os-field-error field="settingForm.value"></div>
         </div>
       </div>
       

@@ -1,15 +1,15 @@
 angular.module('os.administrative.setting', 
   [ 
     'ui.router',
-    'os.administrative.setting.configuration'
+    'os.administrative.setting.settings'
   ])
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('configuration', {
-        url: '/configuration',
-        templateUrl: 'modules/administrative/settings/configurations.html',
-        controller: 'ConfigurationCtrl',
+      .state('settings', {
+        url: '/settings',
+        templateUrl: 'modules/administrative/settings/settings.html',
+        controller: 'SettingsCtrl',
         parent: 'signed-in'
       });
   });
