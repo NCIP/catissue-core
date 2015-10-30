@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class DistributionProtocolRequirement extends BaseEntity{
-	private DistributionProtocol dp;
+public class DistributionProtocolRequirement extends BaseEntity {
+	private DistributionProtocol distributionProtocol;
 	
 	private String specimenType;
 	
@@ -22,12 +22,12 @@ public class DistributionProtocolRequirement extends BaseEntity{
 	
 	private String activityStatus;
 	
-	public DistributionProtocol getDp() {
-		return dp;
+	public DistributionProtocol getDistributionProtocol() {
+		return distributionProtocol;
 	}
 	
-	public void setDp(DistributionProtocol dp) {
-		this.dp = dp;
+	public void setDistributionProtocol(DistributionProtocol distributionProtocol) {
+		this.distributionProtocol = distributionProtocol;
 	}
 	
 	public String getSpecimenType() {
@@ -87,7 +87,7 @@ public class DistributionProtocolRequirement extends BaseEntity{
 	}
 	
 	public void update(DistributionProtocolRequirement dpr) {
-		setDp(dpr.getDp());
+		setDistributionProtocol(dpr.getDistributionProtocol());
 		setSpecimenType(dpr.getSpecimenType());
 		setAnatomicSite(dpr.getAnatomicSite());
 		setPathologyStatus(dpr.getPathologyStatus());
@@ -98,14 +98,9 @@ public class DistributionProtocolRequirement extends BaseEntity{
 	}
 	
 	public boolean equalsSpecimenGroup(DistributionProtocolRequirement dpr) {
-		if (getSpecimenType().equals(dpr.getSpecimenType()) &&
+		return getSpecimenType().equals(dpr.getSpecimenType()) &&
 				getAnatomicSite().equals(dpr.getAnatomicSite()) &&
-				getPathologyStatus().equals(dpr.getPathologyStatus())) {
-			
-			return true;
-		}
-		
-		return false;
+				getPathologyStatus().equals(dpr.getPathologyStatus());
 	}
 	
 	public void delete() {

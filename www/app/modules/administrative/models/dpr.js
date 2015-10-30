@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.dpr', ['os.common.models'])
-  .factory('DistributionProtocolRequirement', function(osModel, $q) {
+  .factory('DistributionProtocolRequirement', function(osModel) {
     var DPRequirement = osModel('distribution-protocol-requirement');
     
     DPRequirement.prototype.getType = function() {

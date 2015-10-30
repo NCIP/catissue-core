@@ -112,7 +112,7 @@ public class DistributionProtocolRequirementDetail {
 		DistributionProtocolRequirementDetail detail = new DistributionProtocolRequirementDetail();
 		
 		detail.setId(dpr.getId());
-		detail.setDp(DistributionProtocolSummary.from(dpr.getDp()));
+		detail.setDp(DistributionProtocolSummary.from(dpr.getDistributionProtocol()));
 		detail.setSpecimenType(dpr.getSpecimenType());
 		detail.setAnatomicSite(dpr.getAnatomicSite());
 		detail.setPathologyStatus(dpr.getPathologyStatus());

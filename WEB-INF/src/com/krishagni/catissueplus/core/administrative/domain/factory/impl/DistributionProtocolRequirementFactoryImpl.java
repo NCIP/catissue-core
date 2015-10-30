@@ -21,10 +21,10 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionProtocolRequirementFactoryImpl implements DistributionProtocolRequirementFactory {
-	private DaoFactory daoFactory;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -32,7 +32,6 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	public DistributionProtocolRequirement createDistributionProtocolRequirement(
 			DistributionProtocolRequirementDetail detail) {
-		
 		DistributionProtocolRequirement dpr = new DistributionProtocolRequirement();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
@@ -52,7 +51,6 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setDistributionProtocol(DistributionProtocolRequirementDetail detail,
 			DistributionProtocolRequirement dpr, OpenSpecimenException ose) {
-		
 		DistributionProtocolSummary dps = detail.getDp();
 		Long dpId = dps != null ? dps.getId() : null;
 		String dpShortTitle = dps != null ? dps.getShortTitle() : null;
@@ -74,12 +72,11 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 			return;
 		}
 		
-		dpr.setDp(dp);
+		dpr.setDistributionProtocol(dp);
 	}
 	
 	private void setSpecimenType(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		String specimenType = detail.getSpecimenType();
 		if (StringUtils.isEmpty(specimenType)) {
 			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_TYPE_REQUIRED);
@@ -96,7 +93,6 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setAnatomicSite(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		String anatomicSite = detail.getAnatomicSite();
 		if (StringUtils.isEmpty(anatomicSite)) {
 			ose.addError(DistributionProtocolRequirementErrorCode.ANATOMIC_SITE_REQUIRED);
@@ -113,7 +109,6 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setPathologyStatus(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		String pathologyStatus = detail.getPathologyStatus();
 		if (StringUtils.isEmpty(pathologyStatus)) {
 			ose.addError(DistributionProtocolRequirementErrorCode.PATHOLOGY_STATUS_REQUIRED);
@@ -130,10 +125,14 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setSpecimenCount(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		Long specimenCount = detail.getSpecimenCount();
 		if (specimenCount == null) {
 			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_COUNT_REQUIRED);
+			return;
+		}
+		
+		if (specimenCount.compareTo(new Long(0)) <= 0) {
+			ose.addError(DistributionProtocolRequirementErrorCode.INVALID_SPECIMEN_COUNT);
 			return;
 		}
 		
@@ -142,10 +141,14 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setQuantity(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		BigDecimal quantity = detail.getQuantity();
 		if (quantity == null) {
 			ose.addError(DistributionProtocolRequirementErrorCode.QUANTITY_REQUIRED);
+			return;
+		}
+		
+		if (NumUtil.lessThanEqualsZero(quantity)) {
+			ose.addError(DistributionProtocolRequirementErrorCode.INVALID_QUANTITY);
 			return;
 		}
 		
@@ -154,13 +157,11 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 	
 	private void setComments(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		dpr.setComments(detail.getComments());
 	}
 	
 	private void setActivityStatus(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
 			OpenSpecimenException ose) {
-		
 		String activityStatus = detail.getActivityStatus();
 		if (StringUtils.isEmpty(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
@@ -173,4 +174,6 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		
 		dpr.setActivityStatus(activityStatus);
 	}
+	
+	private DaoFactory daoFactory;
 }

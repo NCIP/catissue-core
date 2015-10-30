@@ -41,7 +41,6 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolRequirementDetail>> getRequirements(
 			RequestEvent<DistributionProtocolRequirementListCriteria> req) {
-		
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			List<DistributionProtocolRequirementDetail> result = getDprDao().getRequirements(req.getPayload());
@@ -76,7 +75,6 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolRequirementDetail> createRequirement(
 			RequestEvent<DistributionProtocolRequirementDetail> req) {
-		
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			DistributionProtocolRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
@@ -97,7 +95,6 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolRequirementDetail> updateRequirement(
 			RequestEvent<DistributionProtocolRequirementDetail> req) {
-		
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			Long dpReqId = req.getPayload().getId();
@@ -143,18 +140,17 @@ public class DistributionProtocolRequirementServiceImpl implements DistributionP
 	
 	private void ensureUniqueConstraint(DistributionProtocolRequirement oldDpr,
 			DistributionProtocolRequirement newDpr, OpenSpecimenException ose) {
-		
 		if (oldDpr == null || !oldDpr.equalsSpecimenGroup(newDpr)) {
 			DistributionProtocolRequirementListCriteria crit = new DistributionProtocolRequirementListCriteria()
-					.dpId(newDpr.getDp().getId())
+					.dpId(newDpr.getDistributionProtocol().getId())
 					.specimenType(newDpr.getSpecimenType())
 					.anatomicSite(newDpr.getAnatomicSite())
 					.pathologyStatus(newDpr.getPathologyStatus())
 					.includeDistQty(false);
-	
+			
 			List<DistributionProtocolRequirementDetail> existing = getDprDao().getRequirements(crit);
 			if (!CollectionUtils.isEmpty(existing)) {
-				ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_ALREADY_EXISTS);
+				ose.addError(DistributionProtocolRequirementErrorCode.ALREADY_EXISTS);
 			}
 		}
 	}

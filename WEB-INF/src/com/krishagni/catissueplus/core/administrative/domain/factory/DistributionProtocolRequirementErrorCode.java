@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum DistributionProtocolRequirementErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
+	ALREADY_EXISTS,
+	
 	DP_REQUIRED,
 	
 	SPECIMEN_TYPE_REQUIRED,
@@ -15,9 +17,11 @@ public enum DistributionProtocolRequirementErrorCode implements ErrorCode {
 	
 	SPECIMEN_COUNT_REQUIRED,
 	
+	INVALID_SPECIMEN_COUNT,
+	
 	QUANTITY_REQUIRED,
 	
-	SPECIMEN_ALREADY_EXISTS;
+	INVALID_QUANTITY;
 	
 	@Override
 	public String code() {

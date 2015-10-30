@@ -5,7 +5,7 @@
 
 <hibernate-mapping auto-import="false">
   <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement"
-      table="OS_DP_REQUIREMENTS">
+    table="OS_DP_REQUIREMENTS">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
@@ -14,8 +14,7 @@
     </id>
     
     <many-to-one
-      name="dp"
-      cascade="none"
+      name="distributionProtocol"
       class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
       column="DP_ID" />
     
@@ -37,26 +36,21 @@
     
     <query name="getDistributionQty">
       select
-        dpr.id, sum(i.quantity)
+        dpr.id, sum(item.quantity)
       from
-        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement dpr,
-        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem i
-      join
-        i.specimen s
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement dpr
+        join dpr.distributionProtocol dp
+        join dp.distributionOrders do
+        join do.orderItems item
+        join item.specimen spec
       where
-        dpr.dp.id = :dpId
-      and
-        i.order.distributionProtocol.id = :dpId
-      and
-        i.order.status = 'EXECUTED'
-      and
-        dpr.specimenType = s.specimenType
-      and
-        dpr.anatomicSite = s.tissueSite
-      and
-        dpr.pathologyStatus = s.pathologicalStatus
+        dp.id = :dpId and
+        do.status = 'EXECUTED' and
+        dpr.specimenType = spec.specimenType and
+        dpr.anatomicSite = spec.tissueSite and
+        dpr.pathologyStatus = spec.pathologicalStatus
       group by
-        s.specimenType, s.tissueSite, s.pathologicalStatus, dpr.id, i.quantity
+        dpr.id, dpr.specimenType, dpr.anatomicSite, dpr.pathologyStatus
     </query>
   </class>
 </hibernate-mapping>

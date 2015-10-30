@@ -48,7 +48,7 @@ public class DistributionProtocolRequirementDaoImpl extends AbstractDao<Distribu
 	
 	private void addListConditions(Criteria query, DistributionProtocolRequirementListCriteria crit) {
 		if(crit.dpId() != null) {
-			query.createAlias("dp", "dp")
+			query.createAlias("distributionProtocol", "dp")
 			.add(Restrictions.eq("dp.id", crit.dpId()));
 		}
 		
