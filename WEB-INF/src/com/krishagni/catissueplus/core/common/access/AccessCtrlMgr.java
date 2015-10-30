@@ -323,7 +323,7 @@ public class AccessCtrlMgr {
 		}
 		
 		if (!isAccessRestrictedBasedOnMrn()) {
-			return true;
+			return phiAccess;
 		}
 
 		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
