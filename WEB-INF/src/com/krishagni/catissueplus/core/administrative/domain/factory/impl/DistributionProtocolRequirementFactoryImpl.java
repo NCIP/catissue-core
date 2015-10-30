@@ -131,7 +131,7 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 			return;
 		}
 		
-		if (specimenCount.compareTo(new Long(0)) <= 0) {
+		if (specimenCount <= 0L) {
 			ose.addError(DistributionProtocolRequirementErrorCode.INVALID_SPECIMEN_COUNT);
 			return;
 		}
