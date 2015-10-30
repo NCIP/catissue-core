@@ -290,7 +290,11 @@ edu.common.de.Form = function(args) {
 
   this.getFieldEl = function(field) {
     var id      = 'de-' + field.name
-    var labelEl = field.type != 'label' ? this.fieldLabel(id, field.caption) : undefined;
+
+    var labelEl = undefined;
+    if (field.type != 'label' && field.type != 'heading') {
+      labelEl = this.fieldLabel(id, field.caption);
+    }
 
     var fieldObj = edu.common.de.FieldFactory.getField(field, undefined, args);
     var inputEl = fieldObj.render();
@@ -462,7 +466,7 @@ edu.common.de.FieldFactory = {
       fieldObj = new edu.common.de.ComponentForm(id, field, args);
     } else if (field.type == 'fileUpload') {
       fieldObj = new edu.common.de.FileUploadField(id, field, args);
-    } else if (field.type == 'label') {
+    } else if (field.type == 'label' || field.type == 'heading') {
       fieldObj = new edu.common.de.Note(id, field, args);
     } else {
       var params = {id: id, field: field, args: args};
@@ -1432,6 +1436,9 @@ edu.common.de.Note = function(id, field) {
 
   this.render = function() {
     this.inputEl = $("<div/>").html(field.caption);
+    if (field.heading == true || field.type == 'heading') {
+      this.inputEl.addClass('de-heading');
+    }
     return this.inputEl;
   };
 

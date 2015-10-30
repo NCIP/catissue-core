@@ -265,3 +265,11 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   pointer-events: none;
 }
 
+.de-heading {
+  background: #f5f5f5;
+  font-weight: bold;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
