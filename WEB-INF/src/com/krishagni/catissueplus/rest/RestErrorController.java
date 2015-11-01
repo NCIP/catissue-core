@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -44,11 +45,14 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 
 			if (ose.getException() != null) {
 				ose.getException().printStackTrace();
-				errorMsgs.add(getMessage(INTERNAL_ERROR, null));
-			} else {
-				for (ParameterizedError error : ose.getErrors()) {
-					errorMsgs.add(getMessage(error.error(), error.params()));
+
+				if (CollectionUtils.isEmpty(ose.getErrors())) {
+					errorMsgs.add(getMessage(INTERNAL_ERROR, null));
 				}
+			}
+
+			for (ParameterizedError error : ose.getErrors()) {
+				errorMsgs.add(getMessage(error.error(), error.params()));
 			}
 		} else {
 			exception.printStackTrace();

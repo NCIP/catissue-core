@@ -4,6 +4,9 @@ package com.krishagni.catissueplus.core.common.errors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.exception.ConstraintViolationException;
+
 public class OpenSpecimenException extends RuntimeException {
 	private static final long serialVersionUID = -1473557909717365251L;
 	
@@ -22,9 +25,19 @@ public class OpenSpecimenException extends RuntimeException {
 		this.errorType = type;
 	}
 	
-	public OpenSpecimenException(Throwable exception) {
+	public OpenSpecimenException(Throwable t) {
 		this.errorType = ErrorType.SYSTEM_ERROR;
-		this.exception = exception;
+		this.exception = t;
+
+		if (t instanceof ConstraintViolationException) {
+			ConstraintViolationException cve = (ConstraintViolationException)t;
+			String dbMsg = cve.getConstraintName();
+			if (StringUtils.isBlank(dbMsg)) {
+				dbMsg = cve.getSQLException().getMessage();
+			}
+
+			errors.add(new ParameterizedError(CommonErrorCode.CONSTRAINT_VIOLATION, dbMsg));
+		}
 	}
 	
 	public ErrorType getErrorType() {
