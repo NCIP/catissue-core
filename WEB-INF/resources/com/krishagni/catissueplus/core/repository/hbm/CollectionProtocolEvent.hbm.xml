@@ -66,16 +66,10 @@
 
     <property name="code" column="CODE"/>
       
-    <set
-      name="specimenRequirements"
-      table="CATISSUE_CP_REQ_SPECIMEN"
-      lazy="true"
-      inverse="true"
-      cascade="save-update">
-        
+    <set name="specimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN"
+      inverse="true" cascade="all-delete-orphan" order-by="id asc">
       <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
-      <one-to-many
-            class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
       <filter name="activeEntity"/>
     </set>
 

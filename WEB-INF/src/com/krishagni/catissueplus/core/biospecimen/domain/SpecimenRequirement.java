@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,11 +64,11 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 			
 	private SpecimenRequirement parentSpecimenRequirement;
 	
-	private Set<SpecimenRequirement> childSpecimenRequirements = new HashSet<SpecimenRequirement>();
+	private Set<SpecimenRequirement> childSpecimenRequirements = new LinkedHashSet<SpecimenRequirement>();
 
 	private SpecimenRequirement pooledSpecimenRequirement;
 
-	private Set<SpecimenRequirement> specimenPoolReqs = new HashSet<SpecimenRequirement>();
+	private Set<SpecimenRequirement> specimenPoolReqs = new LinkedHashSet<SpecimenRequirement>();
 
 	private Set<Specimen> specimens = new HashSet<Specimen>();
 
@@ -457,7 +458,7 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		result.setParentSpecimenRequirement(parent);
 		result.setPooledSpecimenRequirement(pooledReq);
 		
-		Set<SpecimenRequirement> childSrs = new HashSet<SpecimenRequirement>();
+		Set<SpecimenRequirement> childSrs = new LinkedHashSet<SpecimenRequirement>();
 		int order = 1;
 		for (SpecimenRequirement childSr : getOrderedChildRequirements()) {
 			SpecimenRequirement copiedSr = childSr.deepCopy(cpe, result, null);
@@ -472,7 +473,7 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		}
 
 		order = 1;
-		Set<SpecimenRequirement> specimenPoolReqs = new HashSet<SpecimenRequirement>();
+		Set<SpecimenRequirement> specimenPoolReqs = new LinkedHashSet<SpecimenRequirement>();
 		for (SpecimenRequirement specimenPoolReq : getSpecimenPoolReqs()) {
 			SpecimenRequirement copiedSr = specimenPoolReq.deepCopy(cpe, null, result);			
 			copiedSr.setSortOrder(order++);
