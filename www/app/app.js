@@ -96,6 +96,15 @@ osApp.config(function(
     }
   })
   .factory('httpRespInterceptor', function($rootScope, $q, $injector, $window, Alerts, LocationChangeListener) {
+    function displayErrMsgs(errors) {
+      var errMsgs = errors.map(
+        function(err) {
+          return err.message + " (" + err.code + ")";
+        }
+      );
+      Alerts.errorText(errMsgs);
+    }
+
     return {
       request: function(config) {
         return config || $q.when(config);
@@ -122,15 +131,14 @@ osApp.config(function(
           delete $injector.get("$http").defaults.headers.common['X-OS-API-TOKEN'];
           $injector.get('$state').go('login'); // using injector to get rid of circular dependencies
         } else if (rejection.status / 100 == 5) {
-          Alerts.error("common.server_error");
-        } else if (rejection.status / 100 == 4) {
-          var errMsgs = [];
-
           if (rejection.data instanceof Array) {
-            angular.forEach(rejection.data, function(err) {
-              errMsgs.push(err.message + " (" + err.code + ")");
-            });
-            Alerts.errorText(errMsgs);
+            displayErrMsgs(rejection.data);
+          } else {
+            Alerts.error("common.server_error");
+          }
+        } else if (rejection.status / 100 == 4) {
+          if (rejection.data instanceof Array) {
+            displayErrMsgs(rejection.data);
           } else if (rejection.config.method != 'HEAD') {
             Alerts.error('common.ui_error');
           }
