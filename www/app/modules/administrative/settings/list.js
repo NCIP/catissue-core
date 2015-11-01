@@ -1,27 +1,29 @@
 
-angular.module('os.administrative.setting.settings', ['os.administrative.models'])
-  .controller('SettingsCtrl', function($scope, $modal, $translate, Setting, Alerts) {
-  
-    function loadSettings() {
-      Setting.query().then(
-        function(settings) {
-          $scope.settings = settings;
-        }
-      );
+angular.module('os.administrative.setting.list', ['os.administrative.models'])
+  .controller('SettingsListCtrl', function($scope, $state, $stateParams, $translate, Setting, Alerts) {
+
+    function init() {
+      var moduleName = $stateParams.moduleName;
+      if (!moduleName) {
+        $state.go('settings-list', {moduleName: $scope.modules[0].name});
+        return;
+      } 
+
+      $scope.selectedModule = $scope.modulesMap[moduleName];
     }
     
-    function updateSetting(setting) {
+    init();
+    /*function updateSetting(setting) {
       Setting.updateSetting(setting).then(
         function(resp) {
           Alerts.success($translate.instant('setting.success_message'));
           loadSettings();
         }
       )
-    }
+    }*/
     
-    loadSettings();
     
-    $scope.editSetting = function(setting) {
+    /*$scope.editSetting = function(setting) {
       var modalInstance =  $modal.open({
         templateUrl: 'modules/administrative/settings/editSetting.html',
         controller: function($scope, $modalInstance) {
@@ -42,5 +44,5 @@ angular.module('os.administrative.setting.settings', ['os.administrative.models'
           updateSetting(newSetting);
         }
       );
-    }
+    } */
   });

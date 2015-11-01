@@ -85,7 +85,12 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 	
 	@Override
 	public int compareTo(ConfigSettingDetail o) {
-		return module.compareTo(o.module);
+		int cmp = module.compareTo(o.module);
+		if (cmp == 0) {
+			cmp = name.compareTo(o.name);
+		}
+
+		return cmp;
 	}
 	
 	public static ConfigSettingDetail from(ConfigSetting setting) {

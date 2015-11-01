@@ -48,6 +48,8 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
     "update": "Update",
     "loading": "Loading...",
     "help": "Help",
@@ -1420,22 +1422,37 @@
       "success_message": "Feedback sent successfully"
     },
     
-    "setting": {
+    "settings": {
       "title": "Settings",
-      "category": "Category",
-      "name": "Name",
-      "value": "Value",
-      "edit_title": "Edit Setting",
-      "success_message": "Setting updated successfully",
-      "true": "On",
-      "false": "Off",
+      "modules": "Modules",
+      "property": "Property",
+      "description": "Description",
+      "value": "Setting",
       
-      "modules" : {
-        "auth": "Authentication",
-        "biospecimen": "Biospecimen",
-        "common": "Common",
-        "email": "Email",
-        "notifications": "Notifications"
+      "auth": {
+        "title": "Authentication",
+        "allowed_failed_logins": "Max. Failed Login Attempts",
+        "allowed_failed_logins_desc": "Max. number of consecutive failed logins that are allowed before user account is locked",
+        "token_inactive_interval": "Token Inactive Interval",
+        "token_inactive_interval_desc": "Max. interval (in minutes) of no API calls (inactivity) after which token is invalidated",
+        "verify_token_ip_address": "Caller IP Address Validation",
+        "verify_token_ip_address_desc": "Check whether APIs are invoked from same IP address to which token was issued"
+      },
+
+      "biospecimen": {
+        "title": "Biospecimen"
+      },
+
+      "common": {
+        "title": "Common"
+      },
+
+      "email": {
+        "title": "Email"
+      },
+
+      "notifications": {
+        "title": "Notifications"
       },
       
       "display_codes" : {

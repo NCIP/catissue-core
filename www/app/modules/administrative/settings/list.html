@@ -1,26 +1,65 @@
 <div> 
   <div os-page-header>
     <h3>
-      <span translate="setting.title">Settings</span>
+      <span translate="settings.title">Settings</span>
     </h3>
   </div>
 
   <div class="container">
-    <div class="os-table os-table-muted-hdr os-border">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col col-xs-3" translate="setting.category">Category</div>
-          <div class="col col-xs-3" translate="setting.name">Name</div>
-          <div class="col col-xs-6" translate="setting.value">Value</div>
+    <div class="clearfix">
+      <div class="col-xs-3">
+        <div class="list-group">
+          <div class="list-group-item os-section-hdr">
+            <span translate="settings.modules">Modules</span>
+          </div>
+
+          <a class="list-group-item" 
+            ui-sref="settings-list({moduleName: module.name})" ui-sref-active="active"
+            ng-repeat="module in modules">
+            <p>{{'settings.' + module.name + '.title' | translate}}</p>
+          </a>
         </div>
       </div>
-      <div class="os-table-body">
-        <div ng-repeat="setting in settings">
-          <div class="row os-pointer-cursor" ng-click="editSetting(setting)">
-            <div class="col col-xs-3" translate="setting.modules.{{setting.module}}"></div>
-            <div class="col col-xs-3" translate="setting.display_codes.{{setting.displayNameCode}}"></div>
-            <div ng-if="setting.type == 'BOOLEAN'" class="col col-xs-6" translate="setting.{{setting.value}}"></div>
-            <div ng-if="setting.type != 'BOOLEAN'" class="col col-xs-6">{{setting.value}}</div>
+
+      <div class="col-xs-9">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>{{'settings.' + selectedModule.name + '.title' | translate}}</span>
+          </div>
+          <div class="panel-body">
+            <div class="os-table os-table-hover os-cfg-settings">
+              <div class="os-table-head">
+                <div class="row">
+                  <div class="col os-col-25">
+                    <span translate='settings.property'>Property</span>
+                  </div>
+                  <div class="col os-col-45">
+                    <span translate='settings.description'>Description</span>
+                  </div>
+                  <div class="col os-col-30">
+                    <span translate='settings.value'>Setting</span>
+                  </div>
+                </div>
+              </div>
+              <div class="os-table-body">
+                <div class="row" ng-repeat="setting in selectedModule.settings">
+                  <div class="col os-col-25">
+                    <span>{{'settings.' + setting.module + '.' + setting.name | translate}}</span>
+                  </div>
+                  <div class="col os-col-45">
+                    <span>{{'settings.' + setting.module + '.' + setting.name + '_desc' | translate}}</span>
+                  </div>
+                  <div class="col os-col-30" ng-switch on="setting.type">
+                    <span ng-switch-when="BOOLEAN">
+                      {{setting.value | osBoolValue: 'common.enabled': 'common.disabled'}}
+                    </span>
+                    <span ng-switch-default>
+                      {{setting.value | osNoValue}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
