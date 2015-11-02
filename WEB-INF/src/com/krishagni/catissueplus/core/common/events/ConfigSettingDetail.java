@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.common.events;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +27,8 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 	private String displayNameCode;
 	
 	private String descCode;
+	
+	private Date activationDate;
 
 	public String getModule() {
 		return module;
@@ -83,6 +86,14 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 		this.descCode = descCode;
 	}
 	
+	public Date getActivationDate() {
+		return activationDate;
+	}
+
+	public void setActivationDate(Date activationDate) {
+		this.activationDate = activationDate;
+	}
+	
 	@Override
 	public int compareTo(ConfigSettingDetail o) {
 		int cmp = module.compareTo(o.module);
@@ -106,6 +117,7 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 		result.setDescCode(property.getDescCode());
 		result.setDisplayNameCode(property.getDisplayNameCode());
 		result.setValue(setting.getValue());
+		result.setActivationDate(setting.getActivationDate());
 		return result;
 	}
 	
