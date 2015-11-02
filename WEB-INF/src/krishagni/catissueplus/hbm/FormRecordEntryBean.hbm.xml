@@ -122,5 +122,14 @@
           where
             re.record_id = :recordId
         </sql-query>
+
+        <query name="getRecordEntries">
+          from
+            krishagni.catissueplus.beans.FormRecordEntryBean re
+          where
+            re.formCtxtId = :formCtxtId and
+            re.objectId = :objectId and
+            re.activityStatusStr = 'Active'
+        </query>
     </class>
 </hibernate-mapping>
