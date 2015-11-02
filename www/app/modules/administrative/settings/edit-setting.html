@@ -16,7 +16,19 @@
     </div>
     
     <div class="form-group">
-      <label class="col-xs-2 control-label" translate="settings.value">Value</label>
+      <label class="col-xs-2 control-label" translate="settings.old_value">Old Value</label>
+      <div class="form-value col-xs-10" ng-switch on="setting.type">
+        <span ng-switch-when="BOOLEAN">
+          {{oldValue | osBoolValue: 'common.enabled': 'common.disabled': 'common.not_specified'}}
+        </span>
+        <span ng-switch-default>
+          {{oldValue | osNoValue}}
+        </span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-2 control-label" translate="settings.new_value">New Value</label>
       <div class="col-xs-10">
         <input type="text" name="value" class="form-control" ng-model="setting.value" required ng-if="setting.type == 'STRING'"></input>
         <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="setting.value" required 

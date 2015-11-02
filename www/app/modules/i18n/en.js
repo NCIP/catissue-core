@@ -1428,8 +1428,11 @@
       "property": "Property",
       "description": "Description",
       "value": "Value",
+      "old_value": "Old Value",
+      "new_value": "New Value",
       "last_updated": "Last Updated",
       "success_message": "Setting updated successfully",
+      "invalid_value": "New value must not be same as old value",
       
       "auth": {
         "title": "Authentication",

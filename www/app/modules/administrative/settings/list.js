@@ -18,6 +18,8 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     $scope.updateSetting = function(setting) {
       $scope.isEdit = true;
       $scope.setting = angular.copy(setting);
+      $scope.oldValue = setting.value;
+      $scope.setting.value = '';
     }
     
     $scope.cancel = function() {
@@ -25,16 +27,20 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     }
     
     $scope.submit = function() {
-      Setting.updateSetting($scope.setting).then(
-        function(resp) {
-          Alerts.success($translate.instant('settings.success_message'));
-          angular.forEach($scope.modulesMap[resp.module].settings, function(setting) {
-            if(setting.name == resp.name) {
-              setting.value = resp.value;
-            }
-          });
-          $scope.isEdit = false;
-        }
-      )
+      if($scope.oldValue == $scope.setting.value) {
+        Alerts.error($translate.instant('settings.invalid_value'));
+      } else {
+        Setting.updateSetting($scope.setting).then(
+          function(resp) {
+            Alerts.success($translate.instant('settings.success_message'));
+            angular.forEach($scope.modulesMap[resp.module].settings, function(setting) {
+              if(setting.name == resp.name) {
+                setting.value = resp.value;
+              }
+            });
+            $scope.isEdit = false;
+          }
+        );
+      }
     }
   });
