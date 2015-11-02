@@ -41,9 +41,20 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
+	
+	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
+	
+	static {
+		attrDisplayVals.put("specimenType", "dist_specimen_type");
+		attrDisplayVals.put("anatomicSite", "dist_anatomic_site");
+		attrDisplayVals.put("pathologyStatus", "dist_pathology_status");
+	};
+	
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
+	
+	private MessageSource messageSource;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -373,10 +384,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return daoFactory.getDistributionProtocolDao().getOrderStats(crit);
 	}
 	
-	private String getMessage(String code) {
-		return messageSource.getMessage(code, null, Locale.getDefault());
-	}
-	
 	private String[] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
 		List<String> headers = new ArrayList<String>();
 		if (crit.dpId() == null) {
@@ -410,12 +417,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return data.toArray(new String[0]);
 	}
 	
-	private MessageSource messageSource;
+	private String getMessage(String code) {
+		return messageSource.getMessage(code, null, Locale.getDefault());
+	}
 	
-	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
-	static {
-		attrDisplayVals.put("specimenType", "dist_specimen_type");
-		attrDisplayVals.put("anatomicSite", "dist_anatomic_site");
-		attrDisplayVals.put("pathologyStatus", "dist_pathology_status");
-	};
 }
