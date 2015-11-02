@@ -330,6 +330,7 @@
     <property name="userDao" ref="userDao"/>
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
     <property name="emailService" ref="emailService"/>
+    <property name="templateService" ref="templateService"/>
   </bean>
   
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
@@ -549,6 +550,7 @@
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="deInitializer" ref="deInitializer"/>
     <property name="templateService" ref="templateService"/>
+    <property name="querySvc" ref="querySvc"/>
   </bean>
 
   <bean id="importSpeForms" class="com.krishagni.catissueplus.core.init.ImportSpecimenEventForms">

@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +25,8 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -36,6 +40,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
+import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
@@ -98,6 +103,8 @@ public class QueryServiceImpl implements QueryService {
 	
 	private EmailService emailService;
 	
+	private TemplateService templateService;
+	
 	static {
 		initExportFileCleaner();
 	}
@@ -132,6 +139,14 @@ public class QueryServiceImpl implements QueryService {
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+
+	public TemplateService getTemplateService() {
+		return templateService;
+	}
+
+	public void setTemplateService(TemplateService templateService) {
+		this.templateService = templateService;
 	}
 
 	@Override
@@ -773,6 +788,24 @@ public class QueryServiceImpl implements QueryService {
 			IOUtils.closeQuietly(out);
 			throw OpenSpecimenException.serverError(e);
 		}
+	}
+	
+	@Override
+	public String insertCustomQueryForms(String dirName) throws IOException {
+		StringBuilder templates = new StringBuilder();
+		try {
+			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
+			Resource[] resources = resolver.getResources("classpath:/query-forms/" + dirName + "/*.xml");
+			
+			for (Resource resource: resources) {
+				String filename = "query-forms/" + dirName + "/" + resource.getFilename();
+				templates.append(templateService.render(filename, new HashMap<String, Object>()));
+			}
+		} catch (FileNotFoundException e) {
+
+		}
+		
+		return templates.toString();
 	}
 		
 	private SavedQuery getSavedQuery(SavedQueryDetail detail) {

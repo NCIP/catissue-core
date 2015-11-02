@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.services;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
@@ -67,5 +68,7 @@ public interface QueryService {
 	}	
 
 	public QueryDataExportResult exportQueryData(ExecuteQueryEventOp opDetail, ExportProcessor processor);
+	
+	public String insertCustomQueryForms(String dirName) throws IOException ;
 	
 }

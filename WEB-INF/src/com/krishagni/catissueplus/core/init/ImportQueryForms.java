@@ -5,17 +5,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
 import org.apache.commons.io.IOUtils;
 
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.services.QueryService;
 
 public class ImportQueryForms extends ImportForms {
 	private int order = 1;
 	
+	private QueryService querySvc;
+
+	public void setQuerySvc(QueryService querySvc) {
+		this.querySvc = querySvc;
+	}
+
 	@Override
 	protected List<String> listFormFiles() 
 	throws IOException {		
@@ -57,5 +66,13 @@ public class ImportQueryForms extends ImportForms {
 	@Override
 	protected void cleanup() {
 		order = 1;
-	}	
+	}
+	
+	@Override
+	protected Map<String, Object> getTemplateProps() {
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("querySvc", querySvc);
+		
+		return props;
+	}
 }

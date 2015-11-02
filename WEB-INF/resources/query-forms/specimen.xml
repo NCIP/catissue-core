@@ -440,5 +440,9 @@
         <extnFkCol>RECORD_ID</extnFkCol>
       </subForm>
     </row>
+
+    <row>
+      $querySvc.insertCustomQueryForms('specimen')
+    </row>
   </view>
 </form>

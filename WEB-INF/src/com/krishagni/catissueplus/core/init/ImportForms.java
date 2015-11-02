@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import krishagni.catissueplus.beans.FormContextBean;
 
@@ -111,6 +112,10 @@ public abstract class ImportForms implements InitializingBean {
 	protected abstract FormContextBean getFormContext(String formFile, Long formId);
 	
 	protected abstract void cleanup();
+	
+	protected Map<String, Object> getTemplateProps() {
+		return new HashMap<String, Object>();
+	}
 		
 	private void importForms(Collection<String> formFiles) 
 	throws Exception {
@@ -161,7 +166,7 @@ public abstract class ImportForms implements InitializingBean {
 	}
 		
 	private InputStream preprocessForms(String formFile) {
-		String template = templateService.render(formFile, new HashMap<String, Object>());
+		String template = templateService.render(formFile, getTemplateProps()); 
 		return new ByteArrayInputStream( template.getBytes() );
 	}
 }
