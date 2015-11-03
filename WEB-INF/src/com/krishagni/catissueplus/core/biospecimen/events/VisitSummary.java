@@ -148,8 +148,17 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	@Override
 	public int compareTo(VisitSummary other) {
+		int result = Integer.compare(this.eventPoint, other.eventPoint);
+		if (result != 0) {
+			return result;
+		}
+		
 		Date thisVisit = visitDate != null ? visitDate : anticipatedVisitDate;
-		Date otherVisit = other.visitDate != null ? other.visitDate : other.anticipatedVisitDate;		
-		return thisVisit.compareTo(otherVisit);
+		Date otherVisit = other.visitDate != null ? other.visitDate : other.anticipatedVisitDate;
+		if (thisVisit.equals(otherVisit)) {
+			return eventId.compareTo(other.eventId);
+		} else {
+			return thisVisit.compareTo(otherVisit);
+		}
 	}	
 }
