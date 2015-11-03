@@ -441,8 +441,6 @@
       </subForm>
     </row>
 
-    <row>
-      $querySvc.insertCustomQueryForms('specimen')
-    </row>
+    $querySvc.insertCustomQueryForms('specimen')
   </view>
 </form>

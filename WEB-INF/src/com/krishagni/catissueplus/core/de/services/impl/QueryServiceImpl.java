@@ -109,40 +109,20 @@ public class QueryServiceImpl implements QueryService {
 		initExportFileCleaner();
 	}
 
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-	
-	public UserDao getUserDao() {
-		return userDao;
 	}
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
 
-	public QueryFolderFactory getQueryFolderFactory() {
-		return queryFolderFactory;
-	}
-
 	public void setQueryFolderFactory(QueryFolderFactory queryFolderFactory) {
 		this.queryFolderFactory = queryFolderFactory;
 	}
 
-	public EmailService getEmailService() {
-		return emailService;
-	}
-
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
-	}
-
-	public TemplateService getTemplateService() {
-		return templateService;
 	}
 
 	public void setTemplateService(TemplateService templateService) {
@@ -791,7 +771,7 @@ public class QueryServiceImpl implements QueryService {
 	}
 	
 	@Override
-	public String insertCustomQueryForms(String dirName) throws IOException {
+	public String insertCustomQueryForms(String dirName) {
 		StringBuilder templates = new StringBuilder();
 		try {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
@@ -803,6 +783,8 @@ public class QueryServiceImpl implements QueryService {
 			}
 		} catch (FileNotFoundException e) {
 
+		} catch (IOException io) {
+			io.printStackTrace();
 		}
 		
 		return templates.toString();
