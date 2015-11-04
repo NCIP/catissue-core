@@ -127,6 +127,19 @@
         </span>
       </a>
     </li>
+    <li show-if-allowed="shippingOrderReadOpts" class="os-home-item">
+      <a ui-sref="shipping-order-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-shopping-cart"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.shipping_orders">Shipping Orders</h3>
+          <span translate="menu.shipping_orders_desc">
+            Create, execute request orders for shipping specimens
+          </span>
+        </span>
+      </a>
+    </li>
 
     <li show-if-allowed="scheduledJobReadOpts" class="os-home-item">
       <a ui-sref="job-list">

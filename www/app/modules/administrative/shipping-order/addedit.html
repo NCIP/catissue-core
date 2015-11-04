@@ -1,0 +1,198 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="shipping-order-list" translate="shipping_orders.list">Shipping Orders</a>
+      </li>
+    </ul>
+    <h3 ng-switch on="!order.id">
+      <span ng-switch-when="true" translate="shipping_orders.create_order">Create Shipping Order</span>
+      <span ng-switch-default>{{order.name}}</span>
+    </h3>
+  </div>
+  
+  <div class="container">
+    <div os-wizard="doWizard" type="classic">
+      <os-wizard-step title="{{'shipping_orders.details' | translate}}" on-finish="passThrough">
+        <div ng-include src="'shipping-orders/addedit-detail.html'"></div>
+      </os-wizard-step>
+
+      <os-wizard-step title="{{'shipping_orders.specimens' | translate}}" on-finish="passThrough">
+        <div ng-include src="'shipping-orders/addedit-order-specimens.html'"></div>
+      </os-wizard-step>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="shipping-orders/addedit-detail.html">
+  <form name="ordForm" class="form-horizontal" 
+    os-form-validator="ordForm" validator="ordFormValidator" novalidate>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="shipping_orders.name">Name</label>
+      <div class="col-xs-6">
+        <input type="text" name="name" ng-model="order.name"
+          class="form-control" placeholder="{{'shipping_orders.name' | translate}}" ng-maxlength="255" required/>
+        <div os-field-error field="ordForm.name"></div>
+      </div>
+    </div>
+     
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="shipping_orders.receiving_institute">
+        Receiving Institute
+      </label>
+      <div class="col-xs-6">
+        <os-select name="institute" ng-model="order.instituteName" list="instituteNames"
+          placeholder="{{'shipping_orders.receiving_institute' | translate}}" required
+          on-select="loadSites(order.instituteName)">
+        </os-select>
+        <div os-field-error field="ordForm.institute"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="shipping_orders.receiving_site">Receiving Site</label>
+      <div class="col-xs-6">
+        <os-select name="site" ng-model="order.siteName" 
+          list="sites" placeholder="{{'shipping_orders.receiving_site' | translate}}">
+        </os-select>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="shipping_orders.shipping_date">Shipping Date</label>
+      <div class="col-xs-6">
+        <os-date-picker name="shippingDate" date="order.shippingDate"
+          placeholder="{{'shipping_orders.shipping_date' | translate}}" required>
+        </os-date-picker>
+        <div os-field-error field="ordForm.shippingDate"></div>
+      </div>  
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3" translate="shipping_orders.sender_comments">Sender Comments</label>
+      <div class="col-xs-6">
+        <textarea type="text" name="comments" ng-model="order.comments" class="form-control" 
+          placeholder="{{'shipping_orders.sender_comments' | translate}}" rows="2">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group" style="text-align: right;">
+      <div class="col-xs-offset-3 col-xs-9">
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="doWizard.next(false)">
+          <span translate="common.buttons.next"> Next </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="shipping-orders/addedit-order-specimens.html">
+  <form name="specForm" class="form-horizontal" 
+    os-form-validator="specForm" validator="specFormValidator" novalidate>
+    <div class="alert alert-danger" ng-if="!order.orderItems || order.orderItems.length == 0">
+      <span translate="shipping_orders.no_specimens_in_list">
+        No specimens in list to distribute. Add at least one specimen
+      </span>
+    </div>
+
+    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group>
+      <textarea ng-model="input.labelText" class="form-control" 
+        placeholder="{{'shipping_orders.enter_specimen_label' | translate}}" os-enable-tab rows="2">
+      </textarea>
+      <span class="input-group-btn">
+        <button class="btn btn-primary" ng-click="addSpecimens()" ng-disabled="!input.labelText">
+          <span translate="common.buttons.add">Add</span>
+        </button>
+      </span>
+    </div>
+
+    <div class="os-table os-table-fixed bulk-edit os-border os-table-muted-hdr" 
+      ng-if="order.orderItems && order.orderItems.length > 0">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col os-col-15">
+            <span translate="shipping_orders.spec.label">Label</span>
+          </div>
+          <div class="col os-col-30">
+            <span translate="shipping_orders.spec.desc">Description</span>
+          </div>
+          <div class="col os-col-20">
+            <span translate="shipping_orders.spec.cp">Collection Protocol</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="shipping_orders.spec.location">Location</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="shipping_orders.spec.available_qty">Available</span>
+          </div>
+          <div class="col os-col-5">
+            <span>&nbsp;</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="item in order.orderItems" 
+          ng-form="sform" ng-init="specimen=item.specimen">
+          <div class="col os-col-15">
+            <a ui-sref="specimen({specimenId: specimen.id})">
+              <span>{{specimen.label}}</span>
+            </a>
+          </div>
+          <div class="col os-col-30">
+            <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+          </div>
+          <div class="col os-col-20">
+            <span>{{specimen.cpShortTitle}}</span>
+          </div>
+          <div class="col os-col-15">
+            <span ng-switch on="!!specimen.storageLocation.name">
+              <span ng-switch-when="true">
+                {{specimen.storageLocation.name}} 
+                <span>
+                  ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
+                </span>
+              </span>
+              <span ng-switch-default translate="shipping_orders.spec.virtual">
+                Virtual
+              </span>
+            </span>
+          </div>
+          <div class="col os-col-15">
+            <span> {{specimen.availableQty}} </span>
+            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
+          </div>
+          <div class="col os-col-5">
+            <button class="btn btn-xs btn-default" ng-click="removeOrderItem(item)">
+              <span class="fa fa-remove"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+     
+    <div class="form-group" style="text-align: right;">
+      <div class="col-xs-offset-3 col-xs-9">
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn os-btn-secondary" ng-click="doWizard.previous(false)">
+          <span translate="common.buttons.previous"> Previous </span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!order.orderItems.length">
+          <span translate="shipping_orders.buttons.save_draft"> Save as Draft </span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="ship()" ng-disabled="!order.orderItems.length">
+          <span translate="shipping_orders.buttons.ship"> Ship </span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>

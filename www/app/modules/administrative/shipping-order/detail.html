@@ -1,0 +1,31 @@
+<div> 
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="shipping-order-list" translate="shipping_orders.list">Shipping Orders</a>
+      </li>
+    </ul>
+    <h3>{{order.name}}</h3>
+
+    <div class="os-btns right">
+      <button show-if-allowed="shippingOrderResource.updateOpts" class="primary" 
+        ui-sref="shipping-order-addedit({orderId: order.id})" ng-if="order.status == 'PENDING'">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="shipping-order-detail.overview"> 
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="shipping_orders.menu.overview">Overview</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

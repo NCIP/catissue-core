@@ -14,6 +14,7 @@
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
     "distribution_orders": "Distribution Orders",
+    "shipping_orders": "Shipping Orders",
     "jobs": "Jobs",
 
     "cp_desc": "Create, update SOP of visits and specimens",
@@ -28,6 +29,7 @@
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
+    "shipping_orders_desc": "Create, execute request orders for shipping specimens",
     "jobs_desc": "Create, schedule, execute jobs"
   },
 
@@ -1280,74 +1282,128 @@
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list",
     "distribute": "Distribute",
+    "ship": "Ship",
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
+    "no_specimens_for_shipping": "Please select at least one specimen to create shipping order",
     "created_by": "Created By"
-   },
+  },
 
-   "orders": {
-     "list": "Distribution Orders",
-     "title": "Distribution Order",
-     "create_order": "Create Distribution Order",
-     "name": "Name",
-     "requestor": "Requestor",
-     "site": "Site",
-     "dp": "Distribution Protocol",
-     "date": "Date",
-     "status": "Status",
-     "dispose_all": "Dispose All",
-     "specimens": "Specimens",
-     "distributor": "Distributor",
-     "dist_date": "Distribution Date",
-     "creation_date": "Creation Date",
-     "tracking_url": "Tracking URL",
-     "receiving_institute": "Receiving Institute",
-     "receiving_site": "Receiving Site",
-     "execution_date": "Execution Date",
-     "courier_tracking_url": "Courier Tracking URL",
-     "sender_comments": "Sender Comments",
-     "details": "Order Details",
-     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
-     "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
-     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+  "orders": {
+    "list": "Distribution Orders",
+    "title": "Distribution Order",
+    "create_order": "Create Distribution Order",
+    "name": "Name",
+    "requestor": "Requestor",
+    "site": "Site",
+    "dp": "Distribution Protocol",
+    "date": "Date",
+    "status": "Status",
+    "dispose_all": "Dispose All",
+    "specimens": "Specimens",
+    "distributor": "Distributor",
+    "dist_date": "Distribution Date",
+    "creation_date": "Creation Date",
+    "tracking_url": "Tracking URL",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "execution_date": "Execution Date",
+    "courier_tracking_url": "Courier Tracking URL",
+    "sender_comments": "Sender Comments",
+    "details": "Order Details",
+    "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
+    "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
+    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
-     "report_gen_initiated": "Generating distribution order report...",
-     "downloading_report": "Downloading distribution order report...",
-     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
+    "report_gen_initiated": "Generating distribution order report...",
+    "downloading_report": "Downloading distribution order report...",
+    "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
 
-     "filters": "Filters",
+    "filters": "Filters",
    
-     "spec": {
-       "label": "Label",
-       "cp": "Collection Protocol",
-       "desc": "Description",
-       "available_qty": "Available",
-       "quantity": "Quantity",
-       "location": "Location",
-       "virtual": "Virtual"
-     },
+    "menu": {
+      "overview": "Overview"
+    },
 
-     "statuses": {
-       "EXECUTED": "Executed",
-       "PENDING": "Pending"
-     },
+    "spec": {
+      "label": "Label",
+      "cp": "Collection Protocol",
+      "desc": "Description",
+      "available_qty": "Available",
+      "quantity": "Quantity",
+      "location": "Location",
+      "virtual": "Virtual"
+    },
 
-     "item_statuses": {
-       "DISTRIBUTED": "Distribute",
-       "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
-     },
+    "statuses": {
+      "EXECUTED": "Executed",
+      "PENDING": "Pending"
+    },
 
-     "buttons": {
-       "distribute": "Distribute",
-       "save_draft": "Save Draft",
-       "download_report": "Download Report"
-     },
+    "item_statuses": {
+      "DISTRIBUTED": "Distribute",
+      "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
+    },
 
-     "tooltip": {
-       "create": "Create new distribution order",
-       "search": "Filter out distribution orders"
-     }
-   },
+    "buttons": {
+      "distribute": "Distribute",
+      "save_draft": "Save Draft",
+      "download_report": "Download Report"
+    },
+
+    "tooltip": {
+      "create": "Create new distribution order",
+      "search": "Filter out distribution orders"
+    }
+  },
+
+  "shipping_orders": {
+    "list": "Shipping Orders",
+    "create_order": "Create Shipping Order",
+    "name": "Name",
+    "site": "Site",
+    "shipping_date": "Shipping Date",
+    "creation_date": "Creation Date",
+    "status": "Status",
+    "specimens": "Specimens",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "sender_comments": "Sender Comments",
+    "details": "Order Details",
+    "no_specimens_in_list": "No specimens in order list to shipping. Add at least one specimen",
+    "enter_specimen_label": "To add specimens to shipping list, enter labels separated by a comma/tab/newline and click add",
+    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+
+    "filters": "Filters",
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "spec": {
+      "label": "Label",
+      "cp": "Collection Protocol",
+      "desc": "Description",
+      "available_qty": "Available",
+      "location": "Location",
+      "virtual": "Virtual"
+    },
+
+    "statuses": {
+      "SHIPPED": "Shipped",
+      "PENDING": "Pending"
+    },
+
+    "buttons": {
+      "ship": "Ship",
+      "save_draft": "Save Draft"
+    },
+
+    "tooltip": {
+      "create": "Create new shipping order",
+      "search": "Filter out shipping orders"
+    }
+  },
 
    "jobs": {
      "list": "Jobs",

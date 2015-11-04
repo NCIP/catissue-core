@@ -1,0 +1,34 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title" translate="shipping_orders.filters">
+      Filters
+    </h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <input type="text" ng-model="filterOpts.name" class="form-control"
+        os-md-input placeholder="{{'shipping_orders.name' | translate}}">
+    </div>
+
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.receivingInstitute" placeholder="{{'shipping_orders.receiving_institute' | translate}}">
+        <os-select ng-model="filterOpts.receivingInstitute" class="form-control"
+          list="instituteNames" os-md-input placeholder="{{'shipping_orders.receiving_institute' | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <os-date-picker date="filterOpts.shippingDate" md-type="true"
+        placeholder="{{'shipping_orders.shipping_date' | translate}}">
+      </os-date-picker>
+    </div>
+
+    <div class="form-group os-btns">
+      <button class="default full-width" ng-click="clearFilters()">
+        <span translate="common.buttons.clear_filters">Clear Filters</span>
+      </button>
+    </div>
+  </div>
+</div>

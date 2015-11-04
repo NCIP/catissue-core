@@ -1,0 +1,78 @@
+<div class="clearfix">
+  <div class="col-xs-10">
+    <ul class="os-key-values os-two-cols">
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.receiving_site">Receiving Site</strong>
+        <span class="value value-md">{{order.siteName | osNoValue}}</span>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.distributor">Distributor</strong>
+        <span class="value value-md">{{order.distributor.firstName}} {{order.distributor.lastName}}</span>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.status">Status</strong>
+        <span class="value value-md">{{'orders.statuses.' + order.status | translate}}</span>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.shipping_date">Shipping Date</strong>
+        <span class="value value-md">
+          {{order.shippingDate | date: global.dateFmt | osNoValue}}
+        </span>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.creation_date">Creation Date</strong>
+        <span class="value value-md">{{order.creationDate | date: global.dateFmt}}</span>
+      </li>
+    </ul>
+
+    <div class="os-section" ng-init="specSect=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="specSect=!specSect">
+        <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="avCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="shipping_orders.specimens">Specimens</h3>
+      <div collapse="specSect">
+        <div class="os-table os-table-fixed os-table-muted-hdr os-border">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col os-col-20" translate="shipping_orders.spec.label">Label</div>
+              <div class="col os-col-30" translate="shipping_orders.spec.desc">Description</div>
+              <div class="col os-col-20" translate="shipping_orders.spec.cp">Collection Protocol</div>
+              <div class="col os-col-15" translate="shipping_orders.spec.available_qty">Available</div>
+              <div class="col os-col-15" translate="shipping_orders.status">Status</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
+              <div class="col os-col-20">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <span>{{specimen.label}}</span>
+                </a>
+              </div>
+              <div class="col os-col-30">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                </a>
+              </div>
+              <div class="col os-col-20">
+                <span>{{specimen.cpShortTitle}}</span>
+              </div>
+              <div class="col os-col-15">
+                <span>{{specimen.availableQty}}</span>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-unit>
+              </div>
+              <div class="col os-col-15">
+                <span>{{'shipping_orders.item_statuses.' + item.status | translate}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
