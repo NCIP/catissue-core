@@ -16,31 +16,52 @@
     </div>
   </div>
   
-  <div class="os-cards">
-    <div class="os-card" ng-repeat="distributionProtocol in distributionProtocols" 
-      ng-click="showDpOverview(distributionProtocol)">
-    
-      <h4>
-        <a title="{{distributionProtocol.shortTitle}}" ui-sref=".overview(distributionProtocol)">
-          <span>{{distributionProtocol.shortTitle}}</span>
-        </a>
-      </h4>
-
-      <h5 title="{{'dp.pi' | translate}}" > 
-        {{distributionProtocol.principalInvestigator.firstName}} {{distributionProtocol.principalInvestigator.lastName}}
-      </h5>
-      
-      <h5 title="{{'dp.start_date' | translate}}" > {{distributionProtocol.startDate | date : global.dateFmt}}</h5>
-
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'dp.tooltip.distributed_count' | translate}}">
-          <span class="fa fa-truck"></span>
-          <span>{{(distributionProtocol.distributedSpecimensCount || 0) | number: 0}}</span>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="dp.short_title">Short Title</span>
+          </th>
+          <th class="col os-desc-column">
+            <span translate="dp.title">Title</span>
+          </th>
+          <th class="col">
+            <span translate="dp.pi">Principal Investigator</span>
+          </th>
+          <th class="col">
+            <span translate="dp.start_date">Start Date</span>
+          </th>
+          <th class="col">
+            <span translate="dp.dist_spmns_count">Distributed Specimens</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="dp in distributionProtocols" os-row-click="showDpOverview(dp)">
+          <td class="col">
+            <a ui-sref="dp-detail.overview({dpId: dp.id})">
+              <span>{{dp.shortTitle}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <a ui-sref="dp-detail.overview({dpId: dp.id})">
+              <span>{{dp.title}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{dp.principalInvestigator | osUserDisplayName}}</span>
+          </td>
+          <td class="col">
+            <span>{{dp.startDate | date : global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{dp.distributedSpecimensCount || 0 | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
   <div os-right-drawer ng-include="'modules/administrative/dp/search.html'"></div>
 
 </div>

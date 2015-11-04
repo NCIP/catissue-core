@@ -17,28 +17,47 @@
   </div>
 
   <div class="container">
-    <div class="os-table">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col col-xs-4" translate="form.name">Form Name</div>
-          <div class="col col-xs-3" translate="form.created_by">Created By</div>
-          <div class="col col-xs-3" translate="form.last_updated">Last Updated</div>
-          <div class="col col-xs-2" translate="form.cp_count">CP Count</div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div ng-repeat="form in formsList | filter:searchFormName" class="row">
-          <div class="col col-xs-4">
-            <a ui-sref="form-addedit({formId: form.formId})" 
-              title="{{'form.tooltip.edit' | translate}}">{{form.caption}}</a>
-          </div>
-          <div class="col col-xs-3">{{form.createdBy | osUserDisplayName}}</div>
-          <div class="col col-xs-3" ng-if="form.modificationTime">{{form.modificationTime | date:global.dateFmt }}</div>
-          <div class="col col-xs-3" ng-if="!form.modificationTime">{{form.creationTime |  date:global.dateFmt }}</div>
-          <div class="col col-xs-2 clearfix">
-            {{form.cpCount == -1 ? ('form.all' | translate) : form.cpCount}}
-
-            <div class="pull-right btn-group btn-group-xs">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="form.name">Form Name</span>
+          </th>
+          <th class="col">
+            <span translate="form.created_by">Created By</span>
+          </th>
+          <th class="col">
+            <span translate="form.last_updated">Last Updated</span>
+          </th>
+          <th class="col">
+            <span translate="form.cp_count">CP Count</span>
+          </th>
+          <th class="col">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="form in formsList | filter:searchFormName" os-row-click="openForm(form)">
+          <td class="col">
+            <a ui-sref="form-addedit({formId: form.formId})" title="{{'form.tooltip.edit' | translate}}">
+              <span>{{form.caption}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{form.createdBy | osUserDisplayName}}</span>
+          </td>
+          <td class="col" ng-if="form.modificationTime">
+            <span>{{form.modificationTime | date:global.dateFmt}}</span>
+          </td>
+          <td class="col" ng-if="!form.modificationTime">
+            <span>{{form.creationTime |  date:global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{form.cpCount == -1 ? ('form.all' | translate) : form.cpCount}}</span>
+          </td>
+          <td class="col os-click-esc">
+            <div class="btn-group btn-group-xs">
               <button type="button" class="btn btn-default" ng-click="showFormContexts(form)"
                 title="{{'form.tooltip.attach_form_to_cp' | translate}}">
                 <span class="fa fa-wrench"></span>
@@ -48,9 +67,9 @@
                 <i class="fa fa-trash-o"></i>
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

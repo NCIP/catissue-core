@@ -12,23 +12,29 @@
     </div>
   </div>
   <div class="container">
-    <div class="os-table os-table-muted-hdr os-border">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col col-xs-6" translate="role.name">Name</div>
-          <div class="col col-xs-6" translate="role.description">Description</div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div ng-repeat="role in roles">
-          <div class="row os-pointer-cursor" ng-click="showRoleOverview(role)"
-             title="{{'role.tooltip.view_details' | translate}}">
-            <div class="col col-xs-6">{{role.name}}</div>
-            <div class="col col-xs-6">{{role.description}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="role.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="role.description">Description</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="role in roles" os-row-click="showRoleOverview(role)">
+          <td class="col">
+            <a ui-sref="role-detail.overview({roleId: role.id})">
+              <span>{{role.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{role.description | osNoValue}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-

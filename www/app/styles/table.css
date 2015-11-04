@@ -4,6 +4,7 @@
   max-width: 100%;
   margin-bottom: 20px;
   display: table;
+  border-collapse: separate;
 }
 
 .os-table .row {
@@ -84,4 +85,8 @@
 
 .os-table-borderless .os-table-body .row .col {
   border: 0px!important;
+}
+
+.os-desc-column {
+  width: 375px;
 }

@@ -77,5 +77,9 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
       $scope.filterOpts = {};
     }
 
+    $scope.showOrderOverview = function(order) {
+      $state.go('order-detail.overview', {orderId: order.id});
+    }
+
     init();
   });

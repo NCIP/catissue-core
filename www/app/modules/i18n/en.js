@@ -147,6 +147,10 @@
     "ppids": "Participant Protocol IDs",
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
+    "participant_count": "Participants",
+    "specimen_count": "Specimens",
+    "view_details": "View Details",
+    "view_participants": "View Participants",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
@@ -253,6 +257,8 @@
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
     "search_results": "Participant Search Result for {{key}}",
+    "visits_count": "Visits",
+    "specimens_count": "Specimens",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -584,6 +590,8 @@
     "name": "Name",
     "department_name": "Department Name",
     "departments": "Departments",
+    "depts_count": "Departments",
+    "users_count": "Users",
 
     "bulk_import": "Import Institutes",
     "bulk_import_jobs": "Import Institutes Job List",
@@ -622,6 +630,7 @@
     "coordinators": "Coordinators",
     "type": "Type",
     "address": "Address",
+    "cp_count": "Collection Protocols",
 
     "bulk_import": "Import Sites",
     "bulk_import_jobs": "Import Sites Job List",
@@ -671,6 +680,7 @@
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
     "all_sites": "All current and future sites",
+    "dist_spmns_count": "Distributed Specimens",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -745,6 +755,8 @@
     "locked": "User {{firstName}} {{lastName}} has been locked. Unlock?",
     "unlock_user": "Unlock User",
     "user_unlocked": "User unlocked successfully",
+    "cp_count": "Collection Protocols",
+    "user_since": "User Since",
 
     "user_roles": "User Roles",
     "bulk_import_users": "Import Users",
@@ -862,6 +874,7 @@
     "replicated_successfully": "Container {{name}} replicated successfully",
     "search": "Type storage container name to filter containers",
     "no_containers_match_search": "No containers match search criteria to store specimen/s",
+    "created_by": "Created By",
 
     "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",

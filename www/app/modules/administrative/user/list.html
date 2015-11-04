@@ -43,34 +43,54 @@
     </div>
   </div>
     
-  <div class="os-cards">
-    <div class="os-card" ng-repeat="user in users" ng-click="showUserOverview(user)">
-      <h4>
-        <a title="{{'user.tooltip.view_details' | translate}}" ui-sref=".overview(user)">
-          <span>{{user | osUserDisplayName}}</span>
-        </a>
-      </h4>
-      <!--TODO insert email address here after getting it from backend  -->
-      <h5 title="{{'user.email_address' | translate}}">{{user.loginName}}</h5>
-
-      <!--TODO insert last login time here after getting it from backend  -->
-      <p title="{{'user.tooltip.last_login' | translate}}">{{user.lastLogin}}</p>
-      
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'user.tooltip.cp_count' | translate}}">
-          <span class="fa fa-calendar"></span>
-          <span>{{(user.cpCount || 0 )| number: 0}}</span>
-        </div>
-        <div class="stat col-xs-6" title="{{'user.tooltip.user_since' | translate}}">
-          <span class="fa fa-history"></span>
-          <span ng-if="!!user.creationDate">
-            {{user.creationDate | date: 'yyyy'}}
-          </span>
-          <span ng-if="!user.creationDate" translate="common.na">
-          </span>
-        </div>
-      </div> 
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="user.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="user.email_address">Email Address</span>
+          </th>
+          <th class="col">
+            <span translate="user.login_name">Login Name</span>
+          </th>
+          <th class="col">
+            <span translate="user.cp_count">Collection Protocols</span>
+          </th>
+          <th class="col">
+            <span translate="user.user_since">User Since</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="user in users" os-row-click="showUserOverview(user)">
+          <td class="col">
+            <a ui-sref="user-detail.overview({userId: user.id})">
+              <span>{{user | osUserDisplayName}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{user.emailAddress}}</span>
+          </td>
+          <td class="col">
+            <span>{{user.loginName}}</span>
+          </td>
+          <td class="col">
+            <span>{{user.cpCount | number: 0}}</span>
+          </td>
+          <td class="col" ng-switch on="!!user.creationDate">
+            <span ng-switch-when="true">
+              {{user.creationDate | date: 'yyyy'}}
+            </span>
+            <span ng-switch-when="false" translate="common.na">
+              Not Available
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/user/search.html'"></div>

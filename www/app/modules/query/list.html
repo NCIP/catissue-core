@@ -72,7 +72,7 @@
 </div>
 
 <script type="text/ng-template" id="query_list.html">
-  <div class="os-table" overflow="auto" ng-if="queryList.queries.length > 0">
+  <div class="os-table os-table-hover" overflow="auto" ng-if="queryList.queries.length > 0">
     <div class="os-table-head">
       <div class="row">
         <div class="col col-xs-6" style="padding-left: 20px;" translate="queries.title">
@@ -89,10 +89,10 @@
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="query in queryList.queries"
-        ng-class="{selected: query.selected}"> 
+        ng-class="{selected: query.selected}" os-row-click="viewResults(query)">
         <div class="col col-xs-6">
           <div class="clearfix">
-            <div class="pull-left os-query-select-cb">
+            <div class="pull-left os-query-select-cb os-click-esc">
               <os-checkbox ng-change="toggleQuerySelect(query)" ng-model="query.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">
@@ -104,7 +104,7 @@
         </div>
         <div class="col col-xs-3">{{query.createdBy.firstName}} {{query.createdBy.lastName}}</div>
         <div class="col col-xs-2"> {{query.lastModifiedOn | date: global.dateFmt}}</div>
-        <div class="col col-xs-1 os-more-options">
+        <div class="col col-xs-1 os-click-esc os-more-options">
           <div dropdown>
             <button class="btn btn-xs btn-default dropdown-toggle">
               <span class="fa fa-ellipsis-v"></span>

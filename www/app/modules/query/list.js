@@ -1,7 +1,7 @@
 
 angular.module('os.query.list', ['os.query.models'])
   .controller('QueryListCtrl', function(
-    $scope, $modal, currentUser, queryGlobal, 
+    $scope, $state, $modal, currentUser, queryGlobal,
     Util, SavedQuery, QueryFolder, Alerts) {
 
     function init() {
@@ -51,6 +51,10 @@ angular.module('os.query.list', ['os.query.models'])
       $scope.filterOpts = {};
       loadQueries($scope.filterOpts);
     };
+
+    $scope.viewResults = function(query) {
+      $state.go('query-results', {queryId: query.id});
+    }
 
     $scope.importQuery = function() {
       var mi = $modal.open({

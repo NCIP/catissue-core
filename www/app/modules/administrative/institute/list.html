@@ -36,25 +36,37 @@
     </div>
   </div>
 
-  <div class="os-cards"> 
-    <div class="os-card" ng-repeat="institute in instituteList" ng-click="showInstituteOverview(institute)">
-      <h4>
-        <a title="{{'institutes.tooltip.view_details' | translate}}" 
-          ui-sref="institute-detail.overview({instituteId: institute.id})"> 
-          {{institute.name}}
-        </a>
-      </h4>
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'institutes.tooltip.department_count' | translate}}">
-          <span class="fa fa-sitemap"></span>
-          <span>{{institute.departmentsCount | number: 0}}</span>
-        </div>
-        <div class="stat col-xs-6" title="{{'institutes.tooltip.user_count' | translate}}">
-          <span class="fa fa-user"></span>
-          <span>{{institute.usersCount | number: 0}}</span>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="institutes.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="institutes.depts_count">Departments</span>
+          </th>
+          <th class="col">
+            <span translate="institutes.users_count">Users</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="institute in instituteList" os-row-click="showInstituteOverview(institute)">
+          <td class="col">
+            <a ui-sref="institute-detail.overview({instituteId: institute.id})">
+              <span>{{institute.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{institute.departmentsCount | number: 0}}</span>
+          </td>
+          <td class="col">
+            <span>{{institute.usersCount | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/institute/search.html'"></div>

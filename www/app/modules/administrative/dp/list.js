@@ -28,7 +28,7 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
     }
 
     $scope.showDpOverview = function(distributionProtocol) {
-      $state.go('dp-detail.overview', {dpId:distributionProtocol.id});
+      $state.go('dp-detail.overview', {dpId: distributionProtocol.id});
     };
     
     function loadActivityStatuses () {
