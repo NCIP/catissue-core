@@ -12,5 +12,5 @@ public interface ShippingOrderDao extends Dao<ShippingOrder> {
 	
 	public ShippingOrder getOrderByName(String name);
 	
-	public List<Specimen> getShippedSpecimens(List<String> specimenLabels);
+	public List<Specimen> getShippedSpecimensByLabels(List<String> specimenLabels);
 }

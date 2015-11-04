@@ -1362,6 +1362,7 @@
     "create_order": "Create Shipping Order",
     "name": "Name",
     "site": "Site",
+    "distributor": "Distributor",
     "shipping_date": "Shipping Date",
     "creation_date": "Creation Date",
     "status": "Status",

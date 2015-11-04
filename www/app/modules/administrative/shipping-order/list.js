@@ -12,7 +12,11 @@ angular.module('os.administrative.shippingorder.list', ['os.administrative.model
     }
 
     function loadOrders(filterOpts) {
-
+      ShippingOrder.query(filterOpts).then(
+        function(result) {
+          $scope.orders = result; 
+        }
+      );
     }
  
     function loadInstitutes() {

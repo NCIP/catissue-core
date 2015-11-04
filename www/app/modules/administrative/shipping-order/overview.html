@@ -13,7 +13,7 @@
         
       <li class="item">
         <strong class="key key-sm" translate="shipping_orders.status">Status</strong>
-        <span class="value value-md">{{'orders.statuses.' + order.status | translate}}</span>
+        <span class="value value-md">{{'shipping_orders.statuses.' + order.status | translate}}</span>
       </li>
         
       <li class="item">
@@ -21,11 +21,6 @@
         <span class="value value-md">
           {{order.shippingDate | date: global.dateFmt | osNoValue}}
         </span>
-      </li>
-        
-      <li class="item">
-        <strong class="key key-sm" translate="shipping_orders.creation_date">Creation Date</strong>
-        <span class="value value-md">{{order.creationDate | date: global.dateFmt}}</span>
       </li>
     </ul>
 
@@ -39,35 +34,31 @@
         <div class="os-table os-table-fixed os-table-muted-hdr os-border">
           <div class="os-table-head">
             <div class="row">
-              <div class="col os-col-20" translate="shipping_orders.spec.label">Label</div>
-              <div class="col os-col-30" translate="shipping_orders.spec.desc">Description</div>
-              <div class="col os-col-20" translate="shipping_orders.spec.cp">Collection Protocol</div>
+              <div class="col os-col-25" translate="shipping_orders.spec.label">Label</div>
+              <div class="col os-col-35" translate="shipping_orders.spec.desc">Description</div>
+              <div class="col os-col-25" translate="shipping_orders.spec.cp">Collection Protocol</div>
               <div class="col os-col-15" translate="shipping_orders.spec.available_qty">Available</div>
-              <div class="col os-col-15" translate="shipping_orders.status">Status</div>
             </div>
           </div>
           <div class="os-table-body">
             <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
-              <div class="col os-col-20">
+              <div class="col os-col-25">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <span>{{specimen.label}}</span>
                 </a>
               </div>
-              <div class="col os-col-30">
+              <div class="col os-col-35">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
                 </a>
               </div>
-              <div class="col os-col-20">
+              <div class="col os-col-25">
                 <span>{{specimen.cpShortTitle}}</span>
               </div>
               <div class="col os-col-15">
                 <span>{{specimen.availableQty}}</span>
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>
-              </div>
-              <div class="col os-col-15">
-                <span>{{'shipping_orders.item_statuses.' + item.status | translate}}</span>
               </div>
             </div>
           </div>

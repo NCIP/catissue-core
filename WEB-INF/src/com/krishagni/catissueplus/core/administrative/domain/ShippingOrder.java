@@ -1,14 +1,16 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShippingOrderErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
-import com.krishagni.catissueplus.core.common.CollectionUpdater;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ShippingOrder extends BaseEntity {
@@ -127,10 +129,21 @@ public class ShippingOrder extends BaseEntity {
 	}
 	
 	private void updateOrderItems(ShippingOrder other) {
-		CollectionUpdater.update(getOrderItems(), other.getOrderItems());
+		Map<Specimen, ShippingOrderItem> existingItems = new HashMap<Specimen, ShippingOrderItem>();
 		for (ShippingOrderItem item : getOrderItems()) {
-			item.setOrder(this);
+			existingItems.put(item.getSpecimen(), item); 
 		}
+		
+		for (ShippingOrderItem newItem : other.getOrderItems()) {
+			ShippingOrderItem oldItem = existingItems.remove(newItem.getSpecimen());
+			if (oldItem != null) {
+				oldItem.update(newItem);
+			} else {
+				getOrderItems().add(newItem);
+			}
+		}
+		
+		getOrderItems().removeAll(existingItems.values());
 	}
 	
 	private void updateStatus(ShippingOrder order) {

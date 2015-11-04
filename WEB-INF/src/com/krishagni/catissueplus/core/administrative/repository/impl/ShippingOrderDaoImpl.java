@@ -15,14 +15,20 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
 public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements ShippingOrderDao {
+
+	@Override
+	public Class<ShippingOrder> getType() {
+		return ShippingOrder.class;
+	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<ShippingOrder> getShippingOrders(ShippingOrderListCriteria crit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(ShippingOrder.class)
-				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
-				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
-				.addOrder(Order.desc("id"));
+		Criteria query = sessionFactory.getCurrentSession()
+			.createCriteria(ShippingOrder.class)
+			.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
+			.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
+			.addOrder(Order.desc("id"));
 		
 		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 		addNameRestrictions(query, crit, matchMode);
@@ -33,7 +39,8 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 	@Override
 	@SuppressWarnings("unchecked")
 	public ShippingOrder getOrderByName(String name) {
-		List<ShippingOrder> result = sessionFactory.getCurrentSession().getNamedQuery(GET_ORDER_BY_NAME)
+		List<ShippingOrder> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ORDER_BY_NAME)
 				.setString("name", name)
 				.list();
 		
@@ -42,15 +49,11 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Specimen> getShippedSpecimens(List<String> specimenLabels) {
-		return sessionFactory.getCurrentSession().getNamedQuery(GET_SHIPPED_SPECIMENS)
+	public List<Specimen> getShippedSpecimensByLabels(List<String> specimenLabels) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SHIPPED_SPECIMENS_BY_LABELS)
 				.setParameterList("labels", specimenLabels)
 				.list();
-	}
-	
-	@Override
-	public Class<ShippingOrder> getType() {
-		return ShippingOrder.class;
 	}
 	
 	private void addNameRestrictions(Criteria query, ShippingOrderListCriteria crit, MatchMode matchMode) {
@@ -58,7 +61,7 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 			return;
 		}
 		
-		query.add(Restrictions.ilike("name", crit.query(), matchMode));
+		query.add(Restrictions.ilike("name", crit.name(), matchMode));
 	}
 	
 	private void addInstituteRestrictions(Criteria query, ShippingOrderListCriteria crit, MatchMode matchMode) {
@@ -67,13 +70,13 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 		}
 		
 		query.createAlias("site", "site")
-				.createAlias("site.institute", "institute")
-				.add(Restrictions.ilike("institute.name", crit.institute(), matchMode));
+			.createAlias("site.institute", "institute")
+			.add(Restrictions.ilike("institute.name", crit.institute(), matchMode));
 	}
 	
 	private static final String FQN = ShippingOrder.class.getName();
 	
 	private static final String GET_ORDER_BY_NAME = FQN + ".getOrderByName";
 	
-	private static final String GET_SHIPPED_SPECIMENS = FQN + ".getShippedSpecimens";
+	private static final String GET_SHIPPED_SPECIMENS_BY_LABELS = FQN + ".getShippedSpecimensByLabels";
 }

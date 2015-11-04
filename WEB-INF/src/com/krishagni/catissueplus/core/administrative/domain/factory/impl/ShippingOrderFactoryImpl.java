@@ -98,19 +98,16 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		
 		Set<ShippingOrderItem> orderItems = new HashSet<ShippingOrderItem>();
 		Set<Long> specimens = new HashSet<Long>();
-		boolean dupAdded = false;
 		for (ShippingOrderItemDetail item : detail.getOrderItems()) {
 			ShippingOrderItem orderItem = getOrderItem(item, order, ose);
 			if (orderItem == null) {
 				continue;
 			}
 			
-			if (!specimens.add(orderItem.getSpecimen().getId()) && !dupAdded) {
+			if (!specimens.add(orderItem.getSpecimen().getId())) {
 				ose.addError(ShippingOrderErrorCode.DUPLICATE_SPECIMENS);
-				dupAdded = true;
+				return;
 			}
-			
-			
 			
 			orderItems.add(orderItem);
 		}

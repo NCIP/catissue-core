@@ -42,4 +42,10 @@ public class ShippingOrderItem extends BaseEntity {
 	public void ship() {
 		specimen.updatePosition(null);
 	}
+	
+	public void update(ShippingOrderItem other) {
+		setOrder(other.getOrder());
+		setSpecimen(other.specimen);
+		setQuality(other.getQuality());
+	}
 }

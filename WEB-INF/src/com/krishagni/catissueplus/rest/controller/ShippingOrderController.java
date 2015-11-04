@@ -30,8 +30,8 @@ public class ShippingOrderController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<ShippingOrderDetail> getOrders(
-			@RequestParam(value = "query", required = false, defaultValue = "")
-			String searchTerm,
+			@RequestParam(value = "name", required = false, defaultValue = "")
+			String name,
 			
 			@RequestParam(value = "institute", required = false, defaultValue = "")
 			String institute,
@@ -43,7 +43,7 @@ public class ShippingOrderController {
 			int maxResults) {
 		
 		ShippingOrderListCriteria listCrit = new ShippingOrderListCriteria()
-				.query(searchTerm)
+				.name(name)
 				.institute(institute)
 				.startAt(startAt)
 				.maxResults(maxResults);

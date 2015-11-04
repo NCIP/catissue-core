@@ -163,7 +163,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			return;
 		}
 		
-		List<Specimen> shippedSpecimen = getShippingDao().getShippedSpecimens(specimenLabels);
+		List<Specimen> shippedSpecimen = getShippingDao().getShippedSpecimensByLabels(specimenLabels);
 		if (!CollectionUtils.isEmpty(shippedSpecimen)) {
 			ose.addError(ShippingOrderErrorCode.SPECIMEN_ALREADY_SHIPPED);
 		}

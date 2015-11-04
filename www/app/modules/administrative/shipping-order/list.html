@@ -44,17 +44,17 @@
               #{{order.id}} {{order.name}}
             </a>
           </div>
-          <div class="col os-col-15">
+          <div class="col os-col-20">
             <span>{{order.siteName | osNoValue}}</span>
           </div>
-          <div class="col os-col-10">
+          <div class="col os-col-20">
             <span>{{order.shippingDate | date: global.dateFmt}}</span>
           </div>
-          <div class="col os-col-10">
-            <span>{{'orders.statuses.' + order.status | translate}}</span>
+          <div class="col os-col-20">
+            <span>{{'shipping_orders.statuses.' + order.status | translate}}</span>
           </div>
-          <div class="col os-col-10">
-            <span>{{order.specimenCnt}}</span>
+          <div class="col os-col-15">
+            <span>{{order.orderItems.length}}</span>
           </div>
         </div>
       </div>

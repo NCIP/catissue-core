@@ -6,7 +6,7 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
 
     function init() {
       $scope.order = order;
-      $scope.order.orderItems = []
+      $scope.order.orderItems = order.orderItems || [];
       $scope.input = {labelText: '', allItemStatus: false};
 
       if (!order.id && angular.isArray(SpecimensHolder.getSpecimens())) {
