@@ -57,7 +57,7 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 	}
 	
 	private void addNameRestrictions(Criteria query, ShippingOrderListCriteria crit, MatchMode matchMode) {
-		if (StringUtils.isBlank(crit.query())) {
+		if (StringUtils.isBlank(crit.name())) {
 			return;
 		}
 		
