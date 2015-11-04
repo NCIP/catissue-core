@@ -32,7 +32,7 @@ angular.module('openspecimen')
     var drawerEl = undefined;
     
     function setCardsViewWidth(width) {
-      var cardsDiv = drawerEl.parent().find("div.os-cards, div.os-list-container");
+      var cardsDiv = drawerEl.parent().find("div.container, div.os-cards, div.os-list-container");
       cardsDiv.css('width', width);
     }
 
