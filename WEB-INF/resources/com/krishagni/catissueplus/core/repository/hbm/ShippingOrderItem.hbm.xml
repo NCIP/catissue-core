@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem" table="OS_SHIPPING_ORDER_ITEMS">
+    
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SO_ITEMS_SEQ</param>
+      </generator>
+    </id>
+  
+    <many-to-one
+      name="order"
+      class="com.krishagni.catissueplus.core.administrative.domain.ShippingOrder"
+      column="ORDER_ID" />
+      
+    <many-to-one
+      name="specimen"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
+      column="SPECIMEN_ID" />
+      
+    <property name="quality" column="QUALITY">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem$Quality</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+  </class>
+</hibernate-mapping>
