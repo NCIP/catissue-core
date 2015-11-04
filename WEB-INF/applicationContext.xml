@@ -719,6 +719,7 @@
   <bean id="shippingOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.ShippingOrderServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory" />
     <property name="shippingFactory" ref="shippingOrderFactory" />
+    <property name="emailService" ref="emailService"/>
   </bean>
   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  

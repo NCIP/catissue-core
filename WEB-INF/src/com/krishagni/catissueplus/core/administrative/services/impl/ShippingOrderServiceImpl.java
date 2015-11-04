@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -22,6 +24,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ShippingOrderServiceImpl implements ShippingOrderService {
@@ -30,12 +33,18 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	
 	private ShippingOrderFactory shippingFactory;
 	
+	private EmailService emailService;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
 	public void setShippingFactory(ShippingOrderFactory shippingFactory) {
 		this.shippingFactory = shippingFactory;
+	}
+	
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 	
 	@Override
@@ -89,6 +98,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			}
 			
 			getShippingDao().saveOrUpdate(order);
+			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(ShippingOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -115,8 +125,10 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			ensureValidSpecimen(specimenLabels, ose);
 			ose.checkAndThrow();
 			
+			Status oldStatus = existingOrder.getStatus();
 			existingOrder.update(newOrder);
 			getShippingDao().saveOrUpdate(existingOrder);
+			sendOrderProcessedEmail(existingOrder, oldStatus);
 			return ResponseEvent.response(ShippingOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -157,7 +169,26 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 		}
 	}
 	
+	private void sendOrderProcessedEmail(ShippingOrder order, Status oldStatus) {
+		Status newStatus = order.getStatus();
+		if (!newStatus.equals(Status.SHIPPED) || newStatus.equals(oldStatus)) {
+			return;
+		}
+
+		String[] rcpts = {
+			order.getDistributor().getEmailAddress()
+		};
+		String[] subjectParams = {order.getName()};
+
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("$subject", subjectParams);
+		props.put("order", order);
+		emailService.sendEmail(ORDER_SHIPPED_EMAIL_TMPL, rcpts, props);
+	}
+	
 	private ShippingOrderDao getShippingDao() {
 		return daoFactory.getShippingOrderDao();
 	}
+	
+	private static final String ORDER_SHIPPED_EMAIL_TMPL = "order_shipped";
 }
