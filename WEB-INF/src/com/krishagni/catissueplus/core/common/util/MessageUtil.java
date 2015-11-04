@@ -30,5 +30,9 @@ public class MessageUtil {
 
 		return messageSource.getMessage(bool, null, Locale.getDefault());
 	}
+	
+	public String getMessage(String code) {
+		return messageSource.getMessage(code, null, Locale.getDefault());
+	}
 
 }

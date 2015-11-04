@@ -7,14 +7,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.MessageSource;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -36,25 +34,24 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
 	
-	private static final Map<String, String> attrDisplayVals = new HashMap<String, String>();
-	
-	static {
-		attrDisplayVals.put("specimenType", "dist_specimen_type");
-		attrDisplayVals.put("anatomicSite", "dist_anatomic_site");
-		attrDisplayVals.put("pathologyStatus", "dist_pathology_status");
+	private static final Map<String, String> attrDisplayKeys = new HashMap<String, String>() {
+		{
+			put("specimenType", "dist_specimen_type");
+			put("anatomicSite", "dist_anatomic_site");
+			put("pathologyStatus", "dist_pathology_status");
+		}
 	};
 	
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
-	
-	private MessageSource messageSource;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -62,10 +59,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	public void setDistributionProtocolFactory(DistributionProtocolFactory distributionProtocolFactory) {
 		this.distributionProtocolFactory = distributionProtocolFactory;
-	}
-	
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 	
 	@Override
@@ -271,29 +264,27 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			if (crit.dpId() != null && !orderStats.isEmpty()) {
 				DistributionOrderStat orderStat = orderStats.get(0);
 				csvWriter.writeNext(new String[] {
-					getMessage("dist_dp_title"),
+					MessageUtil.getInstance().getMessage("dist_dp_title"),
 					orderStat.getDistributionProtocol().getTitle()
 				});
 			}
 			
 			csvWriter.writeNext(new String[] {
-				getMessage("dist_exported_by"),
+				MessageUtil.getInstance().getMessage("dist_exported_by"),
 				AuthUtil.getCurrentUser().formattedName()
 			});
 			csvWriter.writeNext(new String[] {
-				getMessage("dist_exported_on"),
+				MessageUtil.getInstance().getMessage("dist_exported_on"),
 				Utility.getDateString(Calendar.getInstance().getTime())
 			});
 			csvWriter.writeNext(new String[1]);
 			
 			String[] headers = getOrderStatsReportHeaders(crit);
 			csvWriter.writeNext(headers);
-			List<String []> csvData = new ArrayList<String []>();
 			for (DistributionOrderStat stat: orderStats) {
-				csvData.add(getOrderStatsReportData(stat, crit));
+				csvWriter.writeNext(getOrderStatsReportData(stat, crit));
 			}
 			
-			csvWriter.writeAll(csvData);
 			return ResponseEvent.response(tempFile);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -301,6 +292,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(e);
 		} finally {
 			IOUtils.closeQuietly(csvWriter);
+			tempFile.deleteOnExit();
 		}
 	}
 	
@@ -387,16 +379,16 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	private String[] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
 		List<String> headers = new ArrayList<String>();
 		if (crit.dpId() == null) {
-			headers.add(getMessage("dist_dp_title"));
+			headers.add(MessageUtil.getInstance().getMessage("dist_dp_title"));
 		}
 		
-		headers.add(getMessage("dist_order_name"));
-		headers.add(getMessage("dist_distribution_date"));
+		headers.add(MessageUtil.getInstance().getMessage("dist_order_name"));
+		headers.add(MessageUtil.getInstance().getMessage("dist_distribution_date"));
 		for (String attr: crit.groupByAttrs()) {
-			headers.add(getMessage(attrDisplayVals.get(attr)));
+			headers.add(MessageUtil.getInstance().getMessage(attrDisplayKeys.get(attr)));
 		}
 		
-		headers.add(getMessage("dist_specimen_distributed"));
+		headers.add(MessageUtil.getInstance().getMessage("dist_specimen_distributed"));
 		return headers.toArray(new String[0]);
 	}
 	
@@ -415,10 +407,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		data.add(stat.getDistributedSpecimenCount().toString());
 		
 		return data.toArray(new String[0]);
-	}
-	
-	private String getMessage(String code) {
-		return messageSource.getMessage(code, null, Locale.getDefault());
 	}
 	
 }
