@@ -16,7 +16,7 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     
     $scope.updateSetting = function(setting) {
       $scope.isEdit = true;
-      $scope.oldSetting = setting;
+      $scope.existingSetting = setting;
       $scope.setting = angular.copy(setting);
       $scope.setting.value = '';
     }
@@ -26,7 +26,7 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     }
     
     $scope.submit = function() {
-      if($scope.oldSetting.value == $scope.setting.value) {
+      if($scope.existingSetting.value == $scope.setting.value) {
         Alerts.error('settings.invalid_value');
         return;
       } 
@@ -34,7 +34,7 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
       Setting.updateSetting($scope.setting).then(
         function(resp) {
           Alerts.success('settings.success_message');
-          $scope.oldSetting.value = resp.value;
+          angular.extend($scope.existingSetting, resp);
           $scope.isEdit = false;
         }
       );
