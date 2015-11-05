@@ -182,6 +182,7 @@ public class DistributionProtocolController {
 		ResponseEvent<File> resp = dpSvc.exportOrderStats(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		Utility.sendToClient(response, "dp-order-stat.csv", resp.getPayload());
+		resp.getPayload().delete();
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

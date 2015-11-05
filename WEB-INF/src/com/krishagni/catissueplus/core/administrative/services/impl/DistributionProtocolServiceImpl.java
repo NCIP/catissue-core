@@ -292,7 +292,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(e);
 		} finally {
 			IOUtils.closeQuietly(csvWriter);
-			tempFile.deleteOnExit();
 		}
 	}
 	
