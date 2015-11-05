@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.shippingorder.list', ['os.administrative.models'])
   .controller('ShippingOrderListCtrl', function(
-    $scope, $state, $filter, ShippingOrder, Institute, Util) {
+    $scope, ShippingOrder, Institute, Util) {
   
     function init() {
       $scope.filterOpts = {};

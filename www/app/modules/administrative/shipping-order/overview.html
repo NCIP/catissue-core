@@ -7,8 +7,8 @@
       </li>
         
       <li class="item">
-        <strong class="key key-sm" translate="shipping_orders.distributor">Distributor</strong>
-        <span class="value value-md">{{order.distributor.firstName}} {{order.distributor.lastName}}</span>
+        <strong class="key key-sm" translate="shipping_orders.sender">Sender</strong>
+        <span class="value value-md">{{order.sender.firstName}} {{order.sender.lastName}}</span>
       </li>
         
       <li class="item">
@@ -20,6 +20,13 @@
         <strong class="key key-sm" translate="shipping_orders.shipping_date">Shipping Date</strong>
         <span class="value value-md">
           {{order.shippingDate | date: global.dateFmt | osNoValue}}
+        </span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipping_orders.sender_comments">Sender Comments</strong>
+        <span class="value value-md">
+          {{order.comments | osNoValue}}
         </span>
       </li>
     </ul>

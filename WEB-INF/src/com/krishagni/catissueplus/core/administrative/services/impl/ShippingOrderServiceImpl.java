@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ShippingOrderServiceImpl implements ShippingOrderService {
+	private static final String ORDER_SHIPPED_EMAIL_TMPL = "order_shipped";
 	
 	private DaoFactory daoFactory;
 	
@@ -53,7 +54,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 		try {
 			ShippingOrderListCriteria listCrit = req.getPayload();
 			
-			return ResponseEvent.response(ShippingOrderDetail.from(getShippingDao().getShippingOrders(listCrit)));
+			return ResponseEvent.response(ShippingOrderDetail.from(getShippingOrderDao().getShippingOrders(listCrit)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -66,7 +67,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	public ResponseEvent<ShippingOrderDetail> getOrder(RequestEvent<Long> req) {
 		try {
 			Long orderId = req.getPayload();
-			ShippingOrder order = getShippingDao().getById(orderId);
+			ShippingOrder order = getShippingOrderDao().getById(orderId);
 			if (order == null) {
 				return ResponseEvent.userError(ShippingOrderErrorCode.NOT_FOUND);
 			}
@@ -97,7 +98,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 				order.ship();
 			}
 			
-			getShippingDao().saveOrUpdate(order);
+			getShippingOrderDao().saveOrUpdate(order);
 			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(ShippingOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {
@@ -112,7 +113,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	public ResponseEvent<ShippingOrderDetail> updateOrder(RequestEvent<ShippingOrderDetail> req) {
 		try {
 			ShippingOrderDetail detail = req.getPayload();
-			ShippingOrder existingOrder = getShippingDao().getById(detail.getId());
+			ShippingOrder existingOrder = getShippingOrderDao().getById(detail.getId());
 			if (existingOrder == null) {
 				return ResponseEvent.userError(ShippingOrderErrorCode.NOT_FOUND);
 			}
@@ -127,7 +128,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			
 			Status oldStatus = existingOrder.getStatus();
 			existingOrder.update(newOrder);
-			getShippingDao().saveOrUpdate(existingOrder);
+			getShippingOrderDao().saveOrUpdate(existingOrder);
 			sendOrderProcessedEmail(existingOrder, oldStatus);
 			return ResponseEvent.response(ShippingOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {
@@ -139,7 +140,7 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	
 	private void ensureUniqueConstraint(ShippingOrder existingOrder, ShippingOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
-			ShippingOrder order = getShippingDao().getOrderByName(newOrder.getName());
+			ShippingOrder order = getShippingOrderDao().getOrderByName(newOrder.getName());
 			if (order != null) {
 				ose.addError(ShippingOrderErrorCode.DUP_NAME, newOrder.getName());
 			}
@@ -163,32 +164,27 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			return;
 		}
 		
-		List<Specimen> shippedSpecimen = getShippingDao().getShippedSpecimensByLabels(specimenLabels);
+		List<Specimen> shippedSpecimen = getShippingOrderDao().getShippedSpecimensByLabels(specimenLabels);
 		if (!CollectionUtils.isEmpty(shippedSpecimen)) {
 			ose.addError(ShippingOrderErrorCode.SPECIMEN_ALREADY_SHIPPED);
 		}
 	}
 	
 	private void sendOrderProcessedEmail(ShippingOrder order, Status oldStatus) {
-		Status newStatus = order.getStatus();
-		if (!newStatus.equals(Status.SHIPPED) || newStatus.equals(oldStatus)) {
+		if (!order.isOrderShipped() ||  order.getStatus().equals(oldStatus)) {
 			return;
 		}
-
-		String[] rcpts = {
-			order.getDistributor().getEmailAddress()
-		};
+		
+		List<String> emailIds = Utility.<List<String>>collect(order.getSite().getCoordinators(), "emailAddress");
 		String[] subjectParams = {order.getName()};
-
+		
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("$subject", subjectParams);
 		props.put("order", order);
-		emailService.sendEmail(ORDER_SHIPPED_EMAIL_TMPL, rcpts, props);
+		emailService.sendEmail(ORDER_SHIPPED_EMAIL_TMPL, emailIds.toArray(new String[0]), props);
 	}
 	
-	private ShippingOrderDao getShippingDao() {
+	private ShippingOrderDao getShippingOrderDao() {
 		return daoFactory.getShippingOrderDao();
 	}
-	
-	private static final String ORDER_SHIPPED_EMAIL_TMPL = "order_shipped";
 }

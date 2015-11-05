@@ -17,7 +17,7 @@
     
     <many-to-one name="site" column="SITE_ID"/>
       
-    <many-to-one name="distributor" column="DISTRIBUTOR_ID"/>
+    <many-to-one name="sender" column="SENDER_ID"/>
     
     <property name="status" column="STATUS" not-null="true">
       <type name="org.hibernate.type.EnumType">

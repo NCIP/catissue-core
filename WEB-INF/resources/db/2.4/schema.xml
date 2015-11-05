@@ -313,7 +313,7 @@
         <constraints nullable="false" />
       </column>
       
-      <column name="DISTRIBUTOR_ID" type="${int.type}">
+      <column name="SENDER_ID" type="${int.type}">
         <constraints nullable="false" />
       </column>
       
@@ -351,11 +351,11 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
   
-  <changeSet author="ckhilosiya" id="Add FK to shipping orders distributor">
+  <changeSet author="ckhilosiya" id="Add FK to shipping orders sender">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SO_DISTRIBUTOR_ID"
+      constraintName="OS_FK_SO_SENDER_ID"
       baseTableName="OS_SHIPPING_ORDERS"
-      baseColumnNames="DISTRIBUTOR_ID"
+      baseColumnNames="SENDER_ID"
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>

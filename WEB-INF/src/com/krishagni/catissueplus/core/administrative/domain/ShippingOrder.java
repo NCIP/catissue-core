@@ -24,7 +24,7 @@ public class ShippingOrder extends BaseEntity {
 	
 	private Site site;
 	
-	private User distributor;
+	private User sender;
 	
 	private Set<ShippingOrderItem> orderItems = new HashSet<ShippingOrderItem>();
 	
@@ -52,12 +52,12 @@ public class ShippingOrder extends BaseEntity {
 		this.site = site;
 	}
 	
-	public User getDistributor() {
-		return distributor;
+	public User getSender() {
+		return sender;
 	}
 	
-	public void setDistributor(User distributor) {
-		this.distributor = distributor;
+	public void setSender(User sender) {
+		this.sender = sender;
 	}
 	
 	public Set<ShippingOrderItem> getOrderItems() {
@@ -103,7 +103,7 @@ public class ShippingOrder extends BaseEntity {
 	public void update(ShippingOrder newOrder) {
 		setName(newOrder.getName());
 		setSite(newOrder.getSite());
-		setDistributor(newOrder.getDistributor());
+		setSender(newOrder.getSender());
 		setShippingDate(newOrder.getShippingDate());
 		setComments(newOrder.getComments());
 		setActivityStatus(newOrder.getActivityStatus());
@@ -126,6 +126,10 @@ public class ShippingOrder extends BaseEntity {
 		}
 		
 		setStatus(Status.SHIPPED);
+	}
+	
+	public boolean isOrderShipped() {
+		return Status.SHIPPED == getStatus();
 	}
 	
 	private void updateOrderItems(ShippingOrder other) {
@@ -156,9 +160,5 @@ public class ShippingOrder extends BaseEntity {
 		} else {
 			throw OpenSpecimenException.userError(ShippingOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
-	}
-	
-	private boolean isOrderShipped() {
-		return Status.SHIPPED == getStatus();
 	}
 }

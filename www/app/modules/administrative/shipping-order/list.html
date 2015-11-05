@@ -24,36 +24,42 @@
             <span translate="shipping_orders.name">Name</span>
           </div>
           <div class="col os-col-20">
+            <span translate="shipping_orders.sender">Sender</span>
+          </div>
+          <div class="col os-col-20">
             <span translate="shipping_orders.site">Site</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-15">
             <span translate="shipping_orders.shipping_date">Shipping Date</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-10">
             <span translate="shipping_orders.status">Status</span>
           </div>
-          <div class="col os-col-15">
+          <div class="col os-col-10">
             <span translate="shipping_orders.specimens">Specimens</span>
           </div>
         </div>
       </div>
       <div class="os-table-body">
         <div class="row" ng-repeat="order in orders">
-          <div class="col os-col-25">
+          <div class="col os-col-20">
             <a ui-sref="shipping-order-detail.overview({orderId: order.id})">
               #{{order.id}} {{order.name}}
             </a>
           </div>
           <div class="col os-col-20">
+            <span>{{order.sender.firstName}} {{order.sender.lastName}}</span>
+          </div>
+          <div class="col os-col-20">
             <span>{{order.siteName | osNoValue}}</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-15">
             <span>{{order.shippingDate | date: global.dateFmt}}</span>
           </div>
-          <div class="col os-col-20">
+          <div class="col os-col-10">
             <span>{{'shipping_orders.statuses.' + order.status | translate}}</span>
           </div>
-          <div class="col os-col-15">
+          <div class="col os-col-10">
             <span>{{order.orderItems.length}}</span>
           </div>
         </div>

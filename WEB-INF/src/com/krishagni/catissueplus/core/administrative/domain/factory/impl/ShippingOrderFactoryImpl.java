@@ -43,7 +43,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		order.setId(detail.getId());
 		setName(detail, order, ose);
 		setSite(detail, order, ose);
-		setDistributor(detail, order, ose);
+		setSender(detail, order, ose);
 		setOrderItems(detail, order, ose);
 		setStatus(detail, status, order, ose);
 		setShippingDate(detail, order, ose);
@@ -80,14 +80,14 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		order.setSite(site);
 	}
 	
-	private void setDistributor(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		User distributor = getUser(detail.getDistributor(), AuthUtil.getCurrentUser());
+	private void setSender(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
+		User distributor = getUser(detail.getSender(), AuthUtil.getCurrentUser());
 		if (distributor == null) {
 			ose.addError(UserErrorCode.NOT_FOUND);
 			return;
 		}
 		
-		order.setDistributor(distributor);
+		order.setSender(distributor);
 	}
 	
 	private void setOrderItems(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
@@ -121,16 +121,15 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 			return;
 		}
 		
-		String statusValue = detail.getStatus();
-		if (StringUtils.isBlank(statusValue)) {
+		if (detail.getStatus() == null) {
 			ose.addError(ShippingOrderErrorCode.STATUS_REQUIRED);
 			return;
 		}
 		
 		ShippingOrder.Status status = null;
-		
+			
 		try {
-			status = ShippingOrder.Status.valueOf(statusValue);
+			status = ShippingOrder.Status.valueOf(detail.getStatus());
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShippingOrderErrorCode.INVALID_STATUS);
 			return;
@@ -196,7 +195,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		ShippingOrderItem.Quality quality = null;
 		
 		try {
-			if (!StringUtils.isBlank(detail.getQuality())) {
+			if (StringUtils.isNotBlank(detail.getQuality())) {
 				quality = ShippingOrderItem.Quality.valueOf(detail.getQuality());
 			}
 		} catch (IllegalArgumentException iae) {

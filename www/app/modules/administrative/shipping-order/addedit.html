@@ -98,7 +98,7 @@
     os-form-validator="specForm" validator="specFormValidator" novalidate>
     <div class="alert alert-danger" ng-if="!order.orderItems || order.orderItems.length == 0">
       <span translate="shipping_orders.no_specimens_in_list">
-        No specimens in list to distribute. Add at least one specimen
+        No specimens in list to ship. Add at least one specimen
       </span>
     </div>
 
@@ -138,8 +138,7 @@
         </div>
       </div>
       <div class="os-table-body">
-        <div class="row" ng-repeat="item in order.orderItems" 
-          ng-form="sform" ng-init="specimen=item.specimen">
+        <div class="row" ng-repeat="item in order.orderItems" ng-form="sform" ng-init="specimen=item.specimen">
           <div class="col os-col-15">
             <a ui-sref="specimen({specimenId: specimen.id})">
               <span>{{specimen.label}}</span>

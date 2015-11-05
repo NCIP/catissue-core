@@ -1,8 +1,8 @@
 
 angular.module('os.administrative.shippingorder.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('ShippingOrderAddEditCtrl', function(
-    $scope, $state, $translate, order, 
-    ShippingOrder, Institute, Site, Specimen, SpecimensHolder, Alerts) {
+    $scope, $state, order, ShippingOrder, 
+    Institute, Site, Specimen, SpecimensHolder, Alerts) {
 
     function init() {
       $scope.order = order;
@@ -16,6 +16,10 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
       
       if (!order.shippingDate) {
         order.shippingDate = new Date();
+      }
+
+      if ($scope.order.instituteName) {
+        $scope.loadSites($scope.order.instituteName);
       }
 
       loadInstitutes();

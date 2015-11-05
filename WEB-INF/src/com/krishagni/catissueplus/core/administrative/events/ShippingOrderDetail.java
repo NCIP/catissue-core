@@ -19,7 +19,7 @@ public class ShippingOrderDetail {
 	
 	private String siteName;
 	
-	private UserSummary distributor;
+	private UserSummary sender;
 	
 	private Set<ShippingOrderItemDetail> orderItems = new HashSet<ShippingOrderItemDetail>();
 	
@@ -63,14 +63,14 @@ public class ShippingOrderDetail {
 		this.siteName = siteName;
 	}
 	
-	public UserSummary getDistributor() {
-		return distributor;
+	public UserSummary getSender() {
+		return sender;
 	}
-	
-	public void setDistributor(UserSummary distributor) {
-		this.distributor = distributor;
+
+	public void setSender(UserSummary sender) {
+		this.sender = sender;
 	}
-	
+
 	public Set<ShippingOrderItemDetail> getOrderItems() {
 		return orderItems;
 	}
@@ -118,7 +118,7 @@ public class ShippingOrderDetail {
 		detail.setName(order.getName());
 		detail.setInstituteName(order.getSite().getInstitute().getName());
 		detail.setSiteName(order.getSite().getName());
-		detail.setDistributor(UserSummary.from(order.getDistributor()));
+		detail.setSender(UserSummary.from(order.getSender()));
 		detail.setOrderItems(ShippingOrderItemDetail.from(order.getOrderItems()));
 		detail.setStatus(order.getStatus().toString());
 		detail.setShippingDate(order.getShippingDate());
