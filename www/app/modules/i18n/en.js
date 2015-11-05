@@ -1448,7 +1448,7 @@
       "property": "Property",
       "description": "Description",
       "value": "Value",
-      "old_value": "Old Value",
+      "existing_value": "Existing Value",
       "new_value": "New Value",
       "last_updated": "Last Updated",
       "success_message": "Setting updated successfully",

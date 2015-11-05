@@ -16,7 +16,7 @@
     </div>
     
     <div class="form-group">
-      <label class="col-xs-2 control-label" translate="settings.old_value">Old Value</label>
+      <label class="col-xs-2 control-label" translate="settings.existing_value">Existing Value</label>
       <div class="form-value col-xs-10" ng-switch on="setting.type">
         <span ng-switch-when="BOOLEAN">
           {{existingSetting.value | osBoolValue: 'common.enabled': 'common.disabled': 'common.not_specified'}}
