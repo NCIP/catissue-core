@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement;
+import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolRequirementErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolRequirementFactory;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementFactory;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -24,15 +24,17 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class DistributionProtocolRequirementFactoryImpl implements DistributionProtocolRequirementFactory {
+public class DpRequirementFactoryImpl implements DpRequirementFactory {
+	
+	private DaoFactory daoFactory;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 	
-	public DistributionProtocolRequirement createDistributionProtocolRequirement(
-			DistributionProtocolRequirementDetail detail) {
-		DistributionProtocolRequirement dpr = new DistributionProtocolRequirement();
+	public DpRequirement createDistributionProtocolRequirement(
+			DpRequirementDetail detail) {
+		DpRequirement dpr = new DpRequirement();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		dpr.setId(detail.getId());
@@ -49,14 +51,14 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		return dpr;
 	}
 	
-	private void setDistributionProtocol(DistributionProtocolRequirementDetail detail,
-			DistributionProtocolRequirement dpr, OpenSpecimenException ose) {
+	private void setDistributionProtocol(DpRequirementDetail detail,
+			DpRequirement dpr, OpenSpecimenException ose) {
 		DistributionProtocolSummary dps = detail.getDp();
 		Long dpId = dps != null ? dps.getId() : null;
 		String dpShortTitle = dps != null ? dps.getShortTitle() : null;
 		
-		if (dpId == null && StringUtils.isEmpty(dpShortTitle)) {
-			ose.addError(DistributionProtocolRequirementErrorCode.DP_REQUIRED);
+		if (dpId == null && StringUtils.isBlank(dpShortTitle)) {
+			ose.addError(DpRequirementErrorCode.DP_REQUIRED);
 			return;
 		}
 		
@@ -75,11 +77,11 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setDistributionProtocol(dp);
 	}
 	
-	private void setSpecimenType(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setSpecimenType(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		String specimenType = detail.getSpecimenType();
-		if (StringUtils.isEmpty(specimenType)) {
-			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_TYPE_REQUIRED);
+		if (StringUtils.isBlank(specimenType)) {
+			ose.addError(DpRequirementErrorCode.SPECIMEN_TYPE_REQUIRED);
 			return;
 		}
 		
@@ -91,11 +93,11 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setSpecimenType(specimenType);
 	}
 	
-	private void setAnatomicSite(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setAnatomicSite(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		String anatomicSite = detail.getAnatomicSite();
-		if (StringUtils.isEmpty(anatomicSite)) {
-			ose.addError(DistributionProtocolRequirementErrorCode.ANATOMIC_SITE_REQUIRED);
+		if (StringUtils.isBlank(anatomicSite)) {
+			ose.addError(DpRequirementErrorCode.ANATOMIC_SITE_REQUIRED);
 			return;
 		}
 		
@@ -107,11 +109,11 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setAnatomicSite(anatomicSite);
 	}
 	
-	private void setPathologyStatus(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setPathologyStatus(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		String pathologyStatus = detail.getPathologyStatus();
-		if (StringUtils.isEmpty(pathologyStatus)) {
-			ose.addError(DistributionProtocolRequirementErrorCode.PATHOLOGY_STATUS_REQUIRED);
+		if (StringUtils.isBlank(pathologyStatus)) {
+			ose.addError(DpRequirementErrorCode.PATHOLOGY_STATUS_REQUIRED);
 			return;
 		}
 		
@@ -123,47 +125,47 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setPathologyStatus(pathologyStatus);
 	}
 	
-	private void setSpecimenCount(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setSpecimenCount(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		Long specimenCount = detail.getSpecimenCount();
 		if (specimenCount == null) {
-			ose.addError(DistributionProtocolRequirementErrorCode.SPECIMEN_COUNT_REQUIRED);
+			ose.addError(DpRequirementErrorCode.SPECIMEN_COUNT_REQUIRED);
 			return;
 		}
 		
 		if (specimenCount <= 0L) {
-			ose.addError(DistributionProtocolRequirementErrorCode.INVALID_SPECIMEN_COUNT);
+			ose.addError(DpRequirementErrorCode.INVALID_SPECIMEN_COUNT);
 			return;
 		}
 		
 		dpr.setSpecimenCount(specimenCount);
 	}
 	
-	private void setQuantity(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setQuantity(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		BigDecimal quantity = detail.getQuantity();
 		if (quantity == null) {
-			ose.addError(DistributionProtocolRequirementErrorCode.QUANTITY_REQUIRED);
+			ose.addError(DpRequirementErrorCode.QUANTITY_REQUIRED);
 			return;
 		}
 		
 		if (NumUtil.lessThanEqualsZero(quantity)) {
-			ose.addError(DistributionProtocolRequirementErrorCode.INVALID_QUANTITY);
+			ose.addError(DpRequirementErrorCode.INVALID_QUANTITY);
 			return;
 		}
 		
 		dpr.setQuantity(quantity);
 	}
 	
-	private void setComments(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setComments(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		dpr.setComments(detail.getComments());
 	}
 	
-	private void setActivityStatus(DistributionProtocolRequirementDetail detail, DistributionProtocolRequirement dpr,
+	private void setActivityStatus(DpRequirementDetail detail, DpRequirement dpr,
 			OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
-		if (StringUtils.isEmpty(activityStatus)) {
+		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		
@@ -175,5 +177,4 @@ public class DistributionProtocolRequirementFactoryImpl implements DistributionP
 		dpr.setActivityStatus(activityStatus);
 	}
 	
-	private DaoFactory daoFactory;
 }

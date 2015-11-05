@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement;
+import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 
-public class DistributionProtocolRequirementDetail {
+public class DpRequirementDetail {
 	private Long id;
 	
 	private DistributionProtocolSummary dp;
@@ -108,8 +108,8 @@ public class DistributionProtocolRequirementDetail {
 		this.activityStatus = activityStatus;
 	}
 	
-	public static DistributionProtocolRequirementDetail from(DistributionProtocolRequirement dpr) {
-		DistributionProtocolRequirementDetail detail = new DistributionProtocolRequirementDetail();
+	public static DpRequirementDetail from(DpRequirement dpr) {
+		DpRequirementDetail detail = new DpRequirementDetail();
 		
 		detail.setId(dpr.getId());
 		detail.setDp(DistributionProtocolSummary.from(dpr.getDistributionProtocol()));
@@ -124,10 +124,10 @@ public class DistributionProtocolRequirementDetail {
 		return detail;
 	}
 	
-	public static List<DistributionProtocolRequirementDetail> from(Collection<DistributionProtocolRequirement> dprs) {
-		List<DistributionProtocolRequirementDetail> details = new ArrayList<DistributionProtocolRequirementDetail>();
+	public static List<DpRequirementDetail> from(Collection<DpRequirement> dprs) {
+		List<DpRequirementDetail> details = new ArrayList<DpRequirementDetail>();
 		
-		for (DistributionProtocolRequirement dpr : dprs) {
+		for (DpRequirement dpr : dprs) {
 			details.add(from(dpr));
 		}
 		

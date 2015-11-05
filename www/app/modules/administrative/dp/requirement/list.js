@@ -2,7 +2,6 @@ angular.module('os.administrative.dp.requirement.list', ['os.administrative.mode
   .controller('DprListCtrl', function($scope, distributionProtocol, DistributionProtocolRequirement, DeleteUtil) {
   
     function init() {
-      $scope.input = {targets: []};
       loadRequirements();
     }
   
@@ -14,21 +13,11 @@ angular.module('os.administrative.dp.requirement.list', ['os.administrative.mode
       DistributionProtocolRequirement.query(params).then(
         function(data) {
           $scope.dprs = data;
-          calcTarget();
         }
       );
     }
     
-    function calcTarget() {
-      var dprs = $scope.dprs;
-      var targets = $scope.input.targets;
-      angular.forEach(dprs, function(dpr) {
-        targets.push(dpr.specimenCount * dpr.quantity);
-      });
-    }
-    
     $scope.deleteDpr = function(dpr) {
-    
       DeleteUtil.confirmDelete({
         entity: dpr,
         templateUrl: 'modules/administrative/dp/requirement/delete.html',

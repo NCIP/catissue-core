@@ -9,12 +9,18 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -33,6 +39,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
+	
+	private DpRequirementFactory dprFactory;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -40,6 +48,14 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	public void setDistributionProtocolFactory(DistributionProtocolFactory distributionProtocolFactory) {
 		this.distributionProtocolFactory = distributionProtocolFactory;
+	}
+	
+	public void setDprFactory(DpRequirementFactory dprFactory) {
+		this.dprFactory = dprFactory;
+	}
+	
+	private DpRequirementDao getDprDao() {
+		return daoFactory.getDistributionProtocolRequirementDao();
 	}
 	
 	@Override
@@ -245,6 +261,124 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<DpRequirementListCriteria> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			List<DpRequirementDetail> result = getDprDao().getRequirements(req.getPayload());
+			
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DpRequirementDetail> getRequirement(RequestEvent<Long> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DpRequirement existing = getDprDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
+			}
+			
+			return ResponseEvent.response(DpRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DpRequirementDetail> createRequirement(RequestEvent<DpRequirementDetail> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DpRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueRequirementConstraint(null, dpr, ose);
+			ose.checkAndThrow();
+			
+			getDprDao().saveOrUpdate(dpr);
+			return ResponseEvent.response(DpRequirementDetail.from(dpr));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DpRequirementDetail> updateRequirement(RequestEvent<DpRequirementDetail> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			Long dpReqId = req.getPayload().getId();
+			DpRequirement existing = getDprDao().getById(dpReqId);
+			if (existing == null) {
+				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
+			}
+			
+			DpRequirement newDpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureUniqueRequirementConstraint(existing, newDpr, ose);
+			ose.checkAndThrow();
+			
+			existing.update(newDpr);
+			getDprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(DpRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DpRequirementDetail> deleteRequirement(RequestEvent<Long> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			DpRequirement existing = getDprDao().getById(req.getPayload());
+			if (existing == null) {
+				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
+			}
+			
+			existing.delete();
+			getDprDao().saveOrUpdate(existing);
+			return ResponseEvent.response(DpRequirementDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	private void ensureUniqueRequirementConstraint(DpRequirement oldDpr, DpRequirement newDpr,
+			OpenSpecimenException ose) {
+		if (oldDpr != null && oldDpr.equalsSpecimenGroup(newDpr)) {
+			return;
+		}
+		
+		DpRequirementListCriteria crit = new DpRequirementListCriteria()
+				.dpId(newDpr.getDistributionProtocol().getId())
+				.specimenType(newDpr.getSpecimenType())
+				.anatomicSite(newDpr.getAnatomicSite())
+				.pathologyStatus(newDpr.getPathologyStatus())
+				.includeDistQty(false);
+		
+		List<DpRequirementDetail> existing = getDprDao().getRequirements(crit);
+		if (!CollectionUtils.isEmpty(existing)) {
+			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(),
+					newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
 		}
 	}
 	

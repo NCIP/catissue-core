@@ -2,8 +2,8 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
-public class DistributionProtocolRequirementListCriteria
-		extends AbstractListCriteria<DistributionProtocolRequirementListCriteria> {
+public class DpRequirementListCriteria
+		extends AbstractListCriteria<DpRequirementListCriteria> {
 	
 	private Long dpId;
 	
@@ -16,7 +16,7 @@ public class DistributionProtocolRequirementListCriteria
 	private boolean includeDistQty;
 	
 	@Override
-	public DistributionProtocolRequirementListCriteria self() {
+	public DpRequirementListCriteria self() {
 		return this;
 	}
 	
@@ -24,7 +24,7 @@ public class DistributionProtocolRequirementListCriteria
 		return dpId;
 	}
 	
-	public DistributionProtocolRequirementListCriteria dpId(Long dpId) {
+	public DpRequirementListCriteria dpId(Long dpId) {
 		this.dpId = dpId;
 		return self();
 	}
@@ -33,7 +33,7 @@ public class DistributionProtocolRequirementListCriteria
 		return specimenType;
 	}
 	
-	public DistributionProtocolRequirementListCriteria specimenType(String specimenType) {
+	public DpRequirementListCriteria specimenType(String specimenType) {
 		this.specimenType = specimenType;
 		return self();
 	}
@@ -42,7 +42,7 @@ public class DistributionProtocolRequirementListCriteria
 		return anatomicSite;
 	}
 	
-	public DistributionProtocolRequirementListCriteria anatomicSite(String anatomicSite) {
+	public DpRequirementListCriteria anatomicSite(String anatomicSite) {
 		this.anatomicSite = anatomicSite;
 		return self();
 	}
@@ -51,7 +51,7 @@ public class DistributionProtocolRequirementListCriteria
 		return pathologyStatus;
 	}
 	
-	public DistributionProtocolRequirementListCriteria pathologyStatus(String pathologyStatus) {
+	public DpRequirementListCriteria pathologyStatus(String pathologyStatus) {
 		this.pathologyStatus = pathologyStatus;
 		return self();
 	}
@@ -60,7 +60,7 @@ public class DistributionProtocolRequirementListCriteria
 		return includeDistQty;
 	}
 	
-	public DistributionProtocolRequirementListCriteria includeDistQty(boolean includeDistQty) {
+	public DpRequirementListCriteria includeDistQty(boolean includeDistQty) {
 		this.includeDistQty = includeDistQty;
 		return self();
 	}

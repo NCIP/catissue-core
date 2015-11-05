@@ -1,9 +1,12 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -41,6 +44,8 @@ public class DistributionProtocol extends BaseEntity {
 	private Set<DistributionOrder> distributionOrders = new HashSet<DistributionOrder>();
 	
 	private Set<DpDistributionSite> distributingSites = new HashSet<DpDistributionSite>();
+	
+	private Set<DpRequirement> requirements = new HashSet<DpRequirement>();
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -142,6 +147,14 @@ public class DistributionProtocol extends BaseEntity {
 		this.distributingSites = distributingSites;
 	}
 
+	public Set<DpRequirement> getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(Set<DpRequirement> requirements) {
+		this.requirements = requirements;
+	}
+
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			setShortTitle(Utility.getDisabledValue(distributionProtocol.getShortTitle(), 50));
@@ -160,6 +173,7 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
 		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
+		CollectionUpdater.update(getRequirements(), distributionProtocol.getRequirements());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -190,4 +204,5 @@ public class DistributionProtocol extends BaseEntity {
 		
 		return sites;
 	}
+	
 }

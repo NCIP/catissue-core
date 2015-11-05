@@ -15,44 +15,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementDetail;
-import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolRequirementListCriteria;
-import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolRequirementService;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementListCriteria;
+import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 @Controller
-@RequestMapping("/distribution-protocol-requirement")
-public class DistributionProtocolRequirementController {
+@RequestMapping("/distribution-protocol-requirements")
+public class DpRequirementController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
 	@Autowired
-	private DistributionProtocolRequirementService dprSvc;
+	private DistributionProtocolService dpSvc;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<DistributionProtocolRequirementDetail> getAllRequirements(
+	public List<DpRequirementDetail> getAllRequirements(
 			@RequestParam(value = "dpId", required = true)
 			Long dpId,
-			
-			@RequestParam(value = "startAt", required = false, defaultValue = "0")
-			int startAt,
-			
-			@RequestParam(value = "maxResult", required = false, defaultValue = "50")
-			int maxResult,
 			
 			@RequestParam(value = "includeDistQty", required = false, defaultValue = "false")
 			boolean includeDistQty) {
 		
-		DistributionProtocolRequirementListCriteria crit = new DistributionProtocolRequirementListCriteria()
+		DpRequirementListCriteria crit = new DpRequirementListCriteria()
 			.dpId(dpId)
-			.startAt(startAt)
-			.maxResults(maxResult)
 			.includeDistQty(includeDistQty);
 		
-		ResponseEvent<List<DistributionProtocolRequirementDetail>> resp = dprSvc.getRequirements(getRequest(crit));
+		ResponseEvent<List<DpRequirementDetail>> resp = dpSvc.getRequirements(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -60,8 +52,8 @@ public class DistributionProtocolRequirementController {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolRequirementDetail getRequirement(@PathVariable("id") Long reqId) {
-		ResponseEvent<DistributionProtocolRequirementDetail> resp = dprSvc.getRequirement(getRequest(reqId));
+	public DpRequirementDetail getRequirement(@PathVariable("id") Long reqId) {
+		ResponseEvent<DpRequirementDetail> resp = dpSvc.getRequirement(getRequest(reqId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -69,11 +61,11 @@ public class DistributionProtocolRequirementController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolRequirementDetail createRequirement(
+	public DpRequirementDetail createRequirement(
 			@RequestBody
-			DistributionProtocolRequirementDetail detail) {
+			DpRequirementDetail detail) {
 		
-		ResponseEvent<DistributionProtocolRequirementDetail> resp = dprSvc.createRequirement(getRequest(detail));
+		ResponseEvent<DpRequirementDetail> resp = dpSvc.createRequirement(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -81,15 +73,15 @@ public class DistributionProtocolRequirementController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolRequirementDetail updateRequirement(
+	public DpRequirementDetail updateRequirement(
 			@PathVariable("id")
 			Long dprId,
 			
 			@RequestBody
-			DistributionProtocolRequirementDetail detail) {
+			DpRequirementDetail detail) {
 		
 		detail.setId(dprId);
-		ResponseEvent<DistributionProtocolRequirementDetail> resp = dprSvc.updateRequirement(getRequest(detail));
+		ResponseEvent<DpRequirementDetail> resp = dpSvc.updateRequirement(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -97,8 +89,8 @@ public class DistributionProtocolRequirementController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionProtocolRequirementDetail deleteRequirement(@PathVariable("id") Long dprId) {
-		ResponseEvent<DistributionProtocolRequirementDetail> resp = dprSvc.deleteRequirement(getRequest(dprId));
+	public DpRequirementDetail deleteRequirement(@PathVariable("id") Long dprId) {
+		ResponseEvent<DpRequirementDetail> resp = dpSvc.deleteRequirement(getRequest(dprId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

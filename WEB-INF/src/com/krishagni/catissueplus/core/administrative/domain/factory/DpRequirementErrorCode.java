@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.administrative.domain.factory;
 
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum DistributionProtocolRequirementErrorCode implements ErrorCode {
+public enum DpRequirementErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
 	ALREADY_EXISTS,

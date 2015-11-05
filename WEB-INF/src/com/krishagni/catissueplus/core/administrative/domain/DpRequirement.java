@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class DistributionProtocolRequirement extends BaseEntity {
+public class DpRequirement extends BaseEntity {
 	private DistributionProtocol distributionProtocol;
 	
 	private String specimenType;
@@ -86,7 +86,7 @@ public class DistributionProtocolRequirement extends BaseEntity {
 		this.activityStatus = activityStatus;
 	}
 	
-	public void update(DistributionProtocolRequirement dpr) {
+	public void update(DpRequirement dpr) {
 		setDistributionProtocol(dpr.getDistributionProtocol());
 		setSpecimenType(dpr.getSpecimenType());
 		setAnatomicSite(dpr.getAnatomicSite());
@@ -97,7 +97,7 @@ public class DistributionProtocolRequirement extends BaseEntity {
 		setActivityStatus(dpr.getActivityStatus());
 	}
 	
-	public boolean equalsSpecimenGroup(DistributionProtocolRequirement dpr) {
+	public boolean equalsSpecimenGroup(DpRequirement dpr) {
 		return getSpecimenType().equals(dpr.getSpecimenType()) &&
 				getAnatomicSite().equals(dpr.getAnatomicSite()) &&
 				getPathologyStatus().equals(dpr.getPathologyStatus());

@@ -53,6 +53,11 @@
       <key column="DISTRIBUTION_PROTOCOL_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite"/>
     </set>
+    
+    <set name="requirements" inverse="true" cascade="all-delete-orphan">
+      <key column="DP_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpRequirement"/>
+    </set>
 
     <filter name="activeEntity"/>
 

@@ -4,7 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement"
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DpRequirement"
     table="OS_DP_REQUIREMENTS">
 
     <id name="id" column="IDENTIFIER">
@@ -38,7 +38,7 @@
       select
         dpr.id, sum(item.quantity)
       from
-        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocolRequirement dpr
+        com.krishagni.catissueplus.core.administrative.domain.DpRequirement dpr
         join dpr.distributionProtocol dp
         join dp.distributionOrders do
         join do.orderItems item
@@ -50,7 +50,7 @@
         dpr.anatomicSite = spec.tissueSite and
         dpr.pathologyStatus = spec.pathologicalStatus
       group by
-        dpr.id, dpr.specimenType, dpr.anatomicSite, dpr.pathologyStatus
+        dpr.id
     </query>
   </class>
 </hibernate-mapping>

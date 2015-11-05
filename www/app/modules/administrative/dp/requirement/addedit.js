@@ -1,6 +1,9 @@
 angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.models'])
   .controller('DprAddEditCtrl', function($scope, $state, distributionProtocol, dpr, PvManager) {
-    $scope.dpr = dpr;
+    function init() {
+      $scope.dpr = dpr;
+      loadPvs();
+    }
 
     function loadPvs() {
       loadAllSpecimenTypes();
@@ -36,6 +39,7 @@ angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.m
       );
     }
     
-    loadPvs();
+    init();
+    
   });
 

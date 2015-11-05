@@ -714,8 +714,8 @@
       "distributed": "Distributed",
       "quantity_specimen": "Quantity Per Specimen",
       "comments": "Comments",
-      "confirm_delete_req_title": "Deleting requirement confirmation",
-      "confirm_delete_req": "Are you sure you want to delete this requirement ?"
+      "confirm_delete_req_title": "Deleting distribution requirement confirmation",
+      "confirm_delete_req": "Are you sure you want to delete this distribution requirement ?"
     }
   },
 

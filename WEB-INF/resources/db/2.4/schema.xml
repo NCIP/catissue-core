@@ -356,4 +356,11 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
   
+  <changeSet author="ckhilosiya" id="Add unique constraint on DP requirements specimen properties">
+    <addUniqueConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnNames="SPECIMEN_TYPE, ANATOMIC_SITE, PATHOLOGY_STATUS"
+      constraintName="OS_DP_REQ_SPEC_UQ"/>
+  </changeSet>
+  
 </databaseChangeLog>
