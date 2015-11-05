@@ -1456,12 +1456,12 @@
       
       "auth": {
         "title": "Authentication",
-        "allowed_failed_logins": "Max. Failed Login Attempts",
-        "allowed_failed_logins_desc": "Max. number of consecutive failed logins that are allowed before user account is locked",
-        "token_inactive_interval": "Token Inactive Interval",
-        "token_inactive_interval_desc": "Max. interval (in minutes) of no API calls (inactivity) after which token is invalidated",
-        "verify_token_ip_address": "Caller IP Address Validation",
-        "verify_token_ip_address_desc": "Check whether APIs are invoked from same IP address to which token was issued"
+        "allowed_failed_logins": "Maximum Failed Login Attempts",
+        "allowed_failed_logins_desc": "Number of consecutive failed logins that are allowed before user account is locked",
+        "token_inactive_interval": "Session Timeout Limit (minutes)",
+        "token_inactive_interval_desc": "Minutes of inactiveness after which an user is logged out forcefully.",
+        "verify_token_ip_address": "IP Address Validation",
+        "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued."
       },
 
       "biospecimen": {
