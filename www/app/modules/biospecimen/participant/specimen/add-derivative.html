@@ -33,7 +33,7 @@
   </div>
 
   <div class="container os-margin-top">
-    <form name="derivativeForm" class="form-horizontal" os-form-validator="derivativeForm" validator="derivativeFormValidator" novalidate>
+    <form name="derivativeForm" class="form-horizontal" os-form-validator="derivativeForm" novalidate>
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
         <div class="col-xs-2 os-ctrl-padding-top">
@@ -44,7 +44,8 @@
         <label class="col-xs-2 control-label" translate="specimens.available_qty">Available Quantity</label>
         <div class="col-xs-2 os-ctrl-padding-top">
           <span>{{parentSpecimen.availableQty}}</span>
-          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
+          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
+          </os-specimen-unit>
         </div>
       </div>
 
@@ -119,15 +120,17 @@
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="os-date-time clearfix">
-          <div class="col-xs-4 input">
-            <os-date-picker name="createdOn" date="derivative.createdOn"
-              placeholder="{{'specimens.created_on' | translate}}" required>
-            </os-date-picker>
-          </div>
-          <div class="col-xs-2">
-            <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
-            </timepicker>
+        <div class="col-xs-6">
+          <div class="os-date-time clearfix">
+            <div class="os-col-65 os-no-padding input">
+              <os-date-picker name="createdOn" date="derivative.createdOn"
+                placeholder="{{'specimens.created_on' | translate}}" required>
+              </os-date-picker>
+            </div>
+            <div class="os-col-35">
+              <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
+              </timepicker>
+            </div>
           </div>
           <div os-field-error field="derivativeForm.createdOn"></div>
         </div>

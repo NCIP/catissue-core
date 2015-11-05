@@ -105,15 +105,17 @@
 
       <div class="form-group" ng-if="currSpecimen.lineage != 'New'">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="os-date-time clearfix">
-          <div class="col-xs-4 input">
-            <os-date-picker name="createdOn" date="currSpecimen.createdOn"
-              placeholder="{{'specimens.created_on' | translate}}" required>
-            </os-date-picker>
-          </div>
-          <div class="col-xs-2">
-            <timepicker ng-model="currSpecimen.createdOn" class="os-time-no-wheels" show-meridian="false">
-            </timepicker>
+        <div class="col-xs-6">
+          <div class="os-date-time clearfix">
+            <div class="os-col-65 input os-no-padding">
+              <os-date-picker name="createdOn" date="currSpecimen.createdOn"
+                placeholder="{{'specimens.created_on' | translate}}" required>
+              </os-date-picker>
+            </div>
+            <div class="os-col-35">
+              <timepicker ng-model="currSpecimen.createdOn" class="os-time-no-wheels" show-meridian="false">
+              </timepicker>
+            </div>
           </div>
           <div os-field-error field="sform.createdOn"></div>
         </div>
