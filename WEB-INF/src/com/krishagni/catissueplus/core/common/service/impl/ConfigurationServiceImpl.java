@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -63,12 +64,20 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@PlusTransactional
 	public ResponseEvent<List<ConfigSettingDetail>> getSettings(RequestEvent<String> req) {
 		String module = req.getPayload();
-		Map<String, ConfigSetting> moduleSettings = configSettings.get(module);
-		if (moduleSettings == null) {
-			moduleSettings = Collections.emptyMap();
+
+		List<ConfigSetting> settings = new ArrayList<ConfigSetting>();
+		if (StringUtils.isBlank(module)) {
+			for (Map<String, ConfigSetting> moduleSettings : configSettings.values()) {
+				settings.addAll(moduleSettings.values());
+			}
+		} else {
+			Map<String, ConfigSetting> moduleSettings = configSettings.get(module);
+			if (moduleSettings != null) {
+				settings.addAll(moduleSettings.values());
+			}
 		}
 		
-		return ResponseEvent.response(ConfigSettingDetail.from(moduleSettings.values()));
+		return ResponseEvent.response(ConfigSettingDetail.from(settings));
 	}
 	
 	@Override
@@ -93,21 +102,28 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			return ResponseEvent.userError(ConfigErrorCode.INVALID_SETTING_VALUE);
 		}
 		
-		ConfigSetting newSetting = new ConfigSetting();
-		newSetting.setProperty(existing.getProperty());
-		newSetting.setActivatedBy(AuthUtil.getCurrentUser());
-		newSetting.setActivationDate(Calendar.getInstance().getTime());
-		newSetting.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		newSetting.setValue(setting);
-				
-		existing.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
-		
-		daoFactory.getConfigSettingDao().saveOrUpdate(existing);
-		daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);		
-		moduleSettings.put(prop, newSetting);
-		
-		notifyListeners(module, prop, setting);
-		return ResponseEvent.response(ConfigSettingDetail.from(newSetting));
+		boolean successful = false;
+		try {
+			ConfigSetting newSetting = createSetting(existing, setting);
+			existing.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+
+			daoFactory.getConfigSettingDao().saveOrUpdate(existing);
+			daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);		
+			moduleSettings.put(prop, newSetting);
+			
+			notifyListeners(module, prop, setting);
+			successful = true;
+			return ResponseEvent.response(ConfigSettingDetail.from(newSetting));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			if (!successful) {
+				existing.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+				moduleSettings.put(prop, existing);
+			}
+		}
 	}
 	
 	@Override
@@ -335,6 +351,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 	}
 	
+	private ConfigSetting createSetting(ConfigSetting existing, String value) {
+		ConfigSetting newSetting = new ConfigSetting();
+		newSetting.setProperty(existing.getProperty());
+		newSetting.setActivatedBy(AuthUtil.getCurrentUser());
+		newSetting.setActivationDate(Calendar.getInstance().getTime());
+		newSetting.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		newSetting.setValue(value);
+
+		return newSetting;
+	}
+
 	private void notifyListeners(String module, String property, String setting) {
 		List<ConfigChangeListener> listeners = changeListeners.get(module);
 		if (listeners == null) {

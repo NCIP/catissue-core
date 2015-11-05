@@ -10,6 +10,7 @@ angular.module('os.administrative',
     'os.administrative.container',
     'os.administrative.role',
     'os.administrative.form',
-    'os.administrative.job'
+    'os.administrative.job',
+    'os.administrative.setting'
   ]
 );
