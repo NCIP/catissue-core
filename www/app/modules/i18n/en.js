@@ -1499,7 +1499,7 @@
         "uid_mandatory": "UID Mandatory",
         "uid_mandatory_desc": "Enable UID mandatory",
         "visit_label_print_rules": "Visit Label Print Rules",
-        "visit_label_print_rules_desc": "Visit lable print rules",
+        "visit_label_print_rules_desc": "Visit label print rules",
         "visit_label_printer": "Visit Label Printer",
         "visit_label_printer_desc": "Visit label printer"
       },
