@@ -681,6 +681,7 @@
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
+    "add_requirement": "Add Specimen Requirement",
     "all_sites": "All current and future sites",
     "dist_spmns_count": "Distributed Specimens",
 
@@ -695,7 +696,8 @@
     
     "menu": {
       "overview": "Overview",
-      "history": "History"
+      "history": "History",
+      "requirements": "Requirements"
     },
 
     "filter": {
@@ -712,13 +714,20 @@
       "reopen": "Reopen"
     },
     
-    "history": {
+    "distribution_order": {
       "order_name": "Order Name",
       "dist_date": "Distribution Date",
       "specimen_type": "Specimen Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
-      "specimens_cnt": "Specimens Distributed"
+      "specimens_dist": "Specimens Distributed",
+      "specimen_cnt": "Specimen Count",
+      "target": "Target",
+      "distributed": "Distributed",
+      "quantity_specimen": "Quantity Per Specimen",
+      "comments": "Comments",
+      "confirm_delete_req_title": "Deleting distribution requirement confirmation",
+      "confirm_delete_req": "Are you sure you want to delete this distribution requirement ?"
     }
   },
 

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DpRequirement"
+    table="OS_DP_REQUIREMENTS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_DP_REQUIREMENTS_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one
+      name="distributionProtocol"
+      class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
+      column="DP_ID" />
+    
+    <property name="specimenType" column="SPECIMEN_TYPE" />
+    
+    <property name="anatomicSite" column="ANATOMIC_SITE" />
+    
+    <property name="pathologyStatus" column="PATHOLOGY_STATUS" />
+    
+    <property name="specimenCount" column="SPECIMEN_COUNT" />
+    
+    <property name="quantity" column="QUANTITY" />
+    
+    <property name="comments" column="COMMENTS" />
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
+    
+    <filter name="activeEntity" />
+    
+    <query name="getDistributionQty">
+      select
+        dpr.id, sum(item.quantity)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DpRequirement dpr
+        join dpr.distributionProtocol dp
+        join dp.distributionOrders do
+        join do.orderItems item
+        join item.specimen spec
+      where
+        dp.id = :dpId and
+        do.status = 'EXECUTED' and
+        dpr.specimenType = spec.specimenType and
+        dpr.anatomicSite = spec.tissueSite and
+        dpr.pathologyStatus = spec.pathologicalStatus
+      group by
+        dpr.id
+    </query>
+  </class>
+</hibernate-mapping>

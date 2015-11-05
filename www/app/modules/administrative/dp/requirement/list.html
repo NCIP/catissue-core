@@ -1,0 +1,60 @@
+
+<div class="clearfix">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span translate="dp.menu.requirements">Requirements</span>
+      <div class="os-action-btns">
+        <button class="btn btn-primary" ui-sref="req-addedit()">
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.add">Add</span>
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="os-table">
+        <div class="os-table-head">
+          <div class="row">
+            <div class="col os-col-15">
+              <span translate="dp.distribution_order.specimen_type">Specimen Type</span>
+            </div>
+            <div class="col os-col-20">
+              <span translate="dp.distribution_order.anatomic_site">Anatomic Site</span>
+            </div>
+            <div class="col os-col-15">
+              <span translate="dp.distribution_order.pathology_status">Pathology Status</span>
+            </div>
+            <div class="col os-col-10">
+              <span translate="dp.distribution_order.target">Target</span>
+            </div>
+            <div class="col os-col-10">
+              <span translate="dp.distribution_order.distributed">Distributed</span>
+            </div>
+            <div class="col os-col-30">
+              <span translate="dp.distribution_order.comments">Comments</span>
+            </div>
+          </div>
+        </div>
+        <div class="os-table-body">
+          <div class="row" ng-repeat="dpr in dprs">
+            <div class="col os-col-15">{{dpr.specimenType}}</div>
+            <div class="col os-col-20">{{dpr.anatomicSite}}</div>
+            <div class="col os-col-15">{{dpr.pathologyStatus}}</div>
+            <div class="col os-col-10">{{dpr.specimenCount * dpr.quantity}}</div>
+            <div class="col os-col-10">{{dpr.distributedQty}}</div>
+            <div class="col os-col-25 os-ellipsis" title="{{dpr.comments}}">{{dpr.comments}}</div>
+            <div class="col os-col-5">
+              <div class="pull-right btn-group btn-group-xs">
+                <button class="btn btn-default" ui-sref="req-addedit({reqId: dpr.id})">
+                  <span class="fa fa-pencil"></span>
+                </button>
+                <button class="btn btn-default" ng-click="deleteDpr(dpr)">
+                  <span class="fa fa-trash"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
