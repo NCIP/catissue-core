@@ -1,6 +1,7 @@
 
 angular.module('os.administrative.setting.list', ['os.administrative.models'])
-  .controller('SettingsListCtrl', function($scope, $state, $stateParams, $translate, Setting, Alerts) {
+  .controller('SettingsListCtrl', function(
+    $scope, $state, $stateParams, Setting, Alerts) {
 
     function init() {
       $scope.isEdit = false;
@@ -13,12 +14,10 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
       $scope.selectedModule = $scope.modulesMap[moduleName];
     }
     
-    init();
-    
     $scope.updateSetting = function(setting) {
       $scope.isEdit = true;
+      $scope.oldSetting = setting;
       $scope.setting = angular.copy(setting);
-      $scope.oldValue = setting.value;
       $scope.setting.value = '';
     }
     
@@ -27,20 +26,19 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     }
     
     $scope.submit = function() {
-      if($scope.oldValue == $scope.setting.value) {
-        Alerts.error($translate.instant('settings.invalid_value'));
-      } else {
-        Setting.updateSetting($scope.setting).then(
-          function(resp) {
-            Alerts.success($translate.instant('settings.success_message'));
-            angular.forEach($scope.modulesMap[resp.module].settings, function(setting) {
-              if(setting.name == resp.name) {
-                setting.value = resp.value;
-              }
-            });
-            $scope.isEdit = false;
-          }
-        );
-      }
+      if($scope.oldSetting.value == $scope.setting.value) {
+        Alerts.error('settings.invalid_value');
+        return;
+      } 
+
+      Setting.updateSetting($scope.setting).then(
+        function(resp) {
+          Alerts.success('settings.success_message');
+          $scope.oldSetting.value = resp.value;
+          $scope.isEdit = false;
+        }
+      );
     }
+
+    init();
   });

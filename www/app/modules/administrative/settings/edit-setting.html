@@ -30,9 +30,10 @@
     <div class="form-group">
       <label class="col-xs-2 control-label" translate="settings.new_value">New Value</label>
       <div class="col-xs-10">
-        <input type="text" name="value" class="form-control" ng-model="setting.value" required ng-if="setting.type == 'STRING'"></input>
-        <input type="text" name="value" class="form-control" ng-pattern="/^[0-9]*$/" ng-model="setting.value" required 
-          ng-if="setting.type == 'INT'"></input>
+        <input type="text" name="value" class="form-control" ng-model="setting.value" 
+          ng-if="setting.type == 'STRING'" required></input>
+        <input type="text" name="value" class="form-control" ng-model="setting.value" 
+          ng-pattern="/^[0-9]*$/" ng-if="setting.type == 'INT'" required></input>
         <div ng-if="setting.type == 'BOOLEAN'">
           <div class="btn-group">
             <button type="button" class="btn btn-default" name="value" ng-model="setting.value" 
