@@ -36,7 +36,8 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
     }
     
     DistributionProtocol.prototype.historyExportUrl = function() {
-      return DistributionProtocol.url() + this.$id() + '/orders-report';
+      var params = '?dpId=' + this.$id() + '&groupBy=specimenType,anatomicSite,pathologyStatus';
+      return DistributionProtocol.url() + '/orders-report' + params;
     }
     
     return DistributionProtocol;

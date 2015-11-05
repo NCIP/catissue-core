@@ -1,13 +1,20 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -32,10 +39,22 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService {
+	
+	private static final Map<String, String> attrDisplayKeys = new HashMap<String, String>() {
+		{
+			put("specimenType", "dist_specimen_type");
+			put("anatomicSite", "dist_anatomic_site");
+			put("pathologyStatus", "dist_pathology_status");
+		}
+	};
+	
 	private DaoFactory daoFactory;
 
 	private DistributionProtocolFactory distributionProtocolFactory;
@@ -236,31 +255,59 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			RequestEvent<DistributionOrderStatListCriteria> req) {
 		try {
 			DistributionOrderStatListCriteria crit = req.getPayload();
+			List<DistributionOrderStat> stats = getOrderStats(crit);
 			
-			if (crit.dpId() != null) {
-				DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
-				if (dp == null) {
-					return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
-				}
-				
-				AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
-			} else {
-				Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
-				if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
-					return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-				}
-				
-				if (siteIds != null) {
-					crit.siteIds(siteIds);
-				}
-			}
-			
-			List<DistributionOrderStat> details = daoFactory.getDistributionProtocolDao().getOrderStats(crit);
-			return ResponseEvent.response(details);
+			return ResponseEvent.response(stats);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req) {
+		File tempFile = null;
+		CSVWriter csvWriter = null;
+		try {
+			DistributionOrderStatListCriteria crit = req.getPayload();
+			List<DistributionOrderStat> orderStats = getOrderStats(crit);
+			
+			tempFile = File.createTempFile("dp-order-stats", null);
+			csvWriter = new CSVWriter(new FileWriter(tempFile));
+			
+			if (crit.dpId() != null && !orderStats.isEmpty()) {
+				DistributionOrderStat orderStat = orderStats.get(0);
+				csvWriter.writeNext(new String[] {
+					MessageUtil.getInstance().getMessage("dist_dp_title"),
+					orderStat.getDistributionProtocol().getTitle()
+				});
+			}
+			
+			csvWriter.writeNext(new String[] {
+				MessageUtil.getInstance().getMessage("dist_exported_by"),
+				AuthUtil.getCurrentUser().formattedName()
+			});
+			csvWriter.writeNext(new String[] {
+				MessageUtil.getInstance().getMessage("dist_exported_on"),
+				Utility.getDateString(Calendar.getInstance().getTime())
+			});
+			csvWriter.writeNext(new String[1]);
+			
+			String[] headers = getOrderStatsReportHeaders(crit);
+			csvWriter.writeNext(headers);
+			for (DistributionOrderStat stat: orderStats) {
+				csvWriter.writeNext(getOrderStatsReportData(stat, crit));
+			}
+			
+			return ResponseEvent.response(tempFile);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(csvWriter);
 		}
 	}
 	
@@ -438,6 +485,61 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		return true;
+	}
+
+	private List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria crit) {
+		if (crit.dpId() != null) {
+			DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(crit.dpId());
+			if (dp == null) {
+				throw OpenSpecimenException.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
+		} else {
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
+				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
+			if (siteIds != null) {
+				crit.siteIds(siteIds);
+			}
+		}
+		
+		return daoFactory.getDistributionProtocolDao().getOrderStats(crit);
+	}
+	
+	private String[] getOrderStatsReportHeaders(DistributionOrderStatListCriteria crit) {
+		List<String> headers = new ArrayList<String>();
+		if (crit.dpId() == null) {
+			headers.add(MessageUtil.getInstance().getMessage("dist_dp_title"));
+		}
+		
+		headers.add(MessageUtil.getInstance().getMessage("dist_order_name"));
+		headers.add(MessageUtil.getInstance().getMessage("dist_distribution_date"));
+		for (String attr: crit.groupByAttrs()) {
+			headers.add(MessageUtil.getInstance().getMessage(attrDisplayKeys.get(attr)));
+		}
+		
+		headers.add(MessageUtil.getInstance().getMessage("dist_specimen_distributed"));
+		return headers.toArray(new String[0]);
+	}
+	
+	private String [] getOrderStatsReportData(DistributionOrderStat stat, DistributionOrderStatListCriteria crit) {
+		List<String> data = new ArrayList<String>();
+		if (crit.dpId() == null) {
+			data.add(stat.getDistributionProtocol().getShortTitle());
+		}
+		
+		data.add(stat.getName());
+		data.add(Utility.getDateString(stat.getExecutionDate()));
+		for (String attr: crit.groupByAttrs()) {
+			data.add(stat.getGroupByAttrVals().get(attr).toString());
+		}
+		
+		data.add(stat.getDistributedSpecimenCount().toString());
+		
+		return data.toArray(new String[0]);
 	}
 	
 }

@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.services;
 
+import java.io.File;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
@@ -40,4 +41,6 @@ public interface DistributionProtocolService {
 	public ResponseEvent<DpRequirementDetail> updateRequirement(RequestEvent<DpRequirementDetail> req);
 	
 	public ResponseEvent<DpRequirementDetail> deleteRequirement(RequestEvent<Long> req);
+	
+	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
 }
