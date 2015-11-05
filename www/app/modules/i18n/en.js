@@ -1484,10 +1484,10 @@
         "participant_uid_pattern_desc": "Pattern for participant unique ids (UID)",
         "participant_uid_validator": "UID Custom Validator",
         "participant_uid_validator_desc": "Custom validator for participant unique ID field.",
-        "specimen_label_print_rules": "Specimen Label Print Rules",
-        "specimen_label_print_rules_desc": "Specimen label print rules",
-        "specimen_label_printer": "Specimen Label Printer",
-        "specimen_label_printer_desc": "Specimen label printer",
+        "specimen_label_print_rules": "Specimen Label Print Rules File",
+        "specimen_label_print_rules_desc": "CSV file containing the conditions which decides the data to be printed as labels and which printer to use",
+        "specimen_label_printer": "Specimen Label Printer Implementor Class",
+        "specimen_label_printer_desc": "Name of the java bean defined in the spring context for the implementor class",
         "specimen_type_abbr_map": "Specimen Type Abbreviation Mapping file",
         "specimen_type_abbr_map_desc": "CSV file containing mapping between specimen types and its abbreviation. Needed for label generation. ",
         "spmn_path_status_abbr_map": "Pathology Status Abbreviation Mapping file",
@@ -1498,10 +1498,10 @@
         "spr_dir_desc": "Folder on the server to store surgical pathology report files.",
         "uid_mandatory": "UID Mandatory",
         "uid_mandatory_desc": "Enable UID mandatory",
-        "visit_label_print_rules": "Visit Label Print Rules",
-        "visit_label_print_rules_desc": "Visit label print rules",
-        "visit_label_printer": "Visit Label Printer",
-        "visit_label_printer_desc": "Visit label printer"
+        "visit_label_print_rules": "Visit Label Print Rules File",
+        "visit_label_print_rules_desc": "CSV file containing the conditions which decides the data to be printed as labels and which printer to use",
+        "visit_label_printer": "Visit Label Printer Implementor Class",
+        "visit_label_printer_desc": "Name of the java bean defined in the spring context for the implementor class"
       },
 
       "common": {
