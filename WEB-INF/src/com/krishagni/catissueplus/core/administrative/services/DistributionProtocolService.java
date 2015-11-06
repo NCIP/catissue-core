@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -32,7 +31,7 @@ public interface DistributionProtocolService {
 	
 	public ResponseEvent<List<DistributionOrderStat>> getOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
 	
-	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<DpRequirementListCriteria> req);
+	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<Long> req);
 	
 	public ResponseEvent<DpRequirementDetail> getRequirement(RequestEvent<Long> req);
 	

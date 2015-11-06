@@ -7,8 +7,7 @@ angular.module('os.administrative.dp.requirement.list', ['os.administrative.mode
   
     function loadRequirements() {
       var params = {
-        dpId : distributionProtocol.$id(),
-        includeDistQty: true
+        dpId : distributionProtocol.$id()
       };
       DistributionProtocolRequirement.query(params).then(
         function(data) {

@@ -5,7 +5,7 @@ angular.module('os.administrative.dp.requirement',
     'os.administrative.dp.requirement.addedit'
   ])
 
-  .config(function($stateProvider, $urlRouterProvider) {
+  .config(function($stateProvider) {
     $stateProvider
       .state('req-root', {
         url: '/requirement',
@@ -33,7 +33,5 @@ angular.module('os.administrative.dp.requirement',
           }
         }
       });
-      
-      $urlRouterProvider.when('/requirement', '/requirement/list');
   });
 

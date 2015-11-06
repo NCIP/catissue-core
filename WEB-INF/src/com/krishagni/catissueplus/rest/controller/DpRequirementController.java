@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -35,16 +34,8 @@ public class DpRequirementController {
 	@ResponseBody
 	public List<DpRequirementDetail> getAllRequirements(
 			@RequestParam(value = "dpId", required = true)
-			Long dpId,
-			
-			@RequestParam(value = "includeDistQty", required = false, defaultValue = "false")
-			boolean includeDistQty) {
-		
-		DpRequirementListCriteria crit = new DpRequirementListCriteria()
-			.dpId(dpId)
-			.includeDistQty(includeDistQty);
-		
-		ResponseEvent<List<DpRequirementDetail>> resp = dpSvc.getRequirements(getRequest(crit));
+			Long dpId) {
+		ResponseEvent<List<DpRequirementDetail>> resp = dpSvc.getRequirements(getRequest(dpId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

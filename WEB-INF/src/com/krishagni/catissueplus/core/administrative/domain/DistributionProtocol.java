@@ -1,12 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
@@ -173,7 +170,7 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
 		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
-		CollectionUpdater.update(getRequirements(), distributionProtocol.getRequirements());
+		//CollectionUpdater.update(getRequirements(), distributionProtocol.getRequirements());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {

@@ -85,7 +85,7 @@ public class DpRequirementFactoryImpl implements DpRequirementFactory {
 			return;
 		}
 		
-		if (!isValid(SPECIMEN_CLASS, 1, specimenType)) {
+		if (!isValid(SPECIMEN_CLASS, 1, specimenType, true)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_TYPE);
 			return;
 		}

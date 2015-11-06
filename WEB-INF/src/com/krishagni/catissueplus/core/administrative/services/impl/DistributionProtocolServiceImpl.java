@@ -3,9 +3,11 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +25,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequireme
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -313,12 +314,30 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<DpRequirementListCriteria> req) {
+	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<Long> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			List<DpRequirementDetail> result = getDprDao().getRequirements(req.getPayload());
+			Long dpId = req.getPayload();
+			DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(dpId);
+			if (dp == null) {
+				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
+			}
 			
-			return ResponseEvent.response(result);
+			Set<DpRequirement> requirements = new HashSet<DpRequirement>(); 
+			for (DpRequirement requirement : dp.getRequirements()) {
+				if (requirement.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
+					requirements.add(requirement);
+				}
+			}
+			
+			List<DpRequirementDetail> reqDetails = DpRequirementDetail.from(requirements);
+			Map<Long, BigDecimal> distributedQty = getDprDao().getDistributedQtyByReq(dpId);
+			for (DpRequirementDetail reqDetail : reqDetails) {
+				BigDecimal qty = distributedQty.get(reqDetail.getId());
+				reqDetail.setDistributedQty(qty == null ? BigDecimal.ZERO : qty);
+			}
+			
+			return ResponseEvent.response(reqDetails);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -415,17 +434,15 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return;
 		}
 		
-		DpRequirementListCriteria crit = new DpRequirementListCriteria()
-				.dpId(newDpr.getDistributionProtocol().getId())
-				.specimenType(newDpr.getSpecimenType())
-				.anatomicSite(newDpr.getAnatomicSite())
-				.pathologyStatus(newDpr.getPathologyStatus())
-				.includeDistQty(false);
-		
-		List<DpRequirementDetail> existing = getDprDao().getRequirements(crit);
-		if (!CollectionUtils.isEmpty(existing)) {
-			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(),
-					newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
+		for (DpRequirement req : newDpr.getDistributionProtocol().getRequirements()) {
+			if (req.getSpecimenType().equals(newDpr.getSpecimenType()) &&
+					req.getAnatomicSite().equals(newDpr.getAnatomicSite()) &&
+					req.getPathologyStatus().equals(newDpr.getPathologyStatus())) {
+
+				ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(),
+						newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
+				return;
+			}
 		}
 	}
 	
