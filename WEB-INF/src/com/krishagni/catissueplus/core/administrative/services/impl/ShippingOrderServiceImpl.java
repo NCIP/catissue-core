@@ -5,21 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder;
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder.Status;
-import com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem;
-import com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem.Quality;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShippingOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShippingOrderFactory;
 import com.krishagni.catissueplus.core.administrative.events.ShippingOrderDetail;
-import com.krishagni.catissueplus.core.administrative.events.ShippingOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShippingOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.ShippingOrderDao;
 import com.krishagni.catissueplus.core.administrative.services.ShippingOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.Pair;
@@ -29,6 +24,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -146,25 +142,35 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ShippingOrderDetail> receiveOrder(RequestEvent<ShippingOrderDetail> req) {
-		ShippingOrderDetail detail = req.getPayload();
-		ShippingOrder existingOrder = getShippingOrderDao().getById(detail.getId());
-		if (existingOrder == null) {
-			return ResponseEvent.userError(ShippingOrderErrorCode.NOT_FOUND);
+		try {
+			ShippingOrderDetail detail = req.getPayload();
+			ShippingOrder existingOrder = getShippingOrderDao().getById(detail.getId());
+			if (existingOrder == null) {
+				return ResponseEvent.userError(ShippingOrderErrorCode.NOT_FOUND);
+			}
+			
+			if (!existingOrder.isOrderShipped()) {
+				return ResponseEvent.userError(ShippingOrderErrorCode.ORDER_NOT_SHIPPED);
+			}
+			
+			if (existingOrder.isOrderCollected()) {
+				return ResponseEvent.userError(ShippingOrderErrorCode.ORDER_ALREADY_COLLECTED);
+			}
+			
+			setShippingOrderDetailAttrs(existingOrder, detail);
+			ShippingOrder newOrder = shippingFactory.createShippingOrder(detail, Status.COLLECTED);
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureReceivingSpecimens(existingOrder, newOrder, ose);
+			
+			ose.checkAndThrow();
+			existingOrder.update(newOrder);
+			
+			return ResponseEvent.response(ShippingOrderDetail.from(existingOrder));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
-		
-		if (existingOrder.getStatus() != Status.SHIPPED) {
-			return ResponseEvent.userError(ShippingOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
-		}
-		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		ensureReceivingSpecimens(existingOrder, detail, ose);
-		ose.checkAndThrow();
-		
-		for (ShippingOrderItemDetail item : detail.getOrderItems()) {
-			collectSpecimens(item);
-		}
-		
-		return null;
 	}
 	
 	private void ensureUniqueConstraint(ShippingOrder existingOrder, ShippingOrder newOrder, OpenSpecimenException ose) {
@@ -213,34 +219,23 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 		emailService.sendEmail(ORDER_SHIPPED_EMAIL_TMPL, emailIds.toArray(new String[0]), props);
 	}
 	
-	private void ensureReceivingSpecimens(ShippingOrder existingOrder, ShippingOrderDetail newOrder,
-			OpenSpecimenException ose) {
+	private void ensureReceivingSpecimens(ShippingOrder existingOrder, ShippingOrder newOrder, OpenSpecimenException ose) {
 		List<String> existingSpecimens = Utility.<List<String>>collect(existingOrder.getOrderItems(), "specimen.label");
 		List<String> newSpecimens = Utility.<List<String>>collect(newOrder.getOrderItems(), "specimen.label");
+		
 		if (!CollectionUtils.isEqualCollection(existingSpecimens, newSpecimens)) {
 			ose.addError(ShippingOrderErrorCode.INVALID_SPECIMENS);
 		}
 	}
 	
-	private void collectSpecimens(ShippingOrderItem item, ShippingOrderItemDetail itemDetail) {
-		if (StringUtils.isBlank(itemDetail.getQuality())) {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.QUALITY_REQUIRED);
-		}
-		
-		Quality quality = null;
-		try {
-			quality = Quality.valueOf(itemDetail.getQuality());
-		} catch (IllegalArgumentException iae) {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.INVALID_QUALITY);
-		}
-		
-		if (quality == Quality.ACCEPTABLE) {
-			storeSpecimen(item.getSpecimen(), itemDetail.getSpecimen());
-		}
-	}
-	
-	private void storeSpecimen(Specimen specimen, SpecimenInfo specimenInfo) {
-		
+	private void setShippingOrderDetailAttrs(ShippingOrder existingOrder, ShippingOrderDetail detail) {
+		detail.setId(existingOrder.getId());
+		detail.setName(existingOrder.getName());
+		detail.setSiteName(existingOrder.getSite().getName());
+		detail.setActivityStatus(existingOrder.getActivityStatus());
+		detail.setComments(existingOrder.getComments());
+		detail.setSender(UserSummary.from(existingOrder.getSender()));
+		detail.setShippingDate(existingOrder.getShippingDate());
 	}
 	
 	private ShippingOrderDao getShippingOrderDao() {

@@ -43,9 +43,11 @@ public class ShippingOrderItem extends BaseEntity {
 		specimen.updatePosition(null);
 	}
 	
-	public void update(ShippingOrderItem other) {
-		setOrder(other.getOrder());
-		setSpecimen(other.specimen);
+	public void collect(ShippingOrderItem other) {
 		setQuality(other.getQuality());
+		
+		if (getQuality() == quality.ACCEPTABLE) {
+			specimen.updatePosition(other.getSpecimen().getPosition());
+		}
 	}
 }

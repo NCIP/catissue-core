@@ -20,6 +20,8 @@ import com.krishagni.catissueplus.core.administrative.events.ShippingOrderDetail
 import com.krishagni.catissueplus.core.administrative.events.ShippingOrderItemDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
@@ -32,10 +34,16 @@ import com.krishagni.catissueplus.core.common.util.Status;
 public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 	private DaoFactory daoFactory;
 	
+	private SpecimenFactory specimenFactory;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-	
+
+	public void setSpecimenFactory(SpecimenFactory specimenFactory) {
+		this.specimenFactory = specimenFactory;
+	}
+
 	public ShippingOrder createShippingOrder(ShippingOrderDetail detail, ShippingOrder.Status status) {
 		ShippingOrder order = new ShippingOrder();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -44,11 +52,13 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		setName(detail, order, ose);
 		setSite(detail, order, ose);
 		setSender(detail, order, ose);
-		setOrderItems(detail, order, ose);
 		setStatus(detail, status, order, ose);
 		setShippingDate(detail, order, ose);
 		setComments(detail, order, ose);
 		setActivityStatus(detail, order, ose);
+		setReceiver(detail, order, ose);
+		setReceiverComments(detail, order, ose);
+		setOrderItems(detail, order, ose);
 		
 		ose.checkAndThrow();
 		return order;
@@ -81,38 +91,13 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 	}
 	
 	private void setSender(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		User distributor = getUser(detail.getSender(), AuthUtil.getCurrentUser());
-		if (distributor == null) {
+		User sender = getUser(detail.getSender(), AuthUtil.getCurrentUser());
+		if (sender == null) {
 			ose.addError(UserErrorCode.NOT_FOUND);
 			return;
 		}
 		
-		order.setSender(distributor);
-	}
-	
-	private void setOrderItems(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		if (CollectionUtils.isEmpty(detail.getOrderItems())) {
-			ose.addError(ShippingOrderErrorCode.NO_SPECIMENS_TO_SHIP);
-			return;
-		}
-		
-		Set<ShippingOrderItem> orderItems = new HashSet<ShippingOrderItem>();
-		Set<Long> specimens = new HashSet<Long>();
-		for (ShippingOrderItemDetail item : detail.getOrderItems()) {
-			ShippingOrderItem orderItem = getOrderItem(item, order, ose);
-			if (orderItem == null) {
-				continue;
-			}
-			
-			if (!specimens.add(orderItem.getSpecimen().getId())) {
-				ose.addError(ShippingOrderErrorCode.DUPLICATE_SPECIMENS);
-				return;
-			}
-			
-			orderItems.add(orderItem);
-		}
-		
-		order.setOrderItems(orderItems);
+		order.setSender(sender);
 	}
 	
 	private void setStatus(ShippingOrderDetail detail, ShippingOrder.Status initialStatus, ShippingOrder order, OpenSpecimenException ose) {
@@ -168,6 +153,54 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		order.setActivityStatus(activityStatus);
 	}
 	
+	private void setReceiver(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
+		if(!order.isOrderCollected()) {
+			return;
+		}
+		
+		User receiver = getUser(detail.getReceiver(), AuthUtil.getCurrentUser());
+		if (receiver == null) {
+			ose.addError(UserErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		order.setReceiver(receiver);
+	}
+	
+	private void setReceiverComments(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
+		if(!order.isOrderCollected()) {
+			return;
+		}
+		
+		order.setReceiverComments(order.getReceiverComments());
+	}
+	
+	private void setOrderItems(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
+		if (CollectionUtils.isEmpty(detail.getOrderItems())) {
+			ose.addError(ShippingOrderErrorCode.NO_SPECIMENS_TO_SHIP);
+			return;
+		}
+		
+		Set<ShippingOrderItem> orderItems = new HashSet<ShippingOrderItem>();
+		Set<Long> specimens = new HashSet<Long>();
+		for (ShippingOrderItemDetail item : detail.getOrderItems()) {
+			ShippingOrderItem orderItem = getOrderItem(item, order, ose);
+			if (orderItem == null) {
+				return;
+			}
+			
+			if (!specimens.add(orderItem.getSpecimen().getId())) {
+				ose.addError(ShippingOrderErrorCode.DUPLICATE_SPECIMENS);
+				return;
+			}
+			
+			orderItems.add(orderItem);
+		}
+		
+		order.setOrderItems(orderItems);
+	}
+	
+	
 	private User getUser(UserSummary userSummary, User defaultUser) {
 		if (userSummary == null) {
 			return defaultUser;
@@ -184,7 +217,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 	}
 	
 	private ShippingOrderItem getOrderItem(ShippingOrderItemDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		Specimen specimen = getSpecimen(detail.getSpecimen(), ose);
+		Specimen specimen = getSpecimen(detail.getSpecimen(), order, ose);
 		if (specimen == null) {
 			return null;
 		}
@@ -192,38 +225,52 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		ShippingOrderItem orderItem = new ShippingOrderItem();
 		orderItem.setOrder(order);
 		orderItem.setSpecimen(specimen);
-		ShippingOrderItem.Quality quality = null;
+		
+		if (!order.isOrderCollected()) {
+			return orderItem;
+		}
+		
+		if (StringUtils.isBlank(detail.getQuality())) {
+			ose.addError(ShippingOrderErrorCode.SPECIMEN_QUALITY_REQUIRED);
+			return null;
+		}
 		
 		try {
-			if (StringUtils.isNotBlank(detail.getQuality())) {
-				quality = ShippingOrderItem.Quality.valueOf(detail.getQuality());
-			}
+			orderItem.setQuality(ShippingOrderItem.Quality.valueOf(detail.getQuality()));
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShippingOrderErrorCode.INVALID_SPECIMEN_QUALITY, detail.getQuality());
 			return null;
 		}
 		
-		orderItem.setQuality(quality);
-		
 		return orderItem;
 	}
 	
-	private Specimen getSpecimen(SpecimenInfo info, OpenSpecimenException ose) {
-		Specimen specimen = null;
+	private Specimen getSpecimen(SpecimenInfo info, ShippingOrder order, OpenSpecimenException ose) {
+		Specimen existing = null;
 		Object key = null;
 		
 		if (info.getId() != null) {
 			key = info.getId();
-			specimen = daoFactory.getSpecimenDao().getById(info.getId());
+			existing = daoFactory.getSpecimenDao().getById(info.getId());
 		} else if (StringUtils.isNotBlank(info.getLabel())) {
 			key = info.getLabel();
-			specimen = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
+			existing = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
 		}
 		
-		if (specimen == null) {
+		if (existing == null) {
 			ose.addError(SpecimenErrorCode.NOT_FOUND, key);
+			return null;
 		}
 		
-		return specimen;
+		if (!order.isOrderCollected()) {
+			return existing;
+		} 
+		
+		SpecimenDetail detail = new SpecimenDetail();
+		detail.setId(info.getId());
+		detail.setLabel(info.getLabel());
+		detail.setStorageLocation(info.getStorageLocation());
+		
+		return specimenFactory.createSpecimen(existing, detail, null);
 	}
 }

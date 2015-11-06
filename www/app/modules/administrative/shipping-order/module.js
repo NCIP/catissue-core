@@ -3,7 +3,8 @@ angular.module('os.administrative.shippingorder',
     'ui.router',
     'os.administrative.shippingorder.list',
     'os.administrative.shippingorder.addedit',
-    'os.administrative.shippingorder.detail'
+    'os.administrative.shippingorder.detail',
+    'os.administrative.shippingorder.receive'
   ])
 
   .config(function($stateProvider) {
@@ -56,5 +57,16 @@ angular.module('os.administrative.shippingorder',
         url: '/overview',
         templateUrl: 'modules/administrative/shipping-order/overview.html',
         parent: 'shipping-order-detail'
-      });
+      })
+      .state('shipping-order-receive', {
+        url: '/shipping-orders/:orderId/receive',
+        templateUrl: 'modules/administrative/shipping-order/receive.html',
+        resolve: {
+          order: function($stateParams , ShippingOrder) {
+            return ShippingOrder.getById($stateParams.orderId);
+          }
+        },
+        controller: 'ShippingOrderReceiveCtrl',
+        parent: 'shipping-order-root'
+      })
   });

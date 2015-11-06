@@ -8,7 +8,12 @@
     <h3>{{order.name}}</h3>
 
     <div class="os-btns right">
-      <button show-if-allowed="shippingOrderResource.updateOpts" class="primary" 
+      <button class="primary" 
+        ui-sref="shipping-order-receive({orderId: order.id})" ng-if="order.status == 'SHIPPED'">
+        <span class="fa fa-plus"></span>
+        <span translate="shipping_orders.buttons.receive">Receive</span>
+      </button>
+      <button class="primary" 
         ui-sref="shipping-order-addedit({orderId: order.id})" ng-if="order.status == 'PENDING'">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>

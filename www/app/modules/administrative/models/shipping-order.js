@@ -19,6 +19,18 @@ angular.module('os.administrative.models.shippingorder', ['os.common.models'])
       return this;
     }
 
+    ShippingOrder.prototype.$receiveShipment = function() {
+      angular.forEach(this.orderItems, function(orderItem) {
+        orderItem.specimen = {id: orderItem.specimen.id, storageLocation: orderItem.specimen.storageLocation};
+      });
+      
+      $http.put(ShippingOrder.url() + this.id + "/receive-shipment", this).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return ShippingOrder;
   }
 );

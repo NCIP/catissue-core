@@ -42,9 +42,10 @@
           <div class="os-table-head">
             <div class="row">
               <div class="col os-col-25" translate="shipping_orders.spec.label">Label</div>
-              <div class="col os-col-35" translate="shipping_orders.spec.desc">Description</div>
+              <div class="col os-col-30" translate="shipping_orders.spec.desc">Description</div>
               <div class="col os-col-25" translate="shipping_orders.spec.cp">Collection Protocol</div>
-              <div class="col os-col-15" translate="shipping_orders.spec.available_qty">Available</div>
+              <div class="col os-col-10" translate="shipping_orders.spec.quantity">Quantity</div>
+              <div class="col os-col-10" translate="shipping_orders.spec.quality">Quality</div>
             </div>
           </div>
           <div class="os-table-body">
@@ -54,7 +55,7 @@
                   <span>{{specimen.label}}</span>
                 </a>
               </div>
-              <div class="col os-col-35">
+              <div class="col os-col-30">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
                 </a>
@@ -62,10 +63,13 @@
               <div class="col os-col-25">
                 <span>{{specimen.cpShortTitle}}</span>
               </div>
-              <div class="col os-col-15">
+              <div class="col os-col-10">
                 <span>{{specimen.availableQty}}</span>
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>
+              </div>
+              <div class="col os-col-10">
+                <span>{{item.quality}}</span>
               </div>
             </div>
           </div>

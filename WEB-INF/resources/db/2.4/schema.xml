@@ -328,6 +328,13 @@
       <column name="COMMENTS" type="${text.type}(255)">
       </column>
       
+      <column name="RECEIVER_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+
+      <column name="RECEIVER_COMMENTS" type="${text.type}(255)">
+      </column>
+
       <column name="ACTIVITY_STATUS" type="${text.type}(16)">
         <constraints nullable="false"/>
       </column>

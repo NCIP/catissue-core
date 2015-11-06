@@ -1,0 +1,78 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="shipping-order-list" translate="shipping_orders.list">Shipping Orders</a>
+      </li>
+    </ul>
+    <h3>
+      <span>{{order.name}}</span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <form name="receiveForm" os-form-validator="receiveForm" novalidate>
+      <div class="form-group clearfix">
+        <label class="control-label col-xs-3" translate="shipping_orders.receiver_comments">Receiver Comments</label>
+        <div class="col-xs-6">
+          <textarea type="text" name="comments" ng-model="order.comments" class="form-control" 
+            placeholder="{{'shipping_orders.sender_comments' | translate}}" rows="2">
+          </textarea>
+        </div>
+      </div>
+
+      <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
+        <thead class="os-table-head">
+          <tr class="row">
+            <td class="col os-col-20" translate="shipping_orders.spec.label">Label</td>
+            <td class="col os-col-20" translate="shipping_orders.spec.desc">Description</td>
+            <td class="col os-col-15" translate="shipping_orders.spec.cp">Collection Protocol</td>
+            <td class="col os-col-10" translate="shipping_orders.spec.quantity">Quantity</td>
+            <td class="col os-col-25" translate="shipping_orders.spec.location">Location</td>
+            <td class="col os-col-10" translate="shipping_orders.spec.quality">Quality</td>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
+            <td class="col os-col-20">
+              <a ui-sref="specimen({specimenId: specimen.id})">
+                <span>{{specimen.label}}</span>
+              </a>
+            </td>
+            <td class="col os-col-20">
+              <a ui-sref="specimen({specimenId: specimen.id})">
+                <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+              </a>
+            </td>
+            <td class="col os-col-15">
+              <span>{{specimen.cpShortTitle}}</span>
+            </td>
+            <td class="col os-col-10">
+              <span>{{specimen.availableQty}}</span>
+              <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+              </os-specimen-unit>
+            </td>
+            <td class="col os-col-25" style="overflow: visible;">
+              <os-storage-position os-md-input
+                entity="specimen" cp-id="specimen.cpId" container-list-cache="containerListCache" hide-placeholder>
+              </os-storage-position>
+            </td>
+            <td class="col os-col-10" style="overflow: visible;">
+              <os-select os-md-input list="qualityStatuses" ng-model="item.status" required> </os-select>
+            </td>
+          </tr>
+        </tbody >
+      </table >
+      <div class="row">
+        <div class="col-xs-10">
+          <button type="submit" class="btn btn-primary" os-form-submit="receiveShipment()" mousedown-click="true"> 
+            <span translate="common.buttons.submit"> Submit </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

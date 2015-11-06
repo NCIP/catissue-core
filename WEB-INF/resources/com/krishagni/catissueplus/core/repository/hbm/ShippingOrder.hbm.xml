@@ -37,6 +37,10 @@
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem"/>
     </set>
     
+    <many-to-one name="receiver" column="RECEIVER_ID"/>
+    
+    <property name="receiverComments" column="RECEIVER_COMMENTS"/>
+    
     <filter name="activeEntity"/>
     
     <query name="getOrderByName">

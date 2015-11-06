@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class ShippingOrderDetail {
+@ListenAttributeChanges
+public class ShippingOrderDetail extends AttributeModifiedSupport {
 	private Long id;
 	
 	private String name;
@@ -30,6 +33,10 @@ public class ShippingOrderDetail {
 	private String comments;
 	
 	private String activityStatus;
+	
+	private UserSummary receiver;
+	
+	private String receiverComments;
 	
 	public Long getId() {
 		return id;
@@ -111,6 +118,22 @@ public class ShippingOrderDetail {
 		this.activityStatus = activityStatus;
 	}
 	
+	public UserSummary getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(UserSummary receiver) {
+		this.receiver = receiver;
+	}
+
+	public String getReceiverComments() {
+		return receiverComments;
+	}
+
+	public void setReceiverComments(String receiverComments) {
+		this.receiverComments = receiverComments;
+	}
+
 	public static ShippingOrderDetail from(ShippingOrder order) {
 		ShippingOrderDetail detail = new ShippingOrderDetail();
 		
@@ -124,6 +147,8 @@ public class ShippingOrderDetail {
 		detail.setShippingDate(order.getShippingDate());
 		detail.setComments(order.getComments());
 		detail.setActivityStatus(order.getActivityStatus());
+		detail.setReceiver(order.getReceiver() == null ? null : UserSummary.from(order.getReceiver()));
+		detail.setReceiverComments(order.getReceiverComments());
 		
 		return detail;
 	}

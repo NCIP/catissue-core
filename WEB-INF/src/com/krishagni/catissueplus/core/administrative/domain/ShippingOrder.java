@@ -36,6 +36,10 @@ public class ShippingOrder extends BaseEntity {
 	
 	private String activityStatus;
 	
+	private User receiver;
+	
+	private String receiverComments;
+	
 	public String getName() {
 		return name;
 	}
@@ -59,7 +63,7 @@ public class ShippingOrder extends BaseEntity {
 	public void setSender(User sender) {
 		this.sender = sender;
 	}
-	
+
 	public Set<ShippingOrderItem> getOrderItems() {
 		return orderItems;
 	}
@@ -100,16 +104,34 @@ public class ShippingOrder extends BaseEntity {
 		this.activityStatus = activityStatus;
 	}
 	
-	public void update(ShippingOrder newOrder) {
-		setName(newOrder.getName());
-		setSite(newOrder.getSite());
-		setSender(newOrder.getSender());
-		setShippingDate(newOrder.getShippingDate());
-		setComments(newOrder.getComments());
-		setActivityStatus(newOrder.getActivityStatus());
+	public User getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(User receiver) {
+		this.receiver = receiver;
+	}
+
+	public String getReceiverComments() {
+		return receiverComments;
+	}
+
+	public void setReceiverComments(String receiverComments) {
+		this.receiverComments = receiverComments;
+	}
+
+	public void update(ShippingOrder other) {
+		setName(other.getName());
+		setSite(other.getSite());
+		setSender(other.getSender());
+		setShippingDate(other.getShippingDate());
+		setComments(other.getComments());
+		setActivityStatus(other.getActivityStatus());
+		setReceiver(other.getReceiver());
+		setReceiverComments(other.getReceiverComments());
 		
-		updateOrderItems(newOrder);
-		updateStatus(newOrder);
+		updateOrderItems(other);
+		updateStatus(other);
 	}
 	
 	public void ship() {
@@ -128,8 +150,20 @@ public class ShippingOrder extends BaseEntity {
 		setStatus(Status.SHIPPED);
 	}
 	
+	public void collect() {
+		if (isOrderCollected()) {
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ORDER_ALREADY_COLLECTED);
+		}
+		
+		setStatus(Status.COLLECTED);
+ 	}
+	
 	public boolean isOrderShipped() {
 		return Status.SHIPPED == getStatus();
+	}
+	
+	public boolean isOrderCollected() {
+		return Status.COLLECTED == getStatus();
 	}
 	
 	private void updateOrderItems(ShippingOrder other) {
@@ -140,8 +174,8 @@ public class ShippingOrder extends BaseEntity {
 		
 		for (ShippingOrderItem newItem : other.getOrderItems()) {
 			ShippingOrderItem oldItem = existingItems.remove(newItem.getSpecimen());
-			if (oldItem != null) {
-				oldItem.update(newItem);
+			if (oldItem != null && other.isOrderCollected()) {
+				oldItem.collect(newItem);
 			} else {
 				getOrderItems().add(newItem);
 			}
@@ -150,15 +184,19 @@ public class ShippingOrder extends BaseEntity {
 		getOrderItems().removeAll(existingItems.values());
 	}
 	
-	private void updateStatus(ShippingOrder order) {
-		if (getStatus() == order.getStatus()) {
+	private void updateStatus(ShippingOrder other) {
+		if (getStatus() == other.getStatus()) {
 			return;
 		}
 		
-		if (getStatus() == Status.PENDING && order.isOrderShipped()) {
+		if (getStatus() == Status.PENDING && other.isOrderShipped()) {
 			ship();
+		} else if (isOrderShipped() && other.isOrderCollected()) {
+			collect();
+			updateOrderItems(other);
 		} else {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ORDER_NOT_SHIPPED);
 		}
 	}
 }
+
