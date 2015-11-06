@@ -435,7 +435,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		for (DpRequirement req : newDpr.getDistributionProtocol().getRequirements()) {
-			if (req.getSpecimenType().equals(newDpr.getSpecimenType()) &&
+			if (req.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) &&
+					req.getSpecimenType().equals(newDpr.getSpecimenType()) &&
 					req.getAnatomicSite().equals(newDpr.getAnatomicSite()) &&
 					req.getPathologyStatus().equals(newDpr.getPathologyStatus())) {
 
