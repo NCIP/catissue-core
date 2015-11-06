@@ -15,4 +15,6 @@ public interface ShippingOrderService {
 	public ResponseEvent<ShippingOrderDetail> createOrder(RequestEvent<ShippingOrderDetail> req);
 	
 	public ResponseEvent<ShippingOrderDetail> updateOrder(RequestEvent<ShippingOrderDetail> req);
+	
+	public ResponseEvent<ShippingOrderDetail> receiveOrder(RequestEvent<ShippingOrderDetail> req);
 }

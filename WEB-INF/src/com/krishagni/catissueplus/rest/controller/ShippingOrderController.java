@@ -88,6 +88,21 @@ public class ShippingOrderController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/receive-shipment")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ShippingOrderDetail receiveOrder(
+			@PathVariable
+			Long id,
+			
+			@RequestBody
+			ShippingOrderDetail detail) {
+		detail.setId(id);
+		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.receiveOrder(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
 	}

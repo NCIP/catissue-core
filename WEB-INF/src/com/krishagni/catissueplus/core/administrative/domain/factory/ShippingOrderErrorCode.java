@@ -29,7 +29,13 @@ public enum ShippingOrderErrorCode implements ErrorCode {
 	
 	INVALID_SPECIMENS,
 	
-	STATUS_CHANGE_NOT_ALLOWED;
+	STATUS_CHANGE_NOT_ALLOWED,
+	
+	INVALID_COLLECT_SPECIMEN,
+	
+	QUALITY_REQUIRED,
+	
+	INVALID_QUALITY;
 	
 	@Override
 	public String code() {
