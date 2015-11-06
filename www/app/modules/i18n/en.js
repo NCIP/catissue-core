@@ -1552,27 +1552,27 @@
       "notifications": {
         "title": "Notifications",
         "email_order_distributed": "Distribution Notification",
-        "email_order_distributed_desc": "Email notfications when specimens are distributed.",
+        "email_order_distributed_desc": "Email notifications when specimens are distributed.",
         "email_query_export_data": "Query Export Notification",
-        "email_query_export_data_desc": "Email notfications when data is exported from query results.",
+        "email_query_export_data_desc": "Email notifications when data is exported from query results.",
         "email_query_share_query_folder": "Share Query Folder Notification",
-        "email_query_share_query_folder_desc": "Email notfications when a query folder is shared with another user.",
+        "email_query_share_query_folder_desc": "Email notifications when a query folder is shared with another user.",
         "email_specimen_list_shared": "Share Specimen List Notification",
-        "email_specimen_list_shared_desc": "Email notfications when a specimen list is shared with another user.",
+        "email_specimen_list_shared_desc": "Email notifications when a specimen list is shared with another user.",
         "email_users_created": "User Creation Notification",
-        "email_users_created_desc": "Email notfications when a new user is created.",
+        "email_users_created_desc": "Email notifications when a new user is created.",
         "email_users_forgot_password_link": "Forgot Password Link Notification",
-        "email_users_forgot_password_link_desc": "Email notfications to send the forgot password link.",
+        "email_users_forgot_password_link_desc": "Email notifications to send the forgot password link.",
         "email_users_new_user_request": "New User Request Notification",
-        "email_users_new_user_request_desc": "Email notfications when a new user is created to the system administrator.",
+        "email_users_new_user_request_desc": "Email notifications when a new user is created to the system administrator.",
         "email_users_passwd_changed": "Password Change Notification",
-        "email_users_passwd_changed_desc": "Email notfications on password change.",
+        "email_users_passwd_changed_desc": "Email notifications on password change.",
         "email_users_request_rejected": "User Request Rejected Notification",
-        "email_users_request_rejected_desc": "Email notfications when a user registration is rejected.",
+        "email_users_request_rejected_desc": "Email notifications when a user registration is rejected.",
         "email_users_role_updated": "Role Updated Notification",
-        "email_users_role_updated_desc": "Email notfications when a user's role is updated.",
+        "email_users_role_updated_desc": "Email notifications when a user's role is updated.",
         "email_users_signed_up": "User Signup Notification",
-        "email_users_signed_up_desc": "Email notfications when a new user signs up."
+        "email_users_signed_up_desc": "Email notifications when a new user signs up."
       }
     }
 }
