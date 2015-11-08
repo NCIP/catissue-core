@@ -410,7 +410,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return; // invalid parent specimen scenario
 		}
 		
-		
 		if (StringUtils.isBlank(pathology)) {
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
