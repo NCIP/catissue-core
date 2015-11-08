@@ -19,7 +19,7 @@ public class DpRequirementDaoImpl extends AbstractDao<DpRequirement>
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<Long, BigDecimal> getDistributedQtyByReq(Long dpId) {
+	public Map<Long, BigDecimal> getDistributedQtyByDp(Long dpId) {
 		List<Object []> data = sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_DISTRIBUTION_QTY)
 				.setLong("dpId", dpId)

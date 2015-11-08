@@ -57,6 +57,7 @@
     <set name="requirements" inverse="true" cascade="all-delete-orphan">
       <key column="DP_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpRequirement"/>
+      <filter name="activeEntity"/>
     </set>
 
     <filter name="activeEntity"/>

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -170,7 +171,6 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
 		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
-		//CollectionUpdater.update(getRequirements(), distributionProtocol.getRequirements());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -200,6 +200,18 @@ public class DistributionProtocol extends BaseEntity {
 		}
 		
 		return sites;
+	}
+	
+	public boolean hasRequirement(String specimenType, String anatomicSite, String pathologyStatus) {
+		for (DpRequirement req : getRequirements()) {
+			if (req.getSpecimenType().equals(specimenType) &&
+					req.getAnatomicSite().equals(anatomicSite) &&
+					req.getPathologyStatus().equals(pathologyStatus)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 }

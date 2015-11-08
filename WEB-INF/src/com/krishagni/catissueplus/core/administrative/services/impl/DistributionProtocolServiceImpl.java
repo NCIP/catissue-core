@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -323,15 +322,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
-			Set<DpRequirement> requirements = new HashSet<DpRequirement>(); 
-			for (DpRequirement requirement : dp.getRequirements()) {
-				if (requirement.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
-					requirements.add(requirement);
-				}
-			}
-			
-			List<DpRequirementDetail> reqDetails = DpRequirementDetail.from(requirements);
-			Map<Long, BigDecimal> distributedQty = getDprDao().getDistributedQtyByReq(dpId);
+			List<DpRequirementDetail> reqDetails = DpRequirementDetail.from(dp.getRequirements());
+			Map<Long, BigDecimal> distributedQty = getDprDao().getDistributedQtyByDp(dpId);
 			for (DpRequirementDetail reqDetail : reqDetails) {
 				BigDecimal qty = distributedQty.get(reqDetail.getId());
 				reqDetail.setDistributedQty(qty == null ? BigDecimal.ZERO : qty);
@@ -434,16 +426,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return;
 		}
 		
-		for (DpRequirement req : newDpr.getDistributionProtocol().getRequirements()) {
-			if (req.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) &&
-					req.getSpecimenType().equals(newDpr.getSpecimenType()) &&
-					req.getAnatomicSite().equals(newDpr.getAnatomicSite()) &&
-					req.getPathologyStatus().equals(newDpr.getPathologyStatus())) {
-
-				ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(),
-						newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
-				return;
-			}
+		if (newDpr.getDistributionProtocol().hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(),
+				newDpr.getPathologyStatus())) {
+			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(), newDpr.getAnatomicSite(),
+					newDpr.getPathologyStatus());
 		}
 	}
 	
