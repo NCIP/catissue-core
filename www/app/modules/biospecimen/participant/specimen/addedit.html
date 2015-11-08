@@ -154,6 +154,17 @@
         </div>
       </div>
 
+      <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen">
+        <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
+        <div class="col-xs-6">
+          <os-select name="pathology" ng-model="currSpecimen.pathology" list="pathologyStatuses"
+            required placeholder="{{'specimens.pathology_status' | translate}}">
+          </os-select>
+          <div os-field-error field="sform.pathology"></div>
+        </div>
+      </div>
+
+
       <div ng-if="showAdvAttrs">
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
@@ -171,15 +182,6 @@
               required placeholder="{{'specimens.laterality' | translate}}">
             </os-select>
             <div os-field-error field="sform.laterality"></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
-          <div class="col-xs-6">
-            <os-select name="pathology" ng-model="currSpecimen.pathology" list="pathologyStatuses"
-              required placeholder="{{'specimens.pathology_status' | translate}}">
-            </os-select>
-            <div os-field-error field="sform.pathology"></div>
           </div>
         </div>
 

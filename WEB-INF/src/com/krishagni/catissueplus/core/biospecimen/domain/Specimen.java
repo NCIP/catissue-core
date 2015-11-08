@@ -621,7 +621,6 @@ public class Specimen extends BaseExtensionEntity {
 
 		setTissueSite(spmnToUpdateFrom.getTissueSite());
 		setTissueSide(spmnToUpdateFrom.getTissueSide());
-		setPathologicalStatus(spmnToUpdateFrom.getPathologicalStatus());
 		
 		if (isDerivative()) {
 			spmnToUpdateFrom = specimen;
@@ -631,6 +630,7 @@ public class Specimen extends BaseExtensionEntity {
 		setSpecimenType(spmnToUpdateFrom.getSpecimenType());
 		updateBiohazards(spmnToUpdateFrom.getBiohazards());
 		setConcentration(spmnToUpdateFrom.getConcentration());
+		setPathologicalStatus(spmnToUpdateFrom.getPathologicalStatus());
 
 		setInitialQuantity(specimen.getInitialQuantity());		
 		setAvailableQuantity(specimen.getAvailableQuantity());

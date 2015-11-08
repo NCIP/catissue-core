@@ -3,7 +3,6 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     var Specimen = osModel(
       'specimens',
       function(specimen) {
-        console.log(specimen);
         if (specimen.specimensPool) {
           specimen.specimensPool = specimen.specimensPool.map(
             function(poolSpmn) {
