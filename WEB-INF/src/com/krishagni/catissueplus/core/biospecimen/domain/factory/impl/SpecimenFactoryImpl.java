@@ -399,16 +399,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null) {
+		String pathology = detail.getPathology();
+		if (specimen.getParentSpecimen() != null && 
+				(specimen.isDerivative() && StringUtils.isBlank(pathology))) {
 			specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 			return;
 		}
 		
-		if (specimen.isAliquot() || specimen.isDerivative()) {
+		if (specimen.isAliquot()) {
 			return; // invalid parent specimen scenario
 		}
 		
-		String pathology = detail.getPathology();
+		
 		if (StringUtils.isBlank(pathology)) {
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);

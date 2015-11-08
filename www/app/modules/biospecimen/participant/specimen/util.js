@@ -124,6 +124,15 @@ angular.module('os.biospecimen.specimen')
       scope.classesLoaded = true;
     }
 
+    function loadPathologyStatuses(scope) {
+      if (scope.pathologyLoaded) {
+        return;
+      }
+
+      scope.pathologyStatuses = PvManager.getPvs('pathology-status');
+      scope.pathologyLoaded = true;
+    }
+
     function loadSpecimenTypes(scope, specimenClass, notClear) {
       if (!notClear) {
         scope.derivative.type = '';
@@ -149,6 +158,8 @@ angular.module('os.biospecimen.specimen')
       loadSpecimenClasses: loadSpecimenClasses,
 
       loadSpecimenTypes: loadSpecimenTypes,
+
+      loadPathologyStatuses: loadPathologyStatuses,
 
       getNewDerivative: getNewDerivative
     }
