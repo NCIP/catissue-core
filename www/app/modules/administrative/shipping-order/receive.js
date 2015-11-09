@@ -1,5 +1,5 @@
 angular.module('os.administrative.shippingorder.receive', ['os.administrative.models'])
-  .controller('ShippingOrderReceiveCtrl', function($scope, order, Specimen, PvManager) {
+  .controller('ShippingOrderReceiveCtrl', function($scope, $state, order, Specimen, PvManager) {
 
     function loadPvs() {
       $scope.qualityStatuses = PvManager.getPvs('quality-status');
@@ -18,7 +18,6 @@ angular.module('os.administrative.shippingorder.receive', ['os.administrative.mo
       var order = angular.copy($scope.order);
       order.$receiveShipment().then(
         function(resp) {
-          Alters.success('');
           $state.go('shipping-order-detail.overview', {orderId: resp.id});
         }
       );
