@@ -98,11 +98,15 @@ public class DpRequirement extends BaseEntity {
 	}
 	
 	public boolean equalsSpecimenGroup(DpRequirement dpr) {
-		return getSpecimenType().equals(dpr.getSpecimenType()) &&
-				getAnatomicSite().equals(dpr.getAnatomicSite()) &&
-				getPathologyStatus().equals(dpr.getPathologyStatus());
+		return equalsSpecimenGroup(dpr.getSpecimenType(), dpr.getAnatomicSite(), dpr.getPathologyStatus());
 	}
-	
+
+	public boolean equalsSpecimenGroup(String specimenType, String anatomicSite, String pathologyStatus) {
+		return getSpecimenType().equals(specimenType) &&
+				getAnatomicSite().equals(anatomicSite) &&
+				getPathologyStatus().equals(pathologyStatus);
+	}
+
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}

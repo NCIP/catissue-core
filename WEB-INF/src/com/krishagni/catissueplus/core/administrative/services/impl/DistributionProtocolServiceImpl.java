@@ -17,18 +17,18 @@ import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
-import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementFactory;
+import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementFactory;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
-import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -360,11 +360,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<DpRequirementDetail> createRequirement(RequestEvent<DpRequirementDetail> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			DpRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+
+			DpRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());	
+
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueRequirementConstraint(null, dpr, ose);
+			ensureUniqueReqConstraints(null, dpr, ose);
 			ose.checkAndThrow();
-			
+
 			getDprDao().saveOrUpdate(dpr);
 			return ResponseEvent.response(DpRequirementDetail.from(dpr));
 		} catch (OpenSpecimenException ose) {
@@ -379,17 +381,18 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<DpRequirementDetail> updateRequirement(RequestEvent<DpRequirementDetail> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+
 			Long dpReqId = req.getPayload().getId();
 			DpRequirement existing = getDprDao().getById(dpReqId);
 			if (existing == null) {
 				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
 			}
-			
+
 			DpRequirement newDpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueRequirementConstraint(existing, newDpr, ose);
+			ensureUniqueReqConstraints(existing, newDpr, ose);
 			ose.checkAndThrow();
-			
+
 			existing.update(newDpr);
 			getDprDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DpRequirementDetail.from(existing));
@@ -405,6 +408,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<DpRequirementDetail> deleteRequirement(RequestEvent<Long> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+
 			DpRequirement existing = getDprDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
@@ -420,16 +424,16 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 	}
 	
-	private void ensureUniqueRequirementConstraint(DpRequirement oldDpr, DpRequirement newDpr,
-			OpenSpecimenException ose) {
+	private void ensureUniqueReqConstraints(DpRequirement oldDpr, DpRequirement newDpr, OpenSpecimenException ose) {
 		if (oldDpr != null && oldDpr.equalsSpecimenGroup(newDpr)) {
 			return;
 		}
 		
-		if (newDpr.getDistributionProtocol().hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(),
-				newDpr.getPathologyStatus())) {
-			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS, newDpr.getSpecimenType(), newDpr.getAnatomicSite(),
-					newDpr.getPathologyStatus());
+		DistributionProtocol dp = newDpr.getDistributionProtocol();
+		if (dp.hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus())) {
+			ose.addError(
+				DpRequirementErrorCode.ALREADY_EXISTS, 
+				newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
 		}
 	}
 	
@@ -443,9 +447,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			dpMap.put(dp.getId(), dp);
 		}
 				
-		Map<Long, Integer> countMap = daoFactory.getDistributionProtocolDao()
-				.getSpecimensCountByDpIds(dpMap.keySet());
-		
+		Map<Long, Integer> countMap = daoFactory.getDistributionProtocolDao().getSpecimensCountByDpIds(dpMap.keySet());		
 		for (Map.Entry<Long, Integer> count : countMap.entrySet()) {
 			dpMap.get(count.getKey()).setDistributedSpecimensCount(count.getValue());
 		}		
@@ -545,5 +547,4 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		
 		return data.toArray(new String[0]);
 	}
-	
 }
