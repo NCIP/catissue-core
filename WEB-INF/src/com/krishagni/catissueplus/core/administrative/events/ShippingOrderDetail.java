@@ -31,7 +31,7 @@ public class ShippingOrderDetail extends AttributeModifiedSupport {
 	private Date shippingDate;
 	
 	private String comments;
-	
+		
 	private String activityStatus;
 	
 	private UserSummary receiver;

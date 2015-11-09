@@ -713,7 +713,8 @@
   </bean>
   
   <bean id="shippingOrderFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ShippingOrderFactoryImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="specimenFactory" ref="specimenFactory"/>
   </bean>
   
   <bean id="shippingOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.ShippingOrderServiceImpl">

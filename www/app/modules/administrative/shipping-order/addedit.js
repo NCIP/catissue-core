@@ -34,13 +34,16 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
     }
 
     function getOrderItems(specimens) {
-      return specimens.map(
+      
+      return specimens.filter(
+        function(specimen) {
+          return specimen.availableQty > 0;
+        }).map(
         function(specimen) {
           return {
             specimen: specimen
           };
-        }
-      );
+        });
     }
 
     function saveOrUpdate() {

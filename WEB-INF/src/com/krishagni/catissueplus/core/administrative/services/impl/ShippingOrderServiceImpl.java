@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder;
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder.Status;
@@ -150,19 +151,17 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 			}
 			
 			if (!existingOrder.isOrderShipped()) {
-				return ResponseEvent.userError(ShippingOrderErrorCode.ORDER_NOT_SHIPPED);
+				return ResponseEvent.userError(ShippingOrderErrorCode.NOT_SHIPPED);
 			}
 			
 			if (existingOrder.isOrderCollected()) {
-				return ResponseEvent.userError(ShippingOrderErrorCode.ORDER_ALREADY_COLLECTED);
+				return ResponseEvent.userError(ShippingOrderErrorCode.ALREADY_COLLECTED);
 			}
 			
 			setShippingOrderDetailAttrs(existingOrder, detail);
 			ShippingOrder newOrder = shippingFactory.createShippingOrder(detail, Status.COLLECTED);
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureReceivingSpecimens(existingOrder, newOrder, ose);
+			existingOrder.ensureShippedSpecimens(newOrder);
 			
-			ose.checkAndThrow();
 			existingOrder.update(newOrder);
 			
 			return ResponseEvent.response(ShippingOrderDetail.from(existingOrder));
@@ -201,8 +200,19 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 		
 		List<Specimen> shippedSpecimen = getShippingOrderDao().getShippedSpecimensByLabels(specimenLabels);
 		if (!CollectionUtils.isEmpty(shippedSpecimen)) {
-			ose.addError(ShippingOrderErrorCode.SPECIMEN_ALREADY_SHIPPED);
+			List<String> labels = Utility.<List<String>>collect(shippedSpecimen, "label");
+			ose.addError(ShippingOrderErrorCode.SPECIMEN_ALREADY_SHIPPED, StringUtils.join(labels, ','));
 		}
+	}
+
+	private void setShippingOrderDetailAttrs(ShippingOrder existingOrder, ShippingOrderDetail detail) {
+		detail.setId(existingOrder.getId());
+		detail.setName(existingOrder.getName());
+		detail.setSiteName(existingOrder.getSite().getName());
+		detail.setSender(UserSummary.from(existingOrder.getSender()));
+		detail.setComments(existingOrder.getComments());
+		detail.setShippingDate(existingOrder.getShippingDate());
+		detail.setActivityStatus(existingOrder.getActivityStatus());
 	}
 	
 	private void sendOrderProcessedEmail(ShippingOrder order, Status oldStatus) {
@@ -217,25 +227,6 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 		props.put("$subject", subjectParams);
 		props.put("order", order);
 		emailService.sendEmail(ORDER_SHIPPED_EMAIL_TMPL, emailIds.toArray(new String[0]), props);
-	}
-	
-	private void ensureReceivingSpecimens(ShippingOrder existingOrder, ShippingOrder newOrder, OpenSpecimenException ose) {
-		List<String> existingSpecimens = Utility.<List<String>>collect(existingOrder.getOrderItems(), "specimen.label");
-		List<String> newSpecimens = Utility.<List<String>>collect(newOrder.getOrderItems(), "specimen.label");
-		
-		if (!CollectionUtils.isEqualCollection(existingSpecimens, newSpecimens)) {
-			ose.addError(ShippingOrderErrorCode.INVALID_SPECIMENS);
-		}
-	}
-	
-	private void setShippingOrderDetailAttrs(ShippingOrder existingOrder, ShippingOrderDetail detail) {
-		detail.setId(existingOrder.getId());
-		detail.setName(existingOrder.getName());
-		detail.setSiteName(existingOrder.getSite().getName());
-		detail.setActivityStatus(existingOrder.getActivityStatus());
-		detail.setComments(existingOrder.getComments());
-		detail.setSender(UserSummary.from(existingOrder.getSender()));
-		detail.setShippingDate(existingOrder.getShippingDate());
 	}
 	
 	private ShippingOrderDao getShippingOrderDao() {

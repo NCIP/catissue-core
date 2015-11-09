@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.ShippingOrderItem;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 
@@ -44,7 +46,8 @@ public class ShippingOrderItemDetail {
 		itemDetail.setId(orderItem.getId());
 		itemDetail.setSpecimen(SpecimenInfo.from(orderItem.getSpecimen()));
 		if (orderItem.getQuality() != null) {
-			itemDetail.setQuality(orderItem.getQuality().toString());
+			String quality = orderItem.getQuality().toString();
+			itemDetail.setQuality(StringUtils.capitalize(quality.toLowerCase()));
 		}
 		
 		return itemDetail;

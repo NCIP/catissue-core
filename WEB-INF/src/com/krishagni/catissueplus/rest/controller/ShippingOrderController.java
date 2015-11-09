@@ -50,6 +50,7 @@ public class ShippingOrderController {
 		
 		ResponseEvent<List<ShippingOrderDetail>> resp = shipOrderSvc.getOrders(getRequest(listCrit));
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
@@ -59,6 +60,7 @@ public class ShippingOrderController {
 	public ShippingOrderDetail getOrder(@PathVariable("id") Long id) {
 		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.getOrder(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
@@ -85,12 +87,13 @@ public class ShippingOrderController {
 		detail.setId(id);
 		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.updateOrder(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}/receive-shipment")
 	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
+	@ResponseBody	
 	public ShippingOrderDetail receiveOrder(
 			@PathVariable
 			Long id,
@@ -100,6 +103,7 @@ public class ShippingOrderController {
 		detail.setId(id);
 		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.receiveOrder(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	

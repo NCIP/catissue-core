@@ -1363,6 +1363,7 @@
     "name": "Name",
     "site": "Site",
     "sender": "Sender",
+    "receiver": "Receiver",
     "shipping_date": "Shipping Date",
     "creation_date": "Creation Date",
     "status": "Status",
@@ -1394,10 +1395,8 @@
 
     "statuses": {
       "SHIPPED": "Shipped",
-      "PENDING": "Pending"
-    },
-
-    "quality_status": {
+      "PENDING": "Pending",
+      "COLLECTED": "Collected"
     },
 
     "buttons": {

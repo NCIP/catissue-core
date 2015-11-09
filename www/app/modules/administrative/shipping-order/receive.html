@@ -15,8 +15,8 @@
       <div class="form-group clearfix">
         <label class="control-label col-xs-3" translate="shipping_orders.receiver_comments">Receiver Comments</label>
         <div class="col-xs-6">
-          <textarea type="text" name="comments" ng-model="order.comments" class="form-control" 
-            placeholder="{{'shipping_orders.sender_comments' | translate}}" rows="2">
+          <textarea type="text" name="comments" ng-model="order.receiverComments" class="form-control" 
+            placeholder="{{'shipping_orders.receiver_comments' | translate}}" rows="2">
           </textarea>
         </div>
       </div>
@@ -58,7 +58,7 @@
               </os-storage-position>
             </td>
             <td class="col os-col-10" style="overflow: visible;">
-              <os-select os-md-input list="qualityStatuses" ng-model="item.status" required> </os-select>
+              <os-select os-md-input list="qualityStatuses" ng-model="item.quality" required> </os-select>
             </td>
           </tr>
         </tbody >

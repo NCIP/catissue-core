@@ -200,7 +200,6 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		order.setOrderItems(orderItems);
 	}
 	
-	
 	private User getUser(UserSummary userSummary, User defaultUser) {
 		if (userSummary == null) {
 			return defaultUser;
@@ -236,7 +235,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		}
 		
 		try {
-			orderItem.setQuality(ShippingOrderItem.Quality.valueOf(detail.getQuality()));
+			orderItem.setQuality(ShippingOrderItem.Quality.valueOf(detail.getQuality().toUpperCase()));
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShippingOrderErrorCode.INVALID_SPECIMEN_QUALITY, detail.getQuality());
 			return null;
@@ -268,7 +267,6 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setId(info.getId());
-		detail.setLabel(info.getLabel());
 		detail.setStorageLocation(info.getStorageLocation());
 		
 		return specimenFactory.createSpecimen(existing, detail, null);

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.ShippingOrd
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ShippingOrder extends BaseEntity {
 	public enum Status {
@@ -136,7 +138,7 @@ public class ShippingOrder extends BaseEntity {
 	
 	public void ship() {
 		if (isOrderShipped()) {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ORDER_ALREADY_SHIPPED);
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ALREADY_SHIPPED);
 		}
 		
 		if (CollectionUtils.isEmpty(getOrderItems())) {
@@ -150,9 +152,19 @@ public class ShippingOrder extends BaseEntity {
 		setStatus(Status.SHIPPED);
 	}
 	
-	public void collect() {
+	public void collect(ShippingOrder other) {
 		if (isOrderCollected()) {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ORDER_ALREADY_COLLECTED);
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ALREADY_COLLECTED);
+		}
+		
+		Map<Specimen, ShippingOrderItem> existingItems = new HashMap<Specimen, ShippingOrderItem>();
+		for (ShippingOrderItem item : getOrderItems()) {
+			existingItems.put(item.getSpecimen(), item); 
+		}
+		
+		for (ShippingOrderItem newItem : other.getOrderItems()) {
+			ShippingOrderItem oldItem = existingItems.remove(newItem.getSpecimen());
+			oldItem.collect(newItem);
 		}
 		
 		setStatus(Status.COLLECTED);
@@ -166,6 +178,15 @@ public class ShippingOrder extends BaseEntity {
 		return Status.COLLECTED == getStatus();
 	}
 	
+	public void ensureShippedSpecimens(ShippingOrder other) {
+		List<String> existingSpecimens = Utility.<List<String>>collect(getOrderItems(), "specimen.label");
+		List<String> newSpecimens = Utility.<List<String>>collect(other.getOrderItems(), "specimen.label");
+		
+		if (!CollectionUtils.isEqualCollection(existingSpecimens, newSpecimens)) {
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.INVALID_SHIPPED_SPECIMENS);
+		}
+	}
+	
 	private void updateOrderItems(ShippingOrder other) {
 		Map<Specimen, ShippingOrderItem> existingItems = new HashMap<Specimen, ShippingOrderItem>();
 		for (ShippingOrderItem item : getOrderItems()) {
@@ -174,9 +195,7 @@ public class ShippingOrder extends BaseEntity {
 		
 		for (ShippingOrderItem newItem : other.getOrderItems()) {
 			ShippingOrderItem oldItem = existingItems.remove(newItem.getSpecimen());
-			if (oldItem != null && other.isOrderCollected()) {
-				oldItem.collect(newItem);
-			} else {
+			if (oldItem == null) {
 				getOrderItems().add(newItem);
 			}
 		}
@@ -192,11 +211,9 @@ public class ShippingOrder extends BaseEntity {
 		if (getStatus() == Status.PENDING && other.isOrderShipped()) {
 			ship();
 		} else if (isOrderShipped() && other.isOrderCollected()) {
-			collect();
-			updateOrderItems(other);
+			collect(other);
 		} else {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ORDER_NOT_SHIPPED);
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
 	}
 }
-
