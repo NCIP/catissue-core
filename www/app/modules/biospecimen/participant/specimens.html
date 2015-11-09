@@ -338,12 +338,10 @@
 
       <div class="form-group clearfix">
         <div class="os-col-30">
-          <div class="form-group">
-            <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
-              os-md-input placeholder="{{'srs.pathology' | translate}}" required>
-            </os-select>
-            <div os-field-error field="childReq.pathology"></div>
-          </div>
+          <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
+            os-md-input placeholder="{{'srs.pathology' | translate}}" required>
+          </os-select>
+          <div os-field-error field="childReq.pathology"></div>
         </div>
 
         <div class="os-col-30">

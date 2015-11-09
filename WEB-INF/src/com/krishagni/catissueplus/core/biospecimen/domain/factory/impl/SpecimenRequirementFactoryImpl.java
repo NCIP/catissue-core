@@ -112,13 +112,18 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		derived.setLineage(Specimen.DERIVED);
 		setSpecimenClass(req.getSpecimenClass(), derived, ose);
 		setSpecimenType(req.getSpecimenClass(), req.getType(), derived, ose);
-		setPathologyStatus(req.getPathology(), derived, ose);
 		setInitialQty(req.getQuantity(), derived, ose);
 		setStorageType(req.getStorageType(), derived, ose);
 		setConcentration(req.getConcentration(), derived, ose);
 		setLabelFormat(req.getLabelFmt(), derived, ose);
 		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
+		
+		//If pathology status specified at derivative then set specified 
+		//otherwise its same as parent specimen
+		if (StringUtils.isNotBlank(req.getPathology())) {
+			setPathologyStatus(req.getPathology(), derived, ose);
+		}
 	
 		ose.checkAndThrow();
 		derived.setParentSpecimenRequirement(parent);
