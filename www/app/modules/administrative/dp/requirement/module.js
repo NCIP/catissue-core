@@ -8,7 +8,7 @@ angular.module('os.administrative.dp.requirement',
   .config(function($stateProvider) {
     $stateProvider
       .state('req-root', {
-        url: '/requirement',
+        url: '/requirements',
         template: '<div ui-view></div>',
         abstract: true,
         parent: 'dp-detail'
@@ -20,7 +20,7 @@ angular.module('os.administrative.dp.requirement',
         parent: 'req-root'
       })
       .state('req-addedit', {
-        url: '/:reqId',
+        url: '/addedit/:reqId',
         templateUrl: 'modules/administrative/dp/requirement/addedit.html',
         controller: 'DprAddEditCtrl',
         parent: 'req-root',

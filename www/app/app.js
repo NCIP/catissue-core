@@ -264,6 +264,10 @@ osApp.config(function(
         };
       });
 
+    $rootScope.includesState = function(stateName, params, options) {
+      return $state.includes(stateName, params, options);
+    }
+
     $rootScope.back = function() {
       LocationChangeListener.allowChange();
       $window.history.back();
