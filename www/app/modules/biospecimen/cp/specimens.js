@@ -267,7 +267,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     $scope.showCreateDerived = function(sr) {
       $scope.parentSr = sr;
       $scope.view = 'addedit_derived';
-      $scope.childReq = {};
+      $scope.childReq = {pathology: sr.pathology};
       loadPvs();
     };
 

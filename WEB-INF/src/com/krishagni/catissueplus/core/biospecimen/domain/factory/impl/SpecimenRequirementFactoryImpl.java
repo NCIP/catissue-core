@@ -118,7 +118,13 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setLabelFormat(req.getLabelFmt(), derived, ose);
 		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
-				
+		
+		//If pathology status specified at derivative then set specified 
+		//otherwise its same as parent specimen
+		if (StringUtils.isNotBlank(req.getPathology())) {
+			setPathologyStatus(req.getPathology(), derived, ose);
+		}
+	
 		ose.checkAndThrow();
 		derived.setParentSpecimenRequirement(parent);
 		return derived;
@@ -309,7 +315,10 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String pathology = detail.getPathology();
+		setPathologyStatus(detail.getPathology(), sr, ose);
+	}
+	
+	private void setPathologyStatus(String pathology, SpecimenRequirement sr, OpenSpecimenException ose) {
 		ensureNotEmptyAndValid(PATH_STATUS, pathology, PATHOLOGY_STATUS_REQUIRED, INVALID_PATHOLOGY_STATUS, ose);
 		sr.setPathologyStatus(pathology);
 	}

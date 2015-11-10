@@ -338,6 +338,13 @@
 
       <div class="form-group clearfix">
         <div class="os-col-30">
+          <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
+            os-md-input placeholder="{{'srs.pathology' | translate}}" required>
+          </os-select>
+          <div os-field-error field="childReq.pathology"></div>
+        </div>
+
+        <div class="os-col-30">
           <os-date-picker name="createdOn" date="derivative.createdOn" md-type="true"
             placeholder="{{'specimens.created_on' | translate}}" required>
           </os-date-picker>

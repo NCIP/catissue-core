@@ -399,17 +399,26 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null) {
+		if (specimen.getParentSpecimen() != null && !specimen.isDerivative()) {
 			specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 			return;
 		}
 		
-		if (specimen.isAliquot() || specimen.isDerivative()) {
+		if (specimen.isAliquot()) {
 			return; // invalid parent specimen scenario
 		}
 		
 		String pathology = detail.getPathology();
 		if (StringUtils.isBlank(pathology)) {
+			// For derivatives if pathology status is blank
+			// 1. For planned collection, it takes from specimen requirement (which is already set in specimen object) 
+			// 2. For unplanned collection, it inherits from parent specimen
+			// Following check is for #2 unplanned collection
+			if (specimen.isDerivative() && specimen.getSpecimenRequirement() == null) {
+				specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
+				return;
+			} 
+			
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
 			}
