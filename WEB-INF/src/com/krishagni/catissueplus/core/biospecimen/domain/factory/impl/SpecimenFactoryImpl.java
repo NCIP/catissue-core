@@ -399,7 +399,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		
 		if (specimen.getParentSpecimen() != null && !specimen.isDerivative()) {
 			specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 			return;
@@ -411,8 +410,10 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		String pathology = detail.getPathology();
 		if (StringUtils.isBlank(pathology)) {
-			// For derivatives if pathology status is blank and specimen requirement is null 
-			// then it inherits from parent 
+			// For derivatives if pathology status is blank
+			// 1. For planned collection, it takes from specimen requirement (which is already set in specimen object) 
+			// 2. For unplanned collection, it inherits from parent specimen
+			// Following check is for #2 unplanned collection
 			if (specimen.isDerivative() && specimen.getSpecimenRequirement() == null) {
 				specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 				return;
