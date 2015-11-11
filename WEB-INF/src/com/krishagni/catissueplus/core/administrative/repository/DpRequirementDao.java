@@ -7,6 +7,6 @@ import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface DpRequirementDao extends Dao<DpRequirement> {
-	public Map<Long, BigDecimal> getDistributedQtyByReq(Long dpId);
+	public Map<Long, BigDecimal> getDistributedQtyByDp(Long dpId);
 	
 }

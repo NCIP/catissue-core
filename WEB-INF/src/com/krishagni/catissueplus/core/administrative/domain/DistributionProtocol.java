@@ -170,7 +170,6 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
 		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
-		//CollectionUpdater.update(getRequirements(), distributionProtocol.getRequirements());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -202,4 +201,13 @@ public class DistributionProtocol extends BaseEntity {
 		return sites;
 	}
 	
+	public boolean hasRequirement(String specimenType, String anatomicSite, String pathologyStatus) {
+		for (DpRequirement req : getRequirements()) {
+			if (req.equalsSpecimenGroup(specimenType, anatomicSite, pathologyStatus)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
