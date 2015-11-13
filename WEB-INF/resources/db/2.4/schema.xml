@@ -329,7 +329,7 @@
       </column>
       
       <column name="RECEIVER_ID" type="${int.type}">
-        <constraints nullable="false" />
+        <constraints nullable="true" />
       </column>
 
       <column name="RECEIVER_COMMENTS" type="${text.type}(255)">
