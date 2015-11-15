@@ -8,6 +8,7 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       $scope.visit = visit;
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
       SpecimenUtil.loadSpecimenClasses($scope);
+      SpecimenUtil.loadPathologyStatuses($scope);
     }
 
     $scope.loadSpecimenTypes = function(specimenClass, notClear) {

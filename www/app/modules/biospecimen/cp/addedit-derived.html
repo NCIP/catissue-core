@@ -53,9 +53,7 @@
           <div os-field-error field="derivativeForm.quantity"></div>
         </div>
       </div>
-    </div>
 
-    <div class="clearfix">
       <div class="col-xs-3">
         <div class="form-group">
           <div class="os-input-addon-grp">
@@ -82,25 +80,24 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <input ng-model="childReq.name" os-md-input class="form-control" type="text" 
-            placeholder="{{'srs.name' | translate}}">
-        </div>
-      </div>
-      <div class="col-xs-3">
-        <div class="form-group">
-          <input ng-model="childReq.labelFmt" os-md-input class="form-control" type="text" 
-            placeholder="{{'srs.label_fmt' | translate}}">
-        </div>
-      </div>
-    </div>
-
-    <div class="clearfix">
-      <div class="col-xs-3">
-        <div class="form-group">
           <os-select name="pathology" ng-model="childReq.pathology" list="pathologyStatuses"
             os-md-input placeholder="{{'srs.pathology' | translate}}" required>
           </os-select>
           <div os-field-error field="derivativeForm.pathology"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.name" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.name' | translate}}">
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.labelFmt" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.label_fmt' | translate}}">
         </div>
       </div>
     </div>

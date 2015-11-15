@@ -160,6 +160,14 @@ public class Specimen extends BaseExtensionEntity {
 	public void setPathologicalStatus(String pathologicalStatus) {
 		if (StringUtils.isNotBlank(this.pathologicalStatus) && !this.pathologicalStatus.equals(pathologicalStatus)) {
 			for (Specimen child : getChildCollection()) {
+				if (child.isDerivative() && !this.pathologicalStatus.equals(child.getPathologicalStatus())) {
+					//
+					// If derivative specimen pathological status is different from parent
+					// then do not copy new value to derivative specimen
+					//
+					continue;
+				}
+
 				child.setPathologicalStatus(pathologicalStatus);
 			}
 			

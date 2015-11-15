@@ -119,6 +119,16 @@
       </div>
 
       <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
+        <div class="col-xs-6">
+          <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
+            required placeholder="{{'specimens.pathology_status' | translate}}">
+          </os-select>
+          <div os-field-error field="derivativeForm.pathology"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
         <div class="col-xs-6">
           <div class="os-date-time clearfix">

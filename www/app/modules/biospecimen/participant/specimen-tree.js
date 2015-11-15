@@ -277,9 +277,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.showCreateDerivative = function(specimen) {
           scope.view = 'create_derivatives';      
           scope.parentSpecimen = specimen;
-          SpecimenUtil.loadPathologyStatuses(scope);
           scope.derivative = SpecimenUtil.getNewDerivative(scope);
           SpecimenUtil.loadSpecimenClasses(scope);
+          SpecimenUtil.loadPathologyStatuses(scope);
         };
 
         scope.createDerivative = function() {
