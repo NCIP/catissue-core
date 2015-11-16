@@ -458,6 +458,10 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		result.setParentSpecimenRequirement(parent);
 		result.setPooledSpecimenRequirement(pooledReq);
 		
+		if (isSafeToCopyCode(cpe)) {
+			result.setCode(getCode());
+		}
+
 		Set<SpecimenRequirement> childSrs = new LinkedHashSet<SpecimenRequirement>();
 		int order = 1;
 		for (SpecimenRequirement childSr : getOrderedChildRequirements()) {
@@ -484,6 +488,18 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		return result;
 	}
 	
+	private boolean isSafeToCopyCode(CollectionProtocolEvent cpe) {
+		if (StringUtils.isBlank(getCode())) {
+			return false;
+		}
+
+		if (cpe.equals(getCollectionProtocolEvent())) {
+			return false;
+		}
+
+		return cpe.getSrByCode(getCode()) == null;
+	}
+
 	private void updateRequirementAttrs(SpecimenRequirement sr) {
 		setAnatomicSite(sr.getAnatomicSite());
 		setLaterality(sr.getLaterality());
