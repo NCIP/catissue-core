@@ -642,18 +642,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenRequirementDetail>> createAliquots(RequestEvent<AliquotSpecimensRequirement> req) {
 		try {
-			AliquotSpecimensRequirement requirement = req.getPayload();
-			List<SpecimenRequirement> aliquots = srFactory.createAliquots(requirement);
-			AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
-			
-			SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
-			if (StringUtils.isNotBlank(requirement.getCode())) {
-				setAliquotCode(parent, aliquots, requirement.getCode());
-			}
-
-			parent.addChildRequirements(aliquots);			
-			daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
-			return ResponseEvent.response(SpecimenRequirementDetail.from(aliquots));
+			return ResponseEvent.response(SpecimenRequirementDetail.from(createAliquots(req.getPayload())));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -972,10 +961,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				importSpecimenReqs(eventId, resp.getPayload().getId(), sr.getChildren());
 			} else if (parentSrId != null && sr.getLineage().equals(Specimen.ALIQUOT)) {				
 				AliquotSpecimensRequirement aliquotReq = sr.toAliquotRequirement(parentSrId, 1);
-				ResponseEvent<List<SpecimenRequirementDetail>> resp = createAliquots(new RequestEvent<AliquotSpecimensRequirement>(aliquotReq));
-				resp.throwErrorIfUnsuccessful();
+				List<SpecimenRequirement> aliquots = createAliquots(aliquotReq);
+
+				if (StringUtils.isNotBlank(sr.getCode())) {
+					aliquots.get(0).setCode(sr.getCode());
+				}
 				
-				importSpecimenReqs(eventId, resp.getPayload().get(0).getId(), sr.getChildren());
+				importSpecimenReqs(eventId, aliquots.get(0).getId(), sr.getChildren());
 			} else if (parentSrId != null && sr.getLineage().equals(Specimen.DERIVED)) {
 				DerivedSpecimenRequirement derivedReq = sr.toDerivedRequirement(parentSrId);
 				ResponseEvent<SpecimenRequirementDetail> resp = createDerived(new RequestEvent<DerivedSpecimenRequirement>(derivedReq));
@@ -984,6 +976,20 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 				importSpecimenReqs(eventId, resp.getPayload().getId(), sr.getChildren());
 			}			
 		}
+	}
+
+	private List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement requirement) {
+		List<SpecimenRequirement> aliquots = srFactory.createAliquots(requirement);
+		AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
+
+		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+		if (StringUtils.isNotBlank(requirement.getCode())) {
+			setAliquotCode(parent, aliquots, requirement.getCode());
+		}
+
+		parent.addChildRequirements(aliquots);
+		daoFactory.getSpecimenRequirementDao().saveOrUpdate(parent, true);
+		return aliquots;
 	}
 
 	private void addDefaultPiRoles(CollectionProtocol cp, User user) {
