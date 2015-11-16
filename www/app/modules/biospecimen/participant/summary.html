@@ -1,0 +1,103 @@
+<ul class="os-key-values os-two-cols" os-inline-editors on-save="editCpr">
+  <li class="item">
+    <strong class="key key-sm" translate="participant.reg_date">Registration Date:</strong>
+    <os-inline-edit editor="rdEditor" name="regDate" class="value value-md" value="cpr.registrationDate">
+      <span ng-if="rdEditor.isDisplayMode()">{{rdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+      <os-date-picker ng-if="rdEditor.isEditMode()" date="rdEditor.editValue">
+      </os-date-picker>
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.protocol_id">PPID:</strong>
+    <os-inline-edit editor="ppidEditor" name="ppid" class="value value-md" value="cpr.ppid">
+      <span ng-if="ppidEditor.isDisplayMode()">{{ppidEditor.viewValue | osNoValue}}</span>
+      <input ng-if="ppidEditor.isEditMode()" type="text" ng-model="ppidEditor.editValue" class="form-control" 
+        required placeholder="Participant Protocol ID">
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.first_name">First Name</strong>
+    <os-inline-edit editor="fnEditor" name="fname" class="value value-md" value="cpr.participant.firstName">
+      <span ng-if="fnEditor.isDisplayMode()">{{fnEditor.viewValue | osNoValue}}</span>
+      <input ng-if="fnEditor.isEditMode()" type="text" ng-model="fnEditor.editValue" class="form-control"
+        placeholder="{{'participant.first_name' | translate}}">
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.last_name">Last Name</strong>
+    <os-inline-edit editor="lnEditor" name="lname" class="value value-md" value="cpr.participant.lastName">
+      <span ng-if="lnEditor.isDisplayMode()">{{lnEditor.viewValue | osNoValue}}</span>
+      <input ng-if="lnEditor.isEditMode()" type="text" ng-model="lnEditor.editValue" class="form-control"
+        placeholder="{{'participant.last_name' | translate}}">
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
+    <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
+      <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+      <os-date-picker ng-if="bdEditor.isEditMode()" date="bdEditor.editValue">
+      </os-date-picker>
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.pmis">Medical Identifiers:</strong>
+    <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | osArrayJoin: pmiText | osNoValue}}</span>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.mpi">Master Patient Index:</strong>
+    <os-inline-edit editor="mpiEditor" name="empi" class="value value-md" value="cpr.participant.empi">
+      <span ng-if="mpiEditor.isDisplayMode()">{{mpiEditor.viewValue | osNoValue}}</span>
+      <input ng-if="mpiEditor.isEditMode()" type="text" ng-model="mpiEditor.editValue" class="form-control" 
+        placeholder="{{'participant.mpi' | translate}}">
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.uid">Social Security No:</strong>
+    <os-inline-edit editor="uidEditor" name="uid" class="value value-md" value="cpr.participant.uid">
+      <span ng-if="uidEditor.isDisplayMode()">{{uidEditor.viewValue | osNoValue}}</span>
+      <input ng-if="uidEditor.isEditMode()" type="text" ng-model="uidEditor.editValue" class="form-control">
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.gender">Gender:</strong>
+    <os-inline-edit editor="genderEditor" name="gender" class="value value-md" value="cpr.participant.gender">
+      <span ng-if="genderEditor.isDisplayMode()">{{genderEditor.viewValue | osNoValue}}</span>
+      <div ng-if="genderEditor.isEditMode()">
+        <os-select ng-model="genderEditor.editValue" list="genders"></os-select>
+      </div>
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.vital_status">Vital Status:</strong>
+    <os-inline-edit editor="vsEditor" name="vitalStatus" class="value value-md" value="cpr.participant.vitalStatus">
+      <span ng-if="vsEditor.isDisplayMode()">{{vsEditor.viewValue | osNoValue}}</span>
+      <div ng-if="vsEditor.isEditMode()">
+        <os-select ng-model="vsEditor.editValue" list="vitalStatuses"></os-select>
+      </div>
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.race">Race:</strong>
+    <os-inline-edit editor="raceEditor" name="race" class="value value-md" value="cpr.participant.races">
+      <span ng-if="raceEditor.isDisplayMode()">{{raceEditor.viewValue.join(", ") | osNoValue}}</span>
+      <div ng-if="raceEditor.isEditMode()">
+        <os-select ng-model="raceEditor.editValue" list="races" multiple></os-select>
+      </div>
+    </os-inline-edit>
+  </li>
+
+  <li class="item">
+    <strong class="key key-sm" translate="participant.other_cps">Other Protocols:</strong>
+    <span class="value value-md">{{cpr.participant.registeredCps | filter : isOtherProtocol | osArrayJoin | osNoValue}}</span>
+  </li>
+</ul>
