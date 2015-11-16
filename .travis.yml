@@ -16,7 +16,7 @@ script: gradle build
 notifications:
   email:
     recipients:
-      - vinayakapawar@gmail.com
+      - os-v20-devs@krishagni.com
     on_success: always
     on_failure: always
 
