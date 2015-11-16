@@ -275,6 +275,7 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		req.setStorageType(getStorageType());
 		req.setType(getType());
 		req.setCode(getCode());
+		req.setPathology(getPathology());
 		
 		return req;
 	}
