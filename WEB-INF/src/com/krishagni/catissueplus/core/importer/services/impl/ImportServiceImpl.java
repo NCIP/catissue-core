@@ -8,13 +8,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +27,6 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.errors.ParameterizedError;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
@@ -67,8 +64,6 @@ public class ImportServiceImpl implements ImportService {
 	
 	private TransactionTemplate txTmpl;
 	
-	private MessageSource messageSource;
-	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
@@ -95,10 +90,6 @@ public class ImportServiceImpl implements ImportService {
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	}
 	
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<ImportJobDetail>> getImportJobs(RequestEvent<ListImportJobsCriteria> req) {
@@ -277,29 +268,6 @@ public class ImportServiceImpl implements ImportService {
 		return job;		
 	}
 
-	private String getMessage(ParameterizedError error) {
-		return messageSource.getMessage(
-				error.error().code().toLowerCase(), 
-				error.params(), 
-				Locale.getDefault());
-	}
-	
-	private String getMessage(OpenSpecimenException ose) {
-		StringBuilder errorMsg = new StringBuilder();
-		if (!ose.getErrors().isEmpty()) {
-			for (ParameterizedError pe : ose.getErrors()) {
-				errorMsg.append(getMessage(pe)).append(", ");
-			}
-			errorMsg.delete(errorMsg.length() - 2, errorMsg.length());
-		} else if (ose.getException() != null) {
-			errorMsg.append(ose.getException().getMessage());
-		} else {
-			errorMsg.append("Unknown error");
-		}
-		
-		return errorMsg.toString();		
-	}
-	
 	private class ImporterTask implements Runnable {
 		private Authentication auth;
 		
@@ -343,7 +311,7 @@ public class ImportServiceImpl implements ImportService {
 											
 						errMsg = importObject(importer, object, job.getParams());
 					} catch (OpenSpecimenException ose) {						
-						errMsg = getMessage(ose);						
+						errMsg = ose.getMessage();
 					}
 					
 					++totalRecords;
@@ -398,7 +366,7 @@ public class ImportServiceImpl implements ImportService {
 				if (resp.isSuccessful()) {
 					return null;
 				} else {
-					return getMessage(resp.getError());
+					return resp.getError().getMessage();
 				}				
 			} catch (Exception e) {
 				if (StringUtils.isBlank(e.getMessage())) {					

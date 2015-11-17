@@ -32,7 +32,10 @@ public class MessageUtil {
 	}
 	
 	public String getMessage(String code) {
-		return messageSource.getMessage(code, null, Locale.getDefault());
+		return getMessage(code, null);
 	}
 
+	public String getMessage(String code, Object[] params) {
+		return messageSource.getMessage(code, params, Locale.getDefault());
+	}
 }
