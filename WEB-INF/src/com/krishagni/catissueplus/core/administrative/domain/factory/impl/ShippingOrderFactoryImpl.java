@@ -154,7 +154,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 	}
 	
 	private void setReceiver(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		if(!order.isOrderCollected()) {
+		if(!order.isOrderReceived()) {
 			return;
 		}
 		
@@ -168,11 +168,11 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 	}
 	
 	private void setReceiverComments(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
-		if(!order.isOrderCollected()) {
+		if(!order.isOrderReceived()) {
 			return;
 		}
 		
-		order.setReceiverComments(order.getReceiverComments());
+		order.setReceiverComments(detail.getReceiverComments());
 	}
 	
 	private void setOrderItems(ShippingOrderDetail detail, ShippingOrder order, OpenSpecimenException ose) {
@@ -225,7 +225,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 		orderItem.setOrder(order);
 		orderItem.setSpecimen(specimen);
 		
-		if (!order.isOrderCollected()) {
+		if (!order.isOrderReceived()) {
 			return orderItem;
 		}
 		
@@ -261,7 +261,7 @@ public class ShippingOrderFactoryImpl implements ShippingOrderFactory {
 			return null;
 		}
 		
-		if (!order.isOrderCollected()) {
+		if (!order.isOrderReceived()) {
 			return existing;
 		} 
 		

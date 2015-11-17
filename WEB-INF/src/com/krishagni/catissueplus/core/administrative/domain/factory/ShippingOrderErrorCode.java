@@ -29,7 +29,7 @@ public enum ShippingOrderErrorCode implements ErrorCode {
 	
 	SPECIMEN_ALREADY_SHIPPED,
 	
-	ALREADY_COLLECTED,
+	ALREADY_RECEIVED,
 	
 	INVALID_SPECIMENS,
 	

@@ -154,12 +154,12 @@ public class ShippingOrderServiceImpl implements ShippingOrderService {
 				return ResponseEvent.userError(ShippingOrderErrorCode.NOT_SHIPPED);
 			}
 			
-			if (existingOrder.isOrderCollected()) {
-				return ResponseEvent.userError(ShippingOrderErrorCode.ALREADY_COLLECTED);
+			if (existingOrder.isOrderReceived()) {
+				return ResponseEvent.userError(ShippingOrderErrorCode.ALREADY_RECEIVED);
 			}
 			
 			setShippingOrderDetailAttrs(existingOrder, detail);
-			ShippingOrder newOrder = shippingFactory.createShippingOrder(detail, Status.COLLECTED);
+			ShippingOrder newOrder = shippingFactory.createShippingOrder(detail, Status.RECEIVED);
 			existingOrder.ensureShippedSpecimens(newOrder);
 			
 			existingOrder.update(newOrder);

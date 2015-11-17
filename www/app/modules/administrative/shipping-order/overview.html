@@ -35,12 +35,12 @@
         </span>
       </li>
 
-      <li class="item" ng-if="order.status == 'COLLECTED'">
+      <li class="item" ng-if="order.status == 'RECEIVED'">
         <strong class="key key-sm" translate="shipping_orders.receiver">Receiver</strong>
         <span class="value value-md">{{order.receiver.firstName}} {{order.receiver.lastName}}</span>
       </li>
         
-      <li class="item" ng-if="order.status == 'COLLECTED'">
+      <li class="item" ng-if="order.status == 'RECEIVED'">
         <strong class="key key-sm" translate="shipping_orders.receiver_comments">Receiver Comments</strong>
         <span class="value value-md">
           {{order.receiverComments | osNoValue}}
@@ -59,12 +59,12 @@
           <div class="os-table-head">
             <div class="row">
               <div class="col os-col-25" translate="shipping_orders.spec.label">Label</div>
-              <div class="col" ng-class="{true: 'os-col-30', false: 'os-col-35'}[order.status == 'COLLECTED']" 
+              <div class="col" ng-class="{true: 'os-col-30', false: 'os-col-35'}[order.status == 'RECEIVED']"
                 translate="shipping_orders.spec.desc">Description</div>
               <div class="col os-col-25" translate="shipping_orders.spec.cp">Collection Protocol</div>
-              <div class="col" ng-class="{true: 'os-col-10', false: 'os-col-15'}[order.status == 'COLLECTED']" 
+              <div class="col" ng-class="{true: 'os-col-10', false: 'os-col-15'}[order.status == 'RECEIVED']"
                 translate="shipping_orders.spec.quantity">Quantity</div>
-              <div class="col os-col-10" ng-if="order.status == 'COLLECTED'" 
+              <div class="col os-col-10" ng-if="order.status == 'RECEIVED'"
                 translate="shipping_orders.spec.quality">Quality</div>
             </div>
           </div>
@@ -75,7 +75,7 @@
                   <span>{{specimen.label}}</span>
                 </a>
               </div>
-              <div class="col" ng-class="{true: 'os-col-30', false: 'os-col-35'}[order.status == 'COLLECTED']">
+              <div class="col" ng-class="{true: 'os-col-30', false: 'os-col-35'}[order.status == 'RECEIVED']">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
                 </a>
@@ -83,12 +83,12 @@
               <div class="col os-col-25">
                 <span>{{specimen.cpShortTitle}}</span>
               </div>
-              <div class="col" ng-class="{true: 'os-col-10', false: 'os-col-15'}[order.status == 'COLLECTED']">
+              <div class="col" ng-class="{true: 'os-col-10', false: 'os-col-15'}[order.status == 'RECEIVED']">
                 <span>{{specimen.availableQty}}</span>
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>
               </div>
-              <div class="col os-col-10" ng-if="order.status == 'COLLECTED'">
+              <div class="col os-col-10" ng-if="order.status == 'RECEIVED'">
                 <span>{{item.quality}}</span>
               </div>
             </div>

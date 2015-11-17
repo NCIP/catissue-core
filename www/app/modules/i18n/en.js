@@ -1370,8 +1370,8 @@
     "specimens": "Specimens",
     "receiving_institute": "Receiving Institute",
     "receiving_site": "Receiving Site",
-    "sender_comments": "Sender Comments",
-    "receiver_comments": "Receiver Comments",
+    "sender_comments": "Sender's Comment",
+    "receiver_comments": "Receiver's Comment",
     "details": "Order Details",
     "no_specimens_in_list": "No specimens in order list to shipping. Add at least one specimen",
     "enter_specimen_label": "To add specimens to shipping list, enter labels separated by a comma/tab/newline and click add",
@@ -1390,13 +1390,14 @@
       "quantity": "Quantity",
       "location": "Location",
       "virtual": "Virtual",
-      "quality": "Quality"
+      "quality": "Quality",
+      "copy_first_to_all": "Copy First To All"
     },
 
     "statuses": {
       "SHIPPED": "Shipped",
       "PENDING": "Pending",
-      "COLLECTED": "Collected"
+      "RECEIVED": "Received"
     },
 
     "buttons": {

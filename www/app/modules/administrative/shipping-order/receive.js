@@ -22,6 +22,19 @@ angular.module('os.administrative.shippingorder.receive', ['os.administrative.mo
         }
       );
     }
+    
+    $scope.applyFirstLocationToAll = function() {
+      var containerName = undefined;
+      
+      if ($scope.order.orderItems[0].specimen.storageLocation.name != null) {
+        containerName = $scope.order.orderItems[0].specimen.storageLocation.name;
+      }
+      
+      angular.forEach($scope.order.orderItems, function(item) {
+        item.specimen.storageLocation.name = containerName;
+      });
+    }
 
     init();
   });
+  

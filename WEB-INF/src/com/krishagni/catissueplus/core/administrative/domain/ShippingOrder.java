@@ -19,7 +19,7 @@ public class ShippingOrder extends BaseEntity {
 	public enum Status {
 		PENDING,
 		SHIPPED,
-		COLLECTED
+		RECEIVED
 	}
 	
 	private String name;
@@ -152,9 +152,9 @@ public class ShippingOrder extends BaseEntity {
 		setStatus(Status.SHIPPED);
 	}
 	
-	public void collect(ShippingOrder other) {
-		if (isOrderCollected()) {
-			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ALREADY_COLLECTED);
+	public void receive(ShippingOrder other) {
+		if (isOrderReceived()) {
+			throw OpenSpecimenException.userError(ShippingOrderErrorCode.ALREADY_RECEIVED);
 		}
 		
 		Map<Specimen, ShippingOrderItem> existingItems = new HashMap<Specimen, ShippingOrderItem>();
@@ -164,18 +164,18 @@ public class ShippingOrder extends BaseEntity {
 		
 		for (ShippingOrderItem newItem : other.getOrderItems()) {
 			ShippingOrderItem oldItem = existingItems.remove(newItem.getSpecimen());
-			oldItem.collect(newItem);
+			oldItem.receive(newItem);
 		}
 		
-		setStatus(Status.COLLECTED);
+		setStatus(Status.RECEIVED);
  	}
 	
 	public boolean isOrderShipped() {
 		return Status.SHIPPED == getStatus();
 	}
 	
-	public boolean isOrderCollected() {
-		return Status.COLLECTED == getStatus();
+	public boolean isOrderReceived() {
+		return Status.RECEIVED == getStatus();
 	}
 	
 	public void ensureShippedSpecimens(ShippingOrder other) {
@@ -210,8 +210,8 @@ public class ShippingOrder extends BaseEntity {
 		
 		if (getStatus() == Status.PENDING && other.isOrderShipped()) {
 			ship();
-		} else if (isOrderShipped() && other.isOrderCollected()) {
-			collect(other);
+		} else if (isOrderShipped() && other.isOrderReceived()) {
+			receive(other);
 		} else {
 			throw OpenSpecimenException.userError(ShippingOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
