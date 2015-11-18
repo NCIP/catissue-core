@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
@@ -14,6 +15,7 @@ import com.krishagni.catissueplus.core.administrative.repository.StorageContaine
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionOrderDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.DistributionProtocolDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.DpRequirementDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ScheduledJobDaoImpl;
@@ -196,7 +198,7 @@ public class DaoFactoryImpl implements DaoFactory {
 		setSessionFactory(dao);
 		return dao;
 	}
-
+	
 	@Override
 	public AuditDao getAuditDao() {
 		AuditDaoImpl dao = new AuditDaoImpl();
@@ -204,6 +206,13 @@ public class DaoFactoryImpl implements DaoFactory {
 		return dao;
 	}
 	
+	@Override
+	public DpRequirementDao getDistributionProtocolRequirementDao() {
+		DpRequirementDaoImpl dao = new DpRequirementDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
 	@Override
 	public ShipmentDao getShipmentDao() {
 		ShipmentDaoImpl dao = new ShipmentDaoImpl();

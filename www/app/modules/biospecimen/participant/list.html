@@ -21,37 +21,55 @@
     </div>
   </div>
 
-  <div class="os-cards">
-    <div class="os-card" ng-repeat="cpr in cprList" ng-click="showParticipantOverview(cpr)">
-      <h4>
-        <a title="{{'participant.tooltip.view_details' | translate}}" ui-sref="participant-detail.overview({cprId: cpr.cprId})">
-          <span>{{cpr.ppid}}</span>
-        </a>
-      </h4>
-
-      <h5 ng-if="!!cpr.participant.empi" title="{{'participant.mpi' | translate}}">
-        <span>{{cpr.participant.empi}}</span>
-      </h5>
-        
-      <h5 ng-if="!!cpr.participant.firstName || !!cpr.participant.lastName">
-        <span>{{cpr.participant.firstName}} {{cpr.participant.lastName}}</span>
-      </h5>
-
-      <p title="{{'participant.reg_date' | translate}}">
-        {{cpr.registrationDate | date: global.dateFmt}}
-      </p>
-
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'participant.tooltip.completed_visits_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">V</span>
-          <span>{{cpr.scgCount | number: 0}}</span>
-        </div>
-        <div class="stat col-xs-6" title="{{'participant.tooltip.collected_specimens_count' | translate}}">
-          <span class="os-lavatar os-lavatar-sm">S</span>
-          <span>{{cpr.specimenCount | number: 0}}</span>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="participant.ppid">Participant Protocol ID</span>
+          </th>
+          <th class="col">
+            <span translate="participant.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="participant.mpi">Master Patient Index</span>
+          </th>
+          <th class="col">
+            <span translate="participant.reg_date">Registration Date</span>
+          </th>
+          <th class="col">
+            <span translate="participant.visits_count">Visits</span>
+          </th>
+          <th class="col">
+            <span translate="participant.specimens_count">Specimens</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="cpr in cprList" os-row-click="showParticipantOverview(cpr)">
+          <td class="col">
+            <a ui-sref="participant-detail.overview({cprId: cpr.cprId})">
+              <span>{{cpr.ppid}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{cpr.participant | osUserDisplayName | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{cpr.participant.empi | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{cpr.registrationDate | date: global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{cpr.scgCount | number: 0}}</span>
+          </td>
+          <td class="col">
+            <span>{{cpr.specimenCount | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/biospecimen/participant/search.html'"></div>

@@ -36,30 +36,49 @@
     </div>
   </div>
 
-  <div class="os-cards">
-    <div class="os-card" ng-repeat="container in containerList" ng-click="showContainerOverview(container)">
-      <h4 title="{{'container.tooltip.view_details' | translate}}">
-        <a ui-sref="container-detail.overview({containerId: container.id})"> {{container.name}} </a>
-      </h4>
-      <h5>
-        <span title="{{'container.parent_site' | translate}}">
-          {{container.siteName}}
-        </span>
-        <span title="{{'container.parent_container' | translate}}" ng-if="container.parentContainerName">
-          | {{container.parentContainerName}}
-        </span>
-      </h5>
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'container.dimension' | translate}}">
-          <span class="fa fa-arrows-alt"></span>
-          <span>{{container.noOfRows}} X {{container.noOfColumns}}</span>
-        </div>
-        <div class="stat col-xs-6" title="{{'container.tooltip.count_free_locations' | translate}}">
-          <span class="fa fa-table"></span>
-          <span>{{container.freePositions}}</span>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="container.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="container.site">Site</span>
+          </th>
+          <th class="col">
+            <span translate="container.created_by">Created By</span>
+          </th>
+          <th class="col">
+            <span translate="container.dimension">Dimension</span>
+          </th>
+          <th class="col">
+            <span translate="container.free_locations">Free Locations</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="container in containerList" os-row-click="showContainerOverview(container)">
+          <td class="col">
+            <a ui-sref="container-detail.overview({containerId: container.id})">
+              <span>{{container.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{container.siteName}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.createdBy | osUserDisplayName}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.noOfRows}} X {{container.noOfColumns}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.freePositions | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/container/search.html'"></div>

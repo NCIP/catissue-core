@@ -10,7 +10,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-3">
         <createTable tableName="CATISSUE_ABSTRACT_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107895" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107895" />
             </column>
             <column name="POSITION_DIMENSION_ONE" type="INTEGER">
                 <constraints nullable="false"/>
@@ -29,7 +29,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-4">
         <createTable tableName="CATISSUE_ADDRESS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107567" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107567" />
             </column>
             <column name="STREET" type="VARCHAR2(255 BYTE)"/>
             <column name="CITY" type="VARCHAR2(50 BYTE)"/>
@@ -43,7 +43,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-9">
         <createTable tableName="CATISSUE_AUTH_DOMAINS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DOMAIN_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DOMAIN_ID" />
             </column>
             <column name="DOMAIN_NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -54,7 +54,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-10">
         <createTable tableName="CATISSUE_AUTH_PROVIDERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PROVIDER_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PROVIDER_ID" />
             </column>
             <column name="AUTH_TYPE" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -67,7 +67,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-11">
         <createTable tableName="CATISSUE_BASE_SHIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108062" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108062" />
             </column>
             <column name="LABEL" type="VARCHAR2(50 BYTE)"/>
             <column name="SENDER_SITE_ID" type="NUMBER(19,0)"/>
@@ -84,7 +84,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-12">
         <createTable tableName="CATISSUE_BIOHAZARD">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107553" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107553" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -104,7 +104,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-14">
         <createTable tableName="CATISSUE_BULK_OPERATION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="CATISSUE_BULK_OPERATION_SEQ" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="CATISSUE_BULK_OPERATION_SEQ" />
             </column>
             <column name="OPERATION" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -123,7 +123,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-16">
         <createTable tableName="CATISSUE_CAPACITY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107592" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107592" />
             </column>
             <column name="ONE_DIMENSION_CAPACITY" type="INTEGER"/>
             <column name="TWO_DIMENSION_CAPACITY" type="INTEGER"/>
@@ -132,7 +132,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-17">
         <createTable tableName="CATISSUE_CDE">
             <column name="PUBLIC_ID" type="VARCHAR2(30 BYTE)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107481" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107481" />
             </column>
             <column name="LONG_NAME" type="VARCHAR2(200 BYTE)"/>
             <column name="DEFINITION" type="VARCHAR2(500 BYTE)"/>
@@ -149,14 +149,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108390" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108390" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-21">
         <createTable tableName="CATISSUE_CLINICAL_DIAGNOSIS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107916" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107916" />
             </column>
             <column name="CLINICAL_DIAGNOSIS" type="VARCHAR2(255 BYTE)"/>
             <column name="COLLECTION_PROTOCOL_ID" type="NUMBER(19,0)"/>
@@ -192,14 +192,14 @@
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108385" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108385" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-25">
         <createTable tableName="CATISSUE_COLL_PROT_EVENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107639" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107639" />
             </column>
             <column name="CLINICAL_STATUS" type="VARCHAR2(50 BYTE)"/>
             <column name="COLLECTION_POINT_LABEL" type="VARCHAR2(255 BYTE)"/>
@@ -215,7 +215,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-26">
         <createTable tableName="CATISSUE_COLL_PROT_REG">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107623" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107623" />
             </column>
             <column name="PROTOCOL_PARTICIPANT_ID" type="VARCHAR2(255 BYTE)"/>
             <column name="REGISTRATION_DATE" type="DATE"/>
@@ -234,7 +234,7 @@
         <validCheckSum>7:14ea667e59d7455e646ed57e6465a4f0</validCheckSum>
         <createTable tableName="CATISSUE_COLLECTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107490" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107490" />
             </column>
             <column name="ALIQUOT_IN_SAME_CONTAINER" type="NUMBER(1,0)"/>
             <column name="UNSIGNED_CONSENT_DOC_URL" type="VARCHAR2(500 BYTE)"/>
@@ -262,7 +262,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-28">
         <createTable tableName="CATISSUE_CONCEPT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107868" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107868" />
             </column>
             <column name="CONCEPT_UNIQUE_ID" type="VARCHAR2(30 BYTE)"/>
             <column name="NAME" type="VARCHAR2(500 BYTE)"/>
@@ -272,7 +272,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-29">
         <createTable tableName="CATISSUE_CONCEPT_CLASSIFICATN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107872" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107872" />
             </column>
             <column name="NAME" type="VARCHAR2(500 BYTE)"/>
         </createTable>
@@ -280,7 +280,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-30">
         <createTable tableName="CATISSUE_CONCEPT_REFERENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107848" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107848" />
             </column>
             <column name="CONCEPT_ID" type="NUMBER(19,0)"/>
             <column name="CONCEPT_CLASSIFICATION_ID" type="NUMBER(19,0)"/>
@@ -294,7 +294,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-31">
         <createTable tableName="CATISSUE_CONSENT_TIER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107794" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107794" />
             </column>
             <column name="STATEMENT" type="VARCHAR2(500 BYTE)"/>
             <column name="COLL_PROTOCOL_ID" type="NUMBER(19,0)"/>
@@ -303,7 +303,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-32">
         <createTable tableName="CATISSUE_CONSENT_TIER_RESPONSE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107790" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107790" />
             </column>
             <column name="RESPONSE" type="VARCHAR2(255 BYTE)"/>
             <column name="CONSENT_TIER_ID" type="NUMBER(19,0)"/>
@@ -313,7 +313,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-33">
         <createTable tableName="CATISSUE_CONSENT_TIER_STATUS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107792" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107792" />
             </column>
             <column name="CONSENT_TIER_ID" type="NUMBER(19,0)"/>
             <column name="STATUS" type="VARCHAR2(255 BYTE)"/>
@@ -334,7 +334,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-35">
         <createTable tableName="CATISSUE_CONTAINER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107509" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107509" />
             </column>
             <column name="ACTIVITY_STATUS" type="VARCHAR2(50 BYTE)"/>
             <column name="BARCODE" type="VARCHAR2(255 BYTE)"/>
@@ -358,7 +358,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-37">
         <createTable tableName="CATISSUE_CONTAINER_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107902" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107902" />
             </column>
             <column name="PARENT_CONTAINER_ID" type="NUMBER(19,0)"/>
             <column name="CONTAINER_ID" type="NUMBER(19,0)"/>
@@ -367,7 +367,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-38">
         <createTable tableName="CATISSUE_CONTAINER_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107589" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107589" />
             </column>
             <column name="CAPACITY_ID" type="NUMBER(19,0)"/>
             <column name="NAME" type="VARCHAR2(255 BYTE)"/>
@@ -382,7 +382,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-39">
         <createTable tableName="CATISSUE_CP_EXTAPP_STUDY_REL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CP_EXTAPP_STUDY_REL" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CP_EXTAPP_STUDY_REL" />
             </column>
             <column name="CP_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -398,7 +398,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-40">
         <createTable tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107655" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107655" />
             </column>
             <column name="STORAGE_TYPE" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -430,7 +430,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-41">
         <createTable tableName="CATISSUE_CP_SITE_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPSITEROLE_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPSITEROLE_ID" />
             </column>
             <column name="CP_ID" type="NUMBER(19,0)"/>
             <column name="SITE_ID" type="NUMBER(19,0)"/>
@@ -440,7 +440,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-42">
         <createTable tableName="CATISSUE_CP_USER_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPUSERROLE_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPUSERROLE_ID" />
             </column>
             <column name="CP_ID" type="NUMBER(19,0)"/>
             <column name="USER_ID" type="NUMBER(19,0)"/>
@@ -450,7 +450,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-44">
         <createTable tableName="CATISSUE_DEIDENTIFIED_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107858" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107858" />
             </column>
             <column name="STATUS" type="VARCHAR2(100 BYTE)"/>
             <column name="SCG_ID" type="NUMBER(19,0)"/>
@@ -459,7 +459,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-45">
         <createTable tableName="CATISSUE_DEPARTMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107615" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107615" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -469,7 +469,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-46">
         <createTable tableName="CATISSUE_DERIEVED_SP_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107804" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107804" />
             </column>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -483,7 +483,7 @@
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108386" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108386" />
             </column>
         </createTable>
     </changeSet>
@@ -500,14 +500,14 @@
             <column name="ORDER_NAME" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108387" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108387" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-49">
         <createTable tableName="CATISSUE_DISTRIBUTED_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107579" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107579" />
             </column>
             <column name="QUANTITY" type="FLOAT(126)"/>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
@@ -518,7 +518,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-50">
         <createTable tableName="CATISSUE_DISTRIBUTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107600" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107600" />
             </column>
             <column name="TO_SITE_ID" type="NUMBER(19,0)"/>
             <column name="DISTRIBUTION_PROTOCOL_ID" type="NUMBER(19,0)"/>
@@ -534,7 +534,7 @@
         <validCheckSum>7:1ec6668a6dba59f1bea0e62b0069799d</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107606" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107606" />
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
             <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
@@ -550,7 +550,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-52">
         <createTable tableName="CATISSUE_DISTRIBUTION_SPEC_REQ">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107609" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107609" />
             </column>
             <column name="SPECIMEN_CLASS" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -570,14 +570,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108392" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108392" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-54">
         <createTable tableName="CATISSUE_EQUIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_EQUIPMENT" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_EQUIPMENT" />
             </column>
             <column name="DEVICE_NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -598,7 +598,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-55">
         <createTable tableName="CATISSUE_EXIST_SP_AR_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107812" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107812" />
             </column>
             <column name="SPECIMEN_ARRAY_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -606,7 +606,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-56">
         <createTable tableName="CATISSUE_EXISTING_SP_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107808" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107808" />
             </column>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -614,7 +614,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-57">
         <createTable tableName="CATISSUE_EXTERNAL_APPLICATION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_EXTERNAL_APPLICATION" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_EXTERNAL_APPLICATION" />
             </column>
             <column name="APP_NAME" type="VARCHAR2(100 BYTE)">
                 <constraints nullable="false"/>
@@ -627,7 +627,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-58">
         <createTable tableName="CATISSUE_EXTERNAL_IDENTIFIER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107612" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107612" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)"/>
             <column name="VALUE" type="VARCHAR2(255 BYTE)"/>
@@ -645,7 +645,7 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108393" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108393" />
             </column>
         </createTable>
     </changeSet>
@@ -657,14 +657,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108394" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108394" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-63">
         <createTable tableName="CATISSUE_FORM_CONTEXT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_CONTEXT" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_CONTEXT" />
             </column>
             <column name="CONTAINER_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -684,7 +684,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-64">
         <createTable tableName="CATISSUE_FORM_RECORD_ENTRY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_RECORD_ENTRY" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_RECORD_ENTRY" />
             </column>
             <column name="FORM_CTXT_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -714,14 +714,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108395" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108395" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-66">
         <createTable tableName="CATISSUE_IDENTIFIED_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107846" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107846" />
             </column>
             <column name="DEID_REPORT" type="NUMBER(19,0)"/>
             <column name="SCG_ID" type="NUMBER(19,0)"/>
@@ -730,7 +730,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-67">
         <createTable tableName="CATISSUE_IMAGE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_IMAGE" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_IMAGE" />
             </column>
             <column name="DESCRIPTION" type="VARCHAR2(1000 BYTE)"/>
             <column name="EQP_IMAGE_ID" type="VARCHAR2(100 BYTE)">
@@ -785,14 +785,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108391" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108391" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-70">
         <createTable tableName="CATISSUE_INSTITUTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107531" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107531" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -835,7 +835,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-73">
         <createTable tableName="CATISSUE_LOGIN_AUDIT_EVENT_LOG">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107691" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107691" />
             </column>
             <column name="LOGIN_TIMESTAMP" type="DATE"/>
             <column name="USER_LOGIN_ID" type="NUMBER(19,0)"/>
@@ -858,14 +858,14 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108396" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108396" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-77">
         <createTable tableName="CATISSUE_NEW_SP_AR_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107814" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107814" />
             </column>
             <column name="ARRAY_TYPE_ID" type="NUMBER(19,0)"/>
             <column name="NAME" type="VARCHAR2(255 BYTE)"/>
@@ -875,7 +875,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-78">
         <createTable tableName="CATISSUE_NEW_SPEC_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107806" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107806" />
             </column>
             <column name="SPECIMEN_CLASS" type="VARCHAR2(255 BYTE)"/>
             <column name="SPECIMEN_TYPE" type="VARCHAR2(255 BYTE)"/>
@@ -884,7 +884,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-79">
         <createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_NEXTGEN_AUDIT_DETAILS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_NEXTGEN_AUDIT_DETAILS" />
             </column>
             <column name="OBJECT_TYPE" type="VARCHAR2(50 BYTE)">
                 <constraints nullable="false"/>
@@ -929,7 +929,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-81">
         <createTable tableName="CATISSUE_ORDER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107820" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107820" />
             </column>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="DISTRIBUTION_PROTOCOL_ID" type="NUMBER(19,0)"/>
@@ -943,7 +943,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-82">
         <createTable tableName="CATISSUE_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107818" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107818" />
             </column>
             <column name="DESCRIPTION" type="VARCHAR2(500 BYTE)"/>
             <column name="DISTRIBUTED_ITEM_ID" type="NUMBER(19,0)"/>
@@ -956,7 +956,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-83">
         <createTable tableName="CATISSUE_PART_MEDICAL_ID">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107594" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107594" />
             </column>
             <column name="MEDICAL_RECORD_NUMBER" type="VARCHAR2(255 BYTE)"/>
             <column name="SITE_ID" type="NUMBER(19,0)"/>
@@ -966,7 +966,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-84">
         <createTable tableName="CATISSUE_PARTICIPANT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107581" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107581" />
             </column>
             <column name="LAST_NAME" type="VARCHAR2(255 BYTE)"/>
             <column name="FIRST_NAME" type="VARCHAR2(255 BYTE)"/>
@@ -987,7 +987,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-85">
         <createTable tableName="CATISSUE_PASSWORD">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107499" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107499" />
             </column>
             <column name="PASSWORD" type="VARCHAR2(255 BYTE)"/>
             <column name="UPDATE_DATE" type="DATE"/>
@@ -997,7 +997,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-86">
         <createTable tableName="CATISSUE_PATH_CASE_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107802" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107802" />
             </column>
             <column name="PATHOLOGICAL_STATUS" type="VARCHAR2(255 BYTE)"/>
             <column name="TISSUE_SITE" type="VARCHAR2(255 BYTE)"/>
@@ -1007,7 +1007,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-87">
         <createTable tableName="CATISSUE_PATHOLOGY_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107862" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107862" />
             </column>
             <column name="ACTIVITY_STATUS" type="VARCHAR2(100 BYTE)"/>
             <column name="REVIEW_FLAG" type="NUMBER(1,0)"/>
@@ -1019,7 +1019,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-88">
         <createTable tableName="CATISSUE_PERMISSIBLE_VALUE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107479" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107479" />
             </column>
             <column name="CONCEPT_CODE" type="VARCHAR2(40 BYTE)"/>
             <column name="DEFINITION" type="VARCHAR2(500 BYTE)"/>
@@ -1032,7 +1032,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-89">
         <createTable tableName="CATISSUE_PRIVILEGES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_PRIVILEGE_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_PRIVILEGE_ID" />
             </column>
             <column name="PRIVILEGE" type="VARCHAR2(64 BYTE)">
                 <constraints nullable="false"/>
@@ -1052,7 +1052,7 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108397" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108397" />
             </column>
         </createTable>
     </changeSet>
@@ -1069,7 +1069,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-92">
         <createTable tableName="CATISSUE_QUARANTINE_PARAMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107860" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107860" />
             </column>
             <column name="DEID_REPORT_ID" type="NUMBER(19,0)"/>
             <column name="IS_QUARANTINED" type="NUMBER(1,0)"/>
@@ -1082,7 +1082,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-93">
         <createTable tableName="CATISSUE_QUERY_AUDIT_LOGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_AUDIT_LOGS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_AUDIT_LOGS" />
             </column>
             <column name="QUERY_ID" type="NUMBER(19,0)"/>
             <column name="RUN_BY" type="NUMBER(19,0)">
@@ -1116,7 +1116,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-96">
         <createTable tableName="CATISSUE_QUERY_FOLDERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_FOLDERS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_FOLDERS" />
             </column>
             <column name="NAME" type="VARCHAR2(64 BYTE)">
                 <constraints nullable="false"/>
@@ -1130,7 +1130,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-98">
         <createTable tableName="CATISSUE_RACE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107563" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107563" />
             </column>
             <column name="PARTICIPANT_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -1147,14 +1147,14 @@
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108388" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108388" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-101">
         <createTable tableName="CATISSUE_REPORT_BICONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107854" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107854" />
             </column>
             <column name="REPORT_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -1162,7 +1162,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-102">
         <createTable tableName="CATISSUE_REPORT_CONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107850" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107850" />
             </column>
             <column name="REPORT_DATA" type="CLOB"/>
         </createTable>
@@ -1170,7 +1170,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-103">
         <createTable tableName="CATISSUE_REPORT_FILECONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_REPORT_FILECONTENT" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_REPORT_FILECONTENT" />
             </column>
             <column name="REPORT_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -1186,7 +1186,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-105">
         <createTable tableName="CATISSUE_REPORT_QUEUE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107866" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107866" />
             </column>
             <column name="STATUS" type="VARCHAR2(50 BYTE)"/>
             <column name="SURGICAL_PATHOLOGY_NUMBER" type="VARCHAR2(50 BYTE)"/>
@@ -1201,7 +1201,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-106">
         <createTable tableName="CATISSUE_REPORT_SECTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107856" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107856" />
             </column>
             <column name="DOCUMENT_FRAGMENT" type="VARCHAR2(4000 BYTE)"/>
             <column name="END_OFFSET" type="INTEGER"/>
@@ -1213,7 +1213,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-107">
         <createTable tableName="CATISSUE_REPORT_TEXTCONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107844" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107844" />
             </column>
             <column name="REPORT_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -1221,7 +1221,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-108">
         <createTable tableName="CATISSUE_REPORT_XMLCONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107864" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107864" />
             </column>
             <column name="REPORT_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -1229,7 +1229,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-109">
         <createTable tableName="CATISSUE_REPORTED_PROBLEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107573" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107573" />
             </column>
             <column name="AFFILIATION" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1252,7 +1252,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-110">
         <createTable tableName="CATISSUE_REVIEW_PARAMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107852" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107852" />
             </column>
             <column name="REVIEWER_ROLE" type="VARCHAR2(100 BYTE)"/>
             <column name="REPORT_ID" type="NUMBER(19,0)"/>
@@ -1275,7 +1275,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-112">
         <createTable tableName="CATISSUE_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_ROLE_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_ROLE_ID" />
             </column>
             <column name="NAME" type="VARCHAR2(64 BYTE)">
                 <constraints nullable="false"/>
@@ -1286,7 +1286,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-113">
         <createTable tableName="CATISSUE_SAVED_QUERIES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SAVED_QUERIES" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SAVED_QUERIES" />
             </column>
             <column name="TITLE" type="VARCHAR2(128 BYTE)">
                 <constraints nullable="false"/>
@@ -1311,7 +1311,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-115">
         <createTable tableName="CATISSUE_SEMANTIC_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107870" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107870" />
             </column>
             <column name="LABEL" type="VARCHAR2(500 BYTE)"/>
         </createTable>
@@ -1319,7 +1319,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-116">
         <createTable tableName="CATISSUE_SHIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108064" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108064" />
             </column>
             <column name="SHIPMENT_REQUEST_ID" type="NUMBER(19,0)"/>
             <column name="BARCODE" type="VARCHAR2(255 BYTE)"/>
@@ -1338,14 +1338,14 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-118">
         <createTable tableName="CATISSUE_SHIPMENT_REQUEST">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108069" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108069" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-119">
         <createTable tableName="CATISSUE_SITE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107514" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107514" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1387,7 +1387,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-123">
         <createTable tableName="CATISSUE_SP_ARRAY_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107816" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107816" />
             </column>
         </createTable>
     </changeSet>
@@ -1404,7 +1404,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-125">
         <createTable tableName="CATISSUE_SPECI_ARRAY_CONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107565" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107565" />
             </column>
             <column name="CONC_IN_MICROGM_PER_MICROLTR" type="FLOAT(126)"/>
             <column name="INITIAL_QUANTITY" type="FLOAT(126)"/>
@@ -1427,7 +1427,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-127">
         <createTable tableName="CATISSUE_SPECIMEN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107671" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107671" />
             </column>
             <column name="LABEL" type="VARCHAR2(255 BYTE)"/>
             <column name="AVAILABLE" type="NUMBER(1,0)"/>
@@ -1458,7 +1458,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-128">
         <createTable tableName="CATISSUE_SPECIMEN_ARRAY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107575" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107575" />
             </column>
             <column name="CREATED_BY_ID" type="NUMBER(19,0)"/>
             <column name="SPECIMEN_ARRAY_TYPE_ID" type="NUMBER(19,0)"/>
@@ -1470,7 +1470,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-129">
         <createTable tableName="CATISSUE_SPECIMEN_ARRAY_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107577" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107577" />
             </column>
             <column name="SPECIMEN_CLASS" type="VARCHAR2(50 BYTE)"/>
         </createTable>
@@ -1488,7 +1488,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-131">
         <createTable tableName="CATISSUE_SPECIMEN_COLL_GROUP">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107644" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107644" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)"/>
             <column name="BARCODE" type="VARCHAR2(255 BYTE)"/>
@@ -1519,7 +1519,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-132">
         <createTable tableName="CATISSUE_SPECIMEN_EVENT_PARAM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107586" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107586" />
             </column>
             <column name="SPECIMEN_COLL_GRP_ID" type="NUMBER(19,0)"/>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
@@ -1537,14 +1537,14 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-134">
         <createTable tableName="CATISSUE_SPECIMEN_LABEL_COUNT">
             <column name="LABEL_COUNT" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107842" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107842" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-135">
         <createTable tableName="CATISSUE_SPECIMEN_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107810" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107810" />
             </column>
             <column name="ARRAY_ORDER_ITEM_ID" type="NUMBER(19,0)"/>
         </createTable>
@@ -1552,7 +1552,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-136">
         <createTable tableName="CATISSUE_SPECIMEN_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107897" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107897" />
             </column>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
             <column name="CONTAINER_ID" type="NUMBER(19,0)"/>
@@ -1567,7 +1567,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-138">
         <createTable tableName="CATISSUE_SPECIMEN_REQUIREMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107528" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107528" />
             </column>
             <column name="SPECIMEN_CLASS" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1589,7 +1589,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-140">
         <createTable tableName="CATISSUE_SPECIMENLIST_TAGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SPECIMENLIST_TAGS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SPECIMENLIST_TAGS" />
             </column>
             <column name="TAG_LABEL" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1608,7 +1608,7 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108398" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108398" />
             </column>
         </createTable>
     </changeSet>
@@ -1699,7 +1699,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-150">
         <createTable tableName="CATISSUE_STORAGE_CONTAINER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107596" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107596" />
             </column>
             <column name="SITE_ID" type="NUMBER(19,0)"/>
             <column name="TEMPERATURE" type="FLOAT(126)"/>
@@ -1711,7 +1711,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-151">
         <createTable tableName="CATISSUE_STORAGE_CONTAINERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_STORAGE_CONTAINERS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_STORAGE_CONTAINERS" />
             </column>
             <column name="NAME" type="VARCHAR2(64 BYTE)">
                 <constraints nullable="false"/>
@@ -1736,7 +1736,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-152">
         <createTable tableName="CATISSUE_STORAGE_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107506" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107506" />
             </column>
             <column name="DEFAULT_TEMPERATURE" type="FLOAT(126)"/>
         </createTable>
@@ -1754,7 +1754,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-154">
         <createTable tableName="CATISSUE_SYNCH_CP_AUDIT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SYNCH_CP_AUDIT" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SYNCH_CP_AUDIT" />
             </column>
             <column name="CP_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -1777,7 +1777,7 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108399" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108399" />
             </column>
         </createTable>
     </changeSet>
@@ -1793,7 +1793,7 @@
             <column name="USER_ID" type="NUMBER(19,0)"/>
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108400" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108400" />
             </column>
         </createTable>
     </changeSet>
@@ -1811,14 +1811,14 @@
             <column name="COMMENTS" type="VARCHAR2(500 BYTE)"/>
             <column name="IDENTIFIER" type="NUMBER(19,0)"/>
             <column name="SPE_ID" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108389" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108389" />
             </column>
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-161">
         <createTable tableName="CATISSUE_USER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107629" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107629" />
             </column>
             <column name="EMAIL_ADDRESS" type="VARCHAR2(255 BYTE)"/>
             <column name="FIRST_NAME" type="VARCHAR2(255 BYTE)"/>
@@ -1857,7 +1857,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-180">
         <createTable tableName="JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(38,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="JOB_DETAILS_SEQ" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="JOB_DETAILS_SEQ" />
             </column>
             <column name="JOB_NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1876,7 +1876,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-181">
         <createTable tableName="KEY_SEQ_GENERATOR">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107926" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107926" />
             </column>
             <column name="KEY_VALUE" type="VARCHAR2(50 BYTE)">
                 <constraints nullable="false"/>
@@ -1890,7 +1890,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-184">
         <createTable tableName="OS_DEPARTMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DEPARTMENT_ID" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DEPARTMENT_ID" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1902,7 +1902,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-185">
         <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_DISTRIBUTION_PROTOCOL" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_DISTRIBUTION_PROTOCOL" />
             </column>
             <column name="PRINCIPAL_INVESTIGATOR_ID" type="NUMBER(19,0)"/>
             <column name="TITLE" type="VARCHAR2(255 BYTE)"/>
@@ -1917,7 +1917,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-186">
         <createTable tableName="OS_SPECIMEN_PRINT_RULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_SPECIMEN_PRINT_RULE" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_SPECIMEN_PRINT_RULE" />
             </column>
             <column name="NAME" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1938,7 +1938,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-188">
         <createTable tableName="QUERY_TAG_ITEMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAG_ITEMS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAG_ITEMS" />
             </column>
             <column name="TAG_ID" type="NUMBER(19,0)">
                 <constraints nullable="false"/>
@@ -1951,7 +1951,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-189">
         <createTable tableName="QUERY_TAGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAGS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAGS" />
             </column>
             <column name="TAG_LABEL" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1964,7 +1964,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-191">
         <createTable tableName="REPORT_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_DETAILS" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_DETAILS" />
             </column>
             <column name="CS_ID" type="NUMBER(19,0)"/>
             <column name="REPORT_GENERATOR" type="VARCHAR2(100 BYTE)">
@@ -1982,7 +1982,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-192">
         <createTable tableName="REPORT_JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_GENERATED_FILES" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_GENERATED_FILES" />
             </column>
             <column name="SCHEDULE_ID" type="NUMBER(19,0)"/>
             <column name="USER_ID" type="NUMBER(19,0)"/>
@@ -2002,7 +2002,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-193">
         <createTable tableName="REPORT_SCHEDULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_SCHEDULE" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_SCHEDULE" />
             </column>
             <column name="DURATION" type="VARCHAR2(255 BYTE)"/>
         </createTable>
@@ -2010,7 +2010,7 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-194">
         <createTable tableName="SCHEDULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SCHEDULE" primaryKeyTablespace="USERS"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SCHEDULE" />
             </column>
             <column name="START_DATE" type="DATE"/>
             <column name="END_DATE" type="DATE"/>
@@ -2046,593 +2046,593 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-198">
-        <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C00107484" tableName="CATISSUE_COLL_COORDINATORS" tablespace="USERS"/>
+        <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C00107484" tableName="CATISSUE_COLL_COORDINATORS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-199">
-        <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, DISTRIBUTION_PROTOCOL_ID" constraintName="SYS_C00107523" tableName="CATISSUE_COLL_DISTRIBUTION_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, DISTRIBUTION_PROTOCOL_ID" constraintName="SYS_C00107523" tableName="CATISSUE_COLL_DISTRIBUTION_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-200">
-        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107544" tableName="CATISSUE_CONT_HOLDS_SPARRTYPE" tablespace="USERS"/>
+        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107544" tableName="CATISSUE_CONT_HOLDS_SPARRTYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-201">
-        <addPrimaryKey columnNames="FOLDER_ID, USER_ID" constraintName="SYS_C00108290" tableName="CATISSUE_QFOLDER_SHARE_SETTING" tablespace="USERS"/>
+        <addPrimaryKey columnNames="FOLDER_ID, USER_ID" constraintName="SYS_C00108290" tableName="CATISSUE_QFOLDER_SHARE_SETTING" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-202">
-        <addPrimaryKey columnNames="FOLDER_ID, QUERY_ID" constraintName="SYS_C00108285" tableName="CATISSUE_QUERY_FOLDER_QUERIES" tablespace="USERS"/>
+        <addPrimaryKey columnNames="FOLDER_ID, QUERY_ID" constraintName="SYS_C00108285" tableName="CATISSUE_QUERY_FOLDER_QUERIES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-203">
-        <addPrimaryKey columnNames="PRIVILEGE_ID, ROLE_ID" constraintName="PK_CAT_RP_ROLEID_PRIVID" tableName="CATISSUE_ROLE_PRIVILEGES" tablespace="USERS"/>
+        <addPrimaryKey columnNames="PRIVILEGE_ID, ROLE_ID" constraintName="PK_CAT_RP_ROLEID_PRIVID" tableName="CATISSUE_ROLE_PRIVILEGES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-204">
-        <addPrimaryKey columnNames="BASE_SHIPMENT_ID, CONTAINER_ID" constraintName="SYS_C00108067" tableName="CATISSUE_SHIPMENT_CONTAINR_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="BASE_SHIPMENT_ID, CONTAINER_ID" constraintName="SYS_C00108067" tableName="CATISSUE_SHIPMENT_CONTAINR_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-205">
-        <addPrimaryKey columnNames="SITE_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107907" tableName="CATISSUE_SITE_CP" tablespace="USERS"/>
+        <addPrimaryKey columnNames="SITE_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107907" tableName="CATISSUE_SITE_CP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-206">
-        <addPrimaryKey columnNames="SITE_ID, USER_ID" constraintName="SYS_C00107906" tableName="CATISSUE_SITE_USERS" tablespace="USERS"/>
+        <addPrimaryKey columnNames="SITE_ID, USER_ID" constraintName="SYS_C00107906" tableName="CATISSUE_SITE_USERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-207">
-        <addPrimaryKey columnNames="SPECIMEN_ID, BIOHAZARD_ID" constraintName="SYS_C00107502" tableName="CATISSUE_SPECIMEN_BIOHZ_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="SPECIMEN_ID, BIOHAZARD_ID" constraintName="SYS_C00107502" tableName="CATISSUE_SPECIMEN_BIOHZ_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-208">
-        <addPrimaryKey columnNames="SHIPMENT_REQ_ID, SPECIMEN_ID" constraintName="SYS_C00108072" tableName="CATISSUE_SPECI_SHIPMNT_REQ_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="SHIPMENT_REQ_ID, SPECIMEN_ID" constraintName="SYS_C00108072" tableName="CATISSUE_SPECI_SHIPMNT_REQ_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-209">
-        <addPrimaryKey columnNames="STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107541" tableName="CATISSUE_STORTY_HOLDS_SPARRTY" tablespace="USERS"/>
+        <addPrimaryKey columnNames="STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107541" tableName="CATISSUE_STORTY_HOLDS_SPARRTY" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-210">
-        <addPrimaryKey columnNames="STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID" constraintName="SYS_C00107538" tableName="CATISSUE_STOR_TYPE_HOLDS_TYPE" tablespace="USERS"/>
+        <addPrimaryKey columnNames="STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID" constraintName="SYS_C00107538" tableName="CATISSUE_STOR_TYPE_HOLDS_TYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-211">
-        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107635" tableName="CATISSUE_ST_CONT_COLL_PROT_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107635" tableName="CATISSUE_ST_CONT_COLL_PROT_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-212">
-        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, STORAGE_TYPE_ID" constraintName="SYS_C00107535" tableName="CATISSUE_ST_CONT_ST_TYPE_REL" tablespace="USERS"/>
+        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, STORAGE_TYPE_ID" constraintName="SYS_C00107535" tableName="CATISSUE_ST_CONT_ST_TYPE_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-213">
-        <addPrimaryKey columnNames="USER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107908" tableName="CATISSUE_USER_CP" tablespace="USERS"/>
+        <addPrimaryKey columnNames="USER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107908" tableName="CATISSUE_USER_CP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-214">
-        <addUniqueConstraint columnNames="DOMAIN_NAME" constraintName="SYS_C00108261" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_DOMAINS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="DOMAIN_NAME" constraintName="SYS_C00108261" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_DOMAINS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-215">
-        <addUniqueConstraint columnNames="AUTH_TYPE" constraintName="SYS_C00108275" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_PROVIDERS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="AUTH_TYPE" constraintName="SYS_C00108275" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_PROVIDERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-216">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107554" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BIOHAZARD" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107554" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BIOHAZARD" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-217">
-        <addUniqueConstraint columnNames="OPERATION" constraintName="SYS_C00108017" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="OPERATION" constraintName="SYS_C00108017" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-218">
-        <addUniqueConstraint columnNames="DROPDOWN_NAME" constraintName="SYS_C00108018" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="DROPDOWN_NAME" constraintName="SYS_C00108018" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-220">
-        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_COLL_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_EVENT_PARAM" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_COLL_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_EVENT_PARAM" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-221">
-        <addUniqueConstraint columnNames="COLLECTION_PROTOCOL_ID, COLLECTION_POINT_LABEL" constraintName="SYS_C00107640" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_EVENT" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="COLLECTION_PROTOCOL_ID, COLLECTION_POINT_LABEL" constraintName="SYS_C00107640" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_EVENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-222">
-        <addUniqueConstraint columnNames="PARTICIPANT_ID, COLLECTION_PROTOCOL_ID, ACTIVITY_STATUS" constraintName="CATISSUE_CP_PART_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="PARTICIPANT_ID, COLLECTION_PROTOCOL_ID, ACTIVITY_STATUS" constraintName="CATISSUE_CP_PART_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-223">
-        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107624" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107624" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-224">
-        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107510" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107510" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-225">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107511" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107511" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-226">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107590" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER_TYPE" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107590" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER_TYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-227">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107616" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_DEPARTMENT" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107616" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_DEPARTMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-228">
-        <addUniqueConstraint columnNames="EQUIPMENT_ID" constraintName="EQPT_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_EQUIPMENT" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="EQUIPMENT_ID" constraintName="EQPT_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_EQUIPMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-229">
-        <addUniqueConstraint columnNames="EQUIPMENT_ID, EQP_IMAGE_ID" constraintName="EQPT_IMGE_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_IMAGE" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="EQUIPMENT_ID, EQP_IMAGE_ID" constraintName="EQPT_IMGE_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_IMAGE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-230">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107532" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_INSTITUTION" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107532" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_INSTITUTION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-231">
-        <addUniqueConstraint columnNames="SOCIAL_SECURITY_NUMBER" constraintName="SYS_C00107582" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PARTICIPANT" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="SOCIAL_SECURITY_NUMBER" constraintName="SYS_C00107582" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PARTICIPANT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-232">
-        <addUniqueConstraint columnNames="MEDICAL_RECORD_NUMBER, SITE_ID" constraintName="MRN_SITE_UNIQUE" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PART_MEDICAL_ID" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="MEDICAL_RECORD_NUMBER, SITE_ID" constraintName="MRN_SITE_UNIQUE" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PART_MEDICAL_ID" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-233">
-        <addUniqueConstraint columnNames="PRIVILEGE" constraintName="SYS_C00108301" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PRIVILEGES" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="PRIVILEGE" constraintName="SYS_C00108301" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PRIVILEGES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-234">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108281" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_QUERY_FOLDERS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108281" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_QUERY_FOLDERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-235">
-        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_REC_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_RECEIVED_EVENT_PARAM" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_REC_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_RECEIVED_EVENT_PARAM" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-237">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108297" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_ROLES" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108297" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_ROLES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-239">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107515" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SITE" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107515" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SITE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-240">
-        <addUniqueConstraint columnNames="LABEL" constraintName="SYS_C00107672" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="LABEL" constraintName="SYS_C00107672" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-241">
-        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107673" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107673" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-242">
-        <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="SPECLIST_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMENLIST_TAGS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="SPECLIST_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMENLIST_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-243">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107645" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107645" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-244">
-        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107646" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107646" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-245">
-        <addUniqueConstraint columnNames="ANCESTOR_ID, DESCENDENT_ID" constraintName="UK_ANCESTOR_DESCENDENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_HIERARCHY" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="ANCESTOR_ID, DESCENDENT_ID" constraintName="UK_ANCESTOR_DESCENDENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_HIERARCHY" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-246">
-        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="CATISSUE_SPEC_POS_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_POSITION" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="CATISSUE_SPEC_POS_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_POSITION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-247">
-        <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="SPECLIST_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPEC_TAG_ITEMS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="SPECLIST_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPEC_TAG_ITEMS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-248">
-        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00108336" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00108336" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-249">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108337" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108337" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-251">
-        <addUniqueConstraint columnNames="LOGIN_NAME" constraintName="SYS_C00107630" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_USER" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="LOGIN_NAME" constraintName="SYS_C00107630" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_USER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-264">
-        <addUniqueConstraint columnNames="NAME, INSTITUTE_ID" constraintName="OS_DEPT_INSTID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_DEPARTMENT" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME, INSTITUTE_ID" constraintName="OS_DEPT_INSTID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_DEPARTMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-265">
-        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108351" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_SPECIMEN_PRINT_RULE" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108351" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_SPECIMEN_PRINT_RULE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-266">
-        <addUniqueConstraint columnNames="TAG_LABEL" constraintName="SYS_C00108106" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_LABEL" constraintName="SYS_C00108106" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-267">
-        <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="USRID_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="USRID_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-268">
-        <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="S_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAG_ITEMS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="S_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAG_ITEMS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-269">
-        <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="Q_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_QUERY_TAGS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="Q_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-270">
-        <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="S_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_SPECIMENLIST_TAGS" tablespace="USERS"/>
+        <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="S_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_SPECIMENLIST_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-272">
-        <createIndex indexName="INDX_CATISSUE_BIOHAZARD_TYPE" tableName="CATISSUE_BIOHAZARD" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_BIOHAZARD_TYPE" tableName="CATISSUE_BIOHAZARD"  unique="false">
             <column name="TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-273">
-        <createIndex indexName="INDX_CATISSUE_CELLEVT_REVNCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_CELLEVT_REVNCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM"  unique="false">
             <column name="NEOPLASTIC_CELLULARITY_PER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-274">
-        <createIndex indexName="INDX_CATISSUE_CELLEVT_REVVCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_CELLEVT_REVVCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM"  unique="false">
             <column name="VIABLE_CELL_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-275">
-        <createIndex indexName="IDX_COLLECTION_PROT_TITLE" tableName="CATISSUE_COLLECTION_PROTOCOL" tablespace="USERS" unique="true">
+        <createIndex indexName="IDX_COLLECTION_PROT_TITLE" tableName="CATISSUE_COLLECTION_PROTOCOL"  unique="true">
             <column name="TITLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-276">
-        <createIndex indexName="CATISSUE_COLL_EVENT_PA_ID_IDX" tableName="CATISSUE_COLL_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_COLL_EVENT_PA_ID_IDX" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-277">
-        <createIndex indexName="INDX_CATISSUE_COLEVT_CONT" tableName="CATISSUE_COLL_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_COLEVT_CONT" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="CONTAINER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-278">
-        <createIndex indexName="INDX_CATISSUE_COLEVT_PROC" tableName="CATISSUE_COLL_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_COLEVT_PROC" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="COLLECTION_PROCEDURE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-279">
-        <createIndex indexName="INDX_COLPROTO_EVNT_CAL" tableName="CATISSUE_COLL_PROT_EVENT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_COLPROTO_EVNT_CAL" tableName="CATISSUE_COLL_PROT_EVENT"  unique="false">
             <column name="STUDY_CALENDAR_EVENT_POINT"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-280">
-        <createIndex indexName="CATISSUE_COL_PROT_REG_ACT_STAT" tableName="CATISSUE_COLL_PROT_REG" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_COL_PROT_REG_ACT_STAT" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-281">
-        <createIndex indexName="INDX_COLL_PROT_REGID" tableName="CATISSUE_COLL_PROT_REG" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_COLL_PROT_REGID" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="PROTOCOL_PARTICIPANT_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-282">
-        <createIndex indexName="INDX_COLL_PROT_REG_DATE" tableName="CATISSUE_COLL_PROT_REG" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_COLL_PROT_REG_DATE" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="REGISTRATION_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-283">
-        <createIndex indexName="CATISSUE_COSNT_TR_RES_RESP" tableName="CATISSUE_CONSENT_TIER_RESPONSE" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_COSNT_TR_RES_RESP" tableName="CATISSUE_CONSENT_TIER_RESPONSE"  unique="false">
             <column name="RESPONSE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-284">
-        <createIndex indexName="CATISSUE_COSNT_TR_STAT_SCG_ID" tableName="CATISSUE_CONSENT_TIER_STATUS" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_COSNT_TR_STAT_SCG_ID" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="SPECIMEN_COLL_GROUP_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-285">
-        <createIndex indexName="CATISSUE_COSNT_TR_STAT_STAT" tableName="CATISSUE_CONSENT_TIER_STATUS" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_COSNT_TR_STAT_STAT" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-286">
-        <createIndex indexName="CONSENT_TIRE_STATUS_SPECIMEN" tableName="CATISSUE_CONSENT_TIER_STATUS" tablespace="USERS" unique="false">
+        <createIndex indexName="CONSENT_TIRE_STATUS_SPECIMEN" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="SPECIMEN_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-287">
-        <createIndex indexName="IDX_SPECIMEN_REQ_CLASS" tableName="CATISSUE_CP_REQ_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPECIMEN_REQ_CLASS" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="SPECIMEN_CLASS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-288">
-        <createIndex indexName="IDX_SPECIMEN_REQ_TYPE" tableName="CATISSUE_CP_REQ_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPECIMEN_REQ_TYPE" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="SPECIMEN_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-289">
-        <createIndex indexName="IDX_SPEC_REQ_PATHOLOGY_STAT" tableName="CATISSUE_CP_REQ_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPEC_REQ_PATHOLOGY_STAT" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="PATHOLOGICAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-290">
-        <createIndex indexName="CATISSUE_DISPOSAL_EVEN_ID_IDX" tableName="CATISSUE_DISPOSAL_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_DISPOSAL_EVEN_ID_IDX" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-291">
-        <createIndex indexName="INDX_CATISSUE_COLEVT_RSN" tableName="CATISSUE_DISPOSAL_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_COLEVT_RSN" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"  unique="false">
             <column name="REASON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-292">
-        <createIndex indexName="IDX_DITRI_TITLE" tableName="CATISSUE_DISTRIBUTION_PROTOCOL" tablespace="USERS" unique="true">
+        <createIndex indexName="IDX_DITRI_TITLE" tableName="CATISSUE_DISTRIBUTION_PROTOCOL"  unique="true">
             <column name="TITLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-293">
-        <createIndex indexName="CATISSUE_DISTRI_EVENT__ID_IDX" tableName="CATISSUE_DISTRI_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_DISTRI_EVENT__ID_IDX" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-294">
-        <createIndex indexName="DISTRIBUTED_QTY_SEQ" tableName="CATISSUE_DISTRI_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="DISTRIBUTED_QTY_SEQ" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="DISTRIBUTED_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-295">
-        <createIndex indexName="DISTRI_PARAM_DISTRIBUTION" tableName="CATISSUE_DISTRI_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="DISTRI_PARAM_DISTRIBUTION" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="DISTRIBUTION_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-296">
-        <createIndex indexName="INDX_CATISSUE_EMBEVT_MEDI" tableName="CATISSUE_EMBEDDED_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_EMBEVT_MEDI" tableName="CATISSUE_EMBEDDED_EVENT_PARAM"  unique="false">
             <column name="EMBEDDING_MEDIUM"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-297">
-        <createIndex indexName="INDX_CATISSUE_FIXEVT_MIN" tableName="CATISSUE_FIXED_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_FIXEVT_MIN" tableName="CATISSUE_FIXED_EVENT_PARAM"  unique="false">
             <column name="DURATION_IN_MINUTES"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-298">
-        <createIndex indexName="INDX_CATISSUE_FIXEVT_TYPE" tableName="CATISSUE_FIXED_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_FIXEVT_TYPE" tableName="CATISSUE_FIXED_EVENT_PARAM"  unique="false">
             <column name="FIXATION_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-299">
-        <createIndex indexName="INDX_CATISSUE_FLDEVT_CELL" tableName="CATISSUE_FLUID_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_FLDEVT_CELL" tableName="CATISSUE_FLUID_SPE_EVENT_PARAM"  unique="false">
             <column name="CELL_COUNT"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-300">
-        <createIndex indexName="IDX_FC_DELETED_ON" tableName="CATISSUE_FORM_CONTEXT" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_FC_DELETED_ON" tableName="CATISSUE_FORM_CONTEXT"  unique="false">
             <column name="DELETED_ON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-301">
-        <createIndex indexName="INDX_CATISSUE_FROZEVT_METH" tableName="CATISSUE_FROZEN_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_FROZEVT_METH" tableName="CATISSUE_FROZEN_EVENT_PARAM"  unique="false">
             <column name="METHOD"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-302">
-        <createIndex indexName="INDX_CATISSUE_IOEVT_STATUS" tableName="CATISSUE_IN_OUT_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_IOEVT_STATUS" tableName="CATISSUE_IN_OUT_EVENT_PARAM"  unique="false">
             <column name="STORAGE_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-305">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS1" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS1" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="ABSORBANCE_AT_260"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-306">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS2" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS2" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="ABSORBANCE_AT_280"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-307">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_GEL" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_GEL" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="GEL_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-308">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_LANE" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_LANE" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="LANE_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-309">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_METH" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_METH" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="GEL_IMAGE_URL"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-310">
-        <createIndex indexName="INDX_CATISSUE_MOLEVT_RAT" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_MOLEVT_RAT" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="RATIO_28S_TO_18S"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-311">
-        <createIndex indexName="IDX_AUDIT_OBJECT_ID" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_AUDIT_OBJECT_ID" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"  unique="false">
             <column name="OBJECT_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-312">
-        <createIndex indexName="IDX_AUDIT_OBJECT_TYPE" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_AUDIT_OBJECT_TYPE" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"  unique="false">
             <column name="OBJECT_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-313">
-        <createIndex indexName="CATISSUE_ORDER_STATUS" tableName="CATISSUE_ORDER" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_ORDER_STATUS" tableName="CATISSUE_ORDER"  unique="false">
             <column name="STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-314">
-        <createIndex indexName="CATISSUE_PARTICIPANT_ACT_STAT" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_PARTICIPANT_ACT_STAT" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-315">
-        <createIndex indexName="INDX_PARTICIPANT_BDATE" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_BDATE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="BIRTH_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-316">
-        <createIndex indexName="INDX_PARTICIPANT_DDATE" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_DDATE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="DEATH_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-317">
-        <createIndex indexName="INDX_PARTICIPANT_ETHNICITY" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_ETHNICITY" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="ETHNICITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-318">
-        <createIndex indexName="INDX_PARTICIPANT_FNAME" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_FNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="FIRST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-319">
-        <createIndex indexName="INDX_PARTICIPANT_GENDER" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_GENDER" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="GENDER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-320">
-        <createIndex indexName="INDX_PARTICIPANT_GENOTYPE" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_GENOTYPE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="GENOTYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-321">
-        <createIndex indexName="INDX_PARTICIPANT_LNAME" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_LNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="LAST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-322">
-        <createIndex indexName="INDX_PARTICIPANT_MNAME" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_MNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="MIDDLE_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-323">
-        <createIndex indexName="INDX_PARTICIPANT_VSTATUS" tableName="CATISSUE_PARTICIPANT" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PARTICIPANT_VSTATUS" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="VITAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-324">
-        <createIndex indexName="INDX_PART_MEDICAL_RECNO" tableName="CATISSUE_PART_MEDICAL_ID" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_PART_MEDICAL_RECNO" tableName="CATISSUE_PART_MEDICAL_ID"  unique="false">
             <column name="MEDICAL_RECORD_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-325">
-        <createIndex indexName="INDX_CATISSUE_PROCEVT_NAME" tableName="CATISSUE_PROCEDURE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_PROCEVT_NAME" tableName="CATISSUE_PROCEDURE_EVENT_PARAM"  unique="false">
             <column name="NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-326">
-        <createIndex indexName="INDX_CATISSUE_PROCEVT_URL" tableName="CATISSUE_PROCEDURE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_PROCEVT_URL" tableName="CATISSUE_PROCEDURE_EVENT_PARAM"  unique="false">
             <column name="URL"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-327">
-        <createIndex indexName="INDX_RACE_NAME" tableName="CATISSUE_RACE" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_RACE_NAME" tableName="CATISSUE_RACE"  unique="false">
             <column name="RACE_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-328">
-        <createIndex indexName="CATISSUE_RECEIVED_EVEN_ID_IDX" tableName="CATISSUE_RECEIVED_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_RECEIVED_EVEN_ID_IDX" tableName="CATISSUE_RECEIVED_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-329">
-        <createIndex indexName="INDX_CATISSUE_RECEVT_QTY" tableName="CATISSUE_RECEIVED_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_RECEVT_QTY" tableName="CATISSUE_RECEIVED_EVENT_PARAM"  unique="false">
             <column name="RECEIVED_QUALITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-330">
-        <createIndex indexName="IDX_QUERY_DELETED_ON" tableName="CATISSUE_SAVED_QUERIES" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_QUERY_DELETED_ON" tableName="CATISSUE_SAVED_QUERIES"  unique="false">
             <column name="DELETED_ON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-331">
-        <createIndex indexName="INDX_CAT_SITE_TYPE" tableName="CATISSUE_SITE" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CAT_SITE_TYPE" tableName="CATISSUE_SITE"  unique="false">
             <column name="TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-332">
-        <createIndex indexName="CATISSUE_SPECIMEN_ACT_STAT" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_SPECIMEN_ACT_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-333">
-        <createIndex indexName="CATISSUE_SPECIMEN_COLL_STAT" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_SPECIMEN_COLL_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="COLLECTION_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-334">
-        <createIndex indexName="IDX_INIT_QUANTITY" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_INIT_QUANTITY" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="INITIAL_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-335">
-        <createIndex indexName="IDX_PATHOLOGY_STAT" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_PATHOLOGY_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="PATHOLOGICAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-336">
-        <createIndex indexName="IDX_SPECIMEN_CLASS" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPECIMEN_CLASS" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="SPECIMEN_CLASS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-337">
-        <createIndex indexName="IDX_SPECIMEN_LINEAGE" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPECIMEN_LINEAGE" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="LINEAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-338">
-        <createIndex indexName="IDX_SPECIMEN_TYPE" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="IDX_SPECIMEN_TYPE" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="SPECIMEN_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-339">
-        <createIndex indexName="INDX_CATISSUE_SPECIMEN_AVQTY" tableName="CATISSUE_SPECIMEN" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_SPECIMEN_AVQTY" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="AVAILABLE_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-340">
-        <createIndex indexName="INDX_CAT_SPEC_ARRAY_AVA" tableName="CATISSUE_SPECIMEN_ARRAY" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CAT_SPEC_ARRAY_AVA" tableName="CATISSUE_SPECIMEN_ARRAY"  unique="false">
             <column name="AVAILABLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-341">
-        <createIndex indexName="CATISSUE_SPC_COL_GRP_COL_STAT" tableName="CATISSUE_SPECIMEN_COLL_GROUP" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_SPC_COL_GRP_COL_STAT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"  unique="false">
             <column name="COLLECTION_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-342">
-        <createIndex indexName="INDX_CATISSUE_SPEVT_SPID" tableName="CATISSUE_SPECIMEN_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_SPEVT_SPID" tableName="CATISSUE_SPECIMEN_EVENT_PARAM"  unique="false">
             <column name="SPECIMEN_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-343">
-        <createIndex indexName="INDX_CATISSUE_SPEVT_TIMESTP" tableName="CATISSUE_SPECIMEN_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_SPEVT_TIMESTP" tableName="CATISSUE_SPECIMEN_EVENT_PARAM"  unique="false">
             <column name="EVENT_TIMESTAMP"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-344">
-        <createIndex indexName="INDX_CATISSUE_TISEVT_CPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TISEVT_CPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="TOTAL_CELLULARITY_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-345">
-        <createIndex indexName="INDX_CATISSUE_TISEVT_HQTY" tableName="CATISSUE_TIS_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TISEVT_HQTY" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="HISTOLOGICAL_QUALITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-346">
-        <createIndex indexName="INDX_CATISSUE_TISEVT_LPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TISEVT_LPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="LYMPHOCYTIC_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-347">
-        <createIndex indexName="INDX_CATISSUE_TISEVT_NCEL" tableName="CATISSUE_TIS_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TISEVT_NCEL" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="NEOPLASTIC_CELLULARITY_PER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-348">
-        <createIndex indexName="INDX_CATISSUE_TISEVT_NPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TISEVT_NPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="NECROSIS_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-349">
-        <createIndex indexName="CATISSUE_TRANSFER_EVEN_ID_IDX" tableName="CATISSUE_TRANSFER_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="CATISSUE_TRANSFER_EVEN_ID_IDX" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-350">
-        <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="FROM_POSITION_DIMENSION_ONE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-351">
-        <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="FROM_POSITION_DIMENSION_TWO"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-352">
-        <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="TO_POSITION_DIMENSION_ONE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-353">
-        <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="TO_POSITION_DIMENSION_TWO"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-354">
-        <createIndex indexName="INDX_USER_FNAME" tableName="CATISSUE_USER" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_USER_FNAME" tableName="CATISSUE_USER"  unique="false">
             <column name="FIRST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-355">
-        <createIndex indexName="INDX_USER_LNAME" tableName="CATISSUE_USER" tablespace="USERS" unique="false">
+        <createIndex indexName="INDX_USER_LNAME" tableName="CATISSUE_USER"  unique="false">
             <column name="LAST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-357">
-        <createIndex indexName="KEY_GENERATOR_KEY_TYPE_INDEX" tableName="KEY_SEQ_GENERATOR" tablespace="USERS" unique="false">
+        <createIndex indexName="KEY_GENERATOR_KEY_TYPE_INDEX" tableName="KEY_SEQ_GENERATOR"  unique="false">
             <column name="KEY_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-358">
-        <createIndex indexName="KEY_SEQ_GENERATOR_INDEX" tableName="KEY_SEQ_GENERATOR" tablespace="USERS" unique="false">
+        <createIndex indexName="KEY_SEQ_GENERATOR_INDEX" tableName="KEY_SEQ_GENERATOR"  unique="false">
             <column name="KEY_VALUE"/>
         </createIndex>
     </changeSet>

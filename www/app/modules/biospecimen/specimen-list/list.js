@@ -77,6 +77,10 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       );
     }
 
+    $scope.viewSpecimen = function(specimen) {
+      $state.go('specimen', {specimenId: specimen.id});
+    }
+
     $scope.toggleAllSpecimenSelect = function() {
       $scope.selection.any = $scope.selection.all;
       if (!$scope.selection.all) {

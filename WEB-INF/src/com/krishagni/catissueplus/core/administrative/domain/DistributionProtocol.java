@@ -42,6 +42,8 @@ public class DistributionProtocol extends BaseEntity {
 	
 	private Set<DpDistributionSite> distributingSites = new HashSet<DpDistributionSite>();
 	
+	private Set<DpRequirement> requirements = new HashSet<DpRequirement>();
+	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -142,6 +144,14 @@ public class DistributionProtocol extends BaseEntity {
 		this.distributingSites = distributingSites;
 	}
 
+	public Set<DpRequirement> getRequirements() {
+		return requirements;
+	}
+
+	public void setRequirements(Set<DpRequirement> requirements) {
+		this.requirements = requirements;
+	}
+
 	public void update(DistributionProtocol distributionProtocol) {
 		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
 			setShortTitle(Utility.getDisabledValue(distributionProtocol.getShortTitle(), 50));
@@ -189,5 +199,15 @@ public class DistributionProtocol extends BaseEntity {
 		}
 		
 		return sites;
+	}
+	
+	public boolean hasRequirement(String specimenType, String anatomicSite, String pathologyStatus) {
+		for (DpRequirement req : getRequirements()) {
+			if (req.equalsSpecimenGroup(specimenType, anatomicSite, pathologyStatus)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

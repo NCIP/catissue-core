@@ -50,6 +50,8 @@
     "view_jobs": "View Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
     "update": "Update",
     "loading": "Loading...",
     "help": "Help",
@@ -149,6 +151,10 @@
     "ppids": "Participant Protocol IDs",
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
+    "participant_count": "Participants",
+    "specimen_count": "Specimens",
+    "view_details": "View Details",
+    "view_participants": "View Participants",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
@@ -255,6 +261,8 @@
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
     "search_results": "Participant Search Result for {{key}}",
+    "visits_count": "Visits",
+    "specimens_count": "Specimens",
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -586,6 +594,8 @@
     "name": "Name",
     "department_name": "Department Name",
     "departments": "Departments",
+    "depts_count": "Departments",
+    "users_count": "Users",
 
     "bulk_import": "Import Institutes",
     "bulk_import_jobs": "Import Institutes Job List",
@@ -624,6 +634,7 @@
     "coordinators": "Coordinators",
     "type": "Type",
     "address": "Address",
+    "cp_count": "Collection Protocols",
 
     "bulk_import": "Import Sites",
     "bulk_import_jobs": "Import Sites Job List",
@@ -672,7 +683,9 @@
     "closed": "Closed",
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
+    "add_requirement": "Add Specimen Requirement",
     "all_sites": "All current and future sites",
+    "dist_spmns_count": "Distributed Specimens",
 
     "tooltip": {
       "view_details": "Click to view/edit Distribution Protocol details",
@@ -685,7 +698,8 @@
     
     "menu": {
       "overview": "Overview",
-      "history": "History"
+      "history": "History",
+      "requirements": "Requirements"
     },
 
     "filter": {
@@ -702,13 +716,20 @@
       "reopen": "Reopen"
     },
     
-    "history": {
+    "distribution_order": {
       "order_name": "Order Name",
       "dist_date": "Distribution Date",
       "specimen_type": "Specimen Type",
       "anatomic_site": "Anatomic Site",
       "pathology_status": "Pathology Status",
-      "specimens_cnt": "Specimens Distributed"
+      "specimens_dist": "Specimens Distributed",
+      "specimen_cnt": "Specimen Count",
+      "target": "Target",
+      "distributed": "Distributed",
+      "quantity_specimen": "Quantity Per Specimen",
+      "comments": "Comments",
+      "confirm_delete_req_title": "Deleting distribution requirement confirmation",
+      "confirm_delete_req": "Are you sure you want to delete this distribution requirement ?"
     }
   },
 
@@ -747,6 +768,8 @@
     "locked": "User {{firstName}} {{lastName}} has been locked. Unlock?",
     "unlock_user": "Unlock User",
     "user_unlocked": "User unlocked successfully",
+    "cp_count": "Collection Protocols",
+    "user_since": "User Since",
 
     "user_roles": "User Roles",
     "bulk_import_users": "Import Users",
@@ -864,6 +887,7 @@
     "replicated_successfully": "Container {{name}} replicated successfully",
     "search": "Type storage container name to filter containers",
     "no_containers_match_search": "No containers match search criteria to store specimen/s",
+    "created_by": "Created By",
 
     "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",
@@ -1489,5 +1513,130 @@
       "subject": "Subject",
       "feedback": "Feedback",
       "success_message": "Feedback sent successfully"
+    },
+    
+    "settings": {
+      "title": "Settings",
+      "modules": "Modules",
+      "property": "Property",
+      "description": "Description",
+      "value": "Value",
+      "existing_value": "Existing Value",
+      "new_value": "New Value",
+      "last_updated": "Last Updated",
+      "success_message": "Setting updated successfully",
+      "invalid_value": "New value must not be same as old value",
+      
+      "auth": {
+        "title": "Authentication",
+        "allowed_failed_logins": "Maximum Failed Login Attempts",
+        "allowed_failed_logins_desc": "Number of consecutive failed logins that are allowed before user account is locked.",
+        "token_inactive_interval": "Session Timeout Limit (minutes)",
+        "token_inactive_interval_desc": "Minutes of inactiveness after which a user is automatically logged out.",
+        "verify_token_ip_address": "IP Address Validation",
+        "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued."
+      },
+
+      "biospecimen": {
+        "title": "Biospecimen",
+        "cp_coding_enabled": "Enable CP Coding",
+        "cp_coding_enabled_desc": "Enable short codes for collection protocol, events, and specimen requirements. Needed for barcoding.",
+        "mpi_format": "MPI Format",
+        "mpi_format_desc": "Format for auto-generating master patient index (MPI).",
+        "mpi_generator": "MPI Custom Generator",
+        "mpi_generator_desc": "Custom Java class to auto-generate master patient index (MPI).",
+        "mpi_pattern": "MPI RegEx Pattern",
+        "mpi_pattern_desc": "RegEx pattern to validate master patient index (MPI).",
+        "mpi_validator": "MPI Custom Validator",
+        "mpi_validator_desc": "Custom Java class to validate master patient index (MPI).",
+        "mrn_restriction_enabled": "Site based Participant Access",
+        "mrn_restriction_enabled_desc": "Restrict access to participants based on the user's sites. By default all participants within a protocol are displayed.",
+        "participant_consent_dir": "Consent File Directory",
+        "participant_consent_dir_desc": "Folder on the server to store participant consent files.",
+        "participant_uid_pattern": "UID Pattern",
+        "participant_uid_pattern_desc": "Pattern for participant unique identifier (UID)",
+        "participant_uid_validator": "UID Custom Validator",
+        "participant_uid_validator_desc": "Custom validator for participant Unique ID field.",
+        "specimen_label_print_rules": "Specimen Label Print Rules",
+        "specimen_label_print_rules_desc": "CSV file containing the conditions which decides the data to be printed as labels and which printer to use",
+        "specimen_label_printer": "Specimen Label Printer Implementor",
+        "specimen_label_printer_desc": "Name of the Java bean defined in the spring context for the implementor class",
+        "specimen_type_abbr_map": "Specimen Type Abbreviation Mapping",
+        "specimen_type_abbr_map_desc": "CSV file containing mapping between specimen types and its abbreviation. Needed for label generation. ",
+        "spmn_path_status_abbr_map": "Pathology Status Abbreviation Mapping",
+        "spmn_path_status_abbr_map_desc": "CSV file containing mapping between specimen pathology status and its abbreviations. Needed for label generation.",
+        "spr_deidentifier": "SPR De-identification",
+        "spr_deidentifier_desc": "Surgical pathology report de-identification",
+        "spr_dir": "SPR Directory",
+        "spr_dir_desc": "Folder on the server to store surgical pathology report files.",
+        "uid_mandatory": "UID Mandatory",
+        "uid_mandatory_desc": "Enable participant's unique identifier field as mandatory",
+        "visit_label_print_rules": "Visit Label Print Rules",
+        "visit_label_print_rules_desc": "CSV file containing the conditions which decides the data to be printed as labels and which printer to use",
+        "visit_label_printer": "Visit Label Printer Implementor",
+        "visit_label_printer_desc": "Name of the Java bean defined in the spring context for the implementor class"
+      },
+
+      "common": {
+        "title": "Common",
+        "app_url": "Application URL",
+        "app_url_desc": "Server URL to be used in the emails to end users.",
+        "data_dir": "Data Directory",
+        "data_dir_desc": "Data directory to store uploaded data",
+        "feedback_enabled": "Feedback To Developers",
+        "feedback_enabled_desc": "Gives an option for end users to send feedback to developers.",
+        "locale": "Locale",
+        "locale_desc": "Locale in which the server has to be deployed. By default, it assumes the server's locale.",
+        "support_email": "Developer Email Address",
+        "support_email_desc": "Email address for end users to email feedback on OpenSpecimen.",
+        "welcome_video_source": "Welcome Video Source",
+        "welcome_video_source_desc": "Add an welcome video to end users during sign up process. E.g. from YouTube, Vimeo etc",
+        "welcome_video_url": "Welcome Video URL",
+        "welcome_video_url_desc": "URL for welcome video"
+      },
+
+      "email": {
+        "title": "Email",
+        "account_id": "OpenSpecimen Email Address",
+        "account_id_desc": "Account from which the OpenSpecimen will send emails. E.g. openspecimen@mycenter.edu.",
+        "account_password": "Account Password",
+        "account_password_desc": "Password for the OpenSpecimen email account.",
+        "admin_email_id": "Administrator Email Address",
+        "admin_email_id_desc": "Email address of the OpenSpecimen administrator. Will be used to CC all emails.",
+        "auth_enabled": "Email Authentication",
+        "auth_enabled_desc": "Enable if email authentication is required for your email server.",
+        "server_host": "Email Server Hostname",
+        "server_host_desc": "Email server hostname.",
+        "server_port": "Email Server Port",
+        "server_port_desc": "Email server port.",
+        "starttls_enabled": "StartTLS",
+        "starttls_enabled_desc": "Enable if StartTLS is to be used for your email server."
+      },
+
+      "notifications": {
+        "title": "Notifications",
+        "email_order_distributed": "Distribution Notification",
+        "email_order_distributed_desc": "Email notifications when specimens are distributed.",
+        "email_query_export_data": "Query Export Notification",
+        "email_query_export_data_desc": "Email notifications when data is exported from query results.",
+        "email_query_share_query_folder": "Share Query Folder Notification",
+        "email_query_share_query_folder_desc": "Email notifications when a query folder is shared with another user.",
+        "email_specimen_list_shared": "Share Specimen List Notification",
+        "email_specimen_list_shared_desc": "Email notifications when a specimen list is shared with another user.",
+        "email_users_created": "User Creation Notification",
+        "email_users_created_desc": "Email notifications when a new user is created.",
+        "email_users_forgot_password_link": "Forgot Password Link Notification",
+        "email_users_forgot_password_link_desc": "Email notifications to send the forgot password link.",
+        "email_users_new_user_request": "New User Request Notification",
+        "email_users_new_user_request_desc": "Email notifications when a new user is created to the system administrator.",
+        "email_users_passwd_changed": "Password Change Notification",
+        "email_users_passwd_changed_desc": "Email notifications on password change.",
+        "email_users_request_rejected": "User Request Rejected Notification",
+        "email_users_request_rejected_desc": "Email notifications when a user registration is rejected.",
+        "email_users_role_updated": "Role Updated Notification",
+        "email_users_role_updated_desc": "Email notifications when a user's role is updated.",
+        "email_users_signed_up": "User Signup Notification",
+        "email_users_signed_up_desc": "Email notifications when a new user signs up."
+      }
     }
 }

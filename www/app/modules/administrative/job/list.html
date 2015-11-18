@@ -18,44 +18,44 @@
   </div>
 
   <div class="container">
-    <div class="os-table">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col col-xs-5">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
             <span translate="jobs.title">Title</span>
-          </div>
-          <div class="col col-xs-2">
+          </th>
+          <th class="col">
             <span translate="jobs.created_by">Created By</span>
-          </div>
-          <div class="col col-xs-2">
+          </th>
+          <th class="col">
             <span translate="jobs.type">Job Type</span>
-          </div>
-          <div class="col col-xs-2">
+          </th>
+          <th class="col">
             <span translate="jobs.last_run_on">Last Run On</span>
-          </div>
-          <div class="col col-xs-1">
+          </th>
+          <th class="col">
             <span>&nbsp;</span>
-          </div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="job in jobs">
-          <div class="col col-xs-5">
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="job in jobs" os-row-click="executeJob(job)">
+          <td class="col">
             <a ng-click="executeJob(job)">
               <span>#{{job.id}} {{job.name}}</span>
             </a>
-          </div>
-          <div class="col col-xs-2">
+          </td>
+          <td class="col">
             <span>{{job.createdBy.firstName}} {{job.createdBy.lastName}}</span>
-          </div>
-          <div class="col col-xs-2">
+          </td>
+          <td class="col">
             <span>{{'jobs.types.' + job.type | translate}}</span>
-          </div>
-          <div class="col col-xs-2" ng-switch on="!!job.lastRunOn">
+          </td>
+          <td class="col" ng-switch on="!!job.lastRunOn">
             <span ng-switch-when="true">{{job.lastRunOn | date: global.dateTimeFmt}}</span>
             <span ng-switch-default translate="common.na">Not Available</span>
-          </div>
-          <div class="col col-xs-1 os-more-options">
+          </td>
+          <td class="col os-more-options os-click-esc">
             <div dropdown>
               <button class="btn btn-xs btn-default dropdown-toggle">
                 <span class="fa fa-ellipsis-v"></span>
@@ -81,12 +81,11 @@
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <div os-right-drawer ng-include="'modules/administrative/job/search.html'"> 
-  </div>
+  <div os-right-drawer ng-include="'modules/administrative/job/search.html'"></div>
 </div>

@@ -37,6 +37,11 @@
     </field>  
 
     <field>
+      <caption>#getMessage("specimen_pathological_status")</caption>
+      <attribute>pathology</attribute>
+    </field> 
+
+    <field>
       <caption>#getMessage("specimen_initial_quantity")</caption>
       <attribute>initialQty</attribute>
     </field>

@@ -26,5 +26,13 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
       );
     };
 
+    Setting.updateSetting = function(setting) {
+      return $http.put(Setting.url(), setting).then(
+        function(resp) {
+          return new Setting(resp.data);
+        }
+      );
+    }
+
     return Setting;
   });

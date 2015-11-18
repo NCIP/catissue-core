@@ -1,9 +1,11 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import com.krishagni.catissueplus.core.administrative.services.DistributionProto
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Controller
 @RequestMapping("/distribution-protocols")
@@ -155,10 +158,30 @@ public class DistributionProtocolController {
 				.dpId(dpId)
 				.groupByAttrs(groupByAttrs);
 		
-		RequestEvent<DistributionOrderStatListCriteria> req = new RequestEvent<DistributionOrderStatListCriteria>(crit);
-		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(req);
+		ResponseEvent<List<DistributionOrderStat>> resp = dpSvc.getOrderStats(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/orders-report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void exportOrderStats(
+			@RequestParam(value = "dpId", required = false)
+			Long dpId,
+			
+			@RequestParam(value = "groupBy", required = false, defaultValue = "")
+			List<String> groupByAttrs,
+			
+			HttpServletResponse response) {
+		
+		DistributionOrderStatListCriteria crit = new DistributionOrderStatListCriteria()
+				.dpId(dpId)
+				.groupByAttrs(groupByAttrs);
+		
+		ResponseEvent<File> resp = dpSvc.exportOrderStats(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		Utility.sendToClient(response, "dp-order-stat.csv", resp.getPayload(), true);
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

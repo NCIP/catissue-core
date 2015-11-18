@@ -3,9 +3,13 @@ package com.krishagni.catissueplus.core.common.errors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.exception.ConstraintViolationException;
+
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
 public class OpenSpecimenException extends RuntimeException {
 	private static final long serialVersionUID = -1473557909717365251L;
@@ -84,6 +88,23 @@ public class OpenSpecimenException extends RuntimeException {
 		throw this;
 	}	
 	
+	public String getMessage() {
+		StringBuilder errorMsg = new StringBuilder();
+
+		if (CollectionUtils.isNotEmpty(errors)) {
+			for (ParameterizedError pe : errors) {
+				errorMsg.append(getMessage(pe)).append(", ");
+			}
+			errorMsg.delete(errorMsg.length() - 2, errorMsg.length());
+		} else if (exception != null) {
+			errorMsg.append(exception.getMessage());
+		} else {
+			errorMsg.append(MessageUtil.getInstance().getMessage("internal_error"));
+		}
+
+		return errorMsg.toString();
+	}
+
 	public static OpenSpecimenException userError(ErrorCode error, Object ... params) {		
 		return new OpenSpecimenException(ErrorType.USER_ERROR, error, params);
 	}
@@ -94,5 +115,9 @@ public class OpenSpecimenException extends RuntimeException {
 	
 	public static OpenSpecimenException serverError(Throwable e) {
 		return new OpenSpecimenException(e);
+	}
+
+	private String getMessage(ParameterizedError error) {
+		return MessageUtil.getInstance().getMessage(error.error().code().toLowerCase(), error.params());
 	}
 }

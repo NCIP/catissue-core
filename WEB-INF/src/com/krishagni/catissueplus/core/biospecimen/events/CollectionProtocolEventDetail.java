@@ -141,11 +141,10 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 		
 		if (fullObject) {
 			Set<SpecimenRequirement> srs = new HashSet<SpecimenRequirement>();
-			for (SpecimenRequirement sr : event.getSpecimenRequirements()) {
-				if (sr.getParentSpecimenRequirement() == null) {
-					srs.add(sr);
-				}
-			}			
+			for (SpecimenRequirement sr : event.getTopLevelAnticipatedSpecimens()) {
+				srs.add(sr);
+			}
+
 			detail.setSpecimenRequirements(SpecimenRequirementDetail.from(srs));
 		}
 		

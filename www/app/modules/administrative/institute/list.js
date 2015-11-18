@@ -12,7 +12,7 @@ angular.module('os.administrative.institute.list', ['os.administrative.models'])
         function(instituteList) {
           $scope.instituteList = instituteList;
         }
-      )
+      );
     }
 
     $scope.showInstituteOverview = function(institute) {

@@ -30,7 +30,7 @@ public class ConfigurationController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<ConfigSettingDetail> getConfigSettings(
-			@RequestParam(value = "module", required = true) 
+			@RequestParam(value = "module", required = false) 
 			String moduleName) {
 		
 		RequestEvent<String> req = new RequestEvent<String>(moduleName);

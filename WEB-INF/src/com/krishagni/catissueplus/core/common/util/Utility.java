@@ -138,8 +138,12 @@ public class Utility {
 		Calendar cal = Calendar.getInstance();
 		return -1 * cal.get(Calendar.ZONE_OFFSET);		
 	}
-	
+
 	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file) {
+		sendToClient(httpResp, fileName, file, false);
+	}
+
+	public static void sendToClient(HttpServletResponse httpResp, String fileName, File file, boolean deleteOnSend) {
 		InputStream in = null;
 		try {
 			String fileType = getContentType(file);
@@ -152,6 +156,10 @@ public class Utility {
 			throw new RuntimeException("Error sending file", e);
 		} finally {
 			IOUtils.closeQuietly(in);
+
+			if (deleteOnSend && file != null) {
+				file.delete();
+			}
 		}
 	}
 	

@@ -17,61 +17,61 @@
     </div>
   </div>
 
-  <div class="container os-list-container">
-    <div class="os-table">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col os-col-25">
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col os-desc-column">
             <span translate="orders.name">Title</span>
-          </div>
-          <div class="col os-col-15">
+          </th>
+          <th class="col">
             <span translate="orders.requestor">Requestor</span>
-          </div>
-          <div class="col os-col-15">
+          </th>
+          <th class="col">
             <span translate="orders.site">Site</span>
-          </div>
-          <div class="col os-col-15">
+          </th>
+          <th class="col">
             <span translate="orders.dp">Distribution Protocol</span>
-          </div>
-          <div class="col os-col-10">
+          </th>
+          <th class="col">
             <span translate="orders.date">Date</span>
-          </div>
-          <div class="col os-col-10">
+          </th>
+          <th class="col">
             <span translate="orders.status">Status</span>
-          </div>
-          <div class="col os-col-10">
+          </th>
+          <th class="col">
             <span translate="orders.specimens">Specimens</span>
-          </div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="order in orders">
-          <div class="col os-col-25">
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="order in orders" os-row-click="showOrderOverview(order)">
+          <td class="col">
             <a ui-sref="order-detail.overview({orderId: order.id})">
               #{{order.id}} {{order.name}}
             </a>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
             <span>{{order.requester.firstName}} {{order.requester.lastName}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
             <span>{{order.siteName | osNoValue}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
             <span>{{order.distributionProtocol.shortTitle}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span>{{order.executionDate | date: global.dateFmt}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span>{{'orders.statuses.' + order.status | translate}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span>{{order.specimenCnt}}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/order/search.html'"> </div>

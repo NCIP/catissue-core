@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import com.krishagni.catissueplus.core.administrative.repository.DistributionOrderDao;
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
+import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
@@ -57,6 +58,8 @@ public interface DaoFactory {
 	public SpecimenUnitDao getSpecimenUnitDao();
 	
 	public AuditDao getAuditDao();
+
+	public DpRequirementDao getDistributionProtocolRequirementDao();
 	
 	public ShipmentDao getShipmentDao();
 } 

@@ -82,6 +82,12 @@
       <attribute>biohazards</attribute>
     </field>
 
+    <field>
+      <type>datetime</type>
+      <caption>#getMessage("specimen_created_on")</caption>
+      <attribute>createdOn</attribute>
+    </field>
+    
     <record>
       <caption>#getMessage("specimen_location")</caption>
       <attribute>storageLocation</attribute>

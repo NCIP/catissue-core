@@ -11,17 +11,17 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
       return this.title;
     }
     
-    DistributionProtocol.prototype.close = function () {
+    DistributionProtocol.prototype.close = function() {
       return updateActivityStatus(this, 'Closed');
     }
     
-    DistributionProtocol.prototype.reopen = function () {
+    DistributionProtocol.prototype.reopen = function() {
       return updateActivityStatus(this, 'Active');
     }
     
-    function updateActivityStatus (dp, status) {
+    function updateActivityStatus(dp, status) {
       return $http.put(DistributionProtocol.url() + '/' + dp.$id() + '/activity-status', {activityStatus: status}).then(
-        function (result) {
+        function(result) {
           return new DistributionProtocol(result.data);
         }
       );
@@ -36,8 +36,10 @@ angular.module('os.administrative.models.dp', ['os.common.models'])
     }
     
     DistributionProtocol.prototype.historyExportUrl = function() {
-      return DistributionProtocol.url() + this.$id() + '/orders-report';
+      var params = '?dpId=' + this.$id() + '&groupBy=specimenType,anatomicSite,pathologyStatus';
+      return DistributionProtocol.url() + '/orders-report' + params;
     }
     
     return DistributionProtocol;
   });
+

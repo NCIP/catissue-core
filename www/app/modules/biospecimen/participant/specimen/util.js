@@ -139,18 +139,28 @@ angular.module('os.biospecimen.specimen')
       }
 
       scope.specimenTypes = scope.specimenClasses[specimenClass];
-    };
+    }
+
+    function loadPathologyStatuses(scope) {
+      if (scope.pathologyLoaded) {
+        return;
+      }
+
+      scope.pathologyStatuses = PvManager.getPvs('pathology-status');
+      scope.pathologyLoaded = true;
+    }
 
     return {
       collectAliquots: collectAliquots,
 
       createDerivatives: createDerivatives,
 
+      getNewDerivative: getNewDerivative,
+
       loadSpecimenClasses: loadSpecimenClasses,
 
       loadSpecimenTypes: loadSpecimenTypes,
 
-      getNewDerivative: getNewDerivative
+      loadPathologyStatuses: loadPathologyStatuses
     }
-
   });

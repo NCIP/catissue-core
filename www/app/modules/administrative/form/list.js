@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.form.list', ['os.administrative.models'])
   .controller('FormListCtrl', function(
-    $scope, $modal, $translate, Form, 
+    $scope, $state, $modal, $translate, Form,
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
@@ -38,6 +38,10 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
           loadAllForms();
         }
       );
+    }
+
+    $scope.openForm = function(form) {
+      $state.go('form-addedit', {formId: form.formId});
     }
 
     $scope.showFormContexts = function(form) {

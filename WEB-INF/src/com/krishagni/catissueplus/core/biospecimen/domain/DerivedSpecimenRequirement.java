@@ -9,6 +9,8 @@ public class DerivedSpecimenRequirement {
 	
 	private String type;
 	
+	private String pathology;
+	
 	private BigDecimal quantity;
 	
 	private BigDecimal concentration;
@@ -43,6 +45,14 @@ public class DerivedSpecimenRequirement {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getPathology() {
+		return pathology;
+	}
+
+	public void setPathology(String pathology) {
+		this.pathology = pathology;
 	}
 
 	public BigDecimal getQuantity() {

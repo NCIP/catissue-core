@@ -398,17 +398,28 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 	}
 	
-	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null) {
+	private void setPathologicalStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {		
+		String pathology = detail.getPathology();
+
+		//
+		// Pick pathology status from parent if either of following is true
+		// 1. specimen being created is aliquot
+		// 2. specimen being created is unplanned derivative whose pathology status is blank or not specified
+		//
+		boolean pathFromParent = specimen.isAliquot() ||
+			(specimen.isDerivative() &&
+			 StringUtils.isBlank(pathology) &&
+			 specimen.getSpecimenRequirement() == null);
+
+		if (specimen.getParentSpecimen() != null && pathFromParent) {
 			specimen.setPathologicalStatus(specimen.getParentSpecimen().getPathologicalStatus());
 			return;
 		}
 		
-		if (specimen.isAliquot() || specimen.isDerivative()) {
+		if (pathFromParent) {
 			return; // invalid parent specimen scenario
 		}
 		
-		String pathology = detail.getPathology();
 		if (StringUtils.isBlank(pathology)) {
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
@@ -422,7 +433,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			return;
 		}
 		
-		specimen.setPathologicalStatus(detail.getPathology());
+		specimen.setPathologicalStatus(pathology);
 	}
 	
 	private void setPathologicalStatus(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {

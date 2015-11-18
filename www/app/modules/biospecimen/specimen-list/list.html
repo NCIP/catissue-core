@@ -146,7 +146,7 @@
 </script>
 
 <script type="text/ng-template" id="specimen-list/specimens.html">
-  <div class="os-table" overflow="auto" ng-if="listSpecimens.actualCount != 0">
+  <div class="os-table os-table-hover" overflow="auto" ng-if="listSpecimens.actualCount != 0">
     <div class="os-table-head">
       <div class="row">
         <div class="col os-col-20">
@@ -175,10 +175,10 @@
     </div>
     <div class="os-table-body">
       <div class="row" ng-repeat="specimen in listSpecimens.specimens"
-        ng-class="{selected: specimen.selected}">
+        ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
         <div class="col os-col-20">
           <div class="clearfix">
-            <div class="pull-left os-select-specimen-cb">
+            <div class="pull-left os-select-specimen-cb os-click-esc">
               <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
             </div>
             <div class="pull-left" style="padding-left: 12px;">

@@ -16,7 +16,7 @@ public class DistributionOrderStat {
 	private Map<String, Object> groupByAttrVals = new HashMap<String, Object>();
 	
 	private Long distributedSpecimenCount;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -56,7 +56,7 @@ public class DistributionOrderStat {
 	public void setGroupByAttrVals(Map<String, Object> groupByAttrVals) {
 		this.groupByAttrVals = groupByAttrVals;
 	}
-
+	
 	public Long getDistributedSpecimenCount() {
 		return distributedSpecimenCount;
 	}
@@ -64,5 +64,5 @@ public class DistributionOrderStat {
 	public void setDistributedSpecimenCount(Long distributedSpecimenCount) {
 		this.distributedSpecimenCount = distributedSpecimenCount;
 	}
-	
+
 }

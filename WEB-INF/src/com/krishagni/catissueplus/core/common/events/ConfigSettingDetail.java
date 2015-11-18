@@ -2,16 +2,18 @@ package com.krishagni.catissueplus.core.common.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
+import com.krishagni.catissueplus.core.common.domain.ConfigProperty.DataType;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.domain.Module;
 
-public class ConfigSettingDetail {
+public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 	private String module;
 	
 	private String name;
@@ -25,6 +27,8 @@ public class ConfigSettingDetail {
 	private String displayNameCode;
 	
 	private String descCode;
+	
+	private Date activationDate;
 
 	public String getModule() {
 		return module;
@@ -82,6 +86,24 @@ public class ConfigSettingDetail {
 		this.descCode = descCode;
 	}
 	
+	public Date getActivationDate() {
+		return activationDate;
+	}
+
+	public void setActivationDate(Date activationDate) {
+		this.activationDate = activationDate;
+	}
+	
+	@Override
+	public int compareTo(ConfigSettingDetail o) {
+		int cmp = module.compareTo(o.module);
+		if (cmp == 0) {
+			cmp = name.compareTo(o.name);
+		}
+
+		return cmp;
+	}
+	
 	public static ConfigSettingDetail from(ConfigSetting setting) {
 		ConfigSettingDetail result = new ConfigSettingDetail();
 		
@@ -95,6 +117,7 @@ public class ConfigSettingDetail {
 		result.setDescCode(property.getDescCode());
 		result.setDisplayNameCode(property.getDisplayNameCode());
 		result.setValue(setting.getValue());
+		result.setActivationDate(setting.getActivationDate());
 		return result;
 	}
 	
@@ -105,6 +128,7 @@ public class ConfigSettingDetail {
 			result.add(from(cs));
 		}
 		
+		Collections.sort(result);
 		return result;
 	}
 }

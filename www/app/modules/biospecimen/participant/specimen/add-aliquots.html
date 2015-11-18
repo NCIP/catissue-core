@@ -85,15 +85,17 @@
 
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="os-date-time clearfix">
-          <div class="col-xs-2 input">
-            <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
-              placeholder="{{'specimens.created_on' | translate}}" required>
-            </os-date-picker>
-          </div>
-          <div class="col-xs-2">
-            <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
-            </timepicker>
+        <div class="col-xs-4">
+          <div class="os-date-time clearfix">
+            <div class="col-xs-6 input os-no-padding">
+              <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
+                placeholder="{{'specimens.created_on' | translate}}" required>
+              </os-date-picker>
+            </div>
+            <div class="col-xs-6">
+              <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
+              </timepicker>
+            </div>
           </div>
           <div os-field-error field="aliquotForm.createdOn"></div>
         </div>

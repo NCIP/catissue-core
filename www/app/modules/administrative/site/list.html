@@ -36,20 +36,49 @@
     </div>
   </div>
 
-  <div class="os-cards">
-    <div class="os-card" ng-repeat="site in siteList" ng-click="showSiteOverview(site)">
-      <h4>
-        <a title="{{'site.tooltip.view_details' | translate}}" ui-sref="site-detail.overview({siteId: site.id})"> {{site.name}} </a>
-      </h4>
-      <h5 title="{{'site.type' | translate}}">{{site.type}}</h5>
-      <p title="{{'site.code' | translate}}">{{site.code || 'N/A'}}</p>
-      <div class="stats">
-        <div class="stat col-xs-6" title="{{'site.tooltip.cp_count' | translate}}">
-          <span class="fa fa-calendar"></span>
-          <span>{{site.cpCount || 0 | number: 0}}</span>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="site.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="site.type">Type</span>
+          </th>
+          <th class="col">
+            <span translate="site.code">Code</span>
+          </th>
+          <th class="col">
+            <span translate="site.institute">Institute</span>
+          </th>
+          <th class="col">
+            <span translate="site.cp_count">Collection Protocols</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="site in siteList" os-row-click="showSiteOverview(site)">
+          <td class="col">
+            <a ui-sref="site-detail.overview({siteId: site.id})">
+              <span>{{site.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{site.type}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.code | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.instituteName}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.cpCount | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/site/search.html'"></div>
