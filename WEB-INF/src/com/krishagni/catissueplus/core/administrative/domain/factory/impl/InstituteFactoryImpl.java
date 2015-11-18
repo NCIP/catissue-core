@@ -11,19 +11,13 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteEr
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
 import com.krishagni.catissueplus.core.administrative.events.DepartmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class InstituteFactoryImpl implements InstituteFactory {
-	private DaoFactory daoFactory;
 
-	public void setDaoFactory(DaoFactory daoFactory) {
-		this.daoFactory = daoFactory;
-	}
-	
 	@Override
 	public Institute createInstitute(InstituteDetail details) {
 		Institute institute = new Institute();
@@ -51,22 +45,10 @@ public class InstituteFactoryImpl implements InstituteFactory {
 		Set<Department> departments = new HashSet<Department>();
 		
 		for (DepartmentDetail deptDetail : detail.getDepartments()) {
-			Department department = null;
-			if (deptDetail.getId() != null && detail.getId() != null) {	
-				department = daoFactory.getInstituteDao().getDepartment(deptDetail.getId(), detail.getId());
-				if(department == null) {
-					ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);
-					return;
-				}
-				
-				department.setName(deptDetail.getName());
-			} else {
-				department = new Department();
-				department.setName(deptDetail.getName());
-				department.setInstitute(institute);
-			}
-			
-			departments.add(department);
+			Department dept = new Department();
+			dept.setName(deptDetail.getName());
+			dept.setInstitute(institute);
+			departments.add(dept);
 		}
 		
 		institute.setDepartments(departments);

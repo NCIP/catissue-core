@@ -334,7 +334,6 @@
   </bean>
   
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 
   <bean id="instSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.InstituteServiceImpl">

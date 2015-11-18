@@ -2,12 +2,13 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.Department;
 
-public class DepartmentDetail {
+public class DepartmentDetail implements Comparable<DepartmentDetail> {
 
 	private Long id;
 
@@ -29,19 +30,25 @@ public class DepartmentDetail {
 		this.name = name;
 	}
 
-	public static DepartmentDetail from(Department department) {
-		DepartmentDetail details = new DepartmentDetail();
-		details.setId(department.getId());
-		details.setName(department.getName());
-		return details;
-	}
-	
-	public static List<DepartmentDetail> from(Set<Department> departments) {
-		List<DepartmentDetail> departmentsDetails = new ArrayList<DepartmentDetail>();
-		for(Department department : departments) {
-			departmentsDetails.add(from(department));
-		}
-		return departmentsDetails;
+	@Override
+	public int compareTo(DepartmentDetail o) {
+		return this.name.compareTo(o.name);
 	}
 
+	public static DepartmentDetail from(Department department) {
+		DepartmentDetail result = new DepartmentDetail();
+		result.setId(department.getId());
+		result.setName(department.getName());
+		return result;
+	}
+
+	public static List<DepartmentDetail> from(Set<Department> departments) {
+		List<DepartmentDetail> result = new ArrayList<DepartmentDetail>();
+		for(Department department : departments) {
+			result.add(from(department));
+		}
+
+		Collections.sort(result);
+		return result;
+	}
 }

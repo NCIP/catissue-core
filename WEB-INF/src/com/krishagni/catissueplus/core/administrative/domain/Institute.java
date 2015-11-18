@@ -1,15 +1,18 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
-import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -67,12 +70,7 @@ public class Institute extends BaseEntity {
 
 	public void update(Institute other) {		
 		setName(other.getName());
-		
-		CollectionUpdater.update(this.getDepartments(), other.getDepartments());
-		for (Department department : this.getDepartments()) {
-			department.setInstitute(this);
-		}
-		
+		updateDepartments(other.getDepartments());
 		updateActivityStatus(other.getActivityStatus());
 	}
 	
@@ -100,7 +98,33 @@ public class Institute extends BaseEntity {
 		
 		setActivityStatus(activityStatus);
 	}
-	
+
+	private void updateDepartments(Collection<Department> newDepts) {
+		Map<String, Department> existingDeptsMap = new HashMap<String, Department>();
+		for (Department dept : getDepartments()) {
+			existingDeptsMap.put(dept.getName(), dept);
+		}
+
+		for (Department dept : newDepts) {
+			if (existingDeptsMap.remove(dept.getName()) != null) {
+				continue;
+			}
+
+			Department newDept = new Department();
+			newDept.setName(dept.getName());
+			newDept.setInstitute(this);
+			getDepartments().add(newDept);
+		}
+
+		for (Department removedDept : existingDeptsMap.values()) {
+			if (CollectionUtils.isNotEmpty(removedDept.getUsers())) {
+				throw OpenSpecimenException.userError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND, removedDept.getName());
+			}
+		}
+
+		getDepartments().removeAll(existingDeptsMap.values());
+	}
+
 	private void updateActivityStatus(String newActivityStatus) {
 		if (activityStatus.equals(newActivityStatus)) {
 			return;
@@ -119,5 +143,4 @@ public class Institute extends BaseEntity {
 			throw OpenSpecimenException.userError(InstituteErrorCode.REF_ENTITY_FOUND);
 		}
 	}
-	
 }
