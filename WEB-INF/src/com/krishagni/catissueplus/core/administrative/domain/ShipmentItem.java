@@ -5,7 +5,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
 public class ShipmentItem extends BaseEntity {
 	public enum ReceivedQuality {
-		ACCEPTABLE,
+		ACCEPTABLE, 
+		
 		UNACCEPTABLE
 	}
 	

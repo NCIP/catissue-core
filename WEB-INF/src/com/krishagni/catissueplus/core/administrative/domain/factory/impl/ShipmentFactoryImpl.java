@@ -105,7 +105,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		Shipment.Status status = null;
 			
 		try {
-			status = Shipment.Status.valueOf(detail.getStatus());
+			status = Shipment.Status.valueOf(detail.getStatus().toUpperCase());
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShipmentErrorCode.INVALID_STATUS);
 			return;

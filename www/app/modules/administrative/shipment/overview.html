@@ -95,7 +95,7 @@
                 </os-specimen-unit>
               </td>
               <td class="col" ng-if="shipment.status == 'RECEIVED'">
-                <span>{{item.receivedQuality}}</span>
+                <span>{{"shipments.quality." + item.receivedQuality | translate}}</span>
               </td>
             </tr>
           </tbody>

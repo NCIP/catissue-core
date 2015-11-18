@@ -1395,8 +1395,8 @@
     "specimens": "Specimens",
     "receiving_institute": "Receiving Institute",
     "receiving_site": "Receiving Site",
-    "sender_comments": "Sender's Comment",
-    "receiver_comments": "Receiver's Comment",
+    "sender_comments": "Sender Comment",
+    "receiver_comments": "Receiver Comment",
     "details": "Shipment Details",
     "no_specimens_in_list": "No specimens in shipping list to shipping. Add at least one specimen",
     "enter_specimen_label": "To add specimens to shipping list, enter labels separated by a comma/tab/newline and click add",
@@ -1423,6 +1423,11 @@
       "SHIPPED": "Shipped",
       "PENDING": "Pending",
       "RECEIVED": "Received"
+    },
+
+    "quality": {
+      "ACCEPTABLE": "Acceptable",
+      "UNACCEPTABLE": "Unacceptable"
     },
 
     "buttons": {

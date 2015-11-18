@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -30,6 +31,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ShipmentServiceImpl implements ShipmentService {
 	private static final String SHIPMENT_SHIPPED_EMAIL_TMPL = "shipment_shipped";
+	
+	private static final String SHIPMENT_RECEIVED_EMAIL_TMPL = "shipment_received";
 	
 	private DaoFactory daoFactory;
 	
@@ -93,13 +96,15 @@ public class ShipmentServiceImpl implements ShipmentService {
 			ensureValidSpecimens(shipment, ose);
 			ose.checkAndThrow();
 			
-			Status inputStatus = Status.valueOf(detail.getStatus());
-			if (inputStatus == Status.SHIPPED) {
+			if (shipment.isShipped()) {
 				shipment.ship();
 			}
 			
 			getShipmentDao().saveOrUpdate(shipment);
-			sendShipmentProcessedEmail(shipment, null);
+			
+			if (shipment.isShipped()) {
+				sendShipmentShippedEmail(shipment);
+			}
 			return ResponseEvent.response(ShipmentDetail.from(shipment));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -128,7 +133,13 @@ public class ShipmentServiceImpl implements ShipmentService {
 			Status oldStatus = existing.getStatus();
 			existing.update(newShipment);
 			getShipmentDao().saveOrUpdate(existing);
-			sendShipmentProcessedEmail(existing, oldStatus);
+			
+			if (oldStatus == Status.PENDING && existing.isShipped()) {
+				sendShipmentShippedEmail(existing);
+			} else if (oldStatus == Status.SHIPPED && existing.isReceived()) {
+				sendShipmentReceivedEmail(existing);
+			}
+			
 			return ResponseEvent.response(ShipmentDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -176,18 +187,28 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 	}
 	
-	private void sendShipmentProcessedEmail(Shipment shipment, Status oldStatus) {
-		if (!shipment.isShipped() || shipment.getStatus().equals(oldStatus)) {
-			return;
-		}
-		
-		List<String> emailIds = Utility.<List<String>>collect(shipment.getSite().getCoordinators(), "emailAddress");
+	private void sendShipmentShippedEmail(Shipment shipment) {
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress");
+		emailIds.add(shipment.getSender().getEmailAddress());
 		String[] subjectParams = {shipment.getName()};
 		
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put("$subject", subjectParams);
 		props.put("shipment", shipment);
 		emailService.sendEmail(SHIPMENT_SHIPPED_EMAIL_TMPL, emailIds.toArray(new String[0]), props);
+	}
+	
+	private void sendShipmentReceivedEmail(Shipment shipment) {
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress");
+		emailIds.add(shipment.getSender().getEmailAddress());
+		emailIds.add(shipment.getReceiver().getEmailAddress());
+		
+ 		String[] subjectParams = {shipment.getName()};
+		
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put("$subject", subjectParams);
+		props.put("shipment", shipment);
+		emailService.sendEmail(SHIPMENT_RECEIVED_EMAIL_TMPL, emailIds.toArray(new String[0]), props);
 	}
 	
 	private ShipmentDao getShipmentDao() {
