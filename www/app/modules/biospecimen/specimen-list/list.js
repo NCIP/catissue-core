@@ -5,7 +5,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function init() { 
       $scope.orderCreateOpts = {resource: 'Order', operations: ['Create']};
-      $scope.shippingOrderCreateOpts = {resource: 'Order', operations: ['Create']};
+      $scope.shipmentCreateOpts = {resource: 'Order', operations: ['Create']};
       $scope.listSpecimens = {
         specimens: [],
         actualCount: 0
@@ -134,7 +134,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       }
 
       SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('shipping-order-addedit', {orderId: ''});
+      $state.go('shipment-addedit', {orderId: ''});
     }
 
     init();

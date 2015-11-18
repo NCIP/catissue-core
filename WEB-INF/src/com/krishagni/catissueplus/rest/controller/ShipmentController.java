@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.events.ShippingOrderDetail;
-import com.krishagni.catissueplus.core.administrative.events.ShippingOrderListCriteria;
-import com.krishagni.catissueplus.core.administrative.services.ShippingOrderService;
+import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
+import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
+import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 @Controller
-@RequestMapping("/shipping-orders")
-public class ShippingOrderController {
+@RequestMapping("/shipments")
+public class ShipmentController {
 
 	@Autowired
-	private ShippingOrderService shipOrderSvc;
+	private ShipmentService shipmentSvc;
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<ShippingOrderDetail> getOrders(
+	public List<ShipmentDetail> getOrders(
 			@RequestParam(value = "name", required = false, defaultValue = "")
 			String name,
 			
@@ -42,13 +42,13 @@ public class ShippingOrderController {
 			@RequestParam(value = "maxResults", required = false, defaultValue = "50")
 			int maxResults) {
 		
-		ShippingOrderListCriteria listCrit = new ShippingOrderListCriteria()
+		ShipmentListCriteria listCrit = new ShipmentListCriteria()
 				.name(name)
 				.institute(institute)
 				.startAt(startAt)
 				.maxResults(maxResults);
 		
-		ResponseEvent<List<ShippingOrderDetail>> resp = shipOrderSvc.getOrders(getRequest(listCrit));
+		ResponseEvent<List<ShipmentDetail>> resp = shipmentSvc.getShipments(getRequest(listCrit));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -57,8 +57,8 @@ public class ShippingOrderController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShippingOrderDetail getOrder(@PathVariable("id") Long id) {
-		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.getOrder(getRequest(id));
+	public ShipmentDetail getOrder(@PathVariable("id") Long id) {
+		ResponseEvent<ShipmentDetail> resp = shipmentSvc.getShipment(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
@@ -67,41 +67,26 @@ public class ShippingOrderController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShippingOrderDetail createOrder(
+	public ShipmentDetail createOrder(
 			@RequestBody
-			ShippingOrderDetail detail) {
-		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.createOrder(getRequest(detail));
+			ShipmentDetail detail) {
+		ResponseEvent<ShipmentDetail> resp = shipmentSvc.createShipment(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
+		
 		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShippingOrderDetail updateOrder(
+	public ShipmentDetail updateOrder(
 			@PathVariable
 			Long id,
 			
 			@RequestBody
-			ShippingOrderDetail detail) {
+			ShipmentDetail detail) {
 		detail.setId(id);
-		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.updateOrder(getRequest(detail));
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload();
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}/receive-shipment")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody	
-	public ShippingOrderDetail receiveOrder(
-			@PathVariable
-			Long id,
-			
-			@RequestBody
-			ShippingOrderDetail detail) {
-		detail.setId(id);
-		ResponseEvent<ShippingOrderDetail> resp = shipOrderSvc.receiveOrder(getRequest(detail));
+		ResponseEvent<ShipmentDetail> resp = shipmentSvc.updateShipment(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

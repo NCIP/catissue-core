@@ -68,8 +68,8 @@ angular.module('openspecimen')
     ];
 
     var qualityStatuses = [
-      'Acceptable',
-      'Unacceptable'
+      'ACCEPTABLE',
+      'UNACCEPTABLE'
     ]
 
     var pvMap = {

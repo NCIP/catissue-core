@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
-public class ShippingOrderListCriteria extends AbstractListCriteria<ShippingOrderListCriteria> {
+public class ShipmentListCriteria extends AbstractListCriteria<ShipmentListCriteria> {
 	private String name;
 	
 	private String institute;
@@ -11,7 +11,7 @@ public class ShippingOrderListCriteria extends AbstractListCriteria<ShippingOrde
 		return name;
 	}
 	
-	public ShippingOrderListCriteria name(String name) {
+	public ShipmentListCriteria name(String name) {
 		this.name = name;
 		return self();
 	}
@@ -20,13 +20,13 @@ public class ShippingOrderListCriteria extends AbstractListCriteria<ShippingOrde
 		return institute;
 	}
 	
-	public ShippingOrderListCriteria institute(String institute) {
+	public ShipmentListCriteria institute(String institute) {
 		this.institute = institute;
 		return self();
 	}
 	
 	@Override
-	public ShippingOrderListCriteria self() {
+	public ShipmentListCriteria self() {
 		return this;
 	}
 

@@ -712,14 +712,14 @@
     <property name="emailService" ref="emailService"/>
   </bean>
   
-  <bean id="shippingOrderFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ShippingOrderFactoryImpl">
+  <bean id="shipmentFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ShipmentFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenFactory" ref="specimenFactory"/>
   </bean>
   
-  <bean id="shippingOrderService" class="com.krishagni.catissueplus.core.administrative.services.impl.ShippingOrderServiceImpl">
+  <bean id="shipmentSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.ShipmentServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory" />
-    <property name="shippingFactory" ref="shippingOrderFactory" />
+    <property name="shipmentFactory" ref="shipmentFactory" />
     <property name="emailService" ref="emailService"/>
   </bean>
   

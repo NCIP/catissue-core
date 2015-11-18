@@ -2,19 +2,19 @@
   <div os-page-header>
     <ul os-breadcrumbs>
       <li>
-        <a ui-sref="shipping-order-list" translate="shipping_orders.list">Shipping Orders</a>
+        <a ui-sref="shipment-list" translate="shipments.list">Shipments</a>
       </li>
     </ul>
-    <h3>{{order.name}}</h3>
+    <h3>{{shipment.name}}</h3>
 
     <div class="os-btns right">
       <button class="primary" 
-        ui-sref="shipping-order-receive({orderId: order.id})" ng-if="order.status == 'SHIPPED'">
+        ui-sref="shipment-receive({shipmentId: shipment.id})" ng-if="shipment.status == 'SHIPPED'">
         <span class="fa fa-plus"></span>
-        <span translate="shipping_orders.buttons.receive">Receive</span>
+        <span translate="shipments.buttons.receive">Receive</span>
       </button>
       <button class="primary" 
-        ui-sref="shipping-order-addedit({orderId: order.id})" ng-if="order.status == 'PENDING'">
+        ui-sref="shipment-addedit({shipmentId: shipment.id})" ng-if="shipment.status == 'PENDING'">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
@@ -24,9 +24,9 @@
   <div os-side-menu>
     <ul>
       <li ui-sref-active="active">
-        <a ui-sref="shipping-order-detail.overview"> 
+        <a ui-sref="shipment-detail.overview"> 
           <i class="fa fa-eye"></i>
-          <span class="os-title" translate="shipping_orders.menu.overview">Overview</span>
+          <span class="os-title" translate="shipments.menu.overview">Overview</span>
         </a>
       </li>
     </ul>

@@ -14,7 +14,7 @@
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
     "distribution_orders": "Distribution Orders",
-    "shipping_orders": "Shipping Orders",
+    "shipping_and_tracking": "Shipping and Tracking",
     "jobs": "Jobs",
 
     "cp_desc": "Create, update SOP of visits and specimens",
@@ -29,7 +29,7 @@
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
-    "shipping_orders_desc": "Create, execute request orders for shipping specimens",
+    "shipping_and_tracking_desc": "Create, receive shipments for shipping specimens",
     "jobs_desc": "Create, schedule, execute jobs"
   },
 
@@ -1357,14 +1357,15 @@
     }
   },
 
-  "shipping_orders": {
-    "list": "Shipping Orders",
-    "create_order": "Create Shipping Order",
+  "shipments": {
+    "list": "Shipments",
+    "create_shipment": "Create Shipment",
     "name": "Name",
     "site": "Site",
     "sender": "Sender",
     "receiver": "Receiver",
-    "shipping_date": "Shipping Date",
+    "shipped_date": "Shipped Date",
+    "received_date": "Received Date",
     "creation_date": "Creation Date",
     "status": "Status",
     "specimens": "Specimens",
@@ -1372,8 +1373,8 @@
     "receiving_site": "Receiving Site",
     "sender_comments": "Sender's Comment",
     "receiver_comments": "Receiver's Comment",
-    "details": "Order Details",
-    "no_specimens_in_list": "No specimens in order list to shipping. Add at least one specimen",
+    "details": "Shipment Details",
+    "no_specimens_in_list": "No specimens in shipping list to shipping. Add at least one specimen",
     "enter_specimen_label": "To add specimens to shipping list, enter labels separated by a comma/tab/newline and click add",
     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
@@ -1407,8 +1408,8 @@
     },
 
     "tooltip": {
-      "create": "Create new shipping order",
-      "search": "Filter out shipping orders"
+      "create": "Create new shipment",
+      "search": "Filter out shipments"
     }
   },
 

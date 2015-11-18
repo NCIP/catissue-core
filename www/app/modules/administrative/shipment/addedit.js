@@ -1,25 +1,25 @@
 
-angular.module('os.administrative.shippingorder.addedit', ['os.administrative.models', 'os.biospecimen.models'])
-  .controller('ShippingOrderAddEditCtrl', function(
-    $scope, $state, order, ShippingOrder, 
+angular.module('os.administrative.shipment.addedit', ['os.administrative.models', 'os.biospecimen.models'])
+  .controller('ShipmentAddEditCtrl', function(
+    $scope, $state, shipment, Shipment, 
     Institute, Site, Specimen, SpecimensHolder, Alerts) {
 
     function init() {
-      $scope.order = order;
-      $scope.order.orderItems = order.orderItems || [];
+      $scope.shipment = shipment;
+      $scope.shipment.shipmentItems = shipment.shipmentItems || [];
       $scope.input = {labelText: '', allItemStatus: false};
 
-      if (!order.id && angular.isArray(SpecimensHolder.getSpecimens())) {
-        order.orderItems = getOrderItems(SpecimensHolder.getSpecimens());
+      if (!shipment.id && angular.isArray(SpecimensHolder.getSpecimens())) {
+        shipment.shipmentItems = getShipmentItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
       }
       
-      if (!order.shippingDate) {
-        order.shippingDate = new Date();
+      if (!shipment.shippedDate) {
+        shipment.shippedDate = new Date();
       }
 
-      if ($scope.order.instituteName) {
-        $scope.loadSites($scope.order.instituteName);
+      if ($scope.shipment.instituteName) {
+        $scope.loadSites($scope.shipment.instituteName);
       }
 
       loadInstitutes();
@@ -33,8 +33,7 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
       );
     }
 
-    function getOrderItems(specimens) {
-      
+    function getShipmentItems(specimens) {
       return specimens.filter(
         function(specimen) {
           return specimen.availableQty > 0;
@@ -47,10 +46,10 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
     }
 
     function saveOrUpdate() {
-      var order = angular.copy($scope.order);
-      order.$saveOrUpdate().then(
-        function(savedOrder) {
-          $state.go('shipping-order-detail.overview', {orderId: savedOrder.id});
+      var shipment = angular.copy($scope.shipment);
+      shipment.$saveOrUpdate().then(
+        function(savedShipment) {
+          $state.go('shipment-detail.overview', {shipmentId: savedShipment.id});
         }
       );
     };
@@ -73,7 +72,7 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
         return; 
       }
 
-      angular.forEach($scope.order.orderItems, function(item) {
+      angular.forEach($scope.shipment.shipmentItems, function(item) {
         var idx = labels.indexOf(item.specimen.label);
         if (idx != -1) {
           labels.splice(idx, 1);
@@ -86,26 +85,28 @@ angular.module('os.administrative.shippingorder.addedit', ['os.administrative.mo
 
       Specimen.listByLabels(labels).then(
         function (specimens) {
-          Array.prototype.push.apply($scope.order.orderItems, getOrderItems(specimens));
+          angular.forEach(getShipmentItems(specimens), function(item) {
+            $scope.shipment.shipmentItems.push(item);
+          });
           $scope.input.labelText = '';
         }
       );
     }
 
-    $scope.removeOrderItem = function(orderItem) {
-      var idx = order.orderItems.indexOf(orderItem);
+    $scope.removeShipmentItem = function(shipmentItem) {
+      var idx = shipment.shipmentItems.indexOf(shipmentItem);
       if (idx != -1) {
-        order.orderItems.splice(idx, 1);
+        shipment.shipmentItems.splice(idx, 1);
       }
     }
 
     $scope.ship = function() {
-      $scope.order.status = 'SHIPPED';
+      $scope.shipment.status = 'SHIPPED';
       saveOrUpdate();
     }
 
     $scope.saveDraft = function() {
-      $scope.order.status = 'PENDING';
+      $scope.shipment.status = 'PENDING';
       saveOrUpdate();
     }
 

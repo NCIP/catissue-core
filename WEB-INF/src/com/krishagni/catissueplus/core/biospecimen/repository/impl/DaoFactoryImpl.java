@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DistributionPro
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.PermissibleValueDao;
 import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
-import com.krishagni.catissueplus.core.administrative.repository.ShippingOrderDao;
+import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
@@ -17,7 +17,7 @@ import com.krishagni.catissueplus.core.administrative.repository.impl.Distributi
 import com.krishagni.catissueplus.core.administrative.repository.impl.InstituteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.PermissibleValueDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.ScheduledJobDaoImpl;
-import com.krishagni.catissueplus.core.administrative.repository.impl.ShippingOrderDaoImpl;
+import com.krishagni.catissueplus.core.administrative.repository.impl.ShipmentDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.SiteDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.StorageContainerDaoImpl;
 import com.krishagni.catissueplus.core.administrative.repository.impl.UserDaoImpl;
@@ -205,8 +205,8 @@ public class DaoFactoryImpl implements DaoFactory {
 	}
 	
 	@Override
-	public ShippingOrderDao getShippingOrderDao() {
-		ShippingOrderDaoImpl dao = new ShippingOrderDaoImpl();
+	public ShipmentDao getShipmentDao() {
+		ShipmentDaoImpl dao = new ShipmentDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

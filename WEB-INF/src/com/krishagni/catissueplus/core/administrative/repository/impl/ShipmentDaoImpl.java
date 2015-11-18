@@ -8,27 +8,27 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.krishagni.catissueplus.core.administrative.domain.ShippingOrder;
-import com.krishagni.catissueplus.core.administrative.events.ShippingOrderListCriteria;
-import com.krishagni.catissueplus.core.administrative.repository.ShippingOrderDao;
+import com.krishagni.catissueplus.core.administrative.domain.Shipment;
+import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements ShippingOrderDao {
+public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDao {
 
 	@Override
-	public Class<ShippingOrder> getType() {
-		return ShippingOrder.class;
+	public Class<Shipment> getType() {
+		return Shipment.class;
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<ShippingOrder> getShippingOrders(ShippingOrderListCriteria crit) {
+	public List<Shipment> getShipments(ShipmentListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
-			.createCriteria(ShippingOrder.class)
-			.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
-			.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
-			.addOrder(Order.desc("id"));
+				.createCriteria(Shipment.class)
+				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
+				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
+				.addOrder(Order.desc("id"));
 		
 		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 		addNameRestrictions(query, crit, matchMode);
@@ -38,9 +38,9 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public ShippingOrder getOrderByName(String name) {
-		List<ShippingOrder> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_ORDER_BY_NAME)
+	public Shipment getShipmentByName(String name) {
+		List<Shipment> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SHIPMENT_BY_NAME)
 				.setString("name", name)
 				.list();
 		
@@ -56,7 +56,7 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 				.list();
 	}
 	
-	private void addNameRestrictions(Criteria query, ShippingOrderListCriteria crit, MatchMode matchMode) {
+	private void addNameRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
 		if (StringUtils.isBlank(crit.name())) {
 			return;
 		}
@@ -64,7 +64,7 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 		query.add(Restrictions.ilike("name", crit.name(), matchMode));
 	}
 	
-	private void addInstituteRestrictions(Criteria query, ShippingOrderListCriteria crit, MatchMode matchMode) {
+	private void addInstituteRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
 		if (StringUtils.isBlank(crit.institute())) {
 			return;
 		}
@@ -74,9 +74,9 @@ public class ShippingOrderDaoImpl extends AbstractDao<ShippingOrder> implements 
 			.add(Restrictions.ilike("institute.name", crit.institute(), matchMode));
 	}
 	
-	private static final String FQN = ShippingOrder.class.getName();
+	private static final String FQN = Shipment.class.getName();
 	
-	private static final String GET_ORDER_BY_NAME = FQN + ".getOrderByName";
+	private static final String GET_SHIPMENT_BY_NAME = FQN + ".getShipmentByName";
 	
 	private static final String GET_SHIPPED_SPECIMENS_BY_LABELS = FQN + ".getShippedSpecimensByLabels";
 }

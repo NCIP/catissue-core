@@ -2,7 +2,7 @@ package com.krishagni.catissueplus.core.administrative.domain.factory;
 
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
-public enum ShippingOrderErrorCode implements ErrorCode {
+public enum ShipmentErrorCode implements ErrorCode {
 	NOT_FOUND,
 	
 	NAME_REQUIRED,
@@ -13,9 +13,9 @@ public enum ShippingOrderErrorCode implements ErrorCode {
 	
 	DUPLICATE_SPECIMENS,
 	
-	SPECIMEN_QUALITY_REQUIRED,
+	SPECIMEN_RECEIVED_QUALITY_REQUIRED,
 	
-	INVALID_SPECIMEN_QUALITY,
+	INVALID_SPECIMEN_RECEIVED_QUALITY,
 	
 	NO_SPECIMENS_TO_SHIP,
 	
@@ -23,7 +23,9 @@ public enum ShippingOrderErrorCode implements ErrorCode {
 	
 	INVALID_STATUS,
 	
-	INVALID_SHIPPING_DATE,
+	INVALID_SHIPPED_DATE,
+	
+	INVALID_RECEIVED_DATE,
 	
 	ALREADY_SHIPPED,
 	
@@ -35,12 +37,10 @@ public enum ShippingOrderErrorCode implements ErrorCode {
 	
 	INVALID_SHIPPED_SPECIMENS,
 	
-	NOT_SHIPPED,
-	
 	STATUS_CHANGE_NOT_ALLOWED;
 	
 	@Override
 	public String code() {
-		return "SHIP_ORDER_" + this.name();
+		return "SHIPMENT_" + this.name();
 	}
 }

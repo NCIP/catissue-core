@@ -1,0 +1,83 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="shipments.list">Shipments</span>
+    </h3>
+    <div class="os-btns right">
+      <button show-if-allowed="shipmentResource.createOpts"
+        class="primary" title="{{'shipments.tooltip.create' | translate}}" ui-sref="shipment-addedit({shipmentId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" os-right-drawer-toggle title="{{'shipments.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container os-list-container">
+    <div class="os-table">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col os-col-15">
+            <span translate="shipments.name">Name</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="shipments.site">Site</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="shipments.sender">Sender</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="shipments.shipped_date">Shipped Date</span>
+          </div>
+          <div class="col os-col-15">
+            <span translate="shipments.receiver">Receiver</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="shipments.received_date">Received Date</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="shipments.status">Status</span>
+          </div>
+          <div class="col os-col-10">
+            <span translate="shipments.specimens">Specimens</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row" ng-repeat="shipment in shipments">
+          <div class="col os-col-15">
+            <a ui-sref="shipment-detail.overview({shipmentId: shipment.id})">
+              #{{shipment.id}} {{shipment.name}}
+            </a>
+          </div>
+          <div class="col os-col-15">
+            <span>{{shipment.siteName | osNoValue}}</span>
+          </div>
+          <div class="col os-col-15">
+            <span>{{shipment.sender | osUserDisplayName}}</span>
+          </div>
+          <div class="col os-col-10">
+            <span>{{shipment.shippedDate | date: global.dateFmt}}</span>
+          </div>
+          <div class="col os-col-15">
+            <span>{{shipment.receiver | osUserDisplayName | osNoValue}}</span>
+          </div>
+          <div class="col os-col-10">
+            <span>{{shipment.receivedDate | date: global.dateFmt | osNoValue}}</span>
+          </div>
+          <div class="col os-col-10">
+            <span>{{'shipments.statuses.' + shipment.status | translate}}</span>
+          </div>
+          <div class="col os-col-10">
+            <span>{{shipment.shipmentItems.length}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/shipment/search.html'"> </div>
+</div>

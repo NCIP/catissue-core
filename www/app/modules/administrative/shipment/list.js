@@ -1,20 +1,20 @@
 
-angular.module('os.administrative.shippingorder.list', ['os.administrative.models'])
-  .controller('ShippingOrderListCtrl', function(
-    $scope, ShippingOrder, Institute, Util) {
+angular.module('os.administrative.shipment.list', ['os.administrative.models'])
+  .controller('ShipmentListCtrl', function(
+    $scope, Shipment, Institute, Util) {
   
     function init() {
       $scope.filterOpts = {};
 
       loadInstitutes();
-      loadOrders($scope.filterOpts);
-      Util.filter($scope, 'filterOpts', loadOrders);
+      loadShipments($scope.filterOpts);
+      Util.filter($scope, 'filterOpts', loadShipments);
     }
 
-    function loadOrders(filterOpts) {
-      ShippingOrder.query(filterOpts).then(
+    function loadShipments(filterOpts) {
+      Shipment.query(filterOpts).then(
         function(result) {
-          $scope.orders = result; 
+          $scope.shipments = result; 
         }
       );
     }

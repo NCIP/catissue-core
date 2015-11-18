@@ -2,21 +2,32 @@
   <div os-page-header>
     <ul os-breadcrumbs>
       <li>
-        <a ui-sref="shipping-order-list" translate="shipping_orders.list">Shipping Orders</a>
+        <a ui-sref="shipment-list" translate="shipments.list">Shipments</a>
       </li>
     </ul>
     <h3>
-      <span>{{order.name}}</span>
+      <span>{{shipment.name}}</span>
     </h3>
   </div>
 
   <div class="container">
-    <form name="receiveForm" os-form-validator="receiveForm" validator="receiveFormValidator" novalidate>
-      <div class="form-group clearfix">
-        <label class="control-label col-xs-3" translate="shipping_orders.receiver_comments">Receiver Comments</label>
+    <form name="receiveForm" class="form-horizontal" 
+      os-form-validator="receiveForm" validator="receiveFormValidator" novalidate>
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="shipments.received_date">Received Date</label>
         <div class="col-xs-6">
-          <textarea type="text" name="comments" ng-model="order.receiverComments" class="form-control" 
-            placeholder="{{'shipping_orders.receiver_comments' | translate}}" rows="2">
+          <os-date-picker name="receivedDate" date="shipment.receivedDate"
+            placeholder="{{'shipments.received_date' | translate}}" required>
+          </os-date-picker>
+          <div os-field-error field="receiveForm.receivedDate"></div>
+        </div>  
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="shipments.receiver_comments">Receiver Comments</label>
+        <div class="col-xs-6">
+          <textarea type="text" name="comments" ng-model="shipment.receiverComments" class="form-control" 
+            placeholder="{{'shipments.receiver_comments' | translate}}" rows="2">
           </textarea>
         </div>
       </div>
@@ -24,22 +35,22 @@
       <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
         <thead class="os-table-head">
           <tr class="row">
-            <td class="col os-col-20" translate="shipping_orders.spec.label">Label</td>
-            <td class="col os-col-20" translate="shipping_orders.spec.desc">Description</td>
-            <td class="col os-col-15" translate="shipping_orders.spec.cp">Collection Protocol</td>
-            <td class="col os-col-10" translate="shipping_orders.spec.quantity">Quantity</td>
+            <td class="col os-col-20" translate="shipments.spec.label">Label</td>
+            <td class="col os-col-20" translate="shipments.spec.desc">Description</td>
+            <td class="col os-col-15" translate="shipments.spec.cp">Collection Protocol</td>
+            <td class="col os-col-10" translate="shipments.spec.quantity">Quantity</td>
             <td class="col os-col-25">
-              <span translate="shipping_orders.spec.location">Location</span>
+              <span translate="shipments.spec.location">Location</span>
               <a ng-click="applyFirstLocationToAll()" style="font-weight:normal">
-                (<span translate="shipping_orders.spec.copy_first_to_all">Copy First To All</span>)
+                (<span translate="shipments.spec.copy_first_to_all">Copy First To All</span>)
               </a>
             </td>
-            <td class="col os-col-10" translate="shipping_orders.spec.quality">Quality</td>
+            <td class="col os-col-10" translate="shipments.spec.quality">Quality</td>
           </tr>
         </thead>
         <tbody class="os-table-body">
-          <tr class="row" ng-repeat="item in order.orderItems"
-            ng-form="sform" ng-init="specimen = item.specimen; item.quality = qualityStatuses[0]">
+          <tr class="row" ng-repeat="item in shipment.shipmentItems"
+            ng-form="sform" ng-init="specimen = item.specimen; item.receivedQuality = qualityStatuses[0]">
             <td class="col os-col-20">
               <a ui-sref="specimen({specimenId: specimen.id})">
                 <span>{{specimen.label}}</span>
@@ -64,7 +75,7 @@
               </os-storage-position>
             </td>
             <td class="col os-col-10" style="overflow: visible;">
-              <os-select os-md-input name="quality" list="qualityStatuses" ng-model="item.quality" required></os-select>
+              <os-select os-md-input name="quality" list="qualityStatuses" ng-model="item.receivedQuality" required></os-select>
               <div os-field-error field="sform.quality"></div>
             </td>
           </tr>

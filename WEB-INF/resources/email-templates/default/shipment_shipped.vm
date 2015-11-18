@@ -1,4 +1,4 @@
-#set ( $url = "$appUrl/#/shipping-orders/${order.id}/overview" )
+#set ( $url = "$appUrl/#/shipment/${shipment.id}/overview" )
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
   <tbody>
@@ -9,7 +9,7 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hello $order.distributor.firstName $order.distributor.lastName,
+                  Hello $shipment.sender.firstName $shipment.sender.lastName,
                   <br><br>
                   A brief description of the shipment:
                   <br><br>
@@ -21,19 +21,19 @@
                 <table>
                   <tr>
                     <td> Shipment Name </td>
-                    <td> : $order.name </td>
+                    <td> : $shipment.name </td>
                   </tr>
                   <tr>
                     <td> Receiving Site </td>
-                    <td> : $order.site.name </td>
+                    <td> : $shipment.site.name </td>
                   </tr>
                   <tr>
                     <td> Sender </td>
-                    <td> : $order.distributor.firstName $order.distributor.lastName </td>
+                    <td> : $shipment.sender.firstName $shipment.sender.lastName </td>
                   </tr>
                   <tr>
                     <td> Sent On </td>
-                    <td> : $dateFmt.format( $order.shippingDate ) </td>
+                    <td> : $dateFmt.format( $shipment.shippedDate ) </td>
                   </tr>
                 </table>
               </td>
