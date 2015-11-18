@@ -109,6 +109,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 		
 		SpecimenRequirement derived = parent.copy();
+		derived.setLabelFormat(null);
 		derived.setLineage(Specimen.DERIVED);
 		setSpecimenClass(req.getSpecimenClass(), derived, ose);
 		setSpecimenType(req.getSpecimenClass(), req.getType(), derived, ose);
@@ -145,13 +146,16 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setCode(req, sr, ose);
 		setConcentration(req, sr, ose);
 		
+		if (!lineage.equals(Specimen.ALIQUOT)) {
+			setPathologyStatus(req, sr, ose);
+		}
+
 		if (!lineage.equals(Specimen.NEW)) {
 			return sr;
 		}
 		
 		setAnatomicSite(req, sr, ose);
 		setLaterality(req, sr, ose);
-		setPathologyStatus(req, sr, ose);
 		setCollector(req, sr, ose);
 		setCollectionProcedure(req, sr, ose);
 		setCollectionContainer(req, sr, ose);
@@ -194,7 +198,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		List<SpecimenRequirement> aliquots = new ArrayList<SpecimenRequirement>();
 		for (int i = 0; i < req.getNoOfAliquots(); ++i) {
 			SpecimenRequirement aliquot = parent.copy();
-			aliquot.setLineage(Specimen.ALIQUOT); 			
+			aliquot.setLabelFormat(null);
+			aliquot.setLineage(Specimen.ALIQUOT);
 			setStorageType(req.getStorageType(), aliquot, ose);
 			setLabelFormat(req.getLabelFmt(), aliquot, ose);			
 			aliquot.setInitialQuantity(req.getQtyPerAliquot());
