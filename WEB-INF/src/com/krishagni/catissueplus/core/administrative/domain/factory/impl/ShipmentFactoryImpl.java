@@ -105,7 +105,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		Shipment.Status status = null;
 			
 		try {
-			status = Shipment.Status.valueOf(detail.getStatus().toUpperCase());
+			status = Shipment.Status.valueOf(detail.getStatus());
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShipmentErrorCode.INVALID_STATUS);
 			return;
@@ -254,7 +254,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		try {
-			shipmentItem.setReceivedQuality(ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality()));
+			shipmentItem.setReceivedQuality(ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase()));
 		} catch (IllegalArgumentException iae) {
 			ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
 			return null;

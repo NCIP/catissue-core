@@ -188,7 +188,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 	
 	private void sendShipmentShippedEmail(Shipment shipment) {
-		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress");
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress", true);
 		emailIds.add(shipment.getSender().getEmailAddress());
 		String[] subjectParams = {shipment.getName()};
 		
@@ -199,7 +199,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 	
 	private void sendShipmentReceivedEmail(Shipment shipment) {
-		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress");
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress", true);
 		emailIds.add(shipment.getSender().getEmailAddress());
 		emailIds.add(shipment.getReceiver().getEmailAddress());
 		
