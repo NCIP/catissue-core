@@ -456,10 +456,6 @@ public class StorageContainer extends BaseEntity {
 		if (startPosSpecified) {
 			startRow = converters.get(getRowLabelingScheme()).toOrdinal(row);
 			startCol = converters.get(getColumnLabelingScheme()).toOrdinal(col);
-			if (++startCol > getNoOfColumns()) {
-				++startRow;
-				startCol=1;
-			}
 		}
 
 		for (int y = startRow; y <= getNoOfRows(); ++y) {

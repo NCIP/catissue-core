@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentItemDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -288,6 +289,13 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		detail.setId(info.getId());
 		detail.setStorageLocation(info.getStorageLocation());
 		
-		return specimenFactory.createSpecimen(existing, detail, null);
+		Specimen specimen = specimenFactory.createSpecimen(existing, detail, null);
+		StorageLocationSummary positionSummary = info.getStorageLocation();
+		if (specimen.getPosition() != null && (positionSummary.getPositionX() == null || positionSummary.getPositionY() == null)) {
+			specimen.getPosition().setPosOne(null);
+			specimen.getPosition().setPosTwo(null);
+		}
+		
+		return specimen;
 	}
 }
