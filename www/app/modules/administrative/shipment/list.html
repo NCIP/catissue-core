@@ -17,66 +17,66 @@
   </div>
 
   <div class="container">
-    <div class="os-table os-table-hover">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col os-col-15">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <td class="col os-col-15">
             <span translate="shipments.name">Name</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span translate="shipments.site">Site</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span translate="shipments.sender">Sender</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span translate="shipments.shipped_date">Shipped Date</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span translate="shipments.receiver">Receiver</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span translate="shipments.received_date">Received Date</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span translate="shipments.status">Status</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span translate="shipments.specimens">Specimens</span>
-          </div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="shipment in shipments">
-          <div class="col os-col-15">
+          </td>
+        </td>
+      </tr>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="shipment in shipments">
+          <td class="col os-col-15">
             <a ui-sref="shipment-detail.overview({shipmentId: shipment.id})">
               #{{shipment.id}} {{shipment.name}}
             </a>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span>{{shipment.siteName | osNoValue}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span>{{shipment.sender | osUserDisplayName}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span>{{shipment.shippedDate | date: global.dateFmt}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col os-col-15">
             <span>{{shipment.receiver | osUserDisplayName | osNoValue}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span>{{shipment.receivedDate | date: global.dateFmt | osNoValue}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span>{{'shipments.statuses.' + shipment.status | translate}}</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col os-col-10">
             <span>{{shipment.shipmentItems.length}}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div os-right-drawer ng-include="'modules/administrative/shipment/search.html'"> </div>

@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ShipmentItem extends BaseEntity {
 	public enum ReceivedQuality {
@@ -48,6 +50,11 @@ public class ShipmentItem extends BaseEntity {
 		setReceivedQuality(other.getReceivedQuality());
 		
 		if (getReceivedQuality() == ReceivedQuality.ACCEPTABLE) {
+			StorageContainerPosition position = other.getSpecimen().getPosition();
+			StorageContainer container = other.getSpecimen().getPosition().getContainer();
+			if (container.isPositionOccupied(position.getPosOne(), position.getPosTwo())) {
+				throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+			}
 			specimen.updatePosition(other.getSpecimen().getPosition());
 		}
 	}

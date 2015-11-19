@@ -235,7 +235,22 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private ShipmentItem getShipmentItem(ShipmentItemDetail detail, Shipment shipment, OpenSpecimenException ose) {
-		Specimen specimen = getSpecimen(detail.getSpecimen(), shipment, ose);
+		if (shipment.isReceived() && StringUtils.isBlank(detail.getReceivedQuality())) {
+			ose.addError(ShipmentErrorCode.SPECIMEN_RECEIVED_QUALITY_REQUIRED);
+			return null;
+		}
+		
+		ShipmentItem.ReceivedQuality receivedQuality = null;
+		try {
+			if (shipment.isReceived()) {
+				receivedQuality = ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase());
+			}
+		} catch (IllegalArgumentException iae) {
+			ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
+			return null;
+		}
+		
+		Specimen specimen = getSpecimen(detail.getSpecimen(), receivedQuality, ose);
 		if (specimen == null) {
 			return null;
 		}
@@ -243,27 +258,12 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		ShipmentItem shipmentItem = new ShipmentItem();
 		shipmentItem.setShipment(shipment);
 		shipmentItem.setSpecimen(specimen);
-		
-		if (!shipment.isReceived()) {
-			return shipmentItem;
-		}
-		
-		if (StringUtils.isBlank(detail.getReceivedQuality())) {
-			ose.addError(ShipmentErrorCode.SPECIMEN_RECEIVED_QUALITY_REQUIRED);
-			return null;
-		}
-		
-		try {
-			shipmentItem.setReceivedQuality(ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase()));
-		} catch (IllegalArgumentException iae) {
-			ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
-			return null;
-		}
+		shipmentItem.setReceivedQuality(receivedQuality);
 		
 		return shipmentItem;
 	}
 	
-	private Specimen getSpecimen(SpecimenInfo info, Shipment shipment, OpenSpecimenException ose) {
+	private Specimen getSpecimen(SpecimenInfo info, ShipmentItem.ReceivedQuality receivedQuality, OpenSpecimenException ose) {
 		Specimen existing = null;
 		Object key = null;
 		
@@ -280,7 +280,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			return null;
 		}
 		
-		if (!shipment.isReceived()) {
+		if (receivedQuality != ShipmentItem.ReceivedQuality.ACCEPTABLE) {
 			return existing;
 		} 
 		
