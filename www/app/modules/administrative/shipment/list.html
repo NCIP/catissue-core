@@ -47,7 +47,7 @@
         </td>
       </tr>
       <tbody class="os-table-body">
-        <tr class="row" ng-repeat="shipment in shipments">
+        <tr class="row" ng-repeat="shipment in shipments" os-row-click="showShipmentOverview(shipment)">
           <td class="col os-col-15">
             <a ui-sref="shipment-detail.overview({shipmentId: shipment.id})">
               #{{shipment.id}} {{shipment.name}}

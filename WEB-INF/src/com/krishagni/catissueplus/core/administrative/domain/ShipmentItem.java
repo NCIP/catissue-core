@@ -49,14 +49,10 @@ public class ShipmentItem extends BaseEntity {
 	public void receive(ShipmentItem other) {
 		setReceivedQuality(other.getReceivedQuality());
 		
-		StorageContainerPosition position = other.getSpecimen().getPosition();
-		if (position != null && getReceivedQuality() == ReceivedQuality.ACCEPTABLE) {
+		if (getReceivedQuality() == ReceivedQuality.ACCEPTABLE) {
+			StorageContainerPosition position = other.getSpecimen().getPosition();
 			StorageContainer container = position.getContainer();
-			if (position.getPosOne() == null && position.getPosTwo() == null) {
-				position = container.nextAvailablePosition(true);
-			}
-			
-			if (position == null || container.isPositionOccupied(position.getPosOne(), position.getPosTwo())) {
+			if (position != null && container.isPositionOccupied(position.getPosOne(), position.getPosTwo())) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 			

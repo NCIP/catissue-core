@@ -29,10 +29,13 @@
     os-form-validator="shipForm" validator="shipFormValidator" novalidate>
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="shipments.name">Name</label>
-      <div class="col-xs-6">
-        <input type="text" name="name" ng-model="shipment.name"
-          class="form-control" placeholder="{{'shipments.name' | translate}}" ng-maxlength="255" required/>
-        <div os-field-error field="shipForm.name"></div>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="RECEIVED" class="control-text">{{shipment.name}}</div>
+        <div ng-switch-default>
+          <input type="text" name="name" ng-model="shipment.name"
+            class="form-control" placeholder="{{'shipments.name' | translate}}" ng-maxlength="255" required/>
+          <div os-field-error field="shipForm.name"></div>
+        </div>
       </div>
     </div>
      
@@ -40,40 +43,70 @@
       <label class="control-label col-xs-3" translate="shipments.receiving_institute">
         Receiving Institute
       </label>
-      <div class="col-xs-6">
-        <os-select name="institute" ng-model="shipment.instituteName" list="instituteNames"
-          placeholder="{{'shipments.receiving_institute' | translate}}" required
-          on-select="loadSites(shipment.instituteName)">
-        </os-select>
-        <div os-field-error field="shipForm.institute"></div>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="RECEIVED" class="control-text">{{shipment.instituteName}}</div>
+        <div ng-switch-default>
+          <os-select name="institute" ng-model="shipment.instituteName" list="instituteNames"
+            placeholder="{{'shipments.receiving_institute' | translate}}" required>
+          </os-select>
+          <div os-field-error field="shipForm.institute"></div>
+        </div>
       </div>
     </div>
     
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="shipments.receiving_site">Receiving Site</label>
-      <div class="col-xs-6">
-        <os-select name="site" ng-model="shipment.siteName" 
-          list="sites" placeholder="{{'shipments.receiving_site' | translate}}" required>
-        </os-select>
-        <div os-field-error field="shipForm.site"></div>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="RECEIVED" class="control-text">{{shipment.siteName}}</div>
+        <div ng-switch-default>
+          <os-select name="site" ng-model="shipment.siteName" 
+            list="sites" placeholder="{{'shipments.receiving_site' | translate}}" required>
+          </os-select>
+          <div os-field-error field="shipForm.site"></div>
+        </div>
       </div>
     </div>
     
     <div class="form-group">
       <label class="control-label col-xs-3" translate="shipments.shipped_date">Shipped Date</label>
-      <div class="col-xs-6">
-        <os-date-picker name="shippedDate" date="shipment.shippedDate"
-          placeholder="{{'shipments.shipped_date' | translate}}" required>
-        </os-date-picker>
-        <div os-field-error field="shipForm.shippedDate"></div>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="RECEIVED" class="control-text">{{shipment.shippedDate | date: global.dateFmt}}</div>
+        <div ng-switch-default>
+          <os-date-picker name="shippedDate" date="shipment.shippedDate"
+            placeholder="{{'shipments.shipped_date' | translate}}" required>
+          </os-date-picker>
+          <div os-field-error field="shipForm.shippedDate"></div>
+        </div>
       </div>  
     </div>
 
-    <div class="form-group">
+    <div class="form-group" ng-if="shipment.status == 'RECEIVED' && !!shipment.senderComments">
       <label class="control-label col-xs-3" translate="shipments.sender_comments">Sender Comments</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="RECEIVED" class="control-text">{{shipment.senderComments}}</div>
+        <div ng-switch-default>
+          <textarea type="text" name="senderComments" ng-model="shipment.senderComments" class="form-control" 
+            placeholder="{{'shipments.sender_comments' | translate}}" rows="2"> 
+          </textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="shipment.status == 'RECEIVED'">
+      <label class="control-label col-xs-3" translate="shipments.received_date">Received Date</label>
       <div class="col-xs-6">
-        <textarea type="text" name="comments" ng-model="shipment.senderComments" class="form-control" 
-          placeholder="{{'shipments.sender_comments' | translate}}" rows="2">
+        <os-date-picker name="receivedDate" date="shipment.receivedDate"
+          placeholder="{{'shipments.received_date' | translate}}" required>
+        </os-date-picker>
+        <div os-field-error field="shipForm.receivedDate"></div>
+      </div>  
+    </div>
+
+    <div class="form-group" ng-if="shipment.status == 'RECEIVED'"> 
+      <label class="control-label col-xs-3" translate="shipments.receiver_comments">Receiver Comments</label>
+      <div class="col-xs-6">
+        <textarea type="text" name="receiverComments" ng-model="shipment.receiverComments" class="form-control" 
+          placeholder="{{'shipments.receiver_comments' | translate}}" rows="2">
         </textarea>
       </div>
     </div>
@@ -102,7 +135,7 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group>
+    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group ng-if="shipment.status != 'RECEIVED'">
       <textarea ng-model="input.labelText" class="form-control" 
         placeholder="{{'shipments.enter_specimen_label' | translate}}" os-enable-tab rows="2">
       </textarea>
@@ -113,44 +146,58 @@
       </span>
     </div>
 
-    <div class="os-table os-table-fixed bulk-edit os-border os-table-muted-hdr" 
+    <table class="os-table bulk-edit os-border os-table-muted-hdr"
       ng-if="shipment.shipmentItems && shipment.shipmentItems.length > 0">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col os-col-15">
-            <span translate="shipments.spec.label">Label</span>
-          </div>
-          <div class="col os-col-30">
-            <span translate="shipments.spec.desc">Description</span>
-          </div>
-          <div class="col os-col-20">
-            <span translate="shipments.spec.cp">Collection Protocol</span>
-          </div>
-          <div class="col os-col-15">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col" translate="shipments.spec.label">Label</th>
+          <th class="col" translate="shipments.spec.desc">Description</th>
+          <th class="col" translate="shipments.spec.cp">Collection Protocol</th>
+          <th class="col" translate="shipments.spec.quantity">Quantity</th>
+          <th class="col" ng-if="shipment.status != 'RECEIVED'"> 
             <span translate="shipments.spec.location">Location</span>
-          </div>
-          <div class="col os-col-15">
-            <span translate="shipments.spec.quantity">Quantity</span>
-          </div>
-          <div class="col os-col-5">
+          </th>
+          <th class="col" ng-if="shipment.status != 'RECEIVED'"> 
             <span>&nbsp;</span>
-          </div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="item in shipment.shipmentItems" ng-form="sform" ng-init="specimen=item.specimen">
-          <div class="col os-col-15">
+          </th>
+          <th class="col os-col-30" ng-if="shipment.status == 'RECEIVED'">
+            <div class="os-col-60 os-no-left-padding">
+              <span translate="specimens.container">Container</span>
+              <a ng-click="applyFirstLocationToAll()"style="font-weight:normal">
+                (<span translate="specimens.copy_first_to_all">Copy First To All</span>)
+              </a>
+            </div>
+            <div class="os-col-15 os-no-left-padding">
+              <span translate="specimens.row">Row</span>
+            </div>
+            <div class="os-col-15 os-no-left-padding">
+              <span translate="specimens.column">Column</span>
+            </div>
+          </th>
+          <th class="col os-col-10" ng-if="shipment.status == 'RECEIVED'" translate="shipments.spec.quality">Quality</th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="item in shipment.shipmentItems"
+          ng-form="sform" ng-init="specimen = item.specimen; item.receivedQuality = qualityStatuses[0]">
+          <td class="col">
             <a ui-sref="specimen({specimenId: specimen.id})">
               <span>{{specimen.label}}</span>
             </a>
-          </div>
-          <div class="col os-col-30">
-            <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
-          </div>
-          <div class="col os-col-20">
+          </td>
+          <td class="col">
+            <a ui-sref="specimen({specimenId: specimen.id})">
+              <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+            </a>
+          </td>
+          <td class="col">
             <span>{{specimen.cpShortTitle}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
+            <span>{{specimen.availableQty}}</span>
+            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"> </os-specimen-unit>
+          </td>
+          <td class="col" ng-if="shipment.status != 'RECEIVED'"> 
             <span ng-switch on="!!specimen.storageLocation.name">
               <span ng-switch-when="true">
                 {{specimen.storageLocation.name}} 
@@ -162,19 +209,24 @@
                 Virtual
               </span>
             </span>
-          </div>
-          <div class="col os-col-15">
-            <span> {{specimen.availableQty}} </span>
-            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
-          </div>
-          <div class="col os-col-5">
+          </td>
+          <td class="col os-col-5" ng-if="shipment.status != 'RECEIVED'"> 
             <button class="btn btn-xs btn-default" ng-click="removeShipmentItem(item)">
               <span class="fa fa-remove"></span>
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+          <td class="col" style="overflow: visible;" ng-if="shipment.status == 'RECEIVED'">
+            <os-storage-position os-md-input
+              entity="specimen" cp-id="specimen.cpId" container-list-cache="containerListCache" hide-placeholder>
+            </os-storage-position>
+          </td>
+          <td class="col" style="overflow: visible;" ng-if="shipment.status == 'RECEIVED'">
+            <os-select os-md-input name="quality" list="qualityStatuses" ng-model="item.receivedQuality" required></os-select>
+            <div os-field-error field="sform.quality"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="os-divider"></div>
      
@@ -186,11 +238,16 @@
         <button class="btn os-btn-secondary" ng-click="shipWizard.previous(false)">
           <span translate="common.buttons.previous"> Previous </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!shipment.shipmentItems.length">
+        <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!shipment.shipmentItems.length" 
+          ng-if="shipment.status != 'RECEIVED'">
           <span translate="shipments.buttons.save_draft"> Save as Draft </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="ship()" ng-disabled="!shipment.shipmentItems.length">
+        <button class="btn btn-primary" os-form-submit="ship()" ng-disabled="!shipment.shipmentItems.length"
+          ng-if="shipment.status != 'RECEIVED'">
           <span translate="shipments.buttons.ship"> Ship </span>
+        </button>
+        <button class="btn btn-primary" os-form-submit="receive()" ng-if="shipment.status == 'RECEIVED'">
+          <span translate="shipments.buttons.receive"> Receive </span>
         </button>
       </div>
     </div>

@@ -18,7 +18,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCo
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentItemDetail;
-import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -236,19 +235,19 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private ShipmentItem getShipmentItem(ShipmentItemDetail detail, Shipment shipment, OpenSpecimenException ose) {
-		if (shipment.isReceived() && StringUtils.isBlank(detail.getReceivedQuality())) {
-			ose.addError(ShipmentErrorCode.SPECIMEN_RECEIVED_QUALITY_REQUIRED);
-			return null;
-		}
-		
 		ShipmentItem.ReceivedQuality receivedQuality = null;
-		try {
-			if (shipment.isReceived()) {
-				receivedQuality = ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase());
+		if (shipment.isReceived()) {
+			if (StringUtils.isBlank(detail.getReceivedQuality())) {
+				ose.addError(ShipmentErrorCode.SPECIMEN_RECEIVED_QUALITY_REQUIRED);
+				return null;
+			} else {
+				try {
+					receivedQuality = ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase());
+				} catch (IllegalArgumentException iae) {
+					ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
+					return null;
+				}
 			}
-		} catch (IllegalArgumentException iae) {
-			ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
-			return null;
 		}
 		
 		Specimen specimen = getSpecimen(detail.getSpecimen(), receivedQuality, ose);
@@ -289,13 +288,6 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		detail.setId(info.getId());
 		detail.setStorageLocation(info.getStorageLocation());
 		
-		Specimen specimen = specimenFactory.createSpecimen(existing, detail, null);
-		StorageLocationSummary positionSummary = info.getStorageLocation();
-		if (specimen.getPosition() != null && (positionSummary.getPositionX() == null || positionSummary.getPositionY() == null)) {
-			specimen.getPosition().setPosOne(null);
-			specimen.getPosition().setPosTwo(null);
-		}
-		
-		return specimen;
+		return  specimenFactory.createSpecimen(existing, detail, null);
 	}
 }

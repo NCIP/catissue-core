@@ -58,20 +58,19 @@
 
     <div class="os-section" ng-init="specSect=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="specSect=!specSect">
-        <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
-        <span ng-if="avCollapsed" class="fa fa-chevron-circle-right"></span>
+        <span ng-if="!specSect" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="specSect" class="fa fa-chevron-circle-right"></span>
       </button>
       <h3 class="os-sub-section-title" translate="shipments.specimens">Specimens</h3>
       <div collapse="specSect">
-        <table class="os-table os-table-fixed os-table-muted-hdr os-border">
+        <table class="os-table os-table-muted-hdr os-border">
           <thead class="os-table-head">
             <tr class="row">
-              <td class="col os-col-25" translate="shipments.spec.label">Label</td>
-              <td class="col os-col-25" translate="shipments.spec.desc">Description</td>
-              <td class="col os-col-25" translate="shipments.spec.cp">Collection Protocol</td>
-              <td class="col os-col-10" ng-class="{true: 'os-col-10', false: 'os-col-25'}[shipment.status == 'RECEIVED']"
-                translate="shipments.spec.quantity">Quantity</td>
-              <td class="col os-col-15" ng-if="shipment.status == 'RECEIVED'" translate="shipments.spec.quality">Quality</td>
+              <th class="col" translate="shipments.spec.label">Label</th>
+              <th class="col" translate="shipments.spec.desc">Description</th>
+              <th class="col" translate="shipments.spec.cp">Collection Protocol</th>
+              <th class="col" translate="shipments.spec.quantity">Quantity</th>
+              <th class="col" ng-if="shipment.status == 'RECEIVED'" translate="shipments.spec.quality">Quality</th>
             </tr>
           </thead>
           <tbody class="os-table-body">

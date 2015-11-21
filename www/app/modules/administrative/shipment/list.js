@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.shipment.list', ['os.administrative.models'])
   .controller('ShipmentListCtrl', function(
-    $scope, Shipment, Institute, Util) {
+    $scope, $state, Shipment, Institute, Util) {
   
     function init() {
       $scope.filterOpts = {};
@@ -27,6 +27,10 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
       );
     }
 
+    $scope.showShipmentOverview = function(shipment) {
+      $state.go('shipment-detail.overview', {shipmentId: shipment.id});
+    };
+    
     $scope.clearFilters = function() {
       $scope.filterOpts = {};
     }

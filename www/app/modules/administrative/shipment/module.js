@@ -60,7 +60,7 @@ angular.module('os.administrative.shipment',
       })
       .state('shipment-receive', {
         url: '/shipments/:shipmentId/receive',
-        templateUrl: 'modules/administrative/shipment/receive.html',
+        templateUrl: 'modules/administrative/shipment/addedit.html',
         resolve: {
           shipment: function($stateParams , Shipment) {
             return Shipment.getById($stateParams.shipmentId);

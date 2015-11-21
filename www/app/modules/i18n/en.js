@@ -29,7 +29,7 @@
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
-    "shipping_and_tracking_desc": "Create, receive shipments for shipping specimens",
+    "shipping_and_tracking_desc": "Create, ship, track and receive specimen shipments",
     "jobs_desc": "Create, schedule, execute jobs"
   },
 
@@ -1309,7 +1309,7 @@
     "ship": "Ship",
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
-    "no_specimens_for_shipping": "Please select at least one specimen to create shipping order",
+    "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By"
   },
 
@@ -1395,11 +1395,11 @@
     "specimens": "Specimens",
     "receiving_institute": "Receiving Institute",
     "receiving_site": "Receiving Site",
-    "sender_comments": "Sender Comment",
-    "receiver_comments": "Receiver Comment",
+    "sender_comments": "Sender Comments",
+    "receiver_comments": "Receiver Comments",
     "details": "Shipment Details",
-    "no_specimens_in_list": "No specimens in shipping list to shipping. Add at least one specimen",
-    "enter_specimen_label": "To add specimens to shipping list, enter labels separated by a comma/tab/newline and click add",
+    "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
+    "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma/tab/newline and click add",
     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "filters": "Filters",

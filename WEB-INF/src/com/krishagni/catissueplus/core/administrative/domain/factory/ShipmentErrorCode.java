@@ -31,6 +31,10 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	SPECIMEN_ALREADY_SHIPPED,
 	
+	CLOSED_SPECIMENS,
+	
+	UNAVAILABLE_SPECIMENS,
+	
 	ALREADY_RECEIVED,
 	
 	INVALID_SPECIMENS,

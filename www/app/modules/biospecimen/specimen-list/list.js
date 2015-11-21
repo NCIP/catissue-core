@@ -133,7 +133,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     $scope.shipSpecimens = function() {
       if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_shipping");
+        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_shipment");
         return;
       }
 

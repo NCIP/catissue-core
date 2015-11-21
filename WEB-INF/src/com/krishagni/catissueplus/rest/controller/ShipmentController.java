@@ -29,7 +29,7 @@ public class ShipmentController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<ShipmentDetail> getOrders(
+	public List<ShipmentDetail> getShipments(
 			@RequestParam(value = "name", required = false, defaultValue = "")
 			String name,
 			
@@ -57,7 +57,7 @@ public class ShipmentController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShipmentDetail getOrder(@PathVariable("id") Long id) {
+	public ShipmentDetail getShipment(@PathVariable("id") Long id) {
 		ResponseEvent<ShipmentDetail> resp = shipmentSvc.getShipment(getRequest(id));
 		resp.throwErrorIfUnsuccessful();
 		
@@ -67,7 +67,7 @@ public class ShipmentController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShipmentDetail createOrder(
+	public ShipmentDetail createShipment(
 			@RequestBody
 			ShipmentDetail detail) {
 		ResponseEvent<ShipmentDetail> resp = shipmentSvc.createShipment(getRequest(detail));
@@ -79,7 +79,7 @@ public class ShipmentController {
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ShipmentDetail updateOrder(
+	public ShipmentDetail updateShipment(
 			@PathVariable
 			Long id,
 			
