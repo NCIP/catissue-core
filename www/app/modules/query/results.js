@@ -1,7 +1,7 @@
 
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal,
+    $scope, $state, $stateParams, $modal, $document,
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     function init() {
@@ -121,6 +121,18 @@ angular.module('os.query.results', ['os.query.models'])
       return label;
     }
 
+    function getColumnWidth(text) {
+      var span = angular.element('<span/>')
+        .addClass('ngHeaderText')
+        .css('visibility', 'hidden')
+        .text(text);
+
+      angular.element($document[0].body).append(span);
+      var width = span[0].offsetWidth + 2 + 10; // 5 + 5 = 10 is padding, 2 is buffer/uncertainity
+      span.remove();
+      return width;
+    }
+
     function preparePivotTable(result) {
       $scope.resultsCtx.rows = result.rows;
       $scope.resultsCtx.columnLabels = result.columnLabels;
@@ -159,10 +171,13 @@ angular.module('os.query.results', ['os.query.models'])
       var colDefs = result.columnLabels.map(
         function(columnLabel) {
           ++idx;
+
+          var columnLabel = removeSeparator(columnLabel);
+          var width = getColumnWidth(columnLabel);
           return {
             field: "col" + idx,
-            displayName: removeSeparator(columnLabel),
-            minWidth: 100,
+            displayName: columnLabel,
+            width: width < 100 ? 100 : width,
             headerCellTemplate: 'modules/query/column-filter.html',
             showSummary: showColSummary,
             summary: summaryRow[idx]
