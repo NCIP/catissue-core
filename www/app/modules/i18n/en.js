@@ -1642,7 +1642,9 @@
         "email_users_role_updated": "Role Updated Notification",
         "email_users_role_updated_desc": "Email notifications when a user's role is updated.",
         "email_users_signed_up": "User Signup Notification",
-        "email_users_signed_up_desc": "Email notifications when a new user signs up."
+        "email_users_signed_up_desc": "Email notifications when a new user signs up.",
+        "email_shipment_shipped": "Shipment shipped email notification",
+        "email_shipment_received": "Shipment received email notification"
       }
     }
 }

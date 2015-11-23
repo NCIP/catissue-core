@@ -1,4 +1,4 @@
-#set ( $url = "$appUrl/#/shipment/${shipment.id}/overview" )
+#set ( $url = "$appUrl/#/shipments/${shipment.id}/overview" )
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
   <tbody>
@@ -9,9 +9,11 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hello $shipment.sender.firstName $shipment.sender.lastName,
+                  Hello $shipment.site.name Coordinators,
                   <br><br>
-                  A brief description of the shipment:
+                  $shipment.sender.firstName $shipment.sender.lastName has shipped $shipment.name specimens' shipment.
+                  <br/><br/>
+                  A brief description of shipment is given below:
                   <br><br>
                 </p>
               </td>
@@ -39,7 +41,7 @@
               </td>
             </tr>
             <tr>
-              <td style="height:5px;line-height:5px;">&nbsp;</td>
+              <td style="height:15px;line-height:5px;">&nbsp;</td>
             </tr>
             <tr>
               <td style="border-collapse:collapse;padding-bottom:10px">

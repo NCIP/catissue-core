@@ -170,4 +170,20 @@
         module_id = (select identifier from os_modules where name = 'biospecimen')
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Adding email notification config properties for shipping and tracking in os">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_shipment_shipped',
+        'shipment_shipped', 'shipment_shipped_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_shipment_received',
+        'shipment_received', 'shipment_received_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

@@ -28,7 +28,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
-import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
@@ -148,7 +147,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			
 			Status oldStatus = existing.getStatus();
 			existing.update(newShipment);
-			getShipmentDao().saveOrUpdate(existing);
+			getShipmentDao().saveOrUpdate(existing, true);
 			sendEmailNotifications(existing, oldStatus);
 			return ResponseEvent.response(ShipmentDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
@@ -191,9 +190,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		for (Specimen specimen : specimens) {
 			if (specimen.isClosed()) {
 				closedSpecimens.add(specimen);
-			}
-			
-			if (NumUtil.isZero(specimen.getAvailableQuantity())) {
+			} else if (!specimen.getIsAvailable()) {
 				unavailableSpecimens.add(specimen);
 			}
 		}

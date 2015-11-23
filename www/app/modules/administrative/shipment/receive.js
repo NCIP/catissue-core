@@ -7,7 +7,6 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
 
     function init() {
       $scope.shipment = shipment;
-      $scope.shipment.status = "RECEIVED";
       angular.forEach(shipment.shipmentItems, function(item) {
         item.specimen = new Specimen(item.specimen);
       });
@@ -17,6 +16,7 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
 
     $scope.receive = function() {
       var shipment = angular.copy($scope.shipment);
+      shipment.status = "RECEIVED";
       shipment.$saveOrUpdate().then(
         function(resp) {
           $state.go('shipment-detail.overview', {shipmentId: resp.id});

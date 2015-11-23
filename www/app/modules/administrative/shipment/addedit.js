@@ -19,7 +19,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       }
 
       if ($scope.shipment.instituteName) {
-        $scope.loadSites($scope.shipment.instituteName);
+        loadSites($scope.shipment.instituteName);
       }
 
       loadInstitutes();
@@ -29,6 +29,14 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       Institute.query().then(
         function (institutes) {
           $scope.instituteNames = Institute.getNames(institutes);
+        }
+      );
+    }
+
+    function loadSites(instituteName) {
+      Site.listForInstitute(instituteName, true).then(
+        function(sites) {
+          $scope.sites = sites;
         }
       );
     }
@@ -45,8 +53,9 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         });
     }
 
-    function saveOrUpdate() {
+    function saveOrUpdate(status) {
       var shipment = angular.copy($scope.shipment);
+      shipment.status = status;
       shipment.$saveOrUpdate().then(
         function(savedShipment) {
           $state.go('shipment-detail.overview', {shipmentId: savedShipment.id});
@@ -54,12 +63,9 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       );
     };
 
-    $scope.loadSites = function (instituteName) {
-      Site.listForInstitute(instituteName, true).then(
-        function(sites) {
-          $scope.sites = sites;
-        }
-      );    
+    $scope.onInstituteSelect = function(instituteName) {
+      $scope.shipment.siteName = undefined;
+      loadSites(instituteName);
     }
 
     $scope.addSpecimens = function() {
@@ -101,13 +107,11 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
 
     $scope.ship = function() {
-      $scope.shipment.status = 'SHIPPED';
-      saveOrUpdate();
+      saveOrUpdate('SHIPPED');
     }
 
     $scope.saveDraft = function() {
-      $scope.shipment.status = 'PENDING';
-      saveOrUpdate();
+      saveOrUpdate('PENDING');
     }
 
     init();
