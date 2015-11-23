@@ -1,13 +1,14 @@
 
 angular.module('os.administrative.shipment.list', ['os.administrative.models'])
   .controller('ShipmentListCtrl', function(
-    $scope, $state, Shipment, Institute, Util) {
+    $scope, $state, Shipment, Institute, Util, Site) {
   
     function init() {
       $scope.filterOpts = {};
 
       loadInstitutes();
       loadShipments($scope.filterOpts);
+      loadSites();
       Util.filter($scope, 'filterOpts', loadShipments);
     }
 
@@ -23,6 +24,14 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
       Institute.query().then(
         function(institutes) {
           $scope.instituteNames = Institute.getNames(institutes);
+        }
+      );
+    }
+    
+    function loadSites() {
+      Site.list().then(
+        function(sites) {
+          $scope.siteNames = sites;
         }
       );
     }

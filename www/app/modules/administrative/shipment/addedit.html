@@ -47,7 +47,8 @@
         <div ng-switch-when="RECEIVED" class="control-text">{{shipment.instituteName}}</div>
         <div ng-switch-default>
           <os-select name="institute" ng-model="shipment.instituteName" list="instituteNames"
-            placeholder="{{'shipments.receiving_institute' | translate}}" required>
+            placeholder="{{'shipments.receiving_institute' | translate}}" required
+            on-select="loadSites(shipment.instituteName)">
           </os-select>
           <div os-field-error field="shipForm.institute"></div>
         </div>

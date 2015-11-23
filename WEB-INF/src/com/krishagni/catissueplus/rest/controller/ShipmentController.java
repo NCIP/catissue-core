@@ -36,6 +36,9 @@ public class ShipmentController {
 			@RequestParam(value = "institute", required = false, defaultValue = "")
 			String institute,
 			
+			@RequestParam(value = "site", required = false, defaultValue = "")
+			String site,
+			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 				
@@ -45,6 +48,7 @@ public class ShipmentController {
 		ShipmentListCriteria listCrit = new ShipmentListCriteria()
 				.name(name)
 				.institute(institute)
+				.site(site)
 				.startAt(startAt)
 				.maxResults(maxResults);
 		

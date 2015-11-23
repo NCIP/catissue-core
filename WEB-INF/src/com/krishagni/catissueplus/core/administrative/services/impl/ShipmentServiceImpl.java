@@ -1,9 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +30,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class ShipmentServiceImpl implements ShipmentService {
 	private static final String SHIPMENT_SHIPPED_EMAIL_TMPL = "shipment_shipped";
@@ -60,7 +59,15 @@ public class ShipmentServiceImpl implements ShipmentService {
 	@PlusTransactional
 	public ResponseEvent<List<ShipmentDetail>> getShipments(RequestEvent<ShipmentListCriteria> req) {
 		try {
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessShipmentSites();
+			if (siteIds != null && siteIds.isEmpty()) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
 			ShipmentListCriteria listCrit = req.getPayload();
+			if (siteIds != null) {
+				listCrit.siteIds(siteIds);
+			}
 			
 			return ResponseEvent.response(ShipmentDetail.from(getShipmentDao().getShipments(listCrit)));
 		} catch (OpenSpecimenException ose) {
@@ -80,6 +87,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 				return ResponseEvent.userError(ShipmentErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureReadShipmentRights(shipment);
 			return ResponseEvent.response(ShipmentDetail.from(shipment));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -92,6 +100,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	@PlusTransactional
 	public ResponseEvent<ShipmentDetail> createShipment(RequestEvent<ShipmentDetail> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureCreateShipmentRights();
 			ShipmentDetail detail = req.getPayload();
 			Shipment shipment = shipmentFactory.createShipment(detail, detail.getStatus() == null ? Status.PENDING : null);
 			
@@ -124,7 +133,13 @@ public class ShipmentServiceImpl implements ShipmentService {
 				return ResponseEvent.userError(ShipmentErrorCode.NOT_FOUND);
 			}
 			
+			AccessCtrlMgr.getInstance().ensureUpdateShipmentRights(existing);
 			Shipment newShipment = shipmentFactory.createShipment(detail, null);
+			if (newShipment.isReceived()) {
+				AccessCtrlMgr.getInstance().ensureReceiveShipmentRights(newShipment);
+			} else {
+				AccessCtrlMgr.getInstance().ensureUpdateShipmentRights(newShipment);
+			}
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(existing, newShipment, ose);
@@ -191,6 +206,21 @@ public class ShipmentServiceImpl implements ShipmentService {
 		if (CollectionUtils.isNotEmpty(unavailableSpecimens)) {
 			List<String> labels = Utility.<List<String>>collect(unavailableSpecimens, "label");
 			ose.addError(ShipmentErrorCode.UNAVAILABLE_SPECIMENS, StringUtils.join(labels, ','));
+		}
+		
+		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
+		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
+		Set<Long> shipmentAllowedIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessShipmentSites();
+		Long shipmentSiteId = shipment.getSite().getId();
+		for (Map.Entry<String, Set<Long>> specimenSiteId : specimenSiteIdsMap.entrySet()) {
+			if (!specimenSiteId.getValue().contains(shipmentSiteId)) {
+				ose.addError(ShipmentErrorCode.SPECIMEN_NOT_BELONG_SITE);
+			}
+			
+			if (shipmentAllowedIds != null &&
+					CollectionUtils.intersection(specimenSiteId.getValue(), shipmentAllowedIds).isEmpty()) {
+				ose.addError(ShipmentErrorCode.INVALID_SPECIMENS);
+			}
 		}
 		
 		if (shipment.isReceived()) {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
+  <changeSet author="ckhilosiya" id="Shipping and tracking resource" dbms="mysql">
+    <sql>
+      insert into rbac_resources(name) values('ShippingAndTracking');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Shipping and tracking resource" dbms="oracle">
+    <sql>
+      insert into rbac_resources
+        (identifier, name)
+      values
+        (rbac_resources_seq.nextval, 'ShippingAndTracking');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Default Shipping and tracking permissions to roles">
+    <sql>call assign_to_role('Administrator', 'ShippingAndTracking', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Coordinator', 'ShippingAndTracking', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'ShippingAndTracking', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'ShippingAndTracking', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'ShippingAndTracking', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'ShippingAndTracking', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+</databaseChangeLog>

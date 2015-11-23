@@ -18,6 +18,14 @@
         </os-select>
       </div>
     </div>
+    
+    <div class="form-group">
+      <div os-md-input ng-model="filterOpts.receivingSite" placeholder="{{'shipments.receiving_site' | translate}}">
+        <os-select ng-model="filterOpts.site" class="form-control"
+          list="siteNames" os-md-input placeholder="{{'shipments.receiving_site' | translate}}">
+        </os-select>
+      </div>
+    </div>
 
     <!--  will be added later with backend code
     <div class="form-group">

@@ -35,4 +35,6 @@
   <include file="db/2.4/schema.xml"/>
   <include file="db/2.4/config.xml"/>
   <include file="db/2.4/audit.xml"/>
+  
+  <include file="db/2.5/seed-data.xml"/>
 </databaseChangeLog> 

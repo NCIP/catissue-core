@@ -952,7 +952,8 @@
       "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
       "User": "Users",
-      "ScheduledJob": "Jobs"
+      "ScheduledJob": "Jobs",
+      "ShippingAndTracking": "Shipping and Tracking"
     },
 
     "menu": {

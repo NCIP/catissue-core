@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
+import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -925,4 +926,73 @@ public class AccessCtrlMgr {
 				ConfigParams.MRN_RESTRICTION_ENABLED, 
 				false);
 	}
+	
+	///////////////////////////////////////////////////////////////////////
+	//                                                                   //
+	//        Shipping and Tracking access control helper methods        //
+	//                                                                   //
+	///////////////////////////////////////////////////////////////////////
+
+	public Set<Long> getReadAccessShipmentSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		return Utility.<Set<Long>>collect(getSites(Resource.SHIPPING_N_TRACKING, Operation.READ), "id", true);
+	}
+	
+	public Set<Long> getCreateUpdateAccessShipmentSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+		
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING,
+				new Operation[] {Operation.CREATE, Operation.UPDATE});
+		return Utility.<Set<Long>>collect(allowedSites, "id", true);
+	}
+	
+	public void ensureReadShipmentRights(Shipment shipment) {
+		ensureShipmentObjectRights(shipment, Operation.READ);
+	}
+	
+	public void ensureCreateShipmentRights() {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		if (CollectionUtils.isEmpty(getSites(Resource.SHIPPING_N_TRACKING, Operation.CREATE))) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+	
+	public void ensureUpdateShipmentRights(Shipment shipment) {
+		ensureShipmentObjectRights(shipment, Operation.UPDATE);
+	}
+	
+	public void ensureReceiveShipmentRights(Shipment shipment) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.UPDATE);
+		if (!allowedSites.contains(shipment.getSite())) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+	
+	private void ensureShipmentObjectRights(Shipment shipment, Operation op) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		if (shipment.getSender().equals(AuthUtil.getCurrentUser())) {
+			return;
+		}
+		
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, op);
+		if (!allowedSites.contains(shipment.getSite())) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+	
 }

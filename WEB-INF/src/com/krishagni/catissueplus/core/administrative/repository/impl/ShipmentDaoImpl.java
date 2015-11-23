@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -13,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteri
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDao {
 
@@ -26,13 +28,22 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	public List<Shipment> getShipments(ShipmentListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Shipment.class)
+				.createAlias("site", "site")
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
 		
+		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
+			query.createAlias("sender", "sender")
+				.add(Restrictions.or(
+					Restrictions.in("site.id", crit.siteIds()),
+					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())));
+		}
+		
 		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 		addNameRestrictions(query, crit, matchMode);
 		addInstituteRestrictions(query, crit, MatchMode.EXACT);
+		addSiteRestrictions(query, crit, MatchMode.EXACT);
 		return query.list();
 	}
 	
@@ -69,9 +80,16 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 			return;
 		}
 		
-		query.createAlias("site", "site")
-			.createAlias("site.institute", "institute")
+		query.createAlias("site.institute", "institute")
 			.add(Restrictions.ilike("institute.name", crit.institute(), matchMode));
+	}
+	
+	private void addSiteRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
+		if (StringUtils.isBlank(crit.site())) {
+			return;
+		}
+		
+		query.add(Restrictions.ilike("site.name", crit.site(), matchMode));
 	}
 	
 	private static final String FQN = Shipment.class.getName();
