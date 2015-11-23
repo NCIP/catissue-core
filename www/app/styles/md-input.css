@@ -108,6 +108,10 @@
   background: transparent;
 }
 
+.os-md-input .ui-select-bootstrap > .ui-select-match .btn-link {
+  right: 0px!important;
+}
+
 .os-md-input .ui-select-bootstrap > .ui-select-match > .ui-select-toggle:hover {
   background: transparent;
 }

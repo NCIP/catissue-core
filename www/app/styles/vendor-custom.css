@@ -3,8 +3,10 @@
   white-space: normal!important;
 }
 
+.ui-select-bootstrap .form-control.ui-select-toggle,
 .ui-select-bootstrap .form-control.ui-select-match {
   height: auto!important;
+  min-height: 34px;
   white-space: normal!important;
 }
 
@@ -16,7 +18,10 @@
   color: #333;
   opacity: 0.6;
   font-size: 8px;
-  margin-top: 3px;
+  position: absolute;
+  margin-top: -7px;
+  right: 15px;
+  top: 50%;
 }
 
 .ui-select-bootstrap .ui-select-match .btn-link:hover {
