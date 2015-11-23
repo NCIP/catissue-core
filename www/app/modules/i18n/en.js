@@ -220,6 +220,11 @@
       "derivative": "Derivative",
       "manual": "User Inputs Allowed",
       "ppid": "PPID"
+    },
+
+    "catalog": {
+      "title": "Catalog Settings",
+      "query": "Query"
     }
   },
 
@@ -1114,7 +1119,7 @@
     "query_saved": "Query '{{title}}' saved",
 
     "edit_filters": "Edit Filters",
-    "define_view": "Define View",
+    "define_view": "Columns",
     "rerun": "Rerun",
 
     "select_fields": "Select Fields",

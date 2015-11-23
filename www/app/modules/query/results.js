@@ -112,9 +112,23 @@ angular.module('os.query.results', ['os.query.models'])
         addLimit);
     }
 
+    function removeSeparator(label)  {
+      var idx = label.lastIndexOf("# ");
+      if (idx != -1) {
+        label = label.substr(idx + 2);
+      }
+
+      return label;
+    }
+
     function preparePivotTable(result) {
       $scope.resultsCtx.rows = result.rows;
       $scope.resultsCtx.columnLabels = result.columnLabels;
+
+      var numGrpCols = $scope.queryCtx.reporting.params.groupRowsBy.length;
+      for (var i = 0; i < numGrpCols; ++i) {
+        result.columnLabels[i] = removeSeparator(result.columnLabels[i]);
+      }
 
       var numValueCols = $scope.queryCtx.reporting.params.summaryFields.length;
       var numRollupCols = numValueCols;
@@ -127,7 +141,7 @@ angular.module('os.query.results', ['os.query.models'])
         height: '500px',
         width: '1200px',
         colHeaders: $scope.resultsCtx.columnLabels,
-        numGrpCols: $scope.queryCtx.reporting.params.groupRowsBy.length,
+        numGrpCols: numGrpCols,
         numValueCols: numValueCols,
         numRollupCols: numRollupCols,
         data: $scope.resultsCtx.rows
@@ -147,7 +161,7 @@ angular.module('os.query.results', ['os.query.models'])
           ++idx;
           return {
             field: "col" + idx,
-            displayName: columnLabel,
+            displayName: removeSeparator(columnLabel),
             minWidth: 100,
             headerCellTemplate: 'modules/query/column-filter.html',
             showSummary: showColSummary,
