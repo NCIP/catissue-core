@@ -113,7 +113,9 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 	
 	private void setCode(SiteDetail detail, Site site) {
-		site.setCode(detail.getCode());
+		if (StringUtils.isNotBlank(detail.getCode())) {
+			site.setCode(detail.getCode().trim());
+		}
 	}
 	
 	private void setCode(SiteDetail detail, Site existing, Site site, OpenSpecimenException ose) {

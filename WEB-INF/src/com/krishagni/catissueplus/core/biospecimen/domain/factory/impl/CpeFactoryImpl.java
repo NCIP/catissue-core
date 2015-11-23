@@ -120,7 +120,9 @@ public class CpeFactoryImpl implements CpeFactory {
 	}
 	
 	public void setCode(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
-		cpe.setCode(detail.getCode());
+		if (StringUtils.isNotBlank(detail.getCode())) {
+			cpe.setCode(detail.getCode().trim());
+		}
 	}
 	
 	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {

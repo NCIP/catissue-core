@@ -247,7 +247,11 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setCode(String code, SpecimenRequirement sr, OpenSpecimenException ose) {
-		sr.setCode(code);
+		if (StringUtils.isNotBlank(code)) {
+			sr.setCode(code.trim());
+		} else {
+			sr.setCode(null);
+		}
 	}
 	
 	private void setLabelFormat(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
