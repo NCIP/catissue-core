@@ -371,6 +371,12 @@ h4 + .btn-group {
   float: right;
 }
 
+.panel .panel-heading .os-btns {
+  position: absolute;
+  top: 5px;
+  margin-left: 10px;
+}
+
 .os-more-options {
   position: absolute;
   cursor: pointer;
@@ -601,6 +607,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #707070;
   font-weight: normal;
   clear: left;
+  max-width: 250px;
 }
 
 .os-key-values.os-one-col .item .key.key-sm {
@@ -1065,3 +1072,12 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-cfg-settings .os-table-body .row {
   cursor: pointer;
 }
+
+.os-full-width-container, .os-full-size-container {
+  width: 100%;
+}
+
+.os-full-height-container, .os-full-size-container {
+  height: 100%;
+}
+

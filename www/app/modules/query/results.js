@@ -1,7 +1,7 @@
 
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, 
+    $scope, $state, $stateParams, $modal,
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     function init() {
@@ -30,7 +30,7 @@ angular.module('os.query.results', ['os.query.models'])
         showFooter        : true,
         totalServerItems  : 'resultsCtx.numRows',
         plugins           : [gridFilterPlugin],
-        headerRowHeight   : 70,
+        headerRowHeight   : 35,
         selectedItems     : $scope.selectedRows,
         enablePaging      : false
       };
@@ -91,7 +91,7 @@ angular.module('os.query.results', ['os.query.models'])
           } else {
             var showColSummary = qc.reporting.type == 'columnsummary';
             prepareDataGrid(showColSummary, result);
-            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 101 : 70;
+            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 66 : 35;
           }
         },
 
@@ -332,6 +332,6 @@ angular.module('os.query.results', ['os.query.models'])
       SpecimensHolder.setSpecimens(getSelectedSpecimens());
       $state.go('specimen-list-addedit', {listId: ''});
     };
- 
+
     init();
   });

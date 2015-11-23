@@ -15,23 +15,6 @@
       </span>
     </h3>
     <div class="os-btns right os-query-btn">
-      <button class="default" ng-click="editFilters()">
-        <span class="fa fa-pencil"></span>
-        <span translate="queries.edit_filters">Edit Filters</span>
-      </button>
-      <button class="default" ng-click="defineView()">
-        <span class="fa fa-eye"></span>
-        <span translate="queries.define_view">Define View</span>
-      </button>
-      <button class="default" ng-click="rerun()">
-        <span class="fa fa-repeat"></span>
-        <span translate="queries.rerun">Rerun</span>
-      </button>
-      <button class="default" ng-click="downloadResults()">
-        <span class="fa fa-download"></span>
-        <span translate="common.buttons.export">Export</span>
-      </button>
-
       <div dropdown class="btn-group" ng-if="showAddToSpecimenList">
         <button class="btn default" ng-if="!resultsCtx.selectAll" ng-click="selectAllRows()">
           <span class="fa fa-check"></span>
@@ -45,37 +28,71 @@
 
         <os-assign-to-spmn-list on-add-to-list="addSelectedSpecimensToSpecimenList(list)">
         </os-assign-to-spmn-list>
-  
+      </div>
+
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ng-click="editFilters()">
+              <span class="fa fa-pencil"></span>
+              <span translate="queries.edit_filters">Edit Filters</span>
+            </a>
+          </li>
+          <li>
+            <a ng-click="defineView()">
+              <span class="fa fa-eye"></span>
+              <span translate="queries.define_view">Define View</span>
+            </a>
+          </li>
+          <li>
+            <a ng-click="rerun()">
+              <span class="fa fa-repeat"></span>
+              <span translate="queries.rerun">Rerun</span>
+            </a>
+          </li>
+          <li>
+            <a ng-click="downloadResults()">
+              <span class="fa fa-download"></span>
+              <span translate="common.buttons.export">Export</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div class="os-query-container">
-    <div ng-if="resultsCtx.waitingForRecords">
-      <span translate="queries.waiting_for_records">
-        Loading records, please wait for a moment ...
-      </span>
-    </div>
+    <div class="os-full-size-container">
+      <div ng-if="resultsCtx.waitingForRecords">
+        <span translate="queries.waiting_for_records">
+          Loading records, please wait for a moment ...
+        </span>
+      </div>
 
-    <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
-      <span translate="queries.error"></span>
-    </div>
+      <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
+        <span translate="queries.error"></span>
+      </div>
 
-    <div class="os-query-results-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
       <div ng-if="resultsCtx.moreData">
         <span translate="queries.export_to_get_all">Export to view all records.</span>
         <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank" 
-           translate="queries.know_why_export_has_more_data">
+          translate="queries.know_why_export_has_more_data">
           Click here to know why exported data file have more records.
         </a> 
       </div>
 
-      <div class="os-query-results-grid-container" ng-if="queryCtx.reporting.type == 'crosstab'">
-        <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
-      </div>
+      <div class="os-full-size-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
+        <div class="os-full-size-container" ng-if="queryCtx.reporting.type == 'crosstab'">
+          <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
+        </div>
 
-      <div class="os-query-results-grid-container" ng-if="queryCtx.reporting.type != 'crosstab'">
-        <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+        <div class="os-full-size-container" ng-if="queryCtx.reporting.type != 'crosstab'">
+          <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+        </div>
       </div>
     </div>
   </div>

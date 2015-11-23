@@ -15,13 +15,13 @@
   <div ng-class="{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }" ng-click="togglePin(col)" ng-show="col.pinnable"></div>
 </div>
 
-<input type="text" class="form-control" 
+<!-- input type="text" class="form-control" 
    ng-click="stopClickProp($event)" 
    placeholder="Filter ..." ng-model="col.filterText" 
    ng-style="{ 'width' : col.width - 10 + 'px' }" 
-   style="position: absolute; top: 30px; bottom: 30px; left: 5px; bottom:0;"/>
+   style="position: absolute; top: 30px; bottom: 30px; left: 5px; bottom:0;"/ -->
 
-<div style="position: absolute; top: 71px; border-top: 1px solid #ccc; padding: 5px; width: 100%;" 
+<div style="position: absolute; top: 36px; border-top: 1px solid #ccc; padding: 5px; width: 100%;" 
   ng-if="col.colDef.showSummary">
   <span>{{col.colDef.summary}}</span>
 </div>
