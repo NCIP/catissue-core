@@ -8,6 +8,7 @@ angular.module('os.query.util', [])
       le:          {name: "le",         desc: "", code: "&#8804;",     symbol: '<=',          model: 'LE'},
       gt:          {name: "gt",         desc: "", code: "&#62;",       symbol: '>',           model: 'GT'},
       ge:          {name: "ge",         desc: "", code: "&#8805;",     symbol: '>=',          model: 'GE'},
+      any:         {name: "any",        desc: "", code: "all",         symbol: 'any',         model: 'ANY'},
       exists:      {name: "exists",     desc: "", code: "&#8707;",     symbol: 'exists',      model: 'EXISTS'},
       not_exists:  {name: "not_exists", desc: "", code: "&#8708;",     symbol: 'not exists',  model: 'NOT_EXISTS'},
       qin:         {name: "qin",        desc: "", code: "&#8712;",     symbol: 'in',          model: 'IN'},
@@ -75,7 +76,7 @@ angular.module('os.query.util', [])
     function getStringOps() {
       return [ 
         ops.eq, ops.ne, 
-        ops.exists, ops.not_exists, 
+        ops.exists, ops.not_exists, ops.any,
         ops.starts_with, ops.ends_with, 
         ops.contains, ops.qin, ops.not_in
       ];
@@ -86,7 +87,7 @@ angular.module('os.query.util', [])
         ops.eq, ops.ne, 
         ops.lt, ops.le, 
         ops.gt, ops.ge, 
-        ops.exists, ops.not_exists, 
+        ops.exists, ops.not_exists, ops.any,
         ops.qin, ops.not_in, 
         ops.between
       ];
@@ -115,7 +116,7 @@ angular.module('os.query.util', [])
     };
 
     function isUnaryOp(op) {
-      return op && (op.name == 'exists' || op.name == 'not_exists');
+      return op && (op.name == 'exists' || op.name == 'not_exists' || op.name == 'any');
     }
 
     function onOpSelect(filter) {
@@ -204,7 +205,7 @@ angular.module('os.query.util', [])
       var expr = filter.form.name + "." + filter.field.name + " ";
       expr += filter.op.symbol + " ";
 
-      if (filter.op.name == 'exists' || filter.op.name == 'not_exists') {
+      if (filter.op.name == 'exists' || filter.op.name == 'not_exists' || filter.op.name == 'any') {
         return expr;
       }
 
@@ -519,7 +520,7 @@ angular.module('os.query.util', [])
 
       var op = getOpByModel(filterDef.op);
       var value = undefined;
-      if (op.name == 'exists' || op.name == 'not_exists') {
+      if (op.name == 'exists' || op.name == 'not_exists' || op.name == 'any') {
         value = undefined;
       } else if (op.name != 'qin' && op.name != 'not_in' && op.name != 'between') {
         value = filterDef.values[0];

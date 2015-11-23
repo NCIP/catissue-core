@@ -1180,6 +1180,7 @@
       "ge": "Greater than or Equals", 
       "exists": "Exists",
       "not_exists": "Not Exists",
+      "any": "All",
       "qin": "Is One Of",
       "not_in": "Is Not One Of",
       "starts_with": "Starts With",

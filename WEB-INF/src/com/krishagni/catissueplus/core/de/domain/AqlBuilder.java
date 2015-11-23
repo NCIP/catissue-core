@@ -168,7 +168,7 @@ public class AqlBuilder {
 				
 		StringBuilder filterExpr = new StringBuilder();
 		filterExpr.append(field).append(" ").append(filter.getOp().symbol()).append(" ");
-		if (filter.getOp() == Op.EXISTS || filter.getOp() == Op.NOT_EXISTS) {
+		if (filter.getOp().isUnary()) {
 			return filterExpr.toString();
 		}
 

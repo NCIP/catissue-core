@@ -17,17 +17,22 @@ public class Filter {
 		NOT_IN ("not in"),
 		EXISTS ("exists"),
 		NOT_EXISTS ("not exists"),
+		ANY("any"),
 		BETWEEN("between");
-		
+
 		private String symbol;
-		
+
 		private Op(String symbol) {
 			this.symbol = symbol;
 		}
-		
+
 		public String symbol() {
 			return symbol;
-		}		
+		}
+
+		public boolean isUnary() {
+			return this == EXISTS || this == NOT_EXISTS || this == ANY;
+		}
 	};
 	
 	private int id;

@@ -10,7 +10,7 @@ angular.module('os.query.addeditfilter', ['os.query.models'])
         return false;
       } else if (filter.field && filter.op) {
         var op = filter.op.name;
-        if (op == 'exists' || op == 'not_exists') {
+        if (op == 'exists' || op == 'not_exists' || op == 'any') {
           return false;
         } else if (op == 'qin' || op == 'not_in') {
           return !filter.value || filter.value.length == 0;

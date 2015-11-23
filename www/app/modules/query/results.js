@@ -177,7 +177,7 @@ angular.module('os.query.results', ['os.query.models'])
           return {
             field: "col" + idx,
             displayName: columnLabel,
-            width: width < 100 ? 100 : width,
+            minWidth: width < 100 ? 100 : width,
             headerCellTemplate: 'modules/query/column-filter.html',
             showSummary: showColSummary,
             summary: summaryRow[idx]
