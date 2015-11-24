@@ -82,6 +82,15 @@ angular.module('os.query.executor', [])
         }
 
         link.remove();
+      },
+
+      getFacetValues: function(cpId, facetExprs) {
+        var params = {facet: facetExprs, cpId: cpId};
+        return $http.get(queryUrl + '/facet-values', {params: params}).then(
+          function(result) {
+            return result.data;
+          }
+        );
       }
     };
   });

@@ -32,6 +32,26 @@
 
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
+          <span class="fa fa-filter"></span>
+          <span translate="queries.result_filters.title">Filters</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <div>
+              <input type="text" class="form-control" placeholder="{{'queries.results_filters.search' | translate}}">
+            </div>
+          </li>
+          <li ng-repeat="facet in resultsCtx.facets">
+            <span>
+              <input type="checkbox" ng-model="facet.show" ng-change="toggleShowFacet(facet)">
+              <span>{{facet.caption}}</span>
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
         </button>
@@ -65,33 +85,99 @@
     </div>
   </div>
 
-  <div class="os-query-container">
-    <div class="os-full-size-container">
-      <div ng-if="resultsCtx.waitingForRecords">
-        <span translate="queries.waiting_for_records">
-          Loading records, please wait for a moment ...
-        </span>
-      </div>
+  <div class="os-query-container os-no-padding">
+    <div class="os-query-results-wrapper">
+      <div>
+        <div class="facets-wrapper">
+          <ul class="os-btns facets-list">
+            <li class="dropdown facet" ng-repeat="facet in resultsCtx.facets | filter: {show: true}"
+              is-open="facet.isOpen">
+              <button class="default dropdown-toggle" ng-click="toggleFacetValues(facet)">
+                <span class="facet-criteria">
+                  <span>{{facet.caption}}: </span>
+                  <span ng-switch on="facet.selectedValues.length > 0">
+                    <span ng-switch-when="true">
+                      {{facet.selectedValues.join()}}
+                    </span>
+                    <span ng-switch-default translate="queries.result_filters.all">
+                      All
+                    </span>
+                  </span>
+                </span>
+                <span class="fa fa-caret-down"></span>
+                <a class="facet-clear" ng-if="facet.selectedValues.length > 0"
+                  ng-click="clearFacetValueSelection($event, facet)">
+                  <span class="fa fa-times-circle"></span>
+                </a>
+              </button>
 
-      <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
-        <span translate="queries.error"></span>
-      </div>
+              <ul class="dropdown-menu dropdown-menu-form" ng-init="facet.valueSearch = ''">
+                <li>
+                  <div>
+                    <input class="form-control" ng-model="valueSearch"
+                      placeholder="{{'queries.result_filters.search' | translate}}">
+                  </div>
+                </li>
 
-      <div ng-if="resultsCtx.moreData">
-        <span translate="queries.export_to_get_all">Export to view all records.</span>
-        <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank" 
-          translate="queries.know_why_export_has_more_data">
-          Click here to know why exported data file have more records.
-        </a> 
-      </div>
-
-      <div class="os-full-size-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
-        <div class="os-full-size-container" ng-if="queryCtx.reporting.type == 'crosstab'">
-          <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
+                <li class="facet-values">
+                  <ul class="dropdown-menu-subgroup">
+                    <li ng-hide="facet.selectedValues.length == 0">
+                      <span>
+                        <a ng-click="clearFacetValueSelection($event, facet)">
+                          <span translate="queries.result_filters.clear_values">Clear Selected Values</span>
+                        </a>
+                      </span>
+                    </li>
+                    <li ng-repeat="value in facet.values" ng-show="value.selected">
+                      <span>
+                        <input type="checkbox" ng-model="value.selected" ng-change="toggleFacetValueSelection(facet)">
+                        <span>{{value.value}}</span>
+                      </span>
+                    </li>
+                    <li class="divider" ng-if="facet.selectedValues.length > 0"> </li>
+                    <li ng-repeat="value in facet.values | filter: valueSearch" ng-hide="value.selected">
+                      <span>
+                        <input type="checkbox" ng-model="value.selected" ng-change="toggleFacetValueSelection(facet)">
+                        <span>{{value.value}}</span>
+                      </span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <div class="os-full-size-container" ng-if="queryCtx.reporting.type != 'crosstab'">
-          <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+      <div class="os-full-size-container">
+        <div class="grid-wrapper">
+          <div ng-if="resultsCtx.waitingForRecords">
+            <span translate="queries.waiting_for_records">
+              Loading records, please wait for a moment ...
+            </span>
+          </div>
+
+          <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
+            <span translate="queries.error"></span>
+          </div>
+
+          <div ng-if="resultsCtx.moreData">
+            <span translate="queries.export_to_get_all">Export to view all records.</span>
+            <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank"
+              translate="queries.know_why_export_has_more_data">
+              Click here to know why exported data file have more records.
+            </a>
+          </div>
+
+          <div class="os-full-size-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
+            <div class="os-full-size-container" ng-if="queryCtx.reporting.type == 'crosstab'">
+              <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
+            </div>
+
+            <div class="os-full-size-container" ng-if="queryCtx.reporting.type != 'crosstab'">
+              <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

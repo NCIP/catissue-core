@@ -1216,6 +1216,12 @@
       "title": "Filters",
       "id_or_title": "Query ID / Title",
       "type_id_or_title": "Enter query ID or title to search queries"
+    },
+
+    "result_filters": {
+      "title": "Filters",
+      "all": "All",
+      "search": "Search"
     }
   },
 

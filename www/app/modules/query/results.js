@@ -1,7 +1,7 @@
 
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, $document,
+    $scope, $state, $stateParams, $modal, $document, $timeout,
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     function init() {
@@ -37,11 +37,11 @@ angular.module('os.query.results', ['os.query.models'])
     }
 
     function executeQuery(editMode) {
-      if (!editMode && isParameterized()) {
-        showParameterizedFilters();
-      } else {
-        loadRecords();
-      }
+      //if (!editMode && isParameterized()) {
+      //  showParameterizedFilters();
+      //} else {
+        loadRecords(true);
+      //}
     }
 
     function isParameterized() {
@@ -78,7 +78,7 @@ angular.module('os.query.results', ['os.query.models'])
       );
     };
 
-    function loadRecords() {
+    function loadRecords(initFacets) {
       var qc = $scope.queryCtx;
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
@@ -98,6 +98,52 @@ angular.module('os.query.results', ['os.query.models'])
         function() {
           $scope.resultsCtx.waitForRecords = false;
           $scope.resultsCtx.error = true;
+        }
+      );
+
+      if (initFacets) {
+        loadFacets();
+      }
+    }
+
+    function loadFacets() {
+      var facets = [];
+      angular.forEach($scope.queryCtx.filters,
+        function(filter, index) {
+          if (!filter.parameterized || !!filter.expr || filter.field.type != 'STRING') {
+            return;
+          }
+
+          facets.push({
+            id: filter.id,
+            caption: filter.field.caption,
+            expr: filter.form.name + "." + filter.field.name,
+            type: filter.field.type,
+            show: index < 4,
+            values: undefined,
+            valuesQ: undefined,
+            selectedValues: [],
+            isOpen: false
+          });
+        }
+      );
+
+      $scope.resultsCtx.facets = facets;
+    }
+
+    function loadFacetValues(facet) {
+      if (facet.valuesQ || facet.values) {
+        return;
+      }
+
+      facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr]);
+      facet.valuesQ.then(
+        function(result) {
+          facet.values = result[0].values.map(
+            function(value) {
+              return {value: value, selected: false}
+            }
+          );
         }
       );
     }
@@ -361,6 +407,66 @@ angular.module('os.query.results', ['os.query.models'])
       SpecimensHolder.setSpecimens(getSelectedSpecimens());
       $state.go('specimen-list-addedit', {listId: ''});
     };
+
+    $scope.toggleFacetValues = function(facet) {
+      $timeout(
+        function() {
+          if (!facet.isOpen) {
+            return;
+          }
+
+          loadFacetValues(facet);
+        }
+      );
+    }
+
+    $scope.toggleShowFacet = function(facet) {
+      if (facet.show) {
+        $timeout(
+          function() {
+            facet.show = true;
+            facet.isOpen = true;
+            $scope.toggleFacetValues(facet);
+          }
+        );
+      } else {
+        facet.show = false;
+        $scope.clearFacetValueSelection(null, facet);
+      }
+    }
+
+    $scope.toggleFacetValueSelection = function(facet) {
+      angular.forEach($scope.queryCtx.filters, function(filter) {
+        if (filter.id != facet.id) {
+          return;
+        }
+
+        filter.op = QueryUtil.getOp('qin');
+        filter.value = facet.values
+          .filter(function(value) { return value.selected })
+          .map(function(value) { return value.value });
+        facet.selectedValues = filter.value;
+
+        if (facet.selectedValues.length == 0) {
+          filter.op = QueryUtil.getOp('any');
+          filter.value = undefined;
+        }
+      });
+
+      loadRecords(false);
+    }
+
+    $scope.clearFacetValueSelection = function($event, facet) {
+      if ($event) {
+        $event.stopPropagation();
+      }
+
+      angular.forEach(facet.values, function(value) {
+        value.selected = false;
+      });
+
+      $scope.toggleFacetValueSelection(facet);
+    }
 
     init();
   });

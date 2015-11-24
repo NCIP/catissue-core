@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.FacetDetail;
+import com.krishagni.catissueplus.core.de.events.GetFacetValuesOp;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
 import com.krishagni.catissueplus.core.de.events.QueryExecResult;
 import com.krishagni.catissueplus.core.de.services.QueryService;
@@ -78,7 +80,26 @@ public class QueryController {
 			IoUtil.close(in);
 		}
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value="/facet-values")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FacetDetail> getFacetValues(
+			@RequestParam(value = "facet", required = true)
+			List<String> facets,
+
+			@RequestParam(value = "cpId", required = false, defaultValue = "-1")
+			Long cpId) {
+
+		GetFacetValuesOp op = new GetFacetValuesOp();
+		op.setFacets(facets);
+		op.setCpId(cpId);
+
+		ResponseEvent<List<FacetDetail>> resp = querySvc.getFacetValues(getRequest(op));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	private <T> T response(ResponseEvent<T> resp) {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -88,4 +109,3 @@ public class QueryController {
 		return new RequestEvent<T>(payload);				
 	}
 }
-																																																																																																																																						

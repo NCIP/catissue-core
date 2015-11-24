@@ -20,12 +20,18 @@ public interface QueryService {
 
 	public ResponseEvent<Long> deleteQuery(RequestEvent<Long> req);
 	
+	//
+	// query execution APIs
+	//
+
 	public ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req);
 	
 	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req);
 	
 	public ResponseEvent<File> getExportDataFile(RequestEvent<String> req);
 	
+	public ResponseEvent<List<FacetDetail>> getFacetValues(RequestEvent<GetFacetValuesOp> req);
+
 	//
 	// folder related APIs
 	//
