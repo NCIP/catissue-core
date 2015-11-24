@@ -300,7 +300,8 @@
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
       "lookup_again": "Lookup Again",
-      "bulk_register": "Bulk Register"  
+      "bulk_register": "Bulk Register",
+      "specimen_catalog": "Specimen Catalog"
     },
 
     "menu": {
@@ -316,7 +317,8 @@
       "completed_visits_count": "Count of Completed Visits",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to filter Participants",
-      "bulk_register": "Click to register participants"
+      "bulk_register": "Click to register participants",
+      "specimen_catalog": "Click to view collection protocol specimens"
     }
   },
 

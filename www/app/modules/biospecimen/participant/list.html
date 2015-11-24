@@ -14,6 +14,14 @@
 
       <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
 
+
+      <button ng-if="!!cp.catalogSetting.query" class="default"
+        title="{{'participant.tooltip.specimen_catalog' | translate}}"
+        ui-sref="query-results({queryId: cp.catalogSetting.query.id})">
+        <span class="fa fa-table"></span>
+        <span translate="participant.buttons.specimen_catalog">Specimen Catalog</span>
+      </button>
+
       <button class="default" os-right-drawer-toggle title="{{'participant.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

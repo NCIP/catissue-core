@@ -29,7 +29,21 @@ angular.module('os.biospecimen.participant',
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
-            return CollectionProtocol.getById($stateParams.cpId);
+            return CollectionProtocol.getById($stateParams.cpId).then(
+              function(cp) {
+                if (!cp) {
+                  return cp;
+                }
+
+                cp.getCatalogSetting().then(
+                  function(setting) {
+                    cp.catalogSetting = setting;
+                  }
+                );
+
+                return cp;
+              }
+            );
           }
         },
         parent: 'signed-in',
