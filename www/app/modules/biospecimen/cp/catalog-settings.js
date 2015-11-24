@@ -16,13 +16,16 @@ angular.module('os.biospecimen.cp.catalog', ['os.biospecimen.models', 'os.query.
       angular.extend($scope.catSettingsCtx, ctx);
     }
 
+    function loadQueries(searchTerm) {
+      $scope.catSettingsCtx.queryList = SavedQuery.list({searchString: searchTerm});
+    }
+
     $scope.showEditForm = function() {
       setEditCtx();
-
-      if (!$scope.catSettingsCtx.queryList) {
-        $scope.catSettingsCtx.queryList = SavedQuery.list();
-      }
+      loadQueries();
     }
+
+    $scope.loadQueries = loadQueries;
 
     $scope.revertEdit = function() {
       setViewCtx();

@@ -29,9 +29,9 @@
               <label class="control-label col-xs-3">
                 <span translate="cp.catalog.query">Query</span>
               </label>
-              <div class="col-xs-8">
-                <os-select name="query" ng-model="catSettingsCtx.setting.query" 
-                  list="catSettingsCtx.queryList.queries" class="form-control" 
+              <div class="col-xs-6">
+                <os-select name="query" class="form-control" ng-model="catSettingsCtx.setting.query"
+                  list="catSettingsCtx.queryList.queries" refresh="loadQueries"
                   display-prop="title" placeholder="{{'cp.catalog.query_desc' | translate}}" required>
                 </os-select>
                 <div os-field-error field="catSettingsForm.query"></div>
