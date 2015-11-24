@@ -30,6 +30,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ShipmentFactoryImpl implements ShipmentFactory {
 	private DaoFactory daoFactory;
@@ -116,11 +117,15 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	
 	private void setShippedDate(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
 		Date shippedDate = detail.getShippedDate();
+		Date todayDate = Utility.chopTime(Calendar.getInstance().getTime());
 		if (shippedDate == null) {
-			shippedDate = Calendar.getInstance().getTime();
-		} else if (shippedDate.after(Calendar.getInstance().getTime())) {
-			ose.addError(ShipmentErrorCode.INVALID_SHIPPED_DATE);
-			return;
+			shippedDate = todayDate;
+		} else {
+			shippedDate = Utility.chopTime(shippedDate);
+			if (shippedDate.after(todayDate)) {
+				ose.addError(ShipmentErrorCode.INVALID_SHIPPED_DATE);
+				return;
+			}
 		}
 
 		shipment.setShippedDate(shippedDate);
@@ -146,12 +151,16 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		Date receivedDate = detail.getReceivedDate();
+		Date todayDate = Utility.chopTime(Calendar.getInstance().getTime());
 		if (receivedDate == null) {
-			receivedDate = Calendar.getInstance().getTime();
-		} else if (receivedDate.before(shipment.getShippedDate()) || 
-			receivedDate.after(Calendar.getInstance().getTime())) {
-			ose.addError(ShipmentErrorCode.INVALID_RECEIVED_DATE);
-			return;
+			receivedDate = todayDate;
+		} else {
+			receivedDate = Utility.chopTime(receivedDate);
+			if (receivedDate.before(Utility.chopTime(shipment.getShippedDate())) ||
+				receivedDate.after(todayDate)) {
+				ose.addError(ShipmentErrorCode.INVALID_RECEIVED_DATE);
+				return;
+			}
 		}
 
 		shipment.setReceivedDate(receivedDate);

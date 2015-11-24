@@ -11,6 +11,10 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
         item.specimen = new Specimen(item.specimen);
       });
 
+      if (!$scope.shipment.receivedDate) {
+        $scope.shipment.receivedDate = new Date();
+      }
+      
       loadPvs();
     }
 
