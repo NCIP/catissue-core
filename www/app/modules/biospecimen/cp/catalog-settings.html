@@ -1,0 +1,74 @@
+<div class="clearfix">
+  <div class="col-xs-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span translate="cp.catalog.title">
+          Catalog Settings
+        </span>
+        <span class="os-btns" show-if-allowed="cpResource.updateOpts" ng-if="catSettingsCtx.view != 'edit_settings'">
+          <button class="default" ng-click="showEditForm()" ng-switch on="!!catSettingsCtx.setting.id">
+            <span ng-switch-when="true">
+              <span class="fa fa-pencil"></span>
+              <span translate="common.buttons.edit">Edit</span>
+            </span>
+            <span ng-switch-default>
+              <span class="fa fa-plus"></span>
+              <span translate="common.buttons.add">Add</span>
+            </span>
+          </button>
+          <button class="btn-danger default" ng-click="delete()" ng-if="!!catSettingsCtx.setting.id">
+            <span class="fa fa-trash"></span>
+            <span translate="common.buttons.delete">Delete</span>
+          </button>
+        </span>
+      </div>
+      <div class="panel-body" ng-switch on="catSettingsCtx.view">
+        <div ng-switch-when="edit_settings">
+          <form name="catSettingsForm" os-form-validator="catSettingsForm" class="form-horizontal" novalidate>
+            <div class="form-group">
+              <label class="control-label col-xs-3">
+                <span translate="cp.catalog.query">Query</span>
+              </label>
+              <div class="col-xs-8">
+                <os-select name="query" ng-model="catSettingsCtx.setting.query" 
+                  list="catSettingsCtx.queryList.queries" class="form-control" 
+                  display-prop="title" placeholder="{{'cp.catalog.query_desc' | translate}}" required>
+                </os-select>
+                <div os-field-error field="catSettingsForm.query"></div>
+              </div>
+            </div>
+
+            <div class="os-divider"></div>
+
+            <div class="form-group">
+              <div class="col-xs-offset-3 col-xs-6">
+                <button class="btn btn-primary" os-form-submit="save()">
+                  <span translate="common.buttons.save">Save</span>
+                </button>
+                <button class="btn os-btn-text" ng-click="revertEdit()">
+                  <span translate="common.buttons.cancel">Cancel</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div ng-switch-default>
+          <ul class="os-key-values os-one-col">
+            <li class="item">
+              <span class="key key-sm" translate="cp.catalog.query">Query</span>
+              <span ng-switch="!!cp.catalogSetting.id">
+                <a ng-switch-when="true" ui-sref="query-addedit({queryId: cp.catalogSetting.query.id})">
+                  <span>{{cp.catalogSetting.query.title}}</span>
+                </a>
+                <span ng-switch-default translate="common.not_specified">
+                  Not Specified
+                </span>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

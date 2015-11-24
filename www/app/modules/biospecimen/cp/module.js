@@ -8,7 +8,8 @@ angular.module('os.biospecimen.cp',
     'os.biospecimen.cp.detail',
     'os.biospecimen.cp.consents',
     'os.biospecimen.cp.events',
-    'os.biospecimen.cp.specimens'
+    'os.biospecimen.cp.specimens',
+    'os.biospecimen.cp.catalog'
   ])
 
   .config(function($stateProvider) {
@@ -198,6 +199,25 @@ angular.module('os.biospecimen.cp',
           }
         },
         controller: 'CpSpecimensCtrl'
-      });
+      })
+      .state('cp-detail.catalog-settings', {
+        url: '/catalog-settings',
+        templateUrl: 'modules/biospecimen/cp/catalog-settings.html',
+        parent: 'cp-detail',
+        resolve: {
+          catalogSetting: function(cp) {
+            if (cp.catalogSetting) {
+              return cp.catalogSetting;
+            }
+
+            return cp.getCatalogSetting().then(
+              function(setting) {
+                cp.catalogSetting = setting || {};
+              }
+            );
+          }
+        },
+        controller: 'CpCatalogSettingsCtrl'
+      })
     });
   

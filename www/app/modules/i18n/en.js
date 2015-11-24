@@ -186,7 +186,7 @@
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
-      "dashboard": "Dashboard"
+      "catalog_settings": "Catalog Settings"
     },
 
     "menu_options": {
@@ -224,7 +224,8 @@
 
     "catalog": {
       "title": "Catalog Settings",
-      "query": "Query"
+      "query": "Query",
+      "query_desc": "Select saved query to use for Specimen Catalog"
     }
   },
 
