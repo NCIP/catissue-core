@@ -5,7 +5,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     function init() { 
       $scope.orderCreateOpts = {resource: 'Order', operations: ['Create']};
-      $scope.shipmentCreateOpts = {resource: 'Order', operations: ['Create']};
+      $scope.shipmentCreateOpts = {resource: 'ShippingAndTracking', operations: ['Create']};
       $scope.listSpecimens = {
         specimens: [],
         actualCount: 0

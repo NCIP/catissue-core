@@ -2,12 +2,13 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
@@ -207,17 +208,23 @@ public class ShipmentServiceImpl implements ShipmentService {
 		
 		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
 		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
-		Set<Long> shipmentAllowedIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessShipmentSites();
-		Long shipmentSiteId = shipment.getSite().getId();
+		Set<Long> allowedSiteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessShipmentSites();
+		Long receivingSiteId = shipment.getSite().getId();
+		Set<String> notBelongSpecNames = new HashSet<String>();
 		for (Map.Entry<String, Set<Long>> specimenSiteId : specimenSiteIdsMap.entrySet()) {
-			if (!specimenSiteId.getValue().contains(shipmentSiteId)) {
-				ose.addError(ShipmentErrorCode.SPECIMEN_NOT_BELONG_SITE);
+			if (!specimenSiteId.getValue().contains(receivingSiteId)) {
+				notBelongSpecNames.add(specimenSiteId.getKey());
 			}
 			
-			if (shipmentAllowedIds != null &&
-					CollectionUtils.intersection(specimenSiteId.getValue(), shipmentAllowedIds).isEmpty()) {
+			if (allowedSiteIds != null &&
+					CollectionUtils.intersection(specimenSiteId.getValue(), allowedSiteIds).isEmpty()) {
 				ose.addError(ShipmentErrorCode.INVALID_SPECIMENS);
 			}
+		}
+		
+		if (CollectionUtils.isNotEmpty(notBelongSpecNames)) {
+			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_REC_SITE, StringUtils.join(notBelongSpecNames, ','),
+					shipment.getSite().getName());
 		}
 		
 		if (shipment.isReceived()) {

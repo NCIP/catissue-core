@@ -185,6 +185,10 @@ public class Shipment extends BaseEntity {
 		setStatus(Status.RECEIVED);
  	}
 	
+	public boolean isPending() {
+		return Status.PENDING == getStatus();
+	}
+	
 	public boolean isShipped() {
 		return Status.SHIPPED == getStatus();
 	}

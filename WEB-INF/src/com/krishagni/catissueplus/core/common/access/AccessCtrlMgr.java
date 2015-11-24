@@ -988,6 +988,11 @@ public class AccessCtrlMgr {
 		if (shipment.getSender().equals(AuthUtil.getCurrentUser())) {
 			return;
 		}
+
+		// receiving site users are not allowed any operation for pending (saved drafts) shipments.
+		if (shipment.isPending()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
 		
 		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, op);
 		if (!allowedSites.contains(shipment.getSite())) {

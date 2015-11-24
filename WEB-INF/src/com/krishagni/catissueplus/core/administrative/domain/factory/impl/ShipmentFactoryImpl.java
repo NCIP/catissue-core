@@ -236,7 +236,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	
 	private ShipmentItem getShipmentItem(ShipmentItemDetail detail, Shipment shipment, OpenSpecimenException ose) {
 		if (shipment.isReceived() && StringUtils.isBlank(detail.getReceivedQuality())) {
-			ose.addError(ShipmentErrorCode.SPECIMEN_QUALITY_REQUIRED);
+			ose.addError(ShipmentErrorCode.SPEC_REC_QUALITY_REQUIRED);
 			return null;
 		}
 		
@@ -245,7 +245,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			try {
 				receivedQuality = ShipmentItem.ReceivedQuality.valueOf(detail.getReceivedQuality().toUpperCase());
 			} catch (IllegalArgumentException iae) {
-				ose.addError(ShipmentErrorCode.INVALID_SPECIMEN_RECEIVED_QUALITY, detail.getReceivedQuality());
+				ose.addError(ShipmentErrorCode.INVALID_SPEC_REC_QUALITY, detail.getReceivedQuality());
 				return null;
 			}
 		}

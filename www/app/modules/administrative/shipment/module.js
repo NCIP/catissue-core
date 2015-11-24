@@ -15,9 +15,9 @@ angular.module('os.administrative.shipment',
         controller: function($scope) {
           // Shipment Authorization Options
           $scope.shipmentResource = {
-            createOpts: {resource: 'Order', operations: ['Create']},
-            updateOpts: {resource: 'Order', operations: ['Update']},
-            deleteOpts: {resource: 'Order', operations: ['Delete']}
+            createOpts: {resource: 'ShippingAndTracking', operations: ['Create']},
+            updateOpts: {resource: 'ShippingAndTracking', operations: ['Update']},
+            deleteOpts: {resource: 'ShippingAndTracking', operations: ['Delete']}
           }
         },
         parent: 'signed-in'

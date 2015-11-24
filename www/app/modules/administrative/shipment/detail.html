@@ -8,12 +8,12 @@
     <h3>{{shipment.name}}</h3>
 
     <div class="os-btns right">
-      <button class="primary" 
+      <button class="primary" show-if-allowed="shipmentResource.updateOpts"
         ui-sref="shipment-receive({shipmentId: shipment.id})" ng-if="shipment.status == 'SHIPPED'">
         <span class="fa fa-inbox"></span>
         <span translate="shipments.buttons.receive">Receive</span>
       </button>
-      <button class="primary" 
+      <button class="primary" show-if-allowed="shipmentResource.updateOpts"
         ui-sref="shipment-addedit({shipmentId: shipment.id})" ng-if="shipment.status == 'PENDING'">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>

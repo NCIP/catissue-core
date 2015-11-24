@@ -13,9 +13,9 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	DUPLICATE_SPECIMENS,
 	
-	SPECIMEN_QUALITY_REQUIRED,
+	SPEC_REC_QUALITY_REQUIRED,
 	
-	INVALID_SPECIMEN_RECEIVED_QUALITY,
+	INVALID_SPEC_REC_QUALITY,
 	
 	NO_SPECIMENS_TO_SHIP,
 	
@@ -43,7 +43,7 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	STATUS_CHANGE_NOT_ALLOWED,
 	
-	SPECIMEN_NOT_BELONG_SITE
+	SPEC_NOT_BELONG_TO_REC_SITE
 	;
 	
 	@Override

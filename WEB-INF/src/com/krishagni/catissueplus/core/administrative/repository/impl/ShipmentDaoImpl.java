@@ -10,6 +10,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
+import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -32,13 +33,6 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
-		
-		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
-			query.createAlias("sender", "sender")
-				.add(Restrictions.or(
-					Restrictions.in("site.id", crit.siteIds()),
-					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())));
-		}
 		
 		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
 		addNameRestrictions(query, crit, matchMode);
@@ -85,6 +79,14 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	}
 	
 	private void addSiteRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
+		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
+			query.createAlias("sender", "sender")
+				.add(Restrictions.or(
+					Restrictions.and(Restrictions.in("site.id", crit.siteIds()),
+						Restrictions.ne("status", Status.PENDING)),
+					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())));
+		}
+		
 		if (StringUtils.isBlank(crit.site())) {
 			return;
 		}
