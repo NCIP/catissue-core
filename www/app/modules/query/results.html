@@ -35,13 +35,14 @@
           <span class="fa fa-filter"></span>
           <span translate="queries.result_filters.title">Filters</span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right">
+        <ul class="dropdown-menu dropdown-menu-form dropdown-menu-right" ng-init="facetSearch = ''">
           <li>
             <div>
-              <input type="text" class="form-control" placeholder="{{'queries.results_filters.search' | translate}}">
+              <input type="text" class="form-control" ng-model="facetSearch" 
+                placeholder="{{'queries.result_filters.search' | translate}}">
             </div>
           </li>
-          <li ng-repeat="facet in resultsCtx.facets">
+          <li ng-repeat="facet in resultsCtx.facets | filter: facetSearch">
             <span>
               <input type="checkbox" ng-model="facet.show" ng-change="toggleShowFacet(facet)">
               <span>{{facet.caption}}</span>
@@ -114,7 +115,7 @@
               <ul class="dropdown-menu dropdown-menu-form" ng-init="facet.valueSearch = ''">
                 <li>
                   <div>
-                    <input class="form-control" ng-model="valueSearch"
+                    <input type="text" class="form-control" ng-model="valueSearch"
                       placeholder="{{'queries.result_filters.search' | translate}}">
                   </div>
                 </li>
