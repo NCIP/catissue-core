@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
@@ -96,5 +97,10 @@ public class AbstractDao<T> implements Dao<T> {
 		
 		criteria.add(or);
 	}
-		 
+
+	protected Session getCurrentSession() {
+		Session session = sessionFactory.getCurrentSession();
+		session.enableFilter("activeEntity");
+		return session;
+	}
 }

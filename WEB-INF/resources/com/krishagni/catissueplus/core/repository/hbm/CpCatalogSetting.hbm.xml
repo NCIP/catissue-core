@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+  <class name="com.krishagni.catissueplus.core.de.domain.CpCatalogSetting" table="OS_CP_CATALOG_SETTINGS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_CP_CATALOG_SETTINGS_SEQ</param>
+      </generator>      
+    </id>
+
+    <many-to-one	 
+      name="cp"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+      column="CP_ID" />
+
+    <many-to-one	 
+      name="query"
+      class="com.krishagni.catissueplus.core.de.domain.SavedQuery"
+      column="QUERY_ID" />
+
+    <many-to-one 
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="CREATED_BY"/>
+
+    <property name="creationTime" column="CREATION_TIME"/>
+     
+    <many-to-one
+      name="lastUpdatedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="LAST_UPDATED_BY"/>
+
+    <property name="lastUpdateTime" column="LAST_UPDATE_TIME"/>
+	
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+	
+    <filter name="activeEntity"/>
+
+    <query name="getSettingByCpId">
+      select
+        setting
+      from
+        com.krishagni.catissueplus.core.de.domain.CpCatalogSetting setting
+        join setting.cp cp
+      where
+        cp.id = :cpId
+    </query>
+    
+    <query name="getSettingByCpShortTitle">
+      select
+        setting
+      from
+        com.krishagni.catissueplus.core.de.domain.CpCatalogSetting setting
+        join setting.cp cp
+      where
+        cp.shortTitle = :shortTitle
+    </query>
+  </class> 
+</hibernate-mapping>

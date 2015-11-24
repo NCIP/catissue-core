@@ -332,6 +332,16 @@
     <property name="emailService" ref="emailService"/>
     <property name="templateService" ref="templateService"/>
   </bean>
+
+  <bean id="catalogSettingFact" class="com.krishagni.catissueplus.core.de.domain.factory.impl.CpCatalogSettingFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="deDaoFactory" ref="deDaoFactory"/>
+  </bean>
+
+  <bean id="catalogSvc" class="com.krishagni.catissueplus.core.de.services.impl.CatalogServiceImpl">
+    <property name="daoFactory" ref="deDaoFactory"/>
+    <property name="catalogSettingFactory" ref="catalogSettingFact"/>
+  </bean>
   
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
   </bean>

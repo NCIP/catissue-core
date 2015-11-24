@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vpawar" id="CP catalog settings">
+    <createTable tableName="OS_CP_CATALOG_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+     
+      <column name="QUERY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATION_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LAST_UPDATED_BY" type="${int.type}">
+      </column>
+
+      <column name="LAST_UPDATE_TIME" type="${nullable.ts.type}">
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>  
+    
+  <changeSet author="vpawar" id="CP catalog settings sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_CP_CATALOG_SETTINGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on catalog settings CP">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_CP_ID"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings query">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_QUERY"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="QUERY_ID"
+      referencedTableName="CATISSUE_SAVED_QUERIES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings creator">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_CREATOR"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings updater">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_UPDATER"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="LAST_UPDATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+</databaseChangeLog>
