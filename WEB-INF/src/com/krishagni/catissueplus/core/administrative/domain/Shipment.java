@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +25,10 @@ public class Shipment extends BaseEntity {
 	
 	private String name;
 	
+	private String trackingNumber;
+	
+	private String  courierName;
+	
 	private Site site;
 	
 	private Date shippedDate;
@@ -44,12 +49,30 @@ public class Shipment extends BaseEntity {
 	
 	private Set<ShipmentItem> shipmentItems = new HashSet<ShipmentItem>();
 	
+	private transient Set<User> notifyUsers = new HashSet<User>();
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
+	}
+
+	public String getCourierName() {
+		return courierName;
+	}
+
+	public void setCourierName(String courierName) {
+		this.courierName = courierName;
 	}
 
 	public Site getSite() {
@@ -132,8 +155,18 @@ public class Shipment extends BaseEntity {
 		this.shipmentItems = shipmentItems;
 	}
 
+	public Set<User> getNotifyUsers() {
+		return notifyUsers;
+	}
+
+	public void setNotifyUsers(Set<User> notifyUsers) {
+		this.notifyUsers = notifyUsers;
+	}
+
 	public void update(Shipment other) {
 		setName(other.getName());
+		setTrackingNumber(other.getTrackingNumber());
+		setCourierName(other.getCourierName());
 		setSite(other.getSite());
 		setShippedDate(other.getShippedDate());
 		setSender(other.getSender());

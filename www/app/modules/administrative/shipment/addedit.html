@@ -39,6 +39,28 @@
       </div>
     </div>
      
+    <div class="form-group"> 
+      <label class="col-xs-3 control-label" translate="shipments.tracking_number">Tracking Number</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.trackingNumber | osNoValue}}</div>
+        <div ng-switch-default>
+          <input type="text" name="trackingNumber" ng-model="shipment.trackingNumber"
+            class="form-control" placeholder="{{'shipments.tracking_number' | translate}}" ng-maxlength="255"/>
+        </div>
+      </div>
+    </div>
+     
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="shipments.courier_name">Courier Name</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.courierName | osNoValue}}</div>
+        <div ng-switch-default>
+          <input type="text" name="courierName" ng-model="shipment.courierName"
+            class="form-control" placeholder="{{'shipments.courier_name' | translate}}" ng-maxlength="255"/>
+        </div>
+      </div>
+    </div>
+     
     <div class="form-group">
       <label class="control-label col-xs-3" translate="shipments.receiving_institute">
         Receiving Institute
@@ -61,10 +83,21 @@
         <div ng-switch-when="SHIPPED" class="form-value">{{shipment.siteName}}</div>
         <div ng-switch-default>
           <os-select name="site" ng-model="shipment.siteName" 
-            list="sites" placeholder="{{'shipments.receiving_site' | translate}}" required>
+            list="sites" placeholder="{{'shipments.receiving_site' | translate}}" 
+            on-select="onSiteSelect(shipment.siteName)" required>
           </os-select>
           <div os-field-error field="shipForm.site"></div>
         </div>
+      </div>
+    </div>
+    
+    <div class="form-group" ng-if="shipment.status != 'SHIPPED'">
+      <label class="control-label col-xs-3" translate="shipments.notify_users">Notify Users</label>
+      <div class="col-xs-6">
+        <os-users name="notifyUsers" ng-model="shipment.notifyUsers" multiple 
+          filter-opts="userFilterOpts" placeholder="{{'shipments.notify_users' | translate}}" required>
+        </os-users>
+        <div os-field-error field="shipForm.notifyUsers"></div>
       </div>
     </div>
     
@@ -81,10 +114,10 @@
       </div>  
     </div>
 
-    <div class="form-group" ng-if="shipment.status == 'SHIPPED' && !!shipment.senderComments">
+    <div class="form-group">
       <label class="control-label col-xs-3" translate="shipments.sender_comments">Sender Comments</label>
       <div class="col-xs-6" ng-switch on="shipment.status">
-        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.senderComments}}</div>
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.senderComments | osNoValue}}</div>
         <div ng-switch-default>
           <textarea type="text" name="senderComments" ng-model="shipment.senderComments" class="form-control" 
             placeholder="{{'shipments.sender_comments' | translate}}" rows="2"> 

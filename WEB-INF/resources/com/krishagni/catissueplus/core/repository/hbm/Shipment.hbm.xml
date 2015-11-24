@@ -14,6 +14,10 @@
     
     <property name="name" column="NAME"/>
     
+    <property name="trackingNumber" column="TRACKING_NUMBER"/>
+    
+    <property name="courierName" column="COURIER_NAME"/>
+    
     <many-to-one name="site" column="SITE_ID"/>
     
     <property name="shippedDate" column="SHIPPED_DATE"/>

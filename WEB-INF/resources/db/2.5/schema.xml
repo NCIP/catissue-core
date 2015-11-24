@@ -43,6 +43,14 @@
         <constraints unique="true" nullable="false" />
       </column>
       
+      <column name="TRACKING_NUMBER" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
+      <column name="COURIER_NAME" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
       <column name="SITE_ID" type="${int.type}">
         <constraints nullable="false" />
       </column>

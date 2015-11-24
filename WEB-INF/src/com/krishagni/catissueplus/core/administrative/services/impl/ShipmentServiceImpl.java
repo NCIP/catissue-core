@@ -10,8 +10,10 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentFactory;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
@@ -107,6 +109,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(null, shipment, ose);
 			ensureValidSpecimens(shipment, ose);
+			ensureValidNotifyUsers(shipment, ose);
 			ose.checkAndThrow();
 			
 			if (shipment.isShipped()) {
@@ -144,12 +147,13 @@ public class ShipmentServiceImpl implements ShipmentService {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(existing, newShipment, ose);
 			ensureValidSpecimens(newShipment, ose);
+			ensureValidNotifyUsers(newShipment, ose);
 			ose.checkAndThrow();
 			
 			Status oldStatus = existing.getStatus();
 			existing.update(newShipment);
 			getShipmentDao().saveOrUpdate(existing, true);
-			sendEmailNotifications(existing, oldStatus);
+			sendEmailNotifications(newShipment, oldStatus);
 			return ResponseEvent.response(ShipmentDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -238,6 +242,19 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 	}
 	
+	public void ensureValidNotifyUsers(Shipment shipment, OpenSpecimenException ose) {
+		if (shipment.isReceived()) {
+			return;
+		}
+		
+		Institute institute = shipment.getSite().getInstitute();
+		for (User user: shipment.getNotifyUsers()) {
+			if (!user.getDepartment().getInstitute().equals(institute)) {
+				ose.addError(ShipmentErrorCode.NOTIFY_USER_NOT_BELONG_TO_INST, user.formattedName(), institute.getName());
+			}
+		}
+	}
+	
 	private void sendEmailNotifications(Shipment shipment, Status oldStatus) {
 		if ((oldStatus == null || oldStatus == Status.PENDING) && shipment.isShipped()) {
 			sendShipmentShippedEmail(shipment);
@@ -247,7 +264,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 	
 	private void sendShipmentShippedEmail(Shipment shipment) {
-		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getSite().getCoordinators(), "emailAddress", true);
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getNotifyUsers(), "emailAddress", true);
 		emailIds.add(shipment.getSender().getEmailAddress());
 		String[] subjectParams = {shipment.getName()};
 		

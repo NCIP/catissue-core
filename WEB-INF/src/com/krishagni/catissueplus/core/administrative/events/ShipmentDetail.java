@@ -13,6 +13,10 @@ public class ShipmentDetail {
 	
 	private String name;
 	
+	private String trackingNumber;
+	
+	private String  courierName;
+	
 	private String instituteName;
 	
 	private String siteName;
@@ -35,6 +39,8 @@ public class ShipmentDetail {
 	
 	private List<ShipmentItemDetail> shipmentItems = new ArrayList<ShipmentItemDetail>();
 	
+	private List<UserSummary> notifyUsers = new ArrayList<UserSummary>();
+	
 	public Long getId() {
 		return id;
 	}
@@ -49,6 +55,22 @@ public class ShipmentDetail {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
+	}
+
+	public String getCourierName() {
+		return courierName;
+	}
+
+	public void setCourierName(String courierName) {
+		this.courierName = courierName;
 	}
 
 	public String getInstituteName() {
@@ -139,10 +161,20 @@ public class ShipmentDetail {
 		this.shipmentItems = shipmentItems;
 	}
 
+	public List<UserSummary> getNotifyUsers() {
+		return notifyUsers;
+	}
+
+	public void setNotifyUsers(List<UserSummary> notifyUsers) {
+		this.notifyUsers = notifyUsers;
+	}
+
 	public static ShipmentDetail from(Shipment shipment) {
 		ShipmentDetail detail = new ShipmentDetail();
 		detail.setId(shipment.getId());
 		detail.setName(shipment.getName());
+		detail.setTrackingNumber(shipment.getTrackingNumber());
+		detail.setCourierName(shipment.getCourierName());
 		detail.setInstituteName(shipment.getSite().getInstitute().getName());
 		detail.setSiteName(shipment.getSite().getName());
 		detail.setShippedDate(shipment.getShippedDate());
@@ -154,6 +186,10 @@ public class ShipmentDetail {
 		detail.setStatus(shipment.getStatus().toString());
 		detail.setActivityStatus(shipment.getActivityStatus());
 		detail.setShipmentItems(ShipmentItemDetail.from(shipment.getShipmentItems()));
+		
+		if (shipment.isPending()) {
+			detail.setNotifyUsers(UserSummary.from(shipment.getSite().getCoordinators()));
+		}
 		
 		return detail;
 	}

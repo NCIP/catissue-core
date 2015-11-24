@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
+import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.events.SiteQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.SiteSummary;
@@ -101,6 +103,20 @@ public class SitesController {
 		SiteQueryCriteria crit = new SiteQueryCriteria();
 		crit.setId(id);
 		
+		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(crit);
+		ResponseEvent<SiteDetail> resp = siteService.getSite(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/byname")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public SiteDetail getSiteByName(@RequestParam(value = "name", required = true) String name) {		
+		SiteQueryCriteria crit = new SiteQueryCriteria();
+		crit.setName(name);
+
 		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(crit);
 		ResponseEvent<SiteDetail> resp = siteService.getSite(req);
 		resp.throwErrorIfUnsuccessful();

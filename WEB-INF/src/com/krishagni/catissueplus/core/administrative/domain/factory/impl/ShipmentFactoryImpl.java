@@ -51,6 +51,8 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		
 		shipment.setId(detail.getId());
 		setName(detail, shipment, ose);
+		setTrackingNumber(detail, shipment, ose);
+		setCourierName(detail, shipment, ose);
 		setSite(detail, shipment, ose);
 		setStatus(detail, status, shipment, ose);
 		setShippedDate(detail, shipment, ose);
@@ -61,6 +63,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		setReceiverComments(detail, shipment, ose);
 		setActivityStatus(detail, shipment, ose);
 		setShipmentItems(detail, shipment, ose);
+		setNotifyUser(detail, shipment, ose);
 		
 		ose.checkAndThrow();
 		return shipment;
@@ -74,6 +77,14 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		shipment.setName(name);
+	}
+	
+	private void setTrackingNumber(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		shipment.setTrackingNumber(detail.getTrackingNumber());
+	}
+	
+	private void setCourierName(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		shipment.setCourierName(detail.getCourierName());
 	}
 	
 	private void setSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
@@ -226,6 +237,36 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		shipment.setShipmentItems(orderItems);
+	}
+	
+	private void setNotifyUser(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		if (shipment.isReceived()) {
+			return;
+		}
+		
+		if (CollectionUtils.isEmpty(detail.getNotifyUsers())) {
+			shipment.setNotifyUsers(shipment.getSite().getCoordinators());
+			return;
+		}
+		
+		Set<User> result = new HashSet<User>();
+		for (UserSummary userSummary : detail.getNotifyUsers()) {
+			User user = null;
+			if (userSummary.getId() != null) {
+				user = daoFactory.getUserDao().getById(userSummary.getId());
+			} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
+				user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
+			}
+						
+			if (user == null) {
+				ose.addError(UserErrorCode.NOT_FOUND);
+				return;
+			}
+			
+			result.add(user);
+		}
+		
+		shipment.setNotifyUsers(result);
 	}
 	
 	private User getUser(UserSummary userSummary, User defaultUser) {

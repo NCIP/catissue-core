@@ -18,11 +18,8 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         shipment.shippedDate = new Date();
       }
 
-      if ($scope.shipment.instituteName) {
-        loadSites($scope.shipment.instituteName);
-      }
-
       loadInstitutes();
+      setUserAndSiteList(shipment);
     }
     
     function loadInstitutes () {
@@ -39,6 +36,18 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
           $scope.sites = sites;
         }
       );
+    }
+
+    function setUserFilterOpts(institute) {
+      $scope.userFilterOpts = {institute: institute};
+    }
+
+    function setUserAndSiteList(shipment) {
+      var instituteName = shipment.instituteName;
+      if (instituteName) {
+        setUserFilterOpts(instituteName);
+        loadSites(instituteName);
+      }
     }
 
     function getShipmentItems(specimens) {
@@ -65,7 +74,19 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
     $scope.onInstituteSelect = function(instituteName) {
       $scope.shipment.siteName = undefined;
+      $scope.shipment.notifyUsers = [];
+
+      var instituteName = $scope.shipment.instituteName;
       loadSites(instituteName);
+      setUserFilterOpts(instituteName);
+    }
+
+    $scope.onSiteSelect = function(siteName) {
+      Site.getByName(siteName).then(
+        function(site) {
+          $scope.shipment.notifyUsers = site.coordinators;
+        }
+      );
     }
 
     $scope.addSpecimens = function() {

@@ -1,5 +1,5 @@
 angular.module('os.administrative.models.site', ['os.common.models'])
-  .factory('Site', function(osModel) {
+  .factory('Site', function(osModel, $http) {
     var Site = new osModel('sites');
 
     Site.prototype.getType = function() {
@@ -10,6 +10,14 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return this.name;
     }
 
+    Site.getByName = function (name) {
+      return $http.get(Site.url() + 'byname', {params: {name: name}}).then(
+        function(result) {
+          return new Site(result.data);
+        }
+      );
+    }
+    
     Site.listForCps = function(opName) {
       var opts = {resource: 'CollectionProtocol', operation: opName};
       return getSites(opts);
