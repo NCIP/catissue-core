@@ -26,6 +26,14 @@
                     <td> : $shipment.name </td>
                   </tr>
                   <tr>
+                    <td> Tracking Number td>
+                    <td> : $shipment.trackingNumber </td>
+                  </tr>
+                  <tr>
+                    <td> Courier Name <td>
+                    <td> : $shipment.courierName </td>
+                  </tr>
+                  <tr>
                     <td> Receiving Site </td>
                     <td> : $shipment.site.name </td>
                   </tr>
