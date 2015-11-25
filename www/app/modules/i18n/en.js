@@ -1224,7 +1224,8 @@
     "result_filters": {
       "title": "Filters",
       "all": "All",
-      "search": "Search"
+      "search": "Search",
+      "clear_values": "Clear selected values"
     }
   },
 

@@ -30,7 +30,7 @@
         </os-assign-to-spmn-list>
       </div>
 
-      <div dropdown os-show-if-menu-items-present class="inline">
+      <div dropdown class="inline" ng-if="resultsCtx.facets.length > 0">
         <button class="default dropdown-toggle">
           <span class="fa fa-filter"></span>
           <span translate="queries.result_filters.title">Filters</span>
@@ -88,7 +88,7 @@
 
   <div class="os-query-container os-no-padding">
     <div class="os-query-results-wrapper">
-      <div>
+      <div ng-if="resultsCtx.facets.length > 0">
         <div class="facets-wrapper">
           <ul class="os-btns facets-list">
             <li class="dropdown facet" ng-repeat="facet in resultsCtx.facets | filter: {show: true}"
