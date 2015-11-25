@@ -91,7 +91,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     function getSelectedSpecimens (scope, message, anyStatus) {
       if (!scope.selection.any) {
         showSelectSpecimens(message);
-        return;
+        return [];
       }
 
       var specimens = [];
@@ -107,7 +107,6 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
       if (specimens.length == 0) {
         showSelectSpecimens(message);
-        return;
       }
 
       return specimens;
@@ -248,6 +247,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
               selectedSpecimens.push({label: specimen.label});
             }
           );
+
+          if (selectedSpecimens.length == 0) {
+            return;
+          }
 
           if (!!list) {
             list.addSpecimens(selectedSpecimens).then(function(specimens) {
