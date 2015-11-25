@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +12,7 @@ import org.apache.commons.collections.CollectionUtils;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -25,9 +25,11 @@ public class Shipment extends BaseEntity {
 	
 	private String name;
 	
+	private String  courierName;
+	
 	private String trackingNumber;
 	
-	private String  courierName;
+	private String trackingUrl;
 	
 	private Site site;
 	
@@ -49,7 +51,7 @@ public class Shipment extends BaseEntity {
 	
 	private Set<ShipmentItem> shipmentItems = new HashSet<ShipmentItem>();
 	
-	private transient Set<User> notifyUsers = new HashSet<User>();
+	private Set<User> notifyUsers = new HashSet<User>();
 	
 	public String getName() {
 		return name;
@@ -57,6 +59,14 @@ public class Shipment extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCourierName() {
+		return courierName;
+	}
+
+	public void setCourierName(String courierName) {
+		this.courierName = courierName;
 	}
 
 	public String getTrackingNumber() {
@@ -67,12 +77,12 @@ public class Shipment extends BaseEntity {
 		this.trackingNumber = trackingNumber;
 	}
 
-	public String getCourierName() {
-		return courierName;
+	public String getTrackingUrl() {
+		return trackingUrl;
 	}
 
-	public void setCourierName(String courierName) {
-		this.courierName = courierName;
+	public void setTrackingUrl(String trackingUrl) {
+		this.trackingUrl = trackingUrl;
 	}
 
 	public Site getSite() {
@@ -165,8 +175,9 @@ public class Shipment extends BaseEntity {
 
 	public void update(Shipment other) {
 		setName(other.getName());
-		setTrackingNumber(other.getTrackingNumber());
 		setCourierName(other.getCourierName());
+		setTrackingNumber(other.getTrackingNumber());
+		setTrackingUrl(other.getTrackingUrl());
 		setSite(other.getSite());
 		setShippedDate(other.getShippedDate());
 		setSender(other.getSender());
@@ -178,6 +189,7 @@ public class Shipment extends BaseEntity {
 		
 		if (getStatus() == Status.PENDING) {
 			updateOrderItems(other);
+			CollectionUpdater.update(getNotifyUsers(), other.getNotifyUsers());
 		}
 		updateStatus(other);
 	}

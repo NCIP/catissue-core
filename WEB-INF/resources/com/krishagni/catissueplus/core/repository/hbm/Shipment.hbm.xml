@@ -14,9 +14,11 @@
     
     <property name="name" column="NAME"/>
     
+    <property name="courierName" column="COURIER_NAME"/>
+    
     <property name="trackingNumber" column="TRACKING_NUMBER"/>
     
-    <property name="courierName" column="COURIER_NAME"/>
+    <property name="trackingUrl" column="TRACKING_URL"/>
     
     <many-to-one name="site" column="SITE_ID"/>
     
@@ -44,6 +46,11 @@
     <set name="shipmentItems" cascade="all-delete-orphan" inverse="true">
       <key column="SHIPMENT_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.ShipmentItem"/>
+    </set>
+    
+    <set name="notifyUsers" table="OS_SHIPMENT_NOTIFY_USERS">
+      <key column="SHIPMENT_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
     
     <filter name="activeEntity"/>

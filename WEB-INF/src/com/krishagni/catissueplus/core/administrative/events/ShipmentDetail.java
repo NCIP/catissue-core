@@ -13,9 +13,11 @@ public class ShipmentDetail {
 	
 	private String name;
 	
+	private String  courierName;
+	
 	private String trackingNumber;
 	
-	private String  courierName;
+	private String trackingUrl;
 	
 	private String instituteName;
 	
@@ -57,6 +59,14 @@ public class ShipmentDetail {
 		this.name = name;
 	}
 
+	public String getCourierName() {
+		return courierName;
+	}
+
+	public void setCourierName(String courierName) {
+		this.courierName = courierName;
+	}
+
 	public String getTrackingNumber() {
 		return trackingNumber;
 	}
@@ -65,12 +75,12 @@ public class ShipmentDetail {
 		this.trackingNumber = trackingNumber;
 	}
 
-	public String getCourierName() {
-		return courierName;
+	public String getTrackingUrl() {
+		return trackingUrl;
 	}
 
-	public void setCourierName(String courierName) {
-		this.courierName = courierName;
+	public void setTrackingUrl(String trackingUrl) {
+		this.trackingUrl = trackingUrl;
 	}
 
 	public String getInstituteName() {
@@ -173,8 +183,9 @@ public class ShipmentDetail {
 		ShipmentDetail detail = new ShipmentDetail();
 		detail.setId(shipment.getId());
 		detail.setName(shipment.getName());
-		detail.setTrackingNumber(shipment.getTrackingNumber());
 		detail.setCourierName(shipment.getCourierName());
+		detail.setTrackingNumber(shipment.getTrackingNumber());
+		detail.setTrackingUrl(shipment.getTrackingUrl());
 		detail.setInstituteName(shipment.getSite().getInstitute().getName());
 		detail.setSiteName(shipment.getSite().getName());
 		detail.setShippedDate(shipment.getShippedDate());
@@ -188,7 +199,7 @@ public class ShipmentDetail {
 		detail.setShipmentItems(ShipmentItemDetail.from(shipment.getShipmentItems()));
 		
 		if (shipment.isPending()) {
-			detail.setNotifyUsers(UserSummary.from(shipment.getSite().getCoordinators()));
+			detail.setNotifyUsers(UserSummary.from(shipment.getNotifyUsers()));
 		}
 		
 		return detail;

@@ -43,11 +43,15 @@
         <constraints unique="true" nullable="false" />
       </column>
       
+      <column name="COURIER_NAME" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
       <column name="TRACKING_NUMBER" type="${text.type}(255)">
         <constraints nullable="true"/>
       </column>
       
-      <column name="COURIER_NAME" type="${text.type}(255)">
+      <column name="TRACKING_URL" type="${text.type}(255)">
         <constraints nullable="true"/>
       </column>
       
@@ -164,6 +168,36 @@
       baseTableName="OS_SHIPMENT_ITEMS"
       baseColumnNames="SPECIMEN_ID"
       referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Table for shipment notify users">
+    <createTable tableName="OS_SHIPMENT_NOTIFY_USERS">
+      <column name="SHIPMENT_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK on shipment notify users shipment id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_NOTIFY_SHIP_ID"
+      baseTableName="OS_SHIPMENT_NOTIFY_USERS"
+      baseColumnNames="SHIPMENT_ID"
+      referencedTableName="OS_SHIPMENTS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK on shipment notify users user id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_NOTIFY_USER_ID"
+      baseTableName="OS_SHIPMENT_NOTIFY_USERS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 </databaseChangeLog>

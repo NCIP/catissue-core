@@ -76,7 +76,6 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       $scope.shipment.siteName = undefined;
       $scope.shipment.notifyUsers = [];
 
-      var instituteName = $scope.shipment.instituteName;
       loadSites(instituteName);
       setUserFilterOpts(instituteName);
     }

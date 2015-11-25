@@ -26,12 +26,34 @@
                     <td> : $shipment.name </td>
                   </tr>
                   <tr>
-                    <td> Tracking Number td>
-                    <td> : $shipment.trackingNumber </td>
+                    <td> Courier Name </td>
+                    <td> : 
+                      #if ( $shipment.courierName )
+                        $shipment.courierName
+                      #else
+                        Not Specified
+                      #end
+                    </td>
                   </tr>
                   <tr>
-                    <td> Courier Name <td>
-                    <td> : $shipment.courierName </td>
+                    <td> Tracking Number </td>
+                    <td> : 
+                      #if ( $shipment.trackingNumber )
+                        $shipment.trackingNumber 
+                      #else
+                        Not Specified
+                      #end
+                    </td>
+                  </tr>
+                  <tr>
+                    <td> Tracking URL </td>
+                    <td> : 
+                      #if ( $shipment.trackingUrl )
+                        $shipment.trackingUrl
+                      #else
+                        Not Specified
+                      #end
+                    </td>
                   </tr>
                   <tr>
                     <td> Receiving Site </td>

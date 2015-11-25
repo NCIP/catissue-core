@@ -1386,8 +1386,9 @@
     "list": "Shipments",
     "create_shipment": "Create Shipment",
     "name": "Name",
-    "tracking_number": "Tracking Number",
     "courier_name": "Courier Name",
+    "tracking_number": "Tracking Number",
+    "tracking_url": "Tracking URL",
     "site": "Site",
     "sender": "Sender",
     "receiver": "Receiver",
@@ -1646,8 +1647,8 @@
         "email_users_role_updated_desc": "Email notifications when a user's role is updated.",
         "email_users_signed_up": "User Signup Notification",
         "email_users_signed_up_desc": "Email notifications when a new user signs up.",
-        "email_shipment_shipped": "Shipment shipped email notification",
-        "email_shipment_received": "Shipment received email notification"
+        "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
+        "email_shipment_received": "Email notifications when specimens' shipment is received"
       }
     }
 }

@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
         
-  <changeSet author="vlonushte" id="Adding email notification config properties for shipping and tracking in os">
+  <changeSet author="vlonushte" id="Config properties to enable/disable shipment shipped/received email notifications">
     <sql>
       call add_cfg_prop(
         'notifications', 'email_shipment_shipped',

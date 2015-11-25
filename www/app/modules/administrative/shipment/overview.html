@@ -2,6 +2,23 @@
   <div class="col-xs-10">
     <ul class="os-key-values os-two-cols">
       <li class="item">
+        <strong class="key key-sm" translate="shipments.courier_name">Courier Name</strong>
+        <span class="value value-md">{{shipment.courierName | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.tracking_number">Tracking Number</strong>
+        <span class="value value-md">{{shipment.trackingNumber | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.tracking_url">Tracking URL</strong>
+        <span class="value value-md">
+          <a href="{{shipment.trackingUrl}}" target="_blank">{{shipment.trackingUrl | osNoValue}}</a>
+        </span>
+      </li>
+
+      <li class="item">
         <strong class="key key-sm" translate="shipments.receiving_site">Receiving Site</strong>
         <span class="value value-md">{{shipment.siteName | osNoValue}}</span>
       </li>

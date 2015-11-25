@@ -8,7 +8,6 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
 
       loadInstitutes();
       loadShipments($scope.filterOpts);
-      loadSites();
       Util.filter($scope, 'filterOpts', loadShipments);
     }
 
@@ -28,8 +27,8 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
       );
     }
     
-    function loadSites() {
-      Site.list().then(
+    function loadSites(institute) {
+      Site.listForInstitute(institute, true).then(
         function(sites) {
           $scope.siteNames = sites;
         }
@@ -40,6 +39,11 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
       $state.go('shipment-detail.overview', {shipmentId: shipment.id});
     };
     
+    $scope.onInstituteSelect = function(institute) {
+      $scope.filterOpts.site = undefined;
+      loadSites(institute);
+    }
+
     $scope.clearFilters = function() {
       $scope.filterOpts = {};
     }

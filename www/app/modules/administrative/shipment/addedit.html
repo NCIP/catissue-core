@@ -39,6 +39,17 @@
       </div>
     </div>
      
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="shipments.courier_name">Courier Name</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.courierName | osNoValue}}</div>
+        <div ng-switch-default>
+          <input type="text" name="courierName" ng-model="shipment.courierName"
+            class="form-control" placeholder="{{'shipments.courier_name' | translate}}" ng-maxlength="255"/>
+        </div>
+      </div>
+    </div>
+     
     <div class="form-group"> 
       <label class="col-xs-3 control-label" translate="shipments.tracking_number">Tracking Number</label>
       <div class="col-xs-6" ng-switch on="shipment.status">
@@ -50,13 +61,13 @@
       </div>
     </div>
      
-    <div class="form-group">
-      <label class="col-xs-3 control-label" translate="shipments.courier_name">Courier Name</label>
+    <div class="form-group"> 
+      <label class="col-xs-3 control-label" translate="shipments.tracking_url">Tracking URL</label>
       <div class="col-xs-6" ng-switch on="shipment.status">
-        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.courierName | osNoValue}}</div>
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.trackingUrl | osNoValue}}</div>
         <div ng-switch-default>
-          <input type="text" name="courierName" ng-model="shipment.courierName"
-            class="form-control" placeholder="{{'shipments.courier_name' | translate}}" ng-maxlength="255"/>
+          <input type="text" name="trackingUrl" ng-model="shipment.trackingUrl"
+            class="form-control" placeholder="{{'shipments.tracking_url' | translate}}" ng-maxlength="255"/>
         </div>
       </div>
     </div>

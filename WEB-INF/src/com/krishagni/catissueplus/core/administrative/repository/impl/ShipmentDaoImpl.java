@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -34,10 +33,9 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
 		
-		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
-		addNameRestrictions(query, crit, matchMode);
-		addInstituteRestrictions(query, crit, MatchMode.EXACT);
-		addSiteRestrictions(query, crit, MatchMode.EXACT);
+		addNameRestrictions(query, crit);
+		addInstituteRestrictions(query, crit);
+		addSiteRestrictions(query, crit);
 		return query.list();
 	}
 	
@@ -61,37 +59,42 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 				.list();
 	}
 	
-	private void addNameRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
+	private void addNameRestrictions(Criteria query, ShipmentListCriteria crit) {
 		if (StringUtils.isBlank(crit.name())) {
 			return;
 		}
 		
-		query.add(Restrictions.ilike("name", crit.name(), matchMode));
+		query.add(Restrictions.ilike("name", crit.name(), crit.matchMode()));
 	}
 	
-	private void addInstituteRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
+	private void addInstituteRestrictions(Criteria query, ShipmentListCriteria crit) {
 		if (StringUtils.isBlank(crit.institute())) {
 			return;
 		}
 		
 		query.createAlias("site.institute", "institute")
-			.add(Restrictions.ilike("institute.name", crit.institute(), matchMode));
+			.add(Restrictions.eq("institute.name", crit.institute()));
 	}
 	
-	private void addSiteRestrictions(Criteria query, ShipmentListCriteria crit, MatchMode matchMode) {
-		if (CollectionUtils.isNotEmpty(crit.siteIds())) {
-			query.createAlias("sender", "sender")
-				.add(Restrictions.or(
-					Restrictions.and(Restrictions.in("site.id", crit.siteIds()),
-						Restrictions.ne("status", Status.PENDING)),
-					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())));
+	private void addSiteRestrictions(Criteria query, ShipmentListCriteria crit) {
+		if (StringUtils.isNotBlank(crit.site())) {
+			query.add(Restrictions.eq("site.name", crit.site()));
 		}
 		
-		if (StringUtils.isBlank(crit.site())) {
+		if (CollectionUtils.isEmpty(crit.siteIds())) {
 			return;
 		}
 		
-		query.add(Restrictions.ilike("site.name", crit.site(), matchMode));
+		query.createAlias("sender", "sender")
+			.add(
+				Restrictions.or(
+					Restrictions.and(
+						Restrictions.in("site.id", crit.siteIds()),
+						Restrictions.ne("status", Status.PENDING)
+					),/* end of AND */
+					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())
+				)/* end of OR */
+			);
 	}
 	
 	private static final String FQN = Shipment.class.getName();
