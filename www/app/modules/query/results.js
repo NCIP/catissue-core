@@ -4,6 +4,8 @@ angular.module('os.query.results', ['os.query.models'])
     $scope, $state, $stateParams, $modal, $document, $timeout,
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
+    var FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
+
     function init() {
       $scope.queryCtx = queryCtx;
       $scope.selectedRows = [];
@@ -114,21 +116,41 @@ angular.module('os.query.results', ['os.query.models'])
             return;
           }
 
-          facets.push({
-            id: filter.id,
-            caption: filter.field.caption,
-            expr: filter.form.name + "." + filter.field.name,
-            type: filter.field.type,
-            show: index < 4,
-            values: undefined,
-            valuesQ: undefined,
-            selectedValues: [],
-            isOpen: false
-          });
+          if (FACETED_OPS.indexOf(filter.op.name) == -1) {
+            return;
+          }
+
+          facets.push(getFacet(filter, index));
         }
       );
 
       $scope.resultsCtx.facets = facets;
+    }
+
+    function getFacet(filter, index) {
+      var values = undefined;
+      if (typeof filter.value == "string" && filter.value.length > 0) {
+        values = [{value: filter.value, selected: false}];
+      } else if (filter.value instanceof Array) {
+        values = filter.value.map(
+          function(val) {
+            return {value: val, selected: false};
+          }
+        );
+      }
+
+      return {
+        id: filter.id,
+        caption: filter.field.caption,
+        expr: filter.form.name + "." + filter.field.name,
+        type: filter.field.type,
+        show: index < 4,
+        values: values,
+        valuesQ: undefined,
+        selectedValues: [],
+        subset: !!values,
+        isOpen: false
+      };
     }
 
     function loadFacetValues(facet) {
@@ -448,8 +470,13 @@ angular.module('os.query.results', ['os.query.models'])
         facet.selectedValues = filter.value;
 
         if (facet.selectedValues.length == 0) {
-          filter.op = QueryUtil.getOp('any');
-          filter.value = undefined;
+          if (facet.subset) {
+            filter.op = QueryUtil.getOp('qin');
+            filter.value = facet.values.map(function(val) { return val.value; });
+          } else {
+            filter.op = QueryUtil.getOp('any');
+            filter.value = undefined;
+          }
         }
       });
 
