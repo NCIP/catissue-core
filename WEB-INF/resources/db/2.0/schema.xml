@@ -331,6 +331,10 @@
   </changeSet>
   
   <changeSet author="vgaikwad" id="Drop foreign key for department id from CATISSUE_USER">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyTableName="CATISSUE_USER" foreignKeyName="FKB025CFC7F30C2528" />
+    </preConditions>
+    
     <dropForeignKeyConstraint
       baseTableName="CATISSUE_USER"
       constraintName="FKB025CFC7F30C2528"/>
@@ -2073,6 +2077,10 @@
   </changeSet>
 
   <changeSet author="ahegade" id="Drop FK on address_id from catissue site table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyTableName="CATISSUE_USER" foreignKeyName="FKB025CFC76CD94566" />
+    </preConditions>
+
     <dropForeignKeyConstraint baseTableName="CATISSUE_SITE" constraintName="FKB024C3436CD94566"/>
   </changeSet>
 
@@ -2280,6 +2288,12 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Creating sequences for permissible value" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <sequenceExists sequenceName="catissue_permi_value_seq" />
+      </not>
+    </preConditions>
+
     <sql endDelimiter="//">
       begin
         declare

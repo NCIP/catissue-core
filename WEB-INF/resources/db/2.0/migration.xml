@@ -72,10 +72,20 @@
     </sql>
   </changeSet>
   
-  <changeSet author="vlonushte" id="Drop foreign key and institution id column from CATISSUE_USER">
+  <changeSet author="vlonushte" id="Drop foreign key on institution id column from CATISSUE_USER">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyTableName="CATISSUE_USER" foreignKeyName="FKB025CFC71792AD22" />
+    </preConditions>
+
     <dropForeignKeyConstraint
       baseTableName="CATISSUE_USER"
       constraintName="FKB025CFC71792AD22"/>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Drop institution id column from CATISSUE_USER">
+    <preConditions onFail="MARK_RAN">
+      <columnExists columnName="INSTITUTION_ID" tableName="CATISSUE_USER"/>
+    </preConditions>
 
     <dropColumn
       columnName="INSTITUTION_ID"

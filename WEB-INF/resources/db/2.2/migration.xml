@@ -171,6 +171,7 @@
   </changeSet>
 
   <changeSet author="hemant" id="Phone number data migration to user table" dbms="oracle">
+    <validCheckSum>7:a314272a4fb3519094b51dfe9b324d25</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <columnExists 
         tableName="CATISSUE_USER" 
@@ -179,11 +180,15 @@
     <sql>
       update
         ( select
-          usr.phone_number as new_number,
-          addr.phone_number as old_number
-      from
-        catissue_user usr
-        inner join catissue_address addr on usr.address_id=addr.identifier) t
+            usr.phone_number as new_number,
+            case
+              when addr.phone_number is null then ' '
+              else addr.phone_number
+            end as old_number
+          from
+            catissue_user usr
+            inner join catissue_address addr on usr.address_id=addr.identifier
+        ) t
       set
         t.new_number=t.old_number;
     </sql>
