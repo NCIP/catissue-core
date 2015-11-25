@@ -32,6 +32,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     Specimen.listForDp = function (labels, dpId) {
       return Specimen.query({label: labels, dpId: dpId});
     }
+    
+    Specimen.listForShipment = function (labels, recSiteName) {
+      return Specimen.query({label: labels, recSiteName: recSiteName});
+    }
 
     Specimen.flatten = function(specimens, parent, depth, pooledSpecimen) {
       var result = [];

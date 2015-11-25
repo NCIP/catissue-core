@@ -13,6 +13,8 @@ public class VisitSpecimensQueryCriteria {
 	private Long dpId;
 	
 	private List<String> labels;
+	
+	private String recSiteName;
 
 	public Long getCprId() {
 		return cprId;
@@ -52,5 +54,13 @@ public class VisitSpecimensQueryCriteria {
 	
 	public void setLabels(List<String> labels) {
 		this.labels = labels;
+	}
+	
+	public String getRecSiteName() {
+		return recSiteName;
+	}
+	
+	public void setRecSiteName(String recSiteName) {
+		this.recSiteName = recSiteName;
 	}
 }

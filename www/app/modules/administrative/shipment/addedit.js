@@ -110,7 +110,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         return;
       }
 
-      Specimen.listByLabels(labels).then(
+      Specimen.listForShipment(labels, $scope.shipment.siteName).then(
         function (specimens) {
           angular.forEach(getShipmentItems(specimens), function(item) {
             $scope.shipment.shipmentItems.push(item);

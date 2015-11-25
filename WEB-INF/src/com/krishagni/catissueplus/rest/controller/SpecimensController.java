@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
+import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -62,6 +64,9 @@ public class SpecimensController {
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 	
+	@Autowired
+	private ShipmentService shipmentService;
+	
 	@RequestMapping(method = RequestMethod.HEAD)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
@@ -91,7 +96,10 @@ public class SpecimensController {
 			Long dpId,
 			
 			@RequestParam(value = "label", required = false)
-			List<String> labels) {
+			List<String> labels,
+			
+			@RequestParam(value = "recSiteName", required = false)
+			String recSiteName) {
 				
 		if (cprId != null) { // TODO: Move this to CPR controller
 			VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
@@ -109,6 +117,11 @@ public class SpecimensController {
 				crit.setDpId(dpId);
 				crit.setLabels(labels);
 				resp = distributionService.getSpecimens(getRequest(crit));
+			} else if (StringUtils.isNotBlank(recSiteName)) {
+				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
+				crit.setRecSiteName(recSiteName);
+				crit.setLabels(labels);
+				resp = shipmentService.getSpecimens(getRequest(crit));
 			} else {
 				resp = specimenSvc.getSpecimens(getRequest(labels));
 			}
