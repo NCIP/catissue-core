@@ -406,6 +406,14 @@
   padding-right: 5px;
 }
 
+.os-query-facets-panel .facet .facet-range {
+  padding-left: 20px;
+}
+
+.os-query-facets-panel .facet .facet-range .os-md-input input {
+  margin-top: 0px;
+}
+
 /** Results view grid customisation **/
 .os-query-results-grid.ngGrid {
   background: #fff;

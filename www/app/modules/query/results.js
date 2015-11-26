@@ -1,10 +1,27 @@
 
 angular.module('os.query.results', ['os.query.models'])
+  .filter('osFacetRange', function() {
+    return function(input) {
+      var in0 = angular.isDefined(input[0]);
+      var in1 = angular.isDefined(input[1]);
+      if (in0 && in1) {
+        return input[0] + " - " + input[1];
+      } else if (in0) {
+        return '>= ' + input[0];
+      } else if (in1) {
+        return '<= ' + input[1];
+      } else {
+        return 'Err';
+      }
+    }
+  })
   .controller('QueryResultsCtrl', function(
     $scope, $state, $stateParams, $modal, $document, 
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
-    var FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
+    var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
+
+    var NUM_FACETED_OPS = ['le', 'ge', 'eq', 'between', 'exists', 'any'];
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -31,7 +48,7 @@ angular.module('os.query.results', ['os.query.models'])
         enableColumnResize: true,
         showFooter        : false,
         totalServerItems  : 'resultsCtx.numRows',
-        plugins           : [gridFilterPlugin],
+        plugins           : [/*gridFilterPlugin*/],
         headerRowHeight   : 39,
         selectedItems     : $scope.selectedRows,
         enablePaging      : false,
@@ -117,12 +134,26 @@ angular.module('os.query.results', ['os.query.models'])
       var facets = [];
       angular.forEach($scope.queryCtx.filters,
         function(filter, index) {
-          if (!filter.parameterized || !!filter.expr || filter.field.type != 'STRING') {
+          if (!filter.parameterized || !!filter.expr) {
             return;
           }
 
-          if (FACETED_OPS.indexOf(filter.op.name) == -1) {
-            return;
+          switch (filter.field.type) {
+            case 'STRING':
+              if (STR_FACETED_OPS.indexOf(filter.op.name) == -1) {
+                return;
+              }
+              break;
+
+            case 'INTEGER':
+            case 'FLOAT':
+              if (NUM_FACETED_OPS.indexOf(filter.op.name) == -1) {
+                return;
+              }
+              break;
+
+            default:
+              return;
           }
 
           facets.push(getFacet(filter, index));
@@ -134,19 +165,34 @@ angular.module('os.query.results', ['os.query.models'])
 
     function getFacet(filter, index) {
       var values = undefined;
-      if (typeof filter.value == "string" && filter.value.length > 0) {
-        values = [{value: filter.value, selected: false}];
-      } else if (filter.value instanceof Array) {
-        values = filter.value.map(
-          function(val) {
-            return {value: val, selected: false};
-          }
-        );
+      if (filter.field.type == 'INTEGER' || filter.field.type == 'FLOAT') {
+        var value = undefined;
+        switch (filter.op.name) {
+          case 'eq': value = [filter.value, filter.value]; break;
+          case 'le': value = [undefined, filter.value]; break;
+          case 'ge': value = [filter.value, undefined]; break;
+          case 'between': value = filter.value; break;
+        }
+
+        if (value) {
+          values = [{value: value, selected: true}];
+        }
+      } else if (filter.field.type == 'STRING') {
+        if (typeof filter.value == "string" && filter.value.length > 0) {
+          values = [{value: filter.value, selected: false}];
+        } else if (filter.value instanceof Array) {
+          values = filter.value.map(
+            function(val) {
+              return {value: val, selected: false};
+            }
+          );
+        }
       }
 
       return {
         id: filter.id,
         caption: filter.field.caption,
+        dataType: filter.field.type,
         expr: filter.form.name + "." + filter.field.name,
         type: filter.field.type,
         values: values,
@@ -158,7 +204,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
 
     function loadFacetValues(facet) {
-      if (facet.valuesQ || facet.values) {
+      if (facet.valuesQ || facet.values || facet.dataType != 'STRING') {
         return;
       }
 
@@ -172,6 +218,10 @@ angular.module('os.query.results', ['os.query.models'])
           );
         }
       );
+    }
+
+    function isNumber(val) {
+      return !isNaN(val) && angular.isNumber(val);
     }
 
     function getAql(addLimit) { 
@@ -200,7 +250,7 @@ angular.module('os.query.results', ['os.query.models'])
         .text(text);
 
       angular.element($document[0].body).append(span);
-      var width = span[0].offsetWidth + 2 + 10; // 5 + 5 = 10 is padding, 2 is buffer/uncertainity
+      var width = span[0].offsetWidth + 2 + 8 * 2; // 8 + 8 is padding, 2 is buffer/uncertainity
       span.remove();
       return width;
     }
@@ -449,19 +499,44 @@ angular.module('os.query.results', ['os.query.models'])
           return;
         }
 
-        filter.op = QueryUtil.getOp('qin');
-        filter.value = facet.values
-          .filter(function(value) { return value.selected })
-          .map(function(value) { return value.value });
-        facet.selectedValues = filter.value;
+        if (facet.dataType == 'INTEGER' || facet.dataType == 'FLOAT') {
+          var minMax = [undefined, undefined];
+          if (facet.values[0].selected) {
+            minMax = facet.values[0].value;
+          }
 
-        if (facet.selectedValues.length == 0) {
-          if (facet.subset) {
-            filter.op = QueryUtil.getOp('qin');
-            filter.value = facet.values.map(function(val) { return val.value; });
+          var validMin = isNumber(minMax[0]);
+          var validMax = isNumber(minMax[1]);
+
+          if (validMin && validMax) {
+            filter.value = minMax;
+            filter.op = QueryUtil.getOp('between');
+          } else if (validMin && !validMax) {
+            filter.value = minMax[0];
+            filter.op = QueryUtil.getOp('ge');
+          } else if (!validMin && validMax) {
+            filter.value = minMax[1];
+            filter.op = QueryUtil.getOp('le');
           } else {
-            filter.op = QueryUtil.getOp('any');
             filter.value = undefined;
+            filter.op = QueryUtil.getOp('any');
+            return;
+          }
+        } else {
+          filter.op = QueryUtil.getOp('qin');
+          filter.value = facet.values
+            .filter(function(value) { return value.selected })
+            .map(function(value) { return value.value });
+          facet.selectedValues = filter.value;
+
+          if (facet.selectedValues.length == 0) {
+            if (facet.subset) {
+              filter.op = QueryUtil.getOp('qin');
+              filter.value = facet.values.map(function(val) { return val.value; });
+            } else {
+              filter.op = QueryUtil.getOp('any');
+              filter.value = undefined;
+            }
           }
         }
       });
@@ -478,6 +553,32 @@ angular.module('os.query.results', ['os.query.models'])
         value.selected = false;
       });
 
+      $scope.toggleFacetValueSelection(facet);
+    }
+
+    $scope.addRangeCond = function(facet) {
+      var fn = undefined;
+      switch(facet.dataType) {
+        case 'INTEGER': fn = Number.parseInt; break;
+        case 'FLOAT': fn = Number.parseFloat; break;
+      }
+
+      var min = fn(facet.min);
+      if (!isNumber(min)) {
+        min = undefined;
+      }
+
+      var max = fn(facet.max);
+      if (!isNumber(max)) {
+        max = undefined;
+      }
+
+      facet.min = facet.max = '';
+      if (min == undefined && max == undefined) {
+        return;
+      }
+
+      facet.values = [{value: [min, max], selected: true}];
       $scope.toggleFacetValueSelection(facet);
     }
 

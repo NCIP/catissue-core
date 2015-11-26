@@ -15,14 +15,31 @@
         </a>
       </div>
       <div class="values os-scrollbar" ng-if="facet.isOpen">
+        <div class="facet-range clearfix" ng-if="facet.dataType != 'STRING'">
+          <div class="col-xs-5 os-no-left-padding">
+            <input type="text" ng-model="facet.min" os-md-input placeholder="Min">
+          </div>
+          <div class="col-xs-5 os-no-left-padding">
+            <input type="text" ng-model="facet.max" os-md-input placeholder="Max">
+          </div>
+          <div class="col-xs-2 os-no-left-padding">
+            <button class="btn btn-xs btn-success" ng-click="addRangeCond(facet)">
+              <span>Go</span>
+            </button>
+          </div>
+        </div>
+
         <ul>
           <li class="value" ng-repeat="value in facet.values">
             <div class="select-cb">
               <os-checkbox ng-model="value.selected" ng-change="toggleFacetValueSelection(facet, value)">
               </os-checkbox>
             </div>
-            <div class="text">
+            <div class="text" ng-if="facet.dataType == 'STRING'">
               <span>{{value.value}}</span>
+            </div>
+            <div class="text" ng-if="facet.dataType != 'STRING'">
+              <span>{{value.value | osFacetRange}}</span>
             </div>
           </li>
         </ul>
