@@ -1221,12 +1221,7 @@
       "type_id_or_title": "Enter query ID or title to search queries"
     },
 
-    "result_filters": {
-      "title": "Filters",
-      "all": "All",
-      "search": "Search",
-      "clear_values": "Clear selected values"
-    }
+    "refine_results": "Refine Results"
   },
 
   "entities": {

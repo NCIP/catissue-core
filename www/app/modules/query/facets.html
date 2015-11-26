@@ -1,0 +1,32 @@
+<div class="os-query-facets-panel">
+  <h4 translate="queries.refine_results"> Refine Results </h4>
+  <div class="facets-list">
+    <div class="facet" ng-repeat="facet in resultsCtx.facets">
+      <div class="head">
+        <a class="toggle" ng-click="toggleFacetValues(facet)" ng-switch on="facet.isOpen">
+          <span class="fa fa-angle-down"  ng-switch-when="true"></span>
+          <span class="fa fa-angle-right" ng-switch-when="false"></span>
+        </a>
+        <span class="name" ng-click="toggleFacetValues(facet)">
+          {{facet.caption}}
+        </span>
+        <a class="clear" ng-if="facet.selectedValues.length > 0" ng-click="clearFacetValueSelection($event, facet)">
+          <span class="fa fa-times-circle"></span>
+        </a>
+      </div>
+      <div class="values os-scrollbar" ng-if="facet.isOpen">
+        <ul>
+          <li class="value" ng-repeat="value in facet.values">
+            <div class="select-cb">
+              <os-checkbox ng-model="value.selected" ng-change="toggleFacetValueSelection(facet, value)">
+              </os-checkbox>
+            </div>
+            <div class="text">
+              <span>{{value.value}}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 
 angular.module('os.query.results', ['os.query.models'])
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, $document, $timeout,
+    $scope, $state, $stateParams, $modal, $document, 
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     var FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
@@ -29,12 +29,17 @@ angular.module('os.query.results', ['os.query.models'])
         columnDefs        : 'resultsCtx.columnDefs',
         data              : 'resultsCtx.rows',
         enableColumnResize: true,
-        showFooter        : true,
+        showFooter        : false,
         totalServerItems  : 'resultsCtx.numRows',
         plugins           : [gridFilterPlugin],
-        headerRowHeight   : 35,
+        headerRowHeight   : 39,
         selectedItems     : $scope.selectedRows,
-        enablePaging      : false
+        enablePaging      : false,
+        rowHeight         : 36,
+        rowTemplate       :'<div ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ' +
+                              'ng-repeat="col in renderedColumns" ng-class="col.colIndex()" ' +
+                              'class="ngCell {{col.cellClass}}" ng-cell> ' +
+                           '</div>'
       };
     }
 
@@ -93,7 +98,7 @@ angular.module('os.query.results', ['os.query.models'])
           } else {
             var showColSummary = qc.reporting.type == 'columnsummary';
             prepareDataGrid(showColSummary, result);
-            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 66 : 35;
+            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 66 : 39;
           }
         },
 
@@ -144,7 +149,6 @@ angular.module('os.query.results', ['os.query.models'])
         caption: filter.field.caption,
         expr: filter.form.name + "." + filter.field.name,
         type: filter.field.type,
-        show: index < 4,
         values: values,
         valuesQ: undefined,
         selectedValues: [],
@@ -431,30 +435,12 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     $scope.toggleFacetValues = function(facet) {
-      $timeout(
-        function() {
-          if (!facet.isOpen) {
-            return;
-          }
-
-          loadFacetValues(facet);
-        }
-      );
-    }
-
-    $scope.toggleShowFacet = function(facet) {
-      if (facet.show) {
-        $timeout(
-          function() {
-            facet.show = true;
-            facet.isOpen = true;
-            $scope.toggleFacetValues(facet);
-          }
-        );
-      } else {
-        facet.show = false;
-        $scope.clearFacetValueSelection(null, facet);
+      facet.isOpen = !facet.isOpen;
+      if (!facet.isOpen) {
+        return;
       }
+
+      loadFacetValues(facet);
     }
 
     $scope.toggleFacetValueSelection = function(facet) {

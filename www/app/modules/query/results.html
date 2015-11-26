@@ -13,6 +13,7 @@
       <span ng-if="!!queryCtx.id">
         {{queryCtx.title}}
       </span>
+      <span>({{resultsCtx.numRows}})</span>
     </h3>
     <div class="os-btns right os-query-btn">
       <div dropdown class="btn-group" ng-if="showAddToSpecimenList">
@@ -28,27 +29,6 @@
 
         <os-assign-to-spmn-list on-add-to-list="addSelectedSpecimensToSpecimenList(list)">
         </os-assign-to-spmn-list>
-      </div>
-
-      <div dropdown class="inline" ng-if="resultsCtx.facets.length > 0">
-        <button class="default dropdown-toggle">
-          <span class="fa fa-filter"></span>
-          <span translate="queries.result_filters.title">Filters</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-form dropdown-menu-right" ng-init="facetSearch = ''">
-          <li>
-            <div>
-              <input type="text" class="form-control" ng-model="facetSearch" 
-                placeholder="{{'queries.result_filters.search' | translate}}">
-            </div>
-          </li>
-          <li ng-repeat="facet in resultsCtx.facets | filter: facetSearch">
-            <span>
-              <input type="checkbox" ng-model="facet.show" ng-change="toggleShowFacet(facet)">
-              <span>{{facet.caption}}</span>
-            </span>
-          </li>
-        </ul>
       </div>
 
       <div dropdown os-show-if-menu-items-present class="inline">
@@ -86,72 +66,14 @@
     </div>
   </div>
 
-  <div class="os-query-container os-no-padding">
-    <div class="os-query-results-wrapper">
-      <div ng-if="resultsCtx.facets.length > 0">
-        <div class="facets-wrapper">
-          <ul class="os-btns facets-list">
-            <li class="dropdown facet" ng-repeat="facet in resultsCtx.facets | filter: {show: true}"
-              is-open="facet.isOpen">
-              <button class="default dropdown-toggle" ng-click="toggleFacetValues(facet)">
-                <span class="facet-criteria">
-                  <span>{{facet.caption}}: </span>
-                  <span ng-switch on="facet.selectedValues.length > 0">
-                    <span ng-switch-when="true">
-                      {{facet.selectedValues.join()}}
-                    </span>
-                    <span ng-switch-default translate="queries.result_filters.all">
-                      All
-                    </span>
-                  </span>
-                </span>
-                <span class="fa fa-caret-down"></span>
-                <a class="facet-clear" ng-if="facet.selectedValues.length > 0"
-                  ng-click="clearFacetValueSelection($event, facet)">
-                  <span class="fa fa-times-circle"></span>
-                </a>
-              </button>
-
-              <ul class="dropdown-menu dropdown-menu-form" ng-init="facet.valueSearch = ''">
-                <li>
-                  <div>
-                    <input type="text" class="form-control" ng-model="valueSearch"
-                      placeholder="{{'queries.result_filters.search' | translate}}">
-                  </div>
-                </li>
-
-                <li class="facet-values">
-                  <ul class="dropdown-menu-subgroup">
-                    <li ng-hide="facet.selectedValues.length == 0">
-                      <span>
-                        <a ng-click="clearFacetValueSelection($event, facet)">
-                          <span translate="queries.result_filters.clear_values">Clear Selected Values</span>
-                        </a>
-                      </span>
-                    </li>
-                    <li ng-repeat="value in facet.values" ng-show="value.selected">
-                      <span>
-                        <input type="checkbox" ng-model="value.selected" ng-change="toggleFacetValueSelection(facet)">
-                        <span>{{value.value}}</span>
-                      </span>
-                    </li>
-                    <li class="divider" ng-if="facet.selectedValues.length > 0"> </li>
-                    <li ng-repeat="value in facet.values | filter: valueSearch" ng-hide="value.selected">
-                      <span>
-                        <input type="checkbox" ng-model="value.selected" ng-change="toggleFacetValueSelection(facet)">
-                        <span>{{value.value}}</span>
-                      </span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+  <div class="os-query-container">
+    <div class="os-query-results-wrapper clearfix">
+      <div class="col-xs-3 os-full-height-container os-scrollbar" style="overflow-y: auto;">
+        <ng-include src="'modules/query/facets.html'"></ng-include>
       </div>
 
-      <div class="os-full-size-container">
-        <div class="grid-wrapper">
+      <div class="col-xs-9 os-full-height-container">
+        <div class="grid-panel os-full-size-container">
           <div ng-if="resultsCtx.waitingForRecords">
             <span translate="queries.waiting_for_records">
               Loading records, please wait for a moment ...
