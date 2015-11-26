@@ -223,10 +223,13 @@ osApp.config(function(
       };
     }
   })
-  .run(
-    function(
-      $rootScope, $window, $cookieStore, $q,  $state, $translate, $translatePartialLoader,
-      LocationChangeListener, ApiUtil, Setting, PluginReg) {
+  .run(function(
+    $rootScope, $window, $document, $cookieStore, $q,  $state, $translate, $translatePartialLoader,
+    LocationChangeListener, ApiUtil, Setting, PluginReg) {
+
+    $document.on('click', '.dropdown-menu.dropdown-menu-form', function(e) {
+      e.stopPropagation();
+    });
 
     if ($window.localStorage['osAuthToken']) {
       $cookieStore.put('osAuthToken', $window.localStorage['osAuthToken']);
