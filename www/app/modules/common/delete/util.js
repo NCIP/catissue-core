@@ -44,7 +44,8 @@ angular.module('os.common.delete')
         templateUrl: opts.templateUrl,
         controller: function($scope, $modalInstance) {
           $scope.entity = opts.entity;
-
+          $scope.props = opts.props;
+          
           $scope.ok = function() {
             $modalInstance.close(true);
           }
