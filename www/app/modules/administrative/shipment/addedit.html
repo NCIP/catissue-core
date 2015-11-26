@@ -71,19 +71,32 @@
         </div>
       </div>
     </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="shipments.sending_site">Sending Site</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.sendSiteName}}</div>
+        <div ng-switch-default>
+          <os-select name="sendSite" ng-model="shipment.sendSiteName" list="sendingSites"
+            placeholder="{{'shipments.sending_site' | translate}}" required>
+          </os-select>
+          <div os-field-error field="shipForm.sendSite"></div>
+        </div>
+      </div>
+    </div>
      
     <div class="form-group">
-      <label class="control-label col-xs-3" translate="shipments.receiving_institute">
+      <label class="col-xs-3 control-label" translate="shipments.receiving_institute">
         Receiving Institute
       </label>
       <div class="col-xs-6" ng-switch on="shipment.status">
-        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.instituteName}}</div>
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.recInstName}}</div>
         <div ng-switch-default>
-          <os-select name="institute" ng-model="shipment.instituteName" list="instituteNames"
+          <os-select name="recInstitute" ng-model="shipment.recInstName" list="instituteNames"
             placeholder="{{'shipments.receiving_institute' | translate}}" 
-            on-select="onInstituteSelect(shipment.instituteName)" required>
+            on-select="onInstituteSelect(shipment.recInstName)" required>
           </os-select>
-          <div os-field-error field="shipForm.institute"></div>
+          <div os-field-error field="shipForm.recInstitute"></div>
         </div>
       </div>
     </div>
@@ -91,13 +104,13 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="shipments.receiving_site">Receiving Site</label>
       <div class="col-xs-6" ng-switch on="shipment.status">
-        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.siteName}}</div>
+        <div ng-switch-when="SHIPPED" class="form-value">{{shipment.recSiteName}}</div>
         <div ng-switch-default>
-          <os-select name="site" ng-model="shipment.siteName" 
+          <os-select name="recSite" ng-model="shipment.recSiteName" 
             list="sites" placeholder="{{'shipments.receiving_site' | translate}}" 
-            on-select="onSiteSelect(shipment.siteName)" required>
+            on-select="onSiteSelect(shipment.recSiteName)" required>
           </os-select>
-          <div os-field-error field="shipForm.site"></div>
+          <div os-field-error field="shipForm.recSite"></div>
         </div>
       </div>
     </div>

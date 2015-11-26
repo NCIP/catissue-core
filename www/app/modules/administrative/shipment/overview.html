@@ -17,10 +17,16 @@
           <a href="{{shipment.trackingUrl}}" target="_blank">{{shipment.trackingUrl | osNoValue}}</a>
         </span>
       </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.sending_site">Sending Site</strong>
+        <span class="value value-md">{{shipment.sendSiteName}}</span>
+        </span>
+      </li>
 
       <li class="item">
         <strong class="key key-sm" translate="shipments.receiving_site">Receiving Site</strong>
-        <span class="value value-md">{{shipment.siteName | osNoValue}}</span>
+        <span class="value value-md">{{shipment.recSiteName}}</span>
       </li>
         
       <li class="item">

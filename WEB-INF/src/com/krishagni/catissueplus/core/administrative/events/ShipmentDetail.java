@@ -19,9 +19,11 @@ public class ShipmentDetail {
 	
 	private String trackingUrl;
 	
-	private String instituteName;
+	private String sendSiteName;
 	
-	private String siteName;
+	private String recInstName;
+	
+	private String recSiteName;
 	
 	private Date shippedDate;
 	
@@ -83,20 +85,28 @@ public class ShipmentDetail {
 		this.trackingUrl = trackingUrl;
 	}
 
-	public String getInstituteName() {
-		return instituteName;
+	public String getSendSiteName() {
+		return sendSiteName;
 	}
 
-	public void setInstituteName(String instituteName) {
-		this.instituteName = instituteName;
+	public void setSendSiteName(String sendSiteName) {
+		this.sendSiteName = sendSiteName;
+	}
+	
+	public String getRecInstName() {
+		return recInstName;
 	}
 
-	public String getSiteName() {
-		return siteName;
+	public void setRecInstName(String recInstName) {
+		this.recInstName = recInstName;
 	}
-
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	
+	public String getRecSiteName() {
+		return recSiteName;
+	}
+	
+	public void setRecSiteName(String recSiteName) {
+		this.recSiteName = recSiteName;
 	}
 
 	public Date getShippedDate() {
@@ -186,8 +196,9 @@ public class ShipmentDetail {
 		detail.setCourierName(shipment.getCourierName());
 		detail.setTrackingNumber(shipment.getTrackingNumber());
 		detail.setTrackingUrl(shipment.getTrackingUrl());
-		detail.setInstituteName(shipment.getSite().getInstitute().getName());
-		detail.setSiteName(shipment.getSite().getName());
+		detail.setSendSiteName(shipment.getSendingSite().getName());
+		detail.setRecInstName(shipment.getReceivingSite().getInstitute().getName());
+		detail.setRecSiteName(shipment.getReceivingSite().getName());
 		detail.setShippedDate(shipment.getShippedDate());
 		detail.setSender(UserSummary.from(shipment.getSender()));
 		detail.setSenderComments(shipment.getSenderComments());

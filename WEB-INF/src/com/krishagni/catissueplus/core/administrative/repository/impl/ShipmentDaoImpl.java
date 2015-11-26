@@ -28,7 +28,7 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	public List<Shipment> getShipments(ShipmentListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(Shipment.class)
-				.createAlias("site", "site")
+				.createAlias("receivingSite", "recSite")
 				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
 				.addOrder(Order.desc("id"));
@@ -68,31 +68,31 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	}
 	
 	private void addInstituteRestrictions(Criteria query, ShipmentListCriteria crit) {
-		if (StringUtils.isBlank(crit.institute())) {
+		if (StringUtils.isBlank(crit.recInstitute())) {
 			return;
 		}
 		
-		query.createAlias("site.institute", "institute")
-			.add(Restrictions.eq("institute.name", crit.institute()));
+		query.createAlias("recSite.institute", "institute")
+			.add(Restrictions.eq("institute.name", crit.recInstitute()));
 	}
 	
 	private void addSiteRestrictions(Criteria query, ShipmentListCriteria crit) {
-		if (StringUtils.isNotBlank(crit.site())) {
-			query.add(Restrictions.eq("site.name", crit.site()));
+		if (StringUtils.isNotBlank(crit.recSite())) {
+			query.add(Restrictions.eq("recSite.name", crit.recSite()));
 		}
 		
 		if (CollectionUtils.isEmpty(crit.siteIds())) {
 			return;
 		}
 		
-		query.createAlias("sender", "sender")
+		query.createAlias("sendingSite", "sendSite")
 			.add(
 				Restrictions.or(
 					Restrictions.and(
-						Restrictions.in("site.id", crit.siteIds()),
+						Restrictions.in("recSite.id", crit.siteIds()),
 						Restrictions.ne("status", Status.PENDING)
 					),/* end of AND */
-					Restrictions.eq("sender.id", AuthUtil.getCurrentUser().getId())
+					Restrictions.in("sendSite.id", crit.siteIds())
 				)/* end of OR */
 			);
 	}

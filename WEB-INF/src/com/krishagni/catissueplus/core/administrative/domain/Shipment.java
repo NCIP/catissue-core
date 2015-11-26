@@ -31,7 +31,9 @@ public class Shipment extends BaseEntity {
 	
 	private String trackingUrl;
 	
-	private Site site;
+	private Site sendingSite;
+	
+	private Site receivingSite;
 	
 	private Date shippedDate;
 	
@@ -85,12 +87,20 @@ public class Shipment extends BaseEntity {
 		this.trackingUrl = trackingUrl;
 	}
 
-	public Site getSite() {
-		return site;
+	public Site getSendingSite() {
+		return sendingSite;
+	}
+	
+	public void setSendingSite(Site sendingSite) {
+		this.sendingSite = sendingSite;
+	}
+	
+	public Site getReceivingSite() {
+		return receivingSite;
 	}
 
-	public void setSite(Site site) {
-		this.site = site;
+	public void setReceivingSite(Site receivingSite) {
+		this.receivingSite = receivingSite;
 	}
 
 	public Date getShippedDate() {
@@ -178,7 +188,8 @@ public class Shipment extends BaseEntity {
 		setCourierName(other.getCourierName());
 		setTrackingNumber(other.getTrackingNumber());
 		setTrackingUrl(other.getTrackingUrl());
-		setSite(other.getSite());
+		setSendingSite(other.getSendingSite());
+		setReceivingSite(other.getReceivingSite());
 		setShippedDate(other.getShippedDate());
 		setSender(other.getSender());
 		setSenderComments(other.getSenderComments());

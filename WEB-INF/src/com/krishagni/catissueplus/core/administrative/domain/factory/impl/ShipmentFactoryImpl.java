@@ -54,7 +54,8 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		setCourierName(detail, shipment, ose);
 		setTrackingNumber(detail, shipment, ose);
 		setTrackingUrl(detail, shipment, ose);
-		setSite(detail, shipment, ose);
+		setSendingSite(detail, shipment, ose);
+		setReceivingSite(detail, shipment, ose);
 		setStatus(detail, status, shipment, ose);
 		setShippedDate(detail, shipment, ose);
 		setSender(detail, shipment, ose);
@@ -92,10 +93,10 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		shipment.setTrackingUrl(detail.getTrackingUrl());
 	}
 	
-	private void setSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
-		String siteName = detail.getSiteName();
+	private void setSendingSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		String siteName = detail.getSendSiteName();
 		if (StringUtils.isBlank(siteName)) {
-			ose.addError(ShipmentErrorCode.SITE_REQUIRED);
+			ose.addError(ShipmentErrorCode.SEND_SITE_REQUIRED);
 			return;
 		}
 		
@@ -105,7 +106,23 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			return;
 		}
 		
-		shipment.setSite(site);
+		shipment.setSendingSite(site);
+	}
+	
+	private void setReceivingSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		String siteName = detail.getRecSiteName();
+		if (StringUtils.isBlank(siteName)) {
+			ose.addError(ShipmentErrorCode.REC_SITE_REQUIRED);
+			return;
+		}
+		
+		Site site = daoFactory.getSiteDao().getSiteByName(siteName);
+		if (site == null) {
+			ose.addError(SiteErrorCode.NOT_FOUND);
+			return;
+		}
+		
+		shipment.setReceivingSite(site);
 	}
 	
 	private void setStatus(ShipmentDetail detail, Shipment.Status initialStatus, Shipment shipment, OpenSpecimenException ose) {
@@ -250,7 +267,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		if (CollectionUtils.isEmpty(detail.getNotifyUsers())) {
-			shipment.setNotifyUsers(shipment.getSite().getCoordinators());
+			shipment.setNotifyUsers(shipment.getReceivingSite().getCoordinators());
 			return;
 		}
 		

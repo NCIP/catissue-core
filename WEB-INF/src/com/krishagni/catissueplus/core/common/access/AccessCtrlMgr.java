@@ -952,7 +952,20 @@ public class AccessCtrlMgr {
 	}
 	
 	public void ensureReadShipmentRights(Shipment shipment) {
-		ensureShipmentObjectRights(shipment, Operation.READ);
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
+		boolean senderRights = hasShipmentObjectSenderRights(shipment, allowedSites);
+		if (shipment.isPending()) {
+			if (senderRights) {
+				return;
+			} else {
+				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+		}
+		
+		boolean receiverRights = hasShipmentObjectReceiverRights(shipment, allowedSites);
+		if (!senderRights && !receiverRights) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
 	}
 	
 	public void ensureCreateShipmentRights() {
@@ -966,38 +979,40 @@ public class AccessCtrlMgr {
 	}
 	
 	public void ensureUpdateShipmentRights(Shipment shipment) {
-		ensureShipmentObjectRights(shipment, Operation.UPDATE);
-	}
-	
-	public void ensureReceiveShipmentRights(Shipment shipment) {
-		if (AuthUtil.isAdmin()) {
-			return;
-		}
-		
 		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.UPDATE);
-		if (!allowedSites.contains(shipment.getSite())) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		if ((shipment.isPending() || shipment.isShipped()) &&
+				hasShipmentObjectSenderRights(shipment, allowedSites)) {
+			return;
+		} else if ((shipment.isShipped() || shipment.isReceived()) &&
+				hasShipmentObjectReceiverRights(shipment, allowedSites)) {
+			return;
 		}
+		
+		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 	
-	private void ensureShipmentObjectRights(Shipment shipment, Operation op) {
+	private boolean hasShipmentObjectSenderRights(Shipment shipment, Set<Site> allowedSites) {
 		if (AuthUtil.isAdmin()) {
-			return;
+			return true;
 		}
 		
-		if (shipment.getSender().equals(AuthUtil.getCurrentUser())) {
-			return;
+		if (allowedSites.contains(shipment.getSendingSite())) {
+			return true;
 		}
-
-		// receiving site users are not allowed any operation for pending (saved drafts) shipments.
-		if (shipment.isPending()) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+				
+		return false;
+	}
+	
+	private boolean hasShipmentObjectReceiverRights(Shipment shipment, Set<Site> allowedSites) {
+		if (AuthUtil.isAdmin()) {
+			return true;
 		}
 		
-		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, op);
-		if (!allowedSites.contains(shipment.getSite())) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		if (allowedSites.contains(shipment.getReceivingSite())) {
+			return true;
 		}
+		
+		return false;
 	}
 	
 }

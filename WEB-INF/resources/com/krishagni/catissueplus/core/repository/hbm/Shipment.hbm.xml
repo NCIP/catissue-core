@@ -20,7 +20,9 @@
     
     <property name="trackingUrl" column="TRACKING_URL"/>
     
-    <many-to-one name="site" column="SITE_ID"/>
+    <many-to-one name="sendingSite" column="SENDING_SITE_ID"/>
+    
+    <many-to-one name="receivingSite" column="RECEIVING_SITE_ID"/>
     
     <property name="shippedDate" column="SHIPPED_DATE"/>
       

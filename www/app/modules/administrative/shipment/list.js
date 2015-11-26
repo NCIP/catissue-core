@@ -40,7 +40,7 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
     };
     
     $scope.onInstituteSelect = function(institute) {
-      $scope.filterOpts.site = undefined;
+      $scope.filterOpts.recSite = undefined;
       loadSites(institute);
     }
 

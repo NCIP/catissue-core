@@ -113,7 +113,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(null, shipment, ose);
 			List<String> specimenLabels = Utility.collect(shipment.getShipmentItems(), "specimen.label");
-			getValidSpecimens(shipment.getSite(), specimenLabels, shipment.isReceived(), ose);
+			getValidSpecimens(shipment.getReceivingSite(), specimenLabels, shipment.isReceived(), ose);
 			ensureValidNotifyUsers(shipment, ose);
 			ose.checkAndThrow();
 			
@@ -143,16 +143,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 			
 			AccessCtrlMgr.getInstance().ensureUpdateShipmentRights(existing);
 			Shipment newShipment = shipmentFactory.createShipment(detail, null);
-			if (newShipment.isReceived()) {
-				AccessCtrlMgr.getInstance().ensureReceiveShipmentRights(newShipment);
-			} else {
-				AccessCtrlMgr.getInstance().ensureUpdateShipmentRights(newShipment);
-			}
+			AccessCtrlMgr.getInstance().ensureUpdateShipmentRights(newShipment);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(existing, newShipment, ose);
 			List<String> specimenLabels = Utility.collect(newShipment.getShipmentItems(), "specimen.label");
-			getValidSpecimens(newShipment.getSite(), specimenLabels, newShipment.isReceived(), ose);
+			getValidSpecimens(newShipment.getReceivingSite(), specimenLabels, newShipment.isReceived(), ose);
 			ensureValidNotifyUsers(newShipment, ose);
 			ose.checkAndThrow();
 			
@@ -174,7 +170,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		String recSiteName = req.getPayload().getRecSiteName();
 		List<String> labels = req.getPayload().getLabels();
 		if (StringUtils.isBlank(recSiteName)) {
-			return ResponseEvent.userError(ShipmentErrorCode.SITE_REQUIRED);
+			return ResponseEvent.userError(ShipmentErrorCode.REC_SITE_REQUIRED);
 		}
 		
 		Site site = daoFactory.getSiteDao().getSiteByName(recSiteName);
@@ -278,7 +274,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			return;
 		}
 		
-		Institute institute = shipment.getSite().getInstitute();
+		Institute institute = shipment.getReceivingSite().getInstitute();
 		for (User user: shipment.getNotifyUsers()) {
 			if (!user.getDepartment().getInstitute().equals(institute)) {
 				ose.addError(ShipmentErrorCode.NOTIFY_USER_NOT_BELONG_TO_INST, user.formattedName(), institute.getName());

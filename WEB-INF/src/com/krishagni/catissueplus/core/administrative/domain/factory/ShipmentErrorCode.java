@@ -9,7 +9,9 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	DUP_NAME,
 	
-	SITE_REQUIRED,
+	SEND_SITE_REQUIRED,
+	
+	REC_SITE_REQUIRED,
 	
 	DUPLICATE_SPECIMENS,
 	

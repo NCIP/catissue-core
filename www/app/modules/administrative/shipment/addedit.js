@@ -19,6 +19,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       }
 
       loadInstitutes();
+      loadSendingSites();
       setUserAndSiteList(shipment);
     }
     
@@ -37,13 +38,21 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         }
       );
     }
+    
+    function loadSendingSites() {
+      Site.list().then(
+        function(sites) {
+          $scope.sendingSites = sites;
+        }
+      );
+    }
 
     function setUserFilterOpts(institute) {
       $scope.userFilterOpts = {institute: institute};
     }
 
     function setUserAndSiteList(shipment) {
-      var instituteName = shipment.instituteName;
+      var instituteName = shipment.recInstituteName;
       if (instituteName) {
         setUserFilterOpts(instituteName);
         loadSites(instituteName);
@@ -73,7 +82,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     };
 
     $scope.onInstituteSelect = function(instituteName) {
-      $scope.shipment.siteName = undefined;
+      $scope.shipment.recSiteName = undefined;
       $scope.shipment.notifyUsers = [];
 
       loadSites(instituteName);
@@ -109,7 +118,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         return;
       }
 
-      Specimen.listForShipment(labels, $scope.shipment.siteName).then(
+      Specimen.listForShipment(labels, $scope.shipment.recSiteName).then(
         function (specimens) {
           angular.forEach(getShipmentItems(specimens), function(item) {
             $scope.shipment.shipmentItems.push(item);
