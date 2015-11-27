@@ -282,7 +282,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 
 	public Boolean getIsAvailable() {
-		return isAvailable;
+		return NumUtil.greaterThanZero(getAliquotQuantity()) && (isAvailable == null ? true: isAvailable);
 	}
 
 	public void setIsAvailable(Boolean isAvailable) {

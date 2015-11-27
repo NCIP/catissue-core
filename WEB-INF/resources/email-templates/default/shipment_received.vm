@@ -56,16 +56,20 @@
                     </td>
                   </tr>
                   <tr>
-                    <td> Receiving Site </td>
-                    <td> : $shipment.site.name </td>
+                    <td> Sending Site </td>
+                    <td> : $shipment.sendingSite.name </td>
                   </tr>
                   <tr>
                     <td> Sender </td>
                     <td> : $shipment.sender.firstName $shipment.sender.lastName </td>
                   </tr>
                   <tr>
-                    <td> Sent On </td>
+                    <td> Shipped Date </td>
                     <td> : $dateFmt.format( $shipment.shippedDate ) </td>
+                  </tr>
+                  <tr>
+                    <td> Receiving Site </td>
+                    <td> : $shipment.receivingSite.name </td>
                   </tr>
                   <tr>
                     <td> Receiver </td>

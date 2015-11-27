@@ -62,7 +62,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     function getShipmentItems(specimens) {
       return specimens.filter(
         function(specimen) {
-          return specimen.available && specimen.activityStatus == 'Active';
+          return specimen.available && specimen.availableQty > 0 && specimen.activityStatus == 'Active';
         }).map(
         function(specimen) {
           return {

@@ -20,13 +20,13 @@
       
       <li class="item">
         <strong class="key key-sm" translate="shipments.sending_site">Sending Site</strong>
-        <span class="value value-md">{{shipment.sendSiteName}}</span>
+        <span class="value value-md">{{shipment.sendingSite}}</span>
         </span>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="shipments.receiving_site">Receiving Site</strong>
-        <span class="value value-md">{{shipment.recSiteName}}</span>
+        <span class="value value-md">{{shipment.receivingSite}}</span>
       </li>
         
       <li class="item">
@@ -65,7 +65,7 @@
 
     <div class="os-section os-line-section" ng-if="!!shipment.senderComments">
       <strong class="key key-sm">
-        <span translate="shipments.sender_comments">Sender's Comments</span>
+        <span translate="shipments.sender_comments">Sender Comments</span>
         <span>&nbsp;</span>
       </strong>
       <span class="value value-md">{{shipment.senderComments}}</span>
@@ -73,7 +73,7 @@
 
     <div class="os-section os-line-section" ng-if="!!shipment.receiverComments">
       <strong class="key key-sm">
-        <span translate="shipments.receiver_comments">Receiver's Comments</span>
+        <span translate="shipments.receiver_comments">Receiver Comments</span>
         <span>&nbsp;</span>
       </strong>
       <span class="value value-md">{{shipment.receiverComments}}</span>

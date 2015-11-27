@@ -9,7 +9,7 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hello $shipment.site.name Coordinators,
+                  Hello $shipment.receivinfSite.name Coordinators,
                   <br><br>
                   $shipment.sender.firstName $shipment.sender.lastName has shipped $shipment.name specimens' shipment.
                   <br/><br/>
@@ -56,16 +56,20 @@
                     </td>
                   </tr>
                   <tr>
-                    <td> Receiving Site </td>
-                    <td> : $shipment.site.name </td>
+                    <td> Sending Site </td>
+                    <td> : $shipment.sendingSite.name </td>
                   </tr>
                   <tr>
                     <td> Sender </td>
                     <td> : $shipment.sender.firstName $shipment.sender.lastName </td>
                   </tr>
                   <tr>
-                    <td> Sent On </td>
+                    <td> shipped Date </td>
                     <td> : $dateFmt.format( $shipment.shippedDate ) </td>
+                  </tr>
+                  <tr>
+                    <td> Receiving Site </td>
+                    <td> : $shipment.receivingSite.name </td>
                   </tr>
                 </table>
               </td>
