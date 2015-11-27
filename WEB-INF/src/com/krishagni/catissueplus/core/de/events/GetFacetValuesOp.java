@@ -1,0 +1,25 @@
+package com.krishagni.catissueplus.core.de.events;
+
+import java.util.List;
+
+public class GetFacetValuesOp {
+	private Long cpId;
+
+	private List<String> facets;
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
+	public List<String> getFacets() {
+		return facets;
+	}
+
+	public void setFacets(List<String> facets) {
+		this.facets = facets;
+	}
+}

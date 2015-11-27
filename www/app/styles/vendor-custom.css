@@ -100,6 +100,26 @@
   text-decoration: none;
 }
 
+.dropdown-menu-subgroup > li > span,
+.dropdown-menu > li > span {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+
+.dropdown-menu-form > li > div {
+  margin: 3px 20px;
+}
+
+.dropdown-menu-subgroup > li > span:hover,
+.dropdown-menu > li > span:hover {
+  background: #eaeaea;
+}
+
 body > .ui-select-bootstrap.open {
   z-index: 2000; 
 }

@@ -13,6 +13,7 @@
       <span ng-if="!!queryCtx.id">
         {{queryCtx.title}}
       </span>
+      <span>({{resultsCtx.numRows}})</span>
     </h3>
     <div class="os-btns right os-query-btn">
       <div dropdown class="btn-group" ng-if="showAddToSpecimenList">
@@ -66,32 +67,40 @@
   </div>
 
   <div class="os-query-container">
-    <div class="os-full-size-container">
-      <div ng-if="resultsCtx.waitingForRecords">
-        <span translate="queries.waiting_for_records">
-          Loading records, please wait for a moment ...
-        </span>
+    <div class="os-query-results-wrapper clearfix">
+      <div class="col-xs-3 os-full-height-container os-scrollbar" style="overflow-y: auto;">
+        <ng-include src="'modules/query/facets.html'"></ng-include>
       </div>
 
-      <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
-        <span translate="queries.error"></span>
-      </div>
+      <div class="col-xs-9 os-full-height-container">
+        <div class="grid-panel os-full-size-container">
+          <div ng-if="resultsCtx.waitingForRecords">
+            <span translate="queries.waiting_for_records">
+              Loading records, please wait for a moment ...
+            </span>
+          </div>
 
-      <div ng-if="resultsCtx.moreData">
-        <span translate="queries.export_to_get_all">Export to view all records.</span>
-        <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank" 
-          translate="queries.know_why_export_has_more_data">
-          Click here to know why exported data file have more records.
-        </a> 
-      </div>
+          <div ng-if="!resultsCtx.waitingForRecords && resultsCtx.error">
+            <span translate="queries.error"></span>
+          </div>
 
-      <div class="os-full-size-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
-        <div class="os-full-size-container" ng-if="queryCtx.reporting.type == 'crosstab'">
-          <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
-        </div>
+          <div ng-if="resultsCtx.moreData">
+            <span translate="queries.export_to_get_all">Export to view all records.</span>
+            <a href="https://catissueplus.atlassian.net/wiki/x/LgDGAQ" target="_blank"
+              translate="queries.know_why_export_has_more_data">
+              Click here to know why exported data file have more records.
+            </a>
+          </div>
 
-        <div class="os-full-size-container" ng-if="queryCtx.reporting.type != 'crosstab'">
-          <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+          <div class="os-full-size-container" ng-if="!resultsCtx.waitingForRecords && !resultsCtx.error">
+            <div class="os-full-size-container" ng-if="queryCtx.reporting.type == 'crosstab'">
+              <div os-pivot-table="resultsCtx.pivotTableOpts"> </div>
+            </div>
+
+            <div class="os-full-size-container" ng-if="queryCtx.reporting.type != 'crosstab'">
+              <div class="os-query-results-grid" ng-grid="resultsCtx.gridOpts"> </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

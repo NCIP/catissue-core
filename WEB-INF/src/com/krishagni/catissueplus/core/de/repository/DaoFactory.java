@@ -8,4 +8,6 @@ public interface DaoFactory {
 	public QueryFolderDao getQueryFolderDao();
 	
 	public QueryAuditLogDao getQueryAuditLogDao();
+
+	public CpCatalogSettingDao getCpCatalogSettingDao();
 }

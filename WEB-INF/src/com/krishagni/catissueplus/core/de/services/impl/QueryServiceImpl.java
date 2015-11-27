@@ -49,6 +49,8 @@ import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.FacetDetail;
+import com.krishagni.catissueplus.core.de.events.GetFacetValuesOp;
 import com.krishagni.catissueplus.core.de.events.ListFolderQueriesCriteria;
 import com.krishagni.catissueplus.core.de.events.ListQueryAuditLogsCriteria;
 import com.krishagni.catissueplus.core.de.events.ListSavedQueriesCriteria;
@@ -771,6 +773,24 @@ public class QueryServiceImpl implements QueryService {
 	}
 	
 	@Override
+	@PlusTransactional
+	public ResponseEvent<List<FacetDetail>> getFacetValues(RequestEvent<GetFacetValuesOp> req) {
+		try {
+			GetFacetValuesOp op = req.getPayload();
+			List<FacetDetail> result = new ArrayList<FacetDetail>();
+			for (String facet : op.getFacets()) {
+				result.add(getFacetDetail(op.getCpId(), facet));
+			}
+
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
 	public String insertCustomQueryForms(String dirName) {
 		StringBuilder templates = new StringBuilder();
 		try {
@@ -1022,5 +1042,27 @@ public class QueryServiceImpl implements QueryService {
 			props.put("sharedWith", sharedWith);
 			emailService.sendEmail(SHARE_QUERY_FOLDER_EMAIL_TMPL, new String[] {sharedWith.getEmailAddress()}, props);
 		}		
+	}
+
+	private FacetDetail getFacetDetail(Long cpId, String facet) {
+		String formName = facet.split("\\.", 2)[0];
+		String aql = String.format("select distinct %s where %s exists", facet, facet);
+
+		Query query = Query.createQuery();
+		query.wideRowMode(WideRowMode.OFF).compile(formName, aql);
+		QueryResponse queryResp = query.getData();
+		QueryResultData queryResult = queryResp.getResultData();
+
+		List<Object> values = new ArrayList<Object>();
+		for (Object[] row : queryResult.getRows()) {
+			values.add(row[0]);
+		}
+
+		String[] columnLabels = queryResp.getResultData().getColumnLabels()[0].split("#");
+		FacetDetail result = new FacetDetail();
+		result.setExpr(facet);
+		result.setCaption(columnLabels[columnLabels.length - 1]);
+		result.setValues(values);
+		return result;
 	}
 }

@@ -1,0 +1,34 @@
+/** Scrollbar styling **/
+
+.ngViewport::-webkit-scrollbar,
+.os-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+    display: none;
+}
+
+.ngViewport:hover::-webkit-scrollbar,
+.os-scrollbar:hover::-webkit-scrollbar {
+    display: block;
+}
+
+.ngViewport::-webkit-scrollbar-track,
+.os-scrollbar::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+.ngViewport::-webkit-scrollbar-track-piece,
+.os-scrollbar::-webkit-scrollbar-track-piece {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.ngViewport::-webkit-scrollbar-thumb:horizontal,
+.ngViewport::-webkit-scrollbar-thumb:vertical,
+.os-scrollbar::-webkit-scrollbar-thumb:horizontal,
+.os-scrollbar::-webkit-scrollbar-thumb:vertical {
+  background: #d0d0d0;
+  border-radius: 5px;
+  display: block;
+}

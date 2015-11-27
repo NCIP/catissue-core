@@ -1,8 +1,56 @@
 
 angular.module('os.query.results', ['os.query.models'])
+  .filter('osFacetRange', function() {
+    return function(input) {
+      var in0 = angular.isDefined(input[0]);
+      var in1 = angular.isDefined(input[1]);
+      if (in0 && in1) {
+        return input[0] + " - " + input[1];
+      } else if (in0) {
+        return '>= ' + input[0];
+      } else if (in1) {
+        return '<= ' + input[1];
+      } else {
+        return 'Err';
+      }
+    }
+  })
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, $document,
+    $scope, $state, $stateParams, $modal, $document, 
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
+
+    var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
+
+    var RANGE_FACETED_OPS = ['le', 'ge', 'eq', 'between', 'exists', 'any'];
+
+    function isNumber(val) {
+      return !isNaN(val) && angular.isNumber(val);
+    }
+
+    function identity(val) {
+      return val;
+    }
+
+    function isNotBlankStr(val) {
+      return angular.isString(val) && val.trim().length > 0;
+    }
+
+    var RANGE_FNS = {
+      'INTEGER': {
+        parse   : Number.parseInt,
+        isValid : isNumber
+      },
+
+      'FLOAT': {
+        parse   : Number.parseFloat,
+        isValid : isNumber
+      },
+
+      'DATE': {
+        parse   : identity,
+        isValid : isNotBlankStr
+      }
+    };
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -27,21 +75,26 @@ angular.module('os.query.results', ['os.query.models'])
         columnDefs        : 'resultsCtx.columnDefs',
         data              : 'resultsCtx.rows',
         enableColumnResize: true,
-        showFooter        : true,
+        showFooter        : false,
         totalServerItems  : 'resultsCtx.numRows',
-        plugins           : [gridFilterPlugin],
-        headerRowHeight   : 35,
+        plugins           : [/*gridFilterPlugin*/],
+        headerRowHeight   : 39,
         selectedItems     : $scope.selectedRows,
-        enablePaging      : false
+        enablePaging      : false,
+        rowHeight         : 36,
+        rowTemplate       :'<div ng-style="{\'cursor\': row.cursor, \'z-index\': col.zIndex() }" ' +
+                              'ng-repeat="col in renderedColumns" ng-class="col.colIndex()" ' +
+                              'class="ngCell {{col.cellClass}}" ng-cell> ' +
+                           '</div>'
       };
     }
 
     function executeQuery(editMode) {
-      if (!editMode && isParameterized()) {
-        showParameterizedFilters();
-      } else {
-        loadRecords();
-      }
+      //if (!editMode && isParameterized()) {
+      //  showParameterizedFilters();
+      //} else {
+        loadRecords(true);
+      //}
     }
 
     function isParameterized() {
@@ -78,7 +131,7 @@ angular.module('os.query.results', ['os.query.models'])
       );
     };
 
-    function loadRecords() {
+    function loadRecords(initFacets) {
       var qc = $scope.queryCtx;
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
@@ -91,13 +144,111 @@ angular.module('os.query.results', ['os.query.models'])
           } else {
             var showColSummary = qc.reporting.type == 'columnsummary';
             prepareDataGrid(showColSummary, result);
-            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 66 : 35;
+            $scope.resultsCtx.gridOpts.headerRowHeight = showColSummary ? 66 : 39;
           }
         },
 
         function() {
           $scope.resultsCtx.waitForRecords = false;
           $scope.resultsCtx.error = true;
+        }
+      );
+
+      if (initFacets) {
+        loadFacets();
+      }
+    }
+
+    function loadFacets() {
+      var facets = [];
+      angular.forEach($scope.queryCtx.filters,
+        function(filter, index) {
+          if (!filter.parameterized || !!filter.expr) {
+            return;
+          }
+
+          switch (filter.field.type) {
+            case 'STRING':
+              if (STR_FACETED_OPS.indexOf(filter.op.name) == -1) {
+                return;
+              }
+              break;
+
+            case 'INTEGER':
+            case 'FLOAT':
+            case 'DATE':
+              if (RANGE_FACETED_OPS.indexOf(filter.op.name) == -1) {
+                return;
+              }
+              break;
+
+            default:
+              return;
+          }
+
+          facets.push(getFacet(filter, index));
+        }
+      );
+
+      $scope.resultsCtx.facets = facets;
+    }
+
+    function getFacet(filter, index) {
+      var values = undefined;
+      var isRangeType = !!RANGE_FNS[filter.field.type];
+
+      if (isRangeType) {
+        var value = undefined;
+        switch (filter.op.name) {
+          case 'eq': value = [filter.value, filter.value]; break;
+          case 'le': value = [undefined, filter.value]; break;
+          case 'ge': value = [filter.value, undefined]; break;
+          case 'between': value = filter.value; break;
+        }
+
+        if (value) {
+          values = [{value: value, selected: true}];
+        }
+      } else if (filter.field.type == 'STRING') {
+        if (typeof filter.value == "string" && filter.value.length > 0) {
+          values = [{value: filter.value, selected: false}];
+        } else if (filter.value instanceof Array) {
+          values = filter.value.map(
+            function(val) {
+              return {value: val, selected: false};
+            }
+          );
+        }
+      }
+
+      return {
+        id: filter.id,
+        caption: filter.field.caption,
+        dataType: filter.field.type,
+        isRange: isRangeType,
+        expr: filter.form.name + "." + filter.field.name,
+        type: filter.field.type,
+        values: values,
+        valuesQ: undefined,
+        selectedValues: [],
+        subset: !!values,
+        isOpen: false
+      };
+    }
+
+    function loadFacetValues(facet) {
+      if (facet.valuesQ || facet.values || facet.dataType != 'STRING') {
+        return;
+      }
+
+      facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr]);
+      facet.valuesQ.then(
+        function(result) {
+          facet.values = result[0].values.map(
+            function(value) {
+              return {value: value, selected: false}
+            }
+          );
         }
       );
     }
@@ -128,7 +279,7 @@ angular.module('os.query.results', ['os.query.models'])
         .text(text);
 
       angular.element($document[0].body).append(span);
-      var width = span[0].offsetWidth + 2 + 10; // 5 + 5 = 10 is padding, 2 is buffer/uncertainity
+      var width = span[0].offsetWidth + 2 + 8 * 2; // 8 + 8 is padding, 2 is buffer/uncertainity
       span.remove();
       return width;
     }
@@ -361,6 +512,101 @@ angular.module('os.query.results', ['os.query.models'])
       SpecimensHolder.setSpecimens(getSelectedSpecimens());
       $state.go('specimen-list-addedit', {listId: ''});
     };
+
+    $scope.toggleFacetValues = function(facet) {
+      facet.isOpen = !facet.isOpen;
+      if (!facet.isOpen) {
+        return;
+      }
+
+      loadFacetValues(facet);
+    }
+
+    $scope.toggleFacetValueSelection = function(facet) {
+      angular.forEach($scope.queryCtx.filters, function(filter) {
+        if (filter.id != facet.id) {
+          return;
+        }
+
+        var rangeFns = RANGE_FNS[facet.dataType];
+        if (!!rangeFns) {
+          var minMax = [undefined, undefined];
+          if (facet.values[0].selected) {
+            minMax = facet.values[0].value;
+          }
+
+          var validMin = rangeFns.isValid(minMax[0]);
+          var validMax = rangeFns.isValid(minMax[1]);
+
+          if (validMin && validMax) {
+            filter.value = minMax;
+            filter.op = QueryUtil.getOp('between');
+          } else if (validMin && !validMax) {
+            filter.value = minMax[0];
+            filter.op = QueryUtil.getOp('ge');
+          } else if (!validMin && validMax) {
+            filter.value = minMax[1];
+            filter.op = QueryUtil.getOp('le');
+          } else {
+            filter.value = undefined;
+            filter.op = QueryUtil.getOp('any');
+            return;
+          }
+        } else {
+          filter.op = QueryUtil.getOp('qin');
+          filter.value = facet.values
+            .filter(function(value) { return value.selected })
+            .map(function(value) { return value.value });
+          facet.selectedValues = filter.value;
+
+          if (facet.selectedValues.length == 0) {
+            if (facet.subset) {
+              filter.op = QueryUtil.getOp('qin');
+              filter.value = facet.values.map(function(val) { return val.value; });
+            } else {
+              filter.op = QueryUtil.getOp('any');
+              filter.value = undefined;
+            }
+          }
+        }
+      });
+
+      loadRecords(false);
+    }
+
+    $scope.clearFacetValueSelection = function($event, facet) {
+      if ($event) {
+        $event.stopPropagation();
+      }
+
+      angular.forEach(facet.values, function(value) {
+        value.selected = false;
+      });
+
+      $scope.toggleFacetValueSelection(facet);
+    }
+
+    $scope.addRangeCond = function(facet) {
+      var fns = RANGE_FNS[facet.dataType];
+
+      var min = fns.parse(facet.min);
+      if (!fns.isValid(min)) {
+        min = undefined;
+      }
+
+      var max = fns.parse(facet.max);
+      if (!fns.isValid(max)) {
+        max = undefined;
+      }
+
+      facet.min = facet.max = '';
+      if (min == undefined && max == undefined) {
+        return;
+      }
+
+      facet.values = [{value: [min, max], selected: true}];
+      $scope.toggleFacetValueSelection(facet);
+    }
 
     init();
   });

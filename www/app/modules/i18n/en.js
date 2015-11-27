@@ -186,7 +186,7 @@
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
-      "dashboard": "Dashboard"
+      "catalog_settings": "Catalog Settings"
     },
 
     "menu_options": {
@@ -224,7 +224,8 @@
 
     "catalog": {
       "title": "Catalog Settings",
-      "query": "Query"
+      "query": "Query",
+      "query_desc": "Select saved query to use for Specimen Catalog"
     }
   },
 
@@ -299,7 +300,8 @@
       "register_selected_participant": "Register Selected participant",
       "ignore_matches": "Ignore Matches and Register Participant",
       "lookup_again": "Lookup Again",
-      "bulk_register": "Bulk Register"  
+      "bulk_register": "Bulk Register",
+      "specimen_catalog": "Specimen Catalog"
     },
 
     "menu": {
@@ -315,7 +317,8 @@
       "completed_visits_count": "Count of Completed Visits",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to filter Participants",
-      "bulk_register": "Click to register participants"
+      "bulk_register": "Click to register participants",
+      "specimen_catalog": "Click to view collection protocol specimens"
     }
   },
 
@@ -1216,7 +1219,9 @@
       "title": "Filters",
       "id_or_title": "Query ID / Title",
       "type_id_or_title": "Enter query ID or title to search queries"
-    }
+    },
+
+    "refine_results": "Refine Results"
   },
 
   "entities": {
