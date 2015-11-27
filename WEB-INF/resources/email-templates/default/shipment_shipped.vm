@@ -64,7 +64,7 @@
                     <td> : $shipment.sender.firstName $shipment.sender.lastName </td>
                   </tr>
                   <tr>
-                    <td> shipped Date </td>
+                    <td> Shipped Date </td>
                     <td> : $dateFmt.format( $shipment.shippedDate ) </td>
                   </tr>
                   <tr>
