@@ -245,7 +245,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		for (Specimen specimen : specimens) {
 			if (specimen.isClosed()) {
 				closedSpecimens.add(specimen);
-			} else if (!specimen.isAvailable()) {
+			} else if (!specimen.getIsAvailable()) {
 				unavailableSpecimens.add(specimen);
 			}
 		}
