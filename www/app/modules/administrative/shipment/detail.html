@@ -1,0 +1,36 @@
+<div> 
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="shipment-list" translate="shipments.list">Shipments</a>
+      </li>
+    </ul>
+    <h3>{{shipment.name}}</h3>
+
+    <div class="os-btns right">
+      <button class="primary" show-if-allowed="shipmentResource.updateOpts"
+        ui-sref="shipment-receive({shipmentId: shipment.id})" ng-if="shipment.status == 'SHIPPED'">
+        <span class="fa fa-inbox"></span>
+        <span translate="shipments.buttons.receive">Receive</span>
+      </button>
+      <button class="primary" show-if-allowed="shipmentResource.updateOpts"
+        ui-sref="shipment-addedit({shipmentId: shipment.id})" ng-if="shipment.status == 'PENDING'">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="shipment-detail.overview"> 
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="shipments.menu.overview">Overview</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

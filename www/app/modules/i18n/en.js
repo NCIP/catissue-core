@@ -14,6 +14,7 @@
     "forms": "Forms",
     "specimen_lists": "Specimen Lists",
     "distribution_orders": "Distribution Orders",
+    "shipping_and_tracking": "Shipping and Tracking",
     "jobs": "Jobs",
 
     "cp_desc": "Create, update SOP of visits and specimens",
@@ -28,6 +29,7 @@
     "forms_desc": "Create and manage custom forms",
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
+    "shipping_and_tracking_desc": "Create, ship, track and receive specimen shipments",
     "jobs_desc": "Create, schedule, execute jobs"
   },
 
@@ -958,7 +960,8 @@
       "SurgicalPathologyReport": "Surgical Pathology Report",
       "StorageContainer": "Storage Containers",
       "User": "Users",
-      "ScheduledJob": "Jobs"
+      "ScheduledJob": "Jobs",
+      "ShippingAndTracking": "Shipping and Tracking"
     },
 
     "menu": {
@@ -1315,74 +1318,145 @@
     "specimens_added": "Specimens sucessfully added to {{name}} list",
     "specimens_removed": "Specimens successfully removed from {{name}} list",
     "distribute": "Distribute",
+    "ship": "Ship",
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
+    "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By"
-   },
+  },
 
-   "orders": {
-     "list": "Distribution Orders",
-     "title": "Distribution Order",
-     "create_order": "Create Distribution Order",
-     "name": "Name",
-     "requestor": "Requestor",
-     "site": "Site",
-     "dp": "Distribution Protocol",
-     "date": "Date",
-     "status": "Status",
-     "dispose_all": "Dispose All",
-     "specimens": "Specimens",
-     "distributor": "Distributor",
-     "dist_date": "Distribution Date",
-     "creation_date": "Creation Date",
-     "tracking_url": "Tracking URL",
-     "receiving_institute": "Receiving Institute",
-     "receiving_site": "Receiving Site",
-     "execution_date": "Execution Date",
-     "courier_tracking_url": "Courier Tracking URL",
-     "sender_comments": "Sender Comments",
-     "details": "Order Details",
-     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
-     "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
-     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+  "orders": {
+    "list": "Distribution Orders",
+    "title": "Distribution Order",
+    "create_order": "Create Distribution Order",
+    "name": "Name",
+    "requestor": "Requestor",
+    "site": "Site",
+    "dp": "Distribution Protocol",
+    "date": "Date",
+    "status": "Status",
+    "dispose_all": "Dispose All",
+    "specimens": "Specimens",
+    "distributor": "Distributor",
+    "dist_date": "Distribution Date",
+    "creation_date": "Creation Date",
+    "tracking_url": "Tracking URL",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "execution_date": "Execution Date",
+    "courier_tracking_url": "Courier Tracking URL",
+    "sender_comments": "Sender Comments",
+    "details": "Order Details",
+    "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
+    "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
+    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
-     "report_gen_initiated": "Generating distribution order report...",
-     "downloading_report": "Downloading distribution order report...",
-     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
+    "report_gen_initiated": "Generating distribution order report...",
+    "downloading_report": "Downloading distribution order report...",
+    "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
 
-     "filters": "Filters",
+    "filters": "Filters",
    
-     "spec": {
-       "label": "Label",
-       "cp": "Collection Protocol",
-       "desc": "Description",
-       "available_qty": "Available",
-       "quantity": "Quantity",
-       "location": "Location",
-       "virtual": "Virtual"
-     },
+    "menu": {
+      "overview": "Overview"
+    },
 
-     "statuses": {
-       "EXECUTED": "Executed",
-       "PENDING": "Pending"
-     },
+    "spec": {
+      "label": "Label",
+      "cp": "Collection Protocol",
+      "desc": "Description",
+      "available_qty": "Available",
+      "quantity": "Quantity",
+      "location": "Location",
+      "virtual": "Virtual"
+    },
 
-     "item_statuses": {
-       "DISTRIBUTED": "Distribute",
-       "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
-     },
+    "statuses": {
+      "EXECUTED": "Executed",
+      "PENDING": "Pending"
+    },
 
-     "buttons": {
-       "distribute": "Distribute",
-       "save_draft": "Save Draft",
-       "download_report": "Download Report"
-     },
+    "item_statuses": {
+      "DISTRIBUTED": "Distribute",
+      "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
+    },
 
-     "tooltip": {
-       "create": "Create new distribution order",
-       "search": "Filter out distribution orders"
-     }
-   },
+    "buttons": {
+      "distribute": "Distribute",
+      "save_draft": "Save Draft",
+      "download_report": "Download Report"
+    },
+
+    "tooltip": {
+      "create": "Create new distribution order",
+      "search": "Filter out distribution orders"
+    }
+  },
+
+  "shipments": {
+    "list": "Shipments",
+    "create_shipment": "Create Shipment",
+    "name": "Name",
+    "courier_name": "Courier Name",
+    "tracking_number": "Tracking Number",
+    "tracking_url": "Tracking URL",
+    "sender": "Sender",
+    "receiver": "Receiver",
+    "shipped_date": "Shipped Date",
+    "received_date": "Received Date",
+    "creation_date": "Creation Date",
+    "status": "Status",
+    "specimens": "Specimens",
+    "sending_site": "Sending Site",
+    "receiving_institute": "Receiving Institute",
+    "receiving_site": "Receiving Site",
+    "notify_users": "Notify Users",
+    "sender_comments": "Sender Comments",
+    "receiver_comments": "Receiver Comments",
+    "details": "Shipment Details",
+    "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
+    "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma/tab/newline and click add",
+    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+
+    "filters": "Filters",
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "spec": {
+      "label": "Label",
+      "cp": "Collection Protocol",
+      "desc": "Description",
+      "quantity": "Quantity",
+      "location": "Location",
+      "virtual": "Virtual",
+      "quality": "Quality",
+      "copy_first_to_all": "Copy First To All"
+    },
+
+    "statuses": {
+      "SHIPPED": "Shipped",
+      "PENDING": "Pending",
+      "RECEIVED": "Received"
+    },
+
+    "quality": {
+      "ACCEPTABLE": "Acceptable",
+      "UNACCEPTABLE": "Unacceptable"
+    },
+
+    "buttons": {
+      "ship": "Ship",
+      "save_draft": "Save Draft",
+      "receive": "Receive"
+    },
+
+    "tooltip": {
+      "create": "Create new shipment",
+      "search": "Filter out shipments"
+    }
+  },
 
    "jobs": {
      "list": "Jobs",
@@ -1583,7 +1657,9 @@
         "email_users_role_updated": "Role Updated Notification",
         "email_users_role_updated_desc": "Email notifications when a user's role is updated.",
         "email_users_signed_up": "User Signup Notification",
-        "email_users_signed_up_desc": "Email notifications when a new user signs up."
+        "email_users_signed_up_desc": "Email notifications when a new user signs up.",
+        "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
+        "email_shipment_received": "Email notifications when specimens' shipment is received"
       }
     }
 }

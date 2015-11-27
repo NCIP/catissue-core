@@ -23,6 +23,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -251,5 +252,13 @@ public class Utility {
 	
 	public static boolean isEmpty(Map<?, ?> map) {
 		return map == null || map.isEmpty();
+	}
+	
+	public static Date chopTime(Date date) {
+		if (date == null) {
+			return null;
+		}
+		
+		return DateUtils.truncate(date, Calendar.DATE);
 	}
 }

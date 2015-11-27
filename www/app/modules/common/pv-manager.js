@@ -67,13 +67,19 @@ angular.module('openspecimen')
       'Closed'
     ];
 
+    var qualityStatuses = [
+      'Acceptable',
+      'Unacceptable'
+    ]
+
     var pvMap = {
       anatomicSite: anatomicSites,
       'storage-type': storageTypes,
       'visit-status': visitStatuses,
       'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
-      'activity-status': activityStatuses
+      'activity-status': activityStatuses,
+      'quality-status': qualityStatuses
     };
 
     var pvIdMap = {

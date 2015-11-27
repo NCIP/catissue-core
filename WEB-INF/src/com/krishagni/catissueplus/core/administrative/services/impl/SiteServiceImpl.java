@@ -349,6 +349,15 @@ public class SiteServiceImpl implements SiteService {
 				break;
 			}
 		}
+
+		if (result == null) {
+			try {
+				AccessCtrlMgr.getInstance().ensureCreateShipmentRights();
+				result = getFromDb(crit);
+			} catch (OpenSpecimenException ose) {
+				
+			}
+		}
 		
 		return result;
 	}

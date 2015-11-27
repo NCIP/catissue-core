@@ -1,0 +1,128 @@
+<div class="clearfix">
+  <div class="col-xs-10">
+    <ul class="os-key-values os-two-cols">
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.courier_name">Courier Name</strong>
+        <span class="value value-md">{{shipment.courierName | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.tracking_number">Tracking Number</strong>
+        <span class="value value-md">{{shipment.trackingNumber | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.tracking_url">Tracking URL</strong>
+        <span class="value value-md">
+          <a href="{{shipment.trackingUrl}}" target="_blank">{{shipment.trackingUrl | osNoValue}}</a>
+        </span>
+      </li>
+      
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.sending_site">Sending Site</strong>
+        <span class="value value-md">{{shipment.sendingSite}}</span>
+        </span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.receiving_site">Receiving Site</strong>
+        <span class="value value-md">{{shipment.receivingSite}}</span>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.status">Status</strong>
+        <ng-switch on="shipment.status">
+          <span class="value value-md os-status-received" ng-switch-when="RECEIVED">{{'shipments.statuses.RECEIVED' | translate}}</span>
+          <span class="value value-md os-status-shipped" ng-switch-when="SHIPPED">{{'shipments.statuses.SHIPPED' | translate}}</span>
+          <span class="value value-md os-status-pending" ng-switch-default>{{'shipments.statuses.PENDING' | translate}}</span>
+        </ng-switch>
+      </li>
+        
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.shipped_date">Shipped Date</strong>
+        <span class="value value-md">
+          {{shipment.shippedDate | date: global.dateFmt | osNoValue}}
+        </span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="shipments.sender">Sender</strong>
+        <span class="value value-md">{{shipment.sender | osUserDisplayName}}</span>
+      </li>
+        
+      <li class="item" ng-if="shipment.status == 'RECEIVED'">
+        <strong class="key key-sm" translate="shipments.received_date">Received Date</strong>
+        <span class="value value-md">
+          {{shipment.receivedDate | date: global.dateFmt | osNoValue}}
+        </span>
+      </li>
+
+      <li class="item" ng-if="shipment.status == 'RECEIVED'">
+        <strong class="key key-sm" translate="shipments.receiver">Receiver</strong>
+        <span class="value value-md">{{shipment.receiver | osUserDisplayName}}</span>
+      </li>
+    </ul>
+
+    <div class="os-section os-line-section" ng-if="!!shipment.senderComments">
+      <strong class="key key-sm">
+        <span translate="shipments.sender_comments">Sender Comments</span>
+        <span>&nbsp;</span>
+      </strong>
+      <span class="value value-md">{{shipment.senderComments}}</span>
+    </div>
+
+    <div class="os-section os-line-section" ng-if="!!shipment.receiverComments">
+      <strong class="key key-sm">
+        <span translate="shipments.receiver_comments">Receiver Comments</span>
+        <span>&nbsp;</span>
+      </strong>
+      <span class="value value-md">{{shipment.receiverComments}}</span>
+    </div>
+
+    <div class="os-section" ng-init="specSect=false">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="specSect=!specSect">
+        <span ng-if="!specSect" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="specSect" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="shipments.specimens">Specimens</h3>
+      <div collapse="specSect">
+        <table class="os-table os-table-muted-hdr os-border">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col" translate="shipments.spec.label">Label</th>
+              <th class="col" translate="shipments.spec.desc">Description</th>
+              <th class="col" translate="shipments.spec.cp">Collection Protocol</th>
+              <th class="col" translate="shipments.spec.quantity">Quantity</th>
+              <th class="col" ng-if="shipment.status == 'RECEIVED'" translate="shipments.spec.quality">Quality</th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="item in shipment.shipmentItems" ng-init="specimen = item.specimen">
+              <td class="col">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <span>{{specimen.label}}</span>
+                </a>
+              </td>
+              <td class="col">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                </a>
+              </td>
+              <td class="col">
+                <span>{{specimen.cpShortTitle}}</span>
+              </td>
+              <td class="col">
+                <span>{{specimen.availableQty}}</span>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                </os-specimen-unit>
+              </td>
+              <td class="col" ng-if="shipment.status == 'RECEIVED'">
+                <span>{{"shipments.quality." + item.receivedQuality | translate}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

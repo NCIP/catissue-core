@@ -727,6 +727,17 @@
     <property name="emailService" ref="emailService"/>
   </bean>
   
+  <bean id="shipmentFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ShipmentFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="specimenFactory" ref="specimenFactory"/>
+  </bean>
+  
+  <bean id="shipmentSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.ShipmentServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="shipmentFactory" ref="shipmentFactory" />
+    <property name="emailService" ref="emailService"/>
+  </bean>
+  
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>
   </bean>

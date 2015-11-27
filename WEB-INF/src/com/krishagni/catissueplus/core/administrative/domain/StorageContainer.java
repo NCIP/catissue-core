@@ -441,8 +441,15 @@ public class StorageContainer extends BaseEntity {
 	public StorageContainerPosition nextAvailablePosition(boolean fromLastAssignedPos) {
 		String row = null, col = null;
 		if (fromLastAssignedPos && lastAssignedPos != null) {
-			row = lastAssignedPos.getPosTwo();
-			col = lastAssignedPos.getPosOne();
+			int startRow = lastAssignedPos.getPosTwoOrdinal();
+			int startCol = lastAssignedPos.getPosOneOrdinal() + 1;
+			if (startCol > getNoOfColumns()) {
+				++startRow;
+				startCol = 1;
+			}
+			
+			row = converters.get(getRowLabelingScheme()).fromOrdinal(startRow);
+			col = converters.get(getColumnLabelingScheme()).fromOrdinal(startCol);
 		}
 
 		return nextAvailablePosition(row, col);

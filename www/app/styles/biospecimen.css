@@ -116,6 +116,8 @@
 .os-key-values .value.os-status-not-collected, 
 .os-key-values .value.os-status-missed,
 .os-key-values .value.os-status-pending,
+.os-key-values .value.os-status-shipped,
+.os-key-values .value.os-status-received,
 .os-key-values .value.os-status-distributed {
   width: initial!important;
   border-radius: 4px;
@@ -141,6 +143,14 @@
 
 .os-key-values .value.os-status-distributed {
   background: #5bc0de;
+}
+
+.os-key-values .value.os-status-shipped {
+  background: #5bc0de;
+}
+
+.os-key-values .value.os-status-received {
+  background: #5cb85c;
 }
 
 .os-table.os-spmn-hide-options .os-select-specimen-cb {

@@ -21,7 +21,9 @@ public enum Resource {
 	
 	DP("DistributionProtocol"),
 
-	SCHEDULED_JOB("ScheduledJob")
+	SCHEDULED_JOB("ScheduledJob"),
+	
+	SHIPPING_N_TRACKING("ShippingAndTracking")
 	;
 
 	private final String name;

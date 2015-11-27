@@ -15,6 +15,10 @@
         <span class="fa fa-shopping-cart"></span>
         <span translate="specimen_list.distribute">Distribute</span>
       </button>
+      <button show-if-allowed="shipmentCreateOpts" class="default" ng-click="shipSpecimens()">
+        <span class="fa fa-paper-plane-o"></span>
+        <span translate="specimen_list.ship">Ship</span>
+      </button>
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
