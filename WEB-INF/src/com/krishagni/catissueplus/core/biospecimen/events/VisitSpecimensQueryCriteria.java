@@ -16,7 +16,7 @@ public class VisitSpecimensQueryCriteria {
 	
 	private String sendSiteName;
 	
-	private String recSiteName;
+	private String recvSiteName;
 
 	public Long getCprId() {
 		return cprId;
@@ -66,11 +66,11 @@ public class VisitSpecimensQueryCriteria {
 		this.sendSiteName = sendSiteName;
 	}
 
-	public String getRecSiteName() {
-		return recSiteName;
+	public String getRecvSiteName() {
+		return recvSiteName;
 	}
 	
-	public void setRecSiteName(String recSiteName) {
-		this.recSiteName = recSiteName;
+	public void setRecvSiteName(String recvSiteName) {
+		this.recvSiteName = recvSiteName;
 	}
 }

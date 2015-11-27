@@ -267,7 +267,6 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		}
 		
 		if (CollectionUtils.isEmpty(detail.getNotifyUsers())) {
-			shipment.setNotifyUsers(shipment.getReceivingSite().getCoordinators());
 			return;
 		}
 		

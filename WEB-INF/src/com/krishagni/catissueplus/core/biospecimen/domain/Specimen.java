@@ -282,7 +282,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 
 	public Boolean getIsAvailable() {
-		return NumUtil.greaterThanZero(getAliquotQuantity()) && (isAvailable == null ? true: isAvailable);
+		return isAvailable;
 	}
 
 	public void setIsAvailable(Boolean isAvailable) {
@@ -529,6 +529,10 @@ public class Specimen extends BaseExtensionEntity {
 
 	public boolean isMissed() {
 		return isMissed(getCollectionStatus());
+	}
+	
+	public boolean isAvailable() {
+		return NumUtil.greaterThanZero(getAvailableQuantity()) && (isAvailable == null ? true: isAvailable);
 	}
 
 	public void disable() {

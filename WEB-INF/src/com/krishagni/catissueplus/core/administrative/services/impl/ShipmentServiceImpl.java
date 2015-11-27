@@ -53,7 +53,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		this.daoFactory = daoFactory;
 	}
 	
-	public void setShipmentFactory(ShipmentFactory shipmentFactory) {
+	public void setShipmentFactory(ShipmentFactory shipmentFactory) {	
 		this.shipmentFactory = shipmentFactory;
 	}
 
@@ -174,7 +174,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 		}
 		
-		String recSiteName = req.getPayload().getRecSiteName();
+		String recSiteName = req.getPayload().getRecvSiteName();
 		if (StringUtils.isBlank(recSiteName)) {
 			return ResponseEvent.userError(ShipmentErrorCode.REC_SITE_REQUIRED);
 		}
@@ -190,7 +190,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		List<Specimen> specimens = getValidSpecimens(labels, ose);
 		if (specimens != null) {
 			ensureSpecimensAreAvailable(specimens, ose);
-			ensureValidSpecSendingAndReceivingSite(specimens, sendingSite, receivingSite, ose);
+			ensureValidSpecimenSites(specimens, sendingSite, receivingSite, ose);
 		}
 		
 		ose.checkAndThrow();
@@ -235,7 +235,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 		
 		ensureSpecimensAreAvailable(specimens, ose);
-		ensureValidSpecSendingAndReceivingSite(specimens, shipment.getSendingSite(), shipment.getReceivingSite(), ose);
+		ensureValidSpecimenSites(specimens, shipment.getSendingSite(), shipment.getReceivingSite(), ose);
 		ensureSpecimensAreNotShipped(shipment, specimenLabels, ose);
 	}
 	
@@ -245,7 +245,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		for (Specimen specimen : specimens) {
 			if (specimen.isClosed()) {
 				closedSpecimens.add(specimen);
-			} else if (!specimen.getIsAvailable()) {
+			} else if (!specimen.isAvailable()) {
 				unavailableSpecimens.add(specimen);
 			}
 		}
@@ -261,7 +261,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 	}
 	
-	private void ensureValidSpecSendingAndReceivingSite(List<Specimen> specimens, Site sendingSite, Site receivingSite, OpenSpecimenException ose) {
+	private void ensureValidSpecimenSites(List<Specimen> specimens, Site sendingSite, Site receivingSite, OpenSpecimenException ose) {
 		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
 		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
 		
@@ -322,7 +322,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 	
 	private void sendShipmentShippedEmail(Shipment shipment) {
-		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getNotifyUsers(), "emailAddress", true);
+		Set<String> emailIds = null;
+		if (CollectionUtils.isNotEmpty(shipment.getNotifyUsers())) {
+			emailIds = Utility.<Set<String>>collect(shipment.getNotifyUsers(), "emailAddress", true);
+		} else {
+			emailIds = Utility.<Set<String>>collect(shipment.getReceivingSite().getCoordinators(), "emailAddress", true);
+		}
 		emailIds.add(shipment.getSender().getEmailAddress());
 		String[] subjectParams = {shipment.getName()};
 		

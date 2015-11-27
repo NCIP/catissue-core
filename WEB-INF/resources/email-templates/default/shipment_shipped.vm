@@ -9,7 +9,7 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hello $shipment.receivinfSite.name Coordinators,
+                  Hello $shipment.receivingSite.name Coordinators,
                   <br><br>
                   $shipment.sender.firstName $shipment.sender.lastName has shipped $shipment.name specimens' shipment.
                   <br/><br/>

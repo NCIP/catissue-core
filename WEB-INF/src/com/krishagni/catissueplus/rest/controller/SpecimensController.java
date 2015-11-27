@@ -101,8 +101,8 @@ public class SpecimensController {
 			@RequestParam(value = "sendSiteName", required = false)
 			String sendSiteName,
 			
-			@RequestParam(value = "recSiteName", required = false)
-			String recSiteName) {
+			@RequestParam(value = "recvSiteName", required = false)
+			String recvSiteName) {
 				
 		if (cprId != null) { // TODO: Move this to CPR controller
 			VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
@@ -123,7 +123,7 @@ public class SpecimensController {
 			} else if (StringUtils.isNotBlank(sendSiteName)) {
 				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
 				crit.setSendSiteName(sendSiteName);
-				crit.setRecSiteName(recSiteName);
+				crit.setRecvSiteName(recvSiteName);
 				crit.setLabels(labels);
 				resp = shipmentService.getSpecimens(getRequest(crit));
 			} else {

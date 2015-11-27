@@ -957,9 +957,12 @@ public class AccessCtrlMgr {
 		}
 		
 		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
-		if (allowedSites.contains(shipment.getSendingSite()) ||
-				!shipment.isPending() && allowedSites.contains(shipment.getReceivingSite())) {
-			return;
+		if (allowedSites.contains(shipment.getSendingSite())) {
+			return; // sender can read
+		}
+		
+		if (!shipment.isPending() && allowedSites.contains(shipment.getReceivingSite())) {
+			return; // receiver can read;
 		}
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
@@ -981,9 +984,12 @@ public class AccessCtrlMgr {
 		}
 		
 		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.UPDATE);
-		if (!shipment.isReceived() && allowedSites.contains(shipment.getSendingSite()) ||
-				shipment.isReceived() && allowedSites.contains(shipment.getReceivingSite())) {
-			return;
+		if (!shipment.isReceived() && allowedSites.contains(shipment.getSendingSite())) {
+			return; // sender can update
+		}
+		
+		if (shipment.isReceived() && allowedSites.contains(shipment.getReceivingSite())) {
+			return; // receiver can update
 		}
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);

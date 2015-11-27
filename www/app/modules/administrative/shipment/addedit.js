@@ -121,7 +121,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       var param = {
         label: labels,
         sendSiteName: $scope.shipment.sendingSite,
-        recSiteName: $scope.shipment.receivingSite
+        recvSiteName: $scope.shipment.receivingSite
       }
 
       Specimen.listForShipment(param).then(
