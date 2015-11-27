@@ -15,7 +15,7 @@
       <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
 
 
-      <button ng-if="!!cp.catalogSetting.query" class="default"
+      <button ng-if="!!cp.catalogSetting.query" class="btn btn-success"
         title="{{'participant.tooltip.specimen_catalog' | translate}}"
         ui-sref="query-results({queryId: cp.catalogSetting.query.id})">
         <span class="fa fa-table"></span>

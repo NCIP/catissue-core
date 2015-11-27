@@ -381,7 +381,7 @@
 .os-query-facets-panel .facet .values ul {
   list-style-type: none;
   padding-left: 20px;
-  margin-bottom: 1px;
+  margin-bottom: 5px;
 }
 
 .os-query-facets-panel .facet .values .value {
