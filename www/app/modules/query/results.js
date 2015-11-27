@@ -21,7 +21,36 @@ angular.module('os.query.results', ['os.query.models'])
 
     var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
 
-    var NUM_FACETED_OPS = ['le', 'ge', 'eq', 'between', 'exists', 'any'];
+    var RANGE_FACETED_OPS = ['le', 'ge', 'eq', 'between', 'exists', 'any'];
+
+    function isNumber(val) {
+      return !isNaN(val) && angular.isNumber(val);
+    }
+
+    function identity(val) {
+      return val;
+    }
+
+    function isNotBlankStr(val) {
+      return angular.isString(val) && val.trim().length > 0;
+    }
+
+    var RANGE_FNS = {
+      'INTEGER': {
+        parse   : Number.parseInt,
+        isValid : isNumber
+      },
+
+      'FLOAT': {
+        parse   : Number.parseFloat,
+        isValid : isNumber
+      },
+
+      'DATE': {
+        parse   : identity,
+        isValid : isNotBlankStr
+      }
+    };
 
     function init() {
       $scope.queryCtx = queryCtx;
@@ -147,7 +176,8 @@ angular.module('os.query.results', ['os.query.models'])
 
             case 'INTEGER':
             case 'FLOAT':
-              if (NUM_FACETED_OPS.indexOf(filter.op.name) == -1) {
+            case 'DATE':
+              if (RANGE_FACETED_OPS.indexOf(filter.op.name) == -1) {
                 return;
               }
               break;
@@ -165,7 +195,9 @@ angular.module('os.query.results', ['os.query.models'])
 
     function getFacet(filter, index) {
       var values = undefined;
-      if (filter.field.type == 'INTEGER' || filter.field.type == 'FLOAT') {
+      var isRangeType = !!RANGE_FNS[filter.field.type];
+
+      if (isRangeType) {
         var value = undefined;
         switch (filter.op.name) {
           case 'eq': value = [filter.value, filter.value]; break;
@@ -193,6 +225,7 @@ angular.module('os.query.results', ['os.query.models'])
         id: filter.id,
         caption: filter.field.caption,
         dataType: filter.field.type,
+        isRange: isRangeType,
         expr: filter.form.name + "." + filter.field.name,
         type: filter.field.type,
         values: values,
@@ -218,10 +251,6 @@ angular.module('os.query.results', ['os.query.models'])
           );
         }
       );
-    }
-
-    function isNumber(val) {
-      return !isNaN(val) && angular.isNumber(val);
     }
 
     function getAql(addLimit) { 
@@ -499,14 +528,15 @@ angular.module('os.query.results', ['os.query.models'])
           return;
         }
 
-        if (facet.dataType == 'INTEGER' || facet.dataType == 'FLOAT') {
+        var rangeFns = RANGE_FNS[facet.dataType];
+        if (!!rangeFns) {
           var minMax = [undefined, undefined];
           if (facet.values[0].selected) {
             minMax = facet.values[0].value;
           }
 
-          var validMin = isNumber(minMax[0]);
-          var validMax = isNumber(minMax[1]);
+          var validMin = rangeFns.isValid(minMax[0]);
+          var validMax = rangeFns.isValid(minMax[1]);
 
           if (validMin && validMax) {
             filter.value = minMax;
@@ -557,19 +587,15 @@ angular.module('os.query.results', ['os.query.models'])
     }
 
     $scope.addRangeCond = function(facet) {
-      var fn = undefined;
-      switch(facet.dataType) {
-        case 'INTEGER': fn = Number.parseInt; break;
-        case 'FLOAT': fn = Number.parseFloat; break;
-      }
+      var fns = RANGE_FNS[facet.dataType];
 
-      var min = fn(facet.min);
-      if (!isNumber(min)) {
+      var min = fns.parse(facet.min);
+      if (!fns.isValid(min)) {
         min = undefined;
       }
 
-      var max = fn(facet.max);
-      if (!isNumber(max)) {
+      var max = fns.parse(facet.max);
+      if (!fns.isValid(max)) {
         max = undefined;
       }
 
