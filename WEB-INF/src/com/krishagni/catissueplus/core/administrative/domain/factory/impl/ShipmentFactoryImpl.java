@@ -94,7 +94,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private void setSendingSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
-		String siteName = detail.getSendSiteName();
+		String siteName = detail.getSendingSite();
 		if (StringUtils.isBlank(siteName)) {
 			ose.addError(ShipmentErrorCode.SEND_SITE_REQUIRED);
 			return;
@@ -110,7 +110,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private void setReceivingSite(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
-		String siteName = detail.getRecSiteName();
+		String siteName = detail.getReceivingSite();
 		if (StringUtils.isBlank(siteName)) {
 			ose.addError(ShipmentErrorCode.REC_SITE_REQUIRED);
 			return;

@@ -952,20 +952,17 @@ public class AccessCtrlMgr {
 	}
 	
 	public void ensureReadShipmentRights(Shipment shipment) {
-		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
-		boolean senderRights = hasShipmentObjectSenderRights(shipment, allowedSites);
-		if (shipment.isPending()) {
-			if (senderRights) {
-				return;
-			} else {
-				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
-			}
+		if (AuthUtil.isAdmin()) {
+			return;
 		}
 		
-		boolean receiverRights = hasShipmentObjectReceiverRights(shipment, allowedSites);
-		if (!senderRights && !receiverRights) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
+		if (allowedSites.contains(shipment.getSendingSite()) ||
+				!shipment.isPending() && allowedSites.contains(shipment.getReceivingSite())) {
+			return;
 		}
+		
+		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 	
 	public void ensureCreateShipmentRights() {
@@ -979,40 +976,16 @@ public class AccessCtrlMgr {
 	}
 	
 	public void ensureUpdateShipmentRights(Shipment shipment) {
-		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.UPDATE);
-		if ((shipment.isPending() || shipment.isShipped()) &&
-				hasShipmentObjectSenderRights(shipment, allowedSites)) {
+		if (AuthUtil.isAdmin()) {
 			return;
-		} else if ((shipment.isShipped() || shipment.isReceived()) &&
-				hasShipmentObjectReceiverRights(shipment, allowedSites)) {
+		}
+		
+		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.UPDATE);
+		if (!shipment.isReceived() && allowedSites.contains(shipment.getSendingSite()) ||
+				shipment.isReceived() && allowedSites.contains(shipment.getReceivingSite())) {
 			return;
 		}
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
-	
-	private boolean hasShipmentObjectSenderRights(Shipment shipment, Set<Site> allowedSites) {
-		if (AuthUtil.isAdmin()) {
-			return true;
-		}
-		
-		if (allowedSites.contains(shipment.getSendingSite())) {
-			return true;
-		}
-				
-		return false;
-	}
-	
-	private boolean hasShipmentObjectReceiverRights(Shipment shipment, Set<Site> allowedSites) {
-		if (AuthUtil.isAdmin()) {
-			return true;
-		}
-		
-		if (allowedSites.contains(shipment.getReceivingSite())) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 }

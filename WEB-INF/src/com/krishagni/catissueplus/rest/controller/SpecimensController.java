@@ -98,6 +98,9 @@ public class SpecimensController {
 			@RequestParam(value = "label", required = false)
 			List<String> labels,
 			
+			@RequestParam(value = "sendSiteName", required = false)
+			String sendSiteName,
+			
 			@RequestParam(value = "recSiteName", required = false)
 			String recSiteName) {
 				
@@ -117,8 +120,9 @@ public class SpecimensController {
 				crit.setDpId(dpId);
 				crit.setLabels(labels);
 				resp = distributionService.getSpecimens(getRequest(crit));
-			} else if (StringUtils.isNotBlank(recSiteName)) {
+			} else if (StringUtils.isNotBlank(sendSiteName)) {
 				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
+				crit.setSendSiteName(sendSiteName);
 				crit.setRecSiteName(recSiteName);
 				crit.setLabels(labels);
 				resp = shipmentService.getSpecimens(getRequest(crit));

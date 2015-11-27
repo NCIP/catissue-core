@@ -14,7 +14,6 @@ import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteri
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDao {
 

@@ -19,11 +19,11 @@ public class ShipmentDetail {
 	
 	private String trackingUrl;
 	
-	private String sendSiteName;
+	private String sendingSite;
 	
-	private String recInstName;
+	private String receivingInstitute;
 	
-	private String recSiteName;
+	private String receivingSite;
 	
 	private Date shippedDate;
 	
@@ -84,29 +84,29 @@ public class ShipmentDetail {
 	public void setTrackingUrl(String trackingUrl) {
 		this.trackingUrl = trackingUrl;
 	}
-
-	public String getSendSiteName() {
-		return sendSiteName;
-	}
-
-	public void setSendSiteName(String sendSiteName) {
-		this.sendSiteName = sendSiteName;
-	}
 	
-	public String getRecInstName() {
-		return recInstName;
+	public String getSendingSite() {
+		return sendingSite;
 	}
 
-	public void setRecInstName(String recInstName) {
-		this.recInstName = recInstName;
+	public void setSendingSite(String sendingSite) {
+		this.sendingSite = sendingSite;
 	}
-	
-	public String getRecSiteName() {
-		return recSiteName;
+
+	public String getReceivingInstitute() {
+		return receivingInstitute;
 	}
-	
-	public void setRecSiteName(String recSiteName) {
-		this.recSiteName = recSiteName;
+
+	public void setReceivingInstitute(String receivingInstitute) {
+		this.receivingInstitute = receivingInstitute;
+	}
+
+	public String getReceivingSite() {
+		return receivingSite;
+	}
+
+	public void setReceivingSite(String receivingSite) {
+		this.receivingSite = receivingSite;
 	}
 
 	public Date getShippedDate() {
@@ -196,9 +196,9 @@ public class ShipmentDetail {
 		detail.setCourierName(shipment.getCourierName());
 		detail.setTrackingNumber(shipment.getTrackingNumber());
 		detail.setTrackingUrl(shipment.getTrackingUrl());
-		detail.setSendSiteName(shipment.getSendingSite().getName());
-		detail.setRecInstName(shipment.getReceivingSite().getInstitute().getName());
-		detail.setRecSiteName(shipment.getReceivingSite().getName());
+		detail.setSendingSite(shipment.getSendingSite().getName());
+		detail.setReceivingInstitute(shipment.getReceivingSite().getInstitute().getName());
+		detail.setReceivingSite(shipment.getReceivingSite().getName());
 		detail.setShippedDate(shipment.getShippedDate());
 		detail.setSender(UserSummary.from(shipment.getSender()));
 		detail.setSenderComments(shipment.getSenderComments());

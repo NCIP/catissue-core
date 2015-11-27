@@ -62,7 +62,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     function getShipmentItems(specimens) {
       return specimens.filter(
         function(specimen) {
-          return specimen.availableQty > 0 && specimen.activityStatus == 'Active';
+          return specimen.available && specimen.activityStatus == 'Active';
         }).map(
         function(specimen) {
           return {
@@ -118,7 +118,13 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         return;
       }
 
-      Specimen.listForShipment(labels, $scope.shipment.recSiteName).then(
+      var param = {
+        label: labels,
+        recSiteName: $scope.shipment.receivingSite,
+        sendSiteName: $scope.shipment.sendingSite
+      }
+
+      Specimen.listForShipment(param).then(
         function (specimens) {
           angular.forEach(getShipmentItems(specimens), function(item) {
             $scope.shipment.shipmentItems.push(item);

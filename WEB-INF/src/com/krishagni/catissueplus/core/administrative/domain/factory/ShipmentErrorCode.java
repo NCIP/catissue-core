@@ -45,6 +45,8 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	STATUS_CHANGE_NOT_ALLOWED,
 	
+	SPEC_NOT_BELONG_TO_SEND_SITE,
+	
 	SPEC_NOT_BELONG_TO_REC_SITE,
 	
 	NOTIFY_USER_NOT_BELONG_TO_INST
