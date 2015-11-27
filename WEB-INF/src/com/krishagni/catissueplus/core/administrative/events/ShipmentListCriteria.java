@@ -7,9 +7,9 @@ import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 public class ShipmentListCriteria extends AbstractListCriteria<ShipmentListCriteria> {
 	private String name;
 	
-	private String recInstitute;
+	private String recvInstitute;
 	
-	private String recSite;
+	private String recvSite;
 	
 	private Set<Long> siteIds;
 	
@@ -27,21 +27,21 @@ public class ShipmentListCriteria extends AbstractListCriteria<ShipmentListCrite
 		return self();
 	}
 	
-	public String recInstitute() {
-		return recInstitute;
+	public String recvInstitute() {
+		return recvInstitute;
 	}
 	
-	public ShipmentListCriteria recInstitute(String recInstitute) {
-		this.recInstitute = recInstitute;
+	public ShipmentListCriteria recvInstitute(String recvInstitute) {
+		this.recvInstitute = recvInstitute;
 		return self();
 	}
 	
-	public String recSite() {
-		return recSite;
+	public String recvSite() {
+		return recvSite;
 	}
 	
-	public ShipmentListCriteria recSite(String recSite) {
-		this.recSite = recSite;
+	public ShipmentListCriteria recvSite(String recvSite) {
+		this.recvSite = recvSite;
 		return self();
 	}
 	

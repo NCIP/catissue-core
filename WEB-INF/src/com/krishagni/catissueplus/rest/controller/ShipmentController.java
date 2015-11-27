@@ -33,11 +33,11 @@ public class ShipmentController {
 			@RequestParam(value = "name", required = false, defaultValue = "")
 			String name,
 			
-			@RequestParam(value = "recInstitute", required = false, defaultValue = "")
-			String recInstitute,
+			@RequestParam(value = "recvInstitute", required = false, defaultValue = "")
+			String recvInstitute,
 			
-			@RequestParam(value = "recSite", required = false, defaultValue = "")
-			String recSite,
+			@RequestParam(value = "recvSite", required = false, defaultValue = "")
+			String recvSite,
 			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
@@ -47,8 +47,8 @@ public class ShipmentController {
 		
 		ShipmentListCriteria listCrit = new ShipmentListCriteria()
 				.name(name)
-				.recInstitute(recInstitute)
-				.recSite(recSite)
+				.recvInstitute(recvInstitute)
+				.recvSite(recvSite)
 				.startAt(startAt)
 				.maxResults(maxResults);
 		

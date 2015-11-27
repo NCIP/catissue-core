@@ -174,12 +174,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 		}
 		
-		String recSiteName = req.getPayload().getRecvSiteName();
-		if (StringUtils.isBlank(recSiteName)) {
+		String recvSiteName = req.getPayload().getRecvSiteName();
+		if (StringUtils.isBlank(recvSiteName)) {
 			return ResponseEvent.userError(ShipmentErrorCode.REC_SITE_REQUIRED);
 		}
 		
-		Site receivingSite = daoFactory.getSiteDao().getSiteByName(recSiteName);
+		Site receivingSite = daoFactory.getSiteDao().getSiteByName(recvSiteName);
 		if (receivingSite == null) {
 			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 		}
