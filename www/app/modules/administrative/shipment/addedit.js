@@ -52,7 +52,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
 
     function setUserAndSiteList(shipment) {
-      var instituteName = shipment.recInstituteName;
+      var instituteName = shipment.receivingInstitute;
       if (instituteName) {
         setUserFilterOpts(instituteName);
         loadSites(instituteName);
@@ -82,7 +82,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     };
 
     $scope.onInstituteSelect = function(instituteName) {
-      $scope.shipment.recSiteName = undefined;
+      $scope.shipment.receivingSite = undefined;
       $scope.shipment.notifyUsers = [];
 
       loadSites(instituteName);
@@ -120,8 +120,8 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
       var param = {
         label: labels,
-        recSiteName: $scope.shipment.receivingSite,
-        sendSiteName: $scope.shipment.sendingSite
+        sendSiteName: $scope.shipment.sendingSite,
+        recSiteName: $scope.shipment.receivingSite
       }
 
       Specimen.listForShipment(param).then(
