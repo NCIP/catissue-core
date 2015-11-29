@@ -68,11 +68,12 @@
 
   <div class="os-query-container">
     <div class="os-query-results-wrapper clearfix">
-      <div class="col-xs-3 os-full-height-container os-scrollbar" style="overflow-y: auto;">
+      <div class="col-xs-3 os-full-height-container os-scrollbar" style="overflow-y: auto;"
+        ng-if="resultsCtx.hasFacets">
         <ng-include src="'modules/query/facets.html'"></ng-include>
       </div>
 
-      <div class="col-xs-9 os-full-height-container">
+      <div class="os-full-height-container" ng-class="{true: 'col-xs-9', false: 'col-xs-12'}[resultsCtx.hasFacets]">
         <div class="grid-panel os-full-size-container">
           <div ng-if="resultsCtx.waitingForRecords">
             <span translate="queries.waiting_for_records">

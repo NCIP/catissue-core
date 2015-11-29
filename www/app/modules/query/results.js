@@ -191,6 +191,7 @@ angular.module('os.query.results', ['os.query.models'])
       );
 
       $scope.resultsCtx.facets = facets;
+      $scope.resultsCtx.hasFacets = (facets.length > 0);
     }
 
     function getFacet(filter, index) {
