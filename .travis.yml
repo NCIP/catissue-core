@@ -5,9 +5,9 @@ node_js:
   - "0.10"
 
 before_script:
-  - rm -rf /home/travis/.npm/*
   - cd www
   - npm install -g bower
+  - rm -rf /home/travis/.npm/*
   - npm install
   - bower install -f
   - cd ..
