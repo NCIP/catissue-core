@@ -1049,7 +1049,8 @@ public class QueryServiceImpl implements QueryService {
 		String aql = String.format("select distinct %s where %s exists", facet, facet);
 
 		Query query = Query.createQuery();
-		query.wideRowMode(WideRowMode.OFF).compile(formName, aql);
+		query.wideRowMode(WideRowMode.OFF)
+			.compile(formName, aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
 		QueryResponse queryResp = query.getData();
 		QueryResultData queryResult = queryResp.getResultData();
 

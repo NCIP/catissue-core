@@ -69,4 +69,16 @@
                         </link>
                 </links>
 	</path>
+
+	<path>
+		<from>SpecimenCollectionGroup</from>
+		<to>CollectionProtocol</to>
+		<start-field>participant</start-field>
+                <links>
+                        <link>
+                                <key>CP_ID</key>
+                                <ref-tab-key>IDENTIFIER</ref-tab-key>
+                        </link>
+                </links>
+	</path>
 </paths>
