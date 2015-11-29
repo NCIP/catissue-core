@@ -188,7 +188,7 @@
   border-radius: 50%;
   border: 1px solid #cccccc;
   text-align: center;
-  margin-right: 11px;
+  margin: 5px;
   position: relative;
 }
 
@@ -212,7 +212,7 @@
   cursor: pointer;
   height: 35px;
   padding-top: 8px;
-  margin-right: 11px;
+  margin: 5px;
   position: relative;
 }
 
@@ -223,7 +223,7 @@
   text-align: center;
   height: 35px;
   padding-top: 8px;
-  margin-right: 11px;
+  margin: 5px;
   position: relative;
 }
 
@@ -332,56 +332,38 @@
 }
 
 /** Facets panel **/
-.os-query-facets-panel {
+.os-query-facets-panel .facet a {
+  text-decoration: none;
 }
 
-.os-query-facets-panel .facet:first-child {
-  border-top: 2px solid #ddd;
-}
-
-.os-query-facets-panel .facet {
-  border-top: 1px solid #ddd;
-  padding: 10px 0px;
-}
-
-.os-query-facets-panel .facet .head {
-  position: relative;
-  padding-right: 20px;
-}
-
-.os-query-facets-panel .facet .head:after {
-  content: '';
-  display: block;
-  clear: both;
-}
-
-.os-query-facets-panel .facet .head .toggle {
-  font-size: 20px;
+.os-query-facets-panel .facet .toggle {
+  font-size: 16px;
   color: #707070;
 }
 
-.os-query-facets-panel .facet .head .name {
-  font-size: 16px;
-  cursor: pointer;
+.os-query-facets-panel .facet .name {
+  color: #333;
+  text-decoration: none;
 }
 
-.os-query-facets-panel .facet .head .clear {
+.os-query-facets-panel .facet .clear {
   color: #707070;
   text-decoration: none;
-  position: absolute;
-  right: 0px;
-  top: 5px;
+}
+
+.os-query-facets-panel .facet.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  padding: 0px!important;
 }
 
 .os-query-facets-panel .facet .values {
-  max-height: 185px;
+  padding: 15px;
+  max-height: 215px;
   overflow-y: auto;
 }
 
 .os-query-facets-panel .facet .values ul {
   list-style-type: none;
-  padding-left: 20px;
-  margin-bottom: 5px;
+  padding-left: 0px;
 }
 
 .os-query-facets-panel .facet .values .value {
@@ -404,10 +386,6 @@
 .os-query-facets-panel .facet .values .value .text {
   margin-left: 21px;
   padding-right: 5px;
-}
-
-.os-query-facets-panel .facet .facet-range {
-  padding-left: 20px;
 }
 
 .os-query-facets-panel .facet .facet-range .os-md-input input {
@@ -463,22 +441,4 @@
 
 .os-query-results-grid .ngHeaderCell:hover .ngVerticalBarVisible {
   background: #ddd!important;
-}
-
-
-.os-query-container::-webkit-scrollbar {
-  height: 9px;
-  width: 9px;
-}
-
-.os-query-results-wrapper > div::-webkit-scrollbar-track:hover {
-  background: #f5f5f5;
-  border-radius: 5px;
-}
-
-.os-query-results-wrapper > div::-webkit-scrollbar-thumb:horizontal,
-.os-query-results-wrapper > div::-webkit-scrollbar-thumb:vertical {
-  background: #d0d0d0;
-  border-radius: 5px;
-  display: block;
 }

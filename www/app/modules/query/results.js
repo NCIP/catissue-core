@@ -16,7 +16,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
   })
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, $document, 
+    $scope, $state, $stateParams, $modal, $document, $timeout,
     queryCtx, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
@@ -37,12 +37,12 @@ angular.module('os.query.results', ['os.query.models'])
 
     var RANGE_FNS = {
       'INTEGER': {
-        parse   : Number.parseInt,
+        parse   : parseInt,
         isValid : isNumber
       },
 
       'FLOAT': {
-        parse   : Number.parseFloat,
+        parse   : parseFloat,
         isValid : isNumber
       },
 
@@ -514,12 +514,15 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     $scope.toggleFacetValues = function(facet) {
-      facet.isOpen = !facet.isOpen;
-      if (!facet.isOpen) {
-        return;
-      }
+      $timeout(
+        function() {
+          if (!facet.isOpen) {
+            return;
+          }
 
-      loadFacetValues(facet);
+          loadFacetValues(facet);
+        }
+      );
     }
 
     $scope.toggleFacetValueSelection = function(facet) {
