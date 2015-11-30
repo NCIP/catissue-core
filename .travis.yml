@@ -21,4 +21,4 @@ notifications:
 
 branches:
   only:
-    - OS_v20
+    - master
