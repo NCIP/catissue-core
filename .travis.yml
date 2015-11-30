@@ -1,9 +1,10 @@
 language: java
 node_js:
-  - '0.10'
+  - stable
 
 before_script:
   - cd www
+  - rm -rf /home/travis/.npm/*
   - npm install -g bower
   - npm install
   - bower install -f
