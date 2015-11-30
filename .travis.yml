@@ -1,6 +1,6 @@
 language: java
 node_js:
-  - "stable"
+  - '0.10'
 
 before_script:
   - cd www
