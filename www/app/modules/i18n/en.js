@@ -1660,6 +1660,12 @@
         "email_users_signed_up_desc": "Email notifications when a new user signs up.",
         "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
         "email_shipment_received": "Email notifications when specimens' shipment is received"
+      },
+
+      "catalog": {
+        "title": "Catalog",
+        "default_query": "Default Catalog Query",
+        "default_query_desc": "Identifier of saved query to be used as default catalog query"
       }
     }
 }

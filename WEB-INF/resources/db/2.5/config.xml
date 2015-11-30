@@ -20,4 +20,32 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Specimen catalog module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'catalog', 'Specimen catalog settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen catalog module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (OS_MODULES_SEQ.nextval, 'catalog', 'Specimen catalog settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="ID of query to use for default catalog">
+    <sql>
+      call add_cfg_prop(
+        'catalog', 'default_query',
+        'default_query', 'default_query_desc',
+        'INT', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>
