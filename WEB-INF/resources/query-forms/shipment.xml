@@ -107,7 +107,7 @@
       <subForm>
         <name>receivingSite</name>
         <udn>receivingSite</udn>
-        <caption>#getMessage("shipment_receiving_site")</caption>
+        <caption>#getMessage("shipment_recv_site")</caption>
         <table>CATISSUE_SITE</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>RECEIVING_SITE_ID</parentKey>
@@ -116,7 +116,7 @@
           <dropDown>
             <name>name</name>
             <udn>name</udn>
-            <caption>#getMessage("shipment_receiving_site_name")</caption>
+            <caption>#getMessage("shipment_recv_site_name")</caption>
             <column>NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>

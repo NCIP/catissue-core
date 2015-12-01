@@ -34,6 +34,16 @@ public class ObjectSchema {
 		return getExtensionRecord(record);
 	}
 	
+	public String getKeyColumnName() {
+		for (Field field : record.getFields()) {
+			if (field.isKey()) {
+				return field.getCaption();
+			}
+		}
+		
+		return null;
+	}
+	
 	public static ObjectSchema parseSchema(String filePath) {
 		XStream parser = getSchemaParser();		
 		return (ObjectSchema)parser.fromXML(new File(filePath));
@@ -164,6 +174,8 @@ public class ObjectSchema {
 		private String type;
 		
 		private boolean multiple;
+		
+		private boolean key;
 
 		public String getCaption() {
 			return caption;
@@ -195,6 +207,14 @@ public class ObjectSchema {
 
 		public void setMultiple(boolean multiple) {
 			this.multiple = multiple;
-		}		
+		}
+
+		public boolean isKey() {
+			return key;
+		}
+
+		public void setKey(boolean key) {
+			this.key = key;
+		}
 	}
 }

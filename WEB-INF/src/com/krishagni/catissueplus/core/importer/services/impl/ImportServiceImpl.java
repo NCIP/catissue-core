@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +27,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.events.Mergeable;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -33,6 +36,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
+import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Type;
 import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
@@ -48,6 +52,8 @@ import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporterFactory;
 import com.krishagni.catissueplus.core.importer.services.ObjectReader;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
+
+import edu.common.dynamicextensions.query.cachestore.LinkedEhCacheMap;
 
 public class ImportServiceImpl implements ImportService {
 	private ConfigurationService cfgSvc;
@@ -89,7 +95,7 @@ public class ImportServiceImpl implements ImportService {
 		this.txTmpl = new TransactionTemplate(this.transactionManager);
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<ImportJobDetail>> getImportJobs(RequestEvent<ListImportJobsCriteria> req) {
@@ -264,8 +270,72 @@ public class ImportServiceImpl implements ImportService {
 		job.setParams(detail.getObjectParams());
 		
 		String importType = detail.getImportType();
-		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));		
+		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));
+		
+		String csvType = detail.getCsvType();
+		job.setCsvtype(StringUtils.isBlank(csvType) ? CsvType.SINGLE_ROW_PER_OBJ : CsvType.valueOf(csvType));
 		return job;		
+	}
+	
+	private class MergedObject {
+		private Object object;
+		
+		private List<List<String>> rows = new ArrayList<List<String>>();
+		
+		private String errMsg;
+
+		public Object getObject() {
+			return object;
+		}
+
+		public void setObject(Object object) {
+			this.object = object;
+		}
+		
+		public void merge(Object other) {
+			if (!isErrorneous()) {
+				((Mergeable) this.object).merge(other);
+			}
+		}
+ 				
+		public void addRow(List<String> row) {
+			rows.add(row);
+		}
+		
+		public void addErrMsg(String errMsg) {
+			if (errMsg == null) {
+				return;
+			}
+			
+			if (StringUtils.isBlank(this.errMsg)) {
+				this.errMsg = errMsg;
+			} else {
+				this.errMsg = new StringBuilder(this.errMsg).append(", ").append(errMsg).toString();
+			}
+			
+			object = null;
+		}
+		
+		public boolean isErrorneous() {
+			return StringUtils.isNotBlank(errMsg);
+		}
+		
+		public List<String[]> getRowsWithStatus() {
+			List<String[]> processedRows = new ArrayList<String[]>();
+			for (List<String> row : rows) {
+				if (isErrorneous()) {
+					row.add("FAIL");
+					row.add(errMsg);
+				} else {
+					row.add("SUCCESS");
+					row.add("");
+				}
+				
+				processedRows.add(row.toArray(new String[0]));
+			}
+			
+			return processedRows;
+		}
 	}
 
 	private class ImporterTask implements Runnable {
@@ -301,38 +371,11 @@ public class ImportServiceImpl implements ImportService {
 				csvWriter = getOutputCsvWriter(job);
 				csvWriter.writeNext(columnNames.toArray(new String[0]));
 				
-				while (true) {
-					String errMsg = null;					
-					try {
-						Object object = objReader.next();
-						if (object == null) {
-							break;
-						}
-											
-						errMsg = importObject(importer, object, job.getParams());
-					} catch (OpenSpecimenException ose) {						
-						errMsg = ose.getMessage();
-					}
-					
-					++totalRecords;
-					
-					List<String> row = objReader.getCsvRow();
-					if (StringUtils.isNotBlank(errMsg)) {
-						row.add("FAIL");
-						row.add(errMsg);
-						++failedRecords;
-					} else {
-						row.add("SUCCESS");
-						row.add("");
-					}
-					
-					csvWriter.writeNext(row.toArray(new String[0]));
-					if (totalRecords % 25 == 0) {
-						saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
-					}					
+				if (job.getCsvtype() == CsvType.MULTIPLE_ROWS_PER_OBJ) {
+					processMultipleRowsPerObj(objReader, csvWriter, importer);
+				} else {
+					processSingleRowPerObj(objReader, csvWriter, importer);
 				}
-				
-				saveJob(totalRecords, failedRecords, Status.COMPLETED);
 			} catch (Exception e) {
 				e.printStackTrace();
 				saveJob(totalRecords, failedRecords, Status.FAILED);
@@ -340,6 +383,111 @@ public class ImportServiceImpl implements ImportService {
 				IOUtils.closeQuietly(objReader);
 				closeQueitly(csvWriter);
 			}
+		}
+		
+		private void processSingleRowPerObj(ObjectReader objReader, CSVWriter csvWriter, ObjectImporter<Object, Object> importer) {
+			long totalRecords = 0, failedRecords = 0;
+
+			while (true) {
+				String errMsg = null;
+				try {
+					Object object = objReader.next();
+					if (object == null) {
+						break;
+					}
+	
+					errMsg = importObject(importer, object, job.getParams());
+				} catch (OpenSpecimenException ose) {
+					errMsg = ose.getMessage();
+				}
+				
+				++totalRecords;
+				
+				List<String> row = objReader.getCsvRow();
+				if (StringUtils.isNotBlank(errMsg)) {
+					row.add("FAIL");
+					row.add(errMsg);
+					++failedRecords;
+				} else {
+					row.add("SUCCESS");
+					row.add("");
+				}
+				
+				csvWriter.writeNext(row.toArray(new String[0]));
+				if (totalRecords % 25 == 0) {
+					saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
+				}
+			}
+			
+			saveJob(totalRecords, failedRecords, Status.COMPLETED);
+		}
+		
+		private void processMultipleRowsPerObj(ObjectReader objReader, CSVWriter csvWriter, ObjectImporter<Object, Object> importer) {
+			long totalRecords = 0, failedRecords = 0;
+			LinkedEhCacheMap<Object, MergedObject> objectsMap =  new LinkedEhCacheMap<Object, MergedObject>();
+			
+			while (true) {
+				String errMsg = null;
+				Object parsedObj = null;
+				
+				try {
+					parsedObj = objReader.next();
+					if (parsedObj == null) {
+						break;
+					}
+				} catch (Exception e) {
+					errMsg = e.getMessage();
+				}
+				
+				Object key = objReader.getRowKey();
+				MergedObject mergedObj = objectsMap.get(key);
+				if (mergedObj == null) {
+					mergedObj = new MergedObject();
+					mergedObj.setObject(parsedObj);
+				}
+				
+				mergedObj.addErrMsg(errMsg);
+				mergedObj.addRow(objReader.getCsvRow());
+				mergedObj.merge(parsedObj);
+
+				objectsMap.put(key, mergedObj);
+			}
+			
+			for (Object key : objectsMap.keySet()) {
+				MergedObject mergedObj = objectsMap.get(key);
+				if (!mergedObj.isErrorneous()) {
+					String errMsg = null;
+					try {
+						errMsg = importObject(importer, mergedObj.getObject(), job.getParams());
+					} catch (OpenSpecimenException ose) {
+						errMsg = ose.getMessage();
+					}
+					
+					if (StringUtils.isNotBlank(errMsg)) {
+						mergedObj.addErrMsg(errMsg);
+					}
+					
+					objectsMap.put(key, mergedObj);
+				}
+				
+				++totalRecords;
+				if (mergedObj.isErrorneous()) {
+					++failedRecords;
+				}
+				
+				if (totalRecords % 25 == 0) {
+					saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
+				}
+			}
+			
+			Iterator<MergedObject> mergedObjIter = objectsMap.iterator();
+			while (mergedObjIter.hasNext()) {
+				MergedObject mergedObj = mergedObjIter.next();
+				csvWriter.writeAll(mergedObj.getRowsWithStatus());
+			}
+			
+			objectsMap.clear();
+			saveJob(totalRecords, failedRecords, Status.COMPLETED);
 		}
 		
 		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, Object> params) {
@@ -376,7 +524,7 @@ public class ImportServiceImpl implements ImportService {
 				}
 			}
 		}
-				
+		
 		private void saveJob(long totalRecords, long failedRecords, Status status) {
 			job.setTotalRecords(totalRecords);
 			job.setFailedRecords(failedRecords);

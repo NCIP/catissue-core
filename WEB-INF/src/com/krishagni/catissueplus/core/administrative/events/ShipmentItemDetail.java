@@ -8,6 +8,7 @@ import java.util.List;
 import com.krishagni.catissueplus.core.administrative.domain.ShipmentItem;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 
+
 public class ShipmentItemDetail implements Comparable<ShipmentItemDetail> {
 	private Long id;
 	

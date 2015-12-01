@@ -22,9 +22,16 @@ public class ImportJob extends BaseEntity {
 		UPDATE
 	}
 	
+	public static enum CsvType {
+		SINGLE_ROW_PER_OBJ,
+		MULTIPLE_ROWS_PER_OBJ
+	}
+	
 	private String name; 
 	
 	private Type type;
+	
+	private CsvType csvtype;
 	
 	private Status status;
 	
@@ -54,6 +61,14 @@ public class ImportJob extends BaseEntity {
 
 	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public CsvType getCsvtype() {
+		return csvtype;
+	}
+
+	public void setCsvtype(CsvType csvtype) {
+		this.csvtype = csvtype;
 	}
 
 	public Status getStatus() {

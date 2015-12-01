@@ -8,7 +8,8 @@ import java.util.List;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class ShipmentDetail {
+
+public class ShipmentDetail implements Mergeable<String, ShipmentDetail> {
 	private Long id;
 	
 	private String name;
@@ -44,6 +45,13 @@ public class ShipmentDetail {
 	private List<ShipmentItemDetail> shipmentItems = new ArrayList<ShipmentItemDetail>();
 	
 	private List<UserSummary> notifyUsers = new ArrayList<UserSummary>();
+	
+	//
+	// For BO template
+	//
+	private ShipmentItemDetail shipmentItem;
+	
+	private boolean sendMail = true;
 	
 	public Long getId() {
 		return id;
@@ -189,6 +197,22 @@ public class ShipmentDetail {
 		this.notifyUsers = notifyUsers;
 	}
 
+	public ShipmentItemDetail getShipmentItem() {
+		return shipmentItem;
+	}
+
+	public void setShipmentItem(ShipmentItemDetail shipmentItem) {
+		this.shipmentItem = shipmentItem;
+	}
+
+	public boolean isSendMail() {
+		return sendMail;
+	}
+
+	public void setSendMail(boolean sendMail) {
+		this.sendMail = sendMail;
+	}
+
 	public static ShipmentDetail from(Shipment shipment) {
 		ShipmentDetail detail = new ShipmentDetail();
 		detail.setId(shipment.getId());
@@ -223,5 +247,15 @@ public class ShipmentDetail {
 		}
 		
 		return details;
+	}
+
+	@Override
+	public String getMergeKey() {
+		return name;
+	}
+
+	@Override
+	public void merge(ShipmentDetail detail) {
+		getShipmentItems().add(detail.getShipmentItem());
 	}
 }

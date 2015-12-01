@@ -148,7 +148,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			}
 			
 			getShipmentDao().saveOrUpdate(shipment);
-			sendEmailNotifications(shipment, null);
+			sendEmailNotifications(shipment, null, detail.isSendMail());
 			return ResponseEvent.response(ShipmentDetail.from(shipment));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -179,7 +179,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			Status oldStatus = existing.getStatus();
 			existing.update(newShipment);
 			getShipmentDao().saveOrUpdate(existing, true);
-			sendEmailNotifications(newShipment, oldStatus);
+			sendEmailNotifications(newShipment, oldStatus, detail.isSendMail());
 			return ResponseEvent.response(ShipmentDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -362,7 +362,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 	}
 	
-	private void sendEmailNotifications(Shipment shipment, Status oldStatus) {
+	private void sendEmailNotifications(Shipment shipment, Status oldStatus, boolean isSendMail) {
+		if (!isSendMail) {
+			return;
+		}
+		
 		if ((oldStatus == null || oldStatus == Status.PENDING) && shipment.isShipped()) {
 			sendShipmentShippedEmail(shipment);
 		} else if (oldStatus == Status.SHIPPED && shipment.isReceived()) {
@@ -371,12 +375,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 	}
 	
 	private void sendShipmentShippedEmail(Shipment shipment) {
-		Set<String> emailIds = null;
-		if (CollectionUtils.isNotEmpty(shipment.getNotifyUsers())) {
-			emailIds = Utility.<Set<String>>collect(shipment.getNotifyUsers(), "emailAddress", true);
-		} else {
-			emailIds = Utility.<Set<String>>collect(shipment.getReceivingSite().getCoordinators(), "emailAddress", true);
+		if (CollectionUtils.isEmpty(shipment.getNotifyUsers())) {
+			return;
 		}
+		
+		Set<String> emailIds = Utility.<Set<String>>collect(shipment.getNotifyUsers(), "emailAddress", true);
 		emailIds.add(shipment.getSender().getEmailAddress());
 		String[] subjectParams = {shipment.getName()};
 		

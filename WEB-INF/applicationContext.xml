@@ -591,6 +591,7 @@
         <value>com/krishagni/catissueplus/core/administrative/schema/user.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/shipment.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/visit.xml</value>
@@ -643,6 +644,13 @@
             <property name="containerSvc" ref="storageContainerSvc"/>
           </bean>
         </entry>
+        
+        <entry key="shipment">
+          <bean class="com.krishagni.catissueplus.core.administrative.services.impl.ShipmentImporter">
+            <property name="shipmentSvc" ref="shipmentSvc"/>
+          </bean>
+        </entry>
+        
 
         <entry key="cpr">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CprImporter">

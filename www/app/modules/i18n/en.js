@@ -1285,7 +1285,8 @@
       "visit": "Visits",
       "specimen": "Specimens",
       "specimenAliquot": "Specimen Aliquots",
-      "specimenDerivative": "Derived Specimens"
+      "specimenDerivative": "Derived Specimens",
+      "shipment": "Shipment"
     },
 
     "import_types": {
@@ -1425,6 +1426,8 @@
     "report_gen_initiated": "Generating shipment report...",
     "downloading_report": "Downloading shipment report...",
     "report_will_be_emailed": "Generating shipment report is taking more time than anticipated. Link to download report will be sent to you by email",
+    "bulk_import": "Bulk Import Shipments",
+    "bulk_import_jobs": "Import Shipments Job List",
 
     "menu": {
       "overview": "Overview"
