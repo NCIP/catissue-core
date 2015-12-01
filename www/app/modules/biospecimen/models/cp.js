@@ -106,6 +106,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return this.cpSites.map(function(cpSite) { return cpSite.siteName; });
     }
 
+    CollectionProtocol.prototype.getCatalogQuery = function() {
+      return $http.get(CollectionProtocol.url() + this.$id() + '/catalog-query').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     CollectionProtocol.prototype.getCatalogSetting = function() {
       return $http.get(CollectionProtocol.url() + this.$id() + '/catalog-settings').then(
         function(resp) {

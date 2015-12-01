@@ -82,8 +82,8 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       this.queryCtx = queryCtx;
     }
 
-    QueryGlobalData.prototype.getQueryCtx = function(queryId) {
-      if (this.queryCtx) {
+    QueryGlobalData.prototype.getQueryCtx = function(queryId, cpId) {
+      if (this.queryCtx && !cpId) {
         return this.queryCtx;
       }
 
@@ -94,15 +94,19 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       var that = this;
       return SavedQuery.getById(queryId).then(
         function(savedQuery) {
-          return createQueryCtx(that, savedQuery);
+          return createQueryCtx(that, savedQuery, cpId);
         }
       );
     };
 
-    function createQueryCtx(queryGlobal, savedQuery) {
+    function createQueryCtx(queryGlobal, savedQuery, cpId) {
       var queryCtx = queryGlobal.newQueryCtx(savedQuery);
       return queryGlobal.getCps().then(
         function(cps) {
+          if (!!cpId) {
+            savedQuery.cpId = cpId;
+          }
+
           var selectedCp = queryCtx.selectedCp = getCp(cps, savedQuery.cpId || -1);
           if (!selectedCp) {
             return undefined;

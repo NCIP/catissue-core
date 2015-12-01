@@ -1,11 +1,10 @@
 language: java
-node_js:
-  - stable
+node_js: stable
 
 before_script:
   - cd www
-  - rm -rf /home/travis/.npm/*
   - npm install -g bower
+  - rm -rf /home/travis/.npm/*
   - npm install
   - bower install -f
   - cd ..
@@ -15,7 +14,7 @@ script: gradle build
 notifications:
   email:
     recipients:
-      - os-v20-devs@krishagni.com
+      - vinayak.pawar@krishagni.com
     on_success: always
     on_failure: always
 

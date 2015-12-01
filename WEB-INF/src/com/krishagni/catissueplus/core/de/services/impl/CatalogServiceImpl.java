@@ -9,10 +9,13 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.CpCatalogSetting;
+import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.CpCatalogSettingFactory;
 import com.krishagni.catissueplus.core.de.events.CpCatalogSettingDetail;
+import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 import com.krishagni.catissueplus.core.de.services.CatalogService;
 
@@ -28,6 +31,31 @@ public class CatalogServiceImpl implements CatalogService {
 
 	public void setCatalogSettingFactory(CpCatalogSettingFactory catalogSettingFactory) {
 		this.catalogSettingFactory = catalogSettingFactory;
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SavedQuerySummary> getCpCatalogQuery(RequestEvent<CollectionProtocolSummary> req) {
+		try {
+			CpCatalogSetting setting = getSetting(req.getPayload());
+			if (setting != null) {
+				return ResponseEvent.response(SavedQuerySummary.fromSavedQuery(setting.getQuery()));
+			}
+
+			Integer queryId = ConfigUtil.getInstance().getIntSetting("catalog", "default_query", null);
+			if (queryId == null) {
+				return ResponseEvent.response(null);
+			}
+
+			SavedQuery query = daoFactory.getSavedQueryDao().getQuery(queryId.longValue());
+			if (query == null) {
+				return ResponseEvent.response(null);
+			}
+
+			return ResponseEvent.response(SavedQuerySummary.fromSavedQuery(query));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override

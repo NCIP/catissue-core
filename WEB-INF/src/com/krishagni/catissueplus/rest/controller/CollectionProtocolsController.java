@@ -49,6 +49,7 @@ import com.krishagni.catissueplus.core.de.events.CpCatalogSettingDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.services.CatalogService;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
@@ -313,6 +314,19 @@ public class CollectionProtocolsController {
 	//
 	// Catalog settings
 	//
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/catalog-query")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SavedQuerySummary getCatalogQuery(@PathVariable("id") Long cpId) {
+		CollectionProtocolSummary cp = new CollectionProtocolSummary();
+		cp.setId(cpId);
+
+		RequestEvent<CollectionProtocolSummary> req = new RequestEvent<CollectionProtocolSummary>(cp);
+		ResponseEvent<SavedQuerySummary> resp = catalogSvc.getCpCatalogQuery(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/catalog-settings")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

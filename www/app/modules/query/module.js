@@ -57,7 +57,7 @@ angular.module('os.query',
        parent: 'query-root'
      })  
      .state('query-results', {
-       url: '/results?queryId&editMode',
+       url: '/results?queryId&editMode&cpId',
        templateUrl: 'modules/query/results.html',
        controller: 'QueryResultsCtrl',
        resolve: {
@@ -68,7 +68,11 @@ angular.module('os.query',
            }
 
            QueryCtxHolder.clearCtx();
-           return queryGlobal.getQueryCtx($stateParams.queryId);
+           return queryGlobal.getQueryCtx($stateParams.queryId, $stateParams.cpId);
+         },
+
+         cps: function(queryGlobal) {
+           return queryGlobal.getCps();
          }
        },
        parent: 'query-root'

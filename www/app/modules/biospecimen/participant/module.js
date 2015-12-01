@@ -35,9 +35,9 @@ angular.module('os.biospecimen.participant',
                   return cp;
                 }
 
-                cp.getCatalogSetting().then(
-                  function(setting) {
-                    cp.catalogSetting = setting;
+                cp.getCatalogQuery().then(
+                  function(query) {
+                    cp.catalogQuery = query;
                   }
                 );
 

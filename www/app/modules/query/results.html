@@ -31,6 +31,26 @@
         </os-assign-to-spmn-list>
       </div>
 
+      <div dropdown class="inline" ng-if="cps.length > 0">
+        <button class="default dropdown-toggle">
+          <span translate="queries.catalogs">Catalogs</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-form os-menu-list">
+          <li>
+            <input ng-model="searchCp" type="text" class="form-control"
+              placeholder="{{'queries.search_cp' | translate}}">
+          </li>
+          <li>
+            <ul class="dropdown-menu-subgroup">
+              <li ng-repeat="cp in cps | filter: {shortTitle: searchCp}" ng-click="switchCatalog(cp)" ng-if="cp.id > 0">
+                <a><span>{{cp.shortTitle}}</span></a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>

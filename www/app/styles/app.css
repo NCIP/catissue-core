@@ -1080,3 +1080,14 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-full-height-container, .os-full-size-container {
   height: 100%;
 }
+
+.os-menu-list > li > input {
+  width: 260px;
+  margin: 3px 20px;
+}
+
+.os-menu-list .dropdown-menu-subgroup {
+  max-height: 150px;
+  overflow: auto;
+}
+
