@@ -31,7 +31,9 @@ public enum FormErrorCode implements ErrorCode {
 	
 	SYS_FORM_DEL_NOT_ALLOWED,
 	
-	SYS_REC_DEL_NOT_ALLOWED;
+	SYS_REC_DEL_NOT_ALLOWED,
+
+	MULTIPLE_CTXS_NOT_ALLOWED;
 
 	@Override
 	public String code() {

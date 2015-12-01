@@ -9,7 +9,8 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
         {entity: 'Participant', name: $translate.instant('entities.participant')},
         {entity: 'Specimen', name: $translate.instant('entities.specimen')},
         {entity: 'SpecimenCollectionGroup', name: $translate.instant('entities.visit')},
-        {entity: 'SpecimenEvent', name: $translate.instant('entities.specimen_event')}
+        {entity: 'SpecimenEvent', name: $translate.instant('entities.specimen_event')},
+        {entity: 'SpecimenRequest', name: $translate.instant('entities.specimen_request')}
       ];
       $scope.form = args.form;
       $scope.cpList = args.cpList;

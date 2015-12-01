@@ -308,6 +308,15 @@
   
   <bean id="formSvc" class="com.krishagni.catissueplus.core.de.services.impl.FormServiceImpl">
     <property name="formDao" ref="formDao"/>
+    <property name="ctxtProcs">
+      <map>
+        <entry key="SpecimenRequest">
+          <list>
+            <bean class="com.krishagni.catissueplus.core.de.services.impl.SingleFormContextProc"/>
+          </list>
+        </entry>
+      </map>
+    </property>
   </bean>
   
   <bean id="specimenEventsSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenEventsServiceImpl">

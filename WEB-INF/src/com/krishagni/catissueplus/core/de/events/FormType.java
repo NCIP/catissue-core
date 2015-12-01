@@ -10,6 +10,8 @@ public enum FormType {
 	SPECIMEN_FORMS("Specimen"),
 	
 	SPECIMEN_EVENT_FORMS("SpecimenEvent"),
+
+	SPECIMEN_REQUEST_FORMS("SpecimenRequest"),
 	
 	SITE_EXTN_FORM("SiteExtension"),
 	
