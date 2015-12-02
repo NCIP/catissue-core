@@ -65,7 +65,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	@PlusTransactional
 	public ResponseEvent<List<ShipmentDetail>> getShipments(RequestEvent<ShipmentListCriteria> req) {
 		try {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessShipmentSites();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessShipmentSiteIds();
 			if (siteIds != null && siteIds.isEmpty()) {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}

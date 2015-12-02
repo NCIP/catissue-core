@@ -82,7 +82,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
 			DpListCriteria crit = req.getPayload();
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSiteIds();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}
@@ -502,7 +502,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			
 			AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
 		} else {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSiteIds();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
 				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 			}

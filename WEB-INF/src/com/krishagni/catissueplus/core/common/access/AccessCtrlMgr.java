@@ -611,13 +611,21 @@ public class AccessCtrlMgr {
 		return canUserPerformOp(userId, Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
 	}
 	
-	public Set<Long> getCreateUpdateAccessDistributionOrderSites() {
+	public Set<Long> getCreateUpdateAccessDistributionOrderSiteIds() {
+		Set<Site> sites = getCreateUpdateAccessDistributionOrderSites();
+		if (sites == null) {
+			return null;
+		}
+
+		return Utility.collect(sites, "id", true);
+	}
+
+	public Set<Site> getCreateUpdateAccessDistributionOrderSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		Set<Site> sites = getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
-		return Utility.<Set<Long>>collect(sites, "id", true);
+		return getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -881,7 +889,7 @@ public class AccessCtrlMgr {
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
-	//          Scheduled Job object access control helper methods              //
+	//          Scheduled Job object access control helper methods                      //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	public void ensureReadScheduledJobRights() {
@@ -933,22 +941,38 @@ public class AccessCtrlMgr {
 	//                                                                   //
 	///////////////////////////////////////////////////////////////////////
 
-	public Set<Long> getReadAccessShipmentSites() {
+	public Set<Long> getReadAccessShipmentSiteIds() {
+		Set<Site> sites = getReadAccessShipmentSites();
+		if (sites == null) {
+			return null;
+		}
+
+		return Utility.collect(sites, "id", true);
+	}
+
+	public Set<Site> getReadAccessShipmentSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		return Utility.<Set<Long>>collect(getSites(Resource.SHIPPING_N_TRACKING, Operation.READ), "id", true);
+		return getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
 	}
 	
-	public Set<Long> getCreateUpdateAccessShipmentSites() {
+	public Set<Long> getCreateUpdateAccessShipmentSiteIds() {
+		Set<Site> sites = getCreateUpdateAccessShipmentSites();
+		if (sites == null) {
+			return null;
+		}
+
+		return Utility.collect(sites, "id", true);
+	}
+
+	public Set<Site> getCreateUpdateAccessShipmentSites() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 		
-		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING,
-				new Operation[] {Operation.CREATE, Operation.UPDATE});
-		return Utility.<Set<Long>>collect(allowedSites, "id", true);
+		return getSites(Resource.SHIPPING_N_TRACKING, new Operation[] {Operation.CREATE, Operation.UPDATE});
 	}
 	
 	public void ensureReadShipmentRights(Shipment shipment) {
@@ -956,7 +980,7 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
-		Set<Site> allowedSites = getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
+		Set<Site> allowedSites = getReadAccessShipmentSites();
 		if (allowedSites.contains(shipment.getSendingSite())) {
 			return; // sender can read
 		}
@@ -993,5 +1017,30 @@ public class AccessCtrlMgr {
 		}
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+	}
+
+	///////////////////////////////////////////////////////////////////////
+	//                                                                   //
+	//       Specimen request access control helper methods              //
+	//                                                                   //
+	///////////////////////////////////////////////////////////////////////
+	public Set<Long> getSpecimenRequestReadAccessSiteIds() {
+		Set<Site> sites = getSpecimenRequestReadAccessSites();
+		if (sites == null) {
+			return null;
+		}
+
+		return Utility.collect(sites, "id", true);
+	}
+
+	public Set<Site> getSpecimenRequestReadAccessSites() {
+		if (AuthUtil.isAdmin()) {
+			return null;
+		}
+
+		Set<Site> allowedSites = new HashSet<Site>();
+		allowedSites.addAll(getCreateUpdateAccessDistributionOrderSites());
+		allowedSites.addAll(getCreateUpdateAccessShipmentSites());
+		return allowedSites;
 	}
 }

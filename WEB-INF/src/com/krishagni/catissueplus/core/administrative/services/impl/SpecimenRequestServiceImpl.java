@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -12,11 +13,14 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.RequestListSpecimensDetail;
+import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestDetail;
 import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestSummary;
+import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequestListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SpecimenRequestService;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -24,19 +28,25 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenListErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormType;
+import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 import krishagni.catissueplus.beans.FormContextBean;
+import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 
@@ -56,6 +66,77 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 
 	public void setFormSvc(FormService formSvc) {
 		this.formSvc = formSvc;
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenRequestSummary>> getRequests(RequestEvent<SpecimenRequestListCriteria> req) {
+		try {
+			SpecimenRequestListCriteria crit = req.getPayload();
+
+			Set<Long> allowedSiteIds = AccessCtrlMgr.getInstance().getSpecimenRequestReadAccessSiteIds();
+			crit.siteIds(allowedSiteIds);
+
+			if (!AuthUtil.isAdmin()) {
+				crit.requestorId(AuthUtil.getCurrentUser().getId());
+			}
+
+			List<SpecimenRequest> spmnReqs = daoFactory.getSpecimenRequestDao().getSpecimenRequests(crit);
+			return ResponseEvent.response(SpecimenRequestSummary.from(spmnReqs));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenRequestDetail> getRequest(RequestEvent<Long> req) {
+		try {
+			return ResponseEvent.response(SpecimenRequestDetail.from(getSpecimenRequest(req.getPayload())));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Map<String, Object>> getRequestFormData(RequestEvent<Long> req) {
+		try {
+			SpecimenRequest spmnReq = getSpecimenRequest(req.getPayload());
+
+			String entityType = FormType.SPECIMEN_REQUEST_FORMS.getType();
+			List<FormCtxtSummary> formCtxts = formDao.getFormContexts(spmnReq.getCp().getId(), entityType);
+			if (CollectionUtils.isEmpty(formCtxts)) {
+				formCtxts = formDao.getFormContexts(-1L, entityType);
+			}
+
+			if (CollectionUtils.isEmpty(formCtxts)) {
+				return ResponseEvent.response(Collections.<String, Object>emptyMap());
+			}
+
+			FormCtxtSummary formCtxt = formCtxts.iterator().next();
+			Long formCtxtId = formCtxt.getFormCtxtId();
+			List<FormRecordEntryBean> recordEntries = formDao.getRecordEntries(formCtxtId, spmnReq.getId());
+			if (CollectionUtils.isEmpty(recordEntries)) {
+				return ResponseEvent.response(Collections.<String, Object>emptyMap());
+			}
+
+			GetFormDataOp op = new GetFormDataOp();
+			op.setFormId(formCtxt.getFormId());
+			op.setRecordId(recordEntries.iterator().next().getRecordId());
+			ResponseEvent<FormDataDetail> resp = formSvc.getFormData(new RequestEvent<GetFormDataOp>(op));
+			resp.throwErrorIfUnsuccessful();
+
+			return ResponseEvent.response(resp.getPayload().getFormData().getFieldNameValueMap(false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
@@ -81,6 +162,29 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+
+	private SpecimenRequest getSpecimenRequest(Long reqId) {
+		SpecimenRequest spmnReq = daoFactory.getSpecimenRequestDao().getById(reqId);
+		if (spmnReq == null) {
+			throw OpenSpecimenException.userError(SpecimenRequestErrorCode.NOT_FOUND, reqId);
+		}
+
+		if (AuthUtil.isAdmin() || spmnReq.getRequestor().equals(AuthUtil.getCurrentUser())) {
+			return spmnReq;
+		}
+
+		Set<Site> allowedSites = AccessCtrlMgr.getInstance().getSpecimenRequestReadAccessSites();
+		if (allowedSites.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+
+		Set<Site> cpSites = Utility.collect(spmnReq.getCp().getSites(), "site", true);
+		if (CollectionUtils.intersection(allowedSites, cpSites).isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+
+		return spmnReq;
 	}
 
 	private List<SpecimenRequest> createSpecimenRequests(SpecimenList list, List<Map<String, Object>> reqForms) {
