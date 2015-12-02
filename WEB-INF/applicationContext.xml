@@ -746,6 +746,12 @@
     <property name="shipmentFactory" ref="shipmentFactory" />
     <property name="emailService" ref="emailService"/>
   </bean>
+
+  <bean id="specimenRequestSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.SpecimenRequestServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="formDao" ref="formDao" />
+    <property name="formSvc" ref="formSvc"/>
+  </bean>
   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>

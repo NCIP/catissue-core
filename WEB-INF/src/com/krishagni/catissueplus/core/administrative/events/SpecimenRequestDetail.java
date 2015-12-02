@@ -19,8 +19,6 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 
 	private List<SpecimenInfo> specimens;
 
-	private ExtensionDetail extensionDetail;
-
 	public UserSummary getProcessedBy() {
 		return processedBy;
 	}
@@ -53,14 +51,6 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 		this.specimens = specimens;
 	}
 
-	public ExtensionDetail getExtensionDetail() {
-		return extensionDetail;
-	}
-
-	public void setExtensionDetail(ExtensionDetail extensionDetail) {
-		this.extensionDetail = extensionDetail;
-	}
-
 	public static SpecimenRequestDetail from(SpecimenRequest request) {
 		SpecimenRequestDetail result = new SpecimenRequestDetail();
 		copyTo(request, result);
@@ -72,7 +62,6 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 
 		result.setComments(request.getComments());
 		result.setSpecimens(SpecimenInfo.from(new ArrayList<Specimen>(request.getSpecimens())));
-		result.setExtensionDetail(ExtensionDetail.from(request.getExtension()));
 		return result;
 	}
 }

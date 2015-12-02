@@ -4,13 +4,12 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
-public class SpecimenRequest extends BaseExtensionEntity {
-
-	private static final String ENTITY_TYPE = "SpecimenRequest";
+public class SpecimenRequest extends BaseEntity {
 
 	private CollectionProtocol cp;
 
@@ -29,11 +28,6 @@ public class SpecimenRequest extends BaseExtensionEntity {
 	private String comments;
 
 	private transient int specimensCount;
-
-	@Override
-	public String getEntityType() {
-		return ENTITY_TYPE;
-	}
 
 	public CollectionProtocol getCp() {
 		return cp;
