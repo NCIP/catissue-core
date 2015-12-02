@@ -164,6 +164,38 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<Long>> getFormIds(RequestEvent<Long> req) {
+		try {
+			List<Long> cpIds = getListSpecimenCps(req.getPayload());
+			cpIds.add(-1L);
+
+			List<FormContextBean> formCtxts = formDao.getFormContexts(cpIds, FormType.SPECIMEN_REQUEST_FORMS.getType());
+			Set<Long> formIds = new HashSet<Long>();
+			Long commonFormId = null;
+			for (FormContextBean formCtxt : formCtxts) {
+				if (formCtxt.getCpId().equals(-1L)) {
+					commonFormId = formCtxt.getContainerId();
+				} else {
+					formIds.add(formCtxt.getContainerId());
+				}
+			}
+
+			if (formIds.size() < (cpIds.size() - 1) && commonFormId != null) {
+				formIds.add(commonFormId);
+			}
+
+			List<Long> result = new ArrayList<Long>(formIds);
+			Collections.sort(result);
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	private SpecimenRequest getSpecimenRequest(Long reqId) {
 		SpecimenRequest spmnReq = daoFactory.getSpecimenRequestDao().getById(reqId);
 		if (spmnReq == null) {
@@ -228,6 +260,10 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 
 	private Map<Long, List<Specimen>> getCpSpecimens(SpecimenList list) {
 		return daoFactory.getSpecimenListDao().getListCpSpecimens(list.getId());
+	}
+
+	private List<Long> getListSpecimenCps(Long listId) {
+		return daoFactory.getSpecimenListDao().getListSpecimensCpIds(listId);
 	}
 
 	private String getCpShortTitle(Collection<Specimen> specimens) {

@@ -21,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequest
 import com.krishagni.catissueplus.core.administrative.services.SpecimenRequestService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 @Controller
 @RequestMapping("/specimen-requests")
@@ -71,6 +72,16 @@ public class SpecimenRequestsController {
 	@ResponseBody
 	public List<SpecimenRequestSummary> createSpecimenRequest(@RequestBody RequestListSpecimensDetail detail) {
 		ResponseEvent<List<SpecimenRequestSummary>> resp = spmnReqSvc.createRequest(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	/** Used mostly for UI purpose **/
+	@RequestMapping(method = RequestMethod.GET, value="form-ids")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Long> getRequestFormIds(@RequestParam("listId") Long listId) {
+		ResponseEvent<List<Long>> resp = spmnReqSvc.getFormIds(getRequest(listId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

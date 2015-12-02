@@ -13,6 +13,8 @@ public interface SpecimenListDao extends Dao<SpecimenList> {
 	public List<SpecimenList> getUserSpecimenLists(Long userId);
 
 	public Map<Long, List<Specimen>> getListCpSpecimens(Long listId);
+
+	public List<Long> getListSpecimensCpIds(Long listId);
 	
 	public SpecimenList getSpecimenList(Long listId);
 	

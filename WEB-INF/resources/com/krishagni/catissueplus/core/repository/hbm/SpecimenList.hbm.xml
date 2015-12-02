@@ -71,7 +71,22 @@
         join v.registration cpr
         join cpr.collectionProtocol cp
       where
-        l.id = :listId
+        l.id = :listId and
+        l.deletedOn is null
+    </query>
+
+    <query name="getListSpecimensCpIds">
+      select
+        distinct cp.id
+      from
+        SpecimenList l
+        join l.specimens s
+        join s.visit v
+        join v.registration cpr
+        join cpr.collectionProtocol cp
+      where
+        l.id = :listId and
+        l.deletedOn is null
     </query>
   </class>
 </hibernate-mapping>
