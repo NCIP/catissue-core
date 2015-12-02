@@ -131,18 +131,14 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			return;
 		}
 		
-		if (detail.getStatus() == null) {
+		if (StringUtils.isBlank(detail.getStatus())) {
 			ose.addError(ShipmentErrorCode.STATUS_REQUIRED);
 			return;
 		}
 		
-		Shipment.Status status = null;
-			
-		try {
-			status = Shipment.Status.valueOf(detail.getStatus());
-		} catch (IllegalArgumentException iae) {
+		Shipment.Status status = Shipment.Status.fromName(detail.getStatus());
+		if (status == null) {
 			ose.addError(ShipmentErrorCode.INVALID_STATUS);
-			return;
 		}
 		
 		shipment.setStatus(status);

@@ -36,7 +36,7 @@ angular.module('os.administrative.shipment',
             if ($stateParams.shipmentId) {
               return Shipment.getById($stateParams.shipmentId);
             }
-            return new Shipment({status: 'PENDING', shipmentItems: []});
+            return new Shipment({status: 'Pending', shipmentItems: []});
           }
         },
         controller: 'ShipmentAddEditCtrl',

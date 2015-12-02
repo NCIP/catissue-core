@@ -205,7 +205,7 @@ public class ShipmentDetail {
 		detail.setReceivedDate(shipment.getReceivedDate());
 		detail.setReceiver(shipment.getReceiver() == null ? null : UserSummary.from(shipment.getReceiver()));
 		detail.setReceiverComments(shipment.getReceiverComments());
-		detail.setStatus(shipment.getStatus().toString());
+		detail.setStatus(shipment.getStatus().getName());
 		detail.setActivityStatus(shipment.getActivityStatus());
 		detail.setShipmentItems(ShipmentItemDetail.from(shipment.getShipmentItems()));
 		

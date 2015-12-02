@@ -9,15 +9,29 @@
 
     <div class="os-btns right">
       <button class="primary" show-if-allowed="shipmentResource.updateOpts"
-        ui-sref="shipment-receive({shipmentId: shipment.id})" ng-if="shipment.status == 'SHIPPED'">
+        ui-sref="shipment-receive({shipmentId: shipment.id})" ng-if="shipment.status == 'Shipped'">
         <span class="fa fa-inbox"></span>
         <span translate="shipments.buttons.receive">Receive</span>
       </button>
       <button class="primary" show-if-allowed="shipmentResource.updateOpts"
-        ui-sref="shipment-addedit({shipmentId: shipment.id})" ng-if="shipment.status == 'PENDING'">
+        ui-sref="shipment-addedit({shipmentId: shipment.id})" ng-if="shipment.status == 'Pending'">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ng-click="downloadReport()" >
+              <span class="fa fa-download"></span>
+              <span translate="shipments.buttons.download_report">Download Report</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 

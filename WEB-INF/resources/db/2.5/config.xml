@@ -48,4 +48,15 @@
       );
     </sql>
   </changeSet>
+ 
+  <changeSet author="ckhilosiya" id="Config properties for shipment export report query">
+    <comment>TODO: move to appropriate module</comment>
+    <sql>
+      call add_cfg_prop(
+        'common', 'shipment_export_report',
+        'shipment_export_report', 'shipment_export_report_desc',
+        'INT', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

@@ -49,7 +49,9 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	SPEC_NOT_BELONG_TO_REC_SITE,
 	
-	NOTIFY_USER_NOT_BELONG_TO_INST
+	NOTIFY_USER_NOT_BELONG_TO_INST,
+	
+	RPT_TMPL_NOT_CONF
 	;
 	
 	@Override

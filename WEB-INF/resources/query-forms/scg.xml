@@ -211,6 +211,28 @@
             </row>
           </subForm>
         </row>
+        
+        <row>
+          <subForm>
+            <name>specimenShipments</name>
+            <udn>specimenShipments</udn>
+            <caption>#getMessage("specimen_shipment_items")</caption>
+            <table>OS_SHIPMENT_ITEMS</table>
+            <foreignKey>SPECIMEN_ID</foreignKey>
+            <parentKey>IDENTIFIER</parentKey>
+           
+            <row>
+              <subForm>
+                <name>shipment</name>
+                <udn>shipment</udn>
+                <caption>#getMessage("specimen_shipment_items_shipment")</caption>
+                <table>OS_SHIPMENTS</table>
+                <foreignKey>IDENTIFIER</foreignKey>
+                <parentKey>SHIPMENT_ID</parentKey>
+              </subForm>
+            </row>
+          </subForm>
+        </row>
       </subForm>
     </row>
     <row>

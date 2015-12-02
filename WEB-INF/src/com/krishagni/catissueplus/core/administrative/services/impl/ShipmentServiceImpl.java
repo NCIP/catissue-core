@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,19 +37,36 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.domain.Filter;
+import com.krishagni.catissueplus.core.de.domain.Filter.Op;
+import com.krishagni.catissueplus.core.de.domain.SavedQuery;
+import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
+import com.krishagni.catissueplus.core.de.services.QueryService;
+import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
+
+import edu.common.dynamicextensions.query.WideRowMode;
 
 public class ShipmentServiceImpl implements ShipmentService {
 	private static final String SHIPMENT_SHIPPED_EMAIL_TMPL = "shipment_shipped";
 	
 	private static final String SHIPMENT_RECEIVED_EMAIL_TMPL = "shipment_received";
 	
+	private static final String SHIPMENT_QUERY_REPORT_SETTING = "shipment_export_report";
+	
 	private DaoFactory daoFactory;
 	
 	private ShipmentFactory shipmentFactory;
 	
 	private EmailService emailService;
+	
+	private QueryService querySvc;
+	
+	private com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -59,6 +78,14 @@ public class ShipmentServiceImpl implements ShipmentService {
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+	
+	public void setQuerySvc(QueryService querySvc) {
+		this.querySvc = querySvc;
+	}
+	
+	public void setDeDaoFactory(com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory) {
+		this.deDaoFactory = deDaoFactory;
 	}
 	
 	@Override
@@ -196,6 +223,28 @@ public class ShipmentServiceImpl implements ShipmentService {
 		ose.checkAndThrow();
 		
 		return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, labels)));
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req) {
+		Shipment shipment = getShipmentDao().getById(req.getPayload());
+		if (shipment == null) {
+			return ResponseEvent.userError(ShipmentErrorCode.NOT_FOUND);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureReadShipmentRights(shipment);
+		Integer queryId = ConfigUtil.getInstance().getIntSetting("common", SHIPMENT_QUERY_REPORT_SETTING, -1);
+		if (queryId == -1) {
+			return ResponseEvent.userError(ShipmentErrorCode.RPT_TMPL_NOT_CONF);
+		}
+		
+		SavedQuery query = deDaoFactory.getSavedQueryDao().getQuery(new Long(queryId));
+		if (query == null) {
+			return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+		}
+		
+		return new ResponseEvent<QueryDataExportResult>(exportShipmentReport(shipment, query));
 	}
 	
 	private List<Specimen> getValidSpecimens(List<String> specimenLabels, OpenSpecimenException ose) {
@@ -347,7 +396,55 @@ public class ShipmentServiceImpl implements ShipmentService {
 		emailService.sendEmail(SHIPMENT_RECEIVED_EMAIL_TMPL, emailIds, props);
 	}
 	
+	private QueryDataExportResult exportShipmentReport(final Shipment shipment, SavedQuery query) {
+		Filter filter = new Filter();
+		filter.setField("Shipment.id");
+		filter.setOp(Op.EQ);
+		filter.setValues(new String[] { shipment.getId().toString() });
+		
+		ExecuteQueryEventOp execReportOp = new ExecuteQueryEventOp();
+		execReportOp.setDrivingForm("Participant");
+		execReportOp.setAql(query.getAql(new Filter[] { filter }));
+		execReportOp.setWideRowMode(WideRowMode.DEEP.name());
+		execReportOp.setRunType("Export");
+		
+		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {
+			@Override
+			public void headers(OutputStream out) {
+				PrintWriter writer = new PrintWriter(out);
+				writeHeaderLine(writer, "shipment_name", shipment.getName());
+				writeHeaderLine(writer, "shipment_courier_name", shipment.getCourierName());
+				writeHeaderLine(writer, "shipment_tracking_number", shipment.getTrackingNumber());
+				writeHeaderLine(writer, "shipment_tracking_url", shipment.getTrackingUrl());
+				writeHeaderLine(writer, "shipment_sending_site", shipment.getSendingSite().getName());
+				writeHeaderLine(writer, "shipment_sender", shipment.getSender().formattedName());
+				writeHeaderLine(writer, "shipment_shipped_date", Utility.getDateString(shipment.getShippedDate()));
+				writeHeaderLine(writer, "shipment_sender_comments", shipment.getSenderComments());
+				writeHeaderLine(writer, "shipment_receiving_site", shipment.getReceivingSite().getName());
+				
+				if (shipment.getReceiver() != null) {
+					writeHeaderLine(writer, "shipment_receiver", shipment.getReceiver().formattedName());
+				}
+				
+				if (shipment.getReceivedDate() != null) {
+					writeHeaderLine(writer, "shipment_received_date",
+							Utility.getDateString(shipment.getReceivedDate()));
+				}
+				
+				writeHeaderLine(writer, "shipment_receiver_comments", shipment.getReceiverComments());
+				writeHeaderLine(writer, "shipment_status", shipment.getStatus().getName());
+				
+				writer.flush();
+			}
+		});
+	}
+	
+	private void writeHeaderLine(PrintWriter writer, String msgCode, String value) {
+		writer.println(MessageUtil.getInstance().getMessage(msgCode) + ", " + (value == null ? "" : value));
+	}
+	
 	private ShipmentDao getShipmentDao() {
 		return daoFactory.getShipmentDao();
 	}
+	
 }

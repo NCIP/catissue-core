@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function($rootScope, $timeout, $document) {
+  .factory('Util', function($rootScope, $timeout, $document, QueryExecutor, Alerts) {
     var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
@@ -178,6 +178,25 @@ angular.module('openspecimen')
         labelAlignment: 'horizontal'
       };
     }
+    
+    function downloadReport(entity, msgClass) {
+      var alert = Alerts.info(msgClass + '.report_gen_initiated', {}, false);
+      entity.generateReport().then(
+        function(result) {
+          Alerts.remove(alert);
+          if (result.completed) {
+            Alerts.info(msgClass + '.downloading_report');
+            QueryExecutor.downloadDataFile(result.dataFile, entity.name + '.csv');
+          } else if (result.dataFile) {
+            Alerts.info(msgClass + '.report_will_be_emailed');
+          }
+        },
+
+        function() {
+          Alerts.remove(alert);
+        }
+      );
+    }
 
     return {
       clear: clear,
@@ -198,6 +217,8 @@ angular.module('openspecimen')
 
       parseDate: parseDate,
 
-      getExtnOpts: getExtnOpts
+      getExtnOpts: getExtnOpts,
+      
+      downloadReport : downloadReport
     };
   });

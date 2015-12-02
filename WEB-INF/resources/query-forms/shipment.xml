@@ -1,0 +1,216 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>Shipment</name>
+    <caption>#getMessage("shipment")</caption>
+    <table>OS_SHIPMENTS</table>
+    <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
+    
+    <row>
+      <numberField>
+        <name>id</name>
+        <udn>id</udn>
+        <caption>#getMessage("shipment_identifier")</caption>
+        <column>IDENTIFIER</column>
+      </numberField>
+    </row>
+    
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>#getMessage("shipment_name")</caption>
+        <column>NAME</column>
+      </textField>
+    </row>
+    
+    <row>
+      <textField>
+        <name>courierName</name>
+        <udn>courierName</udn>
+        <caption>#getMessage("shipment_courier_name")</caption>
+        <column>COURIER_NAME</column>
+      </textField>
+    </row>
+    
+    <row>
+      <textField>
+        <name>trackingNumber</name>
+        <udn>trackingNumber</udn>
+        <caption>#getMessage("shipment_tracking_number")</caption>
+        <column>TRACKING_NUMBER</column>
+      </textField>
+    </row>
+    
+    <row>
+      <textField>
+        <name>trackingUrl</name>
+        <udn>trackingUrl</udn>
+        <caption>#getMessage("shipment_tracking_url")</caption>
+        <column>TRACKING_URL</column>
+      </textField>
+    </row>
+    
+    <row>
+      <subForm>
+        <name>sendingSite</name>
+        <udn>sendingSite</udn>
+        <caption>#getMessage("shipment_sending_site")</caption>
+        <table>CATISSUE_SITE</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>SENDING_SITE_ID</parentKey>
+        
+        <row>
+          <dropDown>
+            <name>name</name>
+            <udn>name</udn>
+            <caption>#getMessage("shipment_sending_site_name")</caption>
+            <column>NAME</column>
+            <options>
+              <sql>select distinct name from CATISSUE_SITE</sql>
+            </options>
+          </dropDown>
+        </row>
+      </subForm>
+    </row>
+    
+    <row>
+      <userField>
+        <name>sender</name>
+        <udn>sender</udn>
+        <caption>#getMessage("shipment_sender")</caption>
+        <column>SENDER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>shippedDate</name>
+        <udn>shippedDate</udn>
+        <caption>#getMessage("shipment_shipped_date")</caption>
+        <column>SHIPPED_DATE</column>
+        <format>MM-dd-yyyy</format>
+      </datePicker>
+    </row>
+    
+    <row>
+      <textField>
+        <name>senderComments</name>
+        <udn>senderComments</udn>
+        <caption>#getMessage("shipment_sender_comments")</caption>
+        <column>SENDER_COMMENTS</column>
+      </textField>
+    </row>
+    
+    <row>
+      <subForm>
+        <name>receivingSite</name>
+        <udn>receivingSite</udn>
+        <caption>#getMessage("shipment_receiving_site")</caption>
+        <table>CATISSUE_SITE</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>RECEIVING_SITE_ID</parentKey>
+        
+        <row>
+          <dropDown>
+            <name>name</name>
+            <udn>name</udn>
+            <caption>#getMessage("shipment_receiving_site_name")</caption>
+            <column>NAME</column>
+            <options>
+              <sql>select distinct name from CATISSUE_SITE</sql>
+            </options>
+          </dropDown>
+        </row>
+      </subForm>
+    </row>
+        
+    <row>
+      <userField>
+        <name>receiver</name>
+        <udn>receiver</udn>
+        <caption>#getMessage("shipment_receiver")</caption>
+        <column>IDENTIFIER</column>
+      </userField>
+    </row>
+    
+    <row>
+      <datePicker>
+        <name>receivedDate</name>
+        <udn>receivedDate</udn>
+        <caption>#getMessage("shipment_received_date")</caption>
+        <column>RECEIVED_DATE</column>
+        <format>MM-dd-yyyy</format>
+      </datePicker>
+    </row>
+    
+    <row>
+      <textField>
+        <name>receiverComments</name>
+        <udn>receiverComments</udn>
+        <caption>#getMessage("shipment_receiver_comments")</caption>
+        <column>RECEIVER_COMMENTS</column>
+      </textField>
+    </row>
+    
+    <row>
+      <dropDown>
+        <name>status</name>
+        <udn>status</udn>
+        <caption>#getMessage("shipment_status")</caption>
+        <column>STATUS</column>
+        <options>
+          <option><value>Pending</value></option>
+          <option><value>Shipped</value></option>
+          <option><value>Received</value></option>
+        </options>
+      </dropDown>
+    </row>
+
+    <row>
+      <subForm>
+        <name>shipmentItems</name>
+        <udn>shipmentItems</udn>
+        <caption>#getMessage("shipment_items")</caption>
+        <table>OS_SHIPMENT_ITEMS</table>
+        <foreignKey>SHIPMENT_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        
+        <row>
+          <subForm>
+            <name>specimen</name>
+            <udn>specimen</udn>
+            <caption>#getMessage("shipment_items_specimen")</caption>
+            <table>CATISSUE_SPECIMEN</table>
+            <foreignKey>IDENTIFIER</foreignKey>
+            <parentKey>SPECIMEN_ID</parentKey>
+
+            <row>
+              <textField>
+                <name>label</name>
+                <udn>label</udn>
+                <caption>#getMessage("shipment_items_specimen_label")</caption>
+                <column>LABEL</column>
+              </textField>
+            </row> 
+          </subForm>
+        </row>
+
+        <row>
+          <dropDown>
+            <name>receivedQuality</name>
+            <udn>receivedQuality</udn>
+            <caption>#getMessage("shipment_items_recv_quality")</caption>
+            <column>RECEIVED_QUALITY</column>
+            <options>
+              <option><value>Acceptable</value></option>
+              <option><value>Unacceptable</value></option>
+            </options>
+          </dropDown>
+        </row>
+      </subForm>
+    </row>
+    
+  </view>
+</form>

@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteri
 import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
 
 @Controller
 @RequestMapping("/shipments")
@@ -93,6 +94,15 @@ public class ShipmentController {
 		ResponseEvent<ShipmentDetail> resp = shipmentSvc.updateShipment(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		
+		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public QueryDataExportResult exportReport(@PathVariable Long id) {
+		ResponseEvent<QueryDataExportResult> resp = shipmentSvc.exportReport(getRequest(id));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
