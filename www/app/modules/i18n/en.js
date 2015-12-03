@@ -1462,6 +1462,13 @@
     }
   },
 
+  "specimen_requests": {
+    "list": "Specimen Requests",
+    "request_spmns": "Request Specimens",
+    "request_submitted": "Specimen request submitted successfully",
+    "loading_forms": "Please wait for a moment while we load specimens request forms..."
+  },
+
    "jobs": {
      "list": "Jobs",
      "create": "Create Job",

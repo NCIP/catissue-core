@@ -1,0 +1,74 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="specimen-list">
+          <span translate="specimen_list.lists">Specimen Lists</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="specimen-list({listId: ctx.list.id})">
+          <span>{{ctx.list.name}}</span>
+        </a>
+      </li>
+    </ul>
+    <h4>
+      <span translate="specimen_requests.request_spmns">Request Specimens</span>
+    </h4>
+  </div>
+
+  <div class="container">
+    <div class="clearfix">
+      <div class="col-xs-12">
+        <div ng-if="!ctx.initForms">
+          <span translate="specimen_requests.loading_forms">
+            Please wait for a moment while we load specimens request forms...
+          </span>
+        </div>
+        <div ng-if="ctx.initForms && ctx.formsOpts.length > 1">
+          <div os-wizard="reqWizard" type="classic">
+            <os-wizard-step title="{{formOpts.formDef.caption}}" on-finish="passThrough" 
+              ng-repeat="formOpts in ctx.formsOpts track by $index">
+              <div os-de-form ctrl="ctx.formCtrls.{{$index}}" opts="formOpts"></div>
+            </os-wizard-step>
+          </div>
+
+          <div class="os-divider"></div>
+
+          <div class="form-group" style="text-align: right;">
+            <div class="col-xs-offset-3 col-xs-9">
+              <button class="btn os-btn-text" ng-click="back()">
+                <span translate="common.buttons.cancel">Cancel</span>
+              </button>
+              <button class="btn os-btn-secondary" ng-click="previous(reqWizard)" ng-if="!reqWizard.isFirstStep()">
+                <span translate="common.buttons.previous"> Previous </span>
+              </button>
+              <button class="btn btn-primary" ng-click="next(reqWizard)" ng-if="!reqWizard.isLastStep()">
+                <span translate="common.buttons.next"> Next </span>
+              </button>
+              <button class="btn btn-primary" ng-click="saveRequest()" ng-if="reqWizard.isLastStep()">
+                <span translate="common.buttons.submit"> Submit </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div ng-if="ctx.initForms && ctx.formsOpts.length == 1">
+          <div>
+            <div os-de-form ctrl="ctx.formCtrls.0" opts="ctx.formsOpts[0]"></div>
+          </div>
+
+          <div class="os-divider"></div>
+
+          <div class="form-group">
+            <button class="btn btn-primary" ng-click="saveRequest()">
+              <span translate="common.buttons.submit"> Submit </span>
+            </button>
+            <button class="btn os-btn-text" ng-click="back()">
+              <span translate="common.buttons.cancel">Cancel</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
