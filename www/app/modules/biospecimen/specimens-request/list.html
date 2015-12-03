@@ -1,0 +1,53 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="cp-detail.overview({cpId: cp.id})">
+          <span>{{cp.shortTitle}}</span>
+        </a>
+      </li>
+    </ul>
+    <h4>
+      <span translate="specimen_requests.list">Specimen Requests</span>
+    </h4>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="specimen_requests.req_id">Request ID</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_requests.requestor">Requestor</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_requests.date_of_request">Date of Request</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_requests.specimens">Specimens</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="req in spmnsReqList" os-row-click="showRequest(req)">
+          <td class="col">
+            <a>
+              <span>{{req.id}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{req.requestor | osUserDisplayName}}</span>
+          </td>
+          <td class="col">
+            <span>{{req.dateOfRequest | date: global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{req.requestedSpecimensCount}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

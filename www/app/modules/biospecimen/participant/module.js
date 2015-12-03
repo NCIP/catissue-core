@@ -29,21 +29,7 @@ angular.module('os.biospecimen.participant',
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
-            return CollectionProtocol.getById($stateParams.cpId).then(
-              function(cp) {
-                if (!cp) {
-                  return cp;
-                }
-
-                cp.getCatalogQuery().then(
-                  function(query) {
-                    cp.catalogQuery = query;
-                  }
-                );
-
-                return cp;
-              }
-            );
+            return CollectionProtocol.getById($stateParams.cpId);
           }
         },
         parent: 'signed-in',
@@ -53,6 +39,19 @@ angular.module('os.biospecimen.participant',
         url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
+        resolve: {
+          catalogQuery: function(cp) {
+            if (cp.catalogQuery) {
+              return cp.catalogQuery;
+            }
+
+            return cp.getCatalogQuery().then(
+              function(query) {
+                cp.catalogQuery = query;
+              }
+            );
+          }
+        },
         parent: 'cp-view'
       })
       .state('participant-root', {

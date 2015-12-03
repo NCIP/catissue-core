@@ -10,6 +10,10 @@ angular.module('os.biospecimen.models.specimenreq', ['os.common.models'])
       );
     }
 
+    SpecimenRequest.listForCp = function(cpId, includeStats) {
+      return SpecimenRequest.query({cpId: cpId, includeStats: includeStats});
+    }
+
     return SpecimenRequest;
   }
 );
