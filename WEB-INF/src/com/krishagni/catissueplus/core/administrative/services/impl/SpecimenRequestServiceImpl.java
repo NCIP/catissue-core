@@ -182,7 +182,7 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 				}
 			}
 
-			if (formIds.size() < (cpIds.size() - 1) && commonFormId != null) {
+			if (formCtxts.size() < cpIds.size() && commonFormId != null) {
 				formIds.add(commonFormId);
 			}
 
