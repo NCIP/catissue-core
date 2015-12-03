@@ -81,8 +81,7 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 				crit.requestorId(AuthUtil.getCurrentUser().getId());
 			}
 
-			List<SpecimenRequest> spmnReqs = daoFactory.getSpecimenRequestDao().getSpecimenRequests(crit);
-			return ResponseEvent.response(SpecimenRequestSummary.from(spmnReqs));
+			return ResponseEvent.response(daoFactory.getSpecimenRequestDao().getSpecimenRequests(crit));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

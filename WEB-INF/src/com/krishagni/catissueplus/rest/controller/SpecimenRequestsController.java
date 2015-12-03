@@ -34,15 +34,23 @@ public class SpecimenRequestsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenRequestSummary> getSpecimenRequests(
+		@RequestParam(value = "cpId", required = false)
+		Long cpId,
+
 		@RequestParam(value = "startAt", required = false, defaultValue = "0")
 		int startAt,
 
 		@RequestParam(value = "maxResults", required = false, defaultValue = "100")
-		int maxResults) {
+		int maxResults,
+
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+		boolean includeStats) {
 
 		SpecimenRequestListCriteria listCriteria = new SpecimenRequestListCriteria()
+			.cpId(cpId)
 			.startAt(startAt)
-			.maxResults(maxResults);
+			.maxResults(maxResults)
+			.includeStat(includeStats);
 
 		ResponseEvent<List<SpecimenRequestSummary>> resp = spmnReqSvc.getRequests(getRequest(listCriteria));
 		resp.throwErrorIfUnsuccessful();

@@ -6,6 +6,8 @@ import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class SpecimenRequestListCriteria extends AbstractListCriteria<SpecimenRequestListCriteria> {
 
+	private Long cpId;
+
 	private Set<Long> siteIds;
 
 	private Long requestorId;
@@ -13,6 +15,15 @@ public class SpecimenRequestListCriteria extends AbstractListCriteria<SpecimenRe
 	@Override
 	public SpecimenRequestListCriteria self() {
 		return this;
+	}
+
+	public SpecimenRequestListCriteria cpId(Long cpId) {
+		this.cpId = cpId;
+		return self();
+	}
+
+	public Long cpId() {
+		return this.cpId;
 	}
 
 	public SpecimenRequestListCriteria siteIds(Set<Long> siteIds) {
