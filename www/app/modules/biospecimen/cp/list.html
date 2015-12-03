@@ -161,23 +161,16 @@
           <td class="col">
             <span>{{cp.specimenCount | number: 0}}</span>
           </td>
-          <td class="col os-more-options os-click-esc">
-            <div dropdown dropdown-append-to-body>
-              <button class="dropdown-toggle">
-                <span class="fa fa-ellipsis-v"></span>
+          <td class="col os-click-esc">
+            <div>
+              <button class="btn btn-xs btn-default" title="{{'cp.view_details' | translate}}"
+                ui-sref="cp-detail.overview({cpId: cp.id})">
+                <span class="fa fa-eye"></span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li>
-                  <a ui-sref="cp-detail.overview({cpId: cp.id})">
-                    <span class="fa fa-eye"></span>
-                    <span translate="cp.view_details">View Details</span>
-                  </a>
-                  <a ui-sref="participant-list({cpId: cp.id})">
-                    <span class="fa fa-group"></span>
-                    <span translate="cp.view_participants">View Participants</span>
-                  </a>
-                </li>
-              </ul>
+              <button class="btn btn-xs btn-default" title="{{'cp.view_participants' | translate}}"
+                ui-sref="participant-list({cpId: cp.id})">
+                <span class="fa fa-group"></span>
+              </button>
             </div>
           </td>
         </tr>
