@@ -60,7 +60,7 @@ public class SpecimenRequestsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenRequestDetail getSpecimenRequests(@PathVariable("id") Long reqId) {
+	public SpecimenRequestDetail getSpecimenRequest(@PathVariable("id") Long reqId) {
 		ResponseEvent<SpecimenRequestDetail> resp = spmnReqSvc.getRequest(getRequest(reqId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

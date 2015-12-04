@@ -12,10 +12,14 @@ public class StorageContainerControl extends AbstractLookupControl {
 	private static final String LU_TABLE = "CATISSUE_CONTAINER";
 	
 	private static final Properties LU_PV_SOURCE_PROPS = initPvSourceProps();
-	
+
+	@Override
+	public String getCtrlType() {
+		return "storageContainer";
+	}
+
 	@Override
 	public void getProps(Map<String, Object> props) {
-		props.put("type", "storageContainer");
 		props.put("apiUrl", "rest/ng/storage-containers");
 		props.put("dataType", getDataType());
 	}

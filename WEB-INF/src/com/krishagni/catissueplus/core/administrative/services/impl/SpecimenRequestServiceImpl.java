@@ -130,7 +130,7 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 			ResponseEvent<FormDataDetail> resp = formSvc.getFormData(new RequestEvent<GetFormDataOp>(op));
 			resp.throwErrorIfUnsuccessful();
 
-			return ResponseEvent.response(resp.getPayload().getFormData().getFieldNameValueMap(false));
+			return ResponseEvent.response(resp.getPayload().getFormData().getFieldValueMap());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
