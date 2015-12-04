@@ -454,7 +454,7 @@
 
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
-    "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen cart",
+    "no_specimens_for_specimen_list": "Please select at least one collected specimen to add specimen cart",
     "no_specimens_for_delete":"Please select at least one collected specimen to delete",
     "no_specimens_for_close":"Please select at least one collected specimen to close",
 
