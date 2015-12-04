@@ -7,8 +7,8 @@ angular.module('os.biospecimen.extensions')
     }
 
     function getFieldValueEl(field) {
-      var el = angular.element('<li class="item"/>');
-      el.append(angular.element('<span class="key key-sm"/>').text(field.caption));
+      var el = angular.element('<li class="item"/>')
+        .append(angular.element('<span class="key key-sm"/>').text(field.caption));
 
       var value = field.value;
       if (value instanceof Array) {
@@ -25,7 +25,6 @@ angular.module('os.biospecimen.extensions')
     }
 
     function getSubFormSection(field) {
-      
       var table = angular.element('<table class="os-table os-table-muted-hdr os-border"/>')
         .append(getSubFormTableHead(field.value))
         .append(getSubFormTableBody(field.value));
