@@ -1,0 +1,83 @@
+<div class="clearfix">
+  <div class="col-xs-10">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span translate="specimens.list">Specimens</span>
+        <span class="os-btns">
+          <button show-if-allowed="orderCreateOpts" class="default" ng-click="distributeSpecimens()">
+            <span class="fa fa-share"></span>
+            <span translate="specimen_list.distribute">Distribute</span>
+          </button>
+          <button show-if-allowed="shipmentCreateOpts" class="default" ng-click="shipSpecimens()">
+            <span class="fa fa-paper-plane-o"></span>
+            <span translate="specimen_list.ship">Ship</span>
+          </button>
+        </span>
+      </div>
+      <div class="panel-body">
+        <table class="os-table">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col">
+                <div class="clearfix">
+                  <div class="pull-left os-select-specimen-cb">
+                    <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
+                  </div>
+                  <div class="pull-left" style="padding-left: 12px;">
+                    <span translate="specimens.label">Label</span>
+                  </div>
+                </div>
+              </th>
+              <th class="col">
+                <span translate="specimens.description">Description</span>
+              </th>
+              <th class="col">
+                <span translate="specimens.available_qty">Available Quantity</span>
+              </th>
+              <th class="col">
+                <span translate="specimens.location">Location</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-class="{'selected': specimen.selected}" ng-repeat="specimen in spmnRequest.specimens">
+              <td class="col">
+                <div class="clearfix">
+                  <div class="pull-left os-select-specimen-cb">
+                    <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected">
+                    </os-checkbox>
+                  </div>
+                  <div class="pull-left" style="padding-left: 12px;">
+                    <a ui-sref="specimen({specimenId: specimen.id})">
+                      <span>{{specimen.label}}</span>
+                    </a>
+                  </div>
+                </div>
+              </td>
+              <td class="col">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                </a>
+              </td>
+              <td class="col">
+                <span>{{specimen.availableQty}}</span>
+                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
+              </td>
+              <td class="col">
+                <span ng-switch on="!!specimen.storageLocation.name"> 
+                  <span ng-switch-when="true">
+                    <span>{{specimen.storageLocation.name}}</span>
+                    <span>({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})</span>
+                  </span>
+                  <span ng-switch-when="false">
+                    <span translate="specimens.virtually_located">Virtual</span>
+                  </span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

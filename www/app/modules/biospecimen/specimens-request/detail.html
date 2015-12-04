@@ -1,0 +1,43 @@
+
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li>
+        <a ui-sref="cp-detail.overview({cpId: cp.id})">
+          <span>{{cp.shortTitle}}</span>
+        </a>
+      </li>
+
+      <li>
+        <a ui-sref="specimens-request-list({cpId: cp.id})">
+          <span translate="specimen_requests.list">Specimen Requests</span>
+        </a>
+      </li>
+    </ul>
+
+    <h4>
+      <span translate="specimen_requests.request">Specimen Request</span>
+      <span>#{{spmnRequest.id}}</span>
+    </h4>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref=".overview">
+          <span class="fa fa-eye"></span>
+          <span class="os-title" translate="specimen_requests.tab.overview">Overview</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref=".specimens">
+          <span class="fa fa-inbox"></span>
+          <span class="os-title" translate="specimen_requests.tab.specimens">Specimens</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="os-side-menu-page-content" ui-view>
+  </div>
+</div>

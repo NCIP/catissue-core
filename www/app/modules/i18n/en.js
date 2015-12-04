@@ -1471,7 +1471,12 @@
     "req_id": "Request ID",
     "requestor": "Requestor",
     "date_of_request": "Request Date",
-    "specimens": "Specimens"
+    "specimens": "Specimens",
+    "request": "Specimen Request",
+    "tab": {
+      "overview": "Overview",
+      "specimens": "Specimens"
+    }
   },
 
    "jobs": {

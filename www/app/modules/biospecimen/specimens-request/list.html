@@ -33,7 +33,7 @@
       <tbody class="os-table-body">
         <tr class="row" ng-repeat="req in spmnsReqList" os-row-click="showRequest(req)">
           <td class="col">
-            <a>
+            <a ui-sref="specimens-request-detail.overview({requestId: req.id})">
               <span>{{req.id}}</span>
             </a>
           </td>

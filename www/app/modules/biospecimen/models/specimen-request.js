@@ -14,6 +14,14 @@ angular.module('os.biospecimen.models.specimenreq', ['os.common.models'])
       return SpecimenRequest.query({cpId: cpId, includeStats: includeStats});
     }
 
+    SpecimenRequest.prototype.getFormData = function() {
+      return $http.get(SpecimenRequest.url() + '/' + this.$id() + '/form-data').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return SpecimenRequest;
   }
 );
