@@ -25,11 +25,11 @@ angular.module('os.administrative.setting',
         },
         template: '<div ui-view></div>',
         resolve: {
-          settings: function(Setting) {
+          settings: function(isAdmin, Setting) {
             return Setting.query();
           }
         },
-        parent: 'signed-in',
+        parent: 'admin-view',
         abstract: true
       })
       .state('settings-list', {
