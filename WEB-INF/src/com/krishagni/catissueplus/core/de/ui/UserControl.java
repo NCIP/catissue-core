@@ -14,10 +14,14 @@ public class UserControl extends AbstractLookupControl {
 	private static final String ALT_KEY = "email_address";
 	
 	private static final Properties LU_PV_SOURCE_PROPS = initPvSourceProps();
-	
+
+	@Override
+	public String getCtrlType() {
+		return "userField";
+	}
+
 	@Override
 	public void getProps(Map<String, Object> props) {
-		props.put("type", "userField");
 		props.put("apiUrl", "rest/ng/users");
 		props.put("dataType", getDataType());
 	}
