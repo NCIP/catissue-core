@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -72,6 +73,8 @@ import com.krishagni.catissueplus.core.de.repository.SavedQueryDao;
 import com.krishagni.catissueplus.core.de.services.QueryService;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
+import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
 import edu.common.dynamicextensions.query.QueryResponse;
@@ -886,7 +889,7 @@ public class QueryServiceImpl implements QueryService {
 		if (user.isAdmin() || isCount) {
 			return aql;
 		} else {
-			String afterSelect = aql.trim().substring(6);
+			String afterSelect = aql.trim().substring("select".length());
 			return "select " + cpForm + ".id, " + afterSelect;
 		}
 	}
@@ -926,14 +929,21 @@ public class QueryServiceImpl implements QueryService {
 		private User user;
 		
 		private boolean countQuery;
+
+		private String mask;
 		
 		private Map<Long, ParticipantReadAccess> phiAccessMap = new HashMap<Long, ParticipantReadAccess>();
 		
-		private static final String mask = "##########";
+		private static final String MASK_MARKER = "##########";
 		
 		public QueryResultScreenerImpl(User user, boolean countQuery) {
+			this(user, countQuery, null);
+		}
+
+		public QueryResultScreenerImpl(User user, boolean countQuery, String mask) {
 			this.user = user;
 			this.countQuery = countQuery;
+			this.mask = (mask == null) ? MASK_MARKER : mask;
 		}
 
 		@Override
@@ -1045,18 +1055,41 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	private FacetDetail getFacetDetail(Long cpId, String facet) {
-		String formName = facet.split("\\.", 2)[0];
-		String aql = String.format("select distinct %s where %s exists", facet, facet);
+		String[] attrParts = facet.split("\\.", 2);
+		Container form = Container.getContainer(attrParts[0]);
+		if (form == null) {
+			throw new IllegalArgumentException("Invalid facet: " + facet);
+		}
+
+		Control field = form.getControlByUdn(attrParts[1], "\\.");
+		if (field == null) {
+			throw new IllegalArgumentException("Invalid facet: " + facet);
+		}
+
+		String aql = null;
+		QueryResultScreener screener = null;
+		Collection<Object> values = null;
+		if (!AuthUtil.isAdmin() && field.isPhi()) {
+			aql = String.format("select distinct %s.id, %s where %s exists limit 0, 500", cpForm, facet, facet);
+			screener = new QueryResultScreenerImpl(AuthUtil.getCurrentUser(), false, "");
+			values = new TreeSet<Object>();
+		} else {
+			aql = String.format("select distinct %s where %s exists limit 0, 500", facet, facet);
+			values = new ArrayList<Object>();
+		}
 
 		Query query = Query.createQuery();
 		query.wideRowMode(WideRowMode.OFF)
-			.compile(formName, aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
+			.compile(attrParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
 		QueryResponse queryResp = query.getData();
-		QueryResultData queryResult = queryResp.getResultData();
 
-		List<Object> values = new ArrayList<Object>();
+		QueryResultData queryResult = queryResp.getResultData();
+		queryResult.setScreener(screener);
+
 		for (Object[] row : queryResult.getRows()) {
-			values.add(row[0]);
+			if (row[0] != null && !row[0].toString().isEmpty()) {
+				values.add(row[0]);
+			}
 		}
 
 		String[] columnLabels = queryResp.getResultData().getColumnLabels()[0].split("#");
