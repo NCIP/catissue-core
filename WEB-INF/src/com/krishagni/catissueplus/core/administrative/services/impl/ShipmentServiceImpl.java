@@ -423,7 +423,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 				writeHeaderLine(writer, "shipment_sender", shipment.getSender().formattedName());
 				writeHeaderLine(writer, "shipment_shipped_date", Utility.getDateString(shipment.getShippedDate()));
 				writeHeaderLine(writer, "shipment_sender_comments", shipment.getSenderComments());
-				writeHeaderLine(writer, "shipment_receiving_site", shipment.getReceivingSite().getName());
+				writeHeaderLine(writer, "shipment_recv_site", shipment.getReceivingSite().getName());
 				
 				if (shipment.getReceiver() != null) {
 					writeHeaderLine(writer, "shipment_receiver", shipment.getReceiver().formattedName());

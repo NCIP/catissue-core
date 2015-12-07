@@ -90,7 +90,7 @@
       <record>
         <attribute>specimen</attribute>
         <multiple>false</multiple>
-        <caption>#getMessage("shipment_items_specimen")</caption>
+        <caption>#getMessage("specimen")</caption>
       
         <field>
           <caption>#getMessage("specimen_label")</caption>

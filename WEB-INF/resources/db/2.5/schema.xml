@@ -183,7 +183,7 @@
   
   <changeSet author="ckhilosiya" id="Add FK to shipments sending site">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SHIPMENTS_SENDING_SITE_ID"
+      constraintName="OS_FK_SHIP_SENDING_SITE_ID"
       baseTableName="OS_SHIPMENTS"
       baseColumnNames="SENDING_SITE_ID"
       referencedTableName="CATISSUE_SITE"
@@ -192,7 +192,7 @@
   
   <changeSet author="ckhilosiya" id="Add FK to shipments receiving site">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SHIPMENTS_RECEIVING_SITE_ID"
+      constraintName="OS_FK_SHIP_RECV_SITE_ID"
       baseTableName="OS_SHIPMENTS"
       baseColumnNames="RECEIVING_SITE_ID"
       referencedTableName="CATISSUE_SITE"
@@ -201,7 +201,7 @@
   
   <changeSet author="ckhilosiya" id="Add FK to shipments sender">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SHIPMENTS_SENDER_ID"
+      constraintName="OS_FK_SHIP_SENDER_ID"
       baseTableName="OS_SHIPMENTS"
       baseColumnNames="SENDER_ID"
       referencedTableName="CATISSUE_USER"
@@ -210,7 +210,7 @@
   
   <changeSet author="vlonushte" id="Add FK to shipments receiver">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SHIPMENTS_RECEIVER_ID"
+      constraintName="OS_FK_SHIP_RECEIVER_ID"
       baseTableName="OS_SHIPMENTS"
       baseColumnNames="RECEIVER_ID"
       referencedTableName="CATISSUE_USER"
@@ -255,7 +255,7 @@
   
   <changeSet author="ckhilosiya" id="Add FK on shipment items specimen id">
     <addForeignKeyConstraint
-      constraintName="OS_FK_SHIP_ITEMS_SPECIMEN_ID"
+      constraintName="OS_FK_SHIP_ITEMS_SPEC_ID"
       baseTableName="OS_SHIPMENT_ITEMS"
       baseColumnNames="SPECIMEN_ID"
       referencedTableName="CATISSUE_SPECIMEN"

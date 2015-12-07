@@ -181,7 +181,7 @@
           <subForm>
             <name>specimen</name>
             <udn>specimen</udn>
-            <caption>#getMessage("shipment_items_specimen")</caption>
+            <caption>#getMessage("specimen")</caption>
             <table>CATISSUE_SPECIMEN</table>
             <foreignKey>IDENTIFIER</foreignKey>
             <parentKey>SPECIMEN_ID</parentKey>
@@ -190,7 +190,7 @@
               <textField>
                 <name>label</name>
                 <udn>label</udn>
-                <caption>#getMessage("shipment_items_specimen_label")</caption>
+                <caption>#getMessage("specimen_label")</caption>
                 <column>LABEL</column>
               </textField>
             </row> 
