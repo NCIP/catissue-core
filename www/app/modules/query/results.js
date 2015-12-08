@@ -164,11 +164,27 @@ angular.module('os.query.results', ['os.query.models'])
       var facets = [];
       angular.forEach($scope.queryCtx.filters,
         function(filter, index) {
-          if (!filter.parameterized || !!filter.expr) {
+          if (!filter.parameterized) {
             return;
           }
 
-          switch (filter.field.type) {
+          var type = undefined;
+          if (!!filter.expr) {
+            var tObj = filter.tObj = QueryUtil.getTemporalExprObj(filter.expr);
+            filter.op = QueryUtil.getOpBySymbol(tObj.op);
+            if (tObj.op == 'between') {
+              var rhs = tObj.rhs.trim();
+              filter.value = JSON.parse('[' + rhs.substring(1, rhs.length - 1) + ']');
+            } else {
+              filter.value = tObj.rhs;
+            }
+
+            type = 'INTEGER';
+          } else {
+            type = filter.field.type;
+          }
+
+          switch (type) {
             case 'STRING':
               if (STR_FACETED_OPS.indexOf(filter.op.name) == -1) {
                 return;
@@ -197,7 +213,8 @@ angular.module('os.query.results', ['os.query.models'])
 
     function getFacet(filter, index) {
       var values = undefined;
-      var isRangeType = !!RANGE_FNS[filter.field.type];
+      var type = !!filter.expr ? 'INTEGER' : filter.field.type;
+      var isRangeType = !!RANGE_FNS[type];
 
       if (isRangeType) {
         var value = undefined;
@@ -225,11 +242,11 @@ angular.module('os.query.results', ['os.query.models'])
 
       return {
         id: filter.id,
-        caption: filter.field.caption,
-        dataType: filter.field.type,
+        caption: !!filter.expr ? filter.desc : filter.field.caption,
+        dataType: type,
         isRange: isRangeType,
-        expr: filter.form.name + "." + filter.field.name,
-        type: filter.field.type,
+        expr: !!filter.expr ? filter.expr : (filter.form.name + "." + filter.field.name),
+        type: type,
         values: values,
         valuesQ: undefined,
         selectedValues: [],
@@ -564,7 +581,19 @@ angular.module('os.query.results', ['os.query.models'])
           } else {
             filter.value = undefined;
             filter.op = QueryUtil.getOp('any');
+          }
+
+          if (!filter.tObj) {
             return;
+          }
+
+          // temporal expression
+          var tObj = filter.tObj;
+          filter.expr = tObj.lhs + ' ' + filter.op.symbol + ' ';
+          if (filter.value instanceof Array) {
+            filter.expr += "(" + filter.value.join() + ")";
+          } else if (angular.isDefined(filter.value)) {
+            filter.expr += filter.value;
           }
         } else {
           filter.op = QueryUtil.getOp('qin');

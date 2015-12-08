@@ -295,12 +295,12 @@ angular.module('os.query.util', [])
     };
 
     function getTemporalExprObj(temporalExpr) {
-      var re = /<=|>=|<|>|=|!=/g
+      var re = /<=|>=|<|>|=|!=|\sbetween\s|\sany|\sexists/g
       var matches = undefined;
       if ((matches = re.exec(temporalExpr))) {
         return {
           lhs: temporalExpr.substring(0, matches.index),
-          op : matches[0],
+          op : matches[0].trim(),
           rhs: temporalExpr.substring(matches.index + matches[0].length)
         }
       }
