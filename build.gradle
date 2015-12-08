@@ -6,6 +6,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'war'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 archivesBaseName = 'openspecimen'
 
@@ -93,7 +94,7 @@ dependencies {
   
   providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
   
-  compile group: 'org.antlr', name: 'antlr4', version:'4.5'
+  compile group: 'org.antlr', name: 'antlr4', version:'4.5.1'
   compile group: 'aopalliance', name: 'aopalliance', version:'1.0'
   compile group: 'asm', name: 'asm', version:'3.3.1'
   compile group: 'org.aspectj', name: 'aspectjweaver', version:'1.8.6'
@@ -129,6 +130,7 @@ dependencies {
   compile group: 'org.json', name: 'json', version:'20140107'
   compile group: 'javax.ws.rs', name: 'jsr311-api', version:'1.1.1'
   compile group: 'javax.servlet', name: 'jstl', version:'1.2'
+  compile group: 'javax.transaction', name: 'jta', version:'1.1'
   compile group: 'org.liquibase', name: 'liquibase-core', version:'3.3.3'
   compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
   compile group: 'log4j', name: 'log4j', version:'1.2.16'
@@ -156,6 +158,7 @@ dependencies {
   compile group: 'velocity', name: 'velocity-dep', version:'1.4'
   compile group: 'com.thoughtworks.xstream', name: 'xstream', version:'1.4.8'
   compile group: 'com.itextpdf', name: 'itextpdf', version:'5.5.6'
+  compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
    
   runtime group: 'antlr', name: 'antlr', version: '2.7.7'
   runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
