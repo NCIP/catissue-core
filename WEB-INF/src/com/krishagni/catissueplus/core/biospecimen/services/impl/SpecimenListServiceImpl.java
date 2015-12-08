@@ -149,8 +149,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			if (!AuthUtil.isAdmin() && !existing.getOwner().getId().equals(userId)) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
-			
-			existing.setDeletedOn(Calendar.getInstance().getTime());
+
+			existing.delete();
 			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
 			return ResponseEvent.response(SpecimenListDetails.from(existing));
 		} catch (OpenSpecimenException ose) {

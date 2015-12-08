@@ -291,4 +291,38 @@
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="Update names of deleted specimens" dbms="oracle">
+    <sql>
+      update 
+        catissue_specimenlist_tags 
+      set 
+        tag_label = 
+          concat(
+            substr(tag_label, 1, 242), 
+            concat(
+              '_', 
+              to_char((trunc(deleted_on) - to_date('1970-01-01', 'YYYY-MM-DD')) * 86400000)
+            )
+          ) 
+      where 
+        deleted_on is not null;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update names of deleted specimens" dbms="mysql">
+    <sql>
+      update 
+        catissue_specimenlist_tags 
+      set 
+        tag_label = 
+          concat(
+            substring(tag_label, 1, 242), 
+            '_', 
+            unix_timestamp(deleted_on)
+          ) 
+      where 
+        deleted_on is not null;
+    </sql>
+  </changeSet>
 </databaseChangeLog>
