@@ -9,6 +9,26 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <div show-if-allowed="shipmentResource.createUpdateOpts" dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="shipment-import">
+              <i class="fa fa-paper-plane-o"></i>
+              <span translate="shipments.list">Shipments</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="shipment-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button class="default" os-right-drawer-toggle title="{{'shipments.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

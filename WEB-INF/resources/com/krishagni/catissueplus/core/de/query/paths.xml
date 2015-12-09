@@ -36,8 +36,8 @@
 	
 	<path>
 		<from>Participant</from>
-		<to>Shipping</to>
-		<start-field>scgs.specimens.specimenShipment.shipment</start-field>
+		<to>Shipment</to>
+		<start-field>scgs.specimens.specimenShipments.shipment</start-field>
 		<links>
 		</links>
 	</path>

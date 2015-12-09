@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.events;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class FacetDetail {
@@ -8,7 +9,7 @@ public class FacetDetail {
 
 	private String caption;
 
-	private List<Object> values = new ArrayList<Object>();
+	private Collection<Object> values = new ArrayList<Object>();
 
 	public String getExpr() {
 		return expr;
@@ -26,11 +27,11 @@ public class FacetDetail {
 		this.caption = caption;
 	}
 
-	public List<Object> getValues() {
+	public Collection<Object> getValues() {
 		return values;
 	}
 
-	public void setValues(List<Object> values) {
+	public void setValues(Collection<Object> values) {
 		this.values = values;
 	}
 }

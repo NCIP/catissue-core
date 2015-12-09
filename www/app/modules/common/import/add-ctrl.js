@@ -14,6 +14,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.importJob = new ImportJob({
         objectType: importDetail.objectType,
         importType: importDetail.importType || 'CREATE',
+        csvType: importDetail.csvType || 'SINGLE_ROW_PER_OBJ',
         inputFileId: undefined,
         objectParams: {
           entityType: importDetail.entityType,

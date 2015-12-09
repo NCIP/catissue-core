@@ -111,11 +111,6 @@ public class CpeFactoryImpl implements CpeFactory {
 			eventPoint = 0d;
 		}
 		
-		if (eventPoint < 0) {
-			ose.addError(CpeErrorCode.INVALID_POINT);
-			return;
-		}
-		
 		cpe.setEventPoint(eventPoint);
 	}
 	

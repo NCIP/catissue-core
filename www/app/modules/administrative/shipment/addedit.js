@@ -142,11 +142,11 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
 
     $scope.ship = function() {
-      saveOrUpdate('SHIPPED');
+      saveOrUpdate('Shipped');
     }
 
     $scope.saveDraft = function() {
-      saveOrUpdate('PENDING');
+      saveOrUpdate('Pending');
     }
 
     init();

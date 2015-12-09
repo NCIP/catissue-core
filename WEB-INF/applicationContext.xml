@@ -600,6 +600,7 @@
         <value>com/krishagni/catissueplus/core/administrative/schema/user.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/shipment.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/visit.xml</value>
@@ -652,6 +653,13 @@
             <property name="containerSvc" ref="storageContainerSvc"/>
           </bean>
         </entry>
+        
+        <entry key="shipment">
+          <bean class="com.krishagni.catissueplus.core.administrative.services.impl.ShipmentImporter">
+            <property name="shipmentSvc" ref="shipmentSvc"/>
+          </bean>
+        </entry>
+        
 
         <entry key="cpr">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CprImporter">
@@ -745,6 +753,8 @@
     <property name="daoFactory" ref="biospecimenDaoFactory" />
     <property name="shipmentFactory" ref="shipmentFactory" />
     <property name="emailService" ref="emailService"/>
+    <property name="querySvc" ref="querySvc"/>
+    <property name="deDaoFactory" ref="deDaoFactory"/>
   </bean>
 
   <bean id="specimenRequestSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.SpecimenRequestServiceImpl">

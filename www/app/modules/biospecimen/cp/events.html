@@ -89,7 +89,7 @@
     </div>
     <div class="form-group clearfix">
       <input os-md-input autofocus type="text" class="form-control" placeholder="{{'cp.cpe_point' | translate}}" 
-        name="eventPoint" ng-model="event.eventPoint" required ng-pattern="/^[0-9]+$/">
+        name="eventPoint" ng-model="event.eventPoint" ng-model-options="{allowInvalid: true}" ng-pattern="/^-?\d+$/">
       <div os-field-error field="eventForm.eventPoint"></div>
     </div>
 

@@ -32,9 +32,9 @@
       <li class="item">
         <strong class="key key-sm" translate="shipments.status">Status</strong>
         <ng-switch on="shipment.status">
-          <span class="value value-md os-status-received" ng-switch-when="RECEIVED">{{'shipments.statuses.RECEIVED' | translate}}</span>
-          <span class="value value-md os-status-shipped" ng-switch-when="SHIPPED">{{'shipments.statuses.SHIPPED' | translate}}</span>
-          <span class="value value-md os-status-pending" ng-switch-default>{{'shipments.statuses.PENDING' | translate}}</span>
+          <span class="value value-md os-status-received" ng-switch-when="Received">{{'shipments.statuses.Received' | translate}}</span>
+          <span class="value value-md os-status-shipped" ng-switch-when="Shipped">{{'shipments.statuses.Shipped' | translate}}</span>
+          <span class="value value-md os-status-pending" ng-switch-default>{{'shipments.statuses.Pending' | translate}}</span>
         </ng-switch>
       </li>
         
@@ -50,14 +50,14 @@
         <span class="value value-md">{{shipment.sender | osUserDisplayName}}</span>
       </li>
         
-      <li class="item" ng-if="shipment.status == 'RECEIVED'">
+      <li class="item" ng-if="shipment.status == 'Received'">
         <strong class="key key-sm" translate="shipments.received_date">Received Date</strong>
         <span class="value value-md">
           {{shipment.receivedDate | date: global.dateFmt | osNoValue}}
         </span>
       </li>
 
-      <li class="item" ng-if="shipment.status == 'RECEIVED'">
+      <li class="item" ng-if="shipment.status == 'Received'">
         <strong class="key key-sm" translate="shipments.receiver">Receiver</strong>
         <span class="value value-md">{{shipment.receiver | osUserDisplayName}}</span>
       </li>
@@ -93,7 +93,7 @@
               <th class="col" translate="shipments.spec.desc">Description</th>
               <th class="col" translate="shipments.spec.cp">Collection Protocol</th>
               <th class="col" translate="shipments.spec.quantity">Quantity</th>
-              <th class="col" ng-if="shipment.status == 'RECEIVED'" translate="shipments.spec.quality">Quality</th>
+              <th class="col" ng-if="shipment.status == 'Received'" translate="shipments.spec.quality">Quality</th>
             </tr>
           </thead>
           <tbody class="os-table-body">
@@ -116,7 +116,7 @@
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>
               </td>
-              <td class="col" ng-if="shipment.status == 'RECEIVED'">
+              <td class="col" ng-if="shipment.status == 'Received'">
                 <span>{{"shipments.quality." + item.receivedQuality | translate}}</span>
               </td>
             </tr>

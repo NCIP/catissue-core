@@ -8,6 +8,8 @@ public class ImportDetail {
 	
 	private String importType;
 	
+	private String csvType;
+	
 	private String inputFileId;
 	
 	private Map<String, Object> objectParams = new HashMap<String, Object>();
@@ -26,6 +28,14 @@ public class ImportDetail {
 
 	public void setImportType(String importType) {
 		this.importType = importType;
+	}
+
+	public String getCsvType() {
+		return csvType;
+	}
+
+	public void setCsvType(String csvType) {
+		this.csvType = csvType;
 	}
 
 	public String getInputFileId() {

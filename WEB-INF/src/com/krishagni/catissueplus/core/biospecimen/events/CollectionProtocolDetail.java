@@ -37,7 +37,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private Boolean manualVisitNameEnabled;
 	
 	private Boolean manualSpecLabelEnabled;
-
+	
 	private Boolean aliquotsInSameContainer;
 
 	private String activityStatus;

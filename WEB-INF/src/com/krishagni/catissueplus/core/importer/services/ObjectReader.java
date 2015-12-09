@@ -39,6 +39,8 @@ public class ObjectReader implements Closeable {
 	private String dateFmt;
 	
 	private String timeFmt;
+	
+	private int keyColumnIdx = -1;
 
 	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt) {
 		try {
@@ -50,6 +52,11 @@ public class ObjectReader implements Closeable {
 
 			this.dateFmt = dateFmt;
 			this.timeFmt = timeFmt;
+			
+			String columnName = schema.getKeyColumnName();
+			if (StringUtils.isNotBlank(columnName)) {
+				keyColumnIdx = getCsvColumnNames().indexOf(columnName);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -71,6 +78,10 @@ public class ObjectReader implements Closeable {
 	
 	public List<String> getCsvRow() {
 		return new ArrayList<String>(Arrays.asList(currentRow));
+	}
+	
+	public String getRowKey() {
+		return keyColumnIdx == -1 ? null : currentRow[keyColumnIdx];
 	}
 	
 	@Override

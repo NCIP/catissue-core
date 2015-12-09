@@ -455,7 +455,7 @@
 
     "no_specimens_for_collection": "Please select at least one anticipated specimen for collection",
     "no_specimens_for_print": "Please select at least one collected specimen for label printing",
-    "no_specimens_for_specimen_list": "Please select at least one specmen to add specimen cart",
+    "no_specimens_for_specimen_list": "Please select at least one collected specimen to add specimen cart",
     "no_specimens_for_delete":"Please select at least one collected specimen to delete",
     "no_specimens_for_close":"Please select at least one collected specimen to close",
 
@@ -1287,7 +1287,8 @@
       "visit": "Visits",
       "specimen": "Specimens",
       "specimenAliquot": "Specimen Aliquots",
-      "specimenDerivative": "Derived Specimens"
+      "specimenDerivative": "Derived Specimens",
+      "shipment": "Shipment"
     },
 
     "import_types": {
@@ -1424,6 +1425,11 @@
     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "filters": "Filters",
+    "report_gen_initiated": "Generating shipment report...",
+    "downloading_report": "Downloading shipment report...",
+    "report_will_be_emailed": "Generating shipment report is taking more time than anticipated. Link to download report will be sent to you by email",
+    "bulk_import": "Bulk Import Shipments",
+    "bulk_import_jobs": "Import Shipments Job List",
 
     "menu": {
       "overview": "Overview"
@@ -1441,9 +1447,9 @@
     },
 
     "statuses": {
-      "SHIPPED": "Shipped",
-      "PENDING": "Pending",
-      "RECEIVED": "Received"
+      "Shipped": "Shipped",
+      "Pending": "Pending",
+      "Received": "Received"
     },
 
     "quality": {
@@ -1454,7 +1460,8 @@
     "buttons": {
       "ship": "Ship",
       "save_draft": "Save Draft",
-      "receive": "Receive"
+      "receive": "Receive",
+      "download_report": "Download Report"
     },
 
     "tooltip": {
@@ -1634,7 +1641,9 @@
         "welcome_video_source": "Welcome Video Source",
         "welcome_video_source_desc": "Add an welcome video to end users during sign up process. E.g. from YouTube, Vimeo etc",
         "welcome_video_url": "Welcome Video URL",
-        "welcome_video_url_desc": "URL for welcome video"
+        "welcome_video_url_desc": "URL for welcome video",
+        "shipment_export_report": "Shipment export report",
+        "shipment_export_report_desc": "Export Report format for all shipments"
       },
 
       "email": {

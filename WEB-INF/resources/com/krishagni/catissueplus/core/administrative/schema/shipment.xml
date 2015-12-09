@@ -1,0 +1,127 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>shipment</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.ShipmentDetail</name>
+    
+    <field>
+      <caption>#getMessage("shipment_name")</caption>
+      <attribute>name</attribute>
+      <key>true</key>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_courier_name")</caption>
+      <attribute>courierName</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_tracking_number")</caption>
+      <attribute>trackingNumber</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_tracking_url")</caption>
+      <attribute>trackingUrl</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_sending_site")</caption>
+      <attribute>sendingSite</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_recv_site")</caption>
+      <attribute>receivingSite</attribute>
+    </field>
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("shipment_shipped_date")</caption>
+      <attribute>shippedDate</attribute>
+    </field>
+ 
+    <record>
+      <attribute>sender</attribute>
+      <caption>#getMessage("shipment_sender")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("shipment_sender_comments")</caption>
+      <attribute>senderComments</attribute>
+    </field>
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("shipment_received_date")</caption>
+      <attribute>receivedDate</attribute>
+    </field>
+
+    <record>
+      <attribute>receiver</attribute>
+      <caption>#getMessage("shipment_receiver")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("shipment_receiver_comments")</caption>
+      <attribute>receiverComments</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("shipment_status")</caption>
+      <attribute>status</attribute>
+    </field>
+
+    <record>
+      <attribute>shipmentItem</attribute>
+      <caption>#getMessage("shipment_item")</caption>
+      
+      <record>
+        <attribute>specimen</attribute>
+        <multiple>false</multiple>
+        <caption>#getMessage("specimen")</caption>
+      
+        <field>
+          <caption>#getMessage("specimen_label")</caption>
+          <attribute>label</attribute>
+        </field>
+
+        <record>
+          <caption>#getMessage("specimen_location")</caption>
+          <attribute>storageLocation</attribute>
+    
+          <field>
+            <caption>#getMessage("specimen_location_container")</caption>
+            <attribute>name</attribute>
+          </field>
+    
+          <field>
+            <caption>#getMessage("specimen_location_row")</caption>
+            <attribute>positionY</attribute>
+          </field>
+    
+          <field>
+            <caption>#getMessage("specimen_location_column")</caption>
+            <attribute>positionX</attribute>
+          </field>
+        </record>
+      </record>
+
+      <field>
+        <caption>#getMessage("shipment_items_recv_quality")</caption>
+        <attribute>receivedQuality</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

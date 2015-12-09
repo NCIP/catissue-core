@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -18,9 +19,35 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class Shipment extends BaseEntity {
 	public enum Status {
-		PENDING,
-		SHIPPED,
-		RECEIVED
+		PENDING("Pending"),
+		SHIPPED("Shipped"),
+		RECEIVED("Received");
+		
+		private final String name;
+		
+		private Status(String name) {
+			this.name = name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public static Status fromName(String name) {
+			if (StringUtils.isBlank(name)) {
+				return null;
+			}
+			
+			Status result = null;
+			for (Status value : Status.values()) {
+				if (value.name.equalsIgnoreCase(name)) {
+					result = value;
+					break;
+				}
+			}
+			
+			return result;
+		}
 	}
 	
 	private String name;

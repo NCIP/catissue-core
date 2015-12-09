@@ -17,7 +17,8 @@ angular.module('os.administrative.shipment',
           $scope.shipmentResource = {
             createOpts: {resource: 'ShippingAndTracking', operations: ['Create']},
             updateOpts: {resource: 'ShippingAndTracking', operations: ['Update']},
-            deleteOpts: {resource: 'ShippingAndTracking', operations: ['Delete']}
+            deleteOpts: {resource: 'ShippingAndTracking', operations: ['Delete']},
+            createUpdateOpts: {resource: 'ShippingAndTracking', operations: ['Create', 'Update']}
           }
         },
         parent: 'signed-in'
@@ -36,11 +37,43 @@ angular.module('os.administrative.shipment',
             if ($stateParams.shipmentId) {
               return Shipment.getById($stateParams.shipmentId);
             }
-            return new Shipment({status: 'PENDING', shipmentItems: []});
+            return new Shipment({status: 'Pending', shipmentItems: []});
           }
         },
         controller: 'ShipmentAddEditCtrl',
         parent: 'shipment-root'
+      })
+      .state('shipment-import', {
+        url: '/shipment-import',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'shipment-list', title: 'shipments.list'}],
+              objectType: 'shipment',
+              csvType: 'MULTIPLE_ROWS_PER_OBJ',
+              title: 'shipments.bulk_import',
+              onSuccess: {state: 'shipment-list'}
+            };
+          }
+        },
+        parent: 'signed-in'
+      })
+      .state('shipment-import-jobs', {
+        url: '/shipment-import-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [{state: 'shipment-list', title: 'shipments.list'}],
+              title: 'shipments.bulk_import_jobs',
+              objectTypes: ['shipment']
+            }
+          }
+        },
+        parent: 'signed-in'
       })
       .state('shipment-detail', {
         url: '/shipments/:shipmentId',

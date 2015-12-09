@@ -93,9 +93,6 @@ public class CollectionProtocolsController {
 			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
 			int maxResults,
 			
-			@RequestParam(value = "chkPrivilege", required = false, defaultValue = "true")  
-			boolean chkPrivlege,
-			
 			@RequestParam(value = "detailedList", required = false, defaultValue = "false") 
 			boolean detailedList) {
 		

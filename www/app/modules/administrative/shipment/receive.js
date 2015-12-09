@@ -20,7 +20,7 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
 
     $scope.receive = function() {
       var shipment = angular.copy($scope.shipment);
-      shipment.status = "RECEIVED";
+      shipment.status = "Received";
       shipment.$saveOrUpdate().then(
         function(resp) {
           $state.go('shipment-detail.overview', {shipmentId: resp.id});
