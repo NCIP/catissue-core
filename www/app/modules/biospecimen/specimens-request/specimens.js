@@ -51,7 +51,7 @@ angular.module('os.biospecimen.specimensrequest.specimens', ['os.biospecimen.mod
       }
 
       SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('order-addedit', {orderId: ''});
+      $state.go('order-addedit', {orderId: '', requestorId: spmnRequest.requestor.id});
     }
 
     $scope.shipSpecimens = function() {
@@ -61,7 +61,7 @@ angular.module('os.biospecimen.specimensrequest.specimens', ['os.biospecimen.mod
       }
 
       SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('shipment-addedit', {orderId: ''});
+      $state.go('shipment-addedit', {shipmentId: '', requestorId: spmnRequest.requestor.id});
     }
 
     init();

@@ -30,14 +30,25 @@ angular.module('os.administrative.shipment',
         parent: 'shipment-root'
       })
       .state('shipment-addedit', {
-        url: '/shipment-addedit/:shipmentId',
+        url: '/shipment-addedit/:shipmentId?requestorId',
         templateUrl: 'modules/administrative/shipment/addedit.html',
         resolve: {
-          shipment: function($stateParams , Shipment) {
+          shipment: function($stateParams , Shipment, User) {
             if ($stateParams.shipmentId) {
               return Shipment.getById($stateParams.shipmentId);
             }
-            return new Shipment({status: 'Pending', shipmentItems: []});
+
+            var shipment = new Shipment({status: 'Pending', shipmentItems: []});
+            if (!angular.isDefined($stateParams.requestorId)) {
+              return shipment;
+            }
+
+            return User.getById($stateParams.requestorId).then(
+              function(user) {
+                shipment.receivingInstitute = user.instituteName;
+                return shipment;
+              }
+            );
           }
         },
         controller: 'ShipmentAddEditCtrl',

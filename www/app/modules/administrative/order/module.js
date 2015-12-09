@@ -28,14 +28,26 @@ angular.module('os.administrative.order',
         parent: 'order-root'
       })
       .state('order-addedit', {
-        url: '/order-addedit/:orderId',
+        url: '/order-addedit/:orderId?requestorId',
         templateUrl: 'modules/administrative/order/addedit.html',
         resolve: {
-          order: function($stateParams , DistributionOrder) {
+          order: function($stateParams , DistributionOrder, User) {
             if ($stateParams.orderId) {
               return DistributionOrder.getById($stateParams.orderId);
             }
-            return new DistributionOrder({status: 'PENDING', orderItems: []});
+
+            var order = new DistributionOrder({status: 'PENDING', orderItems: []});
+            if (!angular.isDefined($stateParams.requestorId)) {
+              return order;
+            }
+
+            return User.getById($stateParams.requestorId).then(
+              function(user) {
+                order.requester = user;
+                order.instituteName = user.instituteName;
+                return order;
+              }
+            );
           }
         },
         controller: 'OrderAddEditCtrl',
