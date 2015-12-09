@@ -523,7 +523,7 @@
       "create_derivative": "Create Derivative",
       "collect": "Collect",
       "print": "Print",
-      "assign_to": "Cart",
+      "assign_to": "Carts",
       "reopen": "Reopen",
       "close": "Close"
     },
@@ -1303,7 +1303,8 @@
     "new_list": "New Specimen Cart",
     "create_list": "Create Specimen Cart",
     "update_list": "Update Specimen Cart",
-    "create_new_list": "Create New Specimen Cart",
+    "create_new_list": "Create New",
+    "manage_lists": "Manage Carts",
     "search_list": "Search Specimen Cart",
     "lists": "Specimen Carts",
     "name": "Name",
