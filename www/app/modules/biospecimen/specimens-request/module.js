@@ -12,8 +12,25 @@ angular.module('os.biospecimen.specimensrequest',
         templateUrl: 'modules/biospecimen/specimens-request/list.html',
         controller: 'SpecimensRequestListCtrl',
         resolve: {
+          specimensRequestList: function(SpecimenRequest) {
+            return SpecimenRequest.listAll(true);
+          },
+          cpView: function() {
+            return false;
+          }
+        },
+        parent: 'signed-in'
+      })
+      .state('cp-specimens-request-list', {
+        url: '/specimen-requests',
+        templateUrl: 'modules/biospecimen/specimens-request/list.html',
+        controller: 'SpecimensRequestListCtrl',
+        resolve: {
           specimensRequestList: function(cp, SpecimenRequest) {
             return SpecimenRequest.listForCp(cp.id, true); 
+          },
+          cpView: function() {
+            return true;
           }
         },
         parent: 'cp-view'
@@ -29,7 +46,7 @@ angular.module('os.biospecimen.specimensrequest',
             return SpecimenRequest.getById($stateParams.requestId);
           }
         },
-        parent: 'cp-view'
+        parent: 'signed-in'
       })
       .state('specimens-request-detail.overview', {
         url: '/specimen-requests/:requestId/overview',

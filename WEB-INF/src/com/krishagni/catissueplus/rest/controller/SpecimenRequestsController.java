@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,6 @@ import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequest
 import com.krishagni.catissueplus.core.administrative.services.SpecimenRequestService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 @Controller
 @RequestMapping("/specimen-requests")
@@ -92,6 +92,16 @@ public class SpecimenRequestsController {
 		ResponseEvent<List<Long>> resp = spmnReqSvc.getFormIds(getRequest(listId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="have-requests")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Boolean> haveRequests(@RequestParam(value = "cpId", required = false) Long cpId) {
+		SpecimenRequestListCriteria listCriteria = new SpecimenRequestListCriteria().cpId(cpId);
+		ResponseEvent<Boolean> resp = spmnReqSvc.haveRequests(getRequest(listCriteria));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("haveRequests", resp.getPayload());
 	}
 
 	private <T> RequestEvent<T> getRequest(T payload) {

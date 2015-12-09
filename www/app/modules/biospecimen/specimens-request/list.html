@@ -1,5 +1,5 @@
 <div>
-  <div os-page-header>
+  <div os-page-header ng-if="cpView">
     <ul os-breadcrumbs>
       <li>
         <a ui-sref="cp-detail.overview({cpId: cp.id})">
@@ -11,6 +11,11 @@
       <span translate="specimen_requests.list">Specimen Requests</span>
     </h4>
   </div>
+  <div os-page-header ng-if="!cpView">
+    <h4>
+      <span translate="specimen_requests.list">Specimen Requests</span>
+    </h4>
+  </div>
 
   <div class="container">
     <table class="os-table os-table-hover">
@@ -18,6 +23,9 @@
         <tr class="row">
           <th class="col">
             <span translate="specimen_requests.req_id">Request ID</span>
+          </th>
+          <th class="col" ng-if="!cpView">
+            <span translate="specimen_requests.cp">Collection Protocol</span>
           </th>
           <th class="col">
             <span translate="specimen_requests.requestor">Requestor</span>
@@ -36,6 +44,9 @@
             <a ui-sref="specimens-request-detail.overview({requestId: req.id})">
               <span>{{req.id}}</span>
             </a>
+          </td>
+          <td class="col" ng-if="!cpView">
+            <span>{{req.cp.shortTitle}}</span>
           </td>
           <td class="col">
             <span>{{req.requestor | osUserDisplayName}}</span>

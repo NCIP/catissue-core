@@ -72,16 +72,8 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenRequestSummary>> getRequests(RequestEvent<SpecimenRequestListCriteria> req) {
 		try {
-			SpecimenRequestListCriteria crit = req.getPayload();
-
-			Set<Long> allowedSiteIds = AccessCtrlMgr.getInstance().getSpecimenRequestReadAccessSiteIds();
-			crit.siteIds(allowedSiteIds);
-
-			if (!AuthUtil.isAdmin()) {
-				crit.requestorId(AuthUtil.getCurrentUser().getId());
-			}
-
-			return ResponseEvent.response(daoFactory.getSpecimenRequestDao().getSpecimenRequests(crit));
+			SpecimenRequestListCriteria listCriteria = getListCriteria(req.getPayload());
+			return ResponseEvent.response(daoFactory.getSpecimenRequestDao().getSpecimenRequests(listCriteria));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -193,6 +185,30 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> haveRequests(RequestEvent<SpecimenRequestListCriteria> req) {
+		try {
+			SpecimenRequestListCriteria listCriteria = getListCriteria(req.getPayload());
+			return ResponseEvent.response(daoFactory.getSpecimenRequestDao().haveRequests(listCriteria));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	private SpecimenRequestListCriteria getListCriteria(SpecimenRequestListCriteria listCriteria) {
+		Set<Long> allowedSiteIds = AccessCtrlMgr.getInstance().getSpecimenRequestReadAccessSiteIds();
+		listCriteria.siteIds(allowedSiteIds);
+
+		if (!AuthUtil.isAdmin()) {
+			listCriteria.requestorId(AuthUtil.getCurrentUser().getId());
+		}
+
+		return listCriteria;
 	}
 
 	private SpecimenRequest getSpecimenRequest(Long reqId) {

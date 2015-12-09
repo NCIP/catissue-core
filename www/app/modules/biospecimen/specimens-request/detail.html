@@ -3,13 +3,13 @@
   <div os-page-header>
     <ul os-breadcrumbs>
       <li>
-        <a ui-sref="cp-detail.overview({cpId: cp.id})">
-          <span>{{cp.shortTitle}}</span>
+        <a ui-sref="cp-detail.overview({cpId: spmnRequest.cp.id})">
+          <span>{{spmnRequest.cp.shortTitle}}</span>
         </a>
       </li>
 
       <li>
-        <a ui-sref="specimens-request-list({cpId: cp.id})">
+        <a ui-sref="specimens-request-list">
           <span translate="specimen_requests.list">Specimen Requests</span>
         </a>
       </li>

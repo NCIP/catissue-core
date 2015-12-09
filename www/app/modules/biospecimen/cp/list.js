@@ -1,11 +1,18 @@
 
 angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
-  .controller('CpListCtrl', function($scope, $state, CollectionProtocol, Util, PvManager) {
+  .controller('CpListCtrl', function($scope, $state, CollectionProtocol, Util, PvManager, SpecimenRequest) {
     function init() {
       $scope.cpFilterOpts = {};
       loadCollectionProtocols();
       $scope.sites = PvManager.getSites();
       Util.filter($scope, 'cpFilterOpts', filter);
+
+      $scope.haveRequests = false;
+      SpecimenRequest.haveRequests().then(
+        function(haveRequests) {
+          $scope.haveRequests = haveRequests;
+        }
+      );
     }
 
     function loadCollectionProtocols(filterOpts) {

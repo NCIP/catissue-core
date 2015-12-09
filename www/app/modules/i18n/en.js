@@ -155,7 +155,7 @@
     "specimen_count": "Specimens",
     "view_details": "View Details",
     "view_participants": "View Participants",
-    "view_spmn_requests": "View Specimen Requests",
+    "spmn_requests": "Specimen Requests",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
@@ -1477,6 +1477,7 @@
     "request_submitted": "Specimen request submitted successfully",
     "loading_forms": "Please wait for a moment while we load specimens request forms...",
     "req_id": "Request ID",
+    "cp": "Collection Protocol",
     "requestor": "Requestor",
     "date_of_request": "Request Date",
     "specimens": "Specimens",

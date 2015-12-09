@@ -1,7 +1,8 @@
 
 angular.module('os.biospecimen.specimensrequest.list', ['os.biospecimen.models'])
-  .controller('SpecimensRequestListCtrl', function($scope, $state, specimensRequestList) {
+  .controller('SpecimensRequestListCtrl', function($scope, $state, cpView, specimensRequestList) {
     function init() {
+      $scope.cpView = cpView;
       $scope.spmnsReqList = specimensRequestList;
     }
 

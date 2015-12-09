@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -58,6 +58,15 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 		return results;
 	}
 
+	@Override
+	public Boolean haveRequests(SpecimenRequestListCriteria listCrit) {
+		Criteria query = getListQuery(listCrit)
+			.setFirstResult(0)
+			.setMaxResults(1)
+			.setProjection(Projections.projectionList().add(Projections.property("id")));
+		return query.uniqueResult() != null;
+	}
+
 	private Criteria getListQuery(SpecimenRequestListCriteria listCrit) {
 		Criteria query = getSessionFactory().getCurrentSession()
 			.createCriteria(SpecimenRequest.class)
@@ -68,8 +77,7 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 			.addOrder(Order.desc("id"));
 
 		addCpCond(query, listCrit);
-		addRequestorCond(query, listCrit);
-		addSiteCond(query, listCrit);
+		addRequestorAndSiteCond(query, listCrit);
 		return query;
 	}
 
@@ -81,26 +89,26 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 		query.add(Restrictions.eq("cp.id", listCrit.cpId()));
 	}
 
-	private void addRequestorCond(Criteria query, SpecimenRequestListCriteria listCrit) {
-		if (listCrit.requestorId() == null) {
-			return;
+	private void addRequestorAndSiteCond(Criteria query, SpecimenRequestListCriteria listCrit) {
+		Junction cond = Restrictions.disjunction();
+
+		if (listCrit.requestorId() != null) {
+			cond.add(Restrictions.eq("requestor.id", listCrit.requestorId()));
 		}
 
-		query.add(Restrictions.eq("requestor.id", listCrit.requestorId()));
-	}
-
-	private void addSiteCond(Criteria query, SpecimenRequestListCriteria listCrit) {
-		if (CollectionUtils.isEmpty(listCrit.siteIds())) {
-			return;
+		if (CollectionUtils.isNotEmpty(listCrit.siteIds())) {
+			query.createAlias("cp.sites", "cpSite")
+				.createAlias("cpSite.site", "site");
+			cond.add(Restrictions.in("site.id", listCrit.siteIds()));
 		}
 
-		query.createAlias("cp.sites", "cpSite")
-			.createAlias("cpSite.site", "site")
-			.add(Restrictions.in("site.id", listCrit.siteIds()));
+		if (cond.conditions().iterator().hasNext()) {
+			query.add(cond);
+		}
 	}
 
 	private void addSummaryFieldsProjection(Criteria query) {
-		ProjectionList projs = Projections.projectionList()
+		query.setProjection(Projections.projectionList()
 			.add(Projections.property("id"))
 			.add(Projections.property("dateOfRequest"))
 			.add(Projections.property("cp.id"))
@@ -109,9 +117,7 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 			.add(Projections.property("requestor.firstName"))
 			.add(Projections.property("requestor.lastName"))
 			.add(Projections.property("requestor.emailAddress"))
-			.add(Projections.property("activityStatus"));
-
-		query.setProjection(projs);
+			.add(Projections.property("activityStatus")));
 	}
 
 	private SpecimenRequestSummary getRequest(Object[] row) {

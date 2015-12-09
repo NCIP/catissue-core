@@ -19,5 +19,10 @@ public interface SpecimenRequestService {
 
 	public ResponseEvent<List<SpecimenRequestSummary>> createRequest(RequestEvent<RequestListSpecimensDetail> req);
 
+	/**
+	 * Mostly useful for UI
+	 */
 	public ResponseEvent<List<Long>> getFormIds(RequestEvent<Long> req);
+
+	public ResponseEvent<Boolean> haveRequests(RequestEvent<SpecimenRequestListCriteria> req);
 }
