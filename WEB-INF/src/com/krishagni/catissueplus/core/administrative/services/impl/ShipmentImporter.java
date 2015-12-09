@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 
+import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -35,7 +36,8 @@ public class ShipmentImporter implements ObjectImporter<ShipmentDetail, Shipment
 	}
 	
 	private ResponseEvent<ShipmentDetail> createShipment(RequestEvent<ShipmentDetail> shipmentReq) {
-		boolean isReceived = shipmentReq.getPayload().getStatus().equals("RECEIVED");
+		String status = shipmentReq.getPayload().getStatus();
+		boolean isReceived = Status.RECEIVED.equals(Status.fromName(status));
 		if (isReceived) {
 			shipmentReq.getPayload().setStatus("SHIPPED");
 		}

@@ -138,6 +138,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			Shipment shipment = shipmentFactory.createShipment(detail, detail.getStatus() == null ? Status.PENDING : null);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureValidShipmentStatus(shipment, ose);
 			ensureUniqueConstraint(null, shipment, ose);
 			ensureValidSpecimens(shipment, ose);
 			ensureValidNotifyUsers(shipment, ose);
@@ -265,6 +266,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 		}
 		
 		return specimens;
+	}
+	
+	private void ensureValidShipmentStatus(Shipment shipment, OpenSpecimenException ose) {
+		if (shipment.getId() == null && shipment.isReceived()) {
+			ose.addError(ShipmentErrorCode.NOT_SHIPPED_TO_RECV, shipment.getName());
+		}
 	}
 
 	private void ensureUniqueConstraint(Shipment existing, Shipment newShipment, OpenSpecimenException ose) {
