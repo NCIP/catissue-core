@@ -156,7 +156,7 @@
     "view_details": "View Details",
     "view_participants": "View Participants",
     "view_catalog": "View Catalog",
-    "spmn_requests": "Specimen Requests",
+    "spmn_requests": "Requests",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
