@@ -37,5 +37,13 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       $state.go('participant-list', {cpId: cp.id});
     };
 
+    $scope.viewCatalog = function(cp) {
+      cp.getCatalogQuery().then(
+        function(query) {
+          $state.go('query-results', {queryId: query.id, cpId: cp.id});
+        }
+      );
+    }
+
     init();
   });

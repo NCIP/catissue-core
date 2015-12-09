@@ -430,6 +430,14 @@ h4 + .btn-group {
   margin-left: 15px;
 }
 
+.os-table-body .os-more-option-btns .os-more-options .dropdown-toggle {
+  margin-top: -4px!important;
+}
+
+.os-table-body .os-more-option-btns .os-more-options .dropdown-menu.dropdown-menu-right {
+  margin-right: 0px!important;
+}
+
 .os-btn-icon, a {
   cursor: pointer;
 }
