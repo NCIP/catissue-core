@@ -242,25 +242,10 @@
             <column name="SPECIMEN_CLASS" value="Cell"/>
         </insert>
     </changeSet>
-    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-10">
-        <insert tableName="catissue_password">
-            <column name="IDENTIFIER" valueNumeric="1"/>
-            <column name="PASSWORD" value="xxits++sTge8j2uyHEABIQ=="/>
-            <column name="UPDATE_DATE" valueDate="2015-03-23"/>
-            <column name="USER_ID" valueNumeric="1"/>
-        </insert>
-    </changeSet>
     <changeSet dbms="mysql" author="home (generated)" id="1427184466112-11">
         <insert tableName="catissue_stor_type_holds_type">
             <column name="STORAGE_TYPE_ID" valueNumeric="1"/>
             <column name="HOLDS_STORAGE_TYPE_ID" valueNumeric="3"/>
-        </insert>
-    </changeSet>
-    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-12">
-        <insert tableName="catissue_institution">
-            <column name="IDENTIFIER" valueNumeric="1"/>
-            <column name="NAME" value="i"/>
-            <column name="ACTIVITY_STATUS" value="Active"/>
         </insert>
     </changeSet>
     <changeSet dbms="mysql" author="home (generated)" id="1427184466112-13">
@@ -550,33 +535,6 @@
         <insert tableName="catissue_privileges">
             <column name="IDENTIFIER" valueNumeric="29"/>
             <column name="PRIVILEGE" value="WRITE"/>
-        </insert>
-    </changeSet>
-    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-46">
-        <insert tableName="os_department">
-            <column name="IDENTIFIER" valueNumeric="1"/>
-            <column name="NAME" value="d"/>
-            <column name="INSTITUTE_ID" valueNumeric="1"/>
-            <column name="ACTIVITY_STATUS" value="Active"/>
-        </insert>
-    </changeSet>
-    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-47">
-        <insert tableName="catissue_user">
-            <column name="IDENTIFIER" valueNumeric="1"/>
-            <column name="EMAIL_ADDRESS" value="admin@admin.com"/>
-            <column name="FIRST_NAME" value="Admin"/>
-            <column name="LAST_NAME" value="Admin"/>
-            <column name="LOGIN_NAME" value="admin@admin.com"/>
-            <column name="START_DATE"/>
-            <column name="ACTIVITY_STATUS" value="Active"/>
-            <column name="DEPARTMENT_ID" valueNumeric="1"/>
-            <column name="INSTITUTION_ID" valueNumeric="1"/>
-            <column name="ADDRESS_ID" valueNumeric="1"/>
-            <column name="CSM_USER_ID" valueNumeric="1"/>
-            <column name="STATUS_COMMENT"/>
-            <column name="FIRST_TIME_LOGIN" valueBoolean="true"/>
-            <column name="FORGOT_PASSWORD_TOKEN"/>
-            <column name="DOMAIN_NAME" value="catissue"/>
         </insert>
     </changeSet>
 	<changeSet author="nitesh" id="enables foreign key check" failOnError="false" dbms="mysql">

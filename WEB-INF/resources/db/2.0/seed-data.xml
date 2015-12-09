@@ -74,12 +74,6 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Updating existing super admin user to set the password">
-    <sql>
-      Update catissue_user set password = '$2a$10$GOH1.KmElP0ZusLYS6l12ejO.xAIzDUFpIm7LVz9xAcrObyvd3gLC', is_admin = 1 where identifier = 1
-    </sql>
-  </changeSet>
-  
   <changeSet author="nmarwaha" id="Insert Coordinator role">
     <validCheckSum>7:8c2c94775aff59d9038d4d52606a0351</validCheckSum>
     <sql>call create_role('Coordinator', 'User can perform all operations within the assigned protocols.');</sql>

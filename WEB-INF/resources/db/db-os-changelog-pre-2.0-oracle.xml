@@ -1887,18 +1887,6 @@
             <column name="KEY_SEQUENCE_ID" type="NUMBER(19,0)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-184">
-        <createTable tableName="OS_DEPARTMENT">
-            <column name="IDENTIFIER" type="NUMBER(19,0)">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DEPARTMENT_ID" />
-            </column>
-            <column name="NAME" type="VARCHAR2(255 BYTE)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="INSTITUTE_ID" type="NUMBER(19,0)"/>
-            <column defaultValue="Active" name="ACTIVITY_STATUS" type="VARCHAR2(64 BYTE)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-185">
         <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
@@ -2194,9 +2182,6 @@
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-251">
         <addUniqueConstraint columnNames="LOGIN_NAME" constraintName="SYS_C00107630" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_USER" />
-    </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-264">
-        <addUniqueConstraint columnNames="NAME, INSTITUTE_ID" constraintName="OS_DEPT_INSTID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_DEPARTMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-265">
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108351" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_SPECIMEN_PRINT_RULE" />
@@ -3302,9 +3287,6 @@
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-596">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="CATISSUE_USER_SITES"  constraintName="FK_CAT_US_USERID_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" referencedColumnNames="IDENTIFIER" referencedTableName="CATISSUE_USER"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-616">
-        <addForeignKeyConstraint baseColumnNames="INSTITUTE_ID" baseTableName="OS_DEPARTMENT"  constraintName="FK_OS_DEPTINSTID_INST_ID" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" referencedColumnNames="IDENTIFIER" referencedTableName="CATISSUE_INSTITUTION"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-617">
         <addForeignKeyConstraint baseColumnNames="PRINCIPAL_INVESTIGATOR_ID" baseTableName="OS_DISTRIBUTION_PROTOCOL"  constraintName="FK_PI_ID_BY_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" referencedColumnNames="IDENTIFIER" referencedTableName="CATISSUE_USER"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -3525,7 +3507,7 @@
         <createSequence  sequenceName="CATISSUE_USER_CP_ROLE_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-700">
-        <createSequence  sequenceName="CATISSUE_USER_SEQ" startValue="2"/>
+        <createSequence  sequenceName="CATISSUE_USER_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-701">
         <createSequence  sequenceName="CAT_CP_EXTAPP_STUDY_REL_SEQ"/>
@@ -3548,9 +3530,6 @@
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-721">
         <createSequence  sequenceName="LOGIN_EVENT_PARAM_SEQ"/>
-    </changeSet>
-    <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-722">
-        <createSequence  sequenceName="OS_DEPARTMENT_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-723">
         <createSequence  sequenceName="OS_DISTRIBUTION_PROTOCOL_SEQ"/>
