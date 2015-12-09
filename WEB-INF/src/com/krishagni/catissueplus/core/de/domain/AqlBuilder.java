@@ -228,7 +228,7 @@ public class AqlBuilder {
 	}
 	
 	private String getLhs(String temporalExpr) {
-		String[] parts = temporalExpr.split("[<=>!]");
+		String[] parts = temporalExpr.split("[<=>!]|\\sany\\s*$|\\sexists\\s*$|\\snot exists\\s*$|\\sbetween\\s");
 		return parts[0];
 	}
 	
