@@ -288,6 +288,8 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		User user = defaultUser;
 		if (userSummary.getId() != null) {
 			user = daoFactory.getUserDao().getById(userSummary.getId());
+		} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
+			user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
 		} else if (StringUtils.isNotBlank(userSummary.getLoginName()) && StringUtils.isNotBlank(userSummary.getDomain())) {
 			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
 		}
