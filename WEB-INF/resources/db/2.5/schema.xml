@@ -325,4 +325,43 @@
         deleted_on is not null;
     </sql>
   </changeSet>
+  
+  <changeSet author="slakhani" id="Drop unique constraint on event code">
+    <preConditions onFail="MARK_RAN">
+      <changeSetExecuted 
+        changeLogFile="db/2.4/schema.xml" 
+        author="vpawar" 
+        id="Add unique constraint on event code"/>
+    </preConditions>
+    <dropUniqueConstraint 
+      tableName="CATISSUE_COLL_PROT_EVENT" 
+      constraintName="OS_CP_EVENT_CODE_UQ"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop foreign key constraint on cp_event_id of CATISSUE_CP_REQ_SPECIMEN table">
+    <dropForeignKeyConstraint 
+      baseTableName="CATISSUE_CP_REQ_SPECIMEN" 
+      constraintName="FK111110456906F39"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop unique constraint on SR code">
+    <preConditions onFail="MARK_RAN">
+      <changeSetExecuted 
+        changeLogFile="db/2.4/schema.xml" 
+        author="vpawar" 
+        id="Add unique constraint on SR code"/>
+    </preConditions>
+    <dropUniqueConstraint 
+      tableName="CATISSUE_CP_REQ_SPECIMEN" 
+      constraintName="OS_EVENT_SR_CODE_UQ"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Regenrate foreign key on cp_event_id of CATISSUE_CP_REQ_SPECIMEN">
+    <addForeignKeyConstraint 
+      constraintName="FK111110456906F39"
+      baseTableName="CATISSUE_CP_REQ_SPECIMEN"
+      baseColumnNames="COLLECTION_PROTOCOL_EVENT_ID" 
+      referencedTableName="CATISSUE_COLL_PROT_EVENT" 
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>
