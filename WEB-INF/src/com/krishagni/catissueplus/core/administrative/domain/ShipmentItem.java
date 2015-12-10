@@ -43,7 +43,7 @@ public class ShipmentItem extends BaseEntity {
 	}
 
 	public void ship() {
-		specimen.updatePosition(null);
+		specimen.updatePosition(null, shipment.getShippedDate());
 	}
 	
 	public void receive(ShipmentItem other) {
@@ -56,7 +56,7 @@ public class ShipmentItem extends BaseEntity {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
 			}
 			
-			specimen.updatePosition(position);
+			specimen.updatePosition(position, shipment.getReceivedDate());
 		}
 	}
 }
