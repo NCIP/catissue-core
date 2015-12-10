@@ -59,4 +59,42 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Query module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'query', 'Query module settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Query module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (OS_MODULES_SEQ.nextval, 'query', 'Query module settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Max no. of concurrent queries">
+    <sql>
+      call add_cfg_prop(
+        'query', 'max_concurrent_queries',
+        'max_concurrent_queries', 'max_concurrent_queries_desc',
+        'INT', '10'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Max no. of records in memory">
+    <sql>
+      call add_cfg_prop(
+        'query', 'max_recs_in_memory',
+        'max_recs_in_memory', 'max_recs_in_memory_desc',
+        'INT', '100'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

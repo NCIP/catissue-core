@@ -331,6 +331,7 @@
     <property name="queryFolderFactory" ref="queryFolderFactory"/>
     <property name="emailService" ref="emailService"/>
     <property name="templateService" ref="templateService"/>
+    <property name="cfgService" ref="cfgSvc"/>
   </bean>
 
   <bean id="catalogSettingFact" class="com.krishagni.catissueplus.core.de.domain.factory.impl.CpCatalogSettingFactoryImpl">

@@ -22,7 +22,7 @@ import com.krishagni.catissueplus.core.de.ui.UserFieldMapper;
 import edu.common.dynamicextensions.domain.nui.factory.ControlManager;
 import edu.common.dynamicextensions.napi.FormDataFilter;
 import edu.common.dynamicextensions.napi.FormDataManager;
-import edu.common.dynamicextensions.nutility.DEApp;
+import edu.common.dynamicextensions.nutility.DeConfiguration;
 import edu.common.dynamicextensions.query.PathConfig;
 import edu.wustl.dynamicextensions.formdesigner.mapper.ControlMapper;
 import edu.wustl.dynamicextensions.formdesigner.usercontext.CSDProperties;
@@ -85,8 +85,13 @@ public class DeInitializer implements InitializingBean {
 		}
 		
 		CSDProperties.getInstance().setUserContextProvider(new UserContextImpl());
-					
-		DEApp.init(dataSource, transactionManager, dir, dateFormat, timeFormat);
+
+		DeConfiguration.getInstance()
+			.dataSource(dataSource, transactionManager)
+			.fileUploadDir(dir)
+			.dateFormat(dateFormat)
+			.timeFormat(timeFormat);
+
 		ControlManager.getInstance().registerFactory(UserControlFactory.getInstance());			
 		ControlMapper.getInstance().registerControlMapper("userField", new UserFieldMapper());
 		
@@ -108,9 +113,10 @@ public class DeInitializer implements InitializingBean {
 					return;
 				}
 				
-				Map<String, Object> localeSettings = cfgSvc.getLocaleSettings();		
-				DEApp.setDateFormat((String)localeSettings.get("deBeDateFmt"));
-				DEApp.setTimeFormat((String)localeSettings.get("timeFmt"));				
+				Map<String, Object> localeSettings = cfgSvc.getLocaleSettings();
+				DeConfiguration.getInstance()
+					.dateFormat((String)localeSettings.get("deBeDateFmt"))
+					.timeFormat((String)localeSettings.get("timeFmt"));
 			}
 		});
 

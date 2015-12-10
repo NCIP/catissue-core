@@ -1678,6 +1678,14 @@
         "title": "Catalog",
         "default_query": "Default Catalog Query",
         "default_query_desc": "Identifier of saved query to be used as default catalog query"
+      },
+
+      "query": {
+        "title": "Query",
+        "max_concurrent_queries": "Concurrent Queries Limit",
+        "max_concurrent_queries_desc": "Maximum number of queries that are allowed to run concurrently/simultaneously before rejecting new query execution requests",
+        "max_recs_in_memory": "In-memory Records Limit",
+        "max_recs_in_memory_desc": "Maximum number of query records that are allowed to be cached in-memory. When limit is reached, excessive records are spooled to disk"
       }
     }
 }

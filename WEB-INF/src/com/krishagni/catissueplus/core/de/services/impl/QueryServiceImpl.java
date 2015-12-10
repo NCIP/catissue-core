@@ -22,6 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -40,6 +41,8 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
@@ -75,6 +78,7 @@ import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.nutility.DeConfiguration;
 import edu.common.dynamicextensions.query.Query;
 import edu.common.dynamicextensions.query.QueryParserException;
 import edu.common.dynamicextensions.query.QueryResponse;
@@ -94,6 +98,16 @@ public class QueryServiceImpl implements QueryService {
 	
 	private static String SHARE_QUERY_FOLDER_EMAIL_TMPL = "query_share_query_folder";
 
+	private static String CFG_MOD = "query";
+
+	private static String MAX_CONCURRENT_QUERIES = "max_concurrent_queries";
+
+	private static int DEF_MAX_CONCURRENT_QUERIES = 10;
+
+	private static String MAX_RECS_IN_MEM = "max_recs_in_memory";
+
+	private static int DEF_MAX_RECS_IN_MEM = 100;
+
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
@@ -109,7 +123,15 @@ public class QueryServiceImpl implements QueryService {
 	private EmailService emailService;
 	
 	private TemplateService templateService;
-	
+
+	private ConfigurationService cfgService;
+
+	private int maxConcurrentQueries = DEF_MAX_CONCURRENT_QUERIES;
+
+	private int maxRecsInMemory = DEF_MAX_RECS_IN_MEM;
+
+	private AtomicInteger concurrentQueriesCnt = new AtomicInteger(0);
+
 	static {
 		initExportFileCleaner();
 	}
@@ -132,6 +154,17 @@ public class QueryServiceImpl implements QueryService {
 
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
+	}
+
+	public void setCfgService(ConfigurationService cfgService) {
+		this.cfgService = cfgService;
+
+		cfgService.registerChangeListener("query", new ConfigChangeListener() {
+			@Override
+			public void onConfigChange(String name, String value) {
+				refreshConfig();
+			}
+		});
 	}
 
 	@Override
@@ -264,8 +297,11 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req) {
 		QueryResultData queryResult = null;
-		
+
+		boolean queryCntIncremented = false;
 		try {
+			queryCntIncremented = incConcurrentQueriesCnt();
+
 			ExecuteQueryEventOp opDetail = req.getPayload();
 			User user = AuthUtil.getCurrentUser();
 			boolean countQuery = opDetail.getRunType().equals("Count");
@@ -301,9 +337,15 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
 			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		} finally {
+			if (queryCntIncremented) {
+				decConcurrentQueriesCnt();
+			}
+
 			if (queryResult != null) {
 				try {
 					queryResult.close();
@@ -317,7 +359,9 @@ public class QueryServiceImpl implements QueryService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req) {
+		boolean queryCntIncremented = false;
 		try {
+			queryCntIncremented = incConcurrentQueriesCnt();
 			return ResponseEvent.response(exportQueryData(req.getPayload(), null));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
@@ -325,8 +369,14 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
 			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
+		} finally {
+			if (queryCntIncremented) {
+				decConcurrentQueriesCnt();
+			}
 		}
 	}
 	
@@ -748,7 +798,6 @@ public class QueryServiceImpl implements QueryService {
 				private void sendEmail() {
 					try {
 						User user = userDao.getById(AuthUtil.getCurrentUser().getId());
-						
 						SavedQuery savedQuery = null;
 						Long queryId = opDetail.getSavedQueryId();
 						if (queryId != null) {
@@ -1098,5 +1147,30 @@ public class QueryServiceImpl implements QueryService {
 		result.setCaption(columnLabels[columnLabels.length - 1]);
 		result.setValues(values);
 		return result;
+	}
+
+	private void refreshConfig() {
+		maxConcurrentQueries = cfgService.getIntSetting(CFG_MOD, MAX_CONCURRENT_QUERIES, DEF_MAX_CONCURRENT_QUERIES);
+		maxRecsInMemory = cfgService.getIntSetting(CFG_MOD, MAX_RECS_IN_MEM, DEF_MAX_RECS_IN_MEM);
+		DeConfiguration.getInstance().maxCacheElementsInMemory(maxRecsInMemory);
+	}
+
+	private boolean incConcurrentQueriesCnt() {
+		while (true) {
+			int current = concurrentQueriesCnt.get();
+			if (current >= maxConcurrentQueries) {
+				throw OpenSpecimenException.userError(SavedQueryErrorCode.TOO_BUSY);
+			}
+
+			if (concurrentQueriesCnt.compareAndSet(current, current + 1)) {
+				break;
+			}
+		}
+
+		return true;
+	}
+
+	private int decConcurrentQueriesCnt() {
+		return concurrentQueriesCnt.decrementAndGet();
 	}
 }
