@@ -8,32 +8,18 @@ angular.module('os.biospecimen.specimensrequest',
   .config(function($stateProvider) {
     $stateProvider
       .state('specimens-request-list', {
-        url: '/specimen-requests',
+        url: '/specimen-requests?cpView',
         templateUrl: 'modules/biospecimen/specimens-request/list.html',
         controller: 'SpecimensRequestListCtrl',
         resolve: {
           specimensRequestList: function(SpecimenRequest) {
             return SpecimenRequest.listAll(true);
           },
-          cpView: function() {
-            return false;
+          cpView: function($stateParams) {
+            return $stateParams.cpView == true;
           }
         },
         parent: 'signed-in'
-      })
-      .state('cp-specimens-request-list', {
-        url: '/specimen-requests',
-        templateUrl: 'modules/biospecimen/specimens-request/list.html',
-        controller: 'SpecimensRequestListCtrl',
-        resolve: {
-          specimensRequestList: function(cp, SpecimenRequest) {
-            return SpecimenRequest.listForCp(cp.id, true); 
-          },
-          cpView: function() {
-            return true;
-          }
-        },
-        parent: 'cp-view'
       })
       .state('specimens-request-detail', {
         url: '/specimen-requests/:requestId',
@@ -49,7 +35,7 @@ angular.module('os.biospecimen.specimensrequest',
         parent: 'signed-in'
       })
       .state('specimens-request-detail.overview', {
-        url: '/specimen-requests/:requestId/overview',
+        url: '/overview',
         templateUrl: 'modules/biospecimen/specimens-request/overview.html',
         controller: function() { },
         resolve: {
@@ -69,7 +55,7 @@ angular.module('os.biospecimen.specimensrequest',
         parent: 'specimens-request-detail'
       })
       .state('specimens-request-detail.specimens', {
-        url: '/specimen-requests/:requestId/specimens',
+        url: '/specimens',
         templateUrl: 'modules/biospecimen/specimens-request/specimens.html',
         controller: 'SpmnReqSpecimensCtrl',
         parent: 'specimens-request-detail'
