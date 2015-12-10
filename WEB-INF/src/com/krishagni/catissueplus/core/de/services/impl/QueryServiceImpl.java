@@ -158,7 +158,7 @@ public class QueryServiceImpl implements QueryService {
 
 	public void setCfgService(ConfigurationService cfgService) {
 		this.cfgService = cfgService;
-
+		refreshConfig();
 		cfgService.registerChangeListener("query", new ConfigChangeListener() {
 			@Override
 			public void onConfigChange(String name, String value) {
