@@ -3507,6 +3507,7 @@
         <createSequence  sequenceName="CATISSUE_USER_CP_ROLE_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-700">
+    	<validCheckSum>7:6eae71695d5d949e2d1a8d30ee9db2c0</validCheckSum>
         <createSequence  sequenceName="CATISSUE_USER_SEQ"/>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-701">
