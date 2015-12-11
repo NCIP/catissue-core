@@ -325,7 +325,7 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		setLabelFormat(sr.getLabelFormat());
 		
 		if (!isAliquot() && !isSpecimenPoolReq()) {
-			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType());
+			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType(), sr.getPathologyStatus());
 		}
 
 		if (NumUtil.lessThanZero(getQtyAfterAliquotsUse())) {
@@ -503,7 +503,6 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 	private void updateRequirementAttrs(SpecimenRequirement sr) {
 		setAnatomicSite(sr.getAnatomicSite());
 		setLaterality(sr.getLaterality());
-		setPathologyStatus(sr.getPathologyStatus());
 		setCollector(sr.getCollector());
 		setCollectionContainer(sr.getCollectionContainer());
 		setCollectionProcedure(sr.getCollectionProcedure());
@@ -518,18 +517,19 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		}
 	}
 	
-	private void update(BigDecimal concentration, String specimenClass, String specimenType) {
+	private void update(BigDecimal concentration, String specimenClass, String specimenType, String pathologyStatus) {
 		setConcentration(concentration);
 		setSpecimenClass(specimenClass);
 		setSpecimenType(specimenType);
+		setPathologyStatus(pathologyStatus);
 		for (SpecimenRequirement childSr : getChildSpecimenRequirements()) {
 			if (childSr.isAliquot()) {
-				childSr.update(concentration, specimenClass, specimenType);
+				childSr.update(concentration, specimenClass, specimenType, pathologyStatus);
 			}
 		}
 		
 		for (SpecimenRequirement poolSr : getSpecimenPoolReqs()) {
-			poolSr.update(concentration, specimenClass, specimenType);
+			poolSr.update(concentration, specimenClass, specimenType, pathologyStatus);
 		}
 	}
 
