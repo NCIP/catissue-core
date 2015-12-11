@@ -39,7 +39,9 @@ public enum SavedQueryErrorCode implements ErrorCode {
 	
 	EXPORT_DATA_FILE_NOT_FOUND,
 
-	TOO_BUSY;
+	TOO_BUSY,
+
+	PHI_NOT_ALLOWED_IN_AGR;
 	
 	@Override
 	public String code() {

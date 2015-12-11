@@ -303,25 +303,13 @@ public class QueryServiceImpl implements QueryService {
 			queryCntIncremented = incConcurrentQueriesCnt();
 
 			ExecuteQueryEventOp opDetail = req.getPayload();
-			User user = AuthUtil.getCurrentUser();
-			boolean countQuery = opDetail.getRunType().equals("Count");
-			
-			
-			Query query = Query.createQuery()
-					.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
-					.ic(true)
-					.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
-					.timeFormat(ConfigUtil.getInstance().getTimeFmt());
-			query.compile(
-					cprForm, 
-					getAqlWithCpIdInSelect(user, countQuery, opDetail.getAql()), 
-					getRestriction(user, opDetail.getCpId()));
-			
+			Query query = getQuery(opDetail);
+
 			QueryResponse resp = query.getData();
-			insertAuditLog(user, opDetail, resp);
+			insertAuditLog(AuthUtil.getCurrentUser(), opDetail, resp);
 			
 			queryResult = resp.getResultData();
-			queryResult.setScreener(new QueryResultScreenerImpl(user, countQuery));
+			queryResult.setScreener(getResultScreener(query));
 			
 			Integer[] indices = null;
 			if (opDetail.getIndexOf() != null && !opDetail.getIndexOf().isEmpty()) {
@@ -761,40 +749,31 @@ public class QueryServiceImpl implements QueryService {
 			final String filename = UUID.randomUUID().toString();
 			final OutputStream fout = new FileOutputStream(getExportDataDir() + File.separator + filename);
 			out = fout;
-			
+
 			if (processor != null) {
 				processor.headers(out);
 			}
-			
-			final Query query = Query.createQuery();
-			query.wideRowMode(WideRowMode.valueOf(opDetail.getWideRowMode()))
-				.ic(true)
-				.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
-				.timeFormat(ConfigUtil.getInstance().getTimeFmt())
-				.compile(
-					cprForm, 
-					getAqlWithCpIdInSelect(user, opDetail.getRunType().equals("Count"), opDetail.getAql()), 
-					getRestriction(user, opDetail.getCpId()));
-					
+
+			final Query query = getQuery(opDetail);
 			Future<Boolean> result = exportThreadPool.submit(new Callable<Boolean>() {
 				@Override
 				@PlusTransactional
 				public Boolean call() throws Exception {
 					SecurityContextHolder.getContext().setAuthentication(auth);
-					
+
 					QueryResultExporter exporter = new QueryResultCsvExporter();
 					try {
-						QueryResponse resp = exporter.export(fout, query, new QueryResultScreenerImpl(user, false));
+						QueryResponse resp = exporter.export(fout, query, getResultScreener(query));
 						insertAuditLog(user, opDetail, resp);
 						sendEmail();
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw OpenSpecimenException.serverError(e);
 					}
-	                
+
 					return true;
 				}
-				
+
 				private void sendEmail() {
 					try {
 						User user = userDao.getById(AuthUtil.getCurrentUser().getId());
@@ -802,25 +781,28 @@ public class QueryServiceImpl implements QueryService {
 						Long queryId = opDetail.getSavedQueryId();
 						if (queryId != null) {
 							savedQuery = daoFactory.getSavedQueryDao().getQuery(queryId);
-						}					
+						}
 						sendQueryDataExportedEmail(user, savedQuery, filename);
 					} catch (Exception e) {
 						e.printStackTrace();
-					}				
+					}
 				}
 			});
-			
+
 			boolean completed = false;
 			try {
 				completed = result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
 			} catch (TimeoutException te) {
 				completed = false;
-			}		
-			
+			}
+
 			return QueryDataExportResult.create(filename, completed);
+		} catch (OpenSpecimenException ose) {
+			throw ose;
 		} catch (Exception e) {
-			IOUtils.closeQuietly(out);
 			throw OpenSpecimenException.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(out);
 		}
 	}
 	
@@ -885,7 +867,39 @@ public class QueryServiceImpl implements QueryService {
 				queryDetail.getFilters(),
 				queryDetail.getQueryExpression());
 	}
-	
+
+	private Query getQuery(ExecuteQueryEventOp op) {
+		boolean countQuery = op.getRunType().equals("Count");
+		User user = AuthUtil.getCurrentUser();
+
+		Query query = Query.createQuery()
+			.wideRowMode(WideRowMode.valueOf(op.getWideRowMode()))
+			.ic(true)
+			.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
+			.timeFormat(ConfigUtil.getInstance().getTimeFmt());
+		query.compile(cprForm, op.getAql());
+
+		String aql = op.getAql();
+		if (query.isPhiResult(true) && !AuthUtil.isAdmin()) {
+			if (query.isAggregateQuery() || StringUtils.isNotBlank(query.getResultProcessorName())) {
+				throw OpenSpecimenException.userError(SavedQueryErrorCode.PHI_NOT_ALLOWED_IN_AGR);
+			}
+
+			aql = getAqlWithCpIdInSelect(user, countQuery, aql);
+		}
+
+		query.compile(cprForm, aql, getRestriction(user, op.getCpId()));
+		return query;
+	}
+
+	private QueryResultScreener getResultScreener(Query query) {
+		if (query.isPhiResult(true) && !AuthUtil.isAdmin()) {
+			return new QueryResultScreenerImpl(AuthUtil.getCurrentUser(), false);
+		}
+
+		return null;
+	}
+
 	private String getRestriction(User user, Long cpId) {
 		if (user.isAdmin()) {
 			if (cpId != null && cpId != -1) {
@@ -1033,7 +1047,7 @@ public class QueryServiceImpl implements QueryService {
 					continue;
 				}
 				
-				if (col.isPhi()) {
+				if (col.isSimpleExpr() && col.isPhi()) {
 					screenedData[i] = mask;
 				}
 				
