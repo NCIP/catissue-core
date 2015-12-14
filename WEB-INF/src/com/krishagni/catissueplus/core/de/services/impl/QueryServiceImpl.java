@@ -1131,14 +1131,12 @@ public class QueryServiceImpl implements QueryService {
 
 		String aql = null;
 		QueryResultScreener screener = null;
-		Collection<Object> values = null;
+		Collection<Object> values = new TreeSet<Object>();
 		if (!AuthUtil.isAdmin() && field.isPhi()) {
 			aql = String.format("select distinct %s.id, %s where %s exists limit 0, 500", cpForm, facet, facet);
 			screener = new QueryResultScreenerImpl(AuthUtil.getCurrentUser(), false, "");
-			values = new TreeSet<Object>();
 		} else {
 			aql = String.format("select distinct %s where %s exists limit 0, 500", facet, facet);
-			values = new ArrayList<Object>();
 		}
 
 		Query query = Query.createQuery();
