@@ -16,7 +16,7 @@ import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.ndao.JdbcDao;
 import edu.common.dynamicextensions.ndao.JdbcDaoFactory;
 import edu.common.dynamicextensions.ndao.ResultExtractor;
-import edu.common.dynamicextensions.nutility.DEApp;
+import edu.common.dynamicextensions.nutility.DeConfiguration;
 
 public class UpgradeUtil {
 	
@@ -77,8 +77,10 @@ public class UpgradeUtil {
 				throw new RuntimeException("Error couldn't create directory for storing de file data");
 			}
 		}
-					
-		DEApp.init(ds, null, dir, null, null);		
+
+		DeConfiguration.getInstance()
+			.dataSource(ds, null)
+			.fileUploadDir(dir);
 	}
 	
 	public static Properties loadInstallProps() {

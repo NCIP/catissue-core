@@ -1,15 +1,21 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 
-public class ShipmentDetail implements Mergeable<String, ShipmentDetail> {
+public class ShipmentDetail implements Mergeable<String, ShipmentDetail>, Serializable {
+
+	private static final long serialVersionUID = -778300952449162194L;
+
 	private Long id;
 	
 	private String name;
@@ -250,6 +256,7 @@ public class ShipmentDetail implements Mergeable<String, ShipmentDetail> {
 	}
 
 	@Override
+	@JsonIgnore
 	public String getMergeKey() {
 		return name;
 	}

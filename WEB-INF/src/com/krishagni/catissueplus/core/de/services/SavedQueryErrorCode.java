@@ -37,7 +37,11 @@ public enum SavedQueryErrorCode implements ErrorCode {
 	
 	MALFORMED,
 	
-	EXPORT_DATA_FILE_NOT_FOUND;
+	EXPORT_DATA_FILE_NOT_FOUND,
+
+	TOO_BUSY,
+
+	PHI_NOT_ALLOWED_IN_AGR;
 	
 	@Override
 	public String code() {

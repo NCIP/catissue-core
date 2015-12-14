@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
@@ -27,7 +26,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.events.Mergeable;
+import com.krishagni.catissueplus.core.administrative.events.MergedObject;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -277,67 +276,6 @@ public class ImportServiceImpl implements ImportService {
 		return job;		
 	}
 	
-	private class MergedObject {
-		private Object object;
-		
-		private List<List<String>> rows = new ArrayList<List<String>>();
-		
-		private String errMsg;
-
-		public Object getObject() {
-			return object;
-		}
-
-		public void setObject(Object object) {
-			this.object = object;
-		}
-		
-		public void merge(Object other) {
-			if (!isErrorneous()) {
-				((Mergeable) this.object).merge(other);
-			}
-		}
- 				
-		public void addRow(List<String> row) {
-			rows.add(row);
-		}
-		
-		public void addErrMsg(String errMsg) {
-			if (errMsg == null) {
-				return;
-			}
-			
-			if (StringUtils.isBlank(this.errMsg)) {
-				this.errMsg = errMsg;
-			} else {
-				this.errMsg = new StringBuilder(this.errMsg).append(", ").append(errMsg).toString();
-			}
-			
-			object = null;
-		}
-		
-		public boolean isErrorneous() {
-			return StringUtils.isNotBlank(errMsg);
-		}
-		
-		public List<String[]> getRowsWithStatus() {
-			List<String[]> processedRows = new ArrayList<String[]>();
-			for (List<String> row : rows) {
-				if (isErrorneous()) {
-					row.add("FAIL");
-					row.add(errMsg);
-				} else {
-					row.add("SUCCESS");
-					row.add("");
-				}
-				
-				processedRows.add(row.toArray(new String[0]));
-			}
-			
-			return processedRows;
-		}
-	}
-
 	private class ImporterTask implements Runnable {
 		private Authentication auth;
 		
@@ -424,7 +362,7 @@ public class ImportServiceImpl implements ImportService {
 		
 		private void processMultipleRowsPerObj(ObjectReader objReader, CSVWriter csvWriter, ObjectImporter<Object, Object> importer) {
 			long totalRecords = 0, failedRecords = 0;
-			LinkedEhCacheMap<Object, MergedObject> objectsMap =  new LinkedEhCacheMap<Object, MergedObject>();
+			LinkedEhCacheMap<String, MergedObject> objectsMap =  new LinkedEhCacheMap<String, MergedObject>();
 			
 			while (true) {
 				String errMsg = null;
@@ -439,10 +377,11 @@ public class ImportServiceImpl implements ImportService {
 					errMsg = e.getMessage();
 				}
 				
-				Object key = objReader.getRowKey();
+				String key = objReader.getRowKey();
 				MergedObject mergedObj = objectsMap.get(key);
 				if (mergedObj == null) {
 					mergedObj = new MergedObject();
+					mergedObj.setKey(key);
 					mergedObj.setObject(parsedObj);
 				}
 				
@@ -453,8 +392,9 @@ public class ImportServiceImpl implements ImportService {
 				objectsMap.put(key, mergedObj);
 			}
 			
-			for (Object key : objectsMap.keySet()) {
-				MergedObject mergedObj = objectsMap.get(key);
+			Iterator<MergedObject> mergedObjIter = objectsMap.iterator();
+			while (mergedObjIter.hasNext()) {
+				MergedObject mergedObj = mergedObjIter.next();
 				if (!mergedObj.isErrorneous()) {
 					String errMsg = null;
 					try {
@@ -465,9 +405,8 @@ public class ImportServiceImpl implements ImportService {
 					
 					if (StringUtils.isNotBlank(errMsg)) {
 						mergedObj.addErrMsg(errMsg);
+						objectsMap.put(mergedObj.getKey(), mergedObj);
 					}
-					
-					objectsMap.put(key, mergedObj);
 				}
 				
 				++totalRecords;
@@ -480,7 +419,7 @@ public class ImportServiceImpl implements ImportService {
 				}
 			}
 			
-			Iterator<MergedObject> mergedObjIter = objectsMap.iterator();
+			mergedObjIter = objectsMap.iterator();
 			while (mergedObjIter.hasNext()) {
 				MergedObject mergedObj = mergedObjIter.next();
 				csvWriter.writeAll(mergedObj.getRowsWithStatus());

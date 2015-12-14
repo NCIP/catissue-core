@@ -1873,18 +1873,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-184">
-        <createTable tableName="os_department">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="INSTITUTE_ID" type="BIGINT"/>
-            <column defaultValue="Active" name="ACTIVITY_STATUS" type="VARCHAR(64)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185" runOnChange="false">
         <validCheckSum>7:cf3bf408ae09c8483b7a5e88fb108151</validCheckSum>
         <createTable tableName="os_distribution_protocol">
@@ -2629,13 +2617,6 @@
             <column name="LOGIN_NAME"/>
         </createIndex>
     </changeSet>
-
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-344">
-        <createIndex indexName="OS_DEPT_INSTID_UNIQUE_KEY" tableName="os_department" unique="true">
-            <column name="NAME"/>
-            <column name="INSTITUTE_ID"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-345">
         <createIndex indexName="NAME" tableName="os_specimen_print_rule" unique="true">
             <column name="NAME"/>
@@ -3347,9 +3328,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-589">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_user_sites"  constraintName="FK_CAT_US_USERID_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-609">
-        <addForeignKeyConstraint baseColumnNames="INSTITUTE_ID" baseTableName="os_department"  constraintName="FK_OS_DEPTINSTID_INST_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_institution"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-610">
         <addForeignKeyConstraint baseColumnNames="PRINCIPAL_INVESTIGATOR_ID" baseTableName="os_distribution_protocol"  constraintName="FK_PI_ID_BY_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>

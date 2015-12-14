@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,7 +10,10 @@ import com.krishagni.catissueplus.core.administrative.domain.ShipmentItem;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 
 
-public class ShipmentItemDetail implements Comparable<ShipmentItemDetail> {
+public class ShipmentItemDetail implements Comparable<ShipmentItemDetail>, Serializable {
+	
+	private static final long serialVersionUID = -2432813388976113244L;
+
 	private Long id;
 	
 	private SpecimenInfo specimen;

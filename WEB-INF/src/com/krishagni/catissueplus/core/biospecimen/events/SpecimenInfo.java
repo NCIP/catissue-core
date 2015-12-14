@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,7 +15,10 @@ import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
 @ListenAttributeChanges
-public class SpecimenInfo extends AttributeModifiedSupport implements Comparable<SpecimenInfo> {
+public class SpecimenInfo extends AttributeModifiedSupport implements Comparable<SpecimenInfo>, Serializable {
+	
+	private static final long serialVersionUID = -2766658206691562011L;
+
 	private Long id;
 
 	private Long cpId;

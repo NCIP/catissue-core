@@ -25,6 +25,8 @@ public enum ShipmentErrorCode implements ErrorCode {
 	
 	INVALID_STATUS,
 	
+	NOT_SHIPPED_TO_RECV,
+	
 	INVALID_SHIPPED_DATE,
 	
 	INVALID_RECEIVED_DATE,
@@ -52,6 +54,7 @@ public enum ShipmentErrorCode implements ErrorCode {
 	NOTIFY_USER_NOT_BELONG_TO_INST,
 	
 	RPT_TMPL_NOT_CONF
+	
 	;
 	
 	@Override

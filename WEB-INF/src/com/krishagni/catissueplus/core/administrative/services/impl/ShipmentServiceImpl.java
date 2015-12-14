@@ -138,6 +138,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 			Shipment shipment = shipmentFactory.createShipment(detail, detail.getStatus() == null ? Status.PENDING : null);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureValidShipmentStatus(shipment, ose);
 			ensureUniqueConstraint(null, shipment, ose);
 			ensureValidSpecimens(shipment, ose);
 			ensureValidNotifyUsers(shipment, ose);
@@ -162,7 +163,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 	public ResponseEvent<ShipmentDetail> updateShipment(RequestEvent<ShipmentDetail> req) {
 		try {
 			ShipmentDetail detail = req.getPayload();
-			Shipment existing = getShipmentDao().getById(detail.getId());
+			Shipment existing = getShipment(detail);
 			if (existing == null) {
 				return ResponseEvent.userError(ShipmentErrorCode.NOT_FOUND);
 			}
@@ -266,6 +267,12 @@ public class ShipmentServiceImpl implements ShipmentService {
 		
 		return specimens;
 	}
+	
+	private void ensureValidShipmentStatus(Shipment shipment, OpenSpecimenException ose) {
+		if (shipment.getId() == null && shipment.isReceived()) {
+			ose.addError(ShipmentErrorCode.NOT_SHIPPED_TO_RECV, shipment.getName());
+		}
+	}
 
 	private void ensureUniqueConstraint(Shipment existing, Shipment newShipment, OpenSpecimenException ose) {
 		if (existing == null || !newShipment.getName().equals(existing.getName())) {
@@ -360,6 +367,17 @@ public class ShipmentServiceImpl implements ShipmentService {
 				ose.addError(ShipmentErrorCode.NOTIFY_USER_NOT_BELONG_TO_INST, user.formattedName(), institute.getName());
 			}
 		}
+	}
+	
+	private Shipment getShipment(ShipmentDetail detail) {
+		Shipment shipment = null;
+		if (detail.getId() != null) {
+			shipment = getShipmentDao().getById(detail.getId());
+		} else if (StringUtils.isNotBlank(detail.getName())) {
+			shipment = getShipmentDao().getShipmentByName(detail.getName());
+		}
+		
+		return shipment;
 	}
 	
 	private void sendEmailNotifications(Shipment shipment, Status oldStatus, boolean isSendMail) {

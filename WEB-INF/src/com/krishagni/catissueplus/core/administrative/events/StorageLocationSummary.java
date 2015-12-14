@@ -1,9 +1,13 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import java.io.Serializable;
+
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 
-public class StorageLocationSummary {
+public class StorageLocationSummary implements Serializable {
+	
+	private static final long serialVersionUID = 3492284917328450439L;
+
 	private Long id;
 	
 	private String name;

@@ -72,6 +72,23 @@ osApp.config(function(
         controller: function() {
         },
         parent: 'signed-in'
+      })
+      .state('admin-view', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        resolve: {
+          isAdmin: function(currentUser, $q) {
+            var adminCheck = $q.defer();
+            if (currentUser.admin) {
+              adminCheck.resolve(true);
+            } else {
+              adminCheck.reject(false);
+            }
+            
+            return adminCheck.promise;
+          }
+        },
+        parent: 'signed-in'
       });
 
     $urlRouterProvider.otherwise('/');
@@ -265,6 +282,15 @@ osApp.config(function(
           toState  : toState,   toParams  : toParams,
           fromState: fromState, fromParams: fromParams
         };
+      });
+      
+    $rootScope.$on('$stateChangeError',
+      function(event, toState, toParams, fromState, fromParams) {
+        if (fromState.name == "") {
+          $state.go('home');
+        } else {
+          $state.go(fromState.name);
+        }
       });
 
     $rootScope.includesState = function(stateName, params, options) {

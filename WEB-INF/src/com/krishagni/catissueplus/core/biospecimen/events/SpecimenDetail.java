@@ -19,6 +19,9 @@ import edu.emory.mathcs.backport.java.util.Collections;
 
 @ListenAttributeChanges
 public class SpecimenDetail extends SpecimenInfo {
+
+	private static final long serialVersionUID = -752005520158376620L;
+
 	private CollectionEventDetail collectionEvent;
 	
 	private ReceivedEventDetail receivedEvent;

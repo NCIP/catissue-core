@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.common.events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -10,7 +11,9 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 @JsonFilter("withoutId")
-public class UserSummary {
+public class UserSummary implements Serializable {
+	
+	private static final long serialVersionUID = -8113791999197573026L;
 
 	private Long id;
 

@@ -21,6 +21,7 @@ import org.springframework.context.MessageSource;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PluginManager;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.domain.ConfigErrorCode;
 import com.krishagni.catissueplus.core.common.domain.ConfigProperty;
 import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
@@ -83,6 +84,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ConfigSettingDetail> saveSetting(RequestEvent<ConfigSettingDetail> req) {
+		AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 		ConfigSettingDetail detail = req.getPayload();
 		
 		String module = detail.getModule();

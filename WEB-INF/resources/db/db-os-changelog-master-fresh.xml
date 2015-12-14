@@ -16,8 +16,8 @@
   <include file="db/db-os-seed-data-pre-2.0-oracle.xml"/>
 
   <include file="db/2.0/schema.xml"/>
-  <include file="db/2.0/config.xml"/>
   <include file="db/2.0/seed-data.xml"/>
+  <include file="db/2.0/config.xml"/>
   <include file="db/2.0/permissible-values.xml"/>
   <include file="db/2.0/audit.xml"/>
   
