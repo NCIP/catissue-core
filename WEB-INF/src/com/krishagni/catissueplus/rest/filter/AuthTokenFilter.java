@@ -3,9 +3,11 @@ package com.krishagni.catissueplus.rest.filter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 	
 	private UserAuthenticationService authService;
 	
-	private Map<String, List<String>> excludeUrls;
+	private Map<String, List<String>> excludeUrls = new HashMap<String, List<String>>();
 	
 	private AuditService auditService;
 	
@@ -63,6 +65,18 @@ public class AuthTokenFilter extends GenericFilterBean {
 
 	public void setExcludeUrls(Map<String, List<String>> excludeUrls) {
 		this.excludeUrls = excludeUrls;
+	}
+
+	public void addExcludeUrl(String method, String resourceUrl) {
+		List<String> urls = excludeUrls.get(method);
+		if (urls == null) {
+			urls = new ArrayList<String>();
+			excludeUrls.put(method, urls);
+		}
+
+		if (urls.indexOf(resourceUrl) == -1) {
+			urls.add(resourceUrl);
+		}
 	}
 
 	public void setAuditService(AuditService auditService) {
