@@ -24,6 +24,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -107,9 +108,9 @@ public class AuthTokenFilter extends GenericFilterBean {
 		if (urls == null) {
 			urls = Collections.emptyList();
 		}
-		
+
 		for (String url : urls) {
-			if (httpReq.getRequestURI().endsWith(url)) {  
+			if (matches(httpReq, url)) {
 				chain.doFilter(req, resp);
 				return;
 			}
@@ -227,5 +228,18 @@ public class AuthTokenFilter extends GenericFilterBean {
 		}
 		
 		return authToken;
+	}
+
+	private boolean matches(HttpServletRequest httpReq, String url) {
+		if (!url.startsWith("/**")) {
+			String prefix = "/**";
+			if (!url.startsWith("/")) {
+				prefix += "/";
+			}
+
+			url = prefix + url;
+		}
+
+		return new AntPathRequestMatcher(url, httpReq.getMethod(), true).matches(httpReq);
 	}
 }
