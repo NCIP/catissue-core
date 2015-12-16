@@ -730,6 +730,8 @@
     <property name="txnMgr" ref="transactionManager"/>
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="userDao" ref="userDao"/>
+    <property name="bioSpecimenDaoFactory" ref="biospecimenDaoFactory" />
+    <property name="cfgService" ref="cfgSvc"/>
   </bean>
   
   <bean id="supportService" class="com.krishagni.catissueplus.core.support.services.impl.SupportServiceImpl">
