@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
@@ -42,9 +43,7 @@ public class ImportDefaultQueries implements InitializingBean {
 	private UserDao userDao;
 
 	private DaoFactory daoFactory;
-	
-	private com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory bioSpecimenDaoFactory;
-	
+
 	private ConfigurationService cfgService;
 	
 	private User sysUser;
@@ -59,11 +58,6 @@ public class ImportDefaultQueries implements InitializingBean {
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
-	}
-	
-	public void setBioSpecimenDaoFactory(
-			com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory bioSpecimenDaoFactory) {
-		this.bioSpecimenDaoFactory = bioSpecimenDaoFactory;
 	}
 	
 	public void setCfgService(ConfigurationService cfgService) {
@@ -104,11 +98,11 @@ public class ImportDefaultQueries implements InitializingBean {
 			if (result == null) {
 				SavedQuery query = insertQuery(filename, content, newDigest);
 				if(query != null){
-					queries.add(query);	
-				}
-				
-				if(resource.getFilename().equals("SpecimenCatalog.json")) {
-					UpdateConfiguration(query);
+					queries.add(query);
+
+					if (resource.getFilename().equals(DEFAULT_CATALOG_QUERY)) {
+						configureCatalogQuery(query);
+					}
 				}
 			} else {
 				Long queryId = ((Number)result.get("queryId")).longValue();
@@ -121,23 +115,10 @@ public class ImportDefaultQueries implements InitializingBean {
 				updateQuery(queryId, filename, content, newDigest);
 			}
 		}
+
 		shareDefaultQueries(queries);
 	}
 	
-	private void UpdateConfiguration(SavedQuery query) {
-		User user = bioSpecimenDaoFactory.getUserDao().getSystemUser();
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, null, null);
-		SecurityContextHolder.getContext().setAuthentication(token);
-		
-		ConfigSettingDetail cfgDetail = new ConfigSettingDetail();
-		cfgDetail.setModule("catalog");
-		cfgDetail.setName("default_query");
-		cfgDetail.setValue(query.getId().toString());
-		RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(cfgDetail); 
-		ResponseEvent<ConfigSettingDetail> resp = cfgService.saveSetting(req);
-		resp.throwErrorIfUnsuccessful();
-	}
-
 	private SavedQuery insertQuery(String filename, byte[] queryContent, String md5Digest) {
 		SavedQuery savedQuery = new SavedQuery();
 		try {
@@ -183,9 +164,32 @@ public class ImportDefaultQueries implements InitializingBean {
 		folder.setName(DEFAULT_QUERIES);
 		daoFactory.getQueryFolderDao().saveOrUpdate(folder);
 	}
-	
+
+	private void configureCatalogQuery(SavedQuery query) {
+		try {
+			AuthUtil.setCurrentUser(sysUser);
+
+			int queryId = cfgService.getIntSetting("catalog", "default_query", -1);
+			if (queryId != -1) {
+				return;
+			}
+
+			ConfigSettingDetail cfgDetail = new ConfigSettingDetail();
+			cfgDetail.setModule("catalog");
+			cfgDetail.setName("default_query");
+			cfgDetail.setValue(query.getId().toString());
+
+			RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(cfgDetail);
+			ResponseEvent<ConfigSettingDetail> resp = cfgService.saveSetting(req);
+			resp.throwErrorIfUnsuccessful();
+		} finally {
+			AuthUtil.clearCurrentUser();
+		}
+	}
+
 	private static final String DEFAULT_QUERIES = "Default Queries";
 	
 	private static final String QUERIES_DIRECTORY = "/default-queries";
 
+	private static final String DEFAULT_CATALOG_QUERY = "SpecimenCatalog.json";
 }
