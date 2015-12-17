@@ -30,7 +30,7 @@
                 <div class="col col-xs-3 os-ellipsis">{{role.role}}</div>
 
                 <div class="col col-xs-1 action">
-                  <div show-if-allowed="userResource.updateOpts" class="btn-group">
+                  <div ng-if="role.isUpdateAllowed" class="btn-group">
                     <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditRole(role)">
                       <span class="fa fa-pencil"></span>
                     </button>

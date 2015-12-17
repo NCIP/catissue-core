@@ -2,8 +2,8 @@
 angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('UserRolesCtrl', function(
     $scope, $translate, $filter,
-    user, userRoles,
-    PvManager, CollectionProtocol, Site, Role) {
+    user, userRoles, currentUser, currentUserInstitute,
+    PvManager, CollectionProtocol, Site, Role, AuthorizationService) {
     
     function init() {
       $scope.currentRole = {};
@@ -45,7 +45,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         }
       );
     }
-
+    
     $scope.showAddRole = function() {
       $scope.addMode = true;
       $scope.currentRole = user.newRole();
@@ -182,17 +182,34 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
 
     function getUserRolesList(userRoles) {
       var userRolesList = [];
-      angular.forEach(userRoles, function(value) {
-        angular.forEach(value, function(role) {
+      var sameInstitute = (currentUserInstitute.name == user.instituteName);
+      angular.forEach(userRoles, function(roles) {
+        angular.forEach(roles, function(role) {
+          role.isUpdateAllowed = isRoleUpdateAllowed(role, sameInstitute);
           userRolesList.push(role);
         })
       });
-
+          
       var sortedUserRoles = userRolesList.sort(function(role1, role2) {
         return role1.id - role2.id;
       });
-
+      
       return sortedUserRoles;
+    }
+    
+    function isRoleUpdateAllowed(role, sameInstitute) {
+      if (currentUser.admin) {
+        return true;
+      }
+      
+      var updateOpts = $scope.userResource.updateOpts;
+      if (role.site && role.site != $scope.all) {
+        return AuthorizationService.isAllowed(angular.extend({sites: [role.site]}, updateOpts));
+      } else if (sameInstitute) {
+        return AuthorizationService.isAllowed(updateOpts);
+      }
+      
+      return false;
     }
 
     function setSitePvs() {
