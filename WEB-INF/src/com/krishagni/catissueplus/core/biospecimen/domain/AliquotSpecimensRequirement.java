@@ -15,6 +15,8 @@ public class AliquotSpecimensRequirement {
 	
 	private String labelFmt;
 	
+	private String labelAutoPrintMode;
+	
 	public Long getParentSrId() {
 		return parentSrId;
 	}
@@ -61,5 +63,13 @@ public class AliquotSpecimensRequirement {
 
 	public void setLabelFmt(String labelFmt) {
 		this.labelFmt = labelFmt;
+	}
+
+	public String getLabelAutoPrintMode() {
+		return labelAutoPrintMode;
+	}
+
+	public void setLabelAutoPrintMode(String labelAutoPrintMode) {
+		this.labelAutoPrintMode = labelAutoPrintMode;
 	}
 }

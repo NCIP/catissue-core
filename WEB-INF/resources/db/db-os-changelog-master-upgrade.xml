@@ -8,6 +8,8 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <include file="db/db-os-case-sensitive-chk-mysql.xml"/>
+  <include file="db/data-type-definitions.xml"/>
+  
   <include file="db/2.0/schema.xml"/>
   <include file="db/2.0/seed-data.xml"/>
   <include file="db/2.0/config.xml"/>
@@ -40,4 +42,7 @@
   <include file="db/2.5/config.xml"/>
   <include file="db/2.5/seed-data.xml"/>
   <include file="db/2.5/migration.xml"/>
+  
+  <include file="db/2.6/schema.xml"/>
+  <include file="db/2.6/audit.xml"/>
 </databaseChangeLog> 

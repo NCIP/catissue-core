@@ -24,6 +24,12 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class SpecimenRequirement extends BaseEntity implements Comparable<SpecimenRequirement> {
+	public enum LabelAutoPrintMode {
+		PRE_PRINT,
+		ON_COLLECTION,
+		NONE;
+	}
+	
 	private String name;
 	
 	private String code;
@@ -57,6 +63,8 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 	private CollectionProtocolEvent collectionProtocolEvent;
 
 	private String labelFormat;
+	
+	private LabelAutoPrintMode labelAutoPrintMode = LabelAutoPrintMode.NONE;
 	
 	private Integer sortOrder;
 
@@ -212,6 +220,14 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 	public void setLabelFormat(String labelFormat) {
 		this.labelFormat = labelFormat;
 	}
+	
+	public LabelAutoPrintMode getLabelAutoPrintMode() {
+		return labelAutoPrintMode != null ? labelAutoPrintMode : LabelAutoPrintMode.NONE; 
+	}
+
+	public void setLabelAutoPrintMode(LabelAutoPrintMode labelAutoPrintMode) {
+		this.labelAutoPrintMode = labelAutoPrintMode;
+	}
 
 	public Integer getSortOrder() {
 		return sortOrder;
@@ -323,7 +339,8 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		setInitialQuantity(sr.getInitialQuantity());
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
-		
+		setLabelAutoPrintMode(sr.getLabelAutoPrintMode());
+
 		if (!isAliquot() && !isSpecimenPoolReq()) {
 			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType(), sr.getPathologyStatus());
 		}
@@ -514,6 +531,9 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		
 		for (SpecimenRequirement poolSr : getSpecimenPoolReqs()) {
 			poolSr.updateRequirementAttrs(sr);
+			poolSr.setStorageType(sr.getStorageType());
+			poolSr.setLabelFormat(sr.getLabelFormat());
+			poolSr.setLabelAutoPrintMode(sr.getLabelAutoPrintMode());
 		}
 	}
 	

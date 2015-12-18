@@ -7,7 +7,7 @@
 angular.module('openspecimen')
   .factory('PvManager', function($http, $q, $translate, ApiUrls, ApiUtil, Site, Util) {
     var url = ApiUrls.getBaseUrl() + 'permissible-values';
-    
+
     var anatomicSites = [
       'DIGESTIVE ORGANS',
       'SKIN',
@@ -70,7 +70,19 @@ angular.module('openspecimen')
     var qualityStatuses = [
       'Acceptable',
       'Unacceptable'
-    ]
+    ];
+
+    var spmnLabelPrePrintModes= [
+      'ON_REGISTRATION',
+      'ON_VISIT_COMPLETION',
+      'NONE'
+    ];
+
+    var spmnLabelAutoPrintModes = [
+      {name: 'PRE_PRINT', displayName: "Pre Print"},
+      {name: 'ON_COLLECTION', displayName: "On Collection"},
+      {name: 'NONE', displayName: "None"}
+    ];
 
     var pvMap = {
       anatomicSite: anatomicSites,
@@ -79,7 +91,9 @@ angular.module('openspecimen')
       'specimen-status': specimenStatuses,
       'container-position-labeling-schemes': positionLabelingSchemes,
       'activity-status': activityStatuses,
-      'quality-status': qualityStatuses
+      'quality-status': qualityStatuses,
+      'specimen-label-pre-print-modes': spmnLabelPrePrintModes,
+      'specimen-label-auto-print-modes': spmnLabelAutoPrintModes
     };
 
     var pvIdMap = {

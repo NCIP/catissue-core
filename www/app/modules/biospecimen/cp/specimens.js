@@ -102,6 +102,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.storageTypes = PvManager.getPvs('storage-type');
       $scope.collectionProcs = PvManager.getPvs('collection-procedure');
       $scope.collectionContainers = PvManager.getPvs('collection-container');
+      $scope.spmnLabelAutoPrintModes = PvManager.getPvs('specimen-label-auto-print-modes');
       pvsLoaded = true;
     };
 
@@ -214,6 +215,21 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       );
     };
 
+    $scope.ensureLabelFmtSpecified = function(sr, lineage) {
+      $scope.labelFmtSpecified = false;
+      if (sr.labelAutoPrintMode != 'PRE_PRINT' || !!sr.labelFmt) {
+        return;
+      }
+
+      if (lineage == 'Aliquot') {
+        $scope.labelFmtSpecified = !$scope.cp.aliquotLabelFmt;
+      } else if (lineage == 'Derivative') {
+        $scope.labelFmtSpecified = !$scope.cp.derivativeLabelFmt;
+      } else {
+        $scope.labelFmtSpecified = !$scope.cp.specimenLabelFmt;
+      }
+    }
+
     ////////////////////////////////////////////////
     //
     //  Aliquot logic
@@ -227,7 +243,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.parentSr = sr;
       $scope.view = 'addedit_aliquot';
-      $scope.childReq = {};
+      $scope.childReq = {labelAutoPrintMode: 'NONE'};
       loadPvs();
     };
 
@@ -267,7 +283,10 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     $scope.showCreateDerived = function(sr) {
       $scope.parentSr = sr;
       $scope.view = 'addedit_derived';
-      $scope.childReq = {pathology: sr.pathology};
+      $scope.childReq = {
+        pathology: sr.pathology,
+        labelAutoPrintMode: 'NONE'
+      };
       loadPvs();
     };
 

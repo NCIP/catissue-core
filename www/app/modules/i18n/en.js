@@ -148,6 +148,7 @@
     "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
     "visit_name_fmt": "Visit Name Format",
     "manual_enabled_for": "User Inputs Allowed For",
+    "pre_print_spmn_labels": "Pre Print Specimen Labels",
     "ppids": "Participant Protocol IDs",
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
@@ -228,6 +229,12 @@
       "title": "Catalog Settings",
       "query": "Query",
       "query_desc": "Select saved query to use for Specimen Catalog"
+    },
+
+    "spmn_label_pre_print_modes": {
+      "ON_REGISTRATION": "On Registration",
+      "ON_VISIT_COMPLETION": "On Visit Completion",
+      "NONE": "None"
     }
   },
 
@@ -554,6 +561,7 @@
     "pathology": "Pathology",
     "storage_type": "Storage Type",
     "label_fmt": "Label Format",
+    "auto_print_label": "Auto Print Label",
     "available_qty": "Available Quantity",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
@@ -571,7 +579,7 @@
     "collection_proc": "Collection Procedure",
     "deleting_sr": "Deleting Specimen Requirement",
     "confirm_delete_sr": "Specimen Requirement and all its children will be deleted. Are you sure you want to proceed?",
-    
+    "lbl_fmt_required_for_auto_print": "Pre-printing requires specimen label format to be specified either at CP level or requirement level",
     "ctx_menu": {
       "view_sr": "View Requirement",
       "edit_sr": "Edit Requirement",
@@ -592,6 +600,12 @@
 
     "errors": {
       "insufficient_qty": "Insufficient parent requirement quantity to create aliquots"
+    },
+
+    "spmn_label_auto_print_modes": {
+      "PRE_PRINT": "Pre Print",
+      "ON_COLLECTION": "On Collection",
+      "NONE": "None"
     }
   },
 

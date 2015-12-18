@@ -369,10 +369,12 @@ public class VisitServiceImpl implements VisitService {
 
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
 		Visit existing = null;
+		String prevStatus = null;   
 		
 		if (update && (input.getId() != null || StringUtils.isNotBlank(input.getName()))) {
 			existing = getVisit(input.getId(), input.getName());
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(existing);
+			prevStatus = existing.getStatus();
 		}
 		
 		if (update && existing == null) {
@@ -405,9 +407,10 @@ public class VisitServiceImpl implements VisitService {
 		existing.setNameIfEmpty();
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		existing.addOrUpdateExtension();
+		existing.prePrintLabels(prevStatus);
 		return VisitDetail.from(existing);		
 	}
-
+	
 	private Visit getVisit(Long visitId, String visitName) {
 		Visit visit = null;
 		

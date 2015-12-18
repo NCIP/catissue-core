@@ -28,6 +28,8 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private String labelFmt;
 	
+	private String labelAutoPrintMode;
+	
 	private Set<String> biohazards;
 	
 	private String comments;
@@ -71,6 +73,14 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	public void setLabelFmt(String labelFmt) {
 		this.labelFmt = labelFmt;
+	}
+
+	public String getLabelAutoPrintMode() {
+		return labelAutoPrintMode;
+	}
+
+	public void setLabelAutoPrintMode(String labelAutoPrintMode) {
+		this.labelAutoPrintMode = labelAutoPrintMode;
 	}
 
 	public List<SpecimenDetail> getChildren() {
@@ -185,6 +195,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		}
 		
 		result.setLabelFmt(specimen.getLabelTmpl());
+		result.setLabelAutoPrintMode(sr != null ? sr.getLabelAutoPrintMode().name(): null);
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
 		

@@ -177,4 +177,23 @@ angular.module('os.common.form', [])
         '  </div>' +
         '</div>'
     };
+  })
+
+  .directive('osFieldWarn', function() {
+    return {
+      restrict: 'A',
+
+      scope: {
+        message: "=osFieldWarn"
+      },
+
+      replace: 'true',
+
+      template:
+        '<div>' +
+        '  <div class="alert alert-warning os-form-err-msg">' +
+        '    <span translate="{{message}}"></span>' +
+        '  </div>' +
+        '</div>'
+    };
   });

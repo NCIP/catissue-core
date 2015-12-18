@@ -716,22 +716,28 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   display: none;
 }
 
-.alert-danger.os-form-err-msg {
+.alert.os-form-err-msg {
   margin: 5px 0px 0px 0px;
   padding: 7px 15px;
   position: relative;
 }
 
-.alert-danger.os-form-err-msg:after {
+.alert.os-form-err-msg:after {
   position: absolute;
   top: -10px;
   content: "";
   left: 20px;
   border-style: solid;
-  border-color: transparent transparent #ebccd1;
   border-width: 5px;
 }
 
+.alert-warning.os-form-err-msg:after {
+  border-color: transparent transparent #faebcc;
+}
+
+.alert-danger.os-form-err-msg:after {
+  border-color: transparent transparent #ebccd1;
+}
 
 #loading-bar .bar {
   background: #b91f1f!important;

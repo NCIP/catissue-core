@@ -29,6 +29,12 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Audited
 @AuditTable(value="CAT_COLLECTION_PROTOCOL_AUD")
 public class CollectionProtocol extends BaseExtensionEntity {
+	public enum SpecimenLabelPrePrintMode {
+		ON_REGISTRATION,
+		ON_VISIT_COMPLETION,
+		NONE;
+	}
+	
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");
@@ -70,6 +76,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	private Boolean manualVisitNameEnabled;
 	
 	private Boolean manualSpecLabelEnabled;
+	
+	private SpecimenLabelPrePrintMode spmnLabelPrePrintMode = SpecimenLabelPrePrintMode.NONE;
 	
 	private Boolean consentsWaived;
 
@@ -241,6 +249,14 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		return manualSpecLabelEnabled != null ? manualSpecLabelEnabled : false;
 	}
 
+	public SpecimenLabelPrePrintMode getSpmnLabelPrePrintMode() {
+		return spmnLabelPrePrintMode != null ? spmnLabelPrePrintMode : SpecimenLabelPrePrintMode.NONE;
+	}
+
+	public void setSpmnLabelPrePrintMode(SpecimenLabelPrePrintMode spmnLabelPrePrintMode) {
+		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
+	}
+
 	public Boolean isConsentsWaived() {
 		return consentsWaived != null ? consentsWaived: false;
 	}
@@ -335,6 +351,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
 		setAliquotLabelFormat(cp.getAliquotLabelFormat());
 		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
+		setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
