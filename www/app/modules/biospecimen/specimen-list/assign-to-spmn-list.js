@@ -5,16 +5,7 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
     function loadAllSpecimenList(scope) {
       SpecimenList.query().then(
         function(lists) {
-          if ($rootScope.currentUser.admin) {
-            scope.specimenLists = lists;
-          } else {
-            scope.specimenLists = [];
-            angular.forEach(lists, function(list) {
-              if (list.owner.id == $rootScope.currentUser.id) {
-                scope.specimenLists.push(list);
-              }
-            })
-          }
+          scope.specimenLists = lists;
         }
       );
     }
