@@ -235,8 +235,12 @@ edu.common.de.Form = function(args) {
     }
 
     var caption = args.showTitle == false ? undefined : this.formDef.caption;
-    var panel = edu.common.de.Utility.panel(caption, formCtrls, 'default');
-    this.formDiv.append(panel);
+    if (args.showPanel == false) {
+      this.formDiv.append(formCtrls);
+    } else {
+      var panel = edu.common.de.Utility.panel(caption, formCtrls, 'default');
+      this.formDiv.append(panel);
+    }
     this.setValue(this.formData);
   };
 

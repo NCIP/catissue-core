@@ -15,3 +15,5 @@ procedure-event.xml, false, true
 spun-event.xml, false, true
 thaw-event.xml, false, true
 tissue-review-event.xml, false, true
+shipped-event.xml, true, true
+shipment-received-event.xml, true, true

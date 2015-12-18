@@ -87,6 +87,24 @@ public class AccessCtrlMgr {
 	public void ensureDeleteUserRights(User user) {
 		ensureUserObjectRights(user, Operation.DELETE);
 	}
+	
+	public void ensureCreateUpdateUserRolesRights(User user, Site roleSite) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+		
+		Set<Site> currentUserSites = getSites(Resource.USER, Operation.UPDATE);
+		Set<Site> updateReqSites = null;
+		if (roleSite == null) {				//this is case of all sites.
+			updateReqSites = user.getInstitute().getSites();
+		} else {
+			updateReqSites = Collections.singleton(roleSite);
+		}
+		
+		if (CollectionUtils.intersection(currentUserSites, updateReqSites).isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
 
 	private void ensureUserObjectRights(User user, Operation op) {
 		if (AuthUtil.isAdmin()) {

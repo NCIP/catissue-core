@@ -24,9 +24,13 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
       },
 
       link: function(scope, element, attrs, ctrl) {
-
         if (!!attrs.ctrl) {
-          scope[attrs.ctrl].ctrl = ctrl;
+          var parts = attrs.ctrl.split("\.")
+          var obj = scope;
+          angular.forEach(parts, function(part) {
+            obj = obj[part];
+          });
+          obj.ctrl = ctrl;
         }
 
         var onceRendered = false;
@@ -65,6 +69,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             onPrint        : opts.onPrint,
             onDelete       : opts.onDelete,
             showActionBtns : opts.showActionBtns,
+            showPanel      : opts.showPanel,
             customHdrs     : hdrs
           };
 

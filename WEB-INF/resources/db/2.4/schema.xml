@@ -162,10 +162,10 @@
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
 
-  <changeSet author="vlonushte" id="Creating specimen field extensions view">
-    <createView viewName="os_spec_cust_field_extns_view"> 
+  <changeSet author="vlonushte" id="Creating specimen field extensions view" runOnChange="true">
+    <createView viewName="os_spec_cust_field_extns_view" replaceIfExists="true"> 
       select 
-        re.object_id as spec_id, re.record_id as record_id 
+        re.object_id as spec_id, re.record_id as record_id, fc.container_id as form_id 
       from 
         catissue_form_record_entry re 
         join catissue_form_context fc on fc.identifier = re.form_ctxt_id

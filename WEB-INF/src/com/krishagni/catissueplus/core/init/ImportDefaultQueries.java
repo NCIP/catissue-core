@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.init;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -19,6 +23,12 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
+import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
+import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
+import com.krishagni.catissueplus.core.common.events.RequestEvent;
+import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
@@ -34,6 +44,8 @@ public class ImportDefaultQueries implements InitializingBean {
 
 	private DaoFactory daoFactory;
 
+	private ConfigurationService cfgService;
+	
 	private User sysUser;
 
 	public void setTxnMgr(PlatformTransactionManager txnMgr) {
@@ -47,7 +59,11 @@ public class ImportDefaultQueries implements InitializingBean {
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-
+	
+	public void setCfgService(ConfigurationService cfgService) {
+		this.cfgService = cfgService;
+	}
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		TransactionTemplate txnTmpl = new TransactionTemplate(txnMgr);
@@ -82,7 +98,11 @@ public class ImportDefaultQueries implements InitializingBean {
 			if (result == null) {
 				SavedQuery query = insertQuery(filename, content, newDigest);
 				if(query != null){
-					queries.add(query);	
+					queries.add(query);
+
+					if (resource.getFilename().equals(DEFAULT_CATALOG_QUERY)) {
+						configureCatalogQuery(query);
+					}
 				}
 			} else {
 				Long queryId = ((Number)result.get("queryId")).longValue();
@@ -95,6 +115,7 @@ public class ImportDefaultQueries implements InitializingBean {
 				updateQuery(queryId, filename, content, newDigest);
 			}
 		}
+
 		shareDefaultQueries(queries);
 	}
 	
@@ -143,9 +164,32 @@ public class ImportDefaultQueries implements InitializingBean {
 		folder.setName(DEFAULT_QUERIES);
 		daoFactory.getQueryFolderDao().saveOrUpdate(folder);
 	}
-	
+
+	private void configureCatalogQuery(SavedQuery query) {
+		try {
+			AuthUtil.setCurrentUser(sysUser);
+
+			int queryId = cfgService.getIntSetting("catalog", "default_query", -1);
+			if (queryId != -1) {
+				return;
+			}
+
+			ConfigSettingDetail cfgDetail = new ConfigSettingDetail();
+			cfgDetail.setModule("catalog");
+			cfgDetail.setName("default_query");
+			cfgDetail.setValue(query.getId().toString());
+
+			RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(cfgDetail);
+			ResponseEvent<ConfigSettingDetail> resp = cfgService.saveSetting(req);
+			resp.throwErrorIfUnsuccessful();
+		} finally {
+			AuthUtil.clearCurrentUser();
+		}
+	}
+
 	private static final String DEFAULT_QUERIES = "Default Queries";
 	
 	private static final String QUERIES_DIRECTORY = "/default-queries";
 
+	private static final String DEFAULT_CATALOG_QUERY = "SpecimenCatalog.json";
 }

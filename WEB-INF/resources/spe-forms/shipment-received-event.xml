@@ -1,0 +1,77 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenShipmentReceivedEvent</name>
+    <caption>#getMessage("shipment_received_event")</caption>
+    <table>SPECIMEN_SHIPMENTS_VIEW</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>#getMessage("shipment_name")</caption>
+        <column>NAME</column>
+        <height>2</height>
+      </textField>
+    </row>
+
+    <row>
+      <siteField>
+        <name>receivingSite</name>
+        <udn>receivingSite</udn>
+        <caption>#getMessage("shipment_recv_site")</caption>
+        <column>RECEIVING_SITE_ID</column>
+        <mandatory>true</mandatory>
+      </siteField>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>receivedQuality</name>
+        <udn>receivedQuality</udn>
+        <caption>#getMessage("shipment_items_recv_quality")</caption>
+        <column>RECEIVED_QUALITY</column>
+        <options>
+          <option><value>ACCEPTABLE</value></option>
+          <option><value>UNACCEPTABLE</value></option>
+        </options>
+      </dropDown>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("shipment_receiver")</caption>
+        <column>RECEIVER_ID</column>
+        <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("shipment_received_date")</caption>
+        <column>RECEIVED_DATE</column>
+        <format>MM-dd-yyyy</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("shipment_receiver_comments")</caption>
+        <column>RECEIVER_COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

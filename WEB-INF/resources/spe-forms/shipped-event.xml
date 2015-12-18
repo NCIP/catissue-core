@@ -1,0 +1,64 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenShipmentShippedEvent</name>
+    <caption>#getMessage("shipment_shipped_event")</caption>
+    <table>SPECIMEN_SHIPMENTS_VIEW</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>#getMessage("shipment_name")</caption>
+        <column>NAME</column>
+        <height>2</height>
+      </textField>
+    </row>
+
+    <row>
+      <siteField>
+        <name>sendingSite</name>
+        <udn>sendingSite</udn>
+        <caption>#getMessage("shipment_sending_site")</caption>
+        <column>SENDING_SITE_ID</column>
+        <mandatory>true</mandatory>
+      </siteField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("shipment_sender")</caption>
+        <column>SENDER_ID</column>
+        <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("shipment_shipped_date")</caption>
+        <column>SHIPPED_DATE</column>
+        <format>MM-dd-yyyy</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("shipment_sender_comments")</caption>
+        <column>SENDER_COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

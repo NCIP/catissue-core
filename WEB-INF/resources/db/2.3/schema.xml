@@ -69,10 +69,10 @@
     <dropView viewName="os_cp_extn_records_view"/>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Creating cp field extensions view">
-    <createView viewName="os_cp_cust_field_extns_view">
+  <changeSet author="vlonushte" id="Creating cp field extensions view" runOnChange="true">
+    <createView viewName="os_cp_cust_field_extns_view" replaceIfExists="true">
       select 
-        re.object_id as cp_id, re.record_id as record_id 
+        re.object_id as cp_id, re.record_id as record_id, fc.container_id as form_id  
       from 
         catissue_form_record_entry re 
         join catissue_form_context fc on fc.identifier = re.form_ctxt_id
@@ -83,10 +83,10 @@
     </createView>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Creating participant field extensions view">
-    <createView viewName="os_part_cust_field_extns_view">
+  <changeSet author="vlonushte" id="Creating participant field extensions view" runOnChange="true">
+    <createView viewName="os_part_cust_field_extns_view" replaceIfExists="true">
       select 
-        re.object_id as pid, re.record_id as record_id 
+        re.object_id as pid, re.record_id as record_id, fc.container_id as form_id 
       from 
         catissue_form_record_entry re 
         join catissue_form_context fc on fc.identifier = re.form_ctxt_id
@@ -97,10 +97,10 @@
     </createView>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Creating visit field extensions view">
-    <createView viewName="os_visit_cust_field_extns_View"> 
+  <changeSet author="vlonushte" id="Creating visit field extensions view" runOnChange="true">
+    <createView viewName="os_visit_cust_field_extns_View" replaceIfExists="true"> 
       select 
-        re.object_id as scg_id, re.record_id as record_id 
+        re.object_id as scg_id, re.record_id as record_id, fc.container_id as form_id 
       from 
         catissue_form_record_entry re 
         join catissue_form_context fc on fc.identifier = re.form_ctxt_id

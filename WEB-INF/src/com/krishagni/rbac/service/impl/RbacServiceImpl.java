@@ -8,12 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -413,29 +414,32 @@ public class RbacServiceImpl implements RbacService {
 			}
 			
 			User user = userDao.getById(subject.getId());
-			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
-						
 			SubjectRole resp = null;
 			Map<String,Object> oldSrDetails = new HashMap<String, Object>();
 			SubjectRole sr = null;
 			switch (subjectRoleOp.getOp()) {
 				case ADD:
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, sr.getSite());
 					resp = subject.addRole(sr);
 					break;
 				
 				case UPDATE:
 					SubjectRole oldSr = subject.getRole(subjectRoleOp.getSubjectRole().getId());
+					AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, oldSr.getSite());
 					oldSrDetails.put("site", oldSr.getSite());
 					oldSrDetails.put("collectionProtocol", oldSr.getCollectionProtocol());
 					oldSrDetails.put("role", oldSr.getRole());
 					
 					sr = createSubjectRole(subjectRoleOp.getSubjectRole());
+					AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, sr.getSite());
 					resp = subject.updateRole(sr);
 					break;
 				
 				case REMOVE:
-					resp = subject.removeSubjectRole(subjectRoleOp.getSubjectRole().getId());
+					SubjectRole role = subject.getRole(subjectRoleOp.getSubjectRole().getId());
+					AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, role.getSite());
+					resp = subject.removeSubjectRole(role);
 					break;
 			}
 			

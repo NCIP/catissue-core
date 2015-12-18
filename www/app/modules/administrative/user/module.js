@@ -107,6 +107,10 @@ angular.module('os.administrative.user',
         resolve: {
           userRoles: function(user) {
             return user.getRoles();
+          },
+          
+          currentUserInstitute: function(currentUser) {
+            return currentUser.getInstitute();
           }
         },
         controller: 'UserRolesCtrl',

@@ -145,13 +145,11 @@ public class AuthTokenFilter extends GenericFilterBean {
 			}
 			return;
 		}
-		
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, authToken, userDetails.getAuthorities());
-		token.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpReq));
-		SecurityContextHolder.getContext().setAuthentication(token);
+
+		AuthUtil.setCurrentUser(userDetails, authToken, httpReq);
 		Date callStartTime = Calendar.getInstance().getTime();
 		chain.doFilter(req, resp);
-		SecurityContextHolder.clearContext();
+		AuthUtil.clearCurrentUser();
 	
 		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(userDetails);

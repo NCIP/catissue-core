@@ -364,4 +364,62 @@
       referencedTableName="CATISSUE_COLL_PROT_EVENT" 
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing collection protocol registration extension view">
+    <createView viewName="cpr_extension_records_view" replaceIfExists="true">
+       select 
+         re.object_id as cpr_id, re.record_id as record_id, fc.container_id as form_id 
+       from 
+         catissue_form_record_entry re 
+         join catissue_form_context fc on re.form_ctxt_id = fc.identifier 
+       where 
+         fc.entity_type = 'Participant' 
+         and fc.deleted_on is null
+         and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing visit extension view">
+    <createView viewName="scg_extn_records_view" replaceIfExists="true">
+      select 
+        re.object_id as scg_id, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id 
+      where 
+        fc.entity_type = 'SpecimenCollectionGroup' 
+        and fc.deleted_on is null
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing specimen extension view"> 
+    <createView viewName="specimen_extn_records_view" replaceIfExists="true">
+      select 
+        re.object_id as specimen_id, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id 
+      where 
+        (fc.entity_type = 'Specimen' or fc.entity_type = 'SpecimenEvent')
+        and fc.deleted_on is null
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating specimen shipments view">
+    <createView viewName="specimen_shipments_view">
+      select 
+        item.identifier as identifier, item.specimen_id as specimen_id, item.received_quality as received_quality,
+        ship.name as name, ship.shipped_date as shipped_date, ship.sending_site_id as sending_site_id, 
+        ship.sender_id as sender_id, ship.sender_comments as sender_comments, ship.received_date as received_date,
+        ship.receiving_site_id as receiving_site_id, ship.receiver_id as receiver_id, ship.receiver_comments as receiver_comments
+      from
+        os_shipment_items item
+        join os_shipments ship on item.shipment_id = ship.identifier
+      where
+        ship.status != 'PENDING'
+    </createView>
+  </changeSet>
+
 </databaseChangeLog>
