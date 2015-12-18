@@ -38,6 +38,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	
 	private Boolean manualSpecLabelEnabled;
 	
+	private String spmnLabelPrePrintMode;
+	
 	private Boolean aliquotsInSameContainer;
 
 	private String activityStatus;
@@ -154,6 +156,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	public void setManualSpecLabelEnabled(Boolean manualSpecLabelEnabled) {
 		this.manualSpecLabelEnabled = manualSpecLabelEnabled;
 	}
+	
+	public String getSpmnLabelPrePrintMode() {
+		return spmnLabelPrePrintMode;
+	}
+
+	public void setSpmnLabelPrePrintMode(String spmnLabelPrePrintMode) {
+		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
+	}
 
 	public Boolean getAliquotsInSameContainer() {
 		return aliquotsInSameContainer;
@@ -215,6 +225,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualPpidEnabled(cp.isManualPpidEnabled());
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
+		result.setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode().name());
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));

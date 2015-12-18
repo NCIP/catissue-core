@@ -53,7 +53,9 @@ public enum CpErrorCode implements ErrorCode {
 	
 	CONSENTS_WAIVED,
 	
-	DUP_CP_SITE_CODES;
+	DUP_CP_SITE_CODES,
+	
+	INVALID_SPMN_LABEL_PRE_PRINT_MODE;
 	
 	@Override
 	public String code() {

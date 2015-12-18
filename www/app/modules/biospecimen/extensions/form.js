@@ -24,7 +24,6 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
       },
 
       link: function(scope, element, attrs, ctrl) {
-
         if (!!attrs.ctrl) {
           var parts = attrs.ctrl.split("\.")
           var obj = scope;

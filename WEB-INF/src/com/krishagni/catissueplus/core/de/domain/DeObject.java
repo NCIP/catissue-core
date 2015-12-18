@@ -101,21 +101,24 @@ public abstract class DeObject {
 			FormData formData = prepareFormData(form);
 			
 			boolean isInsert = (this.id == null);						
-			Long recordId = formDataMgr.saveOrUpdateFormData(userCtx, formData);
+			this.id = formDataMgr.saveOrUpdateFormData(userCtx, formData);
 			
 			if (isInsert) {
-				Long formCtxtId = getFormContext().getIdentifier();
-				FormRecordEntryBean re = prepareRecordEntry(userCtx, formCtxtId, recordId);
-				daoFactory.getFormDao().saveOrUpdateRecordEntry(re);				
+				saveRecordEntry();			
 			}
-			
-			this.id = recordId;
 			
 			attrs.clear();
 			attrs.addAll(getAttrs(formData));
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		}
+	}
+	
+	public void saveRecordEntry() {
+		UserContext userCtx = getUserCtx();
+		Long formCtxtId = getFormContext().getIdentifier();
+		FormRecordEntryBean re = prepareRecordEntry(userCtx, formCtxtId, getId());
+		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
 	}
 	
 	public void delete() {

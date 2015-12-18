@@ -30,7 +30,8 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
         laterality: notSpecified,
         pathology: notSpecified,
         collectionContainer: notSpecified,
-        collectionProcedure: notSpecified
+        collectionProcedure: notSpecified,
+        labelAutoPrintMode: 'NONE'
       }
     }
  

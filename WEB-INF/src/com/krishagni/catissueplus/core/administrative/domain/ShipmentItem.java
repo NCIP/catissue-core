@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenShipmentReceivedEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenShipmentShippedEvent;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ShipmentItem extends BaseEntity {
@@ -44,6 +46,7 @@ public class ShipmentItem extends BaseEntity {
 
 	public void ship() {
 		specimen.updatePosition(null, shipment.getShippedDate());
+		SpecimenShipmentShippedEvent.createForShipmentItem(this).saveRecordEntry();
 	}
 	
 	public void receive(ShipmentItem other) {
@@ -58,5 +61,7 @@ public class ShipmentItem extends BaseEntity {
 			
 			specimen.updatePosition(position, shipment.getReceivedDate());
 		}
+		
+		SpecimenShipmentReceivedEvent.createForShipmentItem(this).saveRecordEntry();
 	}
 }

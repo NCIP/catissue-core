@@ -1,11 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -16,8 +19,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelPrePrintMode;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -75,6 +81,13 @@ public class Visit extends BaseExtensionEntity {
 	@Autowired
 	@Qualifier("visitNameGenerator")
 	private LabelGenerator labelGenerator;
+	
+	@Autowired
+	@Qualifier("specimenLabelGenerator")
+	private LabelGenerator specimenLabelGenerator;
+	
+	@Autowired
+	private SpecimenService specimenSvc;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -391,7 +404,7 @@ public class Visit extends BaseExtensionEntity {
 			addOrUpdateMissedPoolSpmns(specimen);
 		}
 	}
-
+	
 	public static boolean isCompleted(String status) {
 		return Visit.VISIT_STATUS_COMPLETED.equals(status);
 	}
@@ -402,7 +415,32 @@ public class Visit extends BaseExtensionEntity {
 	
 	public static boolean isMissed(String status) {
 		return Visit.VISIT_STATUS_MISSED.equals(status);
-	}	
+	}
+	
+	public boolean isPrePrintEnabled() {
+		return getCollectionProtocol().getSpmnLabelPrePrintMode() == SpecimenLabelPrePrintMode.ON_VISIT_COMPLETION;
+	}
+	
+	public boolean shouldPrePrintLabels(String prevStatus) {
+		if (!isPrePrintEnabled()) {
+			return false;
+		}
+		
+		if (StringUtils.isBlank(prevStatus)) {
+			return !getStatus().equals(VISIT_STATUS_MISSED);
+		} else {
+			return prevStatus.equals(VISIT_STATUS_MISSED) && !getStatus().equals(VISIT_STATUS_MISSED);
+		}
+	}
+	
+	public void prePrintLabels(String prevStatus) {
+		if (!shouldPrePrintLabels(prevStatus)) {
+			return;
+		}
+		
+		List<Specimen> specimens = getSpecimensForPrint(getCpEvent().getTopLevelAnticipatedSpecimens(), null);
+		specimenSvc.getLabelPrinter().print(specimens, 1);
+	}
 		
 	@Override
 	public String getEntityType() {
@@ -446,5 +484,29 @@ public class Visit extends BaseExtensionEntity {
 			specimen.addPoolSpecimen(poolSpecimen);
 			poolSpecimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
 		}
+	}
+	
+	private List<Specimen> getSpecimensForPrint(Collection<SpecimenRequirement> srs, Specimen parent) {
+		List<Specimen> specimens = new ArrayList<Specimen>(); 
+		for (SpecimenRequirement sr : srs) {
+			Specimen specimen = sr.getSpecimen();
+			specimen.setVisit(this);
+			specimen.setParentSpecimen(parent);
+			specimen.setLabel(specimenLabelGenerator.generateLabel(sr.getLabelTmpl(), specimen));
+			
+			if (sr.getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
+				specimens.add(specimen);
+			}
+			
+			if (parent == null && CollectionUtils.isNotEmpty(sr.getOrderedSpecimenPoolReqs())) {
+				specimens.addAll(getSpecimensForPrint(sr.getOrderedSpecimenPoolReqs(), null));
+			}
+			
+			if (CollectionUtils.isNotEmpty(sr.getOrderedChildRequirements())) {
+				specimens.addAll(getSpecimensForPrint(sr.getOrderedChildRequirements(), specimen));
+			}
+		}
+			
+		return specimens;
 	}
 }

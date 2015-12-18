@@ -50,6 +50,7 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       }
 
       userRole.role = {name: userRole.role};
+      delete userRole.isUpdateAllowed;
       return userRole;
     }
 

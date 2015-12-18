@@ -110,63 +110,63 @@ public abstract class ImportForms implements InitializingBean {
 	protected abstract Collection<String> listFormFiles() throws IOException;
 	
 	protected abstract FormContextBean getFormContext(String formFile, Long formId);
-	
+
+	protected void saveOrUpdateFormCtx(String formFile, Long formId) {
+		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
+	}
+
 	protected abstract void cleanup();
-	
+
 	protected Map<String, Object> getTemplateProps() {
 		return new HashMap<String, Object>();
 	}
-		
-	private void importForms(Collection<String> formFiles) 
+
+	private void importForms(Collection<String> formFiles)
 	throws Exception {
 		User sysUser = userDao.getSystemUser();
 		UserContext userCtx = getUserContext(sysUser);
-		
+
 		for (String formFile : formFiles) {
 			InputStream in = null;
-			try {			
+			try {
 				in = preprocessForms(formFile);
 				String existingDigest = daoFactory.getFormDao().getFormChangeLogDigest(formFile);
 				String newDigest = Utility.getInputStreamDigest(in);
 				if (existingDigest != null && existingDigest.equals(newDigest)) {
 					continue;
 				}
-				
+
 				in.reset();
-				Long formId = Container.createContainer(userCtx, in, isCreateTable());				
+				Long formId = Container.createContainer(userCtx, in, isCreateTable());
 				saveOrUpdateFormCtx(formFile, formId);
 				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);
 			} finally {
 				IOUtils.closeQuietly(in);
 			}
-		}		
+		}
 	}
-		
+
 	private UserContext getUserContext(final User user) {
-		return new UserContext() {			
+		return new UserContext() {
 			@Override
-			public String getUserName() {				
+			public String getUserName() {
 				return user.getLoginName();
 			}
-			
+
 			@Override
 			public Long getUserId() {
 				return user.getId();
 			}
-			
+
 			@Override
 			public String getIpAddress() {
 				return null;
 			}
 		};
-	}	
-	
-	private void saveOrUpdateFormCtx(String formFile, Long formId) {
-		daoFactory.getFormDao().saveOrUpdate(getFormContext(formFile, formId));
 	}
-		
+
 	private InputStream preprocessForms(String formFile) {
-		String template = templateService.render(formFile, getTemplateProps()); 
+		String template = templateService.render(formFile, getTemplateProps());
 		return new ByteArrayInputStream( template.getBytes() );
 	}
 }

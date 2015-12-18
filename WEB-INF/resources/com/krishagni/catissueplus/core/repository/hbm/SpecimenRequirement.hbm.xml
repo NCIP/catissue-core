@@ -59,6 +59,15 @@
       column="COLLECTION_PROTOCOL_EVENT_ID"/>
 
     <property name="labelFormat" column="LABELFORMAT"/>
+    
+    <property name="labelAutoPrintMode" column="LABEL_AUTO_PRINT_MODE">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement$LabelAutoPrintMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
   

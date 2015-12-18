@@ -22,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
@@ -37,7 +38,7 @@ import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactory {
-	
+
 	private DaoFactory daoFactory;
 	
 	private LabelGenerator specimenLabelGenerator;
@@ -69,6 +70,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		
 		setCode(detail, requirement, ose);
 		setLabelFormat(detail, requirement, ose);
+		setLabelAutoPrintMode(detail, requirement, ose);
 		setSpecimenClass(detail, requirement, ose);
 		setSpecimenType(detail, requirement, ose);
 		setAnatomicSite(detail, requirement, ose);
@@ -118,6 +120,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setConcentration(req.getConcentration(), derived, ose);
 		setPathologyStatus(req.getPathology(), derived, ose);
 		setLabelFormat(req.getLabelFmt(), derived, ose);
+		setLabelAutoPrintMode(req.getLabelAutoPrintMode(), derived, ose);
 		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
 		
@@ -143,6 +146,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(req, sr, ose);
 		setStorageType(req, sr, ose);
 		setLabelFormat(req, sr, ose);
+		setLabelAutoPrintMode(req, sr, ose);
 		setCode(req, sr, ose);
 		setConcentration(req, sr, ose);
 		
@@ -201,7 +205,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			aliquot.setLabelFormat(null);
 			aliquot.setLineage(Specimen.ALIQUOT);
 			setStorageType(req.getStorageType(), aliquot, ose);
-			setLabelFormat(req.getLabelFmt(), aliquot, ose);			
+			setLabelFormat(req.getLabelFmt(), aliquot, ose);
+			setLabelAutoPrintMode(req.getLabelAutoPrintMode(), aliquot, ose);
 			aliquot.setInitialQuantity(req.getQtyPerAliquot());
 			aliquot.setParentSpecimenRequirement(parent);
 			aliquots.add(aliquot);
@@ -270,6 +275,27 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		sr.setLabelFormat(labelFmt);
 	}
 	
+
+	private void setLabelAutoPrintMode(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
+		setLabelAutoPrintMode(detail.getLabelAutoPrintMode(), sr, ose);
+	}
+	
+	private void setLabelAutoPrintMode(String input, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(input)) {
+			return;
+		}
+		
+		LabelAutoPrintMode labelAutoPrintMode = null;
+		try {
+			labelAutoPrintMode = LabelAutoPrintMode.valueOf(input); 
+		} catch (IllegalArgumentException iae) {
+			ose.addError(INVALID_LABEL_AUTO_PRINT_MODE, input);
+			return;
+		}
+		
+		sr.setLabelAutoPrintMode(labelAutoPrintMode);
+	}
+
 	private void setSpecimenClass(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		setSpecimenClass(detail.getSpecimenClass(), sr, ose);
 	}

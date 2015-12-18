@@ -25,8 +25,8 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.core.Authentication;
@@ -1118,13 +1118,27 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	private FacetDetail getFacetDetail(Long cpId, String facet) {
-		String[] attrParts = facet.split("\\.", 2);
-		Container form = Container.getContainer(attrParts[0]);
+		String[] fieldParts = facet.split("\\.");
+
+		String formName = null, fieldName = null;
+		if (fieldParts[1].equals("extensions") || fieldParts[1].equals("customFields")) {
+			if (fieldParts.length < 4) {
+				throw new IllegalArgumentException("Invalid facet: " + facet);
+			}
+
+			formName = fieldParts[2];
+			fieldName = StringUtils.join(fieldParts, ".", 3, fieldParts.length);
+		} else {
+			formName = fieldParts[0];
+			fieldName = StringUtils.join(fieldParts, ".", 1, fieldParts.length);
+		}
+
+		Container form = Container.getContainer(formName);
 		if (form == null) {
 			throw new IllegalArgumentException("Invalid facet: " + facet);
 		}
 
-		Control field = form.getControlByUdn(attrParts[1], "\\.");
+		Control field = form.getControlByUdn(fieldName, "\\.");
 		if (field == null) {
 			throw new IllegalArgumentException("Invalid facet: " + facet);
 		}
@@ -1141,7 +1155,7 @@ public class QueryServiceImpl implements QueryService {
 
 		Query query = Query.createQuery();
 		query.wideRowMode(WideRowMode.OFF)
-			.compile(attrParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
+			.compile(fieldParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
 		QueryResponse queryResp = query.getData();
 
 		QueryResultData queryResult = queryResp.getResultData();

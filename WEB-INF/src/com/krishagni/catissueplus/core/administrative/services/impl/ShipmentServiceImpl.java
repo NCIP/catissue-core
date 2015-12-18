@@ -148,7 +148,7 @@ public class ShipmentServiceImpl implements ShipmentService {
 				shipment.ship();
 			}
 			
-			getShipmentDao().saveOrUpdate(shipment);
+			getShipmentDao().saveOrUpdate(shipment, true);
 			sendEmailNotifications(shipment, null, detail.isSendMail());
 			return ResponseEvent.response(ShipmentDetail.from(shipment));
 		} catch (OpenSpecimenException ose) {

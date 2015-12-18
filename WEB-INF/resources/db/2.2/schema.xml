@@ -5,35 +5,6 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <property name="boolean.type" value="boolean" dbms="mysql" />
-  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
-
-  <property name="int.type" value="bigint" dbms="mysql" />
-  <property name="int.type" value="number(19,0)" dbms="oracle" />
-
-  <property name="smallint.type" value="smallint" dbms="mysql" />
-  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
-
-  <property name="text.type" value="varchar" dbms="mysql" />
-  <property name="text.type" value="varchar2" dbms="oracle" />
-
-  <property name="double.type" value="double"/>
-
-  <property name="autoIncrement" value="true" dbms="mysql"/>
-  <property name="autoIncrement" value="false" dbms="oracle"/>
-
-  <property name="timestamp.type" value="timestamp" dbms="mysql" />
-  <property name="timestamp.type" value="timestamp" dbms="oracle" />
-
-  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
-  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
-
-  <property name="clob.type" value="text" dbms="mysql"/>
-  <property name="clob.type" value="clob" dbms="oracle"/>
-
-  <property name="decimal.type" value="decimal" dbms="mysql"/>
-  <property name="decimal.type" value="number" dbms="oracle"/>
-
   <changeSet author="vpawar" id="Collection protocol short code">
     <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
       <column name="CODE" type="${text.type}(16)"/>
@@ -185,17 +156,17 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Creating collection protocol extension view" dbms="mysql">
-    <createView viewName="os_cp_extn_records_view">
+  <changeSet author="vlonushte" id="Creating collection protocol extension view" runOnChange="true">
+    <createView viewName="os_cp_extn_records_view" replaceIfExists="true">
       select 
-        re.OBJECT_ID AS CP_ID, re.RECORD_ID AS RECORD_ID 
+        re.object_id as cp_id, re.record_id as record_id, fc.container_id as form_id
       from 
         catissue_form_record_entry re 
-        join catissue_form_context fc on fc.IDENTIFIER = re.FORM_CTXT_ID
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
       where 
-        fc.ENTITY_TYPE = 'CollectionProtocolExtension'
+        fc.entity_type = 'CollectionProtocolExtension'
         and fc.deleted_on is null 
-        and re.ACTIVITY_STATUS = 'ACTIVE'
+        and re.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
 

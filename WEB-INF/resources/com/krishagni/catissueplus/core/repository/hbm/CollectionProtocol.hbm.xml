@@ -55,6 +55,15 @@
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
     
+    <property name="spmnLabelPrePrintMode" column="SPMN_LABEL_PRE_PRINT_MODE">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol$SpecimenLabelPrePrintMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+    
     <property name="consentsWaived" column="CONSENTS_WAIVED"/>
 
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan" order-by="id">

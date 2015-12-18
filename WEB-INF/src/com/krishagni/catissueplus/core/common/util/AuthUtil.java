@@ -1,9 +1,13 @@
 package com.krishagni.catissueplus.core.common.util;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
@@ -34,6 +38,23 @@ public class AuthUtil {
 		}
 		
 		return null;
+	}
+
+	public static void setCurrentUser(User user) {
+		setCurrentUser(user, null, null);
+	}
+
+	public static void setCurrentUser(User user, String authToken, HttpServletRequest httpReq) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, authToken, user.getAuthorities());
+		if (httpReq != null) {
+			token.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpReq));
+		}
+
+		SecurityContextHolder.getContext().setAuthentication(token);
+	}
+
+	public static void clearCurrentUser() {
+		SecurityContextHolder.clearContext();
 	}
 	
 	public static boolean isAdmin() {

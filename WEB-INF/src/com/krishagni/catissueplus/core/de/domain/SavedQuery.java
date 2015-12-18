@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.envers.NotAudited;
@@ -275,6 +276,13 @@ public class SavedQuery {
 		}
 		return true;
 	}
+
+	public SavedQuery copy() {
+		SavedQuery copy = new SavedQuery();
+		copy.setQueryDefJson(getQueryDefJson(true), true);
+		copy.selectList = curateSelectList(copy.selectList);
+		return copy;
+	}
 		
 	private ObjectMapper getReadMapper() {
 		return new ObjectMapper();
@@ -289,5 +297,19 @@ public class SavedQuery {
 				.withSetterVisibility(Visibility.NONE)
 				.withCreatorVisibility(Visibility.NONE));
 		return mapper;		
+	}
+
+	private Object[] curateSelectList(Object[] selectList) {
+		Object[] result = new Object[selectList.length];
+		int idx = 0;
+		for (Object field : selectList) {
+			if (field instanceof Map) {
+				field = new ObjectMapper().convertValue(field, SelectField.class);
+			}
+
+			result[idx++] = field;
+		}
+
+		return result;
 	}
 }

@@ -204,6 +204,16 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.pre_print_spmn_labels">Pre Print Specimen Labels</label>
+        <div class="col-xs-6">
+          <label class="radio-inline" ng-repeat="spmnLabelPrePrintMode in spmnLabelPrePrintModes">
+            <input type="radio" name="spmnLblPrePrintMode" ng-model="cp.spmnLabelPrePrintMode" ng-value="spmnLabelPrePrintMode">
+            <span>{{'cp.spmn_label_pre_print_modes.' + spmnLabelPrePrintMode | translate}}</span>
+          </label>
+        </div>
+      </div>
+
       <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
         <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl"></div>
       </div>

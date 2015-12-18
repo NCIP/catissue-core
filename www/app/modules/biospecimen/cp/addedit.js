@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, cp, extensionCtxt, User, Site, Util) {
+  .controller('CpAddEditCtrl', function($scope, $state, cp, extensionCtxt, User, Site, Util, PvManager) {
 
     function init() {
       $scope.cp = cp;
@@ -38,6 +38,8 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
          
          $scope.cp.repositoryNames = cp.getRepositoryNames();
       });
+
+      $scope.spmnLabelPrePrintModes = PvManager.getPvs('specimen-label-pre-print-modes');
     }
 
     function getPpidFmt() {

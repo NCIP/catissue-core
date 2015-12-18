@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="vgaikwad" id="Audit specimen label pre print mode">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="SPMN_LABEL_PRE_PRINT_MODE" type="${text.type}(32)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Track changes of pre print specimen label mode">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="spmnLabelPrePrintMode_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit specimen label auto print mode">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="LABEL_AUTO_PRINT_MODE" type="${text.type}(32)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Track changes of specimen label auto print mode">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="labelAutoPrintMode_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+ </databaseChangeLog> 

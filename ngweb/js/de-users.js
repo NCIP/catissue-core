@@ -4,7 +4,7 @@ openspecimen.ui = openspecimen.ui || {};
 openspecimen.ui.fancy = openspecimen.ui.fancy || {};
 
 openspecimen.ui.fancy.Users = function() {
-  var baseUrl = '/openspecimen/rest/ng/users/';
+  var baseUrl = '../../rest/ng/users/';
 
   var userCacheMap = {};
  
