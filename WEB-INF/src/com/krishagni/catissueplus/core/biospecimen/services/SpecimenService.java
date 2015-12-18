@@ -51,4 +51,5 @@ public interface SpecimenService {
 	/** Mostly present for UI **/
 	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req);
 
+	public List<Specimen> getSpecimens(List<String> labels);
 }
