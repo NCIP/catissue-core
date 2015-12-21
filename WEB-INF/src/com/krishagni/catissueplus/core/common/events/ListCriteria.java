@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.common.events;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ListCriteria<T extends ListCriteria<T>> {
 	public int startAt();
@@ -27,7 +27,7 @@ public interface ListCriteria<T extends ListCriteria<T>> {
 	
 	public T includeStat(boolean includeStat);
 	
-	public Set<Long> ids();
+	public List<Long> ids();
 	
-	public T ids(Set<Long> ids);
+	public T ids(List<Long> ids);
 }

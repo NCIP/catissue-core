@@ -1,7 +1,7 @@
 package com.krishagni.catissueplus.core.common.events;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.criterion.MatchMode;
 
@@ -19,7 +19,7 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	
 	private boolean includeStat;
 	
-	private Set<Long> ids = new HashSet<Long>();
+	private List<Long> ids = new ArrayList<Long>();
 	
 	@Override
 	public int startAt() {
@@ -92,12 +92,12 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	}
 		
 	@Override
-	public Set<Long> ids() {
+	public List<Long> ids() {
 		return ids;
 	}
 	
 	@Override
-	public T ids(Set<Long> ids) {
+	public T ids(List<Long> ids) {
 		this.ids = ids;
 		return self();
 	}
