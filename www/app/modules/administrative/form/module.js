@@ -8,21 +8,11 @@ angular.module('os.administrative.form',
 
   .config(function($stateProvider) {
     $stateProvider
-      .state('form-root', {
-        abstract: true,
-        template: '<div ui-view></div>',
-        controller: function($scope, $state) {
-          if (!$scope.currentUser.admin) {
-            $state.go('home');
-          }
-        }, 
-        parent: 'signed-in'
-      })
       .state('form-list', {
         url: '/forms',
         templateUrl: 'modules/administrative/form/list.html',
         controller: 'FormListCtrl',
-        parent: 'form-root'
+        parent: 'admin-view'
       })
       .state('form-addedit', {
         url: '/form-addedit/:formId',
@@ -37,7 +27,7 @@ angular.module('os.administrative.form',
             return new Form();
           }
         },
-        parent: 'form-root'
+        parent: 'admin-view'
       })
   });
 

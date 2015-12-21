@@ -233,7 +233,7 @@ public class Shipment extends BaseEntity {
 	}
 	
 	public void ship() {
-		if (getId() != null && isShipped()) {
+		if (isShipped()) {
 			throw OpenSpecimenException.userError(ShipmentErrorCode.ALREADY_SHIPPED);
 		}
 		

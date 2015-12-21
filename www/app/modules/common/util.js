@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function($rootScope, $timeout, $document, QueryExecutor, Alerts) {
+  .factory('Util', function($rootScope, $timeout, $document, $q, QueryExecutor, Alerts) {
     var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
@@ -198,6 +198,17 @@ angular.module('openspecimen')
       );
     }
 
+    function booleanPromise(condition) {
+      var deferred = $q.defer();
+      if (condition) {
+        deferred.resolve(true);
+      } else {
+        deferred.reject(false);
+      }
+      
+      return deferred.promise;
+    }
+
     return {
       clear: clear,
 
@@ -219,6 +230,8 @@ angular.module('openspecimen')
 
       getExtnOpts: getExtnOpts,
       
-      downloadReport : downloadReport
+      downloadReport : downloadReport,
+
+      booleanPromise: booleanPromise
     };
   });
