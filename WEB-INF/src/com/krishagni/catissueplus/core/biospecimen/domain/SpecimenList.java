@@ -144,4 +144,20 @@ public class SpecimenList {
 		setName(Utility.getDisabledValue(getName(), 255));
 		setDeletedOn(Calendar.getInstance().getTime());
 	}
+
+	public boolean isDefaultList(User user) {
+		return getDefaultListName(user).equals(getName());
+	}
+
+	public boolean isDefaultList() {
+		return isDefaultList(getOwner());
+	}
+
+	public static String getDefaultListName(User user) {
+		return getDefaultListName(user.getId());
+	}
+
+	public static String getDefaultListName(Long userId) {
+		return String.format("$$$$user_%d", userId);
+	}
 }

@@ -7,15 +7,15 @@
         </a>
       </li>
     </ul>
-    <h3>
-      <span ng-if="!list.id" translate="specimen_list.create_list">Create Specimen List</span>
-      <span ng-if="!!list.id" translate="specimen_list.update_list">Update Specimen List</span>
+    <h3 ng-switch on="!list.id && list.id != 0">
+      <span ng-switch-when="true" translate="specimen_list.create_list">Create Specimen List</span>
+      <span ng-switch-default translate="specimen_list.update_list">Update Specimen List</span>
     </h3>
   </div>
 
   <div class="container">
     <form name="listForm" class="form-horizontal" os-form-validator="listForm" validator="listFormValidator" novalidate>
-      <div class="form-group">
+      <div class="form-group" ng-if="!list.defaultList">
         <label class= "col-xs-3 control-label" translate="specimen_list.name">
           Name
         </label>
@@ -50,9 +50,9 @@
 
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="saveOrUpdateList()">
-            <span ng-if="!list.id"  translate="common.buttons.create"> Create </span>
-            <span ng-if="!!list.id" translate="common.buttons.update"> Update </span>
+          <button class="btn btn-primary" os-form-submit="saveOrUpdateList()" ng-switch on="!list.id && list.id != 0">
+            <span ng-switch-when="true"  translate="common.buttons.create"> Create </span>
+            <span ng-switch-default translate="common.buttons.update"> Update </span>
           </button>
           <button class="btn btn-danger" ng-if="list.isAllowedToDeleteList" ng-click="deleteList()">
             <span translate="common.buttons.delete">Delete</span>

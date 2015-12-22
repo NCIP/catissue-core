@@ -12,7 +12,9 @@
     <li>
       <ul class="dropdown-menu-subgroup">
         <li ng-repeat="list in specimenLists | filter: searchList" ng-click="addToList(list)">
-          <a><span>{{list.name}}</span></a>
+          <a>
+            <os-spmn-list-name list="list"></os-spmn-list-name>
+          </a>
         </li>
       </ul>
     </li>

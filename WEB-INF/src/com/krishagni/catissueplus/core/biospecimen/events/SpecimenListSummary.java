@@ -15,6 +15,8 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 
 	private UserSummary owner;
 
+	private boolean defaultList;
+
 	public Long getId() {
 		return id;
 	}
@@ -46,13 +48,22 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 	public void setOwner(UserSummary owner) {
 		this.owner = owner;
 	}
-	
+
+	public boolean isDefaultList() {
+		return defaultList;
+	}
+
+	public void setDefaultList(boolean defaultList) {
+		this.defaultList = defaultList;
+	}
+
 	public static SpecimenListSummary fromSpecimenList(SpecimenList list){
 		SpecimenListSummary listSummary = new SpecimenListSummary();
 		listSummary.setId(list.getId());
 		listSummary.setName(list.getName());
 		listSummary.setDescription(list.getDescription());
 		listSummary.setOwner(UserSummary.from(list.getOwner()));
+		listSummary.setDefaultList(list.isDefaultList());
 		return listSummary;
 	}
 }

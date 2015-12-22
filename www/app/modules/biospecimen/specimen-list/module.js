@@ -1,5 +1,6 @@
 angular.module('os.biospecimen.specimenlist', 
   [ 
+    'os.biospecimen.specimenlist.name',
     'os.biospecimen.specimenlist.list',
     'os.biospecimen.specimenlist.addedit',
     'os.biospecimen.specimenlist.specimensholder',

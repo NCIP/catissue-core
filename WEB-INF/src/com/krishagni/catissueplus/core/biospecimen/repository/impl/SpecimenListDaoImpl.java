@@ -50,7 +50,12 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		
 		return result.isEmpty() ? null : result.get(0);
 	}
-	
+
+	@Override
+	public SpecimenList getDefaultSpecimenList(Long userId) {
+		return getSpecimenListByName(SpecimenList.getDefaultListName(userId));
+	}
+
 	@Override
 	public Long getListSpecimensCount(Long listId) {
 		return ((Number) sessionFactory.getCurrentSession()
