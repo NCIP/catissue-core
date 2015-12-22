@@ -11,7 +11,9 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
     }
 
     function isAllowedToDeleteList() {
-       return !!$scope.list.id && ($scope.list.owner.id == $scope.currentUser.id || $scope.currentUser.admin)
+       return !!$scope.list.id &&
+              !$scope.list.defaultList &&
+              ($scope.list.owner.id == $scope.currentUser.id || $scope.currentUser.admin)
     }
 
     $scope.saveOrUpdateList = function() {

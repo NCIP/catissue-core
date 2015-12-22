@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -144,5 +143,21 @@ public class SpecimenList {
 	public void delete() {
 		setName(Utility.getDisabledValue(getName(), 255));
 		setDeletedOn(Calendar.getInstance().getTime());
+	}
+
+	public boolean isDefaultList(User user) {
+		return getDefaultListName(user).equals(getName());
+	}
+
+	public boolean isDefaultList() {
+		return isDefaultList(getOwner());
+	}
+
+	public static String getDefaultListName(User user) {
+		return getDefaultListName(user.getId());
+	}
+
+	public static String getDefaultListName(Long userId) {
+		return String.format("$$$$user_%d", userId);
 	}
 }

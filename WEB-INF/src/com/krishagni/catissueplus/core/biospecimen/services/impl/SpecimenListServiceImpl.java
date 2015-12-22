@@ -1,9 +1,9 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.util.CollectionUtils;
 
@@ -30,7 +30,9 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class SpecimenListServiceImpl implements SpecimenListService {
-	
+
+	private static final Pattern DEF_LIST_NAME_PATTERN = Pattern.compile("\\$\\$\\$\\$user_\\d+");
+
 	private SpecimenListFactory specimenListFactory;
 	
 	private DaoFactory daoFactory;
@@ -55,19 +57,30 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenListSummary>> getUserSpecimenLists(RequestEvent<?> req) {
 		try {
-			Long userId = AuthUtil.getCurrentUser().getId();
+			User currentUser = AuthUtil.getCurrentUser();
 			List<SpecimenList> specimenLists = new ArrayList<SpecimenList>();
 			if (AuthUtil.isAdmin()){
 				specimenLists = daoFactory.getSpecimenListDao().getSpecimenLists();
 			} else {
-				specimenLists = daoFactory.getSpecimenListDao().getUserSpecimenLists(userId);
+				specimenLists = daoFactory.getSpecimenListDao().getUserSpecimenLists(currentUser.getId());
 			}
 
 			List<SpecimenListSummary> result = new ArrayList<SpecimenListSummary>();
+			SpecimenList defUserList = null;
 			for (SpecimenList specimenList : specimenLists) {
+				if (specimenList.isDefaultList(currentUser)) {
+					defUserList = specimenList;
+					continue;
+				}
+
 				result.add(SpecimenListSummary.fromSpecimenList(specimenList));
 			}
-			
+
+			if (defUserList == null) {
+				defUserList = createDefaultList(currentUser, 0L);
+			}
+
+			result.add(0, SpecimenListSummary.fromSpecimenList(defUserList));
 			return ResponseEvent.response(result);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -79,13 +92,21 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	public ResponseEvent<SpecimenListDetails> getSpecimenList(RequestEvent<Long> req) {
 		try {
 			Long listId = req.getPayload();
-			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
+			User currentUser = AuthUtil.getCurrentUser();
+
+			SpecimenList specimenList = null;
+			if (listId == 0) {
+				specimenList = getDefaultList(currentUser);
+			} else {
+				specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
+			}
+
 			if (specimenList == null) {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
 			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
+
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(currentUser.getId())) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -167,13 +188,24 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	public ResponseEvent<ListSpecimensDetail> getListSpecimens(RequestEvent<Long> req) {
 		try {
 			Long listId = req.getPayload();
-			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
-			if (specimenList == null) {
-				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
+			User currentUser = AuthUtil.getCurrentUser();
+
+			SpecimenList specimenList = null;
+			if (listId == 0) {
+				specimenList = daoFactory.getSpecimenListDao().getDefaultSpecimenList(currentUser.getId());
+			} else {
+				specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
 			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
+
+			if (specimenList == null) {
+				if (listId != 0) {
+					return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
+				} else {
+					return ResponseEvent.response(ListSpecimensDetail.from(Collections.<Specimen>emptyList(), 0L));
+				}
+			}
+
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(currentUser.getId())) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -196,16 +228,22 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<ListSpecimensDetail>  updateListSpecimens(RequestEvent<UpdateListSpecimensOp> req) {
 		try {
+			User currentUser = AuthUtil.getCurrentUser();
 			UpdateListSpecimensOp opDetail = req.getPayload();
-			
 			Long listId = opDetail.getListId();
-			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);			
+
+			SpecimenList specimenList = null;
+			if (listId == 0) {
+				specimenList = getDefaultList(currentUser);
+			} else {
+				specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
+			}
+
 			if (specimenList == null) {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
+
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(currentUser.getId())) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -251,16 +289,22 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> shareSpecimenList(RequestEvent<ShareSpecimenListOp> req) {
 		try {
+			User currentUser = AuthUtil.getCurrentUser();
 			ShareSpecimenListOp opDetail = req.getPayload();
-			
 			Long listId = opDetail.getListId();
-			SpecimenList specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
+
+			SpecimenList specimenList = null;
+			if (listId == 0) {
+				specimenList = getDefaultList(currentUser, null);
+			} else {
+				specimenList = daoFactory.getSpecimenListDao().getSpecimenList(listId);
+			}
+
 			if (specimenList == null) {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listId);
 			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(userId)) {
+
+			if (!AuthUtil.isAdmin() && !specimenList.canUserAccess(currentUser.getId())) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -300,18 +344,45 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	private SpecimenList createDefaultList(User user, Long id) {
+		SpecimenList list = specimenListFactory.createDefaultSpecimenList(user);
+		list.setId(id);
+		return list;
+	}
+
+	private SpecimenList getDefaultList(User user) {
+		return getDefaultList(user, 0L);
+	}
+
+	private SpecimenList getDefaultList(User user, Long id) {
+		SpecimenList specimenList = daoFactory.getSpecimenListDao().getDefaultSpecimenList(user.getId());
+		if (specimenList == null) {
+			specimenList = createDefaultList(user, id);
+		}
+
+		return specimenList;
+	}
+
 	@PlusTransactional
 	private ResponseEvent<SpecimenListDetails> updateSpecimenList(RequestEvent<SpecimenListDetails> req, boolean partial) {
 		try {
+			User currentUser = AuthUtil.getCurrentUser();
 			SpecimenListDetails listDetails = req.getPayload();
-			SpecimenList existing = daoFactory.getSpecimenListDao().getSpecimenList(listDetails.getId());
+
+			SpecimenList existing = null;
+			if (listDetails.getId() == 0) {
+				existing = getDefaultList(currentUser, null);
+				listDetails.setName(existing.getName());
+			} else {
+				existing = daoFactory.getSpecimenListDao().getSpecimenList(listDetails.getId());
+			}
+
 			if (existing == null) {
 				return ResponseEvent.userError(SpecimenListErrorCode.NOT_FOUND, listDetails.getId());
 			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (!AuthUtil.isAdmin() && !existing.canUserAccess(userId)) {
+
+			if (!AuthUtil.isAdmin() && !existing.canUserAccess(currentUser.getId())) {
 				return ResponseEvent.userError(SpecimenListErrorCode.ACCESS_NOT_ALLOWED);
 			}
 			
@@ -329,6 +400,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			ensureUniqueName(existing, specimenList);
 			ensureValidSpecimensAndUsers(listDetails, specimenList, null);
 			existing.update(specimenList);
+			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
 			
 			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), null);
 			return ResponseEvent.response(SpecimenListDetails.from(existing, readAccessSpecimens));
@@ -429,9 +501,15 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	}
 	
 	private void ensureUniqueName(SpecimenList newList) {
-		SpecimenList list = daoFactory.getSpecimenListDao().getSpecimenListByName(newList.getName());
+		String newListName = newList.getName();
+
+		SpecimenList list = daoFactory.getSpecimenListDao().getSpecimenListByName(newListName);
 		if  (list != null) {
-			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME, newList.getName());
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME, newListName);
+		}
+
+		if (DEF_LIST_NAME_PATTERN.matcher(newListName).matches()) {
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.DUP_NAME, newListName);
 		}
 	}
 }

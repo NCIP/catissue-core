@@ -86,7 +86,7 @@ angular.module('os.common.models', [])
       };
 
       Model.prototype.$saveOrUpdate = function () {
-        return this.$id() ? this.$update() : this.$save();
+        return (!!this.$id() || this.$id() === 0) ? this.$update() : this.$save();
       };
 
       Model.prototype.getDependentEntities = function() {

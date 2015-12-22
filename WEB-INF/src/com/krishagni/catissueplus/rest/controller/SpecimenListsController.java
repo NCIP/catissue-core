@@ -67,6 +67,8 @@ public class SpecimenListsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenListDetails updateSpecimenList(@PathVariable Long listId, @RequestBody SpecimenListDetails details) {
+		details.setId(listId);
+
 		ResponseEvent<SpecimenListDetails> resp = specimenListSvc.updateSpecimenList(getRequest(details));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

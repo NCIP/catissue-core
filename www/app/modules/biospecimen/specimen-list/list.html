@@ -7,7 +7,7 @@
     </ul>
 
     <h3>
-      <span>{{lists.selectedList.name}}</span>
+      <os-spmn-list-name list="lists.selectedList"></os-spmn-list-name>
     </h3>
 
     <div class="os-btns right">
@@ -87,8 +87,9 @@
         <div class="row" ng-repeat="list in lists.myLists"> 
           <div class="col col-xs-12 clearfix list" 
             ng-class="{'os-specimen-list-selected-list': lists.selectedList.id == list.id}"> 
-            <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
-              <span>{{list.name}}</span>
+
+            <div class="pull-left" ng-click="selectList(list)">
+              <os-spmn-list-name list="list"></os-spmn-list-name>
             </div>
 
             <div class="pull-right">
@@ -126,8 +127,8 @@
         <div class="row" ng-repeat="list in lists.sharedLists">
           <div class="col col-xs-12 clearfix list"
             ng-class="{'os-specimen-list-selected-list': lists.selectedList.id == list.id}"> 
-            <div class="pull-left" ng-click="selectList(list)" title="{{list.name}}">
-              <span>{{list.name}}</span>
+            <div class="pull-left" ng-click="selectList(list)">
+              <os-spmn-list-name list="list"></os-spmn-list-name>
             </div>
            <div class="pull-right">
               <button type="button" class="btn btn-xs btn-default" ui-sref="specimen-list-addedit({listId: list.id})">

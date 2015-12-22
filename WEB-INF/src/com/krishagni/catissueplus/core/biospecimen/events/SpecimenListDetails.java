@@ -42,6 +42,7 @@ public class SpecimenListDetails extends SpecimenListSummary {
 		details.setOwner(UserSummary.from(list.getOwner()));
 		details.setSharedWith(UserSummary.from(list.getSharedWith()));
 		details.setSpecimens(SpecimenDetail.from(specimens));
+		details.setDefaultList(list.isDefaultList());
 		return details;
 		
 	}

@@ -1321,6 +1321,8 @@
     "create_new_list": "Create New",
     "manage_lists": "Manage Carts",
     "search_list": "Search Specimen Cart",
+    "default_list": "Default Specimen Cart",
+    "user_default_list": "{{firstName}} {{lastName}} Default Specimen Cart",
     "lists": "Specimen Carts",
     "name": "Name",
     "share_list_with_users": "Share cart with following users",

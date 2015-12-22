@@ -20,6 +20,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriter
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
 public class SpecimenListFactoryImpl implements SpecimenListFactory {
 	private DaoFactory daoFactory;
@@ -54,7 +55,15 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		ose.checkAndThrow();
 		return specimenList;
 	}
-	
+
+	public SpecimenList createDefaultSpecimenList(User user) {
+		SpecimenList specimenList = new SpecimenList();
+		specimenList.setOwner(user);
+		specimenList.setName(SpecimenList.getDefaultListName(user));
+		specimenList.setDescription(MessageUtil.getInstance().getMessage("specimen_list_default_user_list"));
+		return specimenList;
+	}
+
 	private void setSpecimenListAttributes(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
 		if (specimenList.getId() == null && details.getId() != null) {
 			specimenList.setId(details.getId()); 
