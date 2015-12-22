@@ -49,6 +49,11 @@ angular.module('os.administrative.shipment',
                 return shipment;
               }
             );
+          },
+
+          isEditAllowed: function(shipment, Util) {
+            var editAllowed = !shipment.status || shipment.status == 'Pending';
+            return Util.booleanPromise(editAllowed);
           }
         },
         controller: 'ShipmentAddEditCtrl',
@@ -108,6 +113,10 @@ angular.module('os.administrative.shipment',
         resolve: {
           shipment: function($stateParams , Shipment) {
             return Shipment.getById($stateParams.shipmentId);
+          },
+          
+          isReceiveAllowed: function(shipment, Util) {
+            return Util.booleanPromise(shipment.status == 'Shipped');
           }
         },
         controller: 'ShipmentReceiveCtrl',

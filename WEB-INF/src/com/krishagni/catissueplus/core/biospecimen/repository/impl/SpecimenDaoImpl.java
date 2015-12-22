@@ -33,10 +33,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		Criteria query = getSessionFactory().getCurrentSession().createCriteria(Specimen.class)
 				.addOrder(Order.asc("id"))
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
-		List<String> labels = crit.labels();
-		if (CollectionUtils.isNotEmpty(labels)) {
-			addLabelsCond(query, labels);
+
+		if (CollectionUtils.isNotEmpty(crit.ids())) {
+			addIdsCond(query, crit.ids());
+		} else if (CollectionUtils.isNotEmpty(crit.labels())) {
+			addLabelsCond(query, crit.labels());
 		} else {
 			query.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
 				.setMaxResults(crit.maxResults() <= 0 ? 100 : crit.maxResults());
@@ -174,17 +175,25 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 				.list();
 	}
 
+	private void addIdsCond(Criteria query, List<Long> ids) {
+		addInCond(query, "id", ids);
+	}
+
 	private void addLabelsCond(Criteria query, List<String> labels) {
-		int numLabels = labels.size();		
+		addInCond(query, "label", labels);
+	}
+
+	private <T> void addInCond(Criteria query, String property, List<T> values) {
+		int numValues = values.size();
 		Disjunction labelIn = Restrictions.disjunction();
-		
-		for (int i = 0; i < numLabels; i += 500) {
-			List<String> params = labels.subList(i, i + 500 > numLabels ? numLabels : i + 500);
-			labelIn.add(Restrictions.in("label", params));
+
+		for (int i = 0; i < numValues; i += 500) {
+			List<T> params = values.subList(i, i + 500 > numValues ? numValues : i + 500);
+			labelIn.add(Restrictions.in(property, params));
 			i += 500;
 		}
-		
-		query.add(labelIn);		
+
+		query.add(labelIn);
 	}
 	
 	private void addSiteCpsCond(Criteria query, List<Pair<Long, Long>> siteCps) {

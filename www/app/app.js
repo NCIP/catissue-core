@@ -77,15 +77,8 @@ osApp.config(function(
         abstract: true,
         template: '<div ui-view></div>',
         resolve: {
-          isAdmin: function(currentUser, $q) {
-            var adminCheck = $q.defer();
-            if (currentUser.admin) {
-              adminCheck.resolve(true);
-            } else {
-              adminCheck.reject(false);
-            }
-            
-            return adminCheck.promise;
+          isAdmin: function(currentUser, Util) {
+            return Util.booleanPromise(currentUser.admin);
           }
         },
         parent: 'signed-in'

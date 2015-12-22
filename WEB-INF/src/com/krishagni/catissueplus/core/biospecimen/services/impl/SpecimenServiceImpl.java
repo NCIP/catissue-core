@@ -111,7 +111,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<String>> req) {
 		try {
-			List<Specimen> specimens = getSpecimens(req.getPayload());
+			List<Specimen> specimens = getSpecimensByLabel(req.getPayload());
 			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, req.getPayload())));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -383,20 +383,31 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 	@Override
 	@PlusTransactional
-	public List<Specimen> getSpecimens(List<String> labels) {
+	public List<Specimen> getSpecimensByLabel(List<String> labels) {
 		if (CollectionUtils.isEmpty(labels)) {
 			throw OpenSpecimenException.userError(CommonErrorCode.INVALID_REQUEST);
 		}
 
+		return getSpecimens(new SpecimenListCriteria().labels(labels));
+	}
+
+	@Override
+	@PlusTransactional
+	public List<Specimen> getSpecimensById(List<Long> ids) {
+		if (CollectionUtils.isEmpty(ids)) {
+			throw OpenSpecimenException.userError(CommonErrorCode.INVALID_REQUEST);
+		}
+
+		return getSpecimens(new SpecimenListCriteria().ids(ids));
+	}
+
+	private List<Specimen> getSpecimens(SpecimenListCriteria crit) {
 		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
 			return Collections.<Specimen>emptyList();
 		}
 
-		SpecimenListCriteria crit = new SpecimenListCriteria()
-			.labels(labels)
-			.siteCps(siteCpPairs);
-
+		crit.siteCps(siteCpPairs);
 		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
 

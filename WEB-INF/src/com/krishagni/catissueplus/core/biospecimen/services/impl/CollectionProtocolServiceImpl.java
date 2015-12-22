@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -120,7 +121,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			if (cpIds != null && cpIds.isEmpty()) {
 				return ResponseEvent.response(Collections.<CollectionProtocolSummary>emptyList());
 			} else if (cpIds != null) {
-				crit.ids(cpIds);
+				crit.ids(new ArrayList<Long>(cpIds));
 			}
 			
 			List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit);			
@@ -821,7 +822,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			if (cpIds != null && cpIds.isEmpty()) {
 				return ResponseEvent.response(Collections.<CollectionProtocolSummary>emptyList());
 			} else if (cpIds != null) {
-				crit.ids(cpIds);
+				crit.ids(new ArrayList<Long>(cpIds));
 			}
 			
 			List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit);			

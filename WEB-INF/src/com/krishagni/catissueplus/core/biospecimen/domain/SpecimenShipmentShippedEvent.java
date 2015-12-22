@@ -28,7 +28,7 @@ public class SpecimenShipmentShippedEvent extends SpecimenEvent {
 	
 	public static SpecimenShipmentShippedEvent createForShipmentItem(ShipmentItem item) {
 		SpecimenShipmentShippedEvent event = new SpecimenShipmentShippedEvent(item.getSpecimen());
-		event.setId(item.getShipment().getId());
+		event.setId(item.getId());
 		return event;
 	}
 }

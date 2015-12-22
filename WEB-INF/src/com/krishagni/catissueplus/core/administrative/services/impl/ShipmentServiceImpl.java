@@ -135,20 +135,24 @@ public class ShipmentServiceImpl implements ShipmentService {
 		try {
 			AccessCtrlMgr.getInstance().ensureCreateShipmentRights();
 			ShipmentDetail detail = req.getPayload();
-			Shipment shipment = shipmentFactory.createShipment(detail, detail.getStatus() == null ? Status.PENDING : null);
+			Shipment shipment = shipmentFactory.createShipment(detail, Status.PENDING);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureValidShipmentStatus(shipment, ose);
+			ensureValidShipmentStatus(shipment, detail.getStatus(), ose);
 			ensureUniqueConstraint(null, shipment, ose);
 			ensureValidSpecimens(shipment, ose);
 			ensureValidNotifyUsers(shipment, ose);
 			ose.checkAndThrow();
 			
-			if (shipment.isShipped()) {
+			//
+			//  Saved to obtain IDs to make shipment events
+			//
+			getShipmentDao().saveOrUpdate(shipment, true);
+			Status status = Status.fromName(detail.getStatus());
+			if (status == Status.SHIPPED) {
 				shipment.ship();
 			}
 			
-			getShipmentDao().saveOrUpdate(shipment, true);
 			sendEmailNotifications(shipment, null, detail.isSendMail());
 			return ResponseEvent.response(ShipmentDetail.from(shipment));
 		} catch (OpenSpecimenException ose) {
@@ -268,8 +272,17 @@ public class ShipmentServiceImpl implements ShipmentService {
 		return specimens;
 	}
 	
-	private void ensureValidShipmentStatus(Shipment shipment, OpenSpecimenException ose) {
-		if (shipment.getId() == null && shipment.isReceived()) {
+	private void ensureValidShipmentStatus(Shipment shipment, String shipmentStatus, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(shipmentStatus)) {
+			return;
+		}
+		
+		Status status = Status.fromName(shipmentStatus);
+		if (status == null) {
+			ose.addError(ShipmentErrorCode.INVALID_STATUS);
+		}
+		
+		if (status == Status.RECEIVED) {
 			ose.addError(ShipmentErrorCode.NOT_SHIPPED_TO_RECV, shipment.getName());
 		}
 	}

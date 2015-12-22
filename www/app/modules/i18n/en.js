@@ -408,6 +408,7 @@
 
     "unplanned": "Unplanned",
 
+    "id": "Identifier",
     "lineage": "Lineage",
     "label": "Label",
     "type": "Type",
@@ -1240,7 +1241,6 @@
       "type_id_or_title": "Enter query ID or title to search queries"
     },
 
-    "refine_results": "Refine Results",
     "catalogs": "Catalogs",
     "search_cp": "Search Collection Protocol",
     "no_catalog": "No catalog configured for {{shortTitle}}"
