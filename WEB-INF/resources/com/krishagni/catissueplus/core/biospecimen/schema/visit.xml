@@ -62,6 +62,21 @@
       <attribute>surgicalPathologyNumber</attribute>
     </field>  
 
+    <record>
+      <attribute>missedBy</attribute>
+      <caption>#getMessage("visit_missed_by")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("visit_missed_reason")</caption>
+      <attribute>missedReason</attribute>
+    </field>  
+
     <field>
       <caption>#getMessage("visit_comments")</caption>
       <attribute>comments</attribute>
