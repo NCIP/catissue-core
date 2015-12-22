@@ -21,8 +21,12 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
       link: function(scope, element, attrs) {
         loadAllSpecimenList(scope);
 
-        scope.addToList= function(list){
+        scope.addToList = function(list) {
           scope.onAddToList({list: list});
+        }
+
+        scope.addToDefaultList = function() {
+          scope.onAddToList({list: new SpecimenList({id: 0})});
         }
       }
     }
