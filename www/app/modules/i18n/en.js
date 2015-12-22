@@ -557,7 +557,7 @@
       "create_derivative": "Create Derivative",
       "collect": "Collect",
       "print": "Print",
-      "assign_to": "Cart",
+      "assign_to": "Add to Cart",
       "reopen": "Reopen",
       "close": "Close"
     },
