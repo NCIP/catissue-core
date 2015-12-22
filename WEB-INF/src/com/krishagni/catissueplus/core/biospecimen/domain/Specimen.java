@@ -602,7 +602,10 @@ public class Specimen extends BaseExtensionEntity {
 		
 		setLabel(specimen.getLabel());
 		setBarcode(specimen.getBarcode());
-		
+		setInitialQuantity(specimen.getInitialQuantity());
+		setAvailableQuantity(specimen.getAvailableQuantity());
+		setIsAvailable(specimen.getIsAvailable());
+
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		updateCollectionStatus(specimen.getCollectionStatus());
@@ -640,9 +643,6 @@ public class Specimen extends BaseExtensionEntity {
 		setConcentration(spmnToUpdateFrom.getConcentration());
 		setPathologicalStatus(spmnToUpdateFrom.getPathologicalStatus());
 
-		setInitialQuantity(specimen.getInitialQuantity());		
-		setAvailableQuantity(specimen.getAvailableQuantity());
-		setIsAvailable(specimen.getIsAvailable());
 		setComment(specimen.getComment());
 		setExtension(specimen.getExtension());
 		updatePosition(specimen.getPosition());
