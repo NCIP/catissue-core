@@ -208,8 +208,8 @@
         <label class="col-xs-3 control-label" translate="cp.pre_print_spmn_labels">Pre Print Specimen Labels</label>
         <div class="col-xs-6">
           <label class="radio-inline" ng-repeat="spmnLabelPrePrintMode in spmnLabelPrePrintModes">
-            <input type="radio" name="spmnLblPrePrintMode" ng-model="cp.spmnLabelPrePrintMode" ng-value="spmnLabelPrePrintMode">
-            <span>{{'cp.spmn_label_pre_print_modes.' + spmnLabelPrePrintMode | translate}}</span>
+            <input type="radio" name="spmnLblPrePrintMode" ng-model="cp.spmnLabelPrePrintMode" ng-value="spmnLabelPrePrintMode.name">
+            <span>{{spmnLabelPrePrintMode.displayName}}</span>
           </label>
         </div>
       </div>
