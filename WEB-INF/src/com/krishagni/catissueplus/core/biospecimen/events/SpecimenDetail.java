@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -50,6 +51,9 @@ public class SpecimenDetail extends SpecimenInfo {
 	private Boolean poolSpecimen;
 	
 	private String reqCode;
+
+	// For BO template
+	private boolean forceDelete;
 	
 	private ExtensionDetail extensionDetail;
 	
@@ -167,6 +171,15 @@ public class SpecimenDetail extends SpecimenInfo {
 
 	public boolean closeParent() {
 		return closeParent == null ? false : closeParent;
+	}
+
+	@JsonIgnore
+	public boolean getForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
 	}
 
 	public ExtensionDetail getExtensionDetail() {

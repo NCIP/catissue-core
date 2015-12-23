@@ -113,6 +113,8 @@ public class Specimen extends BaseExtensionEntity {
 	@Qualifier("specimenLabelGenerator")
 	private LabelGenerator labelGenerator;
 	
+	private transient boolean forceDelete;
+	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -487,6 +489,14 @@ public class Specimen extends BaseExtensionEntity {
 		this.labelGenerator = labelGenerator;
 	}
 
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
+
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(getActivityStatus());
 	}
@@ -532,7 +542,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 
 	public void disable() {
-		disable(true);
+		disable(!isForceDelete());
 	}
 
 	public void disable(boolean checkChildSpecimens) {
@@ -542,6 +552,14 @@ public class Specimen extends BaseExtensionEntity {
 
 		if (checkChildSpecimens) {
 			ensureNoActiveChildSpecimens();
+		}
+		
+		for (Specimen child : getChildCollection()) {
+			child.disable(checkChildSpecimens);
+		}
+		
+		for (Specimen specimen : getSpecimensPool()) {
+			specimen.disable(checkChildSpecimens);
 		}
 
 		virtualize(null);
@@ -594,7 +612,8 @@ public class Specimen extends BaseExtensionEntity {
 		return getVisit().getRegistration();
 	}
 
-	public void update(Specimen specimen) {	
+	public void update(Specimen specimen) {
+		setForceDelete(specimen.isForceDelete());
 		updateStatus(specimen.getActivityStatus(), null);
 		if (!isActive()) {
 			return;
