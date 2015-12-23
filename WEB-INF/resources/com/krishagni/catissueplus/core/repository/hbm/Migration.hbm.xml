@@ -48,7 +48,7 @@
       </type>
     </property>
 
-    <property name="date" type="timestamp" column="DATE" />	
+    <property name="date" type="timestamp" column="MIGRATION_DATE" />	
 
     <query name="getMigrationInfo"> 
       select 

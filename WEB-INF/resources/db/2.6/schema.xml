@@ -18,4 +18,12 @@
       </column>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Rename date to migration_date in os_migraitons table">
+    <renameColumn
+      columnDataType="${timestamp.type}"
+      oldColumnName="DATE"
+      newColumnName="MIGRATION_DATE"
+      tableName="OS_MIGRATIONS"/>
+  </changeSet>
 </databaseChangeLog>
