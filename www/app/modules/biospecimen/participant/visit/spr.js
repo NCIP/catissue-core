@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
-  .controller('VisitSprCtrl', function($scope, $sce, visit, DeleteUtil, Alerts) {
+  .controller('VisitSprCtrl', function($scope, $sce, visit, DeleteUtil, Alerts, $window) {
 
     function init() {
       $scope.sprUploader = {};
@@ -18,6 +18,7 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
       visit.getSprText().then(
         function(sprText) {
           $scope.spr.text = sprText;
+          $scope.spr.isTextSpr = (sprText == '' ? false : true);
         }
       );
     }
@@ -74,6 +75,10 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
           Alerts.success("visits.spr_unlocked");
         }
       });
+    }
+    
+    $scope.downloadSpr = function() {
+      $window.open($scope.sprUrl, '_blank');
     }
 
     init();

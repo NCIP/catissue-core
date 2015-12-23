@@ -365,6 +365,7 @@
     "spr_unlocked": "Surgical pathology report unlocked successfully.",
     "spr_pdf": "PDF",
     "spr_text": "Text",
+    "non_text_spr": "Cannot display this report since it is not in text format.",
     "reason": "Reason",
     "search_results": "Visit Search Result for {{key}}",
 
