@@ -84,7 +84,7 @@ angular.module('openspecimen')
           $state.go($rootScope.reqState.name, $rootScope.reqState.params);
           $rootScope.reqState = undefined;
         } else {
-          $state.go('home');
+          $state.go('cp-list');
         }
       } else {
         $rootScope.currentUser = {};

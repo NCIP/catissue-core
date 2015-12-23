@@ -34,7 +34,22 @@ angular.module('os.biospecimen.cp',
         url: '', 
         templateUrl: 'modules/biospecimen/cp/list.html',
         controller: 'CpListCtrl',
-        parent: 'cps'
+        parent: 'cps',
+        resolve: {
+          cpList: function(CollectionProtocol) {
+            return CollectionProtocol.query();
+          },
+          
+          view: function($rootScope, $state, cpList) {
+            if ($rootScope.stateChangeInfo.fromState.name == 'login') {
+              if (cpList.length == 1) {
+                $state.go('participant-list', {cpId: cpList[0].id});
+              } else if (cpList.length == 0) {
+                $state.go('home');
+              }
+            }
+          }
+        }
       })
       .state('import-biospecimen-objs', {
         url: '/bulk-import?objectType&entityType',
