@@ -5,7 +5,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     'os.biospecimen.participant.collect-specimens',
   ])
   .directive('osSpecimenTree', function(
-    $state, $stateParams, $modal, $timeout,
+    $state, $stateParams, $modal, $timeout, $rootScope,
     CollectSpecimensSvc, Specimen, SpecimenLabelPrinter, SpecimensHolder,
     Alerts, PvManager, Util, DeleteUtil, SpecimenUtil) {
 
@@ -253,9 +253,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
 
           if (!!list) {
-            list.addSpecimens(selectedSpecimens).then(function(specimens) {
-              Alerts.success('specimen_list.specimens_added', {name: list.name});
-            })
+            list.addSpecimens(selectedSpecimens).then(
+              function(specimens) {
+                var listType = list.getListType($rootScope.currentUser);
+                Alerts.success('specimen_list.specimens_added_to_' + listType , list);
+              }
+            )
           } else {
             SpecimensHolder.setSpecimens(selectedSpecimens);
             $state.go('specimen-list-addedit', {listId: ''});

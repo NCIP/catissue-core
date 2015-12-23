@@ -1,8 +1,8 @@
 <span ng-switch on="listType">
-  <span ng-switch-when="selfDefaultList" title="{{'specimen_list.default_list' | translate}}">
+  <span ng-switch-when="default_list" title="{{'specimen_list.default_list' | translate}}">
     {{'specimen_list.default_list' | translate}}
   </span>
-  <span ng-switch-when="othersDefaultList" title="{{'specimen_list.user_default_list' | translate: list.owner}}">
+  <span ng-switch-when="user_default_list" title="{{'specimen_list.user_default_list' | translate: list.owner}}">
     {{'specimen_list.user_default_list' | translate: list.owner}}
   </span>
   <span ng-switch-default title="{{list.name}}">

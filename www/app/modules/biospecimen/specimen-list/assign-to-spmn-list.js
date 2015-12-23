@@ -26,7 +26,13 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
         }
 
         scope.addToDefaultList = function() {
-          scope.onAddToList({list: new SpecimenList({id: 0})});
+          var defList = new SpecimenList({
+            id: 0, 
+            name: '$$$$user_' + $rootScope.currentUser.id, 
+            owner: $rootScope.currentUser
+          });
+
+          scope.onAddToList({list: defList});
         }
       }
     }

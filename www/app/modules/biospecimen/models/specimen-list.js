@@ -2,6 +2,8 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
   .factory('SpecimenList', function(osModel, $http) {
     var SpecimenList = osModel('specimen-lists');
 
+    var def_list_name_pattern = /\$\$\$\$user_\d+/;
+
     function getSpecimensUrl(id) {
       return SpecimenList.url() + id + '/specimens';
     }
@@ -44,6 +46,17 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
       return doSpecimenListOp(this.$id(), specimens, 'UPDATE');
     }
 
+    SpecimenList.prototype.getListType = function(user) {
+      if (this.name === undefined || this.name === null || def_list_name_pattern.exec(this.name) == null) {
+        return 'normal_list';
+      }
+
+      if (this.owner.id == user.id) {
+        return 'default_list';
+      } else {
+        return 'user_default_list';
+      }
+    }
 
     return SpecimenList;
   });
