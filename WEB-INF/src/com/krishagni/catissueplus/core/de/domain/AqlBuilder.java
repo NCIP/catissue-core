@@ -175,7 +175,7 @@ public class AqlBuilder {
 		Container form = null;
 		String ctrlName = null;
 		Control ctrl = null;
-		if (fieldParts[1].equals("extensions")) {
+		if (fieldParts[1].equals("extensions") || fieldParts[1].equals("customFields")) {
 			if (fieldParts.length < 4) {
 				return "";
 			}

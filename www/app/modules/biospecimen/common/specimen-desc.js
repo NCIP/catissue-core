@@ -15,12 +15,8 @@ angular.module('os.biospecimen.common.specimendesc', [])
         scope.detailed = attrs.detailed === 'true';
       },
 
-      template: 
+      template:
         '<span class="os-specimen-desc">' +
-          '<span ng-if="showReqLabel && !!specimen.reqLabel">' +
-            '{{specimen.reqLabel}}: ' +
-          '</span>' +
-
           '<span ng-if="(specimen.lineage == \'New\' && !specimen.pooledSpecimen) || detailed">' +
             '<span ng-if="!!specimen.pathology && specimen.pathology != notSpecified">' +
               '{{specimen.pathology}} ' +
@@ -33,6 +29,12 @@ angular.module('os.biospecimen.common.specimendesc', [])
             '<span ng-if="specimen.specimenClass == \'Fluid\' && ' +
               '!!specimen.collectionContainer && specimen.collectionContainer != notSpecified">' +
               '<span translate="specimens.collected_in">collected in</span> {{specimen.collectionContainer}}' +
+            '</span>' +
+            '<span ng-if="!!showReqLabel" ng-switch on="!!specimen.name || !!specimen.reqLabel">' +
+              '<span ng-switch-when="true"> ({{specimen.name || specimen.reqLabel}}) </span>' +
+              '<span ng-switch-default>' +
+                '<span ng-if="!!specimen.code || !!specimen.reqCode"> ({{specimen.code || specimen.reqCode}}) </span>' +
+              '</span>' +
             '</span>' +
           '</span>' +
           '<span ng-if="specimen.lineage == \'New\' && !!specimen.pooledSpecimen && !detailed">' +

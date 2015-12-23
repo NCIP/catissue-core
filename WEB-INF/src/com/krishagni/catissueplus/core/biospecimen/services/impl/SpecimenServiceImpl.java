@@ -125,7 +125,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req) {
 		try {
 			SpecimenDetail detail = req.getPayload();
-			Specimen specimen = saveOrUpdate(detail, null, null, false);
+			Specimen specimen = saveOrUpdate(detail, null, null);
 			return ResponseEvent.response(SpecimenDetail.from(specimen, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -137,13 +137,22 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> updateSpecimen(RequestEvent<SpecimenDetail> req) {
-		return updateSpecimen(req.getPayload(), false);
-	}
-	
-	@Override
-	@PlusTransactional
-	public ResponseEvent<SpecimenDetail> patchSpecimen(RequestEvent<SpecimenDetail> req) {
-		return updateSpecimen(req.getPayload(), true);
+		try {
+			SpecimenDetail detail = req.getPayload();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			Specimen existing = getSpecimen(detail.getId(), detail.getLabel(), ose);
+			if (existing == null) {
+				return ResponseEvent.error(ose);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
+			saveOrUpdate(detail, existing, null);
+			return ResponseEvent.response(SpecimenDetail.from(existing, false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
@@ -527,7 +536,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				existing.getSpecimensPool().addAll(specimensPool);
 			}
 
-			specimen = saveOrUpdate(detail, existing, parent, false);
+			specimen = saveOrUpdate(detail, existing, parent);
 		}
 		
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
@@ -547,32 +556,14 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 		return specimen;
 	}
-
-	private ResponseEvent<SpecimenDetail> updateSpecimen(SpecimenDetail detail, boolean partial) {
-		try {
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen existing = getSpecimen(detail.getId(), detail.getLabel(), ose);
-			if (existing == null) {
-				return ResponseEvent.error(ose);
-			}
-			
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
-			saveOrUpdate(detail, existing, null, partial);
-			return ResponseEvent.response(SpecimenDetail.from(existing, false));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
 	
-	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent, boolean partial) {
+	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
 		if (existing != null && !existing.isActive()) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, existing.getLabel());
 		}
 
 		Specimen specimen = null;		
-		if (partial) {
+		if (existing != null) {
 			specimen = specimenFactory.createSpecimen(existing, detail, parent);
 		} else {
 			specimen = specimenFactory.createSpecimen(detail, parent);

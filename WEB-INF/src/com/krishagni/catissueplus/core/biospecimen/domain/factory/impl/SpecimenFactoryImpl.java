@@ -291,8 +291,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	
 	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, Specimen existing, OpenSpecimenException ose) {
 		Long reqId = detail.getReqId();
+		SpecimenRequirement existingReq = existing != null ? existing.getSpecimenRequirement() : null;
 		if (reqId == null) {
-			return existing != null ? existing.getSpecimenRequirement() : null;
+			return existingReq;
+		}
+
+		Long existingReqId = existingReq != null ? existingReq.getId() : null;
+		if (reqId.equals(existingReqId)) {
+			return existingReq;
 		}
 		
 		SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(reqId);

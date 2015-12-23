@@ -72,16 +72,17 @@ angular.module('openspecimen')
       'Unacceptable'
     ];
 
-    var spmnLabelPrePrintModes= [
-      'ON_REGISTRATION',
-      'ON_VISIT_COMPLETION',
-      'NONE'
+    var spmnLabelPrePrintModes = [
+      {name: 'ON_REGISTRATION', displayKey:'cp.spmn_label_pre_print_modes.ON_REGISTRATION'},
+      {name: 'ON_VISIT_COMPLETION', displayKey:'cp.spmn_label_pre_print_modes.ON_VISIT_COMPLETION'},
+      {name: 'NONE', displayKey:'cp.spmn_label_pre_print_modes.NONE'}
     ];
 
+
     var spmnLabelAutoPrintModes = [
-      {name: 'PRE_PRINT', displayName: "Pre Print"},
-      {name: 'ON_COLLECTION', displayName: "On Collection"},
-      {name: 'NONE', displayName: "None"}
+      {name: 'PRE_PRINT', displayKey:'srs.spmn_label_auto_print_modes.PRE_PRINT'},
+      {name: 'ON_COLLECTION', displayKey:'srs.spmn_label_auto_print_modes.ON_COLLECTION'},
+      {name: 'NONE', displayKey:'srs.spmn_label_auto_print_modes.NONE'}
     ];
 
     var pvMap = {
@@ -177,6 +178,9 @@ angular.module('openspecimen')
       var result = undefined;
       if (pvMap[attr]) {
         result = pvMap[attr];
+        if (hasI18nKey(result) && !isDisplayNameInitialized(result)) {
+          initDisplayNames(result);
+        }
       } else {
         result = [];
       }
@@ -184,6 +188,23 @@ angular.module('openspecimen')
       return deferred.promise;
     };
 
+    function hasI18nKey(pvs) {
+      return !!pvs[0].displayKey;
+    }
+
+    function isDisplayNameInitialized(pvs) {
+      return !!pvs[0].displayName;
+    }
+
+    function initDisplayNames(pvs) {
+      $translate('pvs.not_specified').then(
+        function() {
+          angular.forEach(pvs, function(pv) {
+            pv.displayName = $translate.instant(pv.displayKey);
+          });
+        }
+      );
+    }
 
     return {
       getPvs: function(attr, srchTerm, transformFn) {

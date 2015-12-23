@@ -24,7 +24,7 @@ public class SpecimenImporter implements ObjectImporter<SpecimenDetail, Specimen
 			if (detail.isCreate()) {
 				return specimenSvc.createSpecimen(specReq);
 			} else {
-				return specimenSvc.patchSpecimen(specReq);
+				return specimenSvc.updateSpecimen(specReq);
 			}
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
