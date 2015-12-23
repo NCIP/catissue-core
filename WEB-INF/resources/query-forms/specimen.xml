@@ -290,6 +290,26 @@
             <maxLength>255</maxLength>
           </textField>              
         </row>
+        <row>
+          <subForm>
+            <name>containerStats</name>
+            <udn>containerStats</udn>
+            <caption>#getMessage("specimen_spec_position_container_stats")</caption>
+            <table>OS_STORAGE_CONT_STATS_VIEW</table>
+            <foreignKey>CONTAINER_ID</foreignKey>
+            <parentKey>CONTAINER_IDENTIFIER</parentKey>
+            <primaryKey>CONTAINER_ID</primaryKey>
+            <row>
+              <textField>
+                <name>containerHierarchy</name>
+                <udn>containerHierarchy</udn>
+                <caption>#getMessage("specimen_spec_position_container_hierarchy")</caption>
+                <column>CONTAINER_HIERARCHY</column>
+                <maxLength>255</maxLength>
+              </textField>
+            </row>
+          </subForm>
+        </row>
       </subForm>
     </row>
 
