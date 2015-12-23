@@ -227,7 +227,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 					break;				
 			}
 			
-			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList);
+			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList, true);
 			
 			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(specimenList.getId());
 			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), siteCpPairs);
@@ -317,9 +317,9 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			ensureUniqueName(existing, specimenList);
 			ensureValidSpecimensAndUsers(listDetails, specimenList, null);
 			existing.update(specimenList);
-			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
+			daoFactory.getSpecimenListDao().saveOrUpdate(existing, true);
 			
-			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), null);
+			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(existing.getId(), null);
 			return ResponseEvent.response(SpecimenListDetails.from(existing, readAccessSpecimens));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
