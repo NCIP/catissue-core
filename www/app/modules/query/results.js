@@ -16,7 +16,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
   })
   .controller('QueryResultsCtrl', function(
-    $rootScope, $scope, $state, $stateParams, $modal, $document, $timeout,
+    $rootScope, $scope, $state, $stateParams, $modal, $document, $timeout, currentUser,
     queryCtx, cps, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
@@ -563,7 +563,8 @@ angular.module('os.query.results', ['os.query.models'])
       } else {
         list.addSpecimens(selectedSpecimens).then(
           function(specimens) {
-            Alerts.success('specimen_list.specimens_added', {name: list.name});
+            var type = list.getListType(currentUser);
+            Alerts.success('specimen_list.specimens_added_to_' + type, list);
           }
         );
       }

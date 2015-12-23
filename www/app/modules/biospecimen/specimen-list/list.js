@@ -62,7 +62,9 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
         function(listSpecimens) {
           $scope.listSpecimens = listSpecimens;
           $scope.selection = resetSelection();
-          Alerts.success('specimen_list.specimens_removed', {name: list.name});
+
+          var type = list.getListType(currentUser);
+          Alerts.success('specimen_list.specimens_removed_from_' + type, list);
         }
       );
     }
@@ -118,8 +120,11 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
         return;
       }
 
+      var selectedList = $scope.lists.selectedList;
+      var listType = selectedList.getListType(currentUser);
       DeleteUtil.confirmDelete({
-        entity: $scope.lists.selectedList,
+        entity: selectedList,
+        props: {messageKey: 'specimen_list.confirm_remove_specimens_from_' + listType},
         templateUrl: 'modules/biospecimen/specimen-list/confirm-remove-specimens.html',
         delete: removeSpecimensFromList
       });
