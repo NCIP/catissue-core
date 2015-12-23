@@ -49,6 +49,8 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private Boolean poolSpecimen;
 	
+	private String reqCode;
+	
 	private ExtensionDetail extensionDetail;
 	
 	public CollectionEventDetail getCollectionEvent() {
@@ -154,6 +156,14 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setPoolSpecimen(Boolean poolSpecimen) {
 		this.poolSpecimen = poolSpecimen;
 	}
+	
+	public String getReqCode() {
+		return reqCode;
+	}
+
+	public void setReqCode(String reqCode) {
+		this.reqCode = reqCode;
+	}
 
 	public boolean closeParent() {
 		return closeParent == null ? false : closeParent;
@@ -196,6 +206,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		
 		result.setLabelFmt(specimen.getLabelTmpl());
 		result.setLabelAutoPrintMode(sr != null ? sr.getLabelAutoPrintMode().name(): null);
+		result.setReqCode(sr != null ? sr.getCode() : null);
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
 		
@@ -231,6 +242,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setPoolSpecimen(anticipated.isSpecimenPoolReq());
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
 		result.setLabelFmt(anticipated.getLabelTmpl());
+		result.setReqCode(anticipated.getCode());
 		return result;		
 	}
 
