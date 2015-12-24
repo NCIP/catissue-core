@@ -37,7 +37,7 @@ angular.module('os.biospecimen.cp',
         parent: 'cps',
         resolve: {
           cpList: function(CollectionProtocol) {
-            return CollectionProtocol.query();
+            return CollectionProtocol.list();
           },
           
           view: function($rootScope, $state, cpList) {
