@@ -26,4 +26,32 @@
       newColumnName="MIGRATION_DATE"
       tableName="OS_MIGRATIONS"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Added temporary column tmp_description in specimen list tag table" dbms="oracle">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="TMP_DESCRIPTION" type="${text.type}(1000)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Moving data from clob to newly created varchar column" dbms="oracle">
+    <sql>
+      update 
+        catissue_specimenlist_tags
+      set 
+        tmp_description = DBMS_LOB.SUBSTR (description, 1000);
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Delete the original description column" dbms="oracle">
+    <dropColumn tableName="CATISSUE_SPECIMENLIST_TAGS" columnName="DESCRIPTION"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Rename to temporary column to the actual one" dbms="oracle">
+    <renameColumn
+      columnDataType="${text.type}(1000)"
+      oldColumnName="TMP_DESCRIPTION"
+      newColumnName="DESCRIPTION"
+      tableName="CATISSUE_SPECIMENLIST_TAGS"/>
+  </changeSet>
+  
 </databaseChangeLog>
