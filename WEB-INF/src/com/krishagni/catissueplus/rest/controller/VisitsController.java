@@ -199,7 +199,7 @@ public class VisitsController {
 		resp.throwErrorIfUnsuccessful();
 		FileDetail detail = resp.getPayload();
 		String contentType = Utility.getContentType(detail.getFile());
-		if (!contentType.startsWith("text/") && !contentType.equals("application/pdf")) {
+		if (!contentType.startsWith("text/")) {
 			return null;
 		}
 		
