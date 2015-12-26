@@ -1352,7 +1352,8 @@
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
-    "created_by": "Created By"
+    "created_by": "Created By",
+    "clear_list_on_req": "Clear cart on request submission"
   },
 
   "orders": {

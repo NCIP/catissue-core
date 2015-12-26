@@ -147,6 +147,10 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 			}
 
 			List<SpecimenRequest> requests = createSpecimenRequests(list, detail.getRequestForms());
+			if (detail.isClearList()) {
+				list.clear();
+			}
+
 			return ResponseEvent.response(SpecimenRequestSummary.from(requests));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

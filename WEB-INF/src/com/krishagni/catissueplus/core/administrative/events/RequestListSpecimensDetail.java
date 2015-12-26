@@ -6,6 +6,8 @@ import java.util.Map;
 public class RequestListSpecimensDetail {
 	private Long listId;
 
+	private boolean clearList;
+
 	private List<Map<String, Object>> requestForms;
 
 	public Long getListId() {
@@ -14,6 +16,14 @@ public class RequestListSpecimensDetail {
 
 	public void setListId(Long listId) {
 		this.listId = listId;
+	}
+
+	public boolean isClearList() {
+		return clearList;
+	}
+
+	public void setClearList(boolean clearList) {
+		this.clearList = clearList;
 	}
 
 	public List<Map<String, Object>> getRequestForms() {

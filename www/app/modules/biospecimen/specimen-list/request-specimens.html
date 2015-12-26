@@ -33,6 +33,15 @@
             </os-wizard-step>
           </div>
 
+          <div ng-if="reqWizard.isLastStep()">
+            <div class="form-group">
+              <label>
+                <input type="checkbox" ng-model="ctx.clearList">
+                <span translate="specimen_list.clear_list_on_req">Clear cart on request submission</span>
+              </label>
+            </div>
+          </div>
+
           <div class="os-divider"></div>
 
           <div class="form-group" style="text-align: right;">
@@ -55,6 +64,13 @@
         <div ng-if="ctx.initForms && ctx.formsOpts.length == 1">
           <div>
             <div os-de-form ctrl="ctx.formCtrls.0" opts="ctx.formsOpts[0]"></div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" ng-model="ctx.clearList">
+              <span translate="specimen_list.clear_list_on_req">Clear cart on request submission</span>
+            </label>
           </div>
 
           <div class="os-divider"></div>

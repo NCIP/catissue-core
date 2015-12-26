@@ -5,6 +5,7 @@ angular.module('os.biospecimen.specimenlist.reqspmns', ['os.biospecimen.models']
     function init() {
       $scope.ctx = {
         list: list,
+        clearList: true,
         reqFormIds: reqFormIds,
         formsOpts: [],
         formCtrls: {},
@@ -54,7 +55,11 @@ angular.module('os.biospecimen.specimenlist.reqspmns', ['os.biospecimen.models']
         }
       );
 
-      var spmnReq = new SpecimenRequest({listId: list.id, requestForms: requestForms});
+      var spmnReq = new SpecimenRequest({
+        listId: list.id,
+        clearList: $scope.ctx.clearList,
+        requestForms: requestForms
+      });
       spmnReq.$saveOrUpdate().then(
         function() {
           Alerts.success('specimen_requests.request_submitted');
