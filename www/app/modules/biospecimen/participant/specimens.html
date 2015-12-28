@@ -2,14 +2,14 @@
   <div class="panel-heading">
     <span translate="specimens.list">Specimens</span>
     <div class="os-action-btns" ng-if = "visit.status != 'Missed Collection'">
-      <div dropdown class="btn-group">
-        <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
-          <span class="fa fa-plus"></span>
-          <span translate="specimens.buttons.collect"> Collect </span>
-        </button>
-        <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)">
-        </os-assign-to-spmn-list>
-      </div>
+      <button ng-if="!allowedOps || allowedOps.update" class="btn btn-primary" ng-click="collectSpecimens()">
+        <span class="fa fa-plus"></span>
+        <span translate="specimens.buttons.collect"> Collect </span>
+      </button>
+
+      <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)">
+      </os-assign-to-spmn-list>
+
       <div dropdown class="os-inline-btn">
         <button class="btn btn-default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
