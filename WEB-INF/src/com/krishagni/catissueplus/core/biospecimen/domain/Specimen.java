@@ -115,6 +115,8 @@ public class Specimen extends BaseExtensionEntity {
 	
 	private transient boolean forceDelete;
 	
+	private transient boolean printLabel;
+	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -496,6 +498,14 @@ public class Specimen extends BaseExtensionEntity {
 	public void setForceDelete(boolean forceDelete) {
 		this.forceDelete = forceDelete;
 	}
+	
+	public boolean isPrintLabel() {
+		return printLabel;
+	}
+
+	public void setPrintLabel(boolean printLabel) {
+		this.printLabel = printLabel;
+	}
 
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(getActivityStatus());
@@ -664,8 +674,8 @@ public class Specimen extends BaseExtensionEntity {
 
 		setComment(specimen.getComment());
 		setExtension(specimen.getExtension());
+		setPrintLabel(specimen.isPrintLabel());
 		updatePosition(specimen.getPosition());
-
 		checkQtyConstraints();
 	}
 	

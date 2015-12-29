@@ -52,11 +52,15 @@ public class SpecimenDetail extends SpecimenInfo {
 	
 	private String reqCode;
 
-	// For BO template
-	private boolean forceDelete;
-	
 	private ExtensionDetail extensionDetail;
-	
+
+	//
+	// transient variables specifying action to be performed
+	//
+	private boolean forceDelete;
+
+	private boolean printLabel;
+
 	public CollectionEventDetail getCollectionEvent() {
 		return collectionEvent;
 	}
@@ -173,15 +177,6 @@ public class SpecimenDetail extends SpecimenInfo {
 		return closeParent == null ? false : closeParent;
 	}
 
-	@JsonIgnore
-	public boolean getForceDelete() {
-		return forceDelete;
-	}
-
-	public void setForceDelete(boolean forceDelete) {
-		this.forceDelete = forceDelete;
-	}
-
 	public ExtensionDetail getExtensionDetail() {
 		return extensionDetail;
 	}
@@ -189,7 +184,25 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setExtensionDetail(ExtensionDetail extensionDetail) {
 		this.extensionDetail = extensionDetail;
 	}
-	
+
+	@JsonIgnore
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
+
+	@JsonIgnore
+	public boolean isPrintLabel() {
+		return printLabel;
+	}
+
+	public void setPrintLabel(boolean printLabel) {
+		this.printLabel = printLabel;
+	}
+
 	public static SpecimenDetail from(Specimen specimen) {
 		return from(specimen, true);
 	}
@@ -255,6 +268,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setPoolSpecimen(anticipated.isSpecimenPoolReq());
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
 		result.setLabelFmt(anticipated.getLabelTmpl());
+		result.setLabelAutoPrintMode(anticipated.getLabelAutoPrintMode().name());
 		result.setReqCode(anticipated.getCode());
 		return result;		
 	}

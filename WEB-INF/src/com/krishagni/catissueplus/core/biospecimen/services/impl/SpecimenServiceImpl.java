@@ -226,8 +226,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> collectSpecimens(RequestEvent<List<SpecimenDetail>> req) {
 		try {
-			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
-
+			Collection<Specimen> specimens = new ArrayList<Specimen>();
 			for (SpecimenDetail detail : req.getPayload()) {
 				//
 				// Pre-populate specimen interaction objects with
@@ -236,17 +235,20 @@ public class SpecimenServiceImpl implements SpecimenService {
 				setCreatedOn(detail);
 
 				Specimen specimen = collectSpecimen(detail, null);
-				result.add(SpecimenDetail.from(specimen));
+				specimens.add(specimen);
 			}
-			
-			return ResponseEvent.response(result);
+
+			List<Specimen> specimensToPrint = getSpecimensToPrint(specimens);
+			getLabelPrinter().print(specimensToPrint, 1);
+
+			return ResponseEvent.response(SpecimenDetail.from(specimens));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> createAliquots(RequestEvent<SpecimenAliquotsSpec> req) {
@@ -599,6 +601,12 @@ public class SpecimenServiceImpl implements SpecimenService {
 		return specimen;
 	}
 
+	/**
+	 * Returns list of specimens based on input specification
+	 * The input specification could be
+	 * 1. List of specimen IDs or specimen labels
+	 * 2. Flattened list of specimens of a visit identified by either visit name or visit ID
+	 */
 	private List<Specimen> getSpecimensToPrint(PrintSpecimenLabelDetail detail) {
 		List<Specimen> specimens = null;
 		if (CollectionUtils.isNotEmpty(detail.getSpecimenIds())) {
@@ -613,26 +621,49 @@ public class SpecimenServiceImpl implements SpecimenService {
 				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitId());
 			}
 
-			specimens = getSpecimensToPrint(visit.getTopLevelSpecimens());
+			specimens = getFlattenedSpecimens(visit.getTopLevelSpecimens());
 		} else if (StringUtils.isNotBlank(detail.getVisitName())) {
 			Visit visit = daoFactory.getVisitsDao().getByName(detail.getVisitName());
 			if (visit == null) {
 				throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitName());
 			}
 
-			specimens = getSpecimensToPrint(visit.getTopLevelSpecimens());
+			specimens = getFlattenedSpecimens(visit.getTopLevelSpecimens());
 		}
 		
 		return specimens;		
 	}
-	
+
+	/**
+	 * Filters input collection of specimens based on printLabel flag
+	 */
 	private List<Specimen> getSpecimensToPrint(Collection<Specimen> specimens) {
+		List<Specimen> specimensToPrint = new ArrayList<Specimen>();
+		for (Specimen specimen : specimens) {
+			if (specimen.isPrintLabel()) {
+				specimensToPrint.add(specimen);
+			}
+
+			if (CollectionUtils.isNotEmpty(specimen.getSpecimensPool())) {
+				specimensToPrint.addAll(getSpecimensToPrint(specimen.getSpecimensPool()));
+			}
+
+			if (CollectionUtils.isNotEmpty(specimen.getChildCollection())) {
+				specimensToPrint.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+			}
+		}
+
+		return specimensToPrint;
+	}
+
+	private List<Specimen> getFlattenedSpecimens(Collection<Specimen> specimens) {
 		List<Specimen> sortedSpecimens = Specimen.sort(specimens);
 
 		List<Specimen> result = new ArrayList<Specimen>();
 		for (Specimen specimen : sortedSpecimens) {
 			result.add(specimen);
-			result.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+			result.addAll(getFlattenedSpecimens(specimen.getSpecimensPool()));
+			result.addAll(getFlattenedSpecimens(specimen.getChildCollection()));
 		}
 
 		return result;
