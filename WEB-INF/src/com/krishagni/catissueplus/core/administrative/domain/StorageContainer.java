@@ -4,12 +4,9 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -25,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.util.SchemeOrdinalConverterUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -390,16 +388,16 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public String toColumnLabelingScheme(int ordinal) {
-		return converters.get(getColumnLabelingScheme()).fromOrdinal(ordinal);
+		return fromOrdinal(getColumnLabelingScheme(), ordinal);
 	}
 	
 	public String toRowLabelingScheme(int ordinal) {
-		return converters.get(getRowLabelingScheme()).fromOrdinal(ordinal);
+		return fromOrdinal(getRowLabelingScheme(), ordinal);
 	}
 	
 	public boolean areValidPositions(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
+		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
 			
 		return areValidPositions(posOneOrdinal, posTwoOrdinal);
 	}
@@ -410,8 +408,8 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public StorageContainerPosition createPosition(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
+		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
@@ -448,8 +446,8 @@ public class StorageContainer extends BaseEntity {
 				startCol = 1;
 			}
 			
-			row = converters.get(getRowLabelingScheme()).fromOrdinal(startRow);
-			col = converters.get(getColumnLabelingScheme()).fromOrdinal(startCol);
+			row = fromOrdinal(getRowLabelingScheme(), startRow);
+			col = fromOrdinal(getColumnLabelingScheme(), startCol);
 		}
 
 		return nextAvailablePosition(row, col);
@@ -461,16 +459,16 @@ public class StorageContainer extends BaseEntity {
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
 
 		if (startPosSpecified) {
-			startRow = converters.get(getRowLabelingScheme()).toOrdinal(row);
-			startCol = converters.get(getColumnLabelingScheme()).toOrdinal(col);
+			startRow = toOrdinal(getRowLabelingScheme(), row);
+			startCol = toOrdinal(getColumnLabelingScheme(), col);
 		}
 
 		for (int y = startRow; y <= getNoOfRows(); ++y) {
 			for (int x = startCol; x <= getNoOfColumns(); ++x) {
 				int pos = (y - 1) * getNoOfColumns() + x;
 				if (!occupiedPositionOrdinals.contains(pos)) {
-					String posOne = converters.get(getColumnLabelingScheme()).fromOrdinal(x);
-					String posTwo = converters.get(getRowLabelingScheme()).fromOrdinal(y);
+					String posOne = fromOrdinal(getColumnLabelingScheme(), x);
+					String posTwo = fromOrdinal(getRowLabelingScheme(), y);
 
 					return (lastAssignedPos = createPosition(x, posOne, y, posTwo));
 				}
@@ -487,8 +485,8 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public boolean isPositionOccupied(String posOne, String posTwo) {
-		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
+		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
 
 		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
 	}
@@ -777,9 +775,9 @@ public class StorageContainer extends BaseEntity {
 			String posOne, 
 			String posTwo, 
 			boolean vacateOccupant) {
-		
-		int posOneOrdinal = converters.get(getColumnLabelingScheme()).toOrdinal(posOne);
-		int posTwoOrdinal = converters.get(getRowLabelingScheme()).toOrdinal(posTwo);
+
+		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
+		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
 		
 		if (!areValidPositions(posOneOrdinal, posTwoOrdinal)) {
 			return false;
@@ -820,11 +818,11 @@ public class StorageContainer extends BaseEntity {
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
 			if (colSchemeChanged) {
-				pos.setPosOne(converters.get(newColumnLabelingScheme).fromOrdinal(pos.getPosOneOrdinal()));
+				pos.setPosOne(fromOrdinal(newColumnLabelingScheme, pos.getPosOneOrdinal()));
 			}
 			
 			if (rowSchemeChanged) {
-				pos.setPosTwo(converters.get(newRowLabelingScheme).fromOrdinal(pos.getPosTwoOrdinal()));
+				pos.setPosTwo(fromOrdinal(newRowLabelingScheme, pos.getPosTwoOrdinal()));
 			}
 		}
 		
@@ -1034,176 +1032,33 @@ public class StorageContainer extends BaseEntity {
 	private DaoFactory getDaoFactory() {
 		return (DaoFactory)OpenSpecimenAppCtxProvider.getAppCtx().getBean("biospecimenDaoFactory");
 	}
-	
-	private Map<String, SchemeOrdinalConverter> converters = new HashMap<String, SchemeOrdinalConverter>() {
-		private static final long serialVersionUID = -1198152629671796530L;
 
-		{
-			put("Numbers", new NumberSchemeOrdinalConverter());
-			put("Alphabets Upper Case", new AlphabetSchemeOrdinalConverter(true));
-			put("Alphabets Lower Case", new AlphabetSchemeOrdinalConverter(false));
-			put("Roman Upper Case", new RomanSchemeOrdinalConverter(true));
-			put("Roman Lower Case", new RomanSchemeOrdinalConverter(false));
+	private String fromOrdinal(String scheme, Integer pos) {
+		try {
+			return SchemeOrdinalConverterUtil.fromOrdinal(scheme, pos);
+		} catch (IllegalArgumentException iae) {
+			throw OpenSpecimenException.userError(getSchemeOrdinalErrorCode(scheme));
 		}
-	};
-	
-	private interface SchemeOrdinalConverter {
-		public Integer toOrdinal(String pos);
-		
-		public String fromOrdinal(Integer pos);
 	}
-	
-	private class NumberSchemeOrdinalConverter implements SchemeOrdinalConverter {
-		@Override
-		public Integer toOrdinal(String pos) {
-			if (pos == null) {
-				return null;
-			}
-			
-			try {
-				return Integer.parseInt(pos);
-			} catch (NumberFormatException nfe) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
-			}			
-		}
 
-		@Override
-		public String fromOrdinal(Integer pos) {
-			if (pos == null || pos < 0) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
-			}
-			
-			return pos.toString();
-		}		
+	private Integer toOrdinal(String scheme, String pos) {
+		try {
+			return SchemeOrdinalConverterUtil.toOrdinal(scheme, pos);
+		} catch (IllegalArgumentException iae) {
+			throw OpenSpecimenException.userError(getSchemeOrdinalErrorCode(scheme));
+		}
 	}
-	
-	
-	private class RomanSchemeOrdinalConverter implements SchemeOrdinalConverter {
-		private final Map<String, Integer> romanLiterals = new LinkedHashMap<String, Integer>() {
-			private static final long serialVersionUID = 685666506457371647L;
 
-			{
-				put("m", 1000);
-				put("cm", 900);
-				put("d",  500);
-				put("cd", 400);
-				put("c",  100);
-				put("xc",  90);
-				put("l",   50);
-				put("xl",  40);
-				put("x",   10);
-				put("ix",   9);
-				put("v",    5);
-				put("iv",   4);
-				put("i",    1);				
-			}			
-		};
-		
-		private boolean upper;
-		
-		public RomanSchemeOrdinalConverter(boolean upper) {
-			this.upper = upper;
+	private StorageContainerErrorCode getSchemeOrdinalErrorCode(String scheme) {
+		StorageContainerErrorCode code = null;
+		if (scheme.equals(NUMBER_LABELING_SCHEME)) {
+			code = StorageContainerErrorCode.INVALID_NUMBER_POSITION;
+		} else if (scheme.equals(UPPER_CASE_ALPHA_LABELING_SCHEME) || scheme.equals(LOWER_CASE_ALPHA_LABELING_SCHEME)) {
+			code = StorageContainerErrorCode.INVALID_ALPHA_POSITION;
+		} else if (scheme.equals(UPPER_CASE_ROMAN_LABELING_SCHEME) || scheme.equals(LOWER_CASE_ROMAN_LABELING_SCHEME)) {
+			code = StorageContainerErrorCode.INVALID_ROMAN_POSITION;
 		}
 
-		@Override
-		public Integer toOrdinal(String pos) {
-			pos = pos.toLowerCase();
-			
-			int result = 0;
-			int len = pos.length(), idx = len;
-			while (idx > 0) {
-				--idx;
-				if (idx == len - 1) {
-					Integer val = romanLiterals.get(pos.substring(idx, idx + 1));
-					if (val == null) {
-						throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ROMAN_POSITION);
-					}
-					result += val;
-				} else {
-					Integer current = romanLiterals.get(pos.substring(idx, idx + 1));
-					Integer ahead = romanLiterals.get(pos.substring(idx + 1, idx + 2));
-					if (current == null || ahead == null) {
-						throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ROMAN_POSITION);
-					}
-					
-					if (current < ahead) {
-						result -= current;
-					} else {
-						result += current;
-					}
-				}
-			}
-			
-			return result;
-		}
-
-		@Override
-		public String fromOrdinal(Integer pos) {
-			if (pos == null || pos <= 0) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
-			}
-			
-			StringBuilder result = new StringBuilder();			
-			int num = pos;
-			for (Map.Entry<String, Integer> literal : romanLiterals.entrySet()) {
-				while (num >= literal.getValue()) {
-					result.append(literal.getKey());
-					num -= literal.getValue();
-				}
-			}
-
-			return upper ? result.toString().toUpperCase() : result.toString();
-		}
-		
-	}
-	
-	private class AlphabetSchemeOrdinalConverter implements SchemeOrdinalConverter {
-		private final char[] alphabets = {
-			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-			'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-		};
-				
-		private boolean upper;
-		
-		public AlphabetSchemeOrdinalConverter(boolean upper) {
-			this.upper = upper;			
-		}
-
-		@Override
-		public Integer toOrdinal(String pos) {
-			pos = pos.toLowerCase();
-			
-			if (!StringUtils.isAlpha(pos)) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ALPHA_POSITION);
-			}
-			
-			int len = pos.length();
-			int base = 1, result = 0;
-			while (len > 0) {
-				len--;
-				
-				int charAt = pos.charAt(len);
-				result = result + (charAt - 'a' + 1) * base;
-				base *= 26;
-			}
-
-			return result;
-		}
-
-		@Override
-		public String fromOrdinal(Integer pos) {
-			if (pos == null || pos <= 0) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_NUMBER_POSITION);
-			}
-			
-			StringBuilder result = new StringBuilder();			
-			int num = pos;
-		    while (num > 0) {
-		    	result.insert(0, alphabets[(num - 1) % 26]);
-		    	num = (num - 1) / 26;		      
-		    }
-
-		    return upper ? result.toString().toUpperCase() : result.toString();
-		}		
+		return code;
 	}
 }
