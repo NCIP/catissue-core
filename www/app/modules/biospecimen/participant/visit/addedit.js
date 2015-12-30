@@ -10,10 +10,6 @@ angular.module('os.biospecimen.visit.addedit', [])
       $scope.sites = PvManager.getSites({listAll: true});
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
       $scope.cohorts = PvManager.getPvs('cohort');
-
-      $scope.searchClinicalDiagnoses = function(searchTerm) {
-        $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
-      };
     };
 
     function init() {

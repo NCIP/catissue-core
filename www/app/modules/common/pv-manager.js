@@ -144,7 +144,8 @@ angular.module('openspecimen')
       var params = {
         attribute: pvId,
         searchString: srchTerm,
-        includeOnlyLeafValue: incOnlyLeaf
+        includeOnlyLeafValue: incOnlyLeaf,
+        maxResults: 100
       };
 
       return $http.get(url, {params: params}).then(

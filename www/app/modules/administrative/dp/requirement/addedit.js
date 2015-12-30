@@ -7,7 +7,6 @@ angular.module('os.administrative.dp.requirement.addedit', ['os.administrative.m
 
     function loadPvs() {
       loadAllSpecimenTypes();
-      $scope.anatomicSites = PvManager.getLeafPvs('anatomic-site');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
     }
 

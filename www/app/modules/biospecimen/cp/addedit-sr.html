@@ -46,9 +46,9 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.anatomic_site">Anatomic Site</label>
         <div class="col-xs-8">
-          <os-select name="anatomicSite" ng-model="sr.anatomicSite" list="anatomicSites"
+          <os-pvs name="anatomicSite" ng-model="sr.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
             placeholder="{{'srs.anatomic_site' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.anatomicSite"></div>
         </div>
       </div>

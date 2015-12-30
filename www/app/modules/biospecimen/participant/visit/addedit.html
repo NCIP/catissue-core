@@ -75,8 +75,9 @@
       <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
         <label class="col-xs-3 control-label" translate="visits.clinical_diagnosis">Clinical Diagnosis</label>
         <div class="col-xs-6">
-          <os-select name="diagnosis" ng-model="currVisit.clinicalDiagnosis" list="clinicalDiagnoses" 
-             refresh="searchClinicalDiagnoses" placeholder="{{'visits.clinical_diagnosis' | translate}}"> </os-select>
+          <os-pvs name="diagnosis" ng-model="currVisit.clinicalDiagnosis" attribute="clinical-diagnosis"
+            placeholder="{{'visits.clinical_diagnosis' | translate}}">
+          </os-pvs>
           <div os-field-error field="vform.diagnosis"></div>
         </div>
       </div>
