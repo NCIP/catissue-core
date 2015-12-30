@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -193,12 +194,17 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setForceDelete(boolean forceDelete) {
 		this.forceDelete = forceDelete;
 	}
-
+	
+	//
+	// Do not serialise printLabel from interaction object to response JSON. Therefore @JsonIgnore
+	// However, deserialise, if present, from input request JSON to interaction object. Hence @JsonProperty
+	//
 	@JsonIgnore
 	public boolean isPrintLabel() {
 		return printLabel;
 	}
 
+	@JsonProperty
 	public void setPrintLabel(boolean printLabel) {
 		this.printLabel = printLabel;
 	}
