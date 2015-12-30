@@ -39,6 +39,7 @@ import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -51,6 +52,7 @@ import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenServiceImpl implements SpecimenService {
 
@@ -462,6 +464,23 @@ public class SpecimenServiceImpl implements SpecimenService {
 			setCreatedOn(detail.getChildren(), detail.getCreatedOn());
 		}
 	}
+	
+	private void ensureEditAllowed(SpecimenDetail detail, Specimen existing) {
+		if (existing == null || existing.isActive()) {
+			return;
+		}
+		
+		String status = detail.getActivityStatus();
+		if (StringUtils.isNotBlank(status) && !Status.isValidActivityStatus(status))  {
+			throw OpenSpecimenException.userError(ActivityStatusErrorCode.INVALID);
+		}
+		
+		if (StringUtils.isNotBlank(status) && Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(status)) {
+			return;
+		}
+		
+		throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, existing.getLabel());
+	}
 
 	private void ensureValidAndUniqueLabel(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
 		if (existing != null && 
@@ -560,10 +579,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 	}
 	
 	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
-		if (existing != null && !existing.isActive()) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, existing.getLabel());
-		}
-
+		ensureEditAllowed(detail, existing);
+		
 		Specimen specimen = null;		
 		if (existing != null) {
 			specimen = specimenFactory.createSpecimen(existing, detail, parent);
