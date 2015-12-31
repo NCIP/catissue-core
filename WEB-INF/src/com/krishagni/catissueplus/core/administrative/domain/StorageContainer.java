@@ -797,8 +797,7 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private void updateCapacity(int newNoOfColumns, int newNoOfRows) {
-		if (newNoOfColumns < getNoOfColumns() || 
-				newNoOfRows < getNoOfRows()) {
+		if (newNoOfColumns < getNoOfColumns() || newNoOfRows < getNoOfRows()) {
 			if (arePositionsOccupiedBeyondCapacity(newNoOfColumns, newNoOfRows)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
 			}
