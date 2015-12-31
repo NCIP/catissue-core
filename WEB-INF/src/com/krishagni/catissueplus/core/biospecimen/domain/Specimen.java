@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -736,19 +737,30 @@ public class Specimen extends BaseExtensionEntity {
 		checkPoolStatusConstraints();
 	}
 		
-	public void distribute(User distributor, Date time, BigDecimal quantity, boolean closeAfterDistribution) {
-		if ((getIsAvailable() != null && !getIsAvailable()) || !isCollected() || NumUtil.lessThanEqualsZero(getAvailableQuantity())) {
+	public void distribute(DistributionOrderItem item) {
+		if (!getIsAvailable() || !isCollected()) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (NumUtil.lessThan(getAvailableQuantity(), quantity)) {
+		if (NumUtil.lessThan(getAvailableQuantity(), item.getQuantity())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
 		}
-		
-		setAvailableQuantity(getAvailableQuantity().subtract(quantity));
-		addDistributionEvent(distributor, time, quantity);
-		if (NumUtil.isZero(availableQuantity) || closeAfterDistribution) {
-			close(distributor, time, "Distributed");
+
+		//
+		// Deduct distributed quantity from available quantity
+		//
+		setAvailableQuantity(getAvailableQuantity().subtract(item.getQuantity()));
+
+		//
+		// add distributed event
+		//
+		SpecimenDistributionEvent.createForDistributionOrderItem(item).saveRecordEntry();
+
+		//
+		// close specimen if explicitly closed or no quantity available
+		//
+		if (NumUtil.isZero(availableQuantity) || item.isDistributedAndClosed()) {
+			close(item.getOrder().getDistributor(), item.getOrder().getExecutionDate(), "Distributed");
 		}
 	}
 
@@ -781,14 +793,6 @@ public class Specimen extends BaseExtensionEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
 			}
 		}*/
-	}
-
-	private void addDistributionEvent(User user, Date time, BigDecimal quantity) {
-		SpecimenDistributionEvent event = new SpecimenDistributionEvent(this);
-		event.setQuantity(quantity);
-		event.setUser(user);
-		event.setTime(time);
-		event.saveOrUpdate();
 	}
 	
 	private void addDisposalEvent(User user, Date time, String reason) {

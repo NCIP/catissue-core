@@ -54,4 +54,67 @@
       tableName="CATISSUE_SPECIMENLIST_TAGS"/>
   </changeSet>
   
+  <changeSet author="vlonushte" id="Creating specimen distribution orders view">
+    <createView viewName="specimen_distribution_orders_view">
+      select
+        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
+        ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id, 
+        ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
+      from
+        os_order_items item
+        inner join os_orders ord on item.order_id = ord.identifier
+        inner join catissue_distribution_protocol dp on ord.distribution_protocol_id = dp.identifier
+      where
+        ord.status != 'PENDING'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Migrating distributed event data">
+    <sql dbms="mysql">
+      select 
+        fc.identifier into @form_ctxt_id 
+      from 
+        catissue_form_context fc 
+        inner join dyextn_containers dc on dc.identifier = fc.container_id 
+      where 
+        dc.name = 'SpecimenDistributedEvent';
+
+      delete from catissue_form_record_entry where form_ctxt_id = @form_ctxt_id;
+
+      insert into catissue_form_record_entry
+        (form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status)
+      (select 
+         @form_ctxt_id, do.specimen_id, do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
+       from 
+         specimen_distribution_orders_view do) 
+    </sql> 
+
+    <sql dbms="oracle" endDelimiter="//">
+      declare 
+        form_ctxt_id number;
+      begin 
+        select 
+          fc.identifier into form_ctxt_id 
+        from 
+          catissue_form_context fc 
+          inner join dyextn_containers dc on dc.identifier = fc.container_id 
+        where 
+          dc.name = 'SpecimenDistributedEvent';
+
+        delete from catissue_form_record_entry where form_ctxt_id = form_ctxt_id;
+
+        insert into catissue_form_record_entry
+          (identifier, form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status)
+        (select 
+           catissue_form_rec_entry_seq.nextval, form_ctxt_id, do.specimen_id, 
+           do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
+         from 
+           specimen_distribution_orders_view do); 
+      end;
+      //     
+    </sql>
+
+    <dropTable tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
 </databaseChangeLog>

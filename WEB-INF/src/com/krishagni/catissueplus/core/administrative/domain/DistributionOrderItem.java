@@ -51,12 +51,12 @@ public class DistributionOrderItem extends BaseEntity {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
+	
+	public boolean isDistributedAndClosed() {
+		return getStatus() == Status.DISTRIBUTED_AND_CLOSED;
+	}
 
 	public void distribute() {		
-		specimen.distribute(
-				order.getDistributor(),
-				order.getExecutionDate(),
-				quantity, 
-				status == Status.DISTRIBUTED_AND_CLOSED);
+		specimen.distribute(this);
 	}	
 }

@@ -4,15 +4,42 @@
   <view>
     <name>SpecimenDistributedEvent</name>
     <caption>#getMessage("distributed_event")</caption>
-    <table>CATISSUE_DISTRI_EVENT_PARAM</table>
+    <table>SPECIMEN_DISTRIBUTION_ORDERS_VIEW</table>
     <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>#getMessage("order_name")</caption>
+        <column>NAME</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>dpShortTitle</name>
+        <udn>dpShortTitle</udn>
+        <caption>#getMessage("order_dp_short_title")</caption>
+        <column>DP_SHORT_TITLE</column>
+      </textField>
+    </row>
+
+    <row>
+      <userField>
+        <name>requester</name>
+        <udn>requester</udn>
+        <caption>#getMessage("order_requester")</caption>
+        <column>REQUESTER_ID</column>
+      </userField>
+    </row>
 
     <row>
       <numberField>
         <name>quantity</name>
         <udn>quantity</udn>
-        <caption>#getMessage("distributed_event_quantity")</caption>
-        <column>DISTRIBUTED_QUANTITY</column>
+        <caption>#getMessage("order_items_quantity")</caption>
+        <column>QUANTITY</column>
         <mandatory>true</mandatory>
         <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
       </numberField>
@@ -22,8 +49,8 @@
       <userField>
         <name>user</name>
         <udn>user</udn>
-        <caption>#getMessage("specimen_event_user")</caption>
-        <column>USER_ID</column>
+        <caption>#getMessage("order_distributor")</caption>
+        <column>DISTRIBUTOR_ID</column>
         <showInGrid>true</showInGrid>
       </userField>
     </row>
@@ -32,8 +59,8 @@
       <datePicker>
         <name>time</name>
         <udn>time</udn>
-        <caption>#getMessage("specimen_event_date_time")</caption>
-        <column>EVENT_TIMESTAMP</column>
+        <caption>#getMessage("order_execution_date")</caption>
+        <column>EXECUTION_DATE</column>
         <format>MM-dd-yyyy HH:mm</format>
         <showInGrid>true</showInGrid>
         <default>current_date</default>
@@ -45,7 +72,7 @@
       <textArea>
         <name>comments</name>
         <udn>comments</udn>
-        <caption>#getMessage("specimen_event_comments")</caption>
+        <caption>#getMessage("order_comments")</caption>
         <column>COMMENTS</column>
         <height>2</height>
       </textArea>
