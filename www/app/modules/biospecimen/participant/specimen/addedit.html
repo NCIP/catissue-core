@@ -103,7 +103,7 @@
         </div>
       </div>
 
-      <div class="form-group" ng-if="currSpecimen.lineage != 'New'">
+      <div class="form-group" ng-if="currSpecimen.lineage != 'New' && currSpecimen.status == 'Collected'">
         <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
         <div class="col-xs-6">
           <div class="os-date-time clearfix">
