@@ -117,4 +117,31 @@
     <dropTable tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
   </changeSet>
 
+  <changeSet author="slakhani" id="Table to track OpenSpecimen upgrades">
+    <createTable tableName="OS_UPGRADE_LOG">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="VERSION" type="${text.type}(64)">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="UPGRADE_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="UPGRADED_BY" type="${text.type}(128)">
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="OS_UPGRADE_LOG table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_UPGRADE_LOG_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+  
 </databaseChangeLog>

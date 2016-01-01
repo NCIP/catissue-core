@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.common.domain.UpgradeLog"
+    table="OS_UPGRADE_LOG">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_UPGRADE_LOG_SEQ</param>
+      </generator>
+    </id>
+    
+    <property name="version" column="VERSION"/>
+
+    <property name="upgradeDate" column="UPGRADE_DATE"/>
+
+    <property name="upgradedBy" column="UPGRADED_BY"/>
+    
+    <query name="getLatestVersion">
+      select
+        upgradeLog
+      from
+        com.krishagni.catissueplus.core.common.domain.UpgradeLog upgradeLog
+      order by
+        upgradeLog.upgradeDate desc
+    </query>
+    
+  </class>
+</hibernate-mapping>
