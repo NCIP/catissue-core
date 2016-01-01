@@ -31,6 +31,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
 
       currSpecimen.visitId = visit.id;
+      currSpecimen.createdOn = currSpecimen.createdOn || new Date();
 
       if (currSpecimen.status != 'Collected') {
         if (!currSpecimen.id) {
