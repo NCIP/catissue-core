@@ -23,6 +23,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.Spe
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -88,6 +89,9 @@ public class Visit extends BaseExtensionEntity {
 	
 	@Autowired
 	private SpecimenService specimenSvc;
+
+	@Autowired
+	private DaoFactory daoFactory;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -404,6 +408,19 @@ public class Visit extends BaseExtensionEntity {
 			addOrUpdateMissedPoolSpmns(specimen);
 		}
 	}
+
+	public void createPendingSpecimens() {
+		if (CollectionUtils.isNotEmpty(getSpecimens())) {
+			//
+			// We quit if there is at least one specimen object created for visit
+			//
+			return;
+		}
+
+		for (SpecimenRequirement sr : getCpEvent().getTopLevelAnticipatedSpecimens()) {
+			createPendingSpecimen(sr, null);
+		}
+	}
 	
 	public static boolean isCompleted(String status) {
 		return Visit.VISIT_STATUS_COMPLETED.equals(status);
@@ -437,8 +454,17 @@ public class Visit extends BaseExtensionEntity {
 		if (!shouldPrePrintLabels(prevStatus)) {
 			return;
 		}
-		
-		List<Specimen> specimens = getSpecimensForPrint(getCpEvent().getTopLevelAnticipatedSpecimens(), null);
+
+		//
+		// As a first step we create all pending specimens with their labels set
+		//
+		createPendingSpecimens();
+
+		//
+		// Go through individual specimen that have pre print enabled
+		// and queue for printing their labels
+		//
+		List<Specimen> specimens = getSpecimensToPrint(getTopLevelSpecimens());
 		specimenSvc.getLabelPrinter().print(specimens, 1);
 	}
 		
@@ -485,28 +511,41 @@ public class Visit extends BaseExtensionEntity {
 			poolSpecimen.updateCollectionStatus(Specimen.MISSED_COLLECTION);
 		}
 	}
-	
-	private List<Specimen> getSpecimensForPrint(Collection<SpecimenRequirement> srs, Specimen parent) {
-		List<Specimen> specimens = new ArrayList<Specimen>(); 
-		for (SpecimenRequirement sr : srs) {
-			Specimen specimen = sr.getSpecimen();
-			specimen.setVisit(this);
-			specimen.setParentSpecimen(parent);
-			specimen.setLabel(specimenLabelGenerator.generateLabel(sr.getLabelTmpl(), specimen));
-			
-			if (sr.getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
-				specimens.add(specimen);
-			}
-			
-			if (parent == null && CollectionUtils.isNotEmpty(sr.getOrderedSpecimenPoolReqs())) {
-				specimens.addAll(getSpecimensForPrint(sr.getOrderedSpecimenPoolReqs(), null));
-			}
-			
-			if (CollectionUtils.isNotEmpty(sr.getOrderedChildRequirements())) {
-				specimens.addAll(getSpecimensForPrint(sr.getOrderedChildRequirements(), specimen));
-			}
+
+	private Specimen createPendingSpecimen(SpecimenRequirement sr, Specimen parent) {
+		Specimen specimen = sr.getSpecimen();
+		specimen.setParentSpecimen(parent);
+		specimen.setCollectionStatus(Specimen.PENDING);
+		addSpecimen(specimen);
+		specimen.setLabelIfEmpty();
+
+		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
+
+		for (SpecimenRequirement poolSr : sr.getOrderedSpecimenPoolReqs()) {
+			specimen.addPoolSpecimen(createPendingSpecimen(poolSr, null));
 		}
-			
-		return specimens;
+
+		for (SpecimenRequirement childSr : sr.getOrderedChildRequirements()) {
+			specimen.addChildSpecimen(createPendingSpecimen(childSr, specimen));
+		}
+
+		return specimen;
+	}
+
+	private List<Specimen> getSpecimensToPrint(Collection<Specimen> specimens) {
+		List<Specimen> specimensToPrint = new ArrayList<Specimen>();
+		specimens = Specimen.sort(specimens);
+
+		for (Specimen specimen : specimens) {
+			if (specimen.getSpecimenRequirement().getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
+				specimensToPrint.add(specimen);
+			}
+
+
+			specimensToPrint.addAll(getSpecimensToPrint(specimen.getSpecimensPool()));
+			specimensToPrint.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+		}
+		
+		return specimensToPrint;
 	}
 }
