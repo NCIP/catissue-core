@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.container.map', ['os.common.box', 'os.administrative.container.util'])
-  .directive('osContainerMap', function($compile, BoxLayoutUtil) {
+  .directive('osContainerMap', function($compile, BoxLayoutUtil, ContainerUtil) {
     return {
       restrict: 'EA',
 
@@ -13,31 +13,7 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
       },
 
       link: function(scope, element, attrs) {
-        var container = scope.container;
-        var opts = {
-          box: {
-            instance             : container,
-            row                  : function(occupant) { return occupant.posTwoOrdinal; },
-            column               : function(occupant) { return occupant.posOneOrdinal; },
-            numberOfRows         : function() { return container.noOfRows; },
-            numberOfColumns      : function() { return container.noOfColumns; },
-            rowLabelingScheme    : function() { return container.rowLabelingScheme; },
-            columnLabelingScheme : function() { return container.columnLabelingScheme; }
-          },
-
-          occupants: [],
-          occupantName: function(occupant) {
-            return occupant.occupyingEntityName
-          },
-          occupantSref: function(occupant) {
-            if (occupant.occuypingEntity == 'specimen') {
-              return 'specimen({specimenId: ' + occupant.occupyingEntityId + '})';
-            } else {
-              return 'container-detail.locations({containerId: ' + occupant.occupyingEntityId + '})';
-            }
-          },
-          allowClicks: angular.isDefined(attrs.onAddEvent)
-        };
+        var opts = ContainerUtil.getOpts(scope.container, angular.isDefined(attrs.onAddEvent));
 
         scope.onClick = function($event) {
           var target = angular.element($event.originalEvent.target);

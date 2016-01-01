@@ -1,6 +1,6 @@
 
 angular.module('os.common.box', [])
-  .factory('BoxLayoutUtil', function(NumberConverterUtil) {
+  .factory('BoxLayoutUtil', function(NumberConverterUtil, Util) {
     //
     // opts: {
     //   box: {
@@ -17,6 +17,8 @@ angular.module('os.common.box', [])
     //   occupantSref: function returning state to use for displaying cell occupant details
     //   allowClicks: boolean specifying whether to allow transition on clicking box occupants
     //   onAddEvent: function specifying action to perform when an empty cell is clicked
+    //   isVacatable: function specifying whether existing cell occupant is vacatable or not
+    //   createCell: function returning object to represent cell to newly assigned entity
     // }
     //
     function drawLayout(element, opts) {
@@ -118,8 +120,86 @@ angular.module('os.common.box', [])
         .append("<span class='fa fa-plus'></span>");
     };
 
+    function assignCells(opts, inputLabels, vacateOccupants) {
+      var occupants = angular.copy(opts.occupants);
+      var mapIdx = 0, labelIdx = 0;
+
+      var labels = Util.splitStr(inputLabels, /,|\t|\n/, true);
+      var done = false;
+      for (var y = 1; y <= opts.box.numberOfRows(); ++y) {
+        for (var x = 1; x <= opts.box.numberOfColumns(); ++x) {
+          if (labelIdx >= labels.length) {
+            //
+            // we are done with probing/iterating through all input labels
+            //
+            done = true;
+            break;
+          }
+
+          var existing = undefined;
+          if (mapIdx < occupants.length && isOccupied(opts, occupants[mapIdx], x, y)) {
+            //
+            // current cell is occupied
+            //
+            if (!vacateOccupants || !opts.isVacatable(occupants[mapIdx])) {
+              //
+              // When asked not to vacate existing occupants or present occupant
+              // is not vacatable, then examine next cell
+              //
+              mapIdx++;
+              continue;
+            }
+
+            existing = occupants[mapIdx];
+            occupants.splice(mapIdx, 1);
+          }
+ 
+          var label = labels[labelIdx++];
+          if ((!label || label.trim().length == 0) && (!vacateOccupants || !existing)) {
+            //
+            // Label is empty. Either asked not to vacate existing occupants or 
+            // present cell is empty
+            //
+            continue;
+          }
+
+          var cell = undefined;
+          if (!!existing && opts.occupantName(existing).toLowerCase() == label.toLowerCase()) {
+            cell = existing;
+          } else {
+            cell = opts.createCell(label, x, y, existing);
+          }
+
+          occupants.splice(mapIdx, 0, cell);
+          mapIdx++;
+        }
+
+        if (done) {
+          break;
+        }
+      }
+
+      var noFreeLocs = false;
+      while (labelIdx < labels.length) {
+        if (!!labels[labelIdx] && labels[labelIdx].trim().length > 0) {
+          noFreeLocs = true;
+          break;
+        }
+
+        labelIdx++;
+      }
+
+      return {occupants: occupants, noFreeLocs: noFreeLocs};
+    }
+
+    function isOccupied(opts, occupant, x, y) {
+      return opts.box.row(occupant) == y && opts.box.column(occupant) == x;
+    }
+
     return {
-      drawLayout: drawLayout
+      drawLayout: drawLayout,
+
+      assignCells: assignCells
     }
   })
   .directive('osBoxLayout', function(BoxLayoutUtil, $compile) {
