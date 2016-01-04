@@ -25,7 +25,16 @@ angular.module('os.biospecimen.cp',
             updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
             deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
           }
-
+          
+          $scope.participantResource = {
+            createOpts: {resource: 'ParticipantPhi', operations: ['Create']},
+            updateOpts: {resource: 'ParticipantPhi', operations: ['Update']}
+          }
+          
+          $scope.specimenResource = {
+            updateOpts: {resource: 'VisitAndSpecimen', operations: ['Create', 'Update']}
+          }
+          
           $scope.codingEnabled = $scope.global.appProps.cp_coding_enabled;
         },
         parent: 'signed-in'

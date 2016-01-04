@@ -23,76 +23,76 @@
           </li>
         </ul>
       </div>
-      <div dropdown class="inline">
+      <div os-show-if-menu-items-present dropdown class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.import">Import</span>
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li>
+          <li show-if-allowed="participantResource.createOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'cpr'})">
               <i class="fa fa-user"></i>
               <span translate="participant.registrations">Participant Registrations</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="participantResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'participant'})">
               <i class="fa fa-user"></i>
               <span translate="participant.part_updates">Participant Updates</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="participantResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'Participant'})">
               <i class="fa fa-copy"></i>
               <span translate="participant.part_extensions">Participant Forms</span>
             </a>
           </li>
           <li class="divider"></li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'visit'})">
               <i class="fa fa-calendar"></i>
               <span translate="visits.list">Visits</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'SpecimenCollectionGroup'})">
               <i class="fa fa-copy"></i>
               <span translate="visits.visit_extensions">Visit Forms</span>
             </a>
           </li>
           <li class="divider"></li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'specimen'})">
               <i class="fa fa-sliders"></i>
               <span translate="specimens.list">Specimens</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'specimenDerivative'})">
               <i class="fa fa-flask"></i>
               <span translate="specimens.spmn_derivatives">Specimen Derivatives</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'specimenAliquot'})">
               <i class="fa fa-share-alt"></i>
               <span translate="specimens.spmn_aliquots">Specimen Aliquots</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'Specimen'})">
               <i class="fa fa-copy"></i>
               <span translate="specimens.spmn_extensions">Specimen Forms</span>
             </a>
           </li>
-          <li>
+          <li show-if-allowed="specimenResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'SpecimenEvent'})">
               <i class="fa fa-calendar-o"></i>
               <span translate="specimens.spmn_events">Specimen Events</span>
             </a>
           </li>
           <li class="divider"></li>
-          <li>
+          <li ng-if="allowReadJobs">
             <a ui-sref="biospecimen-obj-import-jobs">
               <i class="fa fa-table"></i>
               <span translate="common.view_jobs">View Jobs</span>

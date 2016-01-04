@@ -9,7 +9,7 @@ angular.module('openspecimen')
       link: function(scope, element, attrs) {
         scope.$watch(
           function() {
-            return element.find("ul.dropdown-menu > li").
+            return element.find("ul.dropdown-menu > li:not(.divider)").
 	      filter(function() {
                 return isElementDisplayed(this);
               }).length;

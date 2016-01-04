@@ -773,6 +773,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   margin-bottom: 20px;
 }
 
+.dropdown-menu li.divider:first-child,
 .dropdown-menu li.divider + li.divider {
   display: none;
 }

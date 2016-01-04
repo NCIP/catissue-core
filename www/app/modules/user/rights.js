@@ -4,10 +4,8 @@ angular.module('openspecimen')
       restrict: 'A',
       link: function(scope, element, attrs) {
         scope.$watch(attrs.showIfAllowed, function(newOpts) {
-          if (AuthorizationService.isAllowed(newOpts)) {
-            element.show();
-          } else {
-            element.hide();
+          if (!AuthorizationService.isAllowed(newOpts)) {
+            element.remove();
           }
         });
       }
@@ -21,7 +19,7 @@ angular.module('openspecimen')
         if ($rootScope.currentUser.admin) {
           element.show();
         } else {
-          element.hide();
+          element.remove();
         }
       }
     }
