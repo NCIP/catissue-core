@@ -29,9 +29,12 @@ angular.module('os.biospecimen.specimen.addedit', [])
       loadPvs();
 
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
-
       currSpecimen.visitId = visit.id;
       currSpecimen.createdOn = currSpecimen.createdOn || new Date();
+
+      if (currSpecimen.lineage != 'New') {
+        currSpecimen.anatomicSite = currSpecimen.laterality = undefined;
+      }
 
       if (currSpecimen.status != 'Collected') {
         if (!currSpecimen.id) {
