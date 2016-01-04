@@ -103,7 +103,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		List<Field> fields = new ArrayList<Field>();
 		List<Record> subRecords = new ArrayList<Record>();
 		
-		for (Control ctrl : form.getAllControls()) {
+		for (Control ctrl : form.getOrderedControlList()) {
 			if (ctrl instanceof SubFormControl) {
 				subRecords.add(getSubRecord((SubFormControl)ctrl, useUdn));
 			} else {
