@@ -143,48 +143,5 @@
       incrementBy="1" 
       ordered="true" />
   </changeSet>
-
-  <changeSet author="hkambale" id="Creating participant visit summary view">
-    <createView viewName="os_participant_visit_view">
-      select
-        participant.identifier,
-        ccpr.protocol_participant_id,
-        sum(if(scg.collection_status = "Complete", 1, 0)) as visits_completed,
-        sum(if(scg.collection_status = "Missed Collection", 1, 0)) as visits_missed,
-        sum(if((scg.identifier is null or scg.collection_status = "Pending"), 1, 0)) as visits_pending
-      from
-        catissue_collection_protocol cp
-        join catissue_coll_prot_reg ccpr on ccpr.collection_protocol_id = cp.identifier
-        join catissue_coll_prot_event cpe on cpe.collection_protocol_id = cp.identifier
-        join catissue_participant participant on ccpr.participant_id = participant.identifier
-        left join catissue_specimen_coll_group scg on scg.collection_protocol_event_id = cpe.identifier and
-        ccpr.identifier = scg.collection_protocol_reg_id
-      group by
-        ccpr.protocol_participant_id
-    </createView>
-  </changeSet>
-
-  <changeSet author="hkambale" id="Creating participant specimen summary view">
-    <createView viewName="os_participant_specimen_view">
-      select
-        participant.identifier,
-        ccpr.protocol_participant_id,
-        sum(if(spec.collection_status = "Collected", 1, 0)) as specimens_collected,
-        sum(if(spec.collection_status = "Missed Collection", 1, 0)) as specimens_missed,
-        sum(if((spec.identifier is null or spec.collection_status = "Pending"), 1, 0)) as specimens_pending
-      from
-        catissue_collection_protocol cp
-        join catissue_coll_prot_reg ccpr on ccpr.collection_protocol_id = cp.identifier
-        join catissue_coll_prot_event cpe on cpe.collection_protocol_id = cp.identifier
-        join catissue_cp_req_specimen sr on sr.collection_protocol_event_id = cpe.identifier
-        join catissue_participant participant on ccpr.participant_id = participant.identifier
-        left join catissue_specimen_coll_group scg on scg.collection_protocol_event_id = cpe.identifier and
-        ccpr.identifier = scg.collection_protocol_reg_id
-        left join catissue_specimen spec on spec.specimen_collection_group_id = scg.identifier and
-        sr.identifier = spec.req_specimen_id
-      group by
-        ccpr.protocol_participant_id
-    </createView>
-  </changeSet>
-
+  
 </databaseChangeLog>
