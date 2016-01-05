@@ -61,7 +61,7 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 				.setParameterList("operations", ops)
 				.list();		
 	}
-		
+	
 	private static final String FQN = Subject.class.getName();
 
 	private static final String GET_ACCESS_LIST = FQN + ".getAccessList";
@@ -69,6 +69,6 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	private static final String GET_ACCESS_LIST_BY_SITES = FQN + ".getAccessListBySites";
 	
 	private static final String GET_ACCESS_LIST_BY_CP = FQN + ".getAccessListByCp";
-	
+
 	private static final String GET_ACCESS_LIST_COUNT = FQN + ".getAccessListCount";
 }
