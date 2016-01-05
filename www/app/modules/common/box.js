@@ -220,7 +220,7 @@ angular.module('os.common.box', [])
           }
 
           if (target.attr('data-pos-x') && target.attr('data-pos-y')) {
-            opts.onAddEvent(target.attr('data-pos-y'), target.attr('data-pos-x'));
+            scope.opts.onAddEvent(target.attr('data-pos-y'), target.attr('data-pos-x'));
           }
         };
 
