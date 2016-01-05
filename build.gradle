@@ -264,6 +264,14 @@ task create_war(type: War) {
     
     into '/ngweb/external/de'
   }
+
+  manifest {
+    attributes(
+      "Implementation-Title": archivesBaseName,
+      "Implementation-Version": getBranch(),
+      "Implementation-Timestamp": new Date()
+    )
+  }
 }
 
 def grunt_cmd = "grunt"
