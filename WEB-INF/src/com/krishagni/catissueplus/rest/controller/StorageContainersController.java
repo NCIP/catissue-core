@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
-import com.krishagni.catissueplus.core.administrative.events.ContainerMapExportDetail;
+import com.krishagni.catissueplus.core.common.events.ExportedFileDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
@@ -225,11 +225,11 @@ public class StorageContainersController {
 	public void exportContainerMap(@PathVariable("id") Long id, HttpServletResponse response) {
 		ContainerQueryCriteria crit = new ContainerQueryCriteria(id);
 		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<ContainerQueryCriteria>(crit);
-		ResponseEvent<ContainerMapExportDetail> resp = storageContainerSvc.exportMap(req);
+		ResponseEvent<ExportedFileDetail> resp = storageContainerSvc.exportMap(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		
-		ContainerMapExportDetail detail = resp.getPayload();		
+		ExportedFileDetail detail = resp.getPayload();
 		response.setContentType("application/csv");
 		response.setHeader("Content-Disposition", "attachment;filename=" + detail.getName() + ".csv");
 			
