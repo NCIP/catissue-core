@@ -125,8 +125,14 @@ public abstract class DeObject {
 		if (getId() == null) {
 			return;
 		}
-		
-		FormRecordEntryBean re = daoFactory.getFormDao().getRecordEntry(getId());
+
+		Long formCtxId = getFormContext().getIdentifier();
+		Long objectId = getObjectId();
+		FormRecordEntryBean re = daoFactory.getFormDao().getRecordEntry(formCtxId, objectId, getId());
+		if (re == null) {
+			return;
+		}
+
 		re.setActivityStatus(Status.CLOSED);
 		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
 	}
