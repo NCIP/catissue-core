@@ -110,11 +110,11 @@ public class AccessCtrlMgr {
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
-		
+
 		if (user.isAdmin() && op != Operation.READ) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
 		}
-		
+
 		if (!canUserPerformOp(AuthUtil.getCurrentUser().getId(), Resource.USER, new Operation[] {op})) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
@@ -828,23 +828,22 @@ public class AccessCtrlMgr {
 		Long userId = AuthUtil.getCurrentUser().getId();
 		Long cpId = cpr.getCollectionProtocol().getId();
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource.getName(), ops);
+
 		Set<Site> cpSites = cpr.getCollectionProtocol().getRepositories();
-		boolean allowed = isAccessAllowedOnAnySite(accessList, cpSites, userId);
-		if (!allowed) {
+		if (!isAccessAllowedOnAnySite(accessList, cpSites, userId)) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
 		if (!isAccessRestrictedBasedOnMrn()) {
 			return;
-		}	
-		
+		}
+
 		Set<Site> mrnSites = cpr.getParticipant().getMrnSites();
 		if (mrnSites.isEmpty()) {
 			return;
 		}
-		
-		allowed = isAccessAllowedOnAnySite(accessList, mrnSites, userId);
-		if (!allowed) {
+
+		if (!isAccessAllowedOnAnySite(accessList, mrnSites, userId)) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
