@@ -194,6 +194,29 @@
                 <column>LABEL</column>
               </textField>
             </row> 
+
+            <row>
+              <subForm>
+                <name>scg</name>
+                <udn>scg</udn>
+                <caption>#getMessage("participant_visits")</caption>
+                <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
+                <foreignKey>IDENTIFIER</foreignKey>
+                <parentKey>SPECIMEN_COLLECTION_GROUP_ID</parentKey>
+                <pathLink>true</pathLink>
+                <row>
+                  <subForm>
+                    <name>participant</name>
+                    <udn>participant</udn>
+                    <caption>#getMessage("participant")</caption>
+                    <table>CPR_VIEW</table>
+                    <foreignKey>CPR_ID</foreignKey>
+                    <parentKey>COLLECTION_PROTOCOL_REG_ID</parentKey>
+                    <pathLink>true</pathLink>
+                  </subForm>
+                </row>
+              </subForm>
+            </row>
           </subForm>
         </row>
 
@@ -211,6 +234,5 @@
         </row>
       </subForm>
     </row>
-    
   </view>
 </form>
