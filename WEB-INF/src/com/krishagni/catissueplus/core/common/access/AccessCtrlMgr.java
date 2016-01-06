@@ -52,11 +52,10 @@ public class AccessCtrlMgr {
 	private static AccessCtrlMgr instance;
 
 	private AccessCtrlMgr() {
-
 	}
 
 	public static AccessCtrlMgr getInstance() {
-		if (instance == null) {
+		if (instance == null || instance.daoFactory == null || instance.userDao == null) {
 			instance = new AccessCtrlMgr();
 		}
 
