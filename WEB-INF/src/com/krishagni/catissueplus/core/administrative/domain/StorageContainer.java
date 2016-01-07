@@ -860,7 +860,7 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private void updateSite(Site site) {
-		this.site = site;
+		setSite(site);
 		for (StorageContainer container : getChildContainers()) {
 			container.updateSite(site);
 		}
