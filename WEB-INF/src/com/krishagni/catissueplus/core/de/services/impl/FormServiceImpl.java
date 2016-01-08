@@ -173,7 +173,7 @@ public class FormServiceImpl implements FormService {
 		if (!op.isExtendedFields()) {
 			return ResponseEvent.response(fields);
 		}
-		
+
 		if (cpId == null || cpId < 0) {
 			cpId = -1L;
 		}
@@ -577,9 +577,9 @@ public class FormServiceImpl implements FormService {
 			FormFieldSummary extensionField = new FormFieldSummary();
 			extensionField.setName(form.getName());
 			extensionField.setCaption(form.getCaption());
-			extensionField.setType("SUBFORM");	
+			extensionField.setType("SUBFORM");
 			extensionField.setSubFields(getFormFields(form));
-
+			extensionField.getSubFields().add(0, getRecordIdField(form));
 			extensionFields.add(extensionField);
 		}
 
@@ -687,6 +687,16 @@ public class FormServiceImpl implements FormService {
         }
 
         return fields;		
+	}
+
+	private FormFieldSummary getRecordIdField(Container form) {
+		Control pkCtrl = form.getPrimaryKeyControl();
+
+		FormFieldSummary field = new FormFieldSummary();
+		field.setName(pkCtrl.getUserDefinedName());
+		field.setCaption(pkCtrl.getCaption());
+		field.setType(getType(pkCtrl).name());
+		return field;
 	}
 	
 	private DataType getType(Control ctrl) {
