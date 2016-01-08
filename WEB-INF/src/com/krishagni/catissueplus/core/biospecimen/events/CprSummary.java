@@ -11,6 +11,8 @@ public class CprSummary {
 	
 	private String ppid;
 
+	private Long cpId;
+
 	private String cpShortTitle;
 	
 	private Long scgCount;
@@ -47,6 +49,14 @@ public class CprSummary {
 
 	public void setPpid(String ppid) {
 		this.ppid = ppid;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
 	}
 
 	public String getCpShortTitle() {

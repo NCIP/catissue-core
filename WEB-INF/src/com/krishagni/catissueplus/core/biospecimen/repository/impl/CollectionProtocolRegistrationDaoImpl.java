@@ -263,6 +263,7 @@ public class CollectionProtocolRegistrationDaoImpl
 				.add(Projections.property("id"))
 				.add(Projections.property("ppid"))
 				.add(Projections.property("registrationDate"))
+				.add(Projections.property("cp.id"))
 				.add(Projections.property("cp.shortTitle"))
 				.add(Projections.property("participant.id"));
 
@@ -276,20 +277,22 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 	
 	private CprSummary getCprSummary(Object[] row) {
+		int idx = 0;
 		CprSummary cpr = new CprSummary();
-		cpr.setCprId((Long)row[0]);
-		cpr.setPpid((String)row[1]);
-		cpr.setRegistrationDate((Date)row[2]);
-		cpr.setCpShortTitle((String)row[3]);
+		cpr.setCprId((Long)row[idx++]);
+		cpr.setPpid((String)row[idx++]);
+		cpr.setRegistrationDate((Date)row[idx++]);
+		cpr.setCpId((Long)row[idx++]);
+		cpr.setCpShortTitle((String)row[idx++]);
 
 		ParticipantSummary participant = new ParticipantSummary();
 		cpr.setParticipant(participant);			
-		participant.setId((Long)row[4]);
-		if (row.length > 5) {
-			participant.setFirstName((String)row[5]);
-			participant.setLastName((String) row[6]);
-			participant.setEmpi((String) row[7]);
-			participant.setUid((String) row[8]);
+		participant.setId((Long)row[idx++]);
+		if (row.length > idx) {
+			participant.setFirstName((String)row[idx++]);
+			participant.setLastName((String) row[idx++]);
+			participant.setEmpi((String) row[idx++]);
+			participant.setUid((String) row[idx++]);
 		}
 		
 		return cpr;
