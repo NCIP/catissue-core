@@ -18,6 +18,7 @@ import org.hibernate.envers.NotAudited;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -31,7 +32,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 public class CollectionProtocol extends BaseExtensionEntity {
 	public enum SpecimenLabelPrePrintMode {
 		ON_REGISTRATION,
-		ON_VISIT_COMPLETION,
+		ON_VISIT,
 		NONE;
 	}
 	
@@ -351,14 +352,14 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
 		setAliquotLabelFormat(cp.getAliquotLabelFormat());
 		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
-		setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
 		updateCollectionProtocolSites(cp.getSites());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
+		updateLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
 	}
-		
+	
 	public boolean isValidPpid(String ppid) {
 		String ppidFmt = getPpidFormat();
 		if (StringUtils.isBlank(ppidFmt)) {
@@ -524,5 +525,33 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		}
 		
 		getSites().removeAll(existingSites.values());
+	}
+	
+	private void updateLabelPrePrintMode(SpecimenLabelPrePrintMode prePrintMode) {
+		if (getSpmnLabelPrePrintMode() == prePrintMode) {
+			//
+			// Nothing has changed
+			//
+			return;
+		}
+
+		setSpmnLabelPrePrintMode(prePrintMode);
+		if (prePrintMode != SpecimenLabelPrePrintMode.NONE) {
+			//
+			// pre-printing is not disabled
+			//
+			return;
+		}
+
+		//
+		// Disable pre-print for all specimen requirements
+		//
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
+				if (sr.getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
+					sr.setLabelAutoPrintMode(LabelAutoPrintMode.NONE);
+				}
+			}
+		}
 	}
 }

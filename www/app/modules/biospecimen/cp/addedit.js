@@ -90,5 +90,9 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       }
     }
 
+    $scope.onPrePrintModeChange = function() {
+      $scope.prePrintDisabled = !!$scope.cp.id && $scope.cp.spmnLabelPrePrintMode == 'NONE';
+    }
+
     init();
   });

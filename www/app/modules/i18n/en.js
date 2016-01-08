@@ -148,7 +148,7 @@
     "store_all_aliquots_in_same_container": "Store all Aliquots in same Container",
     "visit_name_fmt": "Visit Name Format",
     "manual_enabled_for": "User Inputs Allowed For",
-    "pre_print_spmn_labels": "Pre Print Specimen Labels",
+    "pre_print_spmn_labels": "Pre-print Labels",
     "ppids": "Participant Protocol IDs",
     "visit_names": "Visit Names",
     "spec_labels": "Specimen Labels",
@@ -156,6 +156,7 @@
     "specimen_count": "Specimens",
     "view_details": "View Details",
     "view_participants": "View Participants",
+    "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
@@ -232,8 +233,7 @@
     },
 
     "spmn_label_pre_print_modes": {
-      "ON_REGISTRATION": "On Registration",
-      "ON_VISIT_COMPLETION": "On Visit Completion",
+      "ON_VISIT": "On Visit",
       "NONE": "None"
     }
   },
@@ -605,7 +605,7 @@
     },
 
     "spmn_label_auto_print_modes": {
-      "PRE_PRINT": "Pre Print",
+      "PRE_PRINT": "Pre-print",
       "ON_COLLECTION": "On Collection",
       "NONE": "None"
     }

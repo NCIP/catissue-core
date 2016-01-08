@@ -101,9 +101,26 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.storageTypes = PvManager.getPvs('storage-type');
       $scope.collectionProcs = PvManager.getPvs('collection-procedure');
       $scope.collectionContainers = PvManager.getPvs('collection-container');
-      $scope.spmnLabelAutoPrintModes = PvManager.getPvs('specimen-label-auto-print-modes');
+      loadLabelAutoPrintModes();
       pvsLoaded = true;
     };
+    
+    function loadLabelAutoPrintModes() {
+      $scope.spmnLabelAutoPrintModes = [];
+      PvManager.loadPvs('specimen-label-auto-print-modes').then(
+        function(pvs) {
+          if ($scope.cp.spmnLabelPrePrintMode != 'NONE') {
+            $scope.spmnLabelAutoPrintModes = pvs;
+          } else {
+            $scope.spmnLabelAutoPrintModes = pvs.filter(
+      	      function(pv) {
+      	        return pv.name != 'PRE_PRINT';
+      	      }
+      	    );
+          }
+        }
+      );
+    }
 
     $scope.loadSpecimenTypes = function(specimenClass) {
       $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);

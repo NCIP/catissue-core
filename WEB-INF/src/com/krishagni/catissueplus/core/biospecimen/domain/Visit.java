@@ -435,7 +435,7 @@ public class Visit extends BaseExtensionEntity {
 	}
 	
 	public boolean isPrePrintEnabled() {
-		return getCollectionProtocol().getSpmnLabelPrePrintMode() == SpecimenLabelPrePrintMode.ON_VISIT_COMPLETION;
+		return getCollectionProtocol().getSpmnLabelPrePrintMode() == SpecimenLabelPrePrintMode.ON_VISIT;
 	}
 	
 	public boolean shouldPrePrintLabels(String prevStatus) {
