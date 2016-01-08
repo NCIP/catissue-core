@@ -14,6 +14,8 @@ public class ExtensionDetail {
 	
 	private Long objectId;
 	
+	private Long formId;
+	
 	private List<AttrDetail> attrs = new ArrayList<AttrDetail>();
 	
 	public Long getId() {
@@ -30,6 +32,14 @@ public class ExtensionDetail {
 
 	public void setObjectId(Long objectId) {
 		this.objectId = objectId;
+	}
+	
+	public Long getFormId() {
+		return formId;
+	}
+
+	public void setFormId(Long formId) {
+		this.formId = formId;
 	}
 
 	public List<AttrDetail> getAttrs() {
@@ -58,8 +68,9 @@ public class ExtensionDetail {
 		
 		ExtensionDetail detail = new ExtensionDetail();
 		detail.setId(extension.getId());
-		detail.setObjectId(extension.getObjectId()); 
-		detail.setAttrs(AttrDetail.from(extension.getAttrs()));		
+		detail.setObjectId(extension.getObjectId());
+		detail.setFormId(extension.getFormId());
+		detail.setAttrs(AttrDetail.from(extension.getAttrs()));	
 		return detail;
 	}
 	
@@ -71,6 +82,8 @@ public class ExtensionDetail {
 		private String caption;
 		
 		private Object value;
+		
+		private String type;
 
 		public String getName() {
 			return name;
@@ -104,6 +117,14 @@ public class ExtensionDetail {
 			this.value = value;
 		}
 		
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
 		public static AttrDetail from(Attr attr) {
 			AttrDetail detail = new AttrDetail();
 			BeanUtils.copyProperties(attr, detail);

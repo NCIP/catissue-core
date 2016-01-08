@@ -1,5 +1,5 @@
 angular.module("os.biospecimen.extensions")
-  .directive("osExtensionOverview", function() {
+  .directive("osExtensionOverview", function(ExtensionsUtil) {
      return {
        restrict: 'A',
 
@@ -15,6 +15,13 @@ angular.module("os.biospecimen.extensions")
            var attr = scope.extObject.attrs[i];
            if (attr.value instanceof Array) {
              attr.value = attr.value.join(", ");
+           }
+
+           if (attr.type == 'fileUpload') {
+             attr.fileDownloadUrl = ExtensionsUtil.getFileDownloadUrl(
+               scope.extObject.formId,
+               scope.extObject.id,
+               attr.name);
            }
          }
        }

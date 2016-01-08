@@ -4,7 +4,13 @@
     <ul class="os-key-values" ng-class="{'os-one-col': showColumn == 1, 'os-two-cols': showColumn == 2}">
       <li class="item" ng-repeat="attr in extObject.attrs">
         <strong class="key key-sm">{{attr.caption}}</strong>
-        <span class="value value-md">{{attr.value | osNoValue}}</span>
+        <span class="value value-md" ng-switch on="attr.type">
+          <span ng-switch-when="fileUpload">
+            <a href="{{attr.fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
+            <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
+          </span>
+          <span ng-switch-default>{{attr.value | osNoValue}}</span>
+        </span>
       </li>
     </ul>
   </div>

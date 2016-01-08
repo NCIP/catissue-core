@@ -93,6 +93,10 @@ public abstract class DeObject {
 	public void setAttrs(List<Attr> attrs) {
 		this.attrs = attrs;
 	}
+	
+	public Long getFormId() {
+		return getForm().getId(); 
+	}
 
 	public void saveOrUpdate() {
 		try {
@@ -392,6 +396,8 @@ public abstract class DeObject {
 		private String caption;
 		
 		private Object value;
+		
+		private String type;
 
 		public String getName() {
 			return name;
@@ -425,11 +431,20 @@ public abstract class DeObject {
 			this.value = value;
 		}
 		
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
 		public static Attr from(ControlValue cv) {
 			Attr attr = new Attr();
 			attr.setName(cv.getControl().getName()); 
 			attr.setUdn(cv.getControl().getUserDefinedName());
 			attr.setCaption(cv.getControl().getCaption());
+			attr.setType(cv.getControl().getCtrlType());
 			
 			Object value = cv.getValue();
 			if (value != null && value.getClass().isArray()) {
