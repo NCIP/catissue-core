@@ -201,7 +201,7 @@ def getCommitRevision() {
 }
 
 def getBranch() {
-  def branchCmd = "git rev-parse --abbrev-ref HEAD"
+  def branchCmd = "git symbolic-ref -q --short HEAD || git describe --tags --exact-match"
   def branch = branchCmd.execute()
   return branch.text.trim()
 }
