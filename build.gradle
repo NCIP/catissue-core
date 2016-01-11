@@ -201,9 +201,14 @@ def getCommitRevision() {
 }
 
 def getBranch() {
-  def branchCmd = "git symbolic-ref -q --short HEAD || git describe --tags --exact-match"
-  def branch = branchCmd.execute()
-  return branch.text.trim()
+  def branchCmd = "git symbolic-ref -q --short HEAD";
+  def branch = branchCmd.execute().text.trim();
+
+  if (branch.length() == 0) {
+    branchCmd = "git describe --tags --exact-match";
+    branch = branchCmd.execute().text.trim();
+  }
+  return branch;
 }
 
 processResources {
