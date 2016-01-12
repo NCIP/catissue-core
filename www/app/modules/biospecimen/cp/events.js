@@ -17,10 +17,6 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
       $scope.sites = PvManager.getSites();
 
-      $scope.searchClinicalDiagnoses = function(searchTerm) {
-        $scope.clinicalDiagnoses = PvManager.getPvs('clinical-diagnosis', searchTerm);
-      };
-
       pvsLoaded = true;
     };
 
@@ -30,7 +26,6 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
       $scope.mode = undefined;
          
       $scope.clinicalStatuses = [];
-      $scope.clinicalDiagnoses = [];
       $scope.sites = [];
       $scope.event = {};
       $scope.selected = {};

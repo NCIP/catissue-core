@@ -14,7 +14,6 @@ import org.hibernate.Session;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
-import com.krishagni.catissueplus.core.administrative.events.SiteDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -475,10 +474,10 @@ public class RbacServiceImpl implements RbacService {
 			throw OpenSpecimenException.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 		}
 		
-		AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 		ArrayList<SubjectRole> subjectRoles = new ArrayList<SubjectRole>();
 		for (String role : roleNames) {
 			SubjectRole sr = createSubjectRole(site, cp, role, systemRole);
+			AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, sr.getSite());
 			SubjectRole resp = null;
 			switch (op) {
 				case ADD:
@@ -597,12 +596,12 @@ public class RbacServiceImpl implements RbacService {
 				return ResponseEvent.userError(RbacErrorCode.SUBJECT_NOT_FOUND);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 			Subject subject = daoFactory.getSubjectDao().getById(user.getId());
 			subject.removeAllSubjectRoles();
 			
 			for (SubjectRolesList.Role srd : rolesList.getRoles()) {
 				SubjectRole sr = createSubjectRole(srd);
+				AccessCtrlMgr.getInstance().ensureCreateUpdateUserRolesRights(user, sr.getSite());
 				subject.addRole(sr);
 			}
 			

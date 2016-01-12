@@ -42,8 +42,10 @@ import com.krishagni.catissueplus.core.biospecimen.repository.VisitsDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.repository.ConfigSettingDao;
 import com.krishagni.catissueplus.core.common.repository.UniqueIdGenerator;
+import com.krishagni.catissueplus.core.common.repository.UpgradeLogDao;
 import com.krishagni.catissueplus.core.common.repository.impl.ConfigSettingDaoImpl;
 import com.krishagni.catissueplus.core.common.repository.impl.UniqueIdGeneratorImpl;
+import com.krishagni.catissueplus.core.common.repository.impl.UpgradeLogDaoImpl;
 
 public class DaoFactoryImpl implements DaoFactory {
 	private SessionFactory sessionFactory;
@@ -225,6 +227,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public SpecimenRequestDao getSpecimenRequestDao() {
 		SpecimenRequestDaoImpl dao = new SpecimenRequestDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public UpgradeLogDao getUpgradeLogDao() {
+		UpgradeLogDaoImpl dao = new UpgradeLogDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

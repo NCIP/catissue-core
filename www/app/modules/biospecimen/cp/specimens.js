@@ -96,15 +96,42 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         $scope.sr.type = '';
       });
 
-      $scope.anatomicSites = PvManager.getLeafPvs('anatomic-site');
       $scope.lateralities = PvManager.getPvs('laterality');
       $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.storageTypes = PvManager.getPvs('storage-type');
       $scope.collectionProcs = PvManager.getPvs('collection-procedure');
       $scope.collectionContainers = PvManager.getPvs('collection-container');
-      $scope.spmnLabelAutoPrintModes = PvManager.getPvs('specimen-label-auto-print-modes');
+      loadLabelAutoPrintModes();
       pvsLoaded = true;
     };
+    
+    function loadLabelAutoPrintModes() {
+      $scope.spmnLabelAutoPrintModes = [];
+      PvManager.loadPvs('specimen-label-auto-print-modes').then(
+        function(pvs) {
+          if ($scope.cp.spmnLabelPrePrintMode != 'NONE') {
+            $scope.spmnLabelAutoPrintModes = pvs;
+          } else {
+            $scope.spmnLabelAutoPrintModes = pvs.filter(
+      	      function(pv) {
+      	        return pv.name != 'PRE_PRINT';
+      	      }
+      	    );
+          }
+        }
+      );
+    }
+
+    function removeUiProps(sr) {
+      delete sr.labelFmtSpecified;
+      angular.forEach(sr.specimensPool,
+        function(poolSpmn) {
+          delete poolSpmn.labelFmtSpecified;
+        }
+      );
+
+      return sr;
+    }
 
     $scope.loadSpecimenTypes = function(specimenClass) {
       $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
@@ -198,7 +225,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createSr = function() {
-      $scope.sr.$saveOrUpdate().then(
+      removeUiProps($scope.sr).$saveOrUpdate().then(
         function(result) {
           addToSrList(result);
           $scope.view = 'list_sr';
@@ -207,7 +234,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.updateSr = function() {
-      $scope.sr.$saveOrUpdate().then(
+      removeUiProps($scope.sr).$saveOrUpdate().then(
         function(result) {
           updateSrList(result);
           $scope.revertEdit();
@@ -216,17 +243,18 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.ensureLabelFmtSpecified = function(sr, lineage) {
-      $scope.labelFmtSpecified = false;
+      sr.labelFmtSpecified = true;
+
       if (sr.labelAutoPrintMode != 'PRE_PRINT' || !!sr.labelFmt) {
         return;
       }
 
       if (lineage == 'Aliquot') {
-        $scope.labelFmtSpecified = !$scope.cp.aliquotLabelFmt;
+        sr.labelFmtSpecified = !!$scope.cp.aliquotLabelFmt;
       } else if (lineage == 'Derivative') {
-        $scope.labelFmtSpecified = !$scope.cp.derivativeLabelFmt;
+        sr.labelFmtSpecified = !!$scope.cp.derivativeLabelFmt;
       } else {
-        $scope.labelFmtSpecified = !$scope.cp.specimenLabelFmt;
+        sr.labelFmtSpecified = !!$scope.cp.specimenLabelFmt;
       }
     }
 
@@ -263,7 +291,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         spec.qtyPerAliquot = Math.round(availableQty / spec.noOfAliquots * 10000) / 10000;
       }
 
-      $scope.parentSr.createAliquots(spec).then(
+      $scope.parentSr.createAliquots(removeUiProps(spec)).then(
         function(aliquots) {
           addChildren($scope.parentSr, aliquots);
           $scope.parentSr.isOpened = true;
@@ -291,7 +319,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createDerivative = function() {
-      $scope.parentSr.createDerived($scope.childReq).then(
+      $scope.parentSr.createDerived(removeUiProps($scope.childReq)).then(
         function(derived) {
           addChildren($scope.parentSr, [derived]);
           $scope.parentSr.isOpened = true;

@@ -138,12 +138,16 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			ose.checkAndThrow();
 			
+			//
+			//  Saved to obtain IDs to make distributed events
+			//
+			daoFactory.getDistributionOrderDao().saveOrUpdate(order, true);
+
 			Status inputStatus = Status.valueOf(detail.getStatus());
 			if (inputStatus == Status.EXECUTED) {
 				order.distribute();
 			}
 			
-			daoFactory.getDistributionOrderDao().saveOrUpdate(order);
 			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(order));
 		} catch (OpenSpecimenException ose) {

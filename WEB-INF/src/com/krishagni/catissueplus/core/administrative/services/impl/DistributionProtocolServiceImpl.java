@@ -82,7 +82,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
 			DpListCriteria crit = req.getPayload();
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSiteIds();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
 				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
 			}

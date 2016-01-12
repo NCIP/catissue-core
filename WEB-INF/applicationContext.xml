@@ -484,7 +484,9 @@
   <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
     <property name="velocityProperties">
       <value>
-        resource.loader=class
+        resource.loader=jar,class
+        jar.resource.loader.class=com.krishagni.catissueplus.core.common.JarDirectoryResourceLoader
+        jar.resource.loader.path=${plugin.dir}
         class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
       </value>
     </property>
@@ -768,6 +770,11 @@
   
   <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
     <property name="dataSource" ref="dataSource"/>
+  </bean>
+  
+  <bean id="upgradeLogUpdater" class="com.krishagni.catissueplus.core.init.UpgradeLogUpdater">
+    <property name="daoFactory" ref="biospecimenDaoFactory" />
+    <property name="appProps" ref="appProps"/>
   </bean>
   
   <task:scheduler id="taskScheduler" pool-size="1"/>

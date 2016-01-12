@@ -21,6 +21,15 @@
         <div os-field-error field="poolSpmnForm.code"></div>
       </div>
     </div>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <os-select name="printLabelEvent" ng-model="poolReq.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
+          display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(poolReq, 'Primary')"
+          os-md-input placeholder="{{'srs.auto_print_label' | translate}}">
+        </os-select>
+        <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!poolReq.labelFmtSpecified"></div>
+      </div>
+    </div>
     <div class="form-group clearfix">
       <div class="col-xs-12">
         <button type="submit" class="btn btn-success" os-form-submit="addToSpmnPool()" ng-if="!poolReq.id">

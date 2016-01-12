@@ -25,7 +25,16 @@ angular.module('os.biospecimen.cp',
             updateOpts: {resource: 'CollectionProtocol', operations: ['Update']},
             deleteOpts: {resource: 'CollectionProtocol', operations: ['Delete']}
           }
-
+          
+          $scope.participantResource = {
+            createOpts: {resource: 'ParticipantPhi', operations: ['Create']},
+            updateOpts: {resource: 'ParticipantPhi', operations: ['Update']}
+          }
+          
+          $scope.specimenResource = {
+            updateOpts: {resource: 'VisitAndSpecimen', operations: ['Create', 'Update']}
+          }
+          
           $scope.codingEnabled = $scope.global.appProps.cp_coding_enabled;
         },
         parent: 'signed-in'
@@ -34,7 +43,22 @@ angular.module('os.biospecimen.cp',
         url: '', 
         templateUrl: 'modules/biospecimen/cp/list.html',
         controller: 'CpListCtrl',
-        parent: 'cps'
+        parent: 'cps',
+        resolve: {
+          cpList: function(CollectionProtocol) {
+            return CollectionProtocol.list();
+          },
+          
+          view: function($rootScope, $state, cpList) {
+            if ($rootScope.stateChangeInfo.fromState.name == 'login') {
+              if (cpList.length == 1) {
+                $state.go('participant-list', {cpId: cpList[0].id});
+              } else if (cpList.length == 0) {
+                $state.go('home');
+              }
+            }
+          }
+        }
       })
       .state('import-biospecimen-objs', {
         url: '/bulk-import?objectType&entityType',

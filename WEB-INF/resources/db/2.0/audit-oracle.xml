@@ -594,99 +594,123 @@
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-31">
-    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C007913" tableName="CATISSUE_COLL_COORDINATORS_AUD"/>
+    <validCheckSum>7:3f0976144c52836613671dabf7bcac61</validCheckSum>
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, USER_ID" tableName="CATISSUE_COLL_COORDINATORS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-32">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007916" tableName="CATISSUE_COLL_PROT_EVENT_AUD"/>
+    <validCheckSum>7:d4a88c1343dab626c6fb477b176d701f</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_COLL_PROT_EVENT_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-33">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007919" tableName="CATISSUE_COLL_PROT_REG_AUD"/>
+    <validCheckSum>7:1413029710ef84f0171f2f07445de4ea</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_COLL_PROT_REG_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-34">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007922" tableName="CATISSUE_CONSENT_TIER_AUD"/>
+    <validCheckSum>7:2f63408b17fda2e274c80f2d4180649c</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_CONSENT_TIER_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-35">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007925" tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"/>
+    <validCheckSum>7:dc0ab9b917780caff7478c6cdc9ae8d2</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-36">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007928" tableName="CATISSUE_INSTITUTION_AUD"/>
+    <validCheckSum>7:2aeaf2d5d01dc8f68228c1ce661037d7</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_INSTITUTION_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-37">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007931" tableName="CATISSUE_PARTICIPANT_AUD"/>
+    <validCheckSum>7:fa8e99bdd15b64671034a29c63058c3a</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_PARTICIPANT_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-38">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007934" tableName="CATISSUE_PART_MEDICAL_ID_AUD"/>
+    <validCheckSum>7:52f3dd24e8fd2fc7fe2004ae4f437f97</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_PART_MEDICAL_ID_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-39">
-    <addPrimaryKey columnNames="REV, PARTICIPANT_ID, RACE_NAME" constraintName="SYS_C007938" tableName="CATISSUE_RACE_AUD"/>
+    <validCheckSum>7:a172570b689d21cf8b76217c8baaf99d</validCheckSum>
+    <addPrimaryKey columnNames="REV, PARTICIPANT_ID, RACE_NAME" tableName="CATISSUE_RACE_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-40">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007941" tableName="CATISSUE_SITE_AUD"/>
+    <validCheckSum>7:a5abbc1502bab63c637a3f6e6dbf4fc1</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_SITE_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-41">
-    <addPrimaryKey columnNames="REV, SITE_ID, USER_ID" constraintName="SYS_C007945" tableName="CATISSUE_SITE_COORDINATORS_AUD"/>
+    <validCheckSum>7:ddf3c9393ee8b80e799c5ff68171833a</validCheckSum>
+    <addPrimaryKey columnNames="REV, SITE_ID, USER_ID" tableName="CATISSUE_SITE_COORDINATORS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-42">
-    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" constraintName="SYS_C007949" tableName="CATISSUE_SITE_CP_AUD"/>
+    <validCheckSum>7:22b083db9d709ce09d075887f7ed806e</validCheckSum>
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" tableName="CATISSUE_SITE_CP_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-44">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007956" tableName="CATISSUE_SPECIMEN_AUD"/>
+    <validCheckSum>7:ae6d4d9737571cd437bcb61d9579dc91</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_SPECIMEN_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-45">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007959" tableName="CATISSUE_USER_AUD"/>
+    <validCheckSum>7:4d2bf35fc23287c6052df1942410f1f7</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CATISSUE_USER_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-46">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007962" tableName="CAT_COLLECTION_PROTOCOL_AUD"/>
+    <validCheckSum>7:e5ca610a81d52ec1e016e367f4fa8bfd</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CAT_COLLECTION_PROTOCOL_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-47">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007965" tableName="CAT_CONSENT_TIER_RESPONSE_AUD"/>
+    <validCheckSum>7:7281ef6a5f5760d976f69ca162012f5c</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CAT_CONSENT_TIER_RESPONSE_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-48">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007968" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+    <validCheckSum>7:91dfd49e967f03f3d265d2e45830f021</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-50">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007975" tableName="OS_CONTAINER_POSITIONS_AUD"/>
+    <validCheckSum>7:851eaf7db10c6b13c96d7d641c580f52</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="OS_CONTAINER_POSITIONS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-51">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007978" tableName="OS_DEPARTMENTS_AUD"/>
+    <validCheckSum>7:cf70efbe8951bf790909411ecbf6b4c0</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="OS_DEPARTMENTS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-52">
-    <addPrimaryKey columnNames="IDENTIFIER, REV" constraintName="SYS_C007981" tableName="OS_STORAGE_CONTAINERS_AUD"/>
+    <validCheckSum>7:2e174a62b191933248116d55a3445762</validCheckSum>
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="OS_STORAGE_CONTAINERS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-53">
-    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, CP_ID" constraintName="SYS_C007985" tableName="OS_STOR_CONTAINER_CPS_AUD"/>
+    <validCheckSum>7:677fac9cd41c935e57ec6f3fc773d2d0</validCheckSum>
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, CP_ID" tableName="OS_STOR_CONTAINER_CPS_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-54">
-    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS" constraintName="SYS_C007989" tableName="OS_STOR_CONT_SPEC_CLASSES_AUD"/>
+    <validCheckSum>7:d50b9e415d44ed02b7449c8812515b6c</validCheckSum>
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS" tableName="OS_STOR_CONT_SPEC_CLASSES_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-55">
-    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE" constraintName="SYS_C007993" tableName="OS_STOR_CONT_SPEC_TYPES_AUD"/>
+    <validCheckSum>7:7e836a3c00dc0e6566c8ff9910854d71</validCheckSum>
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE" tableName="OS_STOR_CONT_SPEC_TYPES_AUD"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-56">
-    <addPrimaryKey columnNames="REV" constraintName="SYS_C007996" tableName="OS_REVISIONS"/>
+    <validCheckSum>7:b47519d99f2e473b50aa819e5639054e</validCheckSum>
+    <addPrimaryKey columnNames="REV" tableName="OS_REVISIONS"/>
   </changeSet>
 
   <changeSet author="slakhani" id="1429175726743-58">

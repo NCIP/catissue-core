@@ -1,13 +1,13 @@
-package com.krishagni.catissueplus.core.administrative.events;
+package com.krishagni.catissueplus.core.common.events;
 
 import java.io.File;
 
-public class ContainerMapExportDetail {
+public class ExportedFileDetail {
 	private String name;
 	
 	private File file;
 	
-	public ContainerMapExportDetail(String name, File file) {
+	public ExportedFileDetail(String name, File file) {
 		this.name = name;
 		this.file = file;
 	}

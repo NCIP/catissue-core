@@ -49,3 +49,8 @@
   padding-top: 6px;
 }
 
+.os-table.bulk-edit .os-checkbox {
+  top: 12px;
+  height: 14px;
+}
+

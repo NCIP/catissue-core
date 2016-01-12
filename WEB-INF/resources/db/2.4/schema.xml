@@ -149,6 +149,7 @@
   </changeSet>
   
   <changeSet author="vgaikwad" id="User api calls log table">
+    <validCheckSum>7:39da927a449aa37f957a325e43636558</validCheckSum>  
     <createTable tableName="OS_USER_API_CALLS_LOG">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>
@@ -174,12 +175,10 @@
         <constraints nullable="false"/>
       </column>
      
-      <column name="CALL_START_TIME" type="${timestamp.type}">
-        <constraints nullable="false"/>
+      <column name="CALL_START_TIME" type="${nullable.ts.type}">
       </column>
      
-      <column name="CALL_END_TIME" type="${timestamp.type}">
-        <constraints nullable="false"/>
+      <column name="CALL_END_TIME" type="${nullable.ts.type}">
       </column>
     </createTable>
   </changeSet>  

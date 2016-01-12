@@ -46,6 +46,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
             specimen.initialQty = Util.getNumberInScientificNotation(specimen.initialQty);
             if (specimen.status != 'Collected') {
               specimen.status = 'Collected';
+              specimen.printLabel = (specimen.labelAutoPrintMode == 'ON_COLLECTION');
             }
 
             if (specimen.closeAfterChildrenCreation) {
@@ -110,6 +111,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
             expandOrCollapseAliquotsGrp(specimen, expandGrp);
           }
 
+          initAliquotGrpPrintLabel(specimen);
           specimen.aliquotLabels = getAliquotGrpLabels(specimen);
         });
       }
@@ -151,6 +153,35 @@ angular.module('os.biospecimen.participant.collect-specimens',
         if (!aliquot.expanded) {
           aliquot.aliquotLabels = getAliquotGrpLabels(aliquot);
         }
+      }
+
+      function initAliquotGrpPrintLabel(aliquot) {
+        if (aliquot.expanded) {
+          return;
+        }
+
+        var printLabel = aliquot.aliquotGrp.some(
+          function(sibling) {
+            return sibling.printLabel;
+          }
+        );
+
+        if (!printLabel) {
+          return;
+        }
+
+        aliquot.printLabel = printLabel;
+        setAliquotGrpPrintLabel(aliquot);
+      }
+
+      function setAliquotGrpPrintLabel(aliquot) {
+        if (aliquot.expanded || !aliquot.aliquotGrp) {
+          return;
+        }
+
+        angular.forEach(aliquot.aliquotGrp, function(sibling) {
+          sibling.printLabel = aliquot.printLabel;
+        });
       }
 
       function getAliquotGrpLabels(specimen) {
@@ -366,6 +397,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           });
         }
       };
+
+      $scope.togglePrintLabels = setAliquotGrpPrintLabel;
         
       $scope.saveSpecimens = function() {
         if (areDuplicateLabelsPresent($scope.specimens)) {
@@ -487,6 +520,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           id: uiSpecimen.id,
           initialQty: uiSpecimen.initialQty,
           label: uiSpecimen.label,
+          printLabel: uiSpecimen.printLabel,
           reqId: uiSpecimen.reqId,
           visitId: $scope.visit.id,
           storageLocation: uiSpecimen.storageLocation,

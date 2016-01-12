@@ -93,6 +93,10 @@ public abstract class DeObject {
 	public void setAttrs(List<Attr> attrs) {
 		this.attrs = attrs;
 	}
+	
+	public Long getFormId() {
+		return getForm().getId(); 
+	}
 
 	public void saveOrUpdate() {
 		try {
@@ -125,8 +129,14 @@ public abstract class DeObject {
 		if (getId() == null) {
 			return;
 		}
-		
-		FormRecordEntryBean re = daoFactory.getFormDao().getRecordEntry(getId());
+
+		Long formCtxId = getFormContext().getIdentifier();
+		Long objectId = getObjectId();
+		FormRecordEntryBean re = daoFactory.getFormDao().getRecordEntry(formCtxId, objectId, getId());
+		if (re == null) {
+			return;
+		}
+
 		re.setActivityStatus(Status.CLOSED);
 		daoFactory.getFormDao().saveOrUpdateRecordEntry(re);
 	}
@@ -386,6 +396,8 @@ public abstract class DeObject {
 		private String caption;
 		
 		private Object value;
+		
+		private String type;
 
 		public String getName() {
 			return name;
@@ -419,11 +431,20 @@ public abstract class DeObject {
 			this.value = value;
 		}
 		
+		public String getType() {
+			return type;
+		}
+
+		public void setType(String type) {
+			this.type = type;
+		}
+
 		public static Attr from(ControlValue cv) {
 			Attr attr = new Attr();
 			attr.setName(cv.getControl().getName()); 
 			attr.setUdn(cv.getControl().getUserDefinedName());
 			attr.setCaption(cv.getControl().getCaption());
+			attr.setType(cv.getControl().getCtrlType());
 			
 			Object value = cv.getValue();
 			if (value != null && value.getClass().isArray()) {

@@ -198,6 +198,11 @@ public class VisitsController {
 		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();
 		FileDetail detail = resp.getPayload();
+		String contentType = Utility.getContentType(detail.getFile());
+		if (!contentType.startsWith("text/")) {
+			return null;
+		}
+		
 		return Utility.getFileText(detail.getFile());
 	}
 	

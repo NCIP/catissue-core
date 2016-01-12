@@ -101,10 +101,9 @@
 
     <div class="form-group clearfix">
       <div os-md-input ng-model="event.clinicalDiagnosis" placeholder="{{'cp.clinical_diagnosis' | translate}}">
-        <os-select name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" 
-          list="clinicalDiagnoses" refresh="searchClinicalDiagnoses"
+        <os-pvs name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" attribute="clinical-diagnosis"
           os-md-input placeholder="{{'cp.clinical_diagnosis' | translate}}" required>
-        </os-select>
+        </os-pvs>
       </div>
       <div os-field-error field="eventForm.clinicalDiagnosis"></div>
     </div>

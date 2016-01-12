@@ -20,7 +20,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
             searchKey = searchData.ppid || searchData.uid;
             $state.go('participant-search', {}, {reload: true});
           } else {
-            $state.go('participant-detail.overview', {cprId: participants[0].cprId});
+            $state.go('participant-detail.overview', {cpId: participants[0].cpId, cprId: participants[0].cprId});
           }
         }
       );

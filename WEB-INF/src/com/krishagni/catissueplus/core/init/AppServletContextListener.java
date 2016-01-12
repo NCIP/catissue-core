@@ -59,28 +59,24 @@ public class AppServletContextListener implements ServletContextListener {
 		File pluginDirFile = new File(pluginDir);
 
 		for (File file : pluginDirFile.listFiles()) {
-			if (file.isDirectory()) {
+			if (file.isDirectory() || !file.getName().endsWith(".jar")) {
 				continue;
 			}
 
-			if (file.getName().endsWith(".jar")) {
-				JarFile jarFile = null;
-				try {
-					logger.info("Loading plugin resource from: " + file.getAbsolutePath());
-					jarFile = new JarFile(file);
-					Attributes attrs = jarFile.getManifest().getMainAttributes();
-					String pluginName = attrs.getValue("os-plugin-name");
-					if (StringUtils.isBlank(pluginName)) {
-						continue;
-					}
-					
+			JarFile jarFile = null;
+			try {
+				logger.info("Loading plugin resource from: " + file.getAbsolutePath());
+				jarFile = new JarFile(file);
+				Attributes attrs = jarFile.getManifest().getMainAttributes();
+				String pluginName = attrs.getValue("os-plugin-name");
+				if (StringUtils.isNotBlank(pluginName)) {
 					ClassPathUtil.addFile(file);
 					PluginManager.getInstance().addPluginName(pluginName.trim());
-				} catch (Exception e) {
-					logger.error("Error loading plugin resources from: ", e);
-				} finally {
-					IOUtils.closeQuietly(jarFile);
 				}
+			} catch (Exception e) {
+				logger.error("Error loading plugin resources from: ", e);
+			} finally {
+				IOUtils.closeQuietly(jarFile);
 			}
 		}
 	}

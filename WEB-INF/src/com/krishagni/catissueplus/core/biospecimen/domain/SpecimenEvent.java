@@ -83,9 +83,9 @@ public abstract class SpecimenEvent extends DeObject {
 	
 	public Map<String, Object> getAttrValues() {
 		Map<String, Object> vals = new HashMap<String, Object>();
-		vals.put("user", user.getId());
+		vals.put("user", getUser().getId());
 		vals.put("time", new SimpleDateFormat(cfgSvc.getDeDateTimeFormat()).format(time)); 
-		vals.put("comments", comments);
+		vals.put("comments", getComments());
 		
 		vals.putAll(getEventAttrs());
 		return vals;

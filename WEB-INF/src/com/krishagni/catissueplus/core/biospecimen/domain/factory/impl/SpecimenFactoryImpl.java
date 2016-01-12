@@ -99,6 +99,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		specimen.setVisit(visit);
+		specimen.setForceDelete(detail.isForceDelete());
+		specimen.setPrintLabel(detail.isPrintLabel());
 		
 		setCollectionStatus(detail, existing, specimen, ose);
 		setLineage(detail, existing, specimen, ose);
@@ -335,16 +337,23 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setAnatomicSite(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null) {
-			specimen.setTissueSite(specimen.getParentSpecimen().getTissueSite());
+		String anatomicSite = detail.getAnatomicSite();
+
+		Specimen parent = specimen.getParentSpecimen();
+		if (parent != null) {
+			if (StringUtils.isBlank(anatomicSite) || anatomicSite.equals(parent.getTissueSite())) {
+				specimen.setTissueSite(parent.getTissueSite());
+			} else {
+				ose.addError(SpecimenErrorCode.ANATOMIC_SITE_NOT_SAME_AS_PARENT, anatomicSite, parent.getTissueSite());
+			}
+
 			return;
 		}
-		
+
 		if (specimen.isAliquot() || specimen.isDerivative()) {
 			return; // invalid parent scenario
 		}
 		
-		String anatomicSite = detail.getAnatomicSite();
 		if (StringUtils.isBlank(anatomicSite)) {
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.ANATOMIC_SITE_REQUIRED);
@@ -357,7 +366,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE, anatomicSite);
 			return;
 		}
-		
+
 		specimen.setTissueSite(anatomicSite);		
 	}
 	
@@ -370,16 +379,23 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 
 	private void setLaterality(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
-		if (specimen.getParentSpecimen() != null) {
-			specimen.setTissueSide(specimen.getParentSpecimen().getTissueSide());
+		String laterality = detail.getLaterality();
+
+		Specimen parent = specimen.getParentSpecimen();
+		if (parent != null) {
+			if (StringUtils.isBlank(laterality) || laterality.equals(parent.getTissueSide())) {
+				specimen.setTissueSide(parent.getTissueSide());
+			} else {
+				ose.addError(SpecimenErrorCode.LATERALITY_NOT_SAME_AS_PARENT, laterality, parent.getTissueSide());
+			}
+
 			return;
 		}
-		
+
 		if (specimen.isAliquot() || specimen.isDerivative()) {
 			return; // invalid parent scenario
 		}
 		
-		String laterality = detail.getLaterality();
 		if (StringUtils.isBlank(laterality)) {
 			if (specimen.getSpecimenRequirement() == null) {
 				ose.addError(SpecimenErrorCode.LATERALITY_REQUIRED);

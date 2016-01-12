@@ -57,6 +57,14 @@
       </li>
     </ul>
 
+    <div class="os-section os-line-section" ng-if="!!visit.comments">
+      <strong class="key key-sm">
+        <span translate="visits.comments">Comments</span>
+        <span>&nbsp;</span>
+      </strong>
+      <span class="value value-md">{{visit.comments}}</span>
+    </div>
+
     <div ng-if="!!visit.extensionDetail">
       <div os-extension-overview ext-object="visit.extensionDetail" show-column="2"></div>
     </div>

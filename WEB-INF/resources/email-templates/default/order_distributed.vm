@@ -31,7 +31,13 @@
                   </tr>
                   <tr>
                     <td> Receiving Site </td>
-                    <td> : $order.site.name </td>
+                    <td> : 
+                      #if ( $order.site )
+                        $order.site.name 
+                      #else
+                        Not Specified
+                      #end
+                    </td>
                   </tr>
                   <tr>
                     <td> Distribution Protocol </td>

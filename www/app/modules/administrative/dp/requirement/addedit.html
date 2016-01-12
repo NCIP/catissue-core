@@ -13,9 +13,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.anatomic_site">Anatomic Site</label>
       <div class="col-xs-6">
-        <os-select name="anatomicSite" ng-model="dpr.anatomicSite" list="anatomicSites"
+        <os-pvs name="anatomicSite" ng-model="dpr.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
           required placeholder="{{'dp.distribution_order.anatomic_site' | translate}}">
-        </os-select>
+        </os-pvs>
         <div os-field-error field="dprForm.anatomicSite"></div>
       </div>
     </div>

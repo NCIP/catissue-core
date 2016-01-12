@@ -174,5 +174,81 @@
         </options>
       </dropDown>
     </row>
+
+    <row>
+      <subForm>
+        <name>orderItems</name>
+        <udn>orderItems</udn>
+        <caption>#getMessage("order_items")</caption>
+        <table>OS_ORDER_ITEMS</table>
+        <foreignKey>ORDER_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        
+        <row>
+          <subForm>
+            <name>specimen</name>
+            <udn>specimen</udn>
+            <caption>#getMessage("specimen")</caption>
+            <table>CATISSUE_SPECIMEN</table>
+            <foreignKey>IDENTIFIER</foreignKey>
+            <parentKey>SPECIMEN_ID</parentKey>
+
+            <row>
+              <textField>
+                <name>label</name>
+                <udn>label</udn>
+                <caption>#getMessage("specimen_label")</caption>
+                <column>LABEL</column>
+              </textField>
+            </row> 
+
+            <row>
+              <subForm>
+                <name>scg</name>
+                <udn>scg</udn>
+                <caption>#getMessage("participant_visits")</caption>
+                <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
+                <foreignKey>IDENTIFIER</foreignKey>
+                <parentKey>SPECIMEN_COLLECTION_GROUP_ID</parentKey>
+                <pathLink>true</pathLink>
+                <row>
+                  <subForm>
+                    <name>participant</name>
+                    <udn>participant</udn>
+                    <caption>#getMessage("participant")</caption>
+                    <table>CPR_VIEW</table>
+                    <foreignKey>CPR_ID</foreignKey>
+                    <parentKey>COLLECTION_PROTOCOL_REG_ID</parentKey>
+                    <pathLink>true</pathLink>
+                  </subForm>
+                </row>
+              </subForm>
+            </row>
+          </subForm>
+        </row>
+
+        <row>
+          <numberField>
+            <name>quantity</name>
+            <udn>quantity</udn>
+            <caption>#getMessage("order_items_quantity")</caption>
+            <column>QUANTITY</column>
+          </numberField>
+        </row>
+
+        <row>
+          <dropDown>
+            <name>status</name>
+            <udn>status</udn>
+            <caption>#getMessage("order_items_status")</caption>
+            <column>STATUS</column>
+            <options>
+              <option><value>DISTRIBUTED</value></option>
+              <option><value>DISTRIBUTED_AND_CLOSED</value></option>
+            </options>
+          </dropDown>
+        </row>
+      </subForm>
+    </row>
   </view>
 </form>

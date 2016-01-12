@@ -200,6 +200,17 @@ def getCommitRevision() {
   return revision.text.trim()
 }
 
+def getBranch() {
+  def branchCmd = "git symbolic-ref -q --short HEAD";
+  def branch = branchCmd.execute().text.trim();
+
+  if (branch.length() == 0) {
+    branchCmd = "git describe --tags --exact-match";
+    branch = branchCmd.execute().text.trim();
+  }
+  return branch;
+}
+
 processResources {
   from(sourceSets.main.resources.srcDirs) {
     include 'application.properties'
@@ -214,7 +225,7 @@ processResources {
         database_type: database_type,
         app_data_dir: props.app_data_dir,
         plugin_dir: props.plugin_dir,
-        buildinfo_version : props.buildinfo_version,
+        buildinfo_version : getBranch(),
         buildinfo_date : getTodayDate(),
         buildinfo_commit_revision : getCommitRevision()])
   }
@@ -257,6 +268,14 @@ task create_war(type: War) {
     include 'js/**'
     
     into '/ngweb/external/de'
+  }
+
+  manifest {
+    attributes(
+      "Implementation-Title": archivesBaseName,
+      "Implementation-Version": getBranch(),
+      "Implementation-Timestamp": new Date()
+    )
   }
 }
 

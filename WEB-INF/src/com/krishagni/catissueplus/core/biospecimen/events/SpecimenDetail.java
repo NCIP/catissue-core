@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -50,9 +52,16 @@ public class SpecimenDetail extends SpecimenInfo {
 	private Boolean poolSpecimen;
 	
 	private String reqCode;
-	
+
 	private ExtensionDetail extensionDetail;
-	
+
+	//
+	// transient variables specifying action to be performed
+	//
+	private boolean forceDelete;
+
+	private boolean printLabel;
+
 	public CollectionEventDetail getCollectionEvent() {
 		return collectionEvent;
 	}
@@ -176,7 +185,30 @@ public class SpecimenDetail extends SpecimenInfo {
 	public void setExtensionDetail(ExtensionDetail extensionDetail) {
 		this.extensionDetail = extensionDetail;
 	}
+
+	@JsonIgnore
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
 	
+	//
+	// Do not serialise printLabel from interaction object to response JSON. Therefore @JsonIgnore
+	// However, deserialise, if present, from input request JSON to interaction object. Hence @JsonProperty
+	//
+	@JsonIgnore
+	public boolean isPrintLabel() {
+		return printLabel;
+	}
+
+	@JsonProperty
+	public void setPrintLabel(boolean printLabel) {
+		this.printLabel = printLabel;
+	}
+
 	public static SpecimenDetail from(Specimen specimen) {
 		return from(specimen, true);
 	}
@@ -242,6 +274,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setPoolSpecimen(anticipated.isSpecimenPoolReq());
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
 		result.setLabelFmt(anticipated.getLabelTmpl());
+		result.setLabelAutoPrintMode(anticipated.getLabelAutoPrintMode().name());
 		result.setReqCode(anticipated.getCode());
 		return result;		
 	}

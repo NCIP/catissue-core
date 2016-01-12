@@ -54,4 +54,12 @@ public class SprDetail {
 		this.sprText = sprText;
 	}
 	
+	public boolean isTextContent() {
+		return getContentType().startsWith("text/");
+	}
+	
+	public boolean isPdfContent() {
+		return getContentType().equals("application/pdf");
+	}
+	
 }

@@ -168,6 +168,10 @@
   padding-right: 8px;
 }
 
+.os-table-tree .os-specimen-desc {
+  padding-right: 36px;
+}
+
 .os-storage-position > div {
   padding-left: 0px;
   padding-right: 10px;

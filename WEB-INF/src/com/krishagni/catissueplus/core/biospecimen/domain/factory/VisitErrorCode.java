@@ -36,6 +36,8 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	LOCKED_SPR,
 	
+	NON_TEXT_SPR,
+	
 	INVALID_COHORT;
 	
 	public String code() {

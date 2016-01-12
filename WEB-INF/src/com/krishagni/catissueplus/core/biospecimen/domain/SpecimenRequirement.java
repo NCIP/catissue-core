@@ -533,7 +533,6 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 			poolSr.updateRequirementAttrs(sr);
 			poolSr.setStorageType(sr.getStorageType());
 			poolSr.setLabelFormat(sr.getLabelFormat());
-			poolSr.setLabelAutoPrintMode(sr.getLabelAutoPrintMode());
 		}
 	}
 	

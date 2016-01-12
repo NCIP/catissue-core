@@ -50,21 +50,21 @@
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
             <a ui-sref="specimen-create-aliquots({eventId: visit.eventId, visitId: visit.id,
               specimenId: specimen.id, srId: specimen.reqId})">
               <i class="fa fa-share-alt"></i>
               <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
             </a>
           </li>
-          <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
             <a ui-sref="specimen-create-derivative({eventId: visit.eventId, visitId: visit.id,
               specimenId: specimen.id, srId: specimen.reqId})">
               <i class="fa fa-flask"></i>
               <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
             </a>
           </li>
-          <li ng-if="(!allowedOps || allowedOps.update) && specimen.activityStatus == 'Active'">
+          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
             <a ui-sref="specimen-detail.events({eventId: visit.eventId, visitId: visit.id,
               specimenId: specimen.id, srId: specimen.reqId})">
               <i class="fa fa-calendar-o"></i>

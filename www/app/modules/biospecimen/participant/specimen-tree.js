@@ -213,7 +213,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             return;
           }
 
-          var specimenIds = getSpecimenIds(specimensToDelete);
+          var specimenIds = getSpecimenIdsForDeletion(specimensToDelete); 
           DeleteUtil.bulkDelete(Specimen, specimenIds, getBulkDeleteOpts(specimensToDelete));
           scope.selection.all = false;
         }
@@ -317,6 +317,42 @@ angular.module('os.biospecimen.participant.specimen-tree',
               return s.id;
             }
           );
+        }
+
+        function getSpecimenIdsForDeletion(specimens) {
+          var specimenIds = [];
+          var idx = 0;
+
+          while (idx < specimens.length) {
+            specimenIds.push(specimens[idx].id);
+
+            //
+            // +1 for self
+            // + descendent count to exclude all of specimen descendants…
+            // 
+            idx += 1 + getSelectedDescendantCount(specimens[idx]);
+          }
+
+          return specimenIds;
+        }
+
+        function getSelectedDescendantCount(specimen) {
+          var count = 0;
+          angular.forEach(specimen.children, function(child) {
+            if (child.selected) {
+              count++;
+            }
+        
+            count += getSelectedDescendantCount(child);
+          });
+        
+          angular.forEach(specimen.specimensPool, function(poolSpmn) {
+            if (poolSpmn.selected) {
+              count++;
+            }
+          });
+        
+          return count;
         }
 
         function getBulkDeleteOpts(specimensToDelete) {

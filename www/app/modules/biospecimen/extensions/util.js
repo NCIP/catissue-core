@@ -1,6 +1,16 @@
 
 angular.module('os.biospecimen.extensions.util', [])
-  .factory('ExtensionsUtil', function($modal, Form, Alerts) {
+  .factory('ExtensionsUtil', function($modal, Form, Alerts, ApiUrls) {
+    var filesUrl = ApiUrls.getBaseUrl() + 'form-files';
+
+    function getFileDownloadUrl(formId, recordId, ctrlName) {
+      var params = '?formId=' + formId +
+                   '&recordId=' + recordId +
+                   '&ctrlName=' + ctrlName +
+                   '&_reqTime=' + new Date().getTime();
+
+      return filesUrl + params;
+    }
 
     function deleteRecord(record, onDeletion) {
       var modalInstance = $modal.open({
@@ -45,8 +55,10 @@ angular.module('os.biospecimen.extensions.util', [])
         });
       }
     }
- 
+
     return {
+      getFileDownloadUrl: getFileDownloadUrl,
+
       deleteRecord: deleteRecord,
 
       createExtensionFieldMap: createExtensionFieldMap
