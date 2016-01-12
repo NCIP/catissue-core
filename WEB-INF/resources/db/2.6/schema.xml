@@ -54,8 +54,15 @@
       tableName="CATISSUE_SPECIMENLIST_TAGS"/>
   </changeSet>
   
-  <changeSet author="vlonushte" id="Creating specimen distribution orders view">
-    <createView viewName="specimen_distribution_orders_view">
+  <changeSet author="slakhani" id="Drop distribution orders view if exists">
+    <preConditions onFail="MARK_RAN">
+      <viewExists viewName="specimen_distribution_orders_view"/>
+    </preConditions>
+    <dropView viewName="specimen_distribution_orders_view"/>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Creating specimen distribution orders view" runOnChange="true">
+    <createView viewName="os_spmn_distributions_view">
       select
         item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
         ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id, 
@@ -68,8 +75,19 @@
         ord.status != 'PENDING'
     </createView>
   </changeSet>
-
+  
   <changeSet author="vlonushte" id="Migrating distributed event data">
+    <validCheckSum>7:cb8a3cc4f3210d48579fccbc8124adf5</validCheckSum>
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="1">
+        select
+          count(identifier)
+        from 
+          dyextn_containers
+        where
+          name = 'SpecimenDistributedEvent'
+      </sqlCheck>
+    </preConditions>
     <sql dbms="mysql">
       select 
         fc.identifier into @form_ctxt_id 
@@ -86,7 +104,7 @@
       (select 
          @form_ctxt_id, do.specimen_id, do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
        from 
-         specimen_distribution_orders_view do) 
+         os_spmn_distributions_view do)
     </sql> 
 
     <sql dbms="oracle" endDelimiter="//">
@@ -109,7 +127,7 @@
            catissue_form_rec_entry_seq.nextval, form_ctxt_id, do.specimen_id, 
            do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
          from 
-           specimen_distribution_orders_view do); 
+           os_spmn_distributions_view do);
       end;
       //     
     </sql>

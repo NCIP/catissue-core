@@ -4,7 +4,7 @@
   <view>
     <name>SpecimenDistributedEvent</name>
     <caption>#getMessage("distributed_event")</caption>
-    <table>SPECIMEN_DISTRIBUTION_ORDERS_VIEW</table>
+    <table>OS_SPMN_DISTRIBUTIONS_VIEW</table>
     <primaryKey>IDENTIFIER</primaryKey>
 
     <row>
