@@ -68,7 +68,7 @@
             display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(childReq, 'Aliquot')"
             os-md-input placeholder="{{'srs.auto_print_label' | translate}}">
           </os-select>
-          <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="labelFmtSpecified"></div>
+          <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!childReq.labelFmtSpecified"></div>
         </div>
       </div>
     </div>

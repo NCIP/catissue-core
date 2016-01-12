@@ -451,6 +451,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		SpecimenRequirement specimenPoolReq = pooledSpmnReq.copy();
 		setInitialQty(req, specimenPoolReq, ose);
 		setCode(req, specimenPoolReq, ose);
+		setLabelAutoPrintMode(req, specimenPoolReq, ose);
 		specimenPoolReq.setPooledSpecimenRequirement(pooledSpmnReq);
 		return specimenPoolReq;
 	}
