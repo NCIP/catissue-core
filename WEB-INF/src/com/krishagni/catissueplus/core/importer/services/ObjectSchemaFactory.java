@@ -9,5 +9,7 @@ public interface ObjectSchemaFactory {
 	
 	public ObjectSchema getSchema(String name, Map<String, Object> params);
 	
+	public void registerSchema(String schemaResource);
+	
 	public void registerSchema(String name, ObjectSchema schema);
 }
