@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,13 @@ public class WildcardReloadableResourceBundle extends ReloadableResourceBundleMe
 	}
 
 	public WildcardReloadableResourceBundle(String pluginDir) {
-		this.pluginDir = pluginDir;
+		if (StringUtils.isNotBlank(pluginDir)) {
+			try {
+				this.pluginDir = new File(pluginDir).toURI().toURL().getFile();
+			} catch (IOException e) {
+				logger.debug("Invalid plugin directory : " + pluginDir);
+			}
+		}
 	}
 
 	@Override
