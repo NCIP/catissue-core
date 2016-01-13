@@ -256,5 +256,16 @@
       where
         cp.id in (:cpIds)
     </query>
+    
+    <query name="getExpiringCps">
+      select 
+        cp
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+      where
+        cp.endDate is not null and
+        cp.endDate between :fromDate and :toDate and
+        cp.activityStatus = 'Active'
+    </query>
   </class>
 </hibernate-mapping>

@@ -105,6 +105,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 	
 	@SuppressWarnings("unchecked")
+ 	@Override
+	public List<CollectionProtocol> getExpiringCps(Date fromDate, Date toDate) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_EXPIRING_CPS)
+				.setDate("fromDate", fromDate)
+				.setDate("toDate", toDate)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionProtocol getCpByCode(String code) {
 		List<CollectionProtocol> cps = sessionFactory.getCurrentSession()
@@ -382,6 +392,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPS_BY_SHORT_TITLE = FQN + ".getCpsByShortTitle";
 	
 	private static final String GET_CPS_BY_SHORT_TITLE_N_SITE = FQN + ".getCpsByShortTitleAndSite";
+	
+	private static final String GET_EXPIRING_CPS = FQN + ".getExpiringCps";
 	
 	private static final String GET_CP_BY_CODE = FQN + ".getByCode";
 	
