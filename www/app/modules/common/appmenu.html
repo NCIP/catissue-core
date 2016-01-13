@@ -61,7 +61,7 @@
           <li show-if-admin>
             <a ui-sref="institute-list" translate="menu.institutes">Institutes</a>
           </li>
-          <li>
+          <li show-if-allowed="userCreateUpdateOpts">
             <a ui-sref="user-list" translate="menu.users">Users</a>
           </li>
           <li show-if-allowed="userCreateUpdateOpts">
