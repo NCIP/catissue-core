@@ -19,13 +19,20 @@
     </h3>
 
     <div class="os-btns right">
-      <button show-if-allowed="orderCreateOpts" class="default" ng-click="distributeSpecimens()">
+      <button show-if-allowed="orderCreateOpts" ng-if="!lists.reqBasedDistOrShip"
+        class="default" ng-click="distributeSpecimens()">
         <span class="fa fa-share"></span>
         <span translate="specimen_list.distribute">Distribute</span>
       </button>
-      <button show-if-allowed="shipmentCreateOpts" class="default" ng-click="shipSpecimens()">
+      <button show-if-allowed="shipmentCreateOpts" ng-if="!lists.reqBasedDistOrShip"
+        class="default" ng-click="shipSpecimens()">
         <span class="fa fa-paper-plane-o"></span>
         <span translate="specimen_list.ship">Ship</span>
+      </button>
+      <button ng-if="lists.reqBasedDistOrShip"
+        class="default" ui-sref="specimen-list-request({listId: lists.selectedList.id})">
+        <span class="fa fa-inbox"></span>
+        <span translate="specimen_requests.request_spmns">Request Specimens</span>
       </button>
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
@@ -39,7 +46,7 @@
               <span translate="common.buttons.delete">Delete</span>
             </a>
           </li>
-          <li>
+          <li ng-if="!lists.reqBasedDistOrShip">
             <a ui-sref="specimen-list-request({listId: lists.selectedList.id})">
               <span class="fa fa-inbox"></span>
               <span translate="specimen_requests.request_spmns">Request Specimens</span>

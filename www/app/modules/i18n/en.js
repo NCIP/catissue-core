@@ -1355,7 +1355,8 @@
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By",
-    "clear_list_on_req": "Clear cart on request submission"
+    "clear_list_on_req": "Clear cart on request submission",
+    "checkout": "Checkout"
   },
 
   "orders": {
@@ -1671,7 +1672,9 @@
         "welcome_video_url": "Welcome Video URL",
         "welcome_video_url_desc": "URL for welcome video",
         "shipment_export_report": "Shipment export report",
-        "shipment_export_report_desc": "Export Report format for all shipments"
+        "shipment_export_report_desc": "Export Report format for all shipments",
+        "spmn_req_based_dist_or_ship": "Request based Distribution or Shipping",
+        "spmn_req_based_dist_or_ship_desc": "Specifies whether an explicit request needs to be created for distribution or shipping of specimens"
       },
 
       "email": {

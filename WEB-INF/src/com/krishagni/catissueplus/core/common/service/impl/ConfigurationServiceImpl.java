@@ -19,6 +19,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PluginManager;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -80,7 +81,30 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		return ResponseEvent.response(ConfigSettingDetail.from(settings));
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ConfigSettingDetail> getSetting(RequestEvent<Pair<String, String>> req) {
+		Pair<String, String> payload = req.getPayload();
+		try {
+			Map<String, ConfigSetting> moduleSettings = configSettings.get(payload.first());
+			if (moduleSettings == null || moduleSettings.isEmpty()) {
+				return ResponseEvent.userError(ConfigErrorCode.MODULE_NOT_FOUND);
+			}
+
+			ConfigSetting setting = moduleSettings.get(payload.second());
+			if (setting == null) {
+				return ResponseEvent.userError(ConfigErrorCode.SETTING_NOT_FOUND);
+			}
+
+			return ResponseEvent.response(ConfigSettingDetail.from(setting));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ConfigSettingDetail> saveSetting(RequestEvent<ConfigSettingDetail> req) {

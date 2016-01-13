@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+        
+  <changeSet author="vpawar" id="Config setting to enable or disable request based distribution/shipping">
+    <sql>
+      call add_cfg_prop(
+        'common', 'spmn_req_based_dist_or_ship',
+        'spmn_req_based_dist_or_ship', 'spmn_req_based_dist_or_ship_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+ </databaseChangeLog>

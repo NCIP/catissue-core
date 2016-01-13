@@ -44,5 +44,6 @@
   <include file="db/2.5/migration.xml"/>
   
   <include file="db/2.6/schema.xml"/>
+  <include file="db/2.6/config.xml"/>
   <include file="db/2.6/audit.xml"/>
 </databaseChangeLog> 
