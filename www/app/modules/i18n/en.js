@@ -1325,6 +1325,7 @@
     "my_lists": "My Carts",
     "shared_lists": "Shared Carts",
     "info": "Information",
+    "cart_info": "Cart Information",
     "more_specimens": "One or more specimens in cart could not be displayed because you do not have enough rights to view them",
     "no_specimens": "There are no specimens to show in selected cart",
     "description": "Description",

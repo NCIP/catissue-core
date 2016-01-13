@@ -8,6 +8,14 @@
 
     <h3>
       <span>{{lists.selectedList.name}}</span>
+      <button class="btn btn-default btn-xs"
+        title="{{'specimen_list.cart_info' | translate}}"
+        data-placement="bottom"
+        data-container="body"
+        data-trigger="focus"
+        content-template="modules/biospecimen/specimen-list/detail-po.html" bs-popover>
+        <span class="fa fa-info-circle"></span>
+      </button>
     </h3>
 
     <div class="os-btns right">
@@ -42,22 +50,6 @@
         <div ng-include src="'specimen-list/lists.html'"></div>
       </div>
       <div class="os-col-80">
-        <div ng-if="lists.selectedList">
-          <div class="clearfix">
-            <ul class="os-key-values">
-              <li class="item">
-                <strong class="key key-sm" translate="specimen_list.created_by">Created By</strong>
-                <span class="value value-md">{{lists.selectedList.owner | osUserDisplayName}}</span>
-              </li>
-              <li class="item">
-                <strong class="key key-sm" translate="specimen_list.description">Description</strong>
-                <span class="value value-md">{{lists.selectedList.description | osNoValue}}</span>
-              </li>
-            </ul>
-          </div>
-          <div class="os-divider"></div>
-        </div>
-
         <div ng-include src="'specimen-list/specimens.html'"></div>
       </div>
     </div>
