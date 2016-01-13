@@ -664,6 +664,7 @@
 
         <entry key="participant">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantImporter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
             <property name="participantSvc" ref="participantSvc"/>
           </bean>
         </entry>
