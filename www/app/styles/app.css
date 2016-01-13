@@ -257,6 +257,15 @@ body {
   height: 26px;
 }
 
+.os-page-hdr .os-title button {
+  background: transparent;
+  border: 0px;
+}
+
+.os-page-hdr .os-title button span.fa {
+  font-size: 18px;
+}
+
 button.btn.os-round-btn {
   height: 24px;
   width: 24px;
@@ -1106,3 +1115,22 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   overflow: auto;
 }
 
+.os-label-value-pairs {
+  display: table;
+}
+
+.os-label-value-pair {
+  display: table-row;
+}
+
+.os-label-value-pair .os-label {
+  display: table-cell;
+  color: #707070;
+  padding: 5px 10px;
+}
+
+.os-label-value-pair .os-value {
+  display: table-cell;
+  padding: 5px 10px;
+  width: 66%;
+}

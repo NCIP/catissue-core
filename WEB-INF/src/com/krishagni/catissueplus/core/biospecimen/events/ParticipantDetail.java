@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
@@ -50,6 +52,11 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	private Set<String> registeredCps;
 	
 	private ExtensionDetail extensionDetail;
+	
+	// For Update participant through BO
+	private String cpShortTitle;
+	
+	private String ppid;
 	
 	public Long getId() {
 		return id;
@@ -195,6 +202,24 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		this.extensionDetail = extensionDetail;
 	}
 	
+	@JsonIgnore
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
+	@JsonIgnore
+	public String getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
+	}
+
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());

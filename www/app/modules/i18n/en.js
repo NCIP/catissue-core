@@ -59,7 +59,7 @@
     "build_version": "Version",
     "build_date": "Build date",
     "build_commit_revision": "Revision",
-    "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this form/page?",
+    "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this page?",
     "footer_note": "<a href=\"http://www.openspecimen.org\" target=\"_blank\">OpenSpecimen</a> - powered by <a href=\"http://www.krishagni.com\" target=\"_blank\">Krishagni</a>",
 
     "buttons": {
@@ -201,7 +201,7 @@
     },
 
     "tooltip": {
-      "view_details": "Click to view/edit Collection Protocol details",
+      "view_details": "Click to view Collection Protocol details",
       "add": "Click to add new Collection Protocol",
       "edit": "Click to edit Collection Protocol",
       "reg_participants_count": "Count of Registered Participants",
@@ -324,7 +324,7 @@
 
     "tooltip": {
       "register": "Click to register new Participant",
-      "view_details": "Click to view/edit Participant details",
+      "view_details": "Click to view Participant details",
       "completed_visits_count": "Count of Completed Visits",
       "collected_specimens_count": "Count of Collected Specimens",
       "search": "Click to filter Participants",
@@ -541,8 +541,8 @@
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
       "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
-      "created_on_lt_parent": "Created on date/time of specimen less than that of parent specimen",
-      "created_on_gt_curr_time": "Created on date/time of specimen greater than current date/time",
+      "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
+      "created_on_gt_curr_time": "Created on time of specimen greater than current time",
       "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
     }
   },
@@ -627,7 +627,7 @@
     "bulk_import_jobs": "Import Institutes Job List",
 
     "tooltip": {
-      "view_details": "Click to view/edit Institute details",
+      "view_details": "Click to view Institute details",
       "add": "Click to add new Institute",
       "edit": "Click to edit institute",
       "department_count": "Count of Departments",
@@ -666,7 +666,7 @@
     "bulk_import_jobs": "Import Sites Job List",
 
     "tooltip": {
-      "view_details": "Click to view/edit Site details",
+      "view_details": "Click to view Site details",
       "add": "Click to add new Site",
       "edit": "Click to edit site",
       "cp_count": "Count of Collection Protocols",
@@ -714,7 +714,7 @@
     "dist_spmns_count": "Distributed Specimens",
 
     "tooltip": {
-      "view_details": "Click to view/edit Distribution Protocol details",
+      "view_details": "Click to view Distribution Protocol details",
       "add": "Click to add new Distribution Protocol",
       "edit": "Click to edit Distribution Protocol",
       "pending_count": "Pending to distribute specimens count",
@@ -822,7 +822,7 @@
     "return_to_signin": "Return to Sign in",
 
     "tooltip": {
-      "view_details": "Click to view/edit User details",
+      "view_details": "Click to view User details",
       "add": "Click to add new User",
       "edit": "Click to edit User",
       "email_address": "Email Address",
@@ -908,7 +908,7 @@
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
     "assign_positions": "Assign Positions",
     "vacate_positions": "Vacate existing specimens",
-    "paste_specimen_labels": "Paste or input specimen labels separated by comma/tab/newline",
+    "paste_specimen_labels": "Paste or input specimen labels separated by comma, tab, or newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
     "search": "Type storage container name to filter containers",
@@ -930,7 +930,7 @@
     "bulk_import_jobs": "Import Storage Containers Jobs List",
 
     "tooltip": {
-      "view_details": "Click to view/edit Storage Container details",
+      "view_details": "Click to view Storage Container details",
       "add": "Click to add new Storage Container",
       "edit": "Click to edit Storage Container",
       "count_free_locations": "Count of free locations",
@@ -987,7 +987,7 @@
     },
 
     "tooltip": {
-      "view_details": "Click to view/edit Role",
+      "view_details": "Click to view Role",
       "add": "Click to add new Role"
     }
   },
@@ -1114,7 +1114,7 @@
     "cond_value": "Condition Value",
     "select_cond_value": "Select Condition Value",
     "select_cond_values": "Select Condition Values",
-    "specify_multiple_cond": "Specify multiple Condition Values separated by comma/tab/newline",
+    "specify_multiple_cond": "Specify multiple Condition Values separated by comma, tab, or newline",
     "range_min": "Range Min",
     "range_max": "Range Max",
     "select_date": "Select Date",
@@ -1331,6 +1331,7 @@
     "my_lists": "My Carts",
     "shared_lists": "Shared Carts",
     "info": "Information",
+    "cart_info": "Cart Information",
     "more_specimens": "One or more specimens in cart could not be displayed because you do not have enough rights to view them",
     "no_specimens": "There are no specimens to show in selected cart",
     "description": "Description",
@@ -1380,7 +1381,7 @@
     "sender_comments": "Sender Comments",
     "details": "Order Details",
     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
-    "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma/tab/newline and click add",
+    "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma, tab or newline and click add",
     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "report_gen_initiated": "Generating distribution order report...",
@@ -1447,7 +1448,7 @@
     "receiver_comments": "Receiver Comments",
     "details": "Shipment Details",
     "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
-    "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma/tab/newline and click add",
+    "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma, tab or newline and click add",
     "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "filters": "Filters",
@@ -1728,7 +1729,7 @@
       "query": {
         "title": "Query",
         "max_concurrent_queries": "Concurrent Queries Limit",
-        "max_concurrent_queries_desc": "Maximum number of queries that are allowed to run concurrently/simultaneously before rejecting new query execution requests",
+        "max_concurrent_queries_desc": "Maximum number of queries that are allowed to run simultaneously before rejecting new query execution requests",
         "max_recs_in_memory": "In-memory Records Limit",
         "max_recs_in_memory_desc": "Maximum number of query records that are allowed to be cached in-memory. When limit is reached, excessive records are spooled to disk"
       }
