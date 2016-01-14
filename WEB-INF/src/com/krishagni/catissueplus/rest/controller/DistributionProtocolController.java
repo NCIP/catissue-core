@@ -49,6 +49,9 @@ public class DistributionProtocolController {
 			
 			@RequestParam(value = "piId", required = false)
 			Long piId,
+
+			@RequestParam(value = "receivingInstitute", required = false)
+			String receivingInstitute,
 			
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
@@ -68,6 +71,7 @@ public class DistributionProtocolController {
 			.query(searchStr)
 			.title(title)
 			.piId(piId)
+			.receivingInstitute(receivingInstitute)
 			.includeStat(includeStats)
 			.activityStatus(activityStatus);
 		

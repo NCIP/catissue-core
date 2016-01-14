@@ -10,7 +10,7 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	
 	private Long piId;
 	
-	private Long instituteId;
+	private String receivingInstitute;
 	
 	private Set<Long> siteIds;
 	
@@ -39,12 +39,12 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 		return self();
 	}
 	
-	public Long instituteId() {
-		return instituteId;
+	public String receivingInstitute() {
+		return receivingInstitute;
 	}
 	
-	public DpListCriteria instituteId(Long instituteId) {
-		this.instituteId = instituteId;
+	public DpListCriteria receivingInstitute(String receivingInstitute) {
+		this.receivingInstitute = receivingInstitute;
 		return self();
 	}
 	
