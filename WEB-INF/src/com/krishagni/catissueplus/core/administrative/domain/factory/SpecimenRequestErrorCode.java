@@ -5,6 +5,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 public enum SpecimenRequestErrorCode implements ErrorCode {
 	NOT_FOUND,
 
+	CLOSED,
+
 	FORM_NOT_CONFIGURED,
 
 	FORM_NOT_FILLED;

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -171,10 +172,7 @@ public class DistributionOrder extends BaseEntity {
 		setTrackingUrl(newOrder.getTrackingUrl());
 		setComments(newOrder.getComments());
 
-		if (!isOrderExecuted()) {
-			setRequest(newOrder.getRequest());
-		}
-
+		updateRequest(newOrder);
 		updateOrderItems(newOrder);
 		updateDistribution(newOrder);		
 		updateStatus(newOrder);
@@ -215,6 +213,19 @@ public class DistributionOrder extends BaseEntity {
 
 	public boolean isOrderExecuted() {
 		return Status.EXECUTED == status;
+	}
+
+	private void updateRequest(DistributionOrder other) {
+		if (isOrderExecuted()) {
+			return;
+		}
+
+		SpecimenRequest request = other.getRequest();
+		if (request != null && request.isClosed()) {
+			throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
+		}
+
+		setRequest(request);
 	}
 
 	private void updateOrderItems(DistributionOrder other) {

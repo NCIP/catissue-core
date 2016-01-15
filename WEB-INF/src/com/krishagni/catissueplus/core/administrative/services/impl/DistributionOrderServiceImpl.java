@@ -16,9 +16,11 @@ import org.springframework.context.MessageSource;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
@@ -137,6 +139,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			getValidSpecimens(order.getDistributionProtocol(), specimenLabels, ose);
 			
 			ose.checkAndThrow();
+
+			SpecimenRequest request = order.getRequest();
+			if (request != null && request.isClosed()) {
+				throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
+			}
 			
 			//
 			//  Saved to obtain IDs to make distributed events

@@ -127,4 +127,8 @@ public class SpecimenRequest extends BaseEntity {
 	public void delete() {
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
+
+	public boolean isClosed() {
+		return Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(getActivityStatus());
+	}
 }
