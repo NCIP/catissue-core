@@ -20,6 +20,8 @@ public class DistributionOrderItem extends BaseEntity {
 	
 	private Status status;
 
+	private transient SpecimenRequestItem requestItem;
+
 	public DistributionOrder getOrder() {
 		return order;
 	}
@@ -56,7 +58,19 @@ public class DistributionOrderItem extends BaseEntity {
 		return getStatus() == Status.DISTRIBUTED_AND_CLOSED;
 	}
 
-	public void distribute() {		
+	public SpecimenRequestItem getRequestItem() {
+		return requestItem;
+	}
+
+	public void setRequestItem(SpecimenRequestItem requestItem) {
+		this.requestItem = requestItem;
+	}
+
+	public void distribute() {
 		specimen.distribute(this);
+
+		if (requestItem != null) {
+			requestItem.distribute(getOrder());
+		}
 	}	
 }

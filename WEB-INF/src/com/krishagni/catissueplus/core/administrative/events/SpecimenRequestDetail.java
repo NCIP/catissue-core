@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -17,7 +18,9 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 
 	private String comments;
 
-	private List<SpecimenInfo> specimens;
+	private String requestorInstitute;
+
+	private List<SpecimenRequestItemDetail> items;
 
 	public UserSummary getProcessedBy() {
 		return processedBy;
@@ -43,12 +46,20 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 		this.comments = comments;
 	}
 
-	public List<SpecimenInfo> getSpecimens() {
-		return specimens;
+	public String getRequestorInstitute() {
+		return requestorInstitute;
 	}
 
-	public void setSpecimens(List<SpecimenInfo> specimens) {
-		this.specimens = specimens;
+	public void setRequestorInstitute(String requestorInstitute) {
+		this.requestorInstitute = requestorInstitute;
+	}
+
+	public List<SpecimenRequestItemDetail> getItems() {
+		return items;
+	}
+
+	public void setItems(List<SpecimenRequestItemDetail> items) {
+		this.items = items;
 	}
 
 	public static SpecimenRequestDetail from(SpecimenRequest request) {
@@ -61,7 +72,12 @@ public class SpecimenRequestDetail extends SpecimenRequestSummary {
 		}
 
 		result.setComments(request.getComments());
-		result.setSpecimens(SpecimenInfo.from(new ArrayList<Specimen>(request.getSpecimens())));
+
+		if (request.getRequestor().getInstitute() != null) {
+			result.setRequestorInstitute(request.getRequestor().getInstitute().getName());
+		}
+
+		result.setItems(SpecimenRequestItemDetail.from(request.getItems()));
 		return result;
 	}
 }

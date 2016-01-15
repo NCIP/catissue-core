@@ -20,6 +20,7 @@ import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestDeta
 import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestSummary;
 import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequestListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.SpecimenRequestService;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -83,6 +84,17 @@ public class SpecimenRequestsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/status")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenRequestSummary updateStatus(@PathVariable("id") Long reqId, @RequestBody EntityStatusDetail detail) {
+		detail.setId(reqId);
+		ResponseEvent<SpecimenRequestSummary> resp = spmnReqSvc.updateStatus(getRequest(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 
 	/** Used mostly for UI purpose **/
 	@RequestMapping(method = RequestMethod.GET, value="form-ids")

@@ -10,11 +10,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.RequestListSpecimensDetail;
@@ -30,6 +32,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
@@ -152,6 +155,27 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 			}
 
 			return ResponseEvent.response(SpecimenRequestSummary.from(requests));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SpecimenRequestSummary> updateStatus(RequestEvent<EntityStatusDetail> req) {
+		try {
+			EntityStatusDetail detail = req.getPayload();
+			SpecimenRequest request = getSpecimenRequest(detail.getId());
+
+			if (Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(detail.getStatus())) {
+				request.close(detail.getReason());
+			} else if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(detail.getStatus())) {
+				request.delete();
+			}
+
+			return ResponseEvent.response(SpecimenRequestSummary.from(request));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -339,7 +363,7 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		request.setRequestor(AuthUtil.getCurrentUser());
 		request.setDateOfRequest(Calendar.getInstance().getTime());
 		request.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		request.setSpecimens(new LinkedHashSet<Specimen>(specimens));
+		request.setItems(createItems(request, specimens));
 
 		daoFactory.getSpecimenRequestDao().saveOrUpdate(request);
 		return request;
@@ -358,5 +382,16 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		detail.setFormData(FormData.getFormData(form, reqForm));
 		ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(new RequestEvent<FormDataDetail>(detail));
 		resp.throwErrorIfUnsuccessful();
+	}
+
+	private Set<SpecimenRequestItem> createItems(SpecimenRequest request, Collection<Specimen> specimens) {
+		return specimens.stream()
+			.map(specimen -> {
+				SpecimenRequestItem item = new SpecimenRequestItem();
+				item.setRequest(request);
+				item.setSpecimen(specimen);
+				return item;
+			})
+			.collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 }

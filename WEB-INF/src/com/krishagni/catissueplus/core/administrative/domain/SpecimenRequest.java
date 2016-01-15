@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -8,6 +9,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.Status;
 
 public class SpecimenRequest extends BaseEntity {
 
@@ -21,7 +24,7 @@ public class SpecimenRequest extends BaseEntity {
 
 	private Date dateOfProcessing;
 
-	private Set<Specimen> specimens = new LinkedHashSet<Specimen>();
+	private Set<SpecimenRequestItem> items = new LinkedHashSet<SpecimenRequestItem>();
 
 	private String activityStatus;
 
@@ -69,12 +72,12 @@ public class SpecimenRequest extends BaseEntity {
 		this.dateOfProcessing = dateOfProcessing;
 	}
 
-	public Set<Specimen> getSpecimens() {
-		return specimens;
+	public Set<SpecimenRequestItem> getItems() {
+		return items;
 	}
 
-	public void setSpecimens(Set<Specimen> specimens) {
-		this.specimens = specimens;
+	public void setItems(Set<SpecimenRequestItem> items) {
+		this.items = items;
 	}
 
 	public String getActivityStatus() {
@@ -99,5 +102,29 @@ public class SpecimenRequest extends BaseEntity {
 
 	public void setSpecimensCount(int specimensCount) {
 		this.specimensCount = specimensCount;
+	}
+
+	public Institute getInstitute() {
+		return requestor.getInstitute();
+	}
+
+	public void closeIfFulfilled() {
+		boolean anyPending = getItems().stream().anyMatch(SpecimenRequestItem::isPending);
+		if (anyPending) {
+			return;
+		}
+
+		close("Automatic closure of request");
+	}
+
+	public void close(String comments) {
+		setProcessedBy(AuthUtil.getCurrentUser());
+		setDateOfProcessing(Calendar.getInstance().getTime());
+		setComments(comments);
+		setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
+	}
+
+	public void delete() {
+		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 }

@@ -25,11 +25,9 @@
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
 
-    <set name="specimens" table="OS_REQUESTED_SPECIMENS">
+    <set name="items" table="OS_SPECIMEN_REQUEST_ITEMS" inverse="true" cascade="all-delete-orphan">
       <key column="REQUEST_ID"/>
-      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" column="SPECIMEN_ID">
-        <filter name="activeEntity"/>
-      </many-to-many> 
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem"/>
     </set>
 
     <filter name="activeEntity"/>

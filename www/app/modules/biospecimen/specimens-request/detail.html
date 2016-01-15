@@ -18,7 +18,16 @@
     <h4>
       <span translate="specimen_requests.request">Specimen Request</span>
       <span>#{{spmnRequest.id}}</span>
+      <span class="btn os-status-closed" ng-if="spmnRequest.activityStatus == 'Closed'">
+        <span translate="specimen_requests.statuses.closed">Closed</span>
+      </span>
     </h4>
+
+    <div class="os-btns right">
+      <button class="btn btn-primary" ng-if="spmnRequest.activityStatus != 'Closed'" ng-click="closeRequest()">
+        <span translate="common.buttons.close">Close</span>
+      </button>
+    </div>
   </div>
 
   <div os-side-menu>

@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.administrative.events.RequestListSpecimen
 import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestDetail;
 import com.krishagni.catissueplus.core.administrative.events.SpecimenRequestSummary;
 import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequestListCriteria;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
@@ -18,6 +19,8 @@ public interface SpecimenRequestService {
 	public ResponseEvent<Map<String, Object>> getRequestFormData(RequestEvent<Long> req);
 
 	public ResponseEvent<List<SpecimenRequestSummary>> createRequest(RequestEvent<RequestListSpecimensDetail> req);
+
+	public ResponseEvent<SpecimenRequestSummary> updateStatus(RequestEvent<EntityStatusDetail> req);
 
 	/**
 	 * Mostly useful for UI

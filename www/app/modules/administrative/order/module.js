@@ -28,7 +28,7 @@ angular.module('os.administrative.order',
         parent: 'order-root'
       })
       .state('order-addedit', {
-        url: '/order-addedit/:orderId?requestorId',
+        url: '/order-addedit/:orderId?requestId',
         templateUrl: 'modules/administrative/order/addedit.html',
         resolve: {
           order: function($stateParams , DistributionOrder, User) {
@@ -36,18 +36,25 @@ angular.module('os.administrative.order',
               return DistributionOrder.getById($stateParams.orderId);
             }
 
-            var order = new DistributionOrder({status: 'PENDING', orderItems: []});
-            if (!angular.isDefined($stateParams.requestorId)) {
-              return order;
+            return new DistributionOrder({status: 'PENDING', orderItems: []});
+          },
+
+          spmnRequest: function($stateParams, order, SpecimenRequest, SpecimenRequestHolder) {
+            if (angular.isDefined(order.id)) {
+              return !!order.request ? SpecimenRequest.getById(order.request.id) : undefined;
             }
 
-            return User.getById($stateParams.requestorId).then(
-              function(user) {
-                order.requester = user;
-                order.instituteName = user.instituteName;
-                return order;
-              }
-            );
+            if (!angular.isDefined($stateParams.requestId)) {
+              return undefined;
+            }
+
+            var request = SpecimenRequestHolder.get();
+            SpecimenRequestHolder.clear();
+            if (!request) {
+              request = SpecimenRequest.getById($stateParams.requestId);
+            }
+
+            return request;
           }
         },
         controller: 'OrderAddEditCtrl',

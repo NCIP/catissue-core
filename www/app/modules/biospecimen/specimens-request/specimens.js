@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.specimensrequest.specimens', ['os.biospecimen.models'])
-  .controller('SpmnReqSpecimensCtrl', function($scope, $state, spmnRequest, SpecimensHolder, Alerts) {
+  .controller('SpmnReqSpecimensCtrl', function($scope, $state, spmnRequest, SpecimensHolder, SpecimenRequestHolder, Alerts) {
     /**
      * TODO: Merge specimen list functionality and below into one widget 
      */
@@ -11,57 +11,57 @@ angular.module('os.biospecimen.specimensrequest.specimens', ['os.biospecimen.mod
     }
 
     function resetSelection() {
-      $scope.selection = {all: false, any: false, specimens: []};
-      angular.forEach(spmnRequest.specimens, function(specimen) {
-        specimen.selected = false;
-      });
+      $scope.selection = {
+        all: false,
+        any: false,
+        items: [],
+        closed: spmnRequest.activityStatus == 'Closed'
+      };
+
+      angular.forEach(spmnRequest.items,
+        function(item) {
+          item.selected = false;
+        }
+      );
     }
 
     $scope.toggleAllSpecimenSelect = function() {
       $scope.selection.any = $scope.selection.all;
       if (!$scope.selection.all) {
-        $scope.selection.specimens = [];
+        $scope.selection.items = [];
       } else {
-        $scope.selection.specimens = [].concat(spmnRequest.specimens);
+        $scope.selection.items = [].concat(spmnRequest.items);
       }
 
-      angular.forEach(spmnRequest.specimens, function(specimen) {
-        specimen.selected = $scope.selection.all;
-      });
+      angular.forEach(spmnRequest.items,
+        function(item) {
+          item.selected = $scope.selection.all;
+        }
+      );
     }
 
-    $scope.toggleSpecimenSelect = function (specimen) {
-      if (specimen.selected) {
-        $scope.selection.specimens.push(specimen);
+    $scope.toggleSpecimenSelect = function(item) {
+      if (item.selected) {
+        $scope.selection.items.push(item);
       } else {
-        var idx = $scope.selection.specimens.indexOf(specimen);
+        var idx = $scope.selection.items.indexOf(item);
         if (idx != -1) {
-          $scope.selection.specimens.splice(idx, 1);
+          $scope.selection.items.splice(idx, 1);
         }
       }
 
-      $scope.selection.all = ($scope.selection.specimens.length == spmnRequest.specimens.length);
-      $scope.selection.any = ($scope.selection.specimens.length > 0);
+      $scope.selection.all = ($scope.selection.items.length == spmnRequest.items.length);
+      $scope.selection.any = ($scope.selection.items.length > 0);
     };
 
     $scope.distributeSpecimens = function() {
-      if (!$scope.selection.any) {
-        Alerts.error("specimen_list.no_specimens_for_distribution");
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('order-addedit', {orderId: '', requestorId: spmnRequest.requestor.id});
+      SpecimenRequestHolder.set(spmnRequest);
+      $state.go('order-addedit', {orderId: '', requestId: spmnRequest.id});
     }
 
     $scope.shipSpecimens = function() {
-      if (!$scope.selection.any) {
-        Alerts.error("specimen_list.no_specimens_for_shipment");
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('shipment-addedit', {shipmentId: '', requestorId: spmnRequest.requestor.id});
+      SpecimenRequestHolder.set(spmnRequest);
+      $state.go('shipment-addedit', {shipmentId: '', requestId: spmnRequest.id});
     }
 
     init();

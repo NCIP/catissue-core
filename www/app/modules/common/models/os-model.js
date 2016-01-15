@@ -93,6 +93,11 @@ angular.module('os.common.models', [])
         return $http.get(url + this.$id() + '/dependent-entities').then(Model.noTransform);
       }
 
+      Model.prototype.$close = function(comments) {
+        var payload = {status: 'Closed', reason: comments};
+        return $http.put(url + this.$id() + '/status', payload).then(Model.modelRespTransform);
+      }
+
       Model.prototype.$remove = function () {
         return $http['delete'](url + this.$id()).then(Model.modelRespTransform);
       };

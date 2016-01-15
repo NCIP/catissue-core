@@ -1,9 +1,9 @@
-package com.krishagni.catissueplus.core.biospecimen.events;
+package com.krishagni.catissueplus.core.common.events;
 
-public class SpecimenStatusDetail {
+public class EntityStatusDetail {
 	private Long id;
 	
-	private String label;
+	private String name;
 	
 	private String status;
 	
@@ -17,12 +17,12 @@ public class SpecimenStatusDetail {
 		this.id = id;
 	}
 
-	public String getLabel() {
-		return label;
+	public String getName() {
+		return name;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getStatus() {

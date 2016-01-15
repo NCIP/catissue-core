@@ -36,6 +36,9 @@
           <th class="col">
             <span translate="specimen_requests.specimens">Specimens</span>
           </th>
+          <th class="col">
+            <span translate="specimen_requests.status">Status</span>
+          </th>
         </tr>
       </thead>
       <tbody class="os-table-body">
@@ -56,6 +59,10 @@
           </td>
           <td class="col">
             <span>{{req.requestedSpecimensCount}}</span>
+          </td>
+          <td class="col" ng-switch on="req.activityStatus == 'Closed'">
+            <span translate="specimen_requests.statuses.closed" ng-switch-when="true">Closed</span>
+            <span translate="specimen_requests.statuses.pending" ng-switch-default>Pending</span>
           </td>
         </tr>
       </tbody>

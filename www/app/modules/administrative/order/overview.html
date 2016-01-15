@@ -1,6 +1,16 @@
 <div class="clearfix">
   <div class="col-xs-10">
     <ul class="os-key-values os-two-cols">
+      <li class="item" ng-if="!!order.request">
+        <strong class="key key-sm" translate="orders.request">Request</strong>
+        <span class="value value-md">
+          <a ui-sref="specimens-request-detail.overview({requestId: order.request.id})">
+            <span translate="orders.request">Request</span>
+            <span>#{{order.request.id}}</span>
+          </a>
+        </span>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="orders.requestor">Requestor</strong>
         <span class="value value-md">{{order.requester.firstName}} {{order.requester.lastName}}</span>

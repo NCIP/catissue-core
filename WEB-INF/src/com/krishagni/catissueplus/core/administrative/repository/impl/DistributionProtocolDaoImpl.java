@@ -152,7 +152,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 			return;
 		}
 
-		query.add(Restrictions.eq("institute.name", crit.receivingInstitute().trim()));
+		query.createAlias("institute", "institute")
+			.add(Restrictions.eq("institute.name", crit.receivingInstitute().trim()));
 	}
 	
 	private void addDistSitesCondition(Criteria query, DpListCriteria crit) {

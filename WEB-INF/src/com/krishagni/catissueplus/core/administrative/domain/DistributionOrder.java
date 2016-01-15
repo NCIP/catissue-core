@@ -1,8 +1,11 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -42,6 +45,8 @@ public class DistributionOrder extends BaseEntity {
 	private String trackingUrl;
 	
 	private String comments;
+
+	private SpecimenRequest request;
 	
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -143,6 +148,14 @@ public class DistributionOrder extends BaseEntity {
 		this.comments = comments;
 	}
 
+	public SpecimenRequest getRequest() {
+		return request;
+	}
+
+	public void setRequest(SpecimenRequest request) {
+		this.request = request;
+	}
+
 	public Institute getInstitute() {
 		return requester.getInstitute();
 	}
@@ -157,12 +170,32 @@ public class DistributionOrder extends BaseEntity {
 		setExecutionDate(newOrder.getExecutionDate());
 		setTrackingUrl(newOrder.getTrackingUrl());
 		setComments(newOrder.getComments());
-		
+
+		if (!isOrderExecuted()) {
+			setRequest(newOrder.getRequest());
+		}
+
 		updateOrderItems(newOrder);
 		updateDistribution(newOrder);		
 		updateStatus(newOrder);
 	}
-	
+
+	public Set<DistributionOrderItem> getOrderItemsWithReqDetail() {
+		Map<Long, SpecimenRequestItem> reqItemsMap = Collections.emptyMap();
+		if (getRequest() != null) {
+			reqItemsMap = getRequest().getItems()
+				.stream()
+				.collect(Collectors.toMap(item -> item.getSpecimen().getId(), item -> item));
+		}
+
+		for (DistributionOrderItem item : getOrderItems()) {
+			item.setRequestItem(reqItemsMap.get(item.getSpecimen().getId()));
+		}
+
+		return getOrderItems();
+
+	}
+
 	public void distribute() {
 		if (isOrderExecuted()) {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.ALREADY_EXECUTED);
@@ -171,14 +204,19 @@ public class DistributionOrder extends BaseEntity {
 		if (CollectionUtils.isEmpty(getOrderItems())) {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
 		}
-		
-		for (DistributionOrderItem orderItem : getOrderItems()) {
-			orderItem.distribute();
-		}
-		
+
+		getOrderItemsWithReqDetail().forEach(DistributionOrderItem::distribute);
 		setStatus(Status.EXECUTED);
+
+		if (request != null) {
+			request.closeIfFulfilled();
+		}
 	}
-	
+
+	public boolean isOrderExecuted() {
+		return Status.EXECUTED == status;
+	}
+
 	private void updateOrderItems(DistributionOrder other) {
 		if (isOrderExecuted()) {
 			/*
@@ -210,9 +248,5 @@ public class DistributionOrder extends BaseEntity {
 		} else {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
-	}
-	
-	public boolean isOrderExecuted() {
-		return Status.EXECUTED == status;
 	}
 }

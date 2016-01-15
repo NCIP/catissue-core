@@ -144,11 +144,11 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 	}
 
 	private void addCountProjection(Criteria query) {
-		query.createAlias("specimens", "specimen");
+		query.createAlias("items", "item");
 
 		query.setProjection(Projections.projectionList()
 			.add(Projections.property("id"))
-			.add(Projections.count("specimen.id"))
+			.add(Projections.count("item.id"))
 			.add(Projections.groupProperty("id")))
 			.list();
 	}

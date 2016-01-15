@@ -64,6 +64,11 @@
       cascade="none" 
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="DISTRIBUTOR_ID"/>
+
+    <many-to-one
+      name="request"
+      class="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest"
+      column="REQUEST_ID"/>
       
     <filter name="activeEntity"/>
         

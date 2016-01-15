@@ -3,7 +3,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <span translate="specimens.list">Specimens</span>
-        <span class="os-btns">
+        <span class="os-btns" ng-if="!selection.closed">
           <button show-if-allowed="orderCreateOpts" class="default" ng-click="distributeSpecimens()">
             <span class="fa fa-share"></span>
             <span translate="specimen_list.distribute">Distribute</span>
@@ -20,8 +20,8 @@
             <tr class="row">
               <th class="col">
                 <div class="clearfix">
-                  <div class="pull-left os-select-specimen-cb">
-                    <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
+                  <div class="pull-left os-select-specimen-cb" ng-if="!selection.closed">
+                    <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all"></os-checkbox>
                   </div>
                   <div class="pull-left" style="padding-left: 12px;">
                     <span translate="specimens.label">Label</span>
@@ -37,41 +37,51 @@
               <th class="col">
                 <span translate="specimens.location">Location</span>
               </th>
+              <th class="col">
+                <span translate="specimen_requests.status">Status</span>
+              </th>
             </tr>
           </thead>
           <tbody class="os-table-body">
-            <tr class="row" ng-class="{'selected': specimen.selected}" ng-repeat="specimen in spmnRequest.specimens">
+            <tr class="row" ng-class="{'selected': item.selected}" ng-repeat="item in spmnRequest.items">
               <td class="col">
                 <div class="clearfix">
-                  <div class="pull-left os-select-specimen-cb">
-                    <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected">
+                  <div class="pull-left os-select-specimen-cb" ng-if="!selection.closed && item.status == 'PENDING'">
+                    <os-checkbox ng-change="toggleSpecimenSelect(item)" ng-model="item.selected">
                     </os-checkbox>
                   </div>
                   <div class="pull-left" style="padding-left: 12px;">
-                    <a ui-sref="specimen({specimenId: specimen.id})">
-                      <span>{{specimen.label}}</span>
+                    <a ui-sref="specimen({specimenId: item.specimen.id})">
+                      <span>{{item.specimen.label}}</span>
                     </a>
                   </div>
                 </div>
               </td>
               <td class="col">
-                <a ui-sref="specimen({specimenId: specimen.id})">
-                  <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                <a ui-sref="specimen({specimenId: item.specimen.id})">
+                  <os-specimen-desc specimen="item.specimen" detailed="true"></os-specimen-desc>
                 </a>
               </td>
               <td class="col">
-                <span>{{specimen.availableQty}}</span>
-                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
+                <span>{{item.specimen.availableQty}}</span>
+                <os-specimen-unit specimen-class="item.specimen.specimenClass" type="item.specimen.type"></os-specimen-unit>
               </td>
               <td class="col">
-                <span ng-switch on="!!specimen.storageLocation.name"> 
+                <span ng-switch on="!!item.specimen.storageLocation.name">
                   <span ng-switch-when="true">
-                    <span>{{specimen.storageLocation.name}}</span>
-                    <span>({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})</span>
+                    <span>{{item.specimen.storageLocation.name}}</span>
+                    <span>({{item.specimen.storageLocation.positionY}}, {{item.specimen.storageLocation.positionX}})</span>
                   </span>
                   <span ng-switch-when="false">
                     <span translate="specimens.virtually_located">Virtual</span>
                   </span>
+                </span>
+              </td>
+              <td class="col">
+                <span class="status" ng-switch on="item.status">
+                  <span ng-switch-when="PENDING" class="fa fa-circle os-status-pending"></span>
+                  <span ng-switch-when="DISTRIBUTED" class="fa fa-circle os-status-distributed"></span>
+                  <span ng-switch-when="SHIPPED" class="fa fa-circle os-status-distributed"></span>
                 </span>
               </td>
             </tr>

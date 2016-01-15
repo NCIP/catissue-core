@@ -59,6 +59,8 @@
     "build_version": "Version",
     "build_date": "Build date",
     "build_commit_revision": "Revision",
+    "close": "Close",
+    "close_reason": "Reason for closing",
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this page?",
     "footer_note": "<a href=\"http://www.openspecimen.org\" target=\"_blank\">OpenSpecimen</a> - powered by <a href=\"http://www.krishagni.com\" target=\"_blank\">Krishagni</a>",
 
@@ -1364,6 +1366,7 @@
     "title": "Distribution Order",
     "create_order": "Create Distribution Order",
     "name": "Name",
+    "request": "Request",
     "requestor": "Requestor",
     "site": "Site",
     "dp": "Distribution Protocol",
@@ -1509,6 +1512,14 @@
     "date_of_request": "Request Date",
     "specimens": "Specimens",
     "request": "Specimen Request",
+    "status": "Status",
+    "req_closed": "Successfully closed request #{{id}}",
+    "statuses": {
+      "pending": "Pending",
+      "distributed": "Distributed",
+      "shipped": "Shipped",
+      "closed": "Closed"
+    },
     "tab": {
       "overview": "Overview",
       "specimens": "Specimens"

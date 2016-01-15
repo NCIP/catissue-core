@@ -38,18 +38,22 @@ angular.module('os.biospecimen.models.specimenreq', ['os.common.models'])
       return SpecimenRequest.query({cpId: cpId, includeStats: includeStats});
     }
 
-    SpecimenRequest.prototype.getFormData = function() {
-      return $http.get(SpecimenRequest.url() + '/' + this.$id() + '/form-data').then(
-        function(resp) {
-          return resp.data;
-        }
-      );
-    }
-
     SpecimenRequest.haveRequests = function(cpId) {
       return $http.get(SpecimenRequest.url() + '/have-requests', {cpId: cpId}).then(
         function(resp) {
           return resp.data.haveRequests;
+        }
+      );
+    }
+
+    SpecimenRequest.prototype.getDisplayName = function() {
+      return '#' + this.$id();
+    }
+
+    SpecimenRequest.prototype.getFormData = function() {
+      return $http.get(SpecimenRequest.url() + '/' + this.$id() + '/form-data').then(
+        function(resp) {
+          return resp.data;
         }
       );
     }

@@ -36,6 +36,27 @@
       </div>
     </div>
      
+    <div class="form-group" ng-if="!!order.request.id">
+      <label class="col-xs-3 control-label" translate="orders.request">Request</label>
+      <div class="col-xs-6">
+        <input type="text" value="{{('orders.request' | translate) + ' #' + order.request.id}}" class="form-control" disabled>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!!order.request.id">
+      <label class="col-xs-3 control-label" translate="orders.requestor">Requestor</label>
+      <div class="col-xs-6">
+        <input type="text" value="{{order.request.requestor | osUserDisplayName}}" class="form-control" disabled>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!!order.request.id">
+      <label class="col-xs-3 control-label" translate="orders.receiving_institute">Receiving Institute</label>
+      <div class="col-xs-6">
+        <input type="text" value="{{order.instituteName}}" class="form-control" disabled>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="control-label col-xs-3" translate="orders.dp">Distribution Protocol</label>
       <div class="col-xs-6">
@@ -47,7 +68,7 @@
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group" ng-if="!order.request.id">
       <label class="control-label col-xs-3" translate="orders.receiving_institute">
         Receiving Institute
       </label>
@@ -69,7 +90,7 @@
       </div>
     </div>
     
-    <div class="form-group">
+    <div class="form-group" ng-if="!order.request.id">
       <label class="control-label col-xs-3" translate="orders.requestor">Requestor</label>
       <div class="col-xs-6">
         <os-users name="requestor" ng-model="order.requester" 
@@ -130,7 +151,7 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group>
+    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group ng-if="!order.request">
       <textarea ng-model="input.labelText" class="form-control" 
         placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab rows="2">
       </textarea>
@@ -141,55 +162,69 @@
       </span>
     </div>
 
-    <div class="os-table os-table-fixed bulk-edit os-border os-table-muted-hdr" 
+    <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"
       ng-if="order.orderItems && order.orderItems.length > 0">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col os-col-10">
-            <span translate="orders.spec.label">Label</span>
-          </div>
-          <div class="col os-col-25">
+      <thead class="os-table-head">
+        <tr class="row">
+          <td class="col">
+            <div class="clearfix">
+              <div class="pull-left" ng-if="!!order.request">
+                <os-checkbox ng-model="input.allSelected" ng-change="toggleAllSpecimensSelect()"></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <span translate="orders.spec.label">Label</span>
+              </div>
+            </div>
+          </td>
+          <td class="col">
             <span translate="orders.spec.desc">Description</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col" ng-if="!order.request">
             <span translate="orders.spec.cp">Collection Protocol</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
             <span translate="orders.spec.location">Location</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span translate="orders.spec.available_qty">Available</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span translate="orders.spec.quantity">Quantity</span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <div class="os-checkbox-container">
               <os-checkbox ng-model="input.allItemStatus" ng-change="toggleAllItemStatus()"></os-checkbox>
               <span class="os-checkbox-label" translate="orders.dispose_all">Dispose All</span>
             </div>
-          </div>
-          <div class="col os-col-5">
+          </td>
+          <td class="col" ng-if="!order.request">
             <span>&nbsp;</span>
-          </div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="item in order.orderItems" 
+          </td>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="item in order.orderItems"
           ng-form="sform" ng-init="specimen=item.specimen">
 
-          <div class="col os-col-10">
-            <a ui-sref="specimen({specimenId: specimen.id})">
-              <span>{{specimen.label}}</span>
-            </a>
-          </div>
-          <div class="col os-col-25">
+          <td class="col">
+            <div class="clearfix">
+              <div class="pull-left" ng-if="!!order.request">
+                <os-checkbox ng-model="specimen.selected" ng-change="toggleSpecimenSelect()"></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <span>{{specimen.label}}</span>
+                </a>
+              </div>
+            </div>
+          </td>
+          <td class="col">
             <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col" ng-if="!order.request">
             <span>{{specimen.cpShortTitle}}</span>
-          </div>
-          <div class="col os-col-15">
+          </td>
+          <td class="col">
             <span ng-switch on="!!specimen.storageLocation.name">
               <span ng-switch-when="true">
                 {{specimen.storageLocation.name}} 
@@ -201,12 +236,12 @@
                 Virtual
               </span>
             </span>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <span> {{specimen.availableQty}} </span>
             <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <div class="os-input-addon-grp">
               <input type="text" os-md-input name="qty" ng-model="item.quantity" required 
                 os-ensure-range="[
@@ -220,21 +255,21 @@
               </div>
             </div>
             <div os-field-error field="sform.qty"></div>
-          </div>
-          <div class="col os-col-10">
+          </td>
+          <td class="col">
             <div class="os-checkbox-container">
               <os-checkbox ng-model="item.status" ng-true-value="'DISTRIBUTED_AND_CLOSED'" ng-change="setHeaderStatus()"
                 ng-false-value="'DISTRIBUTED'" ng-disabled="item.quantity == specimen.availableQty"></os-checkbox>
             </div>
-          </div>
-          <div class="col os-col-5">
+          </td>
+          <td class="col" ng-if="!order.request">
             <button class="btn btn-xs btn-default" ng-click="removeOrderItem(item)">
               <span class="fa fa-remove"></span>
             </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="os-divider"></div>
      

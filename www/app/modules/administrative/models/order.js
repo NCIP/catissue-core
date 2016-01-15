@@ -21,9 +21,13 @@ angular.module('os.administrative.models.order', ['os.common.models'])
     DistributionOrder.prototype.$saveProps = function() {
       this.requester = {id: this.requester.id};
       this.distributionProtocol = {id: this.distributionProtocol.id};
-      angular.forEach(this.orderItems, function(orderItem) {
-        orderItem.specimen = {id: orderItem.specimen.id};
-      });
+      this.request = !!this.request ? {id: this.request.id} : undefined;
+
+      angular.forEach(this.orderItems,
+        function(orderItem) {
+          orderItem.specimen = {id: orderItem.specimen.id};
+        }
+      );
 
       return this;
     }
