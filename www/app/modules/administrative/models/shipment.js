@@ -12,6 +12,7 @@ angular.module('os.administrative.models.shipment', ['os.common.models'])
     }
 
     Shipment.prototype.$saveProps = function() {
+      this.request = !!this.request ? {id: this.request.id} : undefined;
       angular.forEach(this.shipmentItems, function(shipmentItem) {
         shipmentItem.specimen = {
           id: shipmentItem.specimen.id,

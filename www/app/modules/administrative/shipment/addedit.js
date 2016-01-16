@@ -1,15 +1,23 @@
 
 angular.module('os.administrative.shipment.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('ShipmentAddEditCtrl', function(
-    $scope, $state, shipment, Shipment, 
+    $scope, $state, shipment, spmnRequest, cp, Shipment,
     Institute, Site, Specimen, SpecimensHolder, Alerts) {
 
     function init() {
       $scope.shipment = shipment;
-      $scope.shipment.shipmentItems = shipment.shipmentItems || [];
-      $scope.input = {labelText: '', allItemStatus: false};
 
-      if (!shipment.id && angular.isArray(SpecimensHolder.getSpecimens())) {
+      shipment.request = spmnRequest;
+      if (!!spmnRequest) {
+        shipment.receivingInstitute = spmnRequest.requestorInstitute;
+      }
+
+      $scope.shipment.shipmentItems = shipment.shipmentItems || [];
+      $scope.input = {labelText: '', allSelected: false, allItemStatus: false};
+
+      if (!!spmnRequest) {
+        shipment.shipmentItems = getShipmentItemsFromReq(spmnRequest.items, shipment.shipmentItems);
+      } else if (!shipment.id && angular.isArray(SpecimensHolder.getSpecimens())) {
         shipment.shipmentItems = getShipmentItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
       }
@@ -24,6 +32,10 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
     
     function loadInstitutes () {
+      if (!!spmnRequest) {
+        return;
+      }
+
       Institute.query().then(
         function (institutes) {
           $scope.instituteNames = Institute.getNames(institutes);
@@ -35,16 +47,37 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       Site.listForInstitute(instituteName, true).then(
         function(sites) {
           $scope.sites = sites;
+          if (!spmnRequest) {
+            return;
+          }
+
+          $scope.sites = cp.cpSites.map(
+            function(cpSite) {
+              return cpSite.siteName;
+            }
+          ).filter(
+            function(site) {
+              return sites.indexOf(site) != -1;
+            }
+          );
         }
       );
     }
     
     function loadSendingSites() {
-      Site.list().then(
-        function(sites) {
-          $scope.sendingSites = sites;
-        }
-      );
+      if (!spmnRequest) {
+        Site.list().then(
+          function(sites) {
+            $scope.sendingSites = sites;
+          }
+        );
+      } else {
+        $scope.sendingSites = cp.cpSites.map(
+          function(cpSite) {
+            return cpSite.siteName;
+          }
+        );
+      }
     }
 
     function setUserFilterOpts(institute) {
@@ -71,10 +104,58 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         });
     }
 
+    function getShipmentItemsFromReq(reqItems, shipmentItems) {
+      var shipmentItemsMap = {};
+      angular.forEach(shipmentItems,
+        function(shipmentItem) {
+          shipmentItemsMap[shipmentItem.specimen.id] = shipmentItem;
+        }
+      );
+
+      var items = [];
+      angular.forEach(reqItems,
+        function(reqItem) {
+          var shipmentItem = shipmentItemsMap[reqItem.specimen.id];
+          if (shipmentItem) {
+            shipmentItem.specimen.selected = true;
+          } else if (reqItem.status == 'PENDING') {
+            shipmentItem = {
+              specimen: reqItem.specimen,
+            }
+
+            reqItem.specimen.selected = reqItem.selected;
+          }
+
+          if (shipmentItem) {
+            items.push(shipmentItem);
+          }
+        }
+      );
+
+      return items;
+    }
+
     function saveOrUpdate(status) {
-      var shipment = angular.copy($scope.shipment);
-      shipment.status = status;
-      shipment.$saveOrUpdate().then(
+      var shipmentClone = angular.copy($scope.shipment);
+      shipmentClone.status = status;
+
+      if (!!spmnRequest) {
+        var items = [];
+        angular.forEach(shipmentClone.shipmentItems,
+          function(item) {
+            if (!item.specimen.selected) {
+              return;
+            }
+
+            delete item.specimen.selected;
+            items.push(item);
+          }
+        );
+
+        shipmentClone.shipmentItems = items;
+      }
+
+      shipmentClone.$saveOrUpdate().then(
         function(savedShipment) {
           $state.go('shipment-detail.overview', {shipmentId: savedShipment.id});
         }
@@ -147,6 +228,24 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
     $scope.saveDraft = function() {
       saveOrUpdate('Pending');
+    }
+
+    $scope.toggleAllSpecimensSelect = function() {
+      angular.forEach($scope.shipment.shipmentItems,
+        function(item) {
+          item.specimen.selected = $scope.input.allSelected;
+        }
+      );
+    }
+
+    $scope.toggleSpecimenSelect = function() {
+      var allNotSelected = $scope.shipment.shipmentItems.some(
+        function(item) {
+          return !item.specimen.selected;
+        }
+      );
+
+      $scope.input.allSelected = !allNotSelected;
     }
 
     init();

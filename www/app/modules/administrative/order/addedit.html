@@ -39,7 +39,7 @@
     <div class="form-group" ng-if="!!order.request.id">
       <label class="col-xs-3 control-label" translate="orders.request">Request</label>
       <div class="col-xs-6">
-        <input type="text" value="{{('orders.request' | translate) + ' #' + order.request.id}}" class="form-control" disabled>
+        <input type="text" value="{{'#' + order.request.id}}" class="form-control" disabled>
       </div>
     </div>
 

@@ -72,6 +72,16 @@
       </div>
     </div>
     
+    <div class="form-group" ng-if="!!shipment.request">
+      <label class="col-xs-3 control-label" translate="shipments.request">Request</label>
+      <div class="col-xs-6" ng-switch on="shipment.status">
+        <div ng-switch-when="Shipped" class="form-value">#{{shipment.request.id}}</div>
+        <div ng-switch-default>
+          <input type="text" value="{{'#' + shipment.request.id}}" class="form-control" disabled>
+        </div>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="shipments.sending_site">Sending Site</label>
       <div class="col-xs-6" ng-switch on="shipment.status">
@@ -94,7 +104,7 @@
         <div ng-switch-default>
           <os-select name="receivingInstitute" ng-model="shipment.receivingInstitute" list="instituteNames"
             placeholder="{{'shipments.receiving_institute' | translate}}" 
-            on-select="onInstituteSelect(shipment.receivingInstitute)" required>
+            on-select="onInstituteSelect(shipment.receivingInstitute)" required ng-disabled="!!shipment.request">
           </os-select>
           <div os-field-error field="shipForm.receivingInstitute"></div>
         </div>
@@ -193,7 +203,8 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group ng-if="shipment.status != 'Shipped'">
+    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group
+      ng-if="!shipment.request && shipment.status != 'Shipped'">
       <textarea ng-model="input.labelText" class="form-control" 
         placeholder="{{'shipments.enter_specimen_label' | translate}}" os-enable-tab rows="2">
       </textarea>
@@ -204,18 +215,27 @@
       </span>
     </div>
 
-    <table class="os-table bulk-edit os-border os-table-muted-hdr"
+    <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"
       ng-if="shipment.shipmentItems && shipment.shipmentItems.length > 0">
       <thead class="os-table-head">
         <tr class="row">
-          <th class="col" translate="shipments.spec.label">Label</th>
+          <th class="col">
+            <div class="clearfix">
+              <div class="pull-left" ng-if="!!shipment.request && shipment.status != 'Shipped'">
+                <os-checkbox ng-model="input.allSelected" ng-change="toggleAllSpecimensSelect()"></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <span translate="shipments.spec.label">Label</span>
+              </div>
+            </div>
+          </th>
           <th class="col" translate="shipments.spec.desc">Description</th>
-          <th class="col" translate="shipments.spec.cp">Collection Protocol</th>
+          <th class="col" translate="shipments.spec.cp" ng-if="!shipment.request">Collection Protocol</th>
           <th class="col" translate="shipments.spec.quantity">Quantity</th>
           <th class="col" ng-if="shipment.status != 'Shipped'"> 
             <span translate="shipments.spec.location">Location</span>
           </th>
-          <th class="col" ng-if="shipment.status != 'Shipped'"> 
+          <th class="col" ng-if="shipment.status != 'Shipped' && !shipment.request">
             <span>&nbsp;</span>
           </th>
           <th class="col os-col-30" ng-if="shipment.status == 'Shipped'">
@@ -239,16 +259,23 @@
         <tr class="row" ng-repeat="item in shipment.shipmentItems"
           ng-form="sform" ng-init="specimen = item.specimen; item.receivedQuality = qualityStatuses[0]">
           <td class="col">
-            <a ui-sref="specimen({specimenId: specimen.id})">
-              <span>{{specimen.label}}</span>
-            </a>
+            <div class="clearfix">
+              <div class="pull-left" ng-if="!!shipment.request && shipment.status != 'Shipped'">
+                <os-checkbox ng-model="specimen.selected" ng-change="toggleSpecimenSelect()"></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <span>{{specimen.label}}</span>
+                </a>
+              </div>
+            </div>
           </td>
           <td class="col">
             <a ui-sref="specimen({specimenId: specimen.id})">
               <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
             </a>
           </td>
-          <td class="col">
+          <td class="col" ng-if="!shipment.request">
             <span>{{specimen.cpShortTitle}}</span>
           </td>
           <td class="col">
@@ -268,7 +295,7 @@
               </span>
             </span>
           </td>
-          <td class="col os-col-5" ng-if="shipment.status != 'Shipped'"> 
+          <td class="col os-col-5" ng-if="shipment.status != 'Shipped' && !shipment.request">
             <button class="btn btn-xs btn-default" ng-click="removeShipmentItem(item)">
               <span class="fa fa-remove"></span>
             </button>

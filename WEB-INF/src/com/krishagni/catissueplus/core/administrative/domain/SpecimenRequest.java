@@ -1,9 +1,12 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
@@ -106,6 +109,15 @@ public class SpecimenRequest extends BaseEntity {
 
 	public Institute getInstitute() {
 		return requestor.getInstitute();
+	}
+
+	public Map<Long, SpecimenRequestItem> getSpecimenIdRequestItemMap() {
+		return getItems().stream()
+			.collect(Collectors.toMap(item -> item.getSpecimen().getId(), item -> item));
+	}
+
+	public Set<Long> getSpecimenIds() {
+		return getItems().stream().map(item -> item.getSpecimen().getId()).collect(Collectors.toSet());
 	}
 
 	public void closeIfFulfilled() {

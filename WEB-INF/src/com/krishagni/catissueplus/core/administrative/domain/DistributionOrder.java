@@ -181,9 +181,7 @@ public class DistributionOrder extends BaseEntity {
 	public Set<DistributionOrderItem> getOrderItemsWithReqDetail() {
 		Map<Long, SpecimenRequestItem> reqItemsMap = Collections.emptyMap();
 		if (getRequest() != null) {
-			reqItemsMap = getRequest().getItems()
-				.stream()
-				.collect(Collectors.toMap(item -> item.getSpecimen().getId(), item -> item));
+			reqItemsMap = getRequest().getSpecimenIdRequestItemMap();
 		}
 
 		for (DistributionOrderItem item : getOrderItems()) {
@@ -191,7 +189,6 @@ public class DistributionOrder extends BaseEntity {
 		}
 
 		return getOrderItems();
-
 	}
 
 	public void distribute() {
@@ -206,8 +203,8 @@ public class DistributionOrder extends BaseEntity {
 		getOrderItemsWithReqDetail().forEach(DistributionOrderItem::distribute);
 		setStatus(Status.EXECUTED);
 
-		if (request != null) {
-			request.closeIfFulfilled();
+		if (getRequest() != null) {
+			getRequest().closeIfFulfilled();
 		}
 	}
 

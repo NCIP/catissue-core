@@ -72,6 +72,11 @@ public class SpecimenRequestItem extends BaseEntity {
 		setDistribution(distribution);
 	}
 
+	public void ship(Shipment shipment) {
+		setStatus(Status.SHIPPED);
+		setShipment(shipment);
+	}
+
 	public boolean isPending() {
 		return status == Status.PENDING;
 	}

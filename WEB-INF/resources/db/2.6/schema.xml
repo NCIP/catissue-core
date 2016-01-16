@@ -315,4 +315,20 @@
       referencedTableName="OS_SPECIMEN_REQUESTS"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="vpawar" id="Request for which the shipment is created">
+    <addColumn tableName="OS_SHIPMENTS">
+      <column name="REQUEST_ID" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on shipment request">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_SHIPMENTS_REQ_ID"
+      baseTableName="OS_SHIPMENTS"
+      baseColumnNames="REQUEST_ID"
+      referencedTableName="OS_SPECIMEN_REQUESTS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
 </databaseChangeLog>

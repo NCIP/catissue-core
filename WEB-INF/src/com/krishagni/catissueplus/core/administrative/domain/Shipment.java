@@ -1,16 +1,19 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -20,7 +23,9 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 public class Shipment extends BaseEntity {
 	public enum Status {
 		PENDING("Pending"),
+
 		SHIPPED("Shipped"),
+
 		RECEIVED("Received");
 		
 		private final String name;
@@ -81,6 +86,8 @@ public class Shipment extends BaseEntity {
 	private Set<ShipmentItem> shipmentItems = new HashSet<ShipmentItem>();
 	
 	private Set<User> notifyUsers = new HashSet<User>();
+
+	private SpecimenRequest request;
 	
 	public String getName() {
 		return name;
@@ -210,6 +217,14 @@ public class Shipment extends BaseEntity {
 		this.notifyUsers = notifyUsers;
 	}
 
+	public SpecimenRequest getRequest() {
+		return request;
+	}
+
+	public void setRequest(SpecimenRequest request) {
+		this.request = request;
+	}
+
 	public void update(Shipment other) {
 		setName(other.getName());
 		setCourierName(other.getCourierName());
@@ -224,28 +239,42 @@ public class Shipment extends BaseEntity {
 		setReceiver(other.getReceiver());
 		setReceiverComments(other.getReceiverComments());
 		setActivityStatus(other.getActivityStatus());
-		
-		if (getStatus() == Status.PENDING) {
-			updateOrderItems(other);
-			CollectionUpdater.update(getNotifyUsers(), other.getNotifyUsers());
-		}
+
+		updateRequest(other);
+		updateOrderItems(other);
+		updateNotifyUsers(other);
 		updateStatus(other);
 	}
-	
+
+	public Set<ShipmentItem> getShipmentItemsWithReqDetail() {
+		Map<Long, SpecimenRequestItem> reqItemsMap = Collections.emptyMap();
+		if (getRequest() != null) {
+			reqItemsMap = getRequest().getSpecimenIdRequestItemMap();
+		}
+
+		for (ShipmentItem item : getShipmentItems()) {
+			item.setRequestItem(reqItemsMap.get(item.getSpecimen().getId()));
+		}
+
+		return getShipmentItems();
+	}
+
 	public void ship() {
 		if (isShipped()) {
 			throw OpenSpecimenException.userError(ShipmentErrorCode.ALREADY_SHIPPED);
 		}
-		
-		if (CollectionUtils.isEmpty(getShipmentItems())) {
+
+		Set<ShipmentItem> shipmentItems = getShipmentItemsWithReqDetail();
+		if (CollectionUtils.isEmpty(shipmentItems)) {
 			throw OpenSpecimenException.userError(ShipmentErrorCode.NO_SPECIMENS_TO_SHIP);
 		}
-		
-		for (ShipmentItem item : getShipmentItems()) {
-			item.ship();
-		}
-		
+
+		shipmentItems.forEach(ShipmentItem::ship);
 		setStatus(Status.SHIPPED);
+
+		if (getRequest() != null) {
+			getRequest().closeIfFulfilled();
+		}
 	}
 	
 	public void receive(Shipment other) {
@@ -288,8 +317,25 @@ public class Shipment extends BaseEntity {
 			throw OpenSpecimenException.userError(ShipmentErrorCode.INVALID_SHIPPED_SPECIMENS);
 		}
 	}
-	
+
+	private void updateRequest(Shipment other) {
+		if (getStatus() != Status.PENDING) {
+			return;
+		}
+
+		SpecimenRequest request = other.getRequest();
+		if (request != null && request.isClosed()) {
+			throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
+		}
+
+		setRequest(request);
+	}
+
 	private void updateOrderItems(Shipment other) {
+		if (getStatus() != Status.PENDING) {
+			return;
+		}
+
 		Map<Specimen, ShipmentItem> existingItems = new HashMap<Specimen, ShipmentItem>();
 		for (ShipmentItem item : getShipmentItems()) {
 			existingItems.put(item.getSpecimen(), item); 
@@ -304,7 +350,15 @@ public class Shipment extends BaseEntity {
 		
 		getShipmentItems().removeAll(existingItems.values());
 	}
-	
+
+	private void updateNotifyUsers(Shipment other) {
+		if (getStatus() != Status.PENDING) {
+			return;
+		}
+
+		CollectionUpdater.update(getNotifyUsers(), other.getNotifyUsers());
+	}
+
 	private void updateStatus(Shipment other) {
 		if (getStatus() == other.getStatus()) {
 			return;

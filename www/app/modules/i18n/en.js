@@ -1434,6 +1434,7 @@
     "list": "Shipments",
     "create_shipment": "Create Shipment",
     "name": "Name",
+    "request": "Request",
     "courier_name": "Courier Name",
     "tracking_number": "Tracking Number",
     "tracking_url": "Tracking URL",

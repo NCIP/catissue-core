@@ -31,7 +31,7 @@ angular.module('os.administrative.order',
         url: '/order-addedit/:orderId?requestId',
         templateUrl: 'modules/administrative/order/addedit.html',
         resolve: {
-          order: function($stateParams , DistributionOrder, User) {
+          order: function($stateParams , DistributionOrder) {
             if ($stateParams.orderId) {
               return DistributionOrder.getById($stateParams.orderId);
             }

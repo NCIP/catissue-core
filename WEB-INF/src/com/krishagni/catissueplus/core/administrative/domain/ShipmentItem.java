@@ -19,6 +19,8 @@ public class ShipmentItem extends BaseEntity {
 	private Specimen specimen;
 	
 	private ReceivedQuality receivedQuality;
+
+	private transient SpecimenRequestItem requestItem;
 	
 	public Shipment getShipment() {
 		return shipment;
@@ -44,9 +46,21 @@ public class ShipmentItem extends BaseEntity {
 		this.receivedQuality = receivedQuality;
 	}
 
+	public SpecimenRequestItem getRequestItem() {
+		return requestItem;
+	}
+
+	public void setRequestItem(SpecimenRequestItem requestItem) {
+		this.requestItem = requestItem;
+	}
+
 	public void ship() {
 		specimen.updatePosition(null, shipment.getShippedDate());
 		SpecimenShipmentShippedEvent.createForShipmentItem(this).saveRecordEntry();
+
+		if (requestItem != null) {
+			requestItem.ship(shipment);
+		}
 	}
 	
 	public void receive(ShipmentItem other) {

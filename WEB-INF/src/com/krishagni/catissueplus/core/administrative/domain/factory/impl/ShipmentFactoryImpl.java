@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,13 +12,16 @@ import org.apache.commons.lang3.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.ShipmentItem;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentItemDetail;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
@@ -51,6 +55,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		
 		shipment.setId(detail.getId());
 		setName(detail, shipment, ose);
+		setRequest(detail, shipment, ose);
 		setCourierName(detail, shipment, ose);
 		setTrackingNumber(detail, shipment, ose);
 		setTrackingUrl(detail, shipment, ose);
@@ -80,6 +85,21 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		
 		shipment.setName(name);
 	}
+
+	private void setRequest(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
+		if (detail.getRequest() == null || detail.getRequest().getId() == null) {
+			return;
+		}
+
+		Long requestId = detail.getRequest().getId();
+		SpecimenRequest request = daoFactory.getSpecimenRequestDao().getById(requestId);
+		if (request == null) {
+			ose.addError(SpecimenRequestErrorCode.NOT_FOUND, requestId);
+			return;
+		}
+
+		shipment.setRequest(request);
+	}
 	
 	private void setCourierName(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
 		shipment.setCourierName(detail.getCourierName());
@@ -105,6 +125,12 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
+
+		SpecimenRequest request = shipment.getRequest();
+		if (request != null && !request.getCp().getRepositories().contains(site)) {
+			ose.addError(ShipmentErrorCode.INVALID_SEND_SITE_FOR_REQ, siteName, request.getId());
+			return;
+		}
 		
 		shipment.setSendingSite(site);
 	}
@@ -121,7 +147,20 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			ose.addError(SiteErrorCode.NOT_FOUND);
 			return;
 		}
-		
+
+		SpecimenRequest request = shipment.getRequest();
+		if (request != null) {
+			if (!request.getCp().getRepositories().contains(site)) {
+				ose.addError(ShipmentErrorCode.INVALID_RECV_SITE_FOR_REQ, siteName, request.getId());
+				return;
+			}
+
+			if (!request.getInstitute().equals(site.getInstitute())) {
+				ose.addError(ShipmentErrorCode.INVALID_RECV_SITE_FOR_REQ, siteName, request.getId());
+				return;
+			}
+		}
+
 		shipment.setReceivingSite(site);
 	}
 	
@@ -152,6 +191,14 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		} else {
 			shippedDate = Utility.chopTime(shippedDate);
 			if (shippedDate.after(todayDate)) {
+				ose.addError(ShipmentErrorCode.INVALID_SHIPPED_DATE);
+				return;
+			}
+		}
+
+		if (shipment.getRequest() != null) {
+			Date reqDate = Utility.chopTime(shipment.getRequest().getDateOfRequest());
+			if (shippedDate.before(reqDate)) {
 				ose.addError(ShipmentErrorCode.INVALID_SHIPPED_DATE);
 				return;
 			}
@@ -237,24 +284,30 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 			ose.addError(ShipmentErrorCode.NO_SPECIMENS_TO_SHIP);
 			return;
 		}
-		
-		Set<ShipmentItem> orderItems = new HashSet<ShipmentItem>();
+
+		Set<Long> requestedSpmns = Collections.emptySet();
+		if (shipment.getRequest() != null) {
+			requestedSpmns = shipment.getRequest().getSpecimenIds();
+		}
+
+		Set<ShipmentItem> items = new HashSet<ShipmentItem>();
 		Set<Long> specimens = new HashSet<Long>();
+
 		for (ShipmentItemDetail item : detail.getShipmentItems()) {
-			ShipmentItem orderItem = getShipmentItem(item, shipment, ose);
-			if (orderItem == null) {
+			ShipmentItem shipmentItem = getShipmentItem(item, shipment, requestedSpmns, ose);
+			if (shipmentItem == null) {
 				return;
 			}
 			
-			if (!specimens.add(orderItem.getSpecimen().getId())) {
+			if (!specimens.add(shipmentItem.getSpecimen().getId())) {
 				ose.addError(ShipmentErrorCode.DUPLICATE_SPECIMENS);
 				return;
 			}
 			
-			orderItems.add(orderItem);
+			items.add(shipmentItem);
 		}
 		
-		shipment.setShipmentItems(orderItems);
+		shipment.setShipmentItems(items);
 	}
 	
 	private void setNotifyUser(ShipmentDetail detail, Shipment shipment, OpenSpecimenException ose) {
@@ -297,7 +350,12 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		return user;
 	}
 	
-	private ShipmentItem getShipmentItem(ShipmentItemDetail detail, Shipment shipment, OpenSpecimenException ose) {
+	private ShipmentItem getShipmentItem(
+			ShipmentItemDetail detail,
+			Shipment shipment,
+			Set<Long> requestedSpmns,
+			OpenSpecimenException ose) {
+
 		if (shipment.isReceived() && StringUtils.isBlank(detail.getReceivedQuality())) {
 			ose.addError(ShipmentErrorCode.SPEC_REC_QUALITY_REQUIRED);
 			return null;
@@ -317,12 +375,17 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 		if (specimen == null) {
 			return null;
 		}
-		
+
+		SpecimenRequest request = shipment.getRequest();
+		if (request != null && !requestedSpmns.contains(specimen.getId())) {
+			ose.addError(ShipmentErrorCode.SPECIMEN_NOT_IN_REQ, specimen.getLabel(), request.getId());
+			return null;
+		}
+
 		ShipmentItem shipmentItem = new ShipmentItem();
 		shipmentItem.setShipment(shipment);
 		shipmentItem.setSpecimen(specimen);
 		shipmentItem.setReceivedQuality(receivedQuality);
-		
 		return shipmentItem;
 	}
 	

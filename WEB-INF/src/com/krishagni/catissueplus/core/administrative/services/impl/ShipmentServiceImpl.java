@@ -15,11 +15,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
@@ -143,6 +145,11 @@ public class ShipmentServiceImpl implements ShipmentService {
 			ensureValidSpecimens(shipment, ose);
 			ensureValidNotifyUsers(shipment, ose);
 			ose.checkAndThrow();
+
+			SpecimenRequest request = shipment.getRequest();
+			if (request != null && request.isClosed()) {
+				throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
+			}
 			
 			//
 			//  Saved to obtain IDs to make shipment events

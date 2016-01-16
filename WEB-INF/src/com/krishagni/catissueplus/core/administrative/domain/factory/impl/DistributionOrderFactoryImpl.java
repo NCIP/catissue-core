@@ -206,10 +206,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 
 		Set<Long> requestedSpmns = Collections.emptySet();
 		if (order.getRequest() != null) {
-			requestedSpmns = order.getRequest().getItems()
-				.stream()
-				.map(item -> item.getSpecimen().getId())
-				.collect(Collectors.toSet());
+			requestedSpmns = order.getRequest().getSpecimenIds();
 		}
 
 		boolean error = false;
