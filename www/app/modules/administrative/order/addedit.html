@@ -209,7 +209,7 @@
           <td class="col">
             <div class="clearfix">
               <div class="pull-left" ng-if="!!order.request">
-                <os-checkbox ng-model="specimen.selected" ng-change="toggleSpecimenSelect()"></os-checkbox>
+                <os-checkbox ng-model="specimen.selected" ng-change="toggleSpecimenSelect(item)"></os-checkbox>
               </div>
               <div class="pull-left" style="padding-left: 12px;">
                 <a ui-sref="specimen({specimenId: specimen.id})">

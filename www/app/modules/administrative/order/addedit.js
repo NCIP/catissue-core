@@ -110,7 +110,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
             orderItem = {
               specimen: reqItem.specimen,
               quantity: reqItem.specimen.availableQty,
-              status: 'DISTRIBUTED_AND_CLOSED',
+              status: reqItem.selected ? 'DISTRIBUTED_AND_CLOSED' : 'DISTRIBUTED',
             }
 
             reqItem.specimen.selected = reqItem.selected;
@@ -238,7 +238,9 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
     
     $scope.setStatus = function(item) {
-      if (item.quantity == item.specimen.availableQty) {
+      var selected = !spmnRequest ? true : item.specimen.selected;
+
+      if (item.quantity == item.specimen.availableQty && selected) {
         item.status = 'DISTRIBUTED_AND_CLOSED';
       } else {
         item.status = 'DISTRIBUTED';
@@ -276,14 +278,20 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       );
     }
 
-    $scope.toggleSpecimenSelect = function() {
-      var allNotSelected = $scope.order.orderItems.some(
-        function(item) {
-          return !item.specimen.selected;
-        }
-      );
+    $scope.toggleSpecimenSelect = function(item) {
+      if (!item.specimen.selected) {
+        $scope.input.allSelected = false;
+      } else {
+        var allNotSelected = $scope.order.orderItems.some(
+          function(item) {
+            return !item.specimen.selected;
+          }
+        );
 
-      $scope.input.allSelected = !allNotSelected;
+        $scope.input.allSelected = !allNotSelected;
+      }
+
+      $scope.setStatus(item);
     }
     
     init();
