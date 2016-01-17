@@ -67,6 +67,10 @@ public class DistributionOrderItem extends BaseEntity {
 	}
 
 	public void distribute() {
+		if (requestItem != null) {
+			requestItem.throwErrorIfFulfilled();
+		}
+
 		specimen.distribute(this);
 
 		if (requestItem != null) {

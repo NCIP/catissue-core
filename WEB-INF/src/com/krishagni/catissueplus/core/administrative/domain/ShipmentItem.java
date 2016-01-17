@@ -55,6 +55,10 @@ public class ShipmentItem extends BaseEntity {
 	}
 
 	public void ship() {
+		if (requestItem != null) {
+			requestItem.throwErrorIfFulfilled();
+		}
+
 		specimen.updatePosition(null, shipment.getShippedDate());
 		SpecimenShipmentShippedEvent.createForShipmentItem(this).saveRecordEntry();
 

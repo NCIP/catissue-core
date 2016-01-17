@@ -5,8 +5,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class SpecimenRequestItem extends BaseEntity {
 	public enum Status {
@@ -79,5 +82,26 @@ public class SpecimenRequestItem extends BaseEntity {
 
 	public boolean isPending() {
 		return status == Status.PENDING;
+	}
+
+	public void throwErrorIfFulfilled() {
+		ErrorCode error = null;
+		switch (getStatus()) {
+			case DISTRIBUTED:
+				error = SpecimenRequestErrorCode.SPECIMEN_DISTRIBUTED;
+				break;
+
+			case SHIPPED:
+				error = SpecimenRequestErrorCode.SPECIMEN_SHIPPED;
+				break;
+
+			default:
+				error = null;
+				break;
+		}
+
+		if (error != null) {
+			throw OpenSpecimenException.userError(error, getSpecimen().getLabel());
+		}
 	}
 }
