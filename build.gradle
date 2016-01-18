@@ -172,8 +172,8 @@ compileJava {
                 classpath: configurations.ajc.asPath)
       
     ant.iajc(
-      source: 1.6, 
-      target: 1.6, 
+      source: 1.8,
+      target: 1.8,
       destDir: sourceSets.main.output.classesDir.absolutePath, 
       maxmem: "512m", 
       fork: "true",
