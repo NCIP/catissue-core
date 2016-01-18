@@ -52,37 +52,28 @@ public class SpecimenRequestsController {
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.includeStat(includeStats);
-
-		ResponseEvent<List<SpecimenRequestSummary>> resp = spmnReqSvc.getRequests(getRequest(listCriteria));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(spmnReqSvc.getRequests(request(listCriteria)));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenRequestDetail getSpecimenRequest(@PathVariable("id") Long reqId) {
-		ResponseEvent<SpecimenRequestDetail> resp = spmnReqSvc.getRequest(getRequest(reqId));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(spmnReqSvc.getRequest(request(reqId)));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/form-data")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Map<String, Object> getSpecimenRequestFormData(@PathVariable("id") Long reqId) {
-		ResponseEvent<Map<String, Object>> resp = spmnReqSvc.getRequestFormData(getRequest(reqId));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(spmnReqSvc.getRequestFormData(request(reqId)));
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenRequestSummary> createSpecimenRequest(@RequestBody RequestListSpecimensDetail detail) {
-		ResponseEvent<List<SpecimenRequestSummary>> resp = spmnReqSvc.createRequest(getRequest(detail));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(spmnReqSvc.createRequest(request(detail)));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}/status")
@@ -90,9 +81,7 @@ public class SpecimenRequestsController {
 	@ResponseBody
 	public SpecimenRequestSummary updateStatus(@PathVariable("id") Long reqId, @RequestBody EntityStatusDetail detail) {
 		detail.setId(reqId);
-		ResponseEvent<SpecimenRequestSummary> resp = spmnReqSvc.updateStatus(getRequest(detail));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(spmnReqSvc.updateStatus(request(detail)));
 	}
 
 
@@ -101,9 +90,7 @@ public class SpecimenRequestsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<Long> getRequestFormIds(@RequestParam("listId") Long listId) {
-		ResponseEvent<List<Long>> resp = spmnReqSvc.getFormIds(getRequest(listId));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return  response(spmnReqSvc.getFormIds(request(listId)));
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="have-requests")
@@ -111,12 +98,16 @@ public class SpecimenRequestsController {
 	@ResponseBody
 	public Map<String, Boolean> haveRequests(@RequestParam(value = "cpId", required = false) Long cpId) {
 		SpecimenRequestListCriteria listCriteria = new SpecimenRequestListCriteria().cpId(cpId);
-		ResponseEvent<Boolean> resp = spmnReqSvc.haveRequests(getRequest(listCriteria));
-		resp.throwErrorIfUnsuccessful();
-		return Collections.singletonMap("haveRequests", resp.getPayload());
+		Boolean haveRequests = response(spmnReqSvc.haveRequests(request(listCriteria)));
+		return Collections.singletonMap("haveRequests", haveRequests);
 	}
 
-	private <T> RequestEvent<T> getRequest(T payload) {
+	private <T> RequestEvent<T> request(T payload) {
 		return new RequestEvent<T>(payload);
+	}
+
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 }

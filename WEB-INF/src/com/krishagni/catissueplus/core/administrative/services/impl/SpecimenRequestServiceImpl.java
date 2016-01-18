@@ -102,6 +102,9 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 		try {
 			SpecimenRequest spmnReq = getSpecimenRequest(req.getPayload());
 
+			//
+			// Get form context corresponding to CP to which the request belongs
+			//
 			String entityType = FormType.SPECIMEN_REQUEST_FORMS.getType();
 			List<FormCtxtSummary> formCtxts = formDao.getFormContexts(spmnReq.getCp().getId(), entityType);
 			if (CollectionUtils.isEmpty(formCtxts)) {
@@ -112,6 +115,9 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 				return ResponseEvent.response(Collections.<String, Object>emptyMap());
 			}
 
+			//
+			// Obtain record ID based on form context and request
+			//
 			FormCtxtSummary formCtxt = formCtxts.iterator().next();
 			Long formCtxtId = formCtxt.getFormCtxtId();
 			List<FormRecordEntryBean> recordEntries = formDao.getRecordEntries(formCtxtId, spmnReq.getId());
@@ -119,6 +125,9 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 				return ResponseEvent.response(Collections.<String, Object>emptyMap());
 			}
 
+			//
+			// Retrieve actual form data based on record ID
+			//
 			GetFormDataOp op = new GetFormDataOp();
 			op.setFormId(formCtxt.getFormId());
 			op.setRecordId(recordEntries.iterator().next().getRecordId());
@@ -254,7 +263,7 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
-		Set<Site> cpSites = Utility.collect(spmnReq.getCp().getSites(), "site", true);
+		Set<Site> cpSites = spmnReq.getCp().getRepositories();
 		if (CollectionUtils.intersection(allowedSites, cpSites).isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}

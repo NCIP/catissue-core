@@ -608,7 +608,7 @@ public class AccessCtrlMgr {
 			return null;
 		}
 		
-		return getSites(Resource.ORDER, new Operation[]{Operation.CREATE, Operation.UPDATE});
+		return getSites(Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
 	}
 	
 	@SuppressWarnings("unchecked")
