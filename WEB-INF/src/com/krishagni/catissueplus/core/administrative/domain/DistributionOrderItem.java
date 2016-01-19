@@ -56,7 +56,7 @@ public class DistributionOrderItem extends BaseEntity {
 		return getStatus() == Status.DISTRIBUTED_AND_CLOSED;
 	}
 
-	public void distribute() {		
-		specimen.distribute(this);
-	}	
+	public void distribute() {
+		order.addOnSaveProc(() -> specimen.distribute(this));
+	}
 }
