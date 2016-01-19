@@ -205,7 +205,7 @@
 <script type="text/ng-template" id="matched-participants.html">
   <div class="alert alert-warning os-participant-matching-msg">
     <span translate="participant.similar_participants">
-      Following participants similar to new participant being registered found
+      Following participants found that are similar to participant being registered/updated
     </span>
   </div>
 
@@ -242,14 +242,19 @@
   </div>
 
   <div>
-    <button class="btn btn-primary" ng-if="selectedParticipant" ng-click="registerUsingSelectedParticipant()"> 
+    <button class="btn btn-primary" ng-if="!cpr.id && selectedParticipant" ng-click="registerUsingSelectedParticipant()"> 
       <span translate="participant.buttons.register_selected_participant"> 
         Register Selected Participant 
       </span>
     </button>
+    <button class="btn btn-primary" ng-if="!!cpr.id && selectedParticipant" ng-click="confirmMerge()"> 
+      <span translate="participant.buttons.merge_participants"> 
+        Merge Participants 
+      </span>
+    </button>
     <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()">
       <span translate="participant.buttons.ignore_matches"> 
-        Ignore Matches and Register Participant 
+        Ignore Matches and Proceed 
       </span>
     </button>
     <button class="btn btn-warning" ng-click="lookupAgain()">

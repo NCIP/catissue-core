@@ -42,7 +42,7 @@
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier"/>
     </set>
 
-    <set name="cprs" table="catissue_coll_prot_reg" inverse="true" cascade="all-delete-orphan">
+    <set name="cprs" table="catissue_coll_prot_reg" inverse="true">
       <key column="PARTICIPANT_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"/>
       <filter name="activeEntity"/>

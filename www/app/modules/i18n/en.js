@@ -273,6 +273,8 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
+    "confirm_merging": "Merging Participant",
+    "confirm_merge": "Participant being updated will be deleted forever. Do you want to continue with merge?",
     "search_results": "Participant Search Result for {{key}}",
     "visits_count": "Visits",
     "specimens_count": "Specimens",
@@ -286,7 +288,7 @@
       "clear": "Clear response"
      },
 
-    "similar_participants": "Following participants found that are similar to new participant being registered",
+    "similar_participants": "Following participants found that are similar to participant being registered/updated",
     "matched_attrs": "Matched Attributes",
     "matching_attr": {
       "empi": "EMPI",
@@ -306,8 +308,9 @@
     "buttons": {
       "register": "Register",
       "update_registration": "Update",
-      "register_selected_participant": "Register Selected participant",
-      "ignore_matches": "Ignore Matches and Register Participant",
+      "register_selected_participant": "Register Selected Participant",
+      "merge_participants": "Merge Participants",
+      "ignore_matches": "Ignore Matches and Proceed",
       "lookup_again": "Lookup Again",
       "bulk_register": "Bulk Register",
       "specimen_catalog": "Specimen Catalog"
