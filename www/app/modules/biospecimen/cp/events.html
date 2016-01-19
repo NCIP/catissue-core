@@ -15,7 +15,12 @@
         <div ng-if="evt.id != event.id">
           <div class="list-group-item" ng-class="{'active': selected.id == evt.id}">
             <div ng-click="selectEvent(evt)">
-              T{{evt.eventPoint}}: {{evt.eventLabel}} 
+              <span ng-if="evt.eventPoint >= 0">
+                T{{evt.eventPoint}}: {{evt.eventLabel}}
+              </span>
+              <span ng-if="evt.eventPoint < 0">
+                -T{{-evt.eventPoint}}: {{evt.eventLabel}}
+              </span>
               <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span> 
             </div>
 
