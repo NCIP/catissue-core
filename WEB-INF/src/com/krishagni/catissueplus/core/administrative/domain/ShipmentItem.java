@@ -46,7 +46,7 @@ public class ShipmentItem extends BaseEntity {
 
 	public void ship() {
 		specimen.updatePosition(null, shipment.getShippedDate());
-		SpecimenShipmentShippedEvent.createForShipmentItem(this).saveRecordEntry();
+		shipment.addOnSaveProc(() -> addShippedEvent(this));
 	}
 	
 	public void receive(ShipmentItem other) {
@@ -63,5 +63,9 @@ public class ShipmentItem extends BaseEntity {
 		}
 		
 		SpecimenShipmentReceivedEvent.createForShipmentItem(this).saveRecordEntry();
+	}
+
+	private void addShippedEvent(ShipmentItem item) {
+		SpecimenShipmentShippedEvent.createForShipmentItem(item).saveRecordEntry();
 	}
 }

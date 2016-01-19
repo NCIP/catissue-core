@@ -298,6 +298,7 @@ public class Shipment extends BaseEntity {
 		for (ShipmentItem newItem : other.getShipmentItems()) {
 			ShipmentItem oldItem = existingItems.remove(newItem.getSpecimen());
 			if (oldItem == null) {
+				newItem.setShipment(this);
 				getShipmentItems().add(newItem);
 			}
 		}
