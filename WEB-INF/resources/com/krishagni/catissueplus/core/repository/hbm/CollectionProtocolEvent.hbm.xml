@@ -104,5 +104,15 @@
         cp.shortTitle = :shortTitle and
         cpe.code = :code
     </query>
+
+    <query name="getMinEventPoint">
+      select
+        min(cpe.eventPoint)
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent cpe
+        join cpe.collectionProtocol cp
+      where
+        cp.id = :cpId
+    </query>
   </class>
 </hibernate-mapping>

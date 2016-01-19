@@ -8,7 +8,14 @@
       <a class="list-group-item" ng-repeat="visit in visits" 
         ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})"
         ui-sref-active="active">
-        <h5 class="list-group-item-heading">T{{visit.eventPoint}}: {{visit.eventLabel}}</h5>
+        <h5 class="list-group-item-heading">
+          <span ng-if="visit.eventPoint >= 0">
+            T{{visit.eventPoint}}: {{visit.eventLabel}}
+          </span>
+          <span ng-if="visit.eventPoint < 0">
+            -T{{-visit.eventPoint}}: {{visit.eventLabel}}
+          </span>
+        </h5>
 
         <p class="list-group-item-text">
           <span class="name" title="{{visit.name}}" ng-if="visit.name">

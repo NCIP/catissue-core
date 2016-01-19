@@ -206,7 +206,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
 	}
-	
+
+	@Override
+	public int getMinEventPoint(Long cpId) {
+		Number minEventPoint = (Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_MIN_CPE_CAL_POINT)
+			.setLong("cpId", cpId)
+			.uniqueResult();
+
+		return minEventPoint != null ? minEventPoint.intValue() : 0;
+	}
 
 	@Override
 	public void saveCpe(CollectionProtocolEvent cpe) {
@@ -412,6 +421,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPE_BY_IDS = CPE_FQN + ".getCpeByIds";
 	
 	private static final String GET_CPE_BY_CODE = CPE_FQN + ".getByCode";
+
+	private static final String GET_MIN_CPE_CAL_POINT = CPE_FQN + ".getMinEventPoint";
 	
 	private static final String SR_FQN = SpecimenRequirement.class.getName();
 	

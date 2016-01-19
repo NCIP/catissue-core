@@ -18,7 +18,14 @@
       </li>
     </ul>
 
-    <h3>T{{visit.eventPoint}}: {{visit.eventLabel}}</h3>
+    <h3>
+      <span ng-if="visit.eventPoint >= 0">
+        T{{visit.eventPoint}}: {{visit.eventLabel}}
+      </span>
+      <span ng-if="visit.eventPoint < 0">
+        -T{{-visit.eventPoint}}: {{visit.eventLabel}}
+      </span>
+    </h3>
 
     <div class="os-btns right">
       <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-switch on="!!visit.id" ui-sref="visit-addedit">
