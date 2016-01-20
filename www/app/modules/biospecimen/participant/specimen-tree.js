@@ -262,31 +262,8 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
         }
 
-        scope.showCreateAliquots = function(specimen) {
-          scope.view = 'create_aliquots';      
-          scope.parentSpecimen = specimen;
-          scope.aliquotSpec = {createdOn : new Date()};
-        };
-
-        scope.collectAliquots = function() {
-          var specimens = SpecimenUtil.collectAliquots(scope);
-          CollectSpecimensSvc.collect(getState(), scope.visit, specimens, parent);
-        };
-
         scope.loadSpecimenTypes = function(specimenClass, notClear) {
           SpecimenUtil.loadSpecimenTypes(scope, specimenClass, notClear);
-        };
-
-        scope.showCreateDerivative = function(specimen) {
-          scope.view = 'create_derivatives';      
-          scope.parentSpecimen = specimen;
-          scope.derivative = SpecimenUtil.getNewDerivative(scope);
-          SpecimenUtil.loadSpecimenClasses(scope);
-          SpecimenUtil.loadPathologyStatuses(scope);
-        };
-
-        scope.createDerivative = function() {
-          SpecimenUtil.createDerivatives(scope);
         };
 
         scope.showCloseSpecimen = function(specimen) {
