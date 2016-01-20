@@ -355,6 +355,8 @@
     "surgical_path_no": "Surg Path Number",
     "reason_for_missed_visit": "Reason for Missed Visit",
     "comments": "Comments",
+    "eos": "EOS",
+    "end_of_study": "End of Study",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",

@@ -58,7 +58,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           }
         );
 
-        visit.visitDate = visit.visitDate || visit.anticipatedVisitDate;
+        visit.visitDate = visit.visitDate || visit.anticipatedVisitDate || new Date();
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;

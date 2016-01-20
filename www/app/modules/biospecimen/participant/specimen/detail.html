@@ -13,7 +13,7 @@
       </li>
       <li>
         <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
+          <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
         </a>
       </li>
     </ul>

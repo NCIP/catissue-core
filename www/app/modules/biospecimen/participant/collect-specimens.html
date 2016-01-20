@@ -20,12 +20,7 @@
 
     <h3>
       Specimen Collection for
-      <span ng-if="visit.eventPoint >= 0">
-        T{{visit.eventPoint}}: {{visit.eventLabel}}
-      </span>
-      <span ng-if="visit.eventPoint < 0">
-        -T{{-visit.eventPoint}}: {{visit.eventLabel}}
-      </span>
+      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
     </h3>
   </div>
 

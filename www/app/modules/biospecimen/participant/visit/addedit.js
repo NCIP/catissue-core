@@ -22,8 +22,8 @@ angular.module('os.biospecimen.visit.addedit', [])
       $scope.extnOpts = Util.getExtnOpts(currVisit, extensionCtxt);
       ExtensionsUtil.createExtensionFieldMap(currVisit);
       
-      if (!currVisit.id && currVisit.anticipatedVisitDate) {
-        angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate, status: 'Complete'});
+      if (!currVisit.id) {
+        angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate || new Date(), status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
       }
 

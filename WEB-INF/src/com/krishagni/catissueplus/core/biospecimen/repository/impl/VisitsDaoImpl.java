@@ -63,13 +63,17 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				visitsMap.put(getVisitKey(visit.getId(), visit.getEventId()), visit);
 			}
 
-			if (visit.getEventPoint() < minEventPoint) {
+			if (visit.getEventPoint() != null && visit.getEventPoint() < minEventPoint) {
 				minEventPoint = visit.getEventPoint();
 			}
 		}
 
 		Calendar cal = Calendar.getInstance();
 		for (VisitSummary visit : visits) {
+			if (visit.getEventPoint() == null) {
+				continue;
+			}
+
 			cal.setTime(regDate);
 			cal.add(Calendar.DAY_OF_YEAR, visit.getEventPoint() - minEventPoint);
 			visit.setAnticipatedVisitDate(cal.getTime());

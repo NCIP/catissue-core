@@ -40,7 +40,9 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
             regDate = regDate.getTime();
           }
 
-          event.anticipatedVisitDate = (event.eventPoint - event.offset) * 24 * 60 * 60 * 1000 + regDate;
+          if (event.eventPoint != null) {
+            event.anticipatedVisitDate = (event.eventPoint - event.offset) * 24 * 60 * 60 * 1000 + regDate;
+          }
           delete event.offset;
 
           return new Visit(event);
