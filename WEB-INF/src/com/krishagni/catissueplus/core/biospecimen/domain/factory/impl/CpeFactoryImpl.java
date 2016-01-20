@@ -106,12 +106,7 @@ public class CpeFactoryImpl implements CpeFactory {
 	}
 	
 	public void setEventPoint(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
-		Double eventPoint = detail.getEventPoint();
-		if (eventPoint == null) {
-			eventPoint = 0d;
-		}
-		
-		cpe.setEventPoint(eventPoint);
+		cpe.setEventPoint(detail.getEventPoint());
 	}
 	
 	public void setCode(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {

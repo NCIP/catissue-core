@@ -723,7 +723,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	private void setSpecimenPosition(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
 		if (existing == null || detail.isAttrModified("storageLocation")) {
 			setSpecimenPosition(detail, specimen, ose);
-		} else {
+		} else if (existing.getPosition() != null) {
+			//
+			// Validate container restrictions if specimen class or specimen type is modified
+			//
+			if (detail.isAttrModified("specimenClass") || detail.isAttrModified("specimenType")) {
+				StorageContainer container = existing.getPosition().getContainer();
+				if (!container.canContain(specimen)) {
+					ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, container.getName(), specimen.getLabelOrDesc());
+					return;
+				}
+			}
+			
 			specimen.setPosition(existing.getPosition());
 		}
 	}

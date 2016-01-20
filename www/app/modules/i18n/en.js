@@ -277,6 +277,8 @@
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
     "reg_another_protocol": "Register to Another Protocol",
+    "confirm_merging": "Merging Participant",
+    "confirm_merge": "Participant being updated will be deleted forever. Do you want to continue with merge?",
     "search_results": "Participant Search Result for {{key}}",
     "visits_count": "Visits",
     "specimens_count": "Specimens",
@@ -290,7 +292,7 @@
       "clear": "Clear response"
      },
 
-    "similar_participants": "Following participants found that are similar to new participant being registered",
+    "similar_participants": "Following participants found that are similar to participant being registered/updated",
     "matched_attrs": "Matched Attributes",
     "matching_attr": {
       "empi": "EMPI",
@@ -310,8 +312,9 @@
     "buttons": {
       "register": "Register",
       "update_registration": "Update",
-      "register_selected_participant": "Register Selected participant",
-      "ignore_matches": "Ignore Matches and Register Participant",
+      "register_selected_participant": "Register Selected Participant",
+      "merge_participants": "Merge Participants",
+      "ignore_matches": "Ignore Matches and Proceed",
       "lookup_again": "Lookup Again",
       "bulk_register": "Bulk Register",
       "specimen_catalog": "Specimen Catalog"
@@ -356,6 +359,8 @@
     "surgical_path_no": "Surg Path Number",
     "reason_for_missed_visit": "Reason for Missed Visit",
     "comments": "Comments",
+    "eos": "EOS",
+    "end_of_study": "End of Study",
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",
@@ -1664,7 +1669,11 @@
         "visit_label_print_rules": "Visit Label Print Rules",
         "visit_label_print_rules_desc": "CSV file containing the conditions which decides the data to be printed as labels and which printer to use",
         "visit_label_printer": "Visit Label Printer Implementor",
-        "visit_label_printer_desc": "Name of the Java bean defined in the spring context for the implementor class"
+        "visit_label_printer_desc": "Name of the Java bean defined in the spring context for the implementor class",
+        "cp_expiry_rem_notif": "CP Expiry Reminder",
+        "cp_expiry_rem_notif_desc": "Number of days prior to collection protocol expiry when email notification should be sent to the PI.",
+        "cp_expiry_rem_rept_inter": "Repeat CP Expiry Reminder",
+        "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry."
       },
 
       "common": {

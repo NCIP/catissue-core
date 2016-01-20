@@ -331,4 +331,68 @@
       referencedTableName="OS_SPECIMEN_REQUESTS"
       referencedColumnNames="IDENTIFIER" />
   </changeSet>
+
+  <changeSet author="nmarwaha" id="Add covering index for use in cpr specimen stat view" dbms="mysql">
+    <createIndex indexName="OS_CPR_SPMN_STAT_VIEW_IDX" tableName="CATISSUE_SPECIMEN">
+      <column name="SPECIMEN_COLLECTION_GROUP_ID"/>
+      <column name="REQ_SPECIMEN_ID"/>
+      <column name="COLLECTION_STATUS"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Add covering index for use in cpr visit stat view" dbms="mysql">
+    <createIndex indexName="OS_CPR_VISIT_STAT_VIEW_IDX" tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="COLLECTION_PROTOCOL_REG_ID"/>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID"/>
+      <column name="COLLECTION_STATUS"/>
+      <column name="IDENTIFIER"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating CPR_VISIT_STAT view" runOnChange="true">
+    <createView viewName="OS_CPR_VISIT_STATS_VIEW">
+      select 
+        cpr.identifier as identifier,
+        sum(case when visit.collection_status = 'Complete' then 1 else 0 end) as visits_completed,
+        sum(case when visit.collection_status = 'Missed Collection' then 1 else 0 end) as visits_missed,
+        sum(case when (visit.collection_status = 'Pending' or visit.identifier is null) then 1 else 0 end) as visits_pending 
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_coll_prot_event cpe 
+          on cpe.collection_protocol_id = cpr.collection_protocol_id and 
+             cpe.activity_status!= 'Disabled' 
+        left join catissue_specimen_coll_group visit 
+          on visit.collection_protocol_event_id = cpe.identifier and 
+             visit.collection_protocol_reg_id = cpr.identifier and 
+             visit.activity_status!= 'Disabled'
+      group by 
+        cpr.identifier
+    </createView>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating CPR_SPECIMEN_STAT view" runOnChange="true">
+    <createView viewName="OS_CPR_SPMN_STATS_VIEW">
+      select 
+        cpr.identifier as identifier,
+        sum(case when spmn.collection_status = 'Collected' then 1 else 0 end) as specimens_collected,
+        sum(case when spmn.collection_status = 'Missed Collection' then 1 else 0 end) as specimens_missed,
+        sum(case when (spmn.identifier is null or spmn.collection_status = 'Pending') then 1 else 0 end) as specimens_pending 
+      from 
+        catissue_coll_prot_reg cpr 
+        inner join catissue_coll_prot_event cpe on cpe.collection_protocol_id = cpr.collection_protocol_id 
+        inner join catissue_cp_req_specimen sr 
+          on sr.collection_protocol_event_id = cpe.identifier and
+             sr.activity_status != 'Disabled'
+        left join catissue_specimen_coll_group visit 
+          on visit.collection_protocol_event_id = cpe.identifier and 
+             visit.collection_protocol_reg_id = cpr.identifier and
+             visit.activity_status != 'Disabled'
+        left join catissue_specimen spmn 
+          on spmn.req_specimen_id = sr.identifier and
+             spmn.specimen_collection_group_id = visit.identifier and
+             spmn.activity_status != 'Disabled' 
+      group by
+        cpr.identifier
+    </createView>
+  </changeSet>
 </databaseChangeLog>

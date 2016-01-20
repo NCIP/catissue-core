@@ -246,6 +246,13 @@ public class CollectionProtocolRegistration {
 			setPpid(cp.getId() + "_" + participant.getId());
 		}		
 	}
+	
+	public void addVisits(Collection<Visit> visits) {
+		for (Visit visit : visits) {
+			visit.setRegistration(this); 
+			getVisits().add(visit);
+		}
+	}
 
 	private void setConsentTierResponses(Collection<ConsentTierResponse> consentResponses) {
 		CollectionUpdater.update(getConsentResponses(), consentResponses);

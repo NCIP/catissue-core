@@ -1,9 +1,7 @@
 
 package com.krishagni.catissueplus.core.common.repository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
@@ -11,6 +9,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
+
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class AbstractDao<T> implements Dao<T> {
 
@@ -35,6 +35,17 @@ public class AbstractDao<T> implements Dao<T> {
 		if (flush) {
 			flush();
 		}
+		
+		if (!(obj instanceof BaseEntity)) {
+			return;
+		}
+		
+		BaseEntity entity = (BaseEntity) obj;
+		if (CollectionUtils.isEmpty(entity.getOnSaveProcs())) {
+			return;
+		}
+
+		entity.getOnSaveProcs().forEach(Runnable::run);
 	}
 
 	@Override

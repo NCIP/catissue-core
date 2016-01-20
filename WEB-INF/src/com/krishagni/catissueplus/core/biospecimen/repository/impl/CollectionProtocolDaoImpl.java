@@ -105,6 +105,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	}
 	
 	@SuppressWarnings("unchecked")
+ 	@Override
+	public List<CollectionProtocol> getExpiringCps(Date fromDate, Date toDate) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_EXPIRING_CPS)
+				.setDate("fromDate", fromDate)
+				.setDate("toDate", toDate)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionProtocol getCpByCode(String code) {
 		List<CollectionProtocol> cps = sessionFactory.getCurrentSession()
@@ -196,7 +206,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return CollectionUtils.isEmpty(events) ? null : events.iterator().next();
 	}
-	
+
+	@Override
+	public int getMinEventPoint(Long cpId) {
+		Number minEventPoint = (Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_MIN_CPE_CAL_POINT)
+			.setLong("cpId", cpId)
+			.uniqueResult();
+
+		return minEventPoint != null ? minEventPoint.intValue() : 0;
+	}
 
 	@Override
 	public void saveCpe(CollectionProtocolEvent cpe) {
@@ -383,6 +402,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	
 	private static final String GET_CPS_BY_SHORT_TITLE_N_SITE = FQN + ".getCpsByShortTitleAndSite";
 	
+	private static final String GET_EXPIRING_CPS = FQN + ".getExpiringCps";
+	
 	private static final String GET_CP_BY_CODE = FQN + ".getByCode";
 	
 	private static final String GET_CP_IDS_BY_SITE_IDS = FQN + ".getCpIdsBySiteIds";
@@ -400,6 +421,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String GET_CPE_BY_IDS = CPE_FQN + ".getCpeByIds";
 	
 	private static final String GET_CPE_BY_CODE = CPE_FQN + ".getByCode";
+
+	private static final String GET_MIN_CPE_CAL_POINT = CPE_FQN + ".getMinEventPoint";
 	
 	private static final String SR_FQN = SpecimenRequirement.class.getName();
 	

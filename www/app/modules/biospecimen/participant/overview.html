@@ -33,7 +33,7 @@
               <div class="row title">
                 <div class="col os-col-25">
                   <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-                    T{{visit.eventPoint}}: {{visit.eventLabel}}
+                    <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
                   </a>
                 </div>
                 <div class="col os-col-25">
@@ -126,7 +126,7 @@
               <div class="row title">
                 <div class="col col-xs-4">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-                    T{{visit.eventPoint}}: {{visit.eventLabel}}
+                    <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
                   </a>
                 </div>
                 <div class="col col-xs-3">
@@ -187,10 +187,13 @@
               <div class="row title">
                 <div class="col col-xs-5">
                   <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-                    T{{visit.eventPoint}}: {{visit.eventLabel}}
+                    <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
                   </a>
                 </div>
-                <div class="col col-xs-3">{{visit.anticipatedVisitDate | date: global.dateFmt}}</div>
+                <div class="col col-xs-3" ng-switch on="visit.anticipatedVisitDate != null">
+                  <span ng-switch-when="true">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
+                  <span ng-switch-default translate="visits.end_of_study">End of Study</span>
+                </div>
                 <div class="col col-xs-3">{{visit.anticipatedSpecimens}}</div>
                 <div class="col col-xs-1 os-more-options">
                   <div dropdown>

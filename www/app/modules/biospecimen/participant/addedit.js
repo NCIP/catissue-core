@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, $translate, cp, cpr, extensionCtxt,
+    $scope, $state, $stateParams, $translate, $modal, cp, cpr, extensionCtxt,
     CollectionProtocolRegistration, Participant,
     Site, PvManager, Util, ExtensionsUtil) {
 
@@ -61,8 +61,12 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
       cprToSave.$saveOrUpdate().then(
         function(savedCpr) {
-          angular.extend(cpr, savedCpr);
-          $state.go('participant-detail.overview', {cprId: savedCpr.id});
+          if (savedCpr.activityStatus == 'Active') {
+            angular.extend(cpr, savedCpr);
+            $state.go('participant-detail.overview', {cprId: savedCpr.id});
+          } else {
+            $state.go('participant-list', {cpId: $scope.cp.id});
+          }
         }
       );
     };
@@ -92,7 +96,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
     $scope.register = function() {
       var participant = $scope.cpr.participant;
-      if (participant.$id() || !participant.isMatchingInfoPresent()) {
+      if (!participant.isMatchingInfoPresent()) {
         registerParticipant();
       } else {
         participant.getMatchingParticipants().then(
@@ -109,6 +113,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
                 break;
               }
             } 
+            $scope.allowIgnoreMatches = participant.id || $scope.allowIgnoreMatches;
             $scope.matchedParticipants = result;
           }
         );
@@ -137,6 +142,27 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpr.participant = new Participant({id: $scope.selectedParticipant.$id()});
       registerParticipant();
     };
+
+    $scope.confirmMerge = function() {
+      var modalInstance = $modal.open({
+        templateUrl: "modules/biospecimen/participant/confirm-merge.html",
+        controller: function($scope, $modalInstance) {
+          $scope.ok = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      });
+
+      modalInstance.result.then(
+        function() {
+          $scope.registerUsingSelectedParticipant(); 
+        }
+      );
+    }
 
     init();
   });

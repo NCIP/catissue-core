@@ -23,7 +23,10 @@
  
       <li class="item" ng-if="!visit.id">
         <strong class="key key-sm" translate="visits.anticipated_visit_date">Anticipated Visit Date</strong>
-        <span class="value value-md">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
+        <span class="value value-md" ng-switch on="visit.anticipatedVisitDate != null">
+          <span ng-switch-when="true">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
+          <span ng-switch-default translate="visits.end_of_study">End of Study</span>
+        </span>
       </li>
  
       <li class="item">

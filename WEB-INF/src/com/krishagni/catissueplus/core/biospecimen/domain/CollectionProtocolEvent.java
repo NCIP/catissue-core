@@ -44,6 +44,8 @@ public class CollectionProtocolEvent {
 
 	private Set<Visit> specimenCollectionGroups = new HashSet<Visit>();
 
+	private transient int offset = 0;
+
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -153,7 +155,15 @@ public class CollectionProtocolEvent {
 	public void setSpecimenCollectionGroups(Set<Visit> specimenCollectionGroups) {
 		this.specimenCollectionGroups = specimenCollectionGroups;
 	}
-	
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
 	// updates all but specimen requirements
 	public void update(CollectionProtocolEvent other) { 
 		setEventPoint(other.getEventPoint());

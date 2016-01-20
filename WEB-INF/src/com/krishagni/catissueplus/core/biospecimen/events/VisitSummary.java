@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class VisitSummary implements Comparable<VisitSummary> {
@@ -14,7 +16,7 @@ public class VisitSummary implements Comparable<VisitSummary> {
 	
 	private String eventLabel;
 	
-	private int eventPoint;
+	private Integer eventPoint;
 	
 	private String status;
 	
@@ -66,11 +68,11 @@ public class VisitSummary implements Comparable<VisitSummary> {
 		this.eventLabel = eventLabel;
 	}
 
-	public int getEventPoint() {
+	public Integer getEventPoint() {
 		return eventPoint;
 	}
 
-	public void setEventPoint(int eventPoint) {
+	public void setEventPoint(Integer eventPoint) {
 		this.eventPoint = eventPoint;
 	}
 
@@ -148,18 +150,18 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	@Override
 	public int compareTo(VisitSummary other) {
-		int result = Integer.compare(this.eventPoint, other.eventPoint);
+		int result = ObjectUtils.compare(this.eventPoint, other.eventPoint, true);
 		if (result != 0) {
 			return result;
 		}
-		
+
 		result = eventId.compareTo(other.eventId);
 		if (result != 0) {
 			return result;
 		}
-		
+
 		Date thisVisitDate = visitDate != null ? visitDate : anticipatedVisitDate;
 		Date otherVisitDate = other.visitDate != null ? other.visitDate : other.anticipatedVisitDate;
-		return thisVisitDate.compareTo(otherVisitDate);
-	}	
+		return ObjectUtils.compare(thisVisitDate, otherVisitDate, true);
+	}
 }

@@ -35,7 +35,9 @@ public enum CprErrorCode implements ErrorCode {
 	
 	INVALID_CONSENT_STATEMENT,
 	
-	INVALID_CONSENT_RESPONSE;
+	INVALID_CONSENT_RESPONSE,
+	
+	CANNOT_MERGE_PARTICIPANT;
 	
 	@Override
 	public String code() {

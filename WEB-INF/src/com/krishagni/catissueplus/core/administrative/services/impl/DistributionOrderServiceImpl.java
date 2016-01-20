@@ -189,7 +189,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			
 			Status oldStatus = existingOrder.getStatus();
 			existingOrder.update(newOrder);
-			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder);
+			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder, true);
 			sendOrderProcessedEmail(existingOrder, oldStatus);
 			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
 		} catch (OpenSpecimenException ose) {

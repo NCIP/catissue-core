@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -24,6 +25,8 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	
 	public List<CollectionProtocol> getCpsByShortTitle(Collection<String> shortTitles, String siteName);
 	
+	public List<CollectionProtocol> getExpiringCps(Date fromDate, Date toDate);
+	
 	public CollectionProtocol getCpByCode(String code);
 
 	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds);
@@ -41,6 +44,8 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public CollectionProtocolEvent getCpeByShortTitleAndEventLabel(String shortTitle, String label);
 	
 	public CollectionProtocolEvent getCpeByCode(String shortTitle, String code);
+
+	public int getMinEventPoint(Long cpId);
 	
 	public void saveCpe(CollectionProtocolEvent cpe);
 	

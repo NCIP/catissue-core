@@ -98,7 +98,7 @@
   </changeSet>
   
   <changeSet author="vratnaparkhi" id="Migrate specimen order data">
-    <validCheckSum>7:7fa4658b79dc857403642021a2118302</validCheckSum>
+    <validCheckSum>7:211247e8bb91547462ac27768416914e</validCheckSum>
     <sql>
       insert into os_orders (
         identifier, 
@@ -115,27 +115,27 @@
       
       select 
         distribution.identifier as identifier, 
-        case orders.name is null
-          when true then concat('',distribution.event_timestamp)
+        case when orders.name is null
+          then concat('',distribution.event_timestamp)
           else substr(orders.name, 1, 255)
         end as name,
-        case orders.requester_id is null
-          when true then distribution.user_id
+        case when orders.requester_id is null
+          then distribution.user_id
           else orders.requester_id
         end as requester_id,
-        case orders.requested_date is null
-          when true then distribution.event_timestamp
+        case when orders.requested_date is null
+          then distribution.event_timestamp
           else orders.requested_date
         end as requested_date,
         distribution.event_timestamp as execution_date,
-        case orders.status in ('Completed')
-          when true then 'EXECUTED'
+        case when orders.status in ('Completed')
+          then 'EXECUTED'
           else 'PENDING'
         end as status,
         distribution.activity_status as activity_status, 
         distribution.to_site_id as site_id,
-        case distribution.distribution_protocol_id is null
-          when true then (select identifier from catissue_distribution_protocol limit 1)
+        case when distribution.distribution_protocol_id is null
+          then (select min(identifier) from catissue_distribution_protocol where activity_status != 'Disabled')
           else distribution.distribution_protocol_id
         end as distribution_protocol_id,
         distribution.user_id as distributor_id,

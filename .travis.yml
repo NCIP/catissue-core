@@ -1,5 +1,7 @@
 language: java
 node_js: stable
+jdk:
+ - oraclejdk8
 
 before_script:
   - cd www

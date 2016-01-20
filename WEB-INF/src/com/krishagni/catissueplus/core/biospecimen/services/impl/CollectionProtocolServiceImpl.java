@@ -457,8 +457,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			if (cpe == null) {
 				return ResponseEvent.userError(CpeErrorCode.NOT_FOUND);
 			}
-			
-			AccessCtrlMgr.getInstance().ensureReadCpRights(cpe.getCollectionProtocol());
+
+			CollectionProtocol cp = cpe.getCollectionProtocol();
+			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
+
+			int minEventPoint = daoFactory.getCollectionProtocolDao().getMinEventPoint(cp.getId());
+			cpe.setOffset(minEventPoint > 0 ? 0 : minEventPoint);
+
 			return ResponseEvent.response(CollectionProtocolEventDetail.from(cpe));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

@@ -1,9 +1,10 @@
 
 angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models'])
-  .factory('QueryGlobalData', function($translate, $q, CollectionProtocol, Form, SavedQuery, QueryUtil) {
+  .factory('QueryGlobalData', function($translate, $q, CollectionProtocol, Form, SavedQuery, QueryUtil, Util) {
     var QueryGlobalData = function() {
       this.cpsQ = undefined;
       this.cpList = undefined;
+      this.defSelectList = [];
     };
 
     QueryGlobalData.prototype.getCps = function() {
@@ -35,9 +36,10 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       }
 
       if (!cp.forms) {
+        cp.forms = [];
         this.formsQ.then(
           function(forms) { 
-            cp.forms = angular.copy(forms); 
+            Util.unshiftAll(cp.forms, forms);
             angular.forEach(cp.forms, function(form) {
               form.cp = cp;
             });
@@ -53,6 +55,13 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
 
     QueryGlobalData.prototype.newQueryCtx = function(savedQuery) {
       savedQuery = savedQuery || {};
+
+      var selectList = savedQuery.selectList;
+      if (!selectList) {
+        selectList = [];
+        initDefSelectList(this, selectList);
+      }
+
       this.queryCtx = {
         currentFilter: {},
         disableCpSelection: false,
@@ -62,7 +71,7 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
         filtersMap: {},
         exprNodes: [],
         filterId: 0,
-        selectedFields: savedQuery.selectList || QueryUtil.getDefSelectedFields(),
+        selectedFields: selectList,
         reporting: savedQuery.reporting || {type: 'none', params: {}},
         selectedCp: {id: savedQuery.cpId},
         isValid: true,
@@ -70,6 +79,14 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
         wideRowMode: savedQuery.wideRowMode || 'DEEP'
       };
 
+      var that = this;
+      if (!savedQuery.cpId || savedQuery.cpId == -1) {
+        this.getCps().then(
+          function(cps) {
+            that.queryCtx.selectedCp = cps[0];
+          }
+        );
+      }
 
       return this.queryCtx;
     }
@@ -205,6 +222,53 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       }
 
       QueryUtil.disableCpSelection(queryCtx);
+    }
+
+    function initDefSelectList(queryGlobal, selectList) {
+      if (queryGlobal.defSelectList.length > 0) {
+        Util.unshiftAll(selectList, queryGlobal.defSelectList);
+        return;
+      }
+
+      getDefParticipantForm(queryGlobal).then(
+        function(form) {
+          form.getFields().then(
+            function(fields) {
+              angular.forEach(fields, function(field) {
+                if (field.type == 'SUBFORM') {
+                  return;
+                }
+
+                queryGlobal.defSelectList.push('Participant.' + field.name);
+              });
+
+              Util.unshiftAll(selectList, queryGlobal.defSelectList);
+            }
+          );
+        }
+      );
+    }
+
+    function getDefParticipantForm(queryGlobal) {
+      return queryGlobal.getCps().then(
+        function(cps) {
+          return getParticipantForm(queryGlobal, cps[0]);
+        }
+      );
+    }
+
+    function getParticipantForm(queryGlobal, cp) {
+      return queryGlobal.loadCpForms(cp).then(
+        function(forms) {
+          for (var i = 0; i < forms.length; ++i) {
+            if (forms[i].name == 'Participant') {
+              return forms[i];
+            }
+          }
+
+          return null;
+        }
+      );
     }
 
     return QueryGlobalData;

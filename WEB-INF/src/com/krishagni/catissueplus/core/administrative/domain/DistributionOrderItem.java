@@ -71,7 +71,7 @@ public class DistributionOrderItem extends BaseEntity {
 			requestItem.throwErrorIfFulfilled();
 		}
 
-		specimen.distribute(this);
+		order.addOnSaveProc(() -> specimen.distribute(this));
 
 		if (requestItem != null) {
 			requestItem.distribute(getOrder());

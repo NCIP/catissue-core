@@ -48,7 +48,7 @@
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse" />
     </set>
 
-    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP" inverse="true" cascade="all-delete-orphan">
+    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP" inverse="true">
       <key column="COLLECTION_PROTOCOL_REG_ID" />
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit" />
       <filter name="activeEntity"/>

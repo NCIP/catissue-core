@@ -173,7 +173,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 		ose.checkAndThrow();
 		
 		existing.update(newParticipant);
-		daoFactory.getParticipantDao().saveOrUpdate(existing);	
+		daoFactory.getParticipantDao().saveOrUpdate(existing);
 		existing.addOrUpdateExtension();
 	}
 

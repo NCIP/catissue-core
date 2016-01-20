@@ -51,6 +51,8 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.Status;
+
 
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
 	private DaoFactory daoFactory;
@@ -420,7 +422,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}
 		} else { 
 			// existing reg, therefore it has to be existing participant
-			existingParticipant = existing.getParticipant();
+			existingParticipant = mergeParticipant(existing, cpr);
 		}
 		
 		if (existingParticipant != null) {
@@ -430,6 +432,72 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			participantService.createParticipant(participant);
 			cpr.setParticipant(participant);
 		}
+	}
+	
+	private Participant mergeParticipant(CollectionProtocolRegistration existingCpr, CollectionProtocolRegistration inputCpr) {
+		if (existingCpr.getParticipant().equals(inputCpr.getParticipant())) {
+			//
+			//No change in participant between registration updates. Do nothing
+			//
+			return existingCpr.getParticipant();
+		}
+		
+		//
+		// we’ve been asked to use participant in inputCpr for updating existingCpr
+		//
+		// Two broad cases:
+		// Case #1: Participants are registered to non-overlapping protocols. 
+		// e.g. {cp1, cp4} and {cp2, cp3}
+		// In this case, we need to only point registration to appropriate participant
+		//
+		// Case #2: Participants are registered to overlapping protocols. 
+		// e.g. {cp1, cp2, cp4} and {cp2, cp3, cp4}
+		// In this case, we need to transfer visits from source participant’s overlapping CPRs 
+		// to target participant’s corresponding CPRs
+		//
+		//
+		
+		Participant tgtParticipant = daoFactory.getParticipantDao().getById(inputCpr.getParticipant().getId());
+		Participant srcParticipant = existingCpr.getParticipant();
+		
+		Set<CollectionProtocolRegistration> tgtCprs = tgtParticipant.getCprs();
+		for (CollectionProtocolRegistration srcCpr : srcParticipant.getCprs()) {
+			CollectionProtocolRegistration mergedCpr = mergeCpr(srcCpr, tgtCprs);
+			if (mergedCpr == null) {
+				// case 1
+				srcCpr.setParticipant(tgtParticipant);
+			} else if (mergedCpr.getCollectionProtocol().equals(existingCpr.getCollectionProtocol())){
+				// case 2
+				// marking input CPR should not be used
+				inputCpr.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
+			}
+		}
+		
+		srcParticipant.getCprs().clear();
+		if (srcParticipant.isActive()) {
+			srcParticipant.delete();
+		}
+		
+		return tgtParticipant;
+	}
+	
+	private CollectionProtocolRegistration mergeCpr(CollectionProtocolRegistration srcCpr, Set<CollectionProtocolRegistration> tgtCprs) {
+		try {
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(srcCpr);
+		} catch (OpenSpecimenException ose) {
+			throw OpenSpecimenException.userError(CprErrorCode.CANNOT_MERGE_PARTICIPANT, srcCpr.getCollectionProtocol().getShortTitle());
+		}
+		
+		for (CollectionProtocolRegistration tgtCpr : tgtCprs) {
+			if (srcCpr.getCollectionProtocol().equals(tgtCpr.getCollectionProtocol())) {
+				tgtCpr.addVisits(srcCpr.getVisits());
+				srcCpr.getVisits().clear();
+				srcCpr.delete();
+				return tgtCpr;
+			}
+		}
+		
+		return null;
 	}
 		
 	//
