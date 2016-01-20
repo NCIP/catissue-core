@@ -355,5 +355,69 @@
         <extnFkCol>RECORD_ID</extnFkCol>
       </subForm>
     </row>
+    <row>
+      <subForm>
+        <name>visitCount</name>
+        <udn>visitCount</udn>
+        <caption>#getMessage("cpr_visit_count")</caption>
+        <table>OS_CPR_VISIT_STATS_VIEW</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>CPR_ID</parentKey>
+        <row>
+          <numberField>
+            <name>completedVisits</name>
+            <udn>completedVisits</udn>
+            <caption>#getMessage("number_of_visits_completed")</caption>
+            <column>VISITS_COMPLETED</column>
+          </numberField>
+       
+          <numberField>
+            <name>missedVisits</name>
+            <udn>missedVisits</udn>
+            <caption>#getMessage("number_of_visits_missed")</caption>
+            <column>VISITS_MISSED</column>
+          </numberField>
+      
+          <numberField>
+            <name>pendingVisits</name>
+            <udn>pendingVisits</udn>
+            <caption>#getMessage("number_of_visits_pending")</caption>
+            <column>VISITS_PENDING</column>
+          </numberField>
+        </row>
+      </subForm>
+    </row>
+    <row>
+      <subForm>
+        <name>specimenCount</name>
+        <udn>specimenCount</udn>
+        <caption>#getMessage("cpr_specimen_count")</caption>
+        <table>OS_CPR_SPMN_STATS_VIEW</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>CPR_ID</parentKey>
+        <row>
+          <numberField>
+            <name>collectedSpecimens</name>
+            <udn>collectedSpecimens</udn>
+            <caption>#getMessage("number_of_specimens_collected")</caption>
+            <column>SPECIMENS_COLLECTED</column>
+          </numberField>
+       
+          <numberField>
+            <name>missedSpecimens</name>
+            <udn>missedSpecimens</udn>
+            <caption>#getMessage("number_of_specimens_missed")</caption>
+            <column>SPECIMENS_MISSED</column>
+          </numberField>
+       
+          <numberField>
+            <name>pendingSpecimens</name>
+            <udn>pendingSpecimens</udn>
+            <caption>#getMessage("number_of_specimens_pending")</caption>
+            <column>SPECIMENS_PENDING</column>
+          </numberField>
+        </row>
+      </subForm>
+    </row>
   </view>
 </form>
