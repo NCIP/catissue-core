@@ -199,13 +199,7 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setPhoneNumber(UserDetail detail, User user, OpenSpecimenException ose) {
-		String phoneNumber = detail.getPhoneNumber();
-		if (StringUtils.isBlank(phoneNumber)) {
-			ose.addError(UserErrorCode.PHONE_NUMBER_REQUIRED);
-			return;
-		}
-
-		user.setPhoneNumber(phoneNumber);
+		user.setPhoneNumber(detail.getPhoneNumber());
 	}
 
 	private void setPhoneNumber(UserDetail detail, User existing, User user, OpenSpecimenException ose) {

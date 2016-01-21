@@ -27,8 +27,6 @@ public enum UserErrorCode implements ErrorCode {
 	
 	LOGIN_NAME_REQUIRED,
 
-	PHONE_NUMBER_REQUIRED,
-
 	SYS_LOGIN_NAME,
 	
 	EMAIL_REQUIRED,
