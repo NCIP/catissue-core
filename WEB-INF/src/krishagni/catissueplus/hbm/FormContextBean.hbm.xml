@@ -469,7 +469,7 @@
       where
         c.deleted_on is null and 	
         fc.deleted_on is null and
-        (cp_id = :cpId or cp_id = -1) and entity_type = :entityType
+        (cp_id = :cpId or cp_id = -1) and entity_type in (:entityTypes)
     </sql-query>
         
     <sql-query name="getRecordCount">

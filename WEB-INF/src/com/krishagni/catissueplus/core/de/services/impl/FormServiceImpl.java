@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.services.impl;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -72,27 +74,27 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String SPECIMEN_EVENT_FORM = "SpecimenEvent";
 	
-	private static final String COLLECTION_PROTOCOL_EXTENSION = "CollectionProtocolExtension";
+	private static final List<String> COLLECTION_PROTOCOL_EXTENSIONS = Arrays.asList("CollectionProtocolExtension");
 	
-	private static final String PARTICIPANT_EXTENSION = "ParticipantExtension";
+	private static final List<String> PARTICIPANT_EXTENSIONS = Arrays.asList("ParticipantExtension");
 	
-	private static final String VISIT_EXTENSION = "VisitExtension";
+	private static final List<String> VISIT_EXTENSIONS = Arrays.asList("VisitExtension");
 	
-	private static final String SPECIMEN_EXTENSION = "SpecimenExtension";
+	private static final List<String> SPECIMEN_EXTENSIONS =  Arrays.asList("SpecimenExtension", "DerivativeExtension", "AliquotExtension");
 	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
-	private static Map<String, String> customFieldForms = new HashMap<String, String>();
+	private static Map<String, List<String>> customFieldForms = new HashMap<String, List<String>>();
 	
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
 		
-		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSION);
-		customFieldForms.put("Participant", PARTICIPANT_EXTENSION);
-		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSION);
-		customFieldForms.put("Specimen", SPECIMEN_EXTENSION);
+		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSIONS);
+		customFieldForms.put("Participant", PARTICIPANT_EXTENSIONS);
+		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSIONS);
+		customFieldForms.put("Specimen", SPECIMEN_EXTENSIONS);
 	}
 	
 	private FormDao formDao;
@@ -179,9 +181,9 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
-		String extensionName = customFieldForms.get(formName);
-		if (extensionName != null) {
-			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionName);
+		List<String> extensionNames = customFieldForms.get(formName);
+		if (CollectionUtils.isNotEmpty(extensionNames)) {
+			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionNames);
 			FormFieldSummary field = getExtensionField("customFields", "Custom Fields", extendedFormIds);
 			fields.add(field);
 		}
@@ -291,6 +293,14 @@ public class FormServiceImpl implements FormService {
 			    	 
 			    case SPECIMEN_EXTN:
 			    	forms = formDao.getFormContexts(-1L, "SpecimenExtension");
+			    	break;
+			    	
+			    case ALIQUOT_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "AliquotExtension");
+			    	break;
+			    
+			    case DERIVATIVE_EXTN:
+			    	forms = formDao.getFormContexts(-1L, "DerivativeExtension");
 			    	break;
 			}
 			

@@ -33,9 +33,9 @@
   border-radius: 4px;
 }
 
-.os-entity-extn-form-fields .panel-body {
-  padding: 0px;
-}
+.os-entity-extn-overview ul.os-key-values {
+  margin-top: -20px;
+} 
 
 .os-entity-extn-form-fields .de-sf-content .form-group,
 .os-entity-extn-form-fields .de-sf-content + .form-group {

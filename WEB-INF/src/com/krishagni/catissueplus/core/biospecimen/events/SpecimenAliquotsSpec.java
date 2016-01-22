@@ -3,6 +3,8 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
+
 public class SpecimenAliquotsSpec {
 	private Long parentId;
 	
@@ -21,6 +23,8 @@ public class SpecimenAliquotsSpec {
 	private String positionX;
 
 	private String positionY;
+	
+	private ExtensionDetail extensionDetail;
 
 	public Long getParentId() {
 		return parentId;
@@ -97,4 +101,13 @@ public class SpecimenAliquotsSpec {
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
 	}
+
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+	
 }

@@ -53,8 +53,8 @@ angular.module('os.biospecimen.specimen',
         url: '/addedit-specimen',
         templateUrl: 'modules/biospecimen/participant/specimen/addedit.html',
         resolve: {
-          extensionCtxt: function(Specimen) {
-            return Specimen.getExtensionCtxt();
+          extensionCtxt: function(specimen) {
+            return specimen.getExtensionCtxt();
           }
         },
         controller: 'AddEditSpecimenCtrl',
@@ -137,12 +137,22 @@ angular.module('os.biospecimen.specimen',
       .state('specimen-create-derivative', {
         url: '/derivative',
         templateUrl: 'modules/biospecimen/participant/specimen/add-derivative.html',
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt({"lineage": "Derived"});
+          }
+        },
         controller: 'AddDerivativeCtrl',
         parent: 'specimen-root'
       })
      .state('specimen-create-aliquots', {
         url: '/aliquots',
         templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt({"lineage": "Aliquot"});
+          }
+        },
         controller: 'AddAliquotsCtrl',
         parent: 'specimen-root'
       });

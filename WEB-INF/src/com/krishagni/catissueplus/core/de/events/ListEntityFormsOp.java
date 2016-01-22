@@ -19,7 +19,11 @@ public class ListEntityFormsOp  {
 		
 		VISIT_EXTN,
 		
-		SPECIMEN_EXTN
+		SPECIMEN_EXTN,
+		
+		ALIQUOT_EXTN,
+		
+		DERIVATIVE_EXTN
 	};
 
 	private Long entityId;

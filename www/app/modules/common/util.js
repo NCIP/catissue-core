@@ -175,6 +175,7 @@ angular.module('openspecimen')
         formCtxtId: parseInt(extnCtxt.formCtxtId),
         objectId: entity.id,
         showActionBtns: false,
+        showPanel: false, 
         labelAlignment: 'horizontal'
       };
     }

@@ -296,6 +296,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				aliquot.setParentLabel(parentSpecimen.getLabel());
 				aliquot.setParentId(parentSpecimen.getId());
 				aliquot.setCreatedOn(spec.getCreatedOn());
+				aliquot.setExtensionDetail(spec.getExtensionDetail());
 				
 				StorageLocationSummary location = new StorageLocationSummary();
 				location.setName(spec.getContainerName());

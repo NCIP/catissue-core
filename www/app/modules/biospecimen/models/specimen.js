@@ -149,6 +149,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return curr;
     };
 
+    Specimen.prototype.getExtensionCtxt = function() {
+      return Specimen.getExtensionCtxt({lineage: this.lineage});
+    }
+
     Specimen.prototype.getForms = function(params) {
       return Form.listFor(Specimen.url(), this.$id(), params);
     };

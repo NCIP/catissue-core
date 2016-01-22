@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -359,8 +360,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@Override
 	public List<Long> getFormIds(Long cpId, String entityType) {
+		return getFormIds(cpId, Collections.singletonList(entityType));
+	}
+	
+	@Override
+	public List<Long> getFormIds(Long cpId, List<String> entityTypes) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_IDS);
-		query.setLong("cpId", cpId).setString("entityType", entityType);
+		query.setLong("cpId", cpId).setParameterList("entityTypes", entityTypes);
 		
 		List<Long> formIds = new ArrayList<Long>();
 		for (Object id : query.list()) {

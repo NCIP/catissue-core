@@ -1,7 +1,8 @@
 
 angular.module('os.biospecimen.specimen.addderivative', [])
   .controller('AddDerivativeCtrl', function(
-    $scope, $state, $stateParams, specimen, cpr, visit, SpecimenUtil) {
+    $scope, $state, $stateParams, specimen, cpr, visit, extensionCtxt, SpecimenUtil, Util) {
+
     function init() {
       $scope.parentSpecimen = specimen;
       $scope.cpr = cpr;
@@ -9,6 +10,9 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
       SpecimenUtil.loadSpecimenClasses($scope);
       SpecimenUtil.loadPathologyStatuses($scope);
+
+      $scope.deFormCtrl = {};
+      $scope.extnOpts = Util.getExtnOpts($scope.derivative, extensionCtxt);
     }
 
     $scope.loadSpecimenTypes = function(specimenClass, notClear) {
