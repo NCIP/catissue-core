@@ -30,8 +30,6 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	INVALID_GENDER,
 	
-	MRN_REQUIRED,
-	
 	DUP_MRN,
 	
 	DUP_MRN_SITE,

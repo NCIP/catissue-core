@@ -39,7 +39,7 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
     }
 
     $scope.pmiText = function(pmi) {
-      return pmi.mrn + " (" + pmi.siteName + ")";
+      return pmi.siteName + (pmi.mrn ? " (" + pmi.mrn + ")" : "");
     }
 
     $scope.printSpecimenLabels = function(visitDetail) {

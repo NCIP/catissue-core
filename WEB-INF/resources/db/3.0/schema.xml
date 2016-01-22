@@ -11,4 +11,10 @@
       columnDataType="${text.type}(63)"/>
   </changeSet>
   
+  <changeSet author="slakhani" id="Remove unique constraint for site,mrn in catissue_part_medical_id table">
+    <dropUniqueConstraint 
+      tableName="CATISSUE_PART_MEDICAL_ID" 
+      constraintName="MRN_SITE_UNIQUE"/>
+  </changeSet>
+  
 </databaseChangeLog>
