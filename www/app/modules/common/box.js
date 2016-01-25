@@ -35,6 +35,7 @@ angular.module('os.common.box', [])
       }
 
       var table = $("<table class='os-container-map' ng-click='onClick($event)'/>");
+      var disableSelects = false;
       for (var i = 0; i < matrix.length; ++i) {
         var tr = $("<tr/>");
 
@@ -44,9 +45,15 @@ angular.module('os.common.box', [])
             .append(getCell(matrix[i][j], opts));
 
           if (matrix[i][j].occupied) {
-            td.addClass(!!matrix[i][j].occupied.id ? 'slot-occupied' : 'slot-assigned');
+            if (!!matrix[i][j].occupied.id) {
+              td.addClass('slot-occupied');
+            } else {
+              disableSelects = true;
+              td.addClass('slot-assigned');
+            }
 
             if (!!matrix[i][j].occupied.oldOccupant) {
+              disableSelects = true;
               td.addClass('slot-vacated');
             }
           }
@@ -55,6 +62,10 @@ angular.module('os.common.box', [])
         }
 
         table.append(tr);
+      }
+
+      if (disableSelects) {
+        table.addClass('disable-slot-selectors');
       }
 
       element.append(table);
@@ -88,8 +99,18 @@ angular.module('os.common.box', [])
       var row = NumberConverterUtil.fromNumber(opts.box.rowLabelingScheme(), cell.row);
       var column = NumberConverterUtil.fromNumber(opts.box.columnLabelingScheme(), cell.column);
 
-      var el = $("<div class='slot-element'/>")
-        .append($("<div class='slot-pos'/>").append(formatPos(row, column)));
+      var el = $("<div class='slot-element'/>");
+
+      if (cell.occupied && opts.toggleCellSelect) {
+        var attrs = {'data-id': cell.occupied.id, 'data-pos-y': row, 'data-pos-x': column};
+        var checkbox = $("<label class='os-checkbox'/>")
+          .append($("<input type='checkbox'>").attr(attrs))
+          .append($("<span class='box'/>"))
+          .append($("<span class='tick'/>"));
+        el.append($("<div class='slot-selector'/>").append(checkbox));
+      }
+
+      el.append($("<div class='slot-pos'/>").append(formatPos(row, column)));
 
       if (cell.occupied) {
         var cellDesc = $("<a class='slot-desc'/>")
@@ -116,7 +137,7 @@ angular.module('os.common.box', [])
     };
 
     function getAddMarker() {
-      return $("<div class='slot_add'/>")
+      return $("<div class='slot-add'/>")
         .append("<span class='fa fa-plus'></span>");
     };
 
@@ -215,11 +236,21 @@ angular.module('os.common.box', [])
       link: function(scope, element, attrs) {
         scope.onClick = function($event) {
           var target = angular.element($event.originalEvent.target);
+
+          if (target.is("input[type='checkbox']")) {
+            scope.opts.toggleCellSelect(
+              target.attr('data-id'),
+              target.attr('data-pos-y'),
+              target.attr('data-pos-x'),
+              target[0].checked);
+            return;
+          }
+
           while (!target.hasClass('slot-element') && !target.is("table")) {
             target = target.parent();
           }
 
-          if (target.attr('data-pos-x') && target.attr('data-pos-y')) {
+          if (target.attr('data-pos-y') && target.attr('data-pos-x')) {
             scope.opts.onAddEvent(target.attr('data-pos-y'), target.attr('data-pos-x'));
           }
         };
