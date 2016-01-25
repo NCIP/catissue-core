@@ -98,7 +98,9 @@
           where
             re.form_ctxt_id = :formCtxtId and 
             re.record_id = :recordId and
-            re.object_id = :objectId
+            re.object_id = :objectId and
+            re.activity_status = 'ACTIVE' and
+            ctx.deleted_on is null
         </sql-query>
 
         <sql-query name="getRecordEntryByRecId">
@@ -120,7 +122,9 @@
             catissue_form_record_entry re
             inner join catissue_form_context ctx on ctx.identifier = re.form_ctxt_id
           where
-            re.record_id = :recordId
+            re.record_id = :recordId and
+            re.activity_status = 'ACTIVE' and
+            ctx.deleted_on is null
         </sql-query>
 
         <query name="getRecordEntries">
