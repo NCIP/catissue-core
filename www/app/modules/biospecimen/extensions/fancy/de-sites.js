@@ -22,7 +22,13 @@ openspecimen.ui.fancy.Sites = edu.common.de.LookupSvc.extend({
   },
 
   formatResult: function(data) {
-    return {id: data.id, text: data.name};
+    return !data ? "" : {id: data.id, text: data.name};
+  },
+
+  getDefaultValue: function() {
+    var deferred = $.Deferred();
+    deferred.resolve(undefined);
+    return deferred.promise();
   },
 
   getHeaders: function() {
