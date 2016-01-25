@@ -29,7 +29,9 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
 
     $scope.collectAliquots = function() {
       var specimens = SpecimenUtil.collectAliquots($scope);
-      CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, parent);
+      if (specimens) {
+        CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, parent);
+      }
     }
 
     init();

@@ -26,7 +26,7 @@ angular.module('os.biospecimen.specimen')
         return;
       }
 
-      parent.hasChildren = true;
+      parent.isOpened = parent.hasChildren = true;
       parent.depth = 0;
       parent.closeAfterChildrenCreation = spec.closeParent;
 
