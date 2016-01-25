@@ -60,7 +60,7 @@
     <!-- link rel="stylesheet" href="styles/le/styles/le.css" -->
     <!-- endbuild -->
   </head>
-  <body ng-app="openspecimen">
+  <body> <!-- ng-app="openspecimen" -->
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -94,7 +94,6 @@
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-load/angular-load.js"></script>
     <!-- endbower -->
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
@@ -104,6 +103,7 @@
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="init.js"></script>
     <script src="app.js"></script>
     <script src="modules/user/module.js"></script>
     <script src="modules/common/module.js"></script>
