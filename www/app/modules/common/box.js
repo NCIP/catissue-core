@@ -238,6 +238,13 @@ angular.module('os.common.box', [])
           var target = angular.element($event.originalEvent.target);
 
           if (target.is("input[type='checkbox']")) {
+            var slotEl = target.closest('.slot-element');
+            if (target[0].checked) {
+              slotEl.addClass('slot-assigned');
+            } else {
+              slotEl.removeClass('slot-assigned');
+            }
+
             scope.opts.toggleCellSelect(
               target.attr('data-id'),
               target.attr('data-pos-y'),
