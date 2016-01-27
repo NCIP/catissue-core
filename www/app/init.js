@@ -127,7 +127,9 @@ ui.os.appProps = {
   function bootstrapApp() {
     console.log("Bootstraping...");
     var definedModules = getPluginModules(ui.os.appProps.plugins);
-    angular.bootstrap(document, ['openspecimen'].concat(definedModules));
+    angular.element(document).ready(function() {
+      angular.bootstrap(document, ['openspecimen'].concat(definedModules));
+    });
   }
 
   init();
