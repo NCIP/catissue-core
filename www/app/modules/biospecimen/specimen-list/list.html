@@ -19,14 +19,10 @@
     </h3>
 
     <div class="os-btns right">
-      <button show-if-allowed="orderCreateOpts" class="default" ng-click="distributeSpecimens()">
-        <span class="fa fa-share"></span>
-        <span translate="specimen_list.distribute">Distribute</span>
-      </button>
-      <button show-if-allowed="shipmentCreateOpts" class="default" ng-click="shipSpecimens()">
-        <span class="fa fa-paper-plane-o"></span>
-        <span translate="specimen_list.ship">Ship</span>
-      </button>
+      <a class="btn default" target="_blank" href="{{lists.url + '/' + lists.selectedList.id + '/csv-file'}}">
+        <span class="fa fa-download"></span>
+        <span translate="common.buttons.export">Export</span>
+      </a>
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
@@ -39,13 +35,25 @@
               <span translate="common.buttons.delete">Delete</span>
             </a>
           </li>
+          <li show-if-allowed="orderCreateOpts">
+            <a ng-click="distributeSpecimens()">
+              <span class="fa fa-share"></span>
+              <span translate="specimen_list.distribute">Distribute</span>
+            </a>
+          </li>
+          <li show-if-allowed="shipmentCreateOpts">
+            <a ng-click="shipSpecimens()">
+              <span class="fa fa-paper-plane-o"></span>
+              <span translate="specimen_list.ship">Ship</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div>
 
   <div class="container os-list-container">
-    <div class="row">
+    <div>
       <div class="os-col-20">
         <div ng-include src="'specimen-list/lists.html'"></div>
       </div>
@@ -138,10 +146,10 @@
 </script>
 
 <script type="text/ng-template" id="specimen-list/specimens.html">
-  <div class="os-table os-table-hover" overflow="auto" ng-if="listSpecimens.actualCount != 0">
-    <div class="os-table-head">
-      <div class="row">
-        <div class="col os-col-20">
+  <table class="os-table os-table-hover" overflow="auto" ng-if="listSpecimens.actualCount != 0">
+    <thead class="os-table-head">
+      <tr class="row">
+        <th class="col">
           <div class="clearfix">
             <div class="pull-left os-select-specimen-cb">
               <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="selection.all" ></os-checkbox>
@@ -150,25 +158,28 @@
               <span translate="specimen_list.label">Label</span>
             </div>
           </div>
-        </div>
-        <div class="col os-col-30">
+        </th>
+        <th class="col os-col-25">
           <span translate="specimen_list.description">Description</span>
-        </div>
-        <div class="col os-col-20">
+        </th>
+        <th class="col">
           <span translate="specimen_list.cp">Collection Protocol</span>
-        </div>
-        <div class="col os-col-15">
+        </th>
+        <th class="col">
+          <span translate="specimen_list.location">Location</span>
+        </th>
+        <th class="col">
           <span translate="specimen_list.quantity">Quantity</span>
-        </div>
-        <div class="col os-col-15">
+        </th>
+        <th class="col">
           <span translate="specimen_list.lineage">Lineage</span>
-        </div>
-      </div>
-    </div>
-    <div class="os-table-body">
-      <div class="row" ng-repeat="specimen in listSpecimens.specimens"
+        </th>
+      </tr>
+    </thead>
+    <tbody class="os-table-body">
+      <tr class="row" ng-repeat="specimen in listSpecimens.specimens"
         ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
-        <div class="col os-col-20">
+        <td class="col">
           <div class="clearfix">
             <div class="pull-left os-select-specimen-cb os-click-esc">
               <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
@@ -182,48 +193,57 @@
               </a>
             </div>
           </div>
-        </div>
-        <div class="col os-col-30">
+        </td>
+        <td class="col os-col-25">
           <a ui-sref="specimen({specimenId: specimen.id})">
             <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
           </a>
-        </div>
-        <div class="col os-col-20">
+        </td>
+        <td class="col">
           <span>{{specimen.cpShortTitle}}</span>
-        </div>
-        <div class="col os-col-15">
+        </td>
+        <td class="col" ng-switch on="!!specimen.storageLocation.name">
+          <span ng-switch-when="true">
+            {{specimen.storageLocation.name}}:
+            ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
+          </span>
+          <span ng-switch-when="false">
+            <span translate="specimens.virtually_located">Virtual</span>
+          </span>
+        </td>
+        <td class="col">
           <span>{{specimen.availableQty}}</span>
           <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
-        </div>
-        <div class="col os-col-15">
+        </td>
+        <td class="col">
           <span>{{specimen.lineage}}</span>
-        </div>
-      </div>
-      <div class="row" ng-if="listSpecimens.actualCount > listSpecimens.specimens.length">
-        <div class="col os-col-100">
+        </td>
+      </tr>
+      <tr class="row" ng-if="listSpecimens.actualCount > listSpecimens.specimens.length">
+        <td class="col">
           <span class="text-warning" translate="specimen_list.more_specimens">
            There are more specimens in list than displayed.
           </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="os-table" ng-if="listSpecimens.actualCount == 0">
-    <div class="os-table-head">
-      <div class="row">
-        <div class="col col-xs-10">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="os-table" ng-if="listSpecimens.actualCount == 0">
+    <thead class="os-table-head">
+      <tr class="row">
+        <td class="col os-col-100">
           <span translate="specimen_list.info">Information</span>
-        </div>
-      </div>
-    </div>
-    <div class="os-table-body">
-      <div class="row">
-        <div class="col col-xs-10">
+        </td>
+      </tr>
+    </thead>
+    <tbody class="os-table-body">
+      <tr class="row">
+        <td class="col os-col-100">
           <span translate="specimen_list.no_specimens">
             There are no specimens to show in selected specimen list.
           </span>
-        </div>
-      </div>
-    </div>
-  </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </script>

@@ -1,9 +1,14 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,11 +22,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
+import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.ExportedFileDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -134,6 +140,31 @@ public class SpecimenListsController {
 		ResponseEvent<List<UserSummary>> resp = specimenListSvc.shareSpecimenList(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="{id}/csv-file")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void exportCoresMap(@PathVariable("id") Long listId, HttpServletResponse httpResp) {
+		EntityQueryCriteria crit = new EntityQueryCriteria(listId);
+		ResponseEvent<ExportedFileDetail> resp = specimenListSvc.exportSpecimenList(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+
+		ExportedFileDetail fileDetail = resp.getPayload();
+
+		httpResp.setContentType("application/csv");
+		httpResp.setHeader("Content-Disposition", "attachment;filename=" + fileDetail.getName() + ".csv");
+
+		InputStream in = null;
+		try {
+			in = new FileInputStream(fileDetail.getFile());
+			IOUtils.copy(in, httpResp.getOutputStream());
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
+			fileDetail.getFile().delete();
+		}
 	}
 		
 	private <T> RequestEvent<T> getRequest(T payload) {

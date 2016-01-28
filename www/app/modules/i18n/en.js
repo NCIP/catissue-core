@@ -1334,6 +1334,7 @@
     "description": "Description",
     "cp": "Collection Protocol",
     "label": "Label",
+    "location": "Location",
     "quantity": "Quantity",
     "lineage": "Lineage",
     "remove_specimens": "Removing specimens from cart {{name}}",

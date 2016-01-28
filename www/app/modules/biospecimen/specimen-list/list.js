@@ -16,7 +16,8 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       $scope.lists = {
         selectedList: undefined,
         myLists: [],
-        sharedLists: []
+        sharedLists: [],
+        url: SpecimenList.url()
       }
 
       loadAllSpecimenLists();

@@ -1,4 +1,4 @@
-.os-list-container .row {
+.os-list-container > div {
   display: flex;
   height: 98%;
 }
