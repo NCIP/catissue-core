@@ -25,7 +25,8 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
     }
 
     SpecimenList.prototype.getSpecimens = function() {
-      return $http.get(getSpecimensUrl(this.$id())).then(
+      var params = {maxResults: 1000, includeListCount: true};
+      return $http.get(getSpecimensUrl(this.$id()), {params: params}).then(
         function(result) {
           return result.data;
         }

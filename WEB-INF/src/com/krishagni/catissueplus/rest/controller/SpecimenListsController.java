@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenListService;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.ExportedFileDetail;
@@ -99,8 +100,26 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}/specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public ListSpecimensDetail getListSpecimens(@PathVariable("listId") Long listId) {
-		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.getListSpecimens(getRequest(listId));
+	public ListSpecimensDetail getListSpecimens(
+			@PathVariable("listId")
+			Long listId,
+
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+
+			@RequestParam(value = "maxResults", required = false, defaultValue = "50")
+			int maxResults,
+
+			@RequestParam(value = "includeListCount", required = false, defaultValue = "false")
+			boolean includeListCount) {
+
+		SpecimenListCriteria criteria = new SpecimenListCriteria()
+			.specimenListId(listId)
+			.startAt(startAt)
+			.maxResults(maxResults)
+			.includeStat(includeListCount);
+
+		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.getListSpecimens(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -153,18 +153,26 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<ListSpecimensDetail> getListSpecimens(RequestEvent<Long> req) {
+	public ResponseEvent<ListSpecimensDetail> getListSpecimens(RequestEvent<SpecimenListCriteria> req) {
 		try {
-			SpecimenList specimenList = getSpecimenList(req.getPayload(), null);
+			SpecimenListCriteria crit = req.getPayload();
+			Long listId = crit.specimenListId();
 
-			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(specimenList.getId());
+			SpecimenList specimenList = getSpecimenList(listId, null);
+
+			Long specimensCount = null;
+			if (crit.includeStat()) {
+				specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(listId);
+				crit.includeStat(false);
+			}
+
 			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 			if (siteCpPairs != null && siteCpPairs.isEmpty()) {
 				return ResponseEvent.response(ListSpecimensDetail.from(specimensCount));
 			}
-			
-			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), siteCpPairs);
-			return ResponseEvent.response(ListSpecimensDetail.from(readAccessSpecimens, specimensCount));
+
+			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit.siteCps(siteCpPairs));
+			return ResponseEvent.response(ListSpecimensDetail.from(specimens, specimensCount));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -337,19 +345,18 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		if (siteCpPairs == null) {
 			siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		}
-		
+
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
-			return Collections.<Specimen> emptyList();
+			return Collections.<Specimen>emptyList();
 		}
-		
+
 		SpecimenListCriteria crit = new SpecimenListCriteria()
-			.specimenListId(specimenListId)	
+			.specimenListId(specimenListId)
 			.labels(specimenLabels)
 			.siteCps(siteCpPairs);
-		
 		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
-	
+
 	private void ensureValidSpecimensAndUsers(SpecimenListDetails details, SpecimenList specimenList, List<Pair<Long, Long>> siteCpPairs) {
 		if (details.isAttrModified("specimens")) {
 			ensureValidSpecimens(specimenList, siteCpPairs);
