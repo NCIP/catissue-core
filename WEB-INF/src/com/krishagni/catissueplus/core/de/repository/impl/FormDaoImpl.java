@@ -615,11 +615,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			} else {			
 			    form.setCpCount((Integer)row[5]);
 			}
+			
+			form.setSysForm(row[7] == null ? false : (Boolean) row[7]);
 
 			UserSummary user = new UserSummary();
-			user.setId((Long)row[7]);
-			user.setFirstName((String)row[8]);
-			user.setLastName((String)row[9]);
+			user.setId((Long)row[8]);
+			user.setFirstName((String)row[9]);
+			user.setLastName((String)row[10]);
 			form.setCreatedBy(user);
 			
 			forms.add(form);						
