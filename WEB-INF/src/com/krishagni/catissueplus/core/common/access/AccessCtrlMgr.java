@@ -888,7 +888,7 @@ public class AccessCtrlMgr {
 		}
 	}
 	
-	private Boolean isAccessRestrictedBasedOnMrn() {
+	public Boolean isAccessRestrictedBasedOnMrn() {
 		return ConfigUtil.getInstance().getBoolSetting(
 				ConfigParams.MODULE,
 				ConfigParams.MRN_RESTRICTION_ENABLED, 

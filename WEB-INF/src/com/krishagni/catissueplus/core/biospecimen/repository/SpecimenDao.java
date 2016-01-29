@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface SpecimenDao extends Dao<Specimen> {
@@ -30,4 +31,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public Map<String, Set<Long>> getSpecimenSites(Set<Long> specimenIds);
 
 	public List<Long> getDistributedSpecimens(List<Long> specimenIds);
+
+	public List<Visit> getSpecimenVisits(SpecimenListCriteria crit);
 }

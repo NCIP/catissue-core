@@ -13,6 +13,8 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	
 	private Long specimenListId;
 	
+	private boolean useMrnSites;
+	
 	@Override
 	public SpecimenListCriteria self() {		
 		return this;
@@ -45,4 +47,12 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 		return self();
 	}
 	
+	public boolean useMrnSites() {
+		return this.useMrnSites;
+	}
+	
+	public SpecimenListCriteria useMrnSites(boolean useMrnSites) {
+		this.useMrnSites = useMrnSites;
+		return self();
+	}
 }
