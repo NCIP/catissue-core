@@ -139,7 +139,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     };
 
     $scope.registerUsingSelectedParticipant = function() {
-      $scope.cpr.participant = new Participant({id: $scope.selectedParticipant.$id()});
+      $scope.cpr.participant = new Participant($scope.selectedParticipant);
       registerParticipant();
     };
 
