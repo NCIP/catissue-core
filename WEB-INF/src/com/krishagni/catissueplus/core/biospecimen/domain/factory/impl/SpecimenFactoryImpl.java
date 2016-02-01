@@ -851,7 +851,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	}
 	
 	private void setExtension(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
-		if (detail.isAttrModified("extensionDetail")) {
+		if (existing == null || detail.isAttrModified("extensionDetail")) {
 			setExtension(detail, specimen, ose);
 		} else {
 			specimen.setExtension(existing.getExtension());
