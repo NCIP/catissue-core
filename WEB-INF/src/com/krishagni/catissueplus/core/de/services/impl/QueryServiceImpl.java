@@ -742,7 +742,7 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public QueryDataExportResult exportQueryData(final ExecuteQueryEventOp opDetail, final ExportProcessor processor) {
 		OutputStream out = null;
-		
+
 		try {
 			final Authentication auth = AuthUtil.getAuth();
 			final User user = AuthUtil.getCurrentUser();
@@ -761,6 +761,7 @@ public class QueryServiceImpl implements QueryService {
 				public Boolean call() throws Exception {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 
+
 					QueryResultExporter exporter = new QueryResultCsvExporter();
 					try {
 						QueryResponse resp = exporter.export(fout, query, getResultScreener(query));
@@ -769,6 +770,8 @@ public class QueryServiceImpl implements QueryService {
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw OpenSpecimenException.serverError(e);
+					} finally {
+						IOUtils.closeQuietly(fout);
 					}
 
 					return true;
@@ -791,7 +794,9 @@ public class QueryServiceImpl implements QueryService {
 
 			boolean completed = false;
 			try {
+				out = null;
 				completed = result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
+				out = fout;
 			} catch (TimeoutException te) {
 				completed = false;
 			}
@@ -802,7 +807,9 @@ public class QueryServiceImpl implements QueryService {
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		} finally {
-			IOUtils.closeQuietly(out);
+			if (out != null) {
+				IOUtils.closeQuietly(out);
+			}
 		}
 	}
 	
