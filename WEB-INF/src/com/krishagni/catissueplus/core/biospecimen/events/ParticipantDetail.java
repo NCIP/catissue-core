@@ -244,7 +244,8 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 			cps.add(cpr.getCollectionProtocol().getShortTitle());
 		}
 		result.setRegisteredCps(cps);
-		result.setExtensionDetail(ExtensionDetail.from(participant.getExtension()));
+
+		result.setExtensionDetail(ExtensionDetail.from(participant.getExtension(), excludePhi));
 		return result;
 	}
 	

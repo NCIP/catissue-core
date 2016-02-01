@@ -1,7 +1,7 @@
 package com.krishagni.catissueplus.core.de.events;
 
 
-public class GetFormDataOp {
+public class FormRecordCriteria {
 	private Long formId;
 	
 	private Long recordId;

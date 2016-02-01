@@ -93,8 +93,8 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			EntityQueryCriteria crit = req.getPayload();			
 			Visit visit = getVisit(crit.getId(), crit.getName());
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
-			return ResponseEvent.response(VisitDetail.from(visit));			
+			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			return ResponseEvent.response(VisitDetail.from(visit, false, !allowPhi));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -118,7 +118,7 @@ public class VisitServiceImpl implements VisitService {
 		while (iterator.hasNext()) {
 			Visit visit = iterator.next();
 			try {
-				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit, false);
 			} catch (OpenSpecimenException ose) {
 				if (ose.getErrorType().equals(ErrorType.USER_ERROR)) {
 					visits.remove(visit);
@@ -174,7 +174,7 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			EntityQueryCriteria crit = req.getPayload();
 			Visit visit = getVisit(crit.getId(), crit.getName());
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit, false);
 			return ResponseEvent.response(visit.getDependentEntities());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -447,7 +447,7 @@ public class VisitServiceImpl implements VisitService {
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		existing.addOrUpdateExtension();
 		existing.prePrintLabels(prevStatus);
-		return VisitDetail.from(existing);		
+		return VisitDetail.from(existing, false, false);
 	}
 	
 	private Visit getVisit(Long visitId, String visitName) {

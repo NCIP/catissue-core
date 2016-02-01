@@ -92,9 +92,10 @@ public class VisitsController {
 
 		@RequestParam(value = "sprNumber", required = false)
 		String sprNumber) {
+
 		VisitsListCriteria criteria = new VisitsListCriteria()
-		.name(visitName)
-		.sprNumber(sprNumber);
+			.name(visitName)
+			.sprNumber(sprNumber);
 
 		ResponseEvent<List<VisitDetail>> resp = visitService.getVisits(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();

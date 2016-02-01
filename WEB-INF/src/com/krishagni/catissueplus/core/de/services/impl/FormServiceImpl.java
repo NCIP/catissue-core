@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import krishagni.catissueplus.beans.FormContextBean;
-import krishagni.catissueplus.beans.FormRecordEntryBean;
-import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,13 +29,13 @@ import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
-import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -64,6 +60,9 @@ import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
+import krishagni.catissueplus.beans.FormContextBean;
+import krishagni.catissueplus.beans.FormRecordEntryBean;
+import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 public class FormServiceImpl implements FormService {
 	private static final String PARTICIPANT_FORM = "Participant";
@@ -74,13 +73,13 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String SPECIMEN_EVENT_FORM = "SpecimenEvent";
 	
-	private static final List<String> COLLECTION_PROTOCOL_EXTENSIONS = Arrays.asList("CollectionProtocolExtension");
+	private static final List<String> COLLECTION_PROTOCOL_EXTNS = Arrays.asList("CollectionProtocolExtension");
 	
-	private static final List<String> PARTICIPANT_EXTENSIONS = Arrays.asList("ParticipantExtension");
+	private static final List<String> PARTICIPANT_EXTNS = Arrays.asList("ParticipantExtension");
 	
-	private static final List<String> VISIT_EXTENSIONS = Arrays.asList("VisitExtension");
+	private static final List<String> VISIT_EXTNS = Arrays.asList("VisitExtension");
 	
-	private static final List<String> SPECIMEN_EXTENSIONS =  Arrays.asList("SpecimenExtension", "DerivativeExtension", "AliquotExtension");
+	private static final List<String> SPECIMEN_EXTNS =  Arrays.asList("SpecimenExtension", "DerivativeExtension", "AliquotExtension");
 	
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
@@ -91,23 +90,19 @@ public class FormServiceImpl implements FormService {
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
 		
-		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTENSIONS);
-		customFieldForms.put("Participant", PARTICIPANT_EXTENSIONS);
-		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTENSIONS);
-		customFieldForms.put("Specimen", SPECIMEN_EXTENSIONS);
+		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTNS);
+		customFieldForms.put("Participant", PARTICIPANT_EXTNS);
+		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTNS);
+		customFieldForms.put("Specimen", SPECIMEN_EXTNS);
 	}
 	
 	private FormDao formDao;
 	
-	public FormDao getFormDao() {
-		return formDao;
-	}
-
 	public void setFormDao(FormDao formDao) {
 		this.formDao = formDao;
 	}
 	
-    @Override
+	@Override
     @PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
 		FormType ft = req.getPayload();
@@ -331,15 +326,20 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req) {
-		GetFormDataOp opDetail = req.getPayload();		
-		Long formId = opDetail.getFormId(), recordId = opDetail.getRecordId();
+	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<FormRecordCriteria> req) {
 		FormDataManager formDataMgr = new FormDataManagerImpl(false);
-		
-		FormData formData = formDataMgr.getFormData(formId, recordId);		
+
+		FormRecordCriteria crit = req.getPayload();
+		Long formId = crit.getFormId(), recordId = crit.getRecordId();
+
+		FormData formData = formDataMgr.getFormData(formId, recordId);
 		if (formData == null) {
 			return ResponseEvent.userError(FormErrorCode.REC_NOT_FOUND);
 		} else {
+			if (formData.getContainer().hasPhiFields() && !isPhiAccessAllowed(formData)) {
+				formData.maskPhiFieldValues();
+			}
+
 			return ResponseEvent.response(FormDataDetail.ok(formId, recordId, formData));
 		}
 	}
@@ -421,10 +421,10 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Long> deleteRecord(RequestEvent<Long> req) {
+	public ResponseEvent<Long> deleteRecord(RequestEvent<FormRecordCriteria> req) {
 		try {
-			Long recId = req.getPayload();
-			FormRecordEntryBean recEntry = formDao.getRecordEntry(recId); 
+			FormRecordCriteria crit = req.getPayload();
+			FormRecordEntryBean recEntry = formDao.getRecordEntry(crit.getFormId(), crit.getRecordId());
 			if (recEntry == null) {
 				return ResponseEvent.userError(FormErrorCode.REC_NOT_FOUND);
 			}
@@ -439,14 +439,14 @@ public class FormServiceImpl implements FormService {
 			if (entityType.equals("Participant")) {
 				AccessCtrlMgr.getInstance().ensureUpdateCprRights(objectId);
 			} else if (entityType.equals("SpecimenCollectionGroup")) {
-				AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(objectId);
+				AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(objectId, false);
 			} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
-				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(objectId);
+				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(objectId, false);
 			}
 			
 			recEntry.setActivityStatus(Status.CLOSED);
 			formDao.saveOrUpdateRecordEntry(recEntry);
-			return  ResponseEvent.response(recId);
+			return  ResponseEvent.response(crit.getRecordId());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -616,14 +616,15 @@ public class FormServiceImpl implements FormService {
 		
 		FormContextBean formContext = formContexts.get(0);
 		String entityType = formContext.getEntityType();
+		Container form = formData.getContainer();
 		if (entityType.equals("Participant")) {
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(objectId);
-		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(objectId);
 		} else if (entityType.equals("SpecimenCollectionGroup")) {
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(objectId);
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateVisitRights(objectId, form.hasPhiFields());
+		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(objectId, form.hasPhiFields());
 		}
-		
+
 		formData.setRecordId(recordId);
 		
 		boolean isInsert = (recordId == null);
@@ -697,6 +698,24 @@ public class FormServiceImpl implements FormService {
         }
 
         return fields;		
+	}
+
+	private boolean isPhiAccessAllowed(FormData formData) {
+		FormRecordEntryBean record = formDao.getRecordEntry(formData.getContainer().getId(), formData.getRecordId());
+
+		Long objectId = record.getObjectId();
+		String entityType = record.getEntityType();
+		
+		boolean allowPhiAccess = false;
+		if (entityType.equals(PARTICIPANT_FORM) || PARTICIPANT_EXTNS.contains(entityType)) {
+			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadCprRights(objectId);
+		} else if (entityType.equals(SCG_FORM) || VISIT_EXTNS.contains(entityType)) {
+			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadVisitRights(objectId, true);
+		} else if (entityType.equals(SPECIMEN_FORM) || entityType.equals(SPECIMEN_EVENT_FORM) || SPECIMEN_EXTNS.contains(entityType)) {
+			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(objectId, true);
+		}
+
+		return allowPhiAccess;
 	}
 
 	private FormFieldSummary getRecordIdField(Container form) {

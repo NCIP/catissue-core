@@ -38,7 +38,9 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND, 
 	
-	MANUAL_MPI_NOT_ALLOWED;
+	MANUAL_MPI_NOT_ALLOWED,
+	
+	CANNOT_UPDATE_PHI;
 
 	public String code() {
 		return "PARTICIPANT_" + this.name();

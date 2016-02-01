@@ -108,7 +108,7 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				.setString("sprNumber", sprNumber)
 				.list();
 	}
-	
+
 	private String getVisitKey(Long visitId, Long cpeId) {
 		String key = "";
 		if (visitId != null) {

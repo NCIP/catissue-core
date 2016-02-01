@@ -427,7 +427,7 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 			boolean vacateOccupant) {
 		
 		Specimen specimen = getSpecimen(specimenId, label);
-		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen, false);
 		
 		StorageContainerPosition position = null;
 		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {

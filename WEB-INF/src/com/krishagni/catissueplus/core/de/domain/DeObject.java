@@ -159,6 +159,10 @@ public abstract class DeObject {
 		return recIds;
 	}
 	
+	public boolean hasPhiFields() {
+		return getForm().hasPhiFields();
+	}
+	
 	protected void loadRecordIfNotLoaded() {
 		Long recordId = getId();
 		if (recordLoaded || recordId == null) {
@@ -398,6 +402,8 @@ public abstract class DeObject {
 		private Object value;
 		
 		private String type;
+		
+		private boolean phi;
 
 		public String getName() {
 			return name;
@@ -439,12 +445,21 @@ public abstract class DeObject {
 			this.type = type;
 		}
 
+		public boolean isPhi() {
+			return phi;
+		}
+
+		public void setPhi(boolean phi) {
+			this.phi = phi;
+		}
+
 		public static Attr from(ControlValue cv) {
 			Attr attr = new Attr();
 			attr.setName(cv.getControl().getName()); 
 			attr.setUdn(cv.getControl().getUserDefinedName());
 			attr.setCaption(cv.getControl().getCaption());
 			attr.setType(cv.getControl().getCtrlType());
+			attr.setPhi(cv.getControl().isPhi());
 			
 			Object value = cv.getValue();
 			if (value != null && value.getClass().isArray()) {

@@ -210,10 +210,10 @@ public class SpecimenDetail extends SpecimenInfo {
 	}
 
 	public static SpecimenDetail from(Specimen specimen) {
-		return from(specimen, true);
+		return from(specimen, true, true);
 	}
 
-	public static SpecimenDetail from(Specimen specimen, boolean partial) {
+	public static SpecimenDetail from(Specimen specimen, boolean partial, boolean excludePhi) {
 		SpecimenDetail result = new SpecimenDetail();
 		SpecimenInfo.fromTo(specimen, result);
 		
@@ -243,7 +243,7 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setComments(specimen.getComment());
 		
 		if (!partial) {
-			result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension()));
+			result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension(), excludePhi));
 		}
 		
 		return result;

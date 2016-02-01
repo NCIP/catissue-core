@@ -275,9 +275,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public FormRecordEntryBean getRecordEntry(Long recordId) {
+	public FormRecordEntryBean getRecordEntry(Long formId, Long recordId) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID)
+				.getNamedQuery(GET_REC_BY_FORM_N_REC_ID)
+				.setLong("formId", formId)
 				.setLong("recordId", recordId)
 				.list();
 		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
@@ -680,7 +681,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_RECORD_ENTRIES = RE_FQN + ".getRecordEntries";
 
-	private static final String GET_RECORD_ENTRY_BY_REC_ID = RE_FQN + ".getRecordEntryByRecId";
+	private static final String GET_REC_BY_FORM_N_REC_ID = RE_FQN + ".getRecordEntryByFormAndRecId";
 	
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	

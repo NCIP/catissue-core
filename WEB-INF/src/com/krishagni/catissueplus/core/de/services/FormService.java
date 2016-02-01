@@ -19,7 +19,7 @@ import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
-import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
+import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -47,7 +47,7 @@ public interface FormService {
 	
 	public ResponseEvent<EntityFormRecords> getEntityFormRecords(RequestEvent<GetEntityFormRecordsOp> req);
 	
-	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<GetFormDataOp> req);
+	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<FormRecordCriteria> req);
 	
 	public ResponseEvent<FormDataDetail> saveFormData(RequestEvent<FormDataDetail> req);
 	
@@ -57,7 +57,7 @@ public interface FormService {
 
 	public ResponseEvent<FileDetail> uploadFile(RequestEvent<MultipartFile> req);
 
-	public ResponseEvent<Long> deleteRecord(RequestEvent<Long> req);
+	public ResponseEvent<Long> deleteRecord(RequestEvent<FormRecordCriteria> req);
 
 	public ResponseEvent<Long> addRecordEntry(RequestEvent<AddRecordEntryOp> req);
 

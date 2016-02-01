@@ -268,6 +268,10 @@ public class VisitDetail extends AttributeModifiedSupport {
 	}
 
 	public static VisitDetail from(Visit visit) {
+		return from(visit, true, true);
+	}
+
+	public static VisitDetail from(Visit visit, boolean partial, boolean excludePhi) {
 		VisitDetail detail = new VisitDetail();
 		detail.setActivityStatus(visit.getActivityStatus());
 		detail.setClinicalDiagnosis(visit.getClinicalDiagnosis());
@@ -302,7 +306,9 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setEventLabel(visit.getCpEvent().getEventLabel());
 		detail.setEventPoint(visit.getCpEvent().getEventPoint());
 		
-		detail.setExtensionDetail(ExtensionDetail.from(visit.getExtension()));
+		if (!partial) {
+			detail.setExtensionDetail(ExtensionDetail.from(visit.getExtension(), excludePhi));
+		}
 		return detail;
 	}
 	

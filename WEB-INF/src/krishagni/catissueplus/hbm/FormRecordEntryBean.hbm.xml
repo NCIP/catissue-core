@@ -103,7 +103,7 @@
             ctx.deleted_on is null
         </sql-query>
 
-        <sql-query name="getRecordEntryByRecId">
+        <sql-query name="getRecordEntryByFormAndRecId">
           <return-scalar column="id"              type="long"/>
           <return-scalar column="ctx_id"          type="long"/>
           <return-scalar column="object_id"       type="long"/>
@@ -122,6 +122,7 @@
             catissue_form_record_entry re
             inner join catissue_form_context ctx on ctx.identifier = re.form_ctxt_id
           where
+            ctx.container_id = :formId and
             re.record_id = :recordId and
             re.activity_status = 'ACTIVE' and
             ctx.deleted_on is null
