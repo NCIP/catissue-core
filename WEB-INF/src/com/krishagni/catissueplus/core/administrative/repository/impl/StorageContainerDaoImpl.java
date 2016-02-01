@@ -81,7 +81,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				from = new StringBuilder("select c from ").append(getType().getName()).append(" c");
 				where = new StringBuilder("where c.activityStatus = :activityStatus");						
 			}
-			
+
+			from.append(" left join fetch c.position pos ");
 			params.put("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		}
 		
@@ -135,15 +136,13 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			if (!crit.onlyFreeContainers()) {
 				return;
 			}
-			
-			if (crit.hierarchical()) {
-				from.append(" join dc.stats stats");
-			} else {
-				from.append(" join c.stats stats");
-			}
-			
+
 			addAnd();
-			where.append("stats.freePositions > 0");
+			if (crit.hierarchical()) {
+				where.append("dc.noOfRows * dc.noOfColumns - size(dc.occupiedPositions) > 0");
+			} else {
+				where.append("c.noOfRows * c.noOfColumns - size(c.occupiedPositions) > 0");
+			}
 		}
 
 		private void addSiteRestriction() {

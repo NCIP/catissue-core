@@ -108,9 +108,11 @@
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"/>
     </set>
 
-    <one-to-one
+    <many-to-one
       name="stats"
-      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats"/>
+      column="IDENTIFIER"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats"
+      update="false" insert="false"/>
 
     <filter name="activeEntity"/>
   </class>
