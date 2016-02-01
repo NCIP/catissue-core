@@ -761,7 +761,6 @@ public class QueryServiceImpl implements QueryService {
 				public Boolean call() throws Exception {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 
-
 					QueryResultExporter exporter = new QueryResultCsvExporter();
 					try {
 						QueryResponse resp = exporter.export(fout, query, getResultScreener(query));
