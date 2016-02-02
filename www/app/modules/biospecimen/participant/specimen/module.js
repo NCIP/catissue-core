@@ -7,7 +7,8 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.overview',
     'os.biospecimen.specimen.close',
     'os.biospecimen.specimen.addaliquots',
-    'os.biospecimen.specimen.addderivative'
+    'os.biospecimen.specimen.addderivative',
+    'os.biospecimen.specimen.bulkaddevent'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -166,7 +167,7 @@ angular.module('os.biospecimen.specimen',
         controller: 'AddDerivativeCtrl',
         parent: 'specimen-root'
       })
-     .state('specimen-create-aliquots', {
+      .state('specimen-create-aliquots', {
         url: '/aliquots',
         templateProvider: function(PluginReg, $q) {
           var defaultTmpl = "modules/biospecimen/participant/specimen/add-aliquots.html";
@@ -183,6 +184,12 @@ angular.module('os.biospecimen.specimen',
         },
         controller: 'AddAliquotsCtrl',
         parent: 'specimen-root'
+      })
+      .state('bulk-add-event', {
+        url: '/bulk-add-event',
+        templateUrl: 'modules/biospecimen/participant/specimen/bulk-add-event.html',
+        controller: 'BulkAddEventCtrl',
+        parent: 'signed-in'
       });
   })
 

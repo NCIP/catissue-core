@@ -210,6 +210,10 @@ angular.module('openspecimen')
       return deferred.promise;
     }
 
+    function appendAll(array, elements) {
+      Array.prototype.push.apply(array, elements);
+    }
+
     return {
       clear: clear,
 
@@ -233,6 +237,8 @@ angular.module('openspecimen')
       
       downloadReport : downloadReport,
 
-      booleanPromise: booleanPromise
+      booleanPromise: booleanPromise,
+
+      appendAll: appendAll
     };
   });

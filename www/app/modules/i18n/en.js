@@ -545,6 +545,20 @@
       "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
       "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
+    },
+
+    "bulk_events": {
+      "title": "Bulk Events",
+      "create": "Create Bulk Event",
+      "add_event": "Add Event",
+      "select_specimens": "Select Specimens",
+      "add_event_details": "Add Event Details",
+      "select_event": "Select Event",
+      "no_specimens_in_list": "No specimens in list to add event. Add at least one specimen",
+      "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
+      "details": "Event Details",
+      "copy_first_to_all": "Copy First To All",
+      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them"
     }
   },
 
@@ -1347,7 +1361,13 @@
     "no_specimens_for_deletion": "Please select at least one specimen for deletion",
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
-    "created_by": "Created By"
+    "created_by": "Created By",
+    "add_event": "Add Event",
+    "visit": "Visit",
+    "ppid": "PPID",
+    "location": "Storage Location",
+    "no_specimens_to_add_event": "Please select at least one specimen to add event",
+    "events_saved": "Event saved successfully"
   },
 
   "orders": {

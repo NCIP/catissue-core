@@ -608,7 +608,7 @@ public class FormServiceImpl implements FormService {
 		formCtxtId.add(((Number) appData.get("formCtxtId")).longValue());
 		
 		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
-		if (formContexts == null) {
+		if (CollectionUtils.isEmpty(formContexts)) {
 			throw new IllegalArgumentException("Invalid form context id");
 		}
 		

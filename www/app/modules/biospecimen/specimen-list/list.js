@@ -6,6 +6,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     function init() { 
       $scope.orderCreateOpts =    {resource: 'Order', operations: ['Create']};
       $scope.shipmentCreateOpts = {resource: 'ShippingAndTracking', operations: ['Create']};
+      $scope.specimenUpdateOpts = {resource: 'VisitAndSpecimen', operations: ['Update']};
 
       $scope.listSpecimens = {
         specimens: [],
@@ -142,6 +143,16 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
       SpecimensHolder.setSpecimens($scope.selection.specimens);
       $state.go('shipment-addedit', {orderId: ''});
+    }
+    
+    $scope.addEvent = function() {
+      if (!$scope.selection.any) {
+        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_add_event');
+        return;
+      }
+      
+      SpecimensHolder.setSpecimens($scope.selection.specimens);
+      $state.go('bulk-add-event');
     }
 
     init();

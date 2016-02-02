@@ -1,19 +1,28 @@
 edu.common.de.DataTable = function(args) {
-  this.formDiv = $("#" + args.formDiv);
+  if (typeof args.formDiv == 'string') {
+    this.formDiv = $("#" + args.formDiv);
+  } else {
+    this.formDiv = args.formDiv;
+  }
+  
   this.formId = args.formId;
   this.formDef = args.formDef;
   this.formDefUrl = args.formDefUrl;
   this.tableData = args.tableData;
   this.appColumns = args.appColumns;
   this.mode = args.mode;
+  this.allowRowSelection = args.allowRowSelection;
+  this.dateFormat = args.dateFormat;
 
   this.tableRowsData = [];
   this.fieldObjs = [];
   this.formDefXhr = null;
-
+  
+  this.customHdrs = args.customHdrs || {};
+  
   if (!this.formDef && this.formDefUrl) {
     var url = this.formDefUrl.replace(":formId", this.formId);
-    this.formDefXhr = $.ajax({type: 'GET', url: url});
+    this.formDefXhr = $.ajax({type: 'GET', url: url, headers: this.customHdrs});
   }
 
   this.setMode = function(mode) {
@@ -33,8 +42,8 @@ edu.common.de.DataTable = function(args) {
     if (this.formDefXhr) {
       this.formDefXhr.then(function(formDef) {
         that.formDef = formDef;
-        if (this.tableData != null && this.tableData != undefined) {
-          this.render0();
+        if (that.tableData != null && that.tableData != undefined) {
+          that.render0();
         }
       });
     } else {
@@ -65,7 +74,7 @@ edu.common.de.DataTable = function(args) {
     // Now rendering the header
     var width = 0;
     var tr = $("<tr/>");
-    if (this.mode == 'add') {
+    if (this.mode == 'add' && this.allowRowSelection) {
       tr.append($("<th/>").append().addClass("table-th ").css("width", "30px"));
       width += 30;
     }
@@ -144,7 +153,7 @@ edu.common.de.DataTable = function(args) {
     var tr = $("<tr/>");
     var that = this;
 
-    if (this.mode == 'add') {
+    if (this.mode == 'add' && this.allowRowSelection) {
       var selectRow = $("<input/>").prop({type : 'checkbox', name: 'selectRow', value: key.id , title: key.label});
       selectRow.on("click", function() { that.onRowSelect();});
       tr.append($("<td/>").append(selectRow));
