@@ -11,11 +11,15 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
       $scope.races = PvManager.getPvs('race');
 
+      var registeredCps = [];
+      angular.forEach(cpr.participant.registeredCps, function(cp) {
+        registeredCps.push(cp.cpShortTitle);
+      });
+
       var siteNames = cpr.getMrnSites();
       $scope.cpsForReg = [];
       CollectionProtocol.listForRegistrations(siteNames).then(
         function(cps) {
-          var registeredCps = cpr.participant.registeredCps;
           for (var i = 0; i < cps.length; ++i) {
             if (registeredCps.indexOf(cps[i].shortTitle) == -1) {
               $scope.cpsForReg.push(cps[i]);
