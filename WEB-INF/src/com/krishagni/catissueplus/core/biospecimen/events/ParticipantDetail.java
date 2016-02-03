@@ -49,7 +49,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	
 	private boolean phiAccess;
 	
-	private Set<String> registeredCps;
+	private Set<CprSummary> registeredCps;
 	
 	private ExtensionDetail extensionDetail;
 	
@@ -186,11 +186,11 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		this.phiAccess = phiAccess;
 	}
 
-	public Set<String> getRegisteredCps() {
+	public Set<CprSummary> getRegisteredCps() {
 		return registeredCps;
 	}
 
-	public void setRegisteredCps(Set<String> registeredCps) {
+	public void setRegisteredCps(Set<CprSummary> registeredCps) {
 		this.registeredCps = registeredCps;
 	}
 
@@ -239,12 +239,17 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		result.setVitalStatus(participant.getVitalStatus());
 		result.setPhiAccess(!excludePhi);
 		
-		Set<String> cps = new HashSet<String>();
+		Set<CprSummary> cps = new HashSet<CprSummary>();
 		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
-			cps.add(cpr.getCollectionProtocol().getShortTitle());
+			CprSummary cprSummary = new CprSummary();
+			cprSummary.setCpId(cpr.getCollectionProtocol().getId());
+			cprSummary.setCprId(cpr.getId());
+			cprSummary.setCpShortTitle(cpr.getCollectionProtocol().getShortTitle());
+			cps.add(cprSummary);
 		}
 		result.setRegisteredCps(cps);
-		result.setExtensionDetail(ExtensionDetail.from(participant.getExtension()));
+
+		result.setExtensionDetail(ExtensionDetail.from(participant.getExtension(), excludePhi));
 		return result;
 	}
 	

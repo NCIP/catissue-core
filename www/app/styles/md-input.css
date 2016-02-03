@@ -43,6 +43,7 @@
   border-color: #66afe9!important;
 }
 
+#data-table tbody td input,
 .os-md-input input,
 .os-md-input .ui-select-match,
 .os-md-input .ui-select-search {
@@ -57,15 +58,18 @@
   width: 100%;
 }
 
+#data-table tbody td input,
 .os-md-input input {
   padding: 2px 0px;
 }
 
+#data-table tbody td .de-select,
 .os-md-input .ui-select-match,
 .os-md-input .ui-select-search {
   padding: 2px 0px 1px 0px;
 }
 
+#data-table tbody td textarea,
 .os-md-input textarea {
   resize: none;
   margin-top: 0px !important;

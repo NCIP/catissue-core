@@ -3,7 +3,8 @@ angular.module('os.administrative.form',
   [
     'os.administrative.form.list',
     'os.administrative.form.addedit',
-    'os.administrative.form.formctxts'
+    'os.administrative.form.formctxts',
+    'os.administrative.form.entities'
   ])
 
   .config(function($stateProvider) {

@@ -145,15 +145,15 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 				throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
 			}
 			
-			//
-			//  Saved to obtain IDs to make distributed events
-			//
-			daoFactory.getDistributionOrderDao().saveOrUpdate(order, true);
-
 			Status inputStatus = Status.valueOf(detail.getStatus());
 			if (inputStatus == Status.EXECUTED) {
 				order.distribute();
 			}
+			
+			//
+			//  Saved to obtain IDs to make distributed events
+			//
+			daoFactory.getDistributionOrderDao().saveOrUpdate(order, true);
 			
 			sendOrderProcessedEmail(order, null);
 			return ResponseEvent.response(DistributionOrderDetail.from(order));

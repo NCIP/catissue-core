@@ -151,14 +151,15 @@ public class ShipmentServiceImpl implements ShipmentService {
 				throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
 			}
 			
-			//
-			//  Saved to obtain IDs to make shipment events
-			//
-			getShipmentDao().saveOrUpdate(shipment, true);
 			Status status = Status.fromName(detail.getStatus());
 			if (status == Status.SHIPPED) {
 				shipment.ship();
 			}
+			
+			//
+			//  Saved to obtain IDs to make shipment events
+			//
+			getShipmentDao().saveOrUpdate(shipment, true);
 			
 			sendEmailNotifications(shipment, null, detail.isSendMail());
 			return ResponseEvent.response(ShipmentDetail.from(shipment));

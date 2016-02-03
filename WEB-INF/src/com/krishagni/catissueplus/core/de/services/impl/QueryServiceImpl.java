@@ -316,9 +316,14 @@ public class QueryServiceImpl implements QueryService {
 				indices = queryResult.getColumnIndices(opDetail.getIndexOf());
 			}
 			
-			return ResponseEvent.response(QueryExecResult.create(
-					queryResult.getColumnLabels(), queryResult.getStringifiedRows(), 
-					queryResult.getDbRowsCount(), indices));
+			return ResponseEvent.response(
+				new QueryExecResult()
+					.setColumnLabels(queryResult.getColumnLabels())
+					.setColumnUrls(queryResult.getColumnUrls())
+					.setRows(queryResult.getStringifiedRows())
+					.setDbRowsCount(queryResult.getDbRowsCount())
+					.setColumnIndices(indices)
+			);
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
@@ -742,7 +747,7 @@ public class QueryServiceImpl implements QueryService {
 	@PlusTransactional
 	public QueryDataExportResult exportQueryData(final ExecuteQueryEventOp opDetail, final ExportProcessor processor) {
 		OutputStream out = null;
-		
+
 		try {
 			final Authentication auth = AuthUtil.getAuth();
 			final User user = AuthUtil.getCurrentUser();
@@ -769,6 +774,8 @@ public class QueryServiceImpl implements QueryService {
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw OpenSpecimenException.serverError(e);
+					} finally {
+						IOUtils.closeQuietly(fout);
 					}
 
 					return true;
@@ -791,7 +798,9 @@ public class QueryServiceImpl implements QueryService {
 
 			boolean completed = false;
 			try {
+				out = null;
 				completed = result.get(ONLINE_EXPORT_TIMEOUT_SECS, TimeUnit.SECONDS);
+				out = fout;
 			} catch (TimeoutException te) {
 				completed = false;
 			}
@@ -802,7 +811,9 @@ public class QueryServiceImpl implements QueryService {
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		} finally {
-			IOUtils.closeQuietly(out);
+			if (out != null) {
+				IOUtils.closeQuietly(out);
+			}
 		}
 	}
 	

@@ -203,17 +203,10 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group
-      ng-if="!shipment.request && shipment.status != 'Shipped'">
-      <textarea ng-model="input.labelText" class="form-control" 
-        placeholder="{{'shipments.enter_specimen_label' | translate}}" os-enable-tab rows="2">
-      </textarea>
-      <span class="input-group-btn">
-        <button class="btn btn-primary" ng-click="addSpecimens()" ng-disabled="!input.labelText">
-          <span translate="common.buttons.add">Add</span>
-        </button>
-      </span>
-    </div>
+    <os-add-items ng-if="!shipment.request && shipment.status != 'Shipped'" 
+      item-list="shipment.shipmentItems" item-key="specimen.label"
+      on-add="addSpecimens(itemLabels)" placeholder="{{'shipments.enter_specimen_label' | translate}}">
+    </os-add-items>
 
     <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"
       ng-if="shipment.shipmentItems && shipment.shipmentItems.length > 0">

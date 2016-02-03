@@ -26,7 +26,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
     Participant.prototype.getPmis = function() {
       var pmis = []; 
       angular.forEach(this.pmis, function(pmi) {
-        if (pmi.siteName && pmi.mrn) {
+        if (pmi.siteName) {
           pmis.push(pmi);
         }
       });

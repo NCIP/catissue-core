@@ -37,11 +37,10 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
-import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
+import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormType;
-import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormService;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
@@ -128,10 +127,10 @@ public class SpecimenRequestServiceImpl implements SpecimenRequestService {
 			//
 			// Retrieve actual form data based on record ID
 			//
-			GetFormDataOp op = new GetFormDataOp();
-			op.setFormId(formCtxt.getFormId());
-			op.setRecordId(recordEntries.iterator().next().getRecordId());
-			ResponseEvent<FormDataDetail> resp = formSvc.getFormData(new RequestEvent<GetFormDataOp>(op));
+			FormRecordCriteria crit = new FormRecordCriteria();
+			crit.setFormId(formCtxt.getFormId());
+			crit.setRecordId(recordEntries.iterator().next().getRecordId());
+			ResponseEvent<FormDataDetail> resp = formSvc.getFormData(new RequestEvent<FormRecordCriteria>(crit));
 			resp.throwErrorIfUnsuccessful();
 
 			return ResponseEvent.response(resp.getPayload().getFormData().getFieldValueMap());

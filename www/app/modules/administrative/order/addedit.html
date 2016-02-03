@@ -151,16 +151,9 @@
       </span>
     </div>
 
-    <div class="input-group" style="margin-bottom:5px;" os-textarea-input-group ng-if="!order.request">
-      <textarea ng-model="input.labelText" class="form-control" 
-        placeholder="{{'orders.enter_specimen_label' | translate}}" os-enable-tab rows="2">
-      </textarea>
-      <span class="input-group-btn">
-        <button class="btn btn-primary" ng-click="addSpecimens()" ng-disabled="!input.labelText">
-          <span translate="common.buttons.add">Add</span>
-        </button>
-      </span>
-    </div>
+    <os-add-items item-list="order.orderItems" item-key="specimen.label" on-add="addSpecimens(itemLabels)"
+      placeholder="{{'orders.enter_specimen_label' | translate}}" ng-if="!order.request>
+    </os-add-items>
 
     <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"
       ng-if="order.orderItems && order.orderItems.length > 0">

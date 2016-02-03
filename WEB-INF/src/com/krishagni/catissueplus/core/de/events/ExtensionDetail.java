@@ -60,8 +60,12 @@ public class ExtensionDetail {
 			attrs.add(attr);
 		}
 	}
-
+	
 	public static ExtensionDetail from(DeObject extension) {
+		return from(extension, true);
+	}
+
+	public static ExtensionDetail from(DeObject extension, boolean excludePhi) {
 		if (extension == null || extension.getId() == null) {
 			return null;
 		}
@@ -70,7 +74,7 @@ public class ExtensionDetail {
 		detail.setId(extension.getId());
 		detail.setObjectId(extension.getObjectId());
 		detail.setFormId(extension.getFormId());
-		detail.setAttrs(AttrDetail.from(extension.getAttrs()));	
+		detail.setAttrs(AttrDetail.from(extension.getAttrs(), excludePhi));	
 		return detail;
 	}
 	
@@ -125,16 +129,20 @@ public class ExtensionDetail {
 			this.type = type;
 		}
 
-		public static AttrDetail from(Attr attr) {
+		public static AttrDetail from(Attr attr, boolean excludePhi) {
 			AttrDetail detail = new AttrDetail();
 			BeanUtils.copyProperties(attr, detail);
+			if (excludePhi && attr.isPhi()) {
+				detail.setValue("###");
+			}
+			
 			return detail;
 		}
 		
-		public static List<AttrDetail> from(List<Attr> attrs) {
+		public static List<AttrDetail> from(List<Attr> attrs, boolean excludePhi) {
 			List<AttrDetail> result = new ArrayList<AttrDetail>();
 			for (Attr attr: attrs) {
-				result.add(from(attr));
+				result.add(from(attr, excludePhi));
 			}
 			
 			return result;

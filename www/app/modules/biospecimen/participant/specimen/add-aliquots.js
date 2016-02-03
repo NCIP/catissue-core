@@ -1,8 +1,8 @@
 
 angular.module('os.biospecimen.specimen.addaliquots', [])
   .controller('AddAliquotsCtrl', function(
-    $scope, $rootScope, $state, $stateParams, specimen, cpr, visit,
-    CollectSpecimensSvc, SpecimenUtil) {
+    $scope, $rootScope, $state, $stateParams, specimen, cpr, visit, extensionCtxt,
+    CollectSpecimensSvc, SpecimenUtil, Util) {
 
     function init() {
       $scope.parentSpecimen = specimen;
@@ -18,6 +18,9 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
          var params = {specimenId:  $scope.parentSpecimen.id, srId:  $scope.parentSpecimen.reqId};
          $state.go('specimen-detail.overview', params);
       }
+
+      $scope.deFormCtrl = {};
+      $scope.extnOpts = Util.getExtnOpts($scope.aliquotSpec, extensionCtxt);
     }
 
     function getState() {
@@ -26,7 +29,9 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
 
     $scope.collectAliquots = function() {
       var specimens = SpecimenUtil.collectAliquots($scope);
-      CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, parent);
+      if (specimens) {
+        CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, parent);
+      }
     }
 
     init();

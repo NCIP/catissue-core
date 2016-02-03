@@ -19,8 +19,7 @@ var osApp = angular.module('openspecimen', [
   'ui.autocomplete',
   'mgcrea.ngStrap.popover',
   'angular-loading-bar',
-  'pascalprecht.translate',
-  'angularLoad'
+  'pascalprecht.translate'
   ]);
 
 osApp.config(function(
@@ -88,10 +87,6 @@ osApp.config(function(
 
     $httpProvider.interceptors.push('httpRespInterceptor');
 
-    /*ApiUrlsProvider.hostname = "localhost"; // used for testing purpose
-    ApiUrlsProvider.port = 9090;
-    ApiUrlsProvider.secure = false;
-    ApiUrlsProvider.app = "/openspecimen";*/
     ApiUrlsProvider.urls = {
       'sessions': 'rest/ng/sessions',
       'sites': 'rest/ng/sites',
@@ -191,29 +186,20 @@ osApp.config(function(
   })
   .provider('ApiUrls', function() {
     var that = this;
+    var server = ui.os.server;
 
-    this.hostname = "";
-    this.port = "";
-    this.secure = false;
-    this.app = "";
     this.urls = {};
 
     this.$get = function() {
       return {
-        hostname: that.hostname,
-        port    : that.port,
-        secure  : that.secure,
-        app     : that.app,
+        hostname: server.hostname,
+        port    : server.port,
+        secure  : server.secure,
+        app     : server.app,
         urls    : that.urls,
 
         getBaseUrl: function() {
-          var prefix = '';
-          if (this.hostname) {
-            var protocol = this.secure ? 'https://' : 'http://';
-            prefix = protocol + this.hostname + ':' + this.port + this.app + '/';
-          }
-
-          return prefix + 'rest/ng/';
+          return server.url + 'rest/ng/';
         },
 
         getUrl: function(key) {
@@ -221,14 +207,7 @@ osApp.config(function(
           if (key) {
             url = this.urls[key];
           }
-
-          var prefix = "";
-          if (this.hostname) {
-            var protocol = this.secure ? 'https://' : 'http://';
-            prefix = protocol + this.hostname + ":" + this.port + this.app + '/';
-          }
-
-          return prefix + url;
+          return server.url + url;
         }
       };
     }
@@ -297,13 +276,12 @@ osApp.config(function(
 
     $rootScope.global = {
       defaultDomain: 'openspecimen',	
-      filterWaitInterval: 500
+      filterWaitInterval: 500,
+      appProps: ui.os.appProps
     };
 
-    var promises = [Setting.getLocale(), Setting.getAppProps()];
-    $q.all(promises).then(
-      function(resps) {
-        var localeSettings = resps[0];
+    Setting.getLocale().then(
+      function(localeSettings) {
         angular.extend(
           $rootScope.global,
           {
@@ -316,17 +294,11 @@ osApp.config(function(
           }
         );
 
-
-        var appProps = resps[1];
-        $rootScope.global.appProps = appProps;
-        var plugins = appProps['plugins'];
-        if (plugins) {
-          osApp.providers.pluginReg = PluginReg;
-          PluginReg.usePlugins(plugins);
-          angular.forEach(plugins, function(plugin) {
-            $translatePartialLoader.addPart('plugin-ui-resources/'+ plugin + '/');
-          });
-        }
+        var plugins = ui.os.appProps.plugins;
+        PluginReg.usePlugins(plugins);
+        angular.forEach(plugins, function(plugin) {
+          $translatePartialLoader.addPart('plugin-ui-resources/'+ plugin + '/');
+        });
         
         var locale = localeSettings.locale;
         $translate.use(locale);

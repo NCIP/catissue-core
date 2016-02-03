@@ -457,8 +457,6 @@
     "activity_time_info": "{{name}} created on {{time | date: global.dateTimeFmt}}",
     "activity_info": "{{name}} created",
     "activity_status": "Activity Status",
-    "more_info": "More Specimen Information",
-    "less_info": "Less Specimen Information",
     "location" : "Location",
 
     "reason_for_closing": "Reason for closing",
@@ -551,6 +549,20 @@
       "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
       "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
+    },
+
+    "bulk_events": {
+      "title": "Bulk Events",
+      "create": "Create Bulk Event",
+      "add_event": "Add Event",
+      "select_specimens": "Select Specimens",
+      "add_event_details": "Add Event Details",
+      "select_event": "Select Event",
+      "no_specimens_in_list": "No specimens in list to add event. Add at least one specimen",
+      "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
+      "details": "Event Details",
+      "copy_first_to_all": "Copy First To All",
+      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them"
     }
   },
 
@@ -1026,8 +1038,8 @@
     "confirm_delete": "{{caption}} form will be deleted forever. Are you sure you want to proceed?",
     "confirm_delete_with_data": "You will lose data if you delete the {{caption}} form. Do you want to continue?",
     "form_deleted": "{{caption}} form deleted successfully",
-    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.name}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
-    "association_deleted": "Successfully deleted form at {{level.name}} level from {{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}",
+    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.caption}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
+    "association_deleted": "Successfully deleted form at {{level.caption}} level from {{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}",
 
     "tooltip": {
       "add": "Click to add new Form",
@@ -1339,11 +1351,13 @@
     "shared_lists": "Shared Carts",
     "info": "Information",
     "cart_info": "Cart Information",
-    "more_specimens": "One or more specimens in cart could not be displayed because you do not have enough rights to view them",
+    "more_specimens_no_rights": "One or more specimens in cart could not be displayed because you do not have enough rights to view them",
+    "more_specimens_limit_reached": "One or more specimens in cart could not be displayed because only 1000 specimens can be displayed at a time",
     "no_specimens": "There are no specimens to show in selected cart",
     "description": "Description",
     "cp": "Collection Protocol",
     "label": "Label",
+    "location": "Location",
     "quantity": "Quantity",
     "lineage": "Lineage",
     "remove_specimens": "Removing specimens from cart",
@@ -1363,7 +1377,13 @@
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By",
     "clear_list_on_req": "Clear cart on request submission",
-    "checkout": "Checkout"
+    "checkout": "Checkout",
+    "add_event": "Add Event",
+    "visit": "Visit",
+    "ppid": "PPID",
+    "location": "Storage Location",
+    "no_specimens_to_add_event": "Please select at least one specimen to add event",
+    "events_saved": "Event saved successfully"
   },
 
   "orders": {

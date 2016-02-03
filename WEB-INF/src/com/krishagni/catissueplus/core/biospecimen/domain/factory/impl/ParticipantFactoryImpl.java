@@ -335,11 +335,6 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			return null;
 		}
 		
-		if (StringUtils.isBlank(pmiDetail.getMrn())) {
-			oce.addError(ParticipantErrorCode.MRN_REQUIRED);
-			return null;
-		}
-		
 		ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifier();
 		pmi.setSite(site);
 		pmi.setMedicalRecordNumber(pmiDetail.getMrn());

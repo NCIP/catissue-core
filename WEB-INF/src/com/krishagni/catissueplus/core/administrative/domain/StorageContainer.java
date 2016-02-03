@@ -322,7 +322,7 @@ public class StorageContainer extends BaseEntity {
 	public void setStats(StorageContainerStats stats) {
 		this.stats = stats;
 	}
-	
+
 	@NotAudited
 	public Set<String> getCompAllowedSpecimenClasses() {
 		return compAllowedSpecimenClasses;

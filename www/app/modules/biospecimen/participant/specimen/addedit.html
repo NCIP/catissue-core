@@ -28,7 +28,7 @@
     </h3>
   </div>
 
-  <div class="container os-margin-top" ng-init="showAdvAttrs=currSpecimen.lineage == 'New' && !currSpecimen.id && !currSpecimen.reqId">
+  <div class="container os-margin-top">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
       <div class="form-group" ng-if="!!currSpecimen.label || !currSpecimen.labelFmt || cp.manualSpecLabelEnabled">
         <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
@@ -164,7 +164,7 @@
         </div>
       </div>
 
-      <div ng-if="showAdvAttrs">
+      <div ng-if="currSpecimen.lineage == 'New' && !currSpecimen.poolSpecimen">
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
           <div class="col-xs-6">
@@ -281,16 +281,6 @@
               <div os-field-error field="sform.receivedQuality"></div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currSpecimen.lineage == 'New' && !currSpecimen.poolSpecimen && 
-                                     (currSpecimen.reqId || currSpecimen.id)">
-        <div class="col-xs-offset-3 col-xs-6">
-          <a ng-click="$parent.showAdvAttrs = !$parent.showAdvAttrs">
-            <span ng-if="!showAdvAttrs" translate="specimens.more_info">More Specimen Information</span>
-            <span ng-if="showAdvAttrs" translate="specimens.less_info">Less Specimen Information</span>
-          </a>
         </div>
       </div>
 

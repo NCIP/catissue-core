@@ -11,6 +11,7 @@ angular.module('os.biospecimen.models',
     'os.biospecimen.models.specimenlabelprinter',
     'os.biospecimen.models.form',
     'os.biospecimen.models.specimenlist',
-    'os.biospecimen.models.specimenreq'
+    'os.biospecimen.models.specimenreq',
+    'os.biospecimen.models.specimenevent'
   ]
 );

@@ -55,12 +55,13 @@
     <link rel="stylesheet" href="styles/quick-search.css">
     <link rel="stylesheet" href="styles/tabs.css">
     <link rel="stylesheet" href="styles/scrollbar.css">
+    <link rel="stylesheet" href="styles/de-table.css">
 
     <!-- custom modules css -->
     <!-- link rel="stylesheet" href="styles/le/styles/le.css" -->
     <!-- endbuild -->
   </head>
-  <body ng-app="openspecimen">
+  <body> <!-- ng-app="openspecimen" -->
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -94,16 +95,17 @@
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-load/angular-load.js"></script>
     <!-- endbower -->
     <script src="external_components/blueimp-file-upload/js/jquery.fileupload.js"></script>
     <script src="external_components/blueimp-file-upload/js/jquery.iframe-transport.js"></script>
     <script src="external_components/de/js/de-form.js"></script>
+    <script src="external_components/de/js/de-data-table.js"></script>
     <script src="external_components/de/js/de-field-manager.js"></script>
     <script src="external_components/select2/select2.min.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="init.js"></script>
     <script src="app.js"></script>
     <script src="modules/user/module.js"></script>
     <script src="modules/common/module.js"></script>
@@ -164,6 +166,7 @@
     <script src="modules/common/pv-dropdown.js"></script>
     <script src="modules/common/number-converter.js"></script>
     <script src="modules/common/box.js"></script>
+    <script src="modules/common/add-items.js"></script>
 
     <!-- Search module -->
     <script src="modules/common/search/module.js"></script>
@@ -273,6 +276,7 @@
     <script src="modules/administrative/form/list.js"></script>
     <script src="modules/administrative/form/addedit.js"></script>
     <script src="modules/administrative/form/association.js"></script>
+    <script src="modules/administrative/form/entities.js"></script>
     
     <!-- Support Module -->
     <script src="modules/administrative/support/feedback.js"></script>
@@ -298,6 +302,7 @@
     <script src="modules/biospecimen/models/form.js"></script>
     <script src="modules/biospecimen/models/specimen-list.js"></script>
     <script src="modules/biospecimen/models/specimen-request.js"></script>
+    <script src="modules/biospecimen/models/specimen-event.js"></script>
 
     <!-- Extensions -->
     <script src="modules/biospecimen/extensions/module.js"></script>
@@ -308,6 +313,7 @@
     <script src="modules/biospecimen/extensions/select2.js"></script>
     <script src="modules/biospecimen/extensions/extension-overview.js"></script>
     <script src="modules/biospecimen/extensions/form-data.js"></script>
+    <script src="modules/biospecimen/extensions/table.js"></script>
     <script src="modules/biospecimen/extensions/fancy/de-users.js"></script>
     <script src="modules/biospecimen/extensions/fancy/de-storage-containers.js"></script>
     <script src="modules/biospecimen/extensions/fancy/de-sites.js"></script>
@@ -354,6 +360,7 @@
     <script src="modules/biospecimen/participant/specimen/add-aliquots.js"></script>
     <script src="modules/biospecimen/participant/specimen/add-derivative.js"></script>
     <script src="modules/biospecimen/participant/specimen/util.js"></script>
+    <script src="modules/biospecimen/participant/specimen/bulk-add-event.js"></script>
 
     <!-- Specimen List module  -->
     <script src="modules/biospecimen/specimen-list/module.js"></script>

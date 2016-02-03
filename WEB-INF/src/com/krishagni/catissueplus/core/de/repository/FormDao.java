@@ -50,7 +50,7 @@ public interface FormDao extends Dao<FormContextBean>{
 
 	public FormRecordEntryBean getRecordEntry(Long formCtxtId, Long objectId, Long recordId);
 
-	public FormRecordEntryBean getRecordEntry(Long recordId);
+	public FormRecordEntryBean getRecordEntry(Long formId, Long recordId);
 
 	public Long getRecordsCount(Long formCtxtId, Long objectId);
 	
@@ -59,6 +59,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public Long getFormCtxtId(Long containerId, String entityType, Long cpId);
 	
 	public List<Long> getFormIds(Long cpId, String entityType);
+	
+	public List<Long> getFormIds(Long cpId, List<String> entityTypes);
 	
 	public List<FormContextBean> getFormContextsById(List<Long> formContextIds);
 	

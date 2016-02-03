@@ -108,6 +108,7 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				.setString("sprNumber", sprNumber)
 				.list();
 	}
+
 	private String getVisitKey(Long visitId, Long cpeId) {
 		String key = "";
 		if (visitId != null) {
@@ -176,6 +177,5 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	private static final String GET_VISIT_BY_NAME = FQN + ".getVisitByName";
 
 	private static final String GET_VISIT_BY_SPR = FQN + ".getVisitBySpr";
-
 }
 

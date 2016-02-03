@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('PluginReg', function($http, $rootScope, angularLoad) {
+  .factory('PluginReg', function($rootScope) {
     /**
      * Structure
      * {
@@ -40,18 +40,10 @@ angular.module('openspecimen')
      function getTmpls(viewName, secName, defaultTmpl) {
        var tmpls = [];
        angular.forEach(pluginViews, function(pViews, pName) {
-         if (activePlugins.indexOf(pName) == -1) {
-           //
-           // plugin is not used
-           //
-           return; 
-         }
-
          angular.forEach(pViews, function(pViewTmpls, pViewName) {
            if (viewName !== pViewName) {
              return;
            }
-
 
            angular.forEach(pViewTmpls, function(pViewSecTmpl, pViewSecName) {
              if (pViewSecName !== secName) {
@@ -72,21 +64,6 @@ angular.module('openspecimen')
 
      function usePlugins(pluginNames) {
        activePlugins = [].concat(pluginNames); 
-
-       var pluginUrl = 'plugin-ui-resources/'; 
-       angular.forEach(activePlugins, function(pluginName) {
-         $http.get(pluginUrl + pluginName + '/def.json').then(
-           function(result) {
-             angular.forEach(result.data.styles, function(style) {
-               angularLoad.loadCSS(pluginUrl + style);
-             });
-
-             angular.forEach(result.data.scripts, function(script) {
-               angularLoad.loadScript(pluginUrl + script);
-             });
-           }
-         );
-       });
      }
 
      return {

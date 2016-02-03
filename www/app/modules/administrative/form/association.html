@@ -25,7 +25,7 @@
           <div class="os-table-body">
             <div class="row" ng-repeat="ctxt in cpFormCtxts">
               <div class="col col-xs-5">{{ctxt.collectionProtocol.shortTitle}}</div>
-              <div class="col col-xs-3">{{ctxt.level.name}}</div>
+              <div class="col col-xs-3">{{ctxt.level.caption}}</div>
               <div class="col col-xs-3">
                 <div class="os-tag" ng-if="ctxt.multiRecord" translate="form.multiple_records">Multiple Records</div>
               </div>
@@ -42,13 +42,13 @@
     </div>
 
     <div class="os-form-association-form">
-      <div ng-show="!cpFormCtxt.isSpecimenEvent" translate="form.use_in_cps">
+      <div ng-show="!cpFormCtxt.selectedEntity.allCps" translate="form.use_in_cps">
         Use form in following collection protocols
       </div>
-      <div ng-show="cpFormCtxt.isSpecimenEvent" translate="form.spe_attached_to_all_cps">
-        Specimen Event forms always attached to all collection protocols. 
+      <div ng-show="cpFormCtxt.selectedEntity.allCps" translate="form.spe_attached_to_all_cps">
+        {{cpFormCtxt.selectedEntity.caption}} forms always attached to all collection protocols. 
       </div>
-      <div class="checkbox" ng-show="!cpFormCtxt.isSpecimenEvent">
+      <div class="checkbox" ng-show="!cpFormCtxt.selectedEntity.allCps">
         <label>
           <input type="checkbox" ng-checked="cpFormCtxt.allProtocols" ng-model="cpFormCtxt.allProtocols"/> 
           <span translate="form.all_cps">All Present and Future Collection Protocols</span>
@@ -56,10 +56,10 @@
       </div>
       <os-select multiple ng-model="cpFormCtxt.selectedCps" list="cpList" display-prop="shortTitle"
         placeholder="{{'form.select_cps' | translate}}" name="cps" append-to-body="true" 
-        ng-show="!cpFormCtxt.allProtocols && !cpFormCtxt.isSpecimenEvent">
+        ng-show="!cpFormCtxt.allProtocols && !cpFormCtxt.selectedEntity.allCps">
       </os-select>
-      <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="name"
-        placeholder="{{'form.select_level' | translate }}" on-change="onEntitySelect" append-to-body="true">
+      <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="caption"
+        placeholder="{{'form.select_level' | translate }}" append-to-body="true">
       </os-select>
       <div class="checkbox">
         <label>

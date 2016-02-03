@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.de.repository.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -285,9 +286,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public FormRecordEntryBean getRecordEntry(Long recordId) {
+	public FormRecordEntryBean getRecordEntry(Long formId, Long recordId) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_RECORD_ENTRY_BY_REC_ID)
+				.getNamedQuery(GET_REC_BY_FORM_N_REC_ID)
+				.setLong("formId", formId)
 				.setLong("recordId", recordId)
 				.list();
 		return CollectionUtils.isEmpty(rows) ? null : getFormRecordEntry(rows.iterator().next());
@@ -370,8 +372,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@Override
 	public List<Long> getFormIds(Long cpId, String entityType) {
+		return getFormIds(cpId, Collections.singletonList(entityType));
+	}
+	
+	@Override
+	public List<Long> getFormIds(Long cpId, List<String> entityTypes) {
 		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_FORM_IDS);
-		query.setLong("cpId", cpId).setString("entityType", entityType);
+		query.setLong("cpId", cpId).setParameterList("entityTypes", entityTypes);
 		
 		List<Long> formIds = new ArrayList<Long>();
 		for (Object id : query.list()) {
@@ -620,11 +627,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			} else {			
 			    form.setCpCount((Integer)row[5]);
 			}
+			
+			form.setSysForm(row[7] == null ? false : (Boolean) row[7]);
 
 			UserSummary user = new UserSummary();
-			user.setId((Long)row[7]);
-			user.setFirstName((String)row[8]);
-			user.setLastName((String)row[9]);
+			user.setId((Long)row[8]);
+			user.setFirstName((String)row[9]);
+			user.setLastName((String)row[10]);
 			form.setCreatedBy(user);
 			
 			forms.add(form);						
@@ -683,7 +692,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_RECORD_ENTRIES = RE_FQN + ".getRecordEntries";
 
-	private static final String GET_RECORD_ENTRY_BY_REC_ID = RE_FQN + ".getRecordEntryByRecId";
+	private static final String GET_REC_BY_FORM_N_REC_ID = RE_FQN + ".getRecordEntryByFormAndRecId";
 	
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	

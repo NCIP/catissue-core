@@ -51,3 +51,4 @@ getNextPvId(),,,"getPvParentId('2003991', 'Cell')",Slide,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Molecular')",Total Nucleic Acid,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Molecular')",Whole Genome Amplified DNA,null,null
 getNextPvId(),,,"getPvParentId('2003991', 'Molecular')",ctDNA,null,null
+getNextPvId(),,,"getPvParentId('2003991', 'Cell')",PBMC,null,null

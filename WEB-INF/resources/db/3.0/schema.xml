@@ -11,4 +11,30 @@
       columnDataType="${text.type}(63)"/>
   </changeSet>
   
+  <changeSet author="slakhani" id="Remove unique constraint for site,mrn in catissue_part_medical_id table">
+    <dropUniqueConstraint 
+      tableName="CATISSUE_PART_MEDICAL_ID" 
+      constraintName="MRN_SITE_UNIQUE"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Added PMBC specimen type under class Cell">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          count(pv.identifier) 
+        from 
+          catissue_permissible_value pv 
+          join catissue_permissible_value parent on pv.parent_identifier = parent.identifier
+        where 
+          pv.value = 'PBMC' and parent.value = 'Cell' and parent.public_id = '2003991'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values 
+        (getNextPvId(),'','',getPvParentId('2003991', 'Cell'),'PBMC',null,null)
+    </sql>
+  </changeSet>
+  
 </databaseChangeLog>

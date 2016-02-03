@@ -446,7 +446,7 @@
   </changeSet>
   
   <changeSet id="Loading permissible values for attribute: specimen class and type" author="vratnaparkhi">
-    <validCheckSum>7:54757531856fb273aa808a4a7229b045</validCheckSum>
+    <validCheckSum>7:3077a1a733ac6694a1abd05e152bf2c2</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
         select 

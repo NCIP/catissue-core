@@ -7,7 +7,8 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.overview',
     'os.biospecimen.specimen.close',
     'os.biospecimen.specimen.addaliquots',
-    'os.biospecimen.specimen.addderivative'
+    'os.biospecimen.specimen.addderivative',
+    'os.biospecimen.specimen.bulkaddevent'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -51,10 +52,17 @@ angular.module('os.biospecimen.specimen',
       })
       .state('specimen-addedit', {
         url: '/addedit-specimen',
-        templateUrl: 'modules/biospecimen/participant/specimen/addedit.html',
+        templateProvider: function(PluginReg, $q) {
+          var defaultTmpl = "modules/biospecimen/participant/specimen/addedit.html";
+          return $q.when(PluginReg.getTmpls("specimen-addedit", "page-body", defaultTmpl)).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         resolve: {
-          extensionCtxt: function(Specimen) {
-            return Specimen.getExtensionCtxt();
+          extensionCtxt: function(specimen) {
+            return specimen.getExtensionCtxt();
           }
         },
         controller: 'AddEditSpecimenCtrl',
@@ -68,7 +76,14 @@ angular.module('os.biospecimen.specimen',
       })
       .state('specimen-detail.overview', {
         url: '/overview',
-        templateUrl: 'modules/biospecimen/participant/specimen/overview.html',
+        templateProvider: function(PluginReg, $q) {
+          var defaultTmpl = "modules/biospecimen/participant/specimen/overview.html";
+          return $q.when(PluginReg.getTmpls("specimen-detail", "overview", defaultTmpl)).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
         controller: 'SpecimenOverviewCtrl',
         parent: 'specimen-detail'
       })
@@ -136,15 +151,45 @@ angular.module('os.biospecimen.specimen',
       })
       .state('specimen-create-derivative', {
         url: '/derivative',
-        templateUrl: 'modules/biospecimen/participant/specimen/add-derivative.html',
+        templateProvider: function(PluginReg, $q) {
+          var defaultTmpl = "modules/biospecimen/participant/specimen/add-derivative.html";
+          return $q.when(PluginReg.getTmpls("specimen-create-derivative", "page-body", defaultTmpl)).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt({"lineage": "Derived"});
+          }
+        },
         controller: 'AddDerivativeCtrl',
         parent: 'specimen-root'
       })
-     .state('specimen-create-aliquots', {
+      .state('specimen-create-aliquots', {
         url: '/aliquots',
-        templateUrl: 'modules/biospecimen/participant/specimen/add-aliquots.html',
+        templateProvider: function(PluginReg, $q) {
+          var defaultTmpl = "modules/biospecimen/participant/specimen/add-aliquots.html";
+          return $q.when(PluginReg.getTmpls("specimen-create-aliquots", "page-body", defaultTmpl)).then(
+            function(tmpls) {
+              return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
+            }
+          );
+        },
+        resolve: {
+          extensionCtxt: function(Specimen) {
+            return Specimen.getExtensionCtxt({"lineage": "Aliquot"});
+          }
+        },
         controller: 'AddAliquotsCtrl',
         parent: 'specimen-root'
+      })
+      .state('bulk-add-event', {
+        url: '/bulk-add-event',
+        templateUrl: 'modules/biospecimen/participant/specimen/bulk-add-event.html',
+        controller: 'BulkAddEventCtrl',
+        parent: 'signed-in'
       });
   })
 

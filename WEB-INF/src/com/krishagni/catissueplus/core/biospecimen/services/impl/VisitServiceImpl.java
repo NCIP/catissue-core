@@ -25,12 +25,14 @@ import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.DocumentDeIdentifier;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.biospecimen.services.SprPdfGenerator;
 import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -91,8 +93,8 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			EntityQueryCriteria crit = req.getPayload();			
 			Visit visit = getVisit(crit.getId(), crit.getName());
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
-			return ResponseEvent.response(VisitDetail.from(visit));			
+			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			return ResponseEvent.response(VisitDetail.from(visit, false, !allowPhi));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -116,7 +118,7 @@ public class VisitServiceImpl implements VisitService {
 		while (iterator.hasNext()) {
 			Visit visit = iterator.next();
 			try {
-				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+				AccessCtrlMgr.getInstance().ensureReadVisitRights(visit, false);
 			} catch (OpenSpecimenException ose) {
 				if (ose.getErrorType().equals(ErrorType.USER_ERROR)) {
 					visits.remove(visit);
@@ -172,7 +174,7 @@ public class VisitServiceImpl implements VisitService {
 		try {
 			EntityQueryCriteria crit = req.getPayload();
 			Visit visit = getVisit(crit.getId(), crit.getName());
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit, false);
 			return ResponseEvent.response(visit.getDependentEntities());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -389,6 +391,21 @@ public class VisitServiceImpl implements VisitService {
 		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
 	}
 
+	@PlusTransactional
+	@Override
+	public List<Visit> getSpecimenVisits(List<String> specimenLabels) {
+		List<Pair<Long, Long>> siteCps = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+		if (siteCps != null && siteCps.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		SpecimenListCriteria crit = new SpecimenListCriteria()
+				.labels(specimenLabels)
+				.siteCps(siteCps)
+				.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
+		return daoFactory.getSpecimenDao().getSpecimenVisits(crit);
+	}
+
 	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
 		Visit existing = null;
 		String prevStatus = null;   
@@ -430,7 +447,7 @@ public class VisitServiceImpl implements VisitService {
 		daoFactory.getVisitsDao().saveOrUpdate(existing);
 		existing.addOrUpdateExtension();
 		existing.prePrintLabels(prevStatus);
-		return VisitDetail.from(existing);		
+		return VisitDetail.from(existing, false, false);
 	}
 	
 	private Visit getVisit(Long visitId, String visitName) {

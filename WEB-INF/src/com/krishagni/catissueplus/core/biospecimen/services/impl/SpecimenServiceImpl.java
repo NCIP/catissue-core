@@ -94,11 +94,10 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return ResponseEvent.error(ose);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
+			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
+			SpecimenDetail detail = SpecimenDetail.from(specimen, false, !allowPhi);
 
-			SpecimenDetail detail = SpecimenDetail.from(specimen, false);
 			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(Collections.singletonList(specimen.getId()));
-
 			if (CollectionUtils.isNotEmpty(distributedSpecimenIds)) {
 				detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
 			}
@@ -128,7 +127,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 		try {
 			SpecimenDetail detail = req.getPayload();
 			Specimen specimen = saveOrUpdate(detail, null, null);
-			return ResponseEvent.response(SpecimenDetail.from(specimen, false));
+			return ResponseEvent.response(SpecimenDetail.from(specimen, false, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception ex) {
@@ -149,7 +148,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 			
 			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
 			saveOrUpdate(detail, existing, null);
-			return ResponseEvent.response(SpecimenDetail.from(existing, false));
+			return ResponseEvent.response(SpecimenDetail.from(existing, false, false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -170,7 +169,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 					return ResponseEvent.error(ose);
 				}
 
-				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen);
+				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen, false);
 				specimen.updateStatus(detail.getStatus(), detail.getReason());
 				result.add(SpecimenDetail.from(specimen));
 			}
@@ -191,7 +190,6 @@ public class SpecimenServiceImpl implements SpecimenService {
 
 		for (SpecimenDeleteCriteria criteria : request.getPayload()) {
 			Specimen specimen = getSpecimen(criteria.getId(), criteria.getLabel(), ose);
-
 			if (specimen == null) {
 				return ResponseEvent.error(ose);
 			}
@@ -215,7 +213,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				return ResponseEvent.error(ose);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen, false);
 			return ResponseEvent.response(specimen.getDependentEntities());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -296,6 +294,7 @@ public class SpecimenServiceImpl implements SpecimenService {
 				aliquot.setParentLabel(parentSpecimen.getLabel());
 				aliquot.setParentId(parentSpecimen.getId());
 				aliquot.setCreatedOn(spec.getCreatedOn());
+				aliquot.setExtensionDetail(spec.getExtensionDetail());
 				
 				StorageLocationSummary location = new StorageLocationSummary();
 				location.setName(spec.getContainerName());

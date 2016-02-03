@@ -175,6 +175,7 @@ angular.module('openspecimen')
         formCtxtId: parseInt(extnCtxt.formCtxtId),
         objectId: entity.id,
         showActionBtns: false,
+        showPanel: false, 
         labelAlignment: 'horizontal'
       };
     }
@@ -209,6 +210,10 @@ angular.module('openspecimen')
       return deferred.promise;
     }
 
+    function appendAll(array, elements) {
+      Array.prototype.push.apply(array, elements);
+    }
+
     return {
       clear: clear,
 
@@ -232,6 +237,8 @@ angular.module('openspecimen')
       
       downloadReport : downloadReport,
 
-      booleanPromise: booleanPromise
+      booleanPromise: booleanPromise,
+
+      appendAll: appendAll
     };
   });

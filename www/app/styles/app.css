@@ -363,6 +363,7 @@ h4 + .btn-group {
   color: #666666;
   background: #f5f5f5;
   border: 1px solid #ccc;
+  vertical-align: initial;
 }
 
 .os-btns a.default:hover,

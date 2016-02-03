@@ -845,9 +845,17 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}		
 	}
 	
-	private void setExtension(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+	private void setExtension(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), specimen);
 		specimen.setExtension(extension);
+	}
+	
+	private void setExtension(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("extensionDetail")) {
+			setExtension(detail, specimen, ose);
+		} else {
+			specimen.setExtension(existing.getExtension());
+		}
 	}
 	
 	private User getUser(SpecimenEventDetail detail, OpenSpecimenException ose) {

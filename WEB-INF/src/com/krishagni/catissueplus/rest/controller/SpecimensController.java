@@ -319,9 +319,18 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public FormCtxtSummary getForm() {
+	public FormCtxtSummary getForm(
+			@RequestParam(value = "lineage", required = false, defaultValue="New")
+			String lineage
+			) {
 		ListEntityFormsOp op = new ListEntityFormsOp();
-		op.setEntityType(EntityType.SPECIMEN_EXTN); 
+		if (lineage.equals("Aliquot")) {
+			op.setEntityType(EntityType.ALIQUOT_EXTN);
+		} else if (lineage.equals("Derived")) {
+			op.setEntityType(EntityType.DERIVATIVE_EXTN);
+		} else {
+			op.setEntityType(EntityType.SPECIMEN_EXTN);
+		}
         
 		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
 		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);

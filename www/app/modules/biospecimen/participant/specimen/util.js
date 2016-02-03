@@ -4,6 +4,7 @@ angular.module('os.biospecimen.specimen')
     function collectAliquots(scope) {
       var spec = scope.aliquotSpec;
       var parent = scope.parentSpecimen;
+      var extensionDetail = getExtensionDetail(scope);
 
       if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
         var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
@@ -26,7 +27,6 @@ angular.module('os.biospecimen.specimen')
       }
 
       parent.isOpened = parent.hasChildren = true;
-      parent.hasChildren = true;
       parent.depth = 0;
       parent.closeAfterChildrenCreation = spec.closeParent;
 
@@ -53,7 +53,9 @@ angular.module('os.biospecimen.specimen')
 
       var aliquots = [];
       for (var i = 0; i < spec.noOfAliquots; ++i) {
-        aliquots.push(angular.copy(aliquot));
+        var clonedAlqt = angular.copy(aliquot);
+        clonedAlqt.extensionDetail = extensionDetail;
+        aliquots.push(clonedAlqt);
       }
 
       parent.children = [].concat(aliquots);
@@ -64,6 +66,7 @@ angular.module('os.biospecimen.specimen')
 
     function createDerivatives(scope) {
       var closeParent = scope.derivative.closeParent;
+      scope.derivative.extensionDetail = getExtensionDetail(scope);
       delete scope.derivative.closeParent;
 
       if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
@@ -89,14 +92,6 @@ angular.module('os.biospecimen.specimen')
 
       return Specimen.save(specimensToSave).then(
         function(result) {
-          if (closeParent) {
-            scope.parentSpecimen.activityStatus = result[0].activityStatus;
-            scope.parentSpecimen.children = result[0].children;
-          } else {
-            scope.parentSpecimen.children.push(result[0]);
-          }
-          scope.parentSpecimen.isOpened = true;
-          scope.specimens = Specimen.flatten(scope.specimenTree);
           scope.revertEdit();
         }
       );
@@ -148,6 +143,15 @@ angular.module('os.biospecimen.specimen')
 
       scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       scope.pathologyLoaded = true;
+    }
+
+    function getExtensionDetail(scope) {
+      var formCtrl = scope.deFormCtrl.ctrl;
+      if (!formCtrl || !formCtrl.validate()) {
+        return;
+      }
+
+      return formCtrl.getFormData();
     }
 
     return {

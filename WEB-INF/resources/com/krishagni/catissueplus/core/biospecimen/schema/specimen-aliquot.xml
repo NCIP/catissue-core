@@ -47,5 +47,9 @@
       <caption>#getMessage("specimen_close_parent")</caption>
       <attribute>closeParent</attribute>
     </field>
+
+    <record type="extensions" entityType="AliquotExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
   </record>
 </object-schema>

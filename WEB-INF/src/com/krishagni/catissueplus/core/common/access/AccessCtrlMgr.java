@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.Pair;
@@ -275,6 +276,22 @@ public class AccessCtrlMgr {
 		result.siteIds = siteIds;
 		return result;
 	}
+	
+	public boolean ensurePhiRights(CollectionProtocolRegistration cpr, Operation op) {
+		if (op == Operation.CREATE || op == Operation.UPDATE) {
+			return ensureUpdatePhiRights(cpr);
+		} else {
+			return ensureReadCprRights(cpr);
+		}
+	}
+	
+	public boolean  ensureUpdatePhiRights(CollectionProtocolRegistration cpr) {
+		try {
+			return ensureUpdateCprRights(cpr);
+		} catch (OpenSpecimenException ose) {
+			throw OpenSpecimenException.userError(ParticipantErrorCode.CANNOT_UPDATE_PHI, cpr.getCollectionProtocol().getShortTitle()); 
+		}
+	}
 
 	public boolean ensureCreateCprRights(Long cprId) {
 		return ensureCprObjectRights(cprId, Operation.CREATE);
@@ -284,8 +301,8 @@ public class AccessCtrlMgr {
 		return ensureCprObjectRights(cpr, Operation.CREATE);
 	}
 
-	public void ensureReadCprRights(Long cprId) {
-		ensureCprObjectRights(cprId, Operation.READ);
+	public boolean ensureReadCprRights(Long cprId) {
+		return ensureCprObjectRights(cprId, Operation.READ);
 	}
 
 	public boolean ensureReadCprRights(CollectionProtocolRegistration cpr) {
@@ -364,60 +381,72 @@ public class AccessCtrlMgr {
 	//          Visit and Specimen object access control helper methods                 //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
-	public void ensureCreateOrUpdateVisitRights(Long visitId) {
-		ensureVisitObjectRights(visitId, Operation.UPDATE);
+	public void ensureCreateOrUpdateVisitRights(Long visitId, boolean checkPhiAccess) {
+		ensureVisitObjectRights(visitId, Operation.UPDATE, checkPhiAccess);
 	}
 
 	public void ensureCreateOrUpdateVisitRights(Visit visit) {
-		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.UPDATE);
+		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.UPDATE, visit.hasPhiFields());
 	}
 
-	public void ensureReadVisitRights(Long visitId) {
-		ensureVisitObjectRights(visitId, Operation.READ);
+	public boolean ensureReadVisitRights(Long visitId) {
+		return ensureReadVisitRights(visitId, false);
 	}
 
-	public void ensureReadVisitRights(Visit visit) {
-		ensureReadVisitRights(visit.getRegistration());
+	public boolean ensureReadVisitRights(Long visitId, boolean checkPhiAccess) {
+		return ensureVisitObjectRights(visitId, Operation.READ, checkPhiAccess);
 	}
 
-	public void ensureReadVisitRights(CollectionProtocolRegistration cpr) {
-		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
+	public boolean ensureReadVisitRights(Visit visit) {
+		return ensureReadVisitRights(visit, visit.hasPhiFields());
 	}
 
-	public void ensureDeleteVisitRights(Long visitId) {
-		ensureVisitObjectRights(visitId, Operation.DELETE);
+	public boolean ensureReadVisitRights(Visit visit, boolean checkPhiAccess) {
+		return ensureReadVisitRights(visit.getRegistration(), checkPhiAccess);
+	}
+
+	public boolean ensureReadVisitRights(CollectionProtocolRegistration cpr, boolean checkPhiAccess) {
+		return ensureVisitAndSpecimenObjectRights(cpr, Operation.READ, checkPhiAccess);
 	}
 
 	public void ensureDeleteVisitRights(Visit visit) {
-		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.DELETE);
+		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), Operation.DELETE, false);
 	}
-
-	public void ensureCreateOrUpdateSpecimenRights(Long specimenId) {
-		ensureSpecimenObjectRights(specimenId, Operation.UPDATE);
+	
+	public void ensureCreateOrUpdateSpecimenRights(Long specimenId, boolean checkPhiAccess) {
+		ensureSpecimenObjectRights(specimenId, Operation.UPDATE, checkPhiAccess);
 	}
 
 	public void ensureCreateOrUpdateSpecimenRights(Specimen specimen) {
-		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.UPDATE);
+		ensureCreateOrUpdateSpecimenRights(specimen, specimen.hasPhiFields());
 	}
 
-	public void ensureReadSpecimenRights(Long specimenId) {
-		ensureSpecimenObjectRights(specimenId, Operation.READ);
+	public void ensureCreateOrUpdateSpecimenRights(Specimen specimen, boolean checkPhiAccess) {
+		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.UPDATE, checkPhiAccess);
 	}
 
-	public void ensureReadSpecimenRights(Specimen specimen) {
-		ensureReadSpecimenRights(specimen.getRegistration());
+	public boolean ensureReadSpecimenRights(Long specimenId) {
+		return ensureReadSpecimenRights(specimenId, false);
 	}
 
-	public void ensureReadSpecimenRights(CollectionProtocolRegistration cpr) {
-		ensureVisitAndSpecimenObjectRights(cpr, Operation.READ);
+	public boolean ensureReadSpecimenRights(Long specimenId, boolean checkPhiAccess) {
+		return ensureSpecimenObjectRights(specimenId, Operation.READ, checkPhiAccess);
 	}
 
-	public void ensureDeleteSpecimenRights(Long specimenId) {
-		ensureSpecimenObjectRights(specimenId, Operation.DELETE);
+	public boolean ensureReadSpecimenRights(Specimen specimen) {
+		return ensureReadSpecimenRights(specimen, specimen.hasPhiFields());
+	}
+
+	public boolean ensureReadSpecimenRights(Specimen specimen, boolean checkPhiAccess) {
+		return ensureReadSpecimenRights(specimen.getRegistration(), checkPhiAccess);
+	}
+
+	public boolean ensureReadSpecimenRights(CollectionProtocolRegistration cpr, boolean checkPhiAccess) {
+		return ensureVisitAndSpecimenObjectRights(cpr, Operation.READ, checkPhiAccess);
 	}
 
 	public void ensureDeleteSpecimenRights(Specimen specimen) {
-		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.DELETE);
+		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), Operation.DELETE, false);
 	}
 
 	public List<Pair<Long, Long>> getReadAccessSpecimenSiteCps() {
@@ -438,7 +467,6 @@ public class AccessCtrlMgr {
 			}
 		}
 
-
 		for (Pair<Long, Long> siteCp : siteCpPairs) {
 			if (sitesOfAllCps.contains(siteCp.first())) {
 				continue;
@@ -450,27 +478,31 @@ public class AccessCtrlMgr {
 		return result;
 	}
 
-	private void ensureVisitObjectRights(Long visitId, Operation op) {
+	private boolean ensureVisitObjectRights(Long visitId, Operation op, boolean checkPhiAccess) {
 		Visit visit = daoFactory.getVisitDao().getById(visitId);
 		if (visit == null) {
 			throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND);
 		}
 
-		ensureVisitAndSpecimenObjectRights(visit.getRegistration(), op);
+		return ensureVisitObjectRights(visit, op, checkPhiAccess);
 	}
 
-	private void ensureSpecimenObjectRights(Long specimenId, Operation op) {
+	private boolean ensureVisitObjectRights(Visit visit, Operation op, boolean checkPhiAccess) {
+		return ensureVisitAndSpecimenObjectRights(visit.getRegistration(), op, checkPhiAccess);
+	}
+	
+	private boolean ensureSpecimenObjectRights(Long specimenId, Operation op, boolean checkPhiAccess) {
 		Specimen specimen = daoFactory.getSpecimenDao().getById(specimenId);
 		if (specimen == null) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, specimenId);
 		}
 
-		ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), op);
+		return ensureVisitAndSpecimenObjectRights(specimen.getRegistration(), op, checkPhiAccess);
 	}
 
-	private void ensureVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Operation op) {
+	private boolean ensureVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Operation op, boolean checkPhiAccess) {
 		if (AuthUtil.isAdmin()) {
-			return;
+			return true;
 		}
 
 		String[] ops = null;
@@ -479,7 +511,9 @@ public class AccessCtrlMgr {
 		} else {
 			ops = new String[]{op.getName()};
 		}
-		ensureSprOrVisitAndSpecimenObjectRights(cpr, Resource.VISIT_N_SPECIMEN, ops);
+
+		ensureVisitAndSpecimenObjectRights(cpr, Resource.VISIT_N_SPECIMEN, ops);
+		return checkPhiAccess ? ensurePhiRights(cpr, op) : false;
 	}
 
 	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(String[] ops) {
@@ -795,7 +829,6 @@ public class AccessCtrlMgr {
 	//          Surgical pathology report access control helper methods                 //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
-
 	public void ensureCreateOrUpdateSprRights(Visit visit) {
 		ensureSprObjectRights(visit, Operation.UPDATE);
 	}
@@ -822,16 +855,17 @@ public class AccessCtrlMgr {
 		}
 
 		if (op == Operation.LOCK || op == Operation.UNLOCK) {
-			ensureCreateOrUpdateVisitRights(visit);
+			ensureVisitObjectRights(visit, Operation.UPDATE, false);
 		} else {
-			ensureVisitObjectRights(visit.getId(), op);
+			ensureVisitObjectRights(visit, op, false);
 		}
+
 		CollectionProtocolRegistration cpr = visit.getRegistration();
 		String[] ops = {op.getName()};
-		ensureSprOrVisitAndSpecimenObjectRights(cpr, Resource.SURGICAL_PATHOLOGY_REPORT, ops);
+		ensureVisitAndSpecimenObjectRights(cpr, Resource.SURGICAL_PATHOLOGY_REPORT, ops);
 	}
 
-	private void ensureSprOrVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Resource resource, String[] ops) {
+	private void ensureVisitAndSpecimenObjectRights(CollectionProtocolRegistration cpr, Resource resource, String[] ops) {
 		Long userId = AuthUtil.getCurrentUser().getId();
 		Long cpId = cpr.getCollectionProtocol().getId();
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource.getName(), ops);
@@ -896,7 +930,7 @@ public class AccessCtrlMgr {
 		}
 	}
 	
-	private Boolean isAccessRestrictedBasedOnMrn() {
+	public Boolean isAccessRestrictedBasedOnMrn() {
 		return ConfigUtil.getInstance().getBoolSetting(
 				ConfigParams.MODULE,
 				ConfigParams.MRN_RESTRICTION_ENABLED, 

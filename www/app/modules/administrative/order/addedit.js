@@ -2,7 +2,7 @@
 angular.module('os.administrative.order.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('OrderAddEditCtrl', function(
     $scope, $state, $translate, order, spmnRequest, Institute,
-    Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts) {
+    Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts, Util) {
     
     function init() {
       $scope.order = order;
@@ -17,8 +17,8 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.instituteNames = [];
       $scope.siteList = [];
       $scope.userFilterOpts = {};
-      $scope.input = {labelText: '', allSelected: false, allItemStatus: false};
 
+      $scope.input = {allItemStatus: false};
 
       if (!spmnRequest) {
         loadDps();
@@ -187,31 +187,11 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.order.requester = '';
     }
 
-    $scope.addSpecimens = function() {
-      var labels = 
-        $scope.input.labelText.split(/,|\t|\n/)
-          .map(function(label) { return label.trim(); })
-          .filter(function(label) { return label.length != 0; });
-
-      if (labels.length == 0) {
-        return; 
-      }
-
-      angular.forEach(order.orderItems, function(item) {
-        var idx = labels.indexOf(item.specimen.label);
-        if (idx != -1) {
-          labels.splice(idx, 1);
-        }
-      });
-
-      if (labels.length == 0) {
-        return;
-      }
-
-      Specimen.listForDp(labels, $scope.order.distributionProtocol.id).then(
+    $scope.addSpecimens = function(labels) {
+      return Specimen.listForDp(labels, $scope.order.distributionProtocol.id).then(
         function (specimens) {
-          order.orderItems = order.orderItems.concat(getOrderItems(specimens));
-          $scope.input.labelText = '';
+          Util.appendAll($scope.order.orderItems, getOrderItems(specimens));
+          return true;
         }
       );
     }

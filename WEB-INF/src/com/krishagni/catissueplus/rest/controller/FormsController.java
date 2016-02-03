@@ -30,10 +30,10 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
+import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
-import com.krishagni.catissueplus.core.de.events.GetFormDataOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
@@ -137,11 +137,11 @@ public class FormsController {
 			@RequestParam(value="includeUdn", required=false, defaultValue="false")
 			boolean includeUdn) {
 		
-		GetFormDataOp op = new GetFormDataOp();
-		op.setFormId(formId);
-		op.setRecordId(recordId);
+		FormRecordCriteria crit = new FormRecordCriteria();
+		crit.setFormId(formId);
+		crit.setRecordId(recordId);
 		
-		ResponseEvent<FormDataDetail> resp = formSvc.getFormData(getRequest(op));
+		ResponseEvent<FormDataDetail> resp = formSvc.getFormData(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload().getFormData().getFieldNameValueMap(includeUdn);
 	}
@@ -257,8 +257,12 @@ public class FormsController {
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}/data/{recordId}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public Long deleteRecords(@PathVariable("id") Long formId, @PathVariable("recordId") Long recId) {		
-		ResponseEvent<Long> resp = formSvc.deleteRecord(getRequest(recId));
+	public Long deleteRecords(@PathVariable("id") Long formId, @PathVariable("recordId") Long recId) {
+		FormRecordCriteria crit = new FormRecordCriteria();
+		crit.setFormId(formId);
+		crit.setRecordId(recId);
+
+		ResponseEvent<Long> resp = formSvc.deleteRecord(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

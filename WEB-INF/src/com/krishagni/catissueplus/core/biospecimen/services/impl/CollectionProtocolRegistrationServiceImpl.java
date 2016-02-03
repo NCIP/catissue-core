@@ -314,7 +314,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req) {
 		try {
 			CollectionProtocolRegistration cpr = getCpr(req.getPayload().cprId(), null, null);
-			AccessCtrlMgr.getInstance().ensureReadVisitRights(cpr);
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(cpr, false);
 			return ResponseEvent.response(daoFactory.getVisitsDao().getVisits(req.getPayload()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -330,7 +330,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		try {
 			CollectionProtocolRegistration cpr = getCpr(req.getPayload().getCprId(), null, null);
-			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(cpr);
+			AccessCtrlMgr.getInstance().ensureReadSpecimenRights(cpr, false);
 
 			List<SpecimenDetail> specimens = Collections.emptyList();			
 			if (crit.getVisitId() != null) {
