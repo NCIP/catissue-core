@@ -1,16 +1,11 @@
 angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
-  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, Alerts) {
+  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, FormEntityReg, Alerts) {
 
     var reload = false;
 
     function init() {
       $scope.showFormCtxts = true;
-      $scope.extnEntities = [
-        {entity: 'Participant', name: $translate.instant('entities.participant')},
-        {entity: 'Specimen', name: $translate.instant('entities.specimen')},
-        {entity: 'SpecimenCollectionGroup', name: $translate.instant('entities.visit')},
-        {entity: 'SpecimenEvent', name: $translate.instant('entities.specimen_event')}
-      ];
+      $scope.extnEntities = FormEntityReg.getEntities();
       $scope.form = args.form;
       $scope.cpList = args.cpList;
 
@@ -22,7 +17,7 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
 
         for (var i = 0; i < $scope.extnEntities.length; i++) {
            var entity = $scope.extnEntities[i];
-           if (entity.entity == formCtx.level) {
+           if (entity.name == formCtx.level) {
              formCtx.level = entity;
              break;
            }
@@ -33,23 +28,25 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
         allProtocols: false,
         isMultiRecord: false,
         selectedCps: [],
-        selectedEntity: undefined,
-        isSpecimenEvent: false
+        selectedEntity: undefined
       }
     }
 
-    $scope.onEntitySelect = function(selected) {
-      $scope.cpFormCtxt.isSpecimenEvent = (selected.entity == 'SpecimenEvent');
-    }
-
     $scope.enableAttach = function(formCtxt) {
-      return ((formCtxt.allProtocols || (formCtxt.selectedCps && formCtxt.selectedCps.length > 0)) 
-               && !!formCtxt.selectedEntity) || formCtxt.isSpecimenEvent;
-    };
+      if (!formCtxt.selectedEntity) {
+        return false;
+      }
+
+      if (formCtxt.selectedEntity.allCps) {
+        return true;
+      }
+
+      return formCtxt.allProtocols || (formCtxt.selectedCps && formCtxt.selectedCps.length > 0);
+    }
 
     $scope.attach = function(formCtxt) {
       var cpIds = [];
-      if (formCtxt.allProtocols || formCtxt.isSpecimenEvent) { 
+      if (formCtxt.allProtocols || formCtxt.selectedEntity.allCps) {
         cpIds = [-1];
       } else {
         for (var i = 0; i < formCtxt.selectedCps.length; ++i) {
@@ -60,7 +57,7 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
       var formContext = {
         form: $scope.form,
         cpIds: cpIds,
-        entity: formCtxt.selectedEntity.entity,
+        entity: formCtxt.selectedEntity.name,
         isMultiRecord: formCtxt.isMultiRecord
       }
 
@@ -81,7 +78,7 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
     $scope.removeCtx = function() {
       var cpId = $scope.removeCtxData.ctx.collectionProtocol.id || -1;
       var entity = $scope.removeCtxData.ctx.level;
-      var formContext = $scope.form.newFormContext({form: $scope.form, cpId: cpId, entityType: entity.entity});
+      var formContext = $scope.form.newFormContext({form: $scope.form, cpId: cpId, entityType: entity.name});
 
       formContext.$remove().then(
         function() {
