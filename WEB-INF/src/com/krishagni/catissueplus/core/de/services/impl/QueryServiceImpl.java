@@ -316,9 +316,14 @@ public class QueryServiceImpl implements QueryService {
 				indices = queryResult.getColumnIndices(opDetail.getIndexOf());
 			}
 			
-			return ResponseEvent.response(QueryExecResult.create(
-					queryResult.getColumnLabels(), queryResult.getStringifiedRows(), 
-					queryResult.getDbRowsCount(), indices));
+			return ResponseEvent.response(
+				new QueryExecResult()
+					.setColumnLabels(queryResult.getColumnLabels())
+					.setColumnUrls(queryResult.getColumnUrls())
+					.setRows(queryResult.getStringifiedRows())
+					.setDbRowsCount(queryResult.getDbRowsCount())
+					.setColumnIndices(indices)
+			);
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalArgumentException iae) {
