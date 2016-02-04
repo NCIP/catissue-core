@@ -29,7 +29,7 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.napi.FormData;
 
 public interface FormService {
-	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req);
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<String> req);
 	
 	public ResponseEvent<Container> getFormDefinition(RequestEvent<Long> req);
 	

@@ -63,15 +63,10 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormSummary> getForms(
-			@RequestParam(value="formType", required=false, defaultValue="dataEntry") 
+			@RequestParam(value="formType", required=false, defaultValue="DataEntry")
 			String formType) {
 		
-		FormType type = FormType.fromType(formType);
-		if (type == null) {
-			type = FormType.DATA_ENTRY_FORMS;
-		}
-		
-		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequest(type));
+		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequest(formType));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

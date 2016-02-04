@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -104,21 +105,14 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
     @PlusTransactional
-	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
-		FormType ft = req.getPayload();
-		switch (ft) {
-			case DATA_ENTRY_FORMS:
-				return ResponseEvent.response(formDao.getAllFormsSummary());
-
-			case PARTICIPANT_FORMS:
-			case VISIT_FORMS:
-			case SPECIMEN_FORMS:
-			case SPECIMEN_EVENT_FORMS:
-				return ResponseEvent.response(formDao.getFormsByEntityType(ft.getType()));
-
-			case QUERY_FORMS:
-			default:
-				return ResponseEvent.response(formDao.getQueryForms());
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<String> req) {
+		String entityType = req.getPayload();
+		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
+			return ResponseEvent.response(formDao.getAllFormsSummary());
+		} else if (entityType.equalsIgnoreCase("Query")) {
+			return ResponseEvent.response(formDao.getQueryForms());
+		} else {
+			return ResponseEvent.response(formDao.getFormsByEntityType(entityType));
 		}
 	}
 
