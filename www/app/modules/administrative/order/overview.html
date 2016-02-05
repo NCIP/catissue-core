@@ -53,30 +53,52 @@
       </li>
     </ul>
 
-    <div class="os-section" ng-init="specSect=false">
-      <button class="os-btn-section-collapse os-btn-transparent" ng-click="specSect=!specSect">
-        <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
-        <span ng-if="avCollapsed" class="fa fa-chevron-circle-right"></span>
-      </button>
-      <h3 class="os-sub-section-title" translate="orders.specimens">Specimens</h3>
-      <div collapse="specSect">
-        <div class="os-table os-table-fixed os-table-muted-hdr os-border">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span translate="specimens.list">Specimens</span>
+        <div class="os-action-btns">
+          <button class="btn btn-primary" ng-if="order.status == 'EXECUTED'" ng-click="returnSpecimens()">
+            <span class="fa fa-plus"></span>
+            <span translate="orders.buttons.return_specimen"></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <div class="os-table">
           <div class="os-table-head">
             <div class="row">
-              <div class="col os-col-20" translate="orders.spec.label">Label</div>
+              <div class="col os-col-25">
+                <div class="clearfix">
+                  <div class="pull-left os-select-specimen-cb" ng-if="order.status == 'EXECUTED'">
+                    <os-checkbox ng-model="selection.all" ng-change="toggleAllItemSelect()"></os-checkbox>
+                  </div>
+                  <div class="pull-left" style="padding-left: 20px;" translate="orders.spec.label">Label</div>
+                </div>
+              </div>
+
               <div class="col os-col-30" translate="orders.spec.desc">Description</div>
               <div class="col os-col-20" translate="orders.spec.cp">Collection Protocol</div>
-              <div class="col os-col-15" translate="orders.spec.quantity">Quantity</div>
+              <div class="col os-col-10" translate="orders.spec.quantity">Quantity</div>
               <div class="col os-col-15" translate="orders.status">Status</div>
             </div>
           </div>
           <div class="os-table-body">
-            <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
-              <div class="col os-col-20">
-                <a ui-sref="specimen({specimenId: specimen.id})">
-                  <span>{{specimen.label}}</span>
-                </a>
+            <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen"
+              ng-class="{selected: item.selected}">
+              <div class="col os-col-25">
+                <div class="clearfix">
+                  <div class="pull-left os-select-specimen-cb" ng-if="order.status == 'EXECUTED'">
+                    <os-checkbox ng-model="item.selected" ng-change="toggleItemSelect(item)"></os-checkbox>
+                  </div>
+                  <div class="pull-left" style="padding-left: 20px;">
+                    <a ui-sref="specimen({specimenId: specimen.id})">
+                      <span>{{specimen.label}}</span>
+                    </a>
+                  </div>
+                </div>
               </div>
+
               <div class="col os-col-30">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
@@ -85,7 +107,7 @@
               <div class="col os-col-20">
                 <span>{{specimen.cpShortTitle}}</span>
               </div>
-              <div class="col os-col-15">
+              <div class="col os-col-10">
                 <span>{{item.quantity}}</span>
                 <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
                 </os-specimen-unit>

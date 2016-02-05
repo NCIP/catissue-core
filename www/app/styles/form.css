@@ -52,3 +52,6 @@
   padding-top: 7px;
 }
 
+.form-group.right-submit-btns {
+  text-align: right;
+}

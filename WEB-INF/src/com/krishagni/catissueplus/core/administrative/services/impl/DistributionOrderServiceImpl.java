@@ -2,8 +2,9 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -15,13 +16,17 @@ import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
+import com.krishagni.catissueplus.core.administrative.events.DoReturnEventDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
@@ -37,6 +42,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.Filter.Op;
@@ -238,6 +244,37 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			return ResponseEvent.serverError(e);
 		}
 	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DistributionOrderDetail> returnSpecimen(RequestEvent<DoReturnEventDetail> req) {
+		DoReturnEventDetail eventDetail = req.getPayload();
+		DistributionOrder order = daoFactory.getDistributionOrderDao().getById(eventDetail.getOrder().getId());
+		if (order == null) {
+			return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
+		}
+
+		if (order.getStatus().equals(Status.PENDING)) {
+			return ResponseEvent.userError(DistributionOrderErrorCode.NOT_DISTRIBUTED, order.getName());
+		}
+
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		for (Map<String, Object> valueMap : eventDetail.getValueMapList()) {
+			Map<String, Object> appData = (Map<String, Object>)valueMap.get("appData");
+			Long id = Long.parseLong(appData.get("id").toString());
+			for (DistributionOrderItem item : order.getOrderItems()) {
+				if (item.getId() == id) {
+					updateItemReturnEventData(order, item, valueMap, ose);
+					item.returnSpecimen();
+					break;
+				}
+			}
+		}
+
+		ose.checkAndThrow();
+		daoFactory.getDistributionOrderDao().saveOrUpdate(order, true);
+		return ResponseEvent.response(DistributionOrderDetail.from(order));
+	}
 	
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
@@ -328,6 +365,55 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		props.put("$subject", subjectParams);
 		props.put("order", order);
 		emailService.sendEmail(ORDER_DISTRIBUTED_EMAIL_TMPL, rcpts, props);
+	}
+
+	private void ensureItemIsNotReturned(DistributionOrderItem item, OpenSpecimenException ose) {
+		if (item.getStatus().equals(DistributionOrderItem.Status.RETURNED)) {
+			ose.addError(DistributionOrderErrorCode.SPEC_ALREADY_RETURNED, item.getSpecimen().getLabel());
+		}
+	}
+
+	private void validateItemReturnQty(DistributionOrderItem item, BigDecimal returnQty, OpenSpecimenException ose) {
+		if (NumUtil.lessThan(item.getQuantity(), returnQty)) {
+			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_QUANTITY, item.getSpecimen().getLabel());
+		}
+	}
+
+	private void validateItemReturnDate(DistributionOrder order, DistributionOrderItem item, Date returnDate,
+		OpenSpecimenException ose) {
+		if (order.getExecutionDate().after(returnDate)) {
+			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_DATE, item.getSpecimen().getLabel());
+		}
+	}
+
+	private void updateItemReturnEventData(DistributionOrder order, DistributionOrderItem item,
+		Map<String, Object> valueMap, OpenSpecimenException ose) {
+		ensureItemIsNotReturned(item, ose);
+
+		BigDecimal returnQty = new BigDecimal(valueMap.get("quantity").toString());
+		validateItemReturnQty(item, returnQty, ose);
+		item.setReturnQuantity(returnQty);
+
+		Object location = valueMap.get("location");
+		if (location != null) {
+			Long locationId = new Long(location.toString());
+			StorageContainer container = daoFactory.getStorageContainerDao().getById(locationId);
+			item.setReturnLocation(container);
+			StorageContainerPosition position = container.nextAvailablePosition();
+			item.setReturnPosOne(position.getPosOneOrdinal());
+			item.setReturnPosTwo(position.getPosTwoOrdinal());
+			item.setReturnPosOneStr(position.getPosOne());
+			item.setReturnPosTwoStr(position.getPosTwo());
+		}
+
+		Long userId = new Long(valueMap.get("user").toString());
+		item.setReturnUser(daoFactory.getUserDao().getById(userId));
+
+		Date returnDate = new Date(new Long(valueMap.get("time").toString()));
+		validateItemReturnDate(order, item, returnDate, ose);
+		item.setReturnDate(returnDate);
+
+		item.setReturnComments(valueMap.get("comments").toString());
 	}
 	
 	private static final String ORDER_DISTRIBUTED_EMAIL_TMPL = "order_distributed";

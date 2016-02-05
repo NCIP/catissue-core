@@ -181,5 +181,19 @@
         o.status = 'EXECUTED' and
         sp.id in (:specimenIds)
     </query>
+
+    <query name="getSpmnDistributionStatus">
+      select
+        sp.id, max(o.executionDate), max(item.returnDate)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem item
+        join item.specimen sp
+        join item.order o
+      where
+        o.status = 'EXECUTED' and
+        sp.id in (:specimenIds)
+      group by
+        sp.id
+    </query>
   </class>
 </hibernate-mapping>

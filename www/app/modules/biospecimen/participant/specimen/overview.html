@@ -9,13 +9,16 @@
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.collection_status">Status</strong>
-        <ng-switch on="!specimen.distributed">
+        <ng-switch on="!specimen.distributionStatus">
           <ng-switch ng-switch-when="true" on="specimen.status">
             <span ng-switch-when="Collected" class="value value-md os-status-collected">Collected</span>
             <span ng-switch-when="Missed Collection" class="value value-md os-status-missed">Missed Collection</span>
             <span ng-switch-default class="value value-md os-status-pending">Pending</span>
           </ng-switch>
-          <span ng-switch-when="false" class="value value-md os-status-distributed" ng-if="specimen.distributed">Distributed</span>
+          <ng-switch ng-switch-when="false" on="specimen.distributionStatus">
+            <span ng-switch-when="Distributed" class="value value-md os-status-distributed">Distributed</span>
+            <span ng-switch-when="Returned" class="value value-md os-status-returned">Returned</span>
+          </ng-switch>
         </ng-switch>
       </li>
 

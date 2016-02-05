@@ -558,7 +558,8 @@
       "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
       "details": "Event Details",
       "copy_first_to_all": "Copy First To All",
-      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them"
+      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+      "events_saved": "Event saved successfully"
     }
   },
 
@@ -1363,11 +1364,8 @@
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By",
     "add_event": "Add Event",
-    "visit": "Visit",
-    "ppid": "PPID",
     "location": "Storage Location",
-    "no_specimens_to_add_event": "Please select at least one specimen to add event",
-    "events_saved": "Event saved successfully"
+    "no_specimens_to_add_event": "Please select at least one specimen to add event"
   },
 
   "orders": {
@@ -1401,6 +1399,11 @@
     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
 
     "filters": "Filters",
+
+    "return_specimen": "Return Specimen",
+    "no_specimen_to_return": "Please select at least one specimen to return",
+    "specimen_returned": "Specimens returned successfully",
+    "specimen_already_returned": "The specimen {{spec_label}} is already returned",
    
     "menu": {
       "overview": "Overview"
@@ -1423,13 +1426,16 @@
 
     "item_statuses": {
       "DISTRIBUTED": "Distribute",
-      "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
+      "DISTRIBUTED_AND_CLOSED": "Distribute and Close",
+      "RETURNED": "Returned"
     },
 
     "buttons": {
       "distribute": "Distribute",
       "save_draft": "Save Draft",
-      "download_report": "Download Report"
+      "download_report": "Download Report",
+      "return_specimen": "Return",
+      "copy_first_to_all": "Copy First To All"
     },
 
     "tooltip": {

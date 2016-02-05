@@ -3,7 +3,8 @@ angular.module('os.administrative.order',
     'ui.router',
     'os.administrative.order.list',
     'os.administrative.order.detail',
-    'os.administrative.order.addedit'
+    'os.administrative.order.addedit',
+    'os.administrative.order.returnspecimen'
   ])
 
   .config(function($stateProvider) {
@@ -56,5 +57,16 @@ angular.module('os.administrative.order',
         url: '/overview',
         templateUrl: 'modules/administrative/order/overview.html',
         parent: 'order-detail'
+      })
+      .state('return-specimen', {
+        url: '/orders/:orderId/return-specimen',
+        resolve: {
+          order: function($stateParams, DistributionOrder) {
+            return DistributionOrder.getById($stateParams.orderId);
+          }
+        },
+        templateUrl: 'modules/administrative/order/return-specimen.html',
+        controller: 'ReturnSpecimenCtrl',
+        parent: 'order-root'
       });
   });

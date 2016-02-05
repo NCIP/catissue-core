@@ -35,6 +35,14 @@ angular.module('os.administrative.models.order', ['os.common.models'])
         }
       );
     }
+
+    DistributionOrder.prototype.returnSpecimen = function(data) {
+      return $http.post(DistributionOrder.url() + this.$id() + '/return-specimen', data).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
     
     return DistributionOrder;
   });

@@ -86,12 +86,13 @@
 
                     <span class="fa fa-circle"
                       ng-class="{
-                        'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId && !specimen.distributed,
+                        'os-status-unplanned': specimen.status == 'Collected' && !specimen.reqId && !specimen.distributionStatus,
                         'os-status-collected': specimen.status == 'Collected',
                         'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                         'os-status-not-collected': specimen.status == 'Missed Collection',
-                        'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributed,
-                        'os-status-distributed': !!specimen.distributed}">
+                        'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributionStatus,
+                        'os-status-distributed': !!specimen.distributionStatus && specimen.distributionStatus == 'Distributed',
+                        'os-status-returned': !!specimen.distributionStatus && specimen.distributionStatus == 'Returned'}">
                     </span>
 
                     <a ui-sref="specimen-detail.overview(

@@ -35,7 +35,15 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	SPECIMEN_DOES_NOT_EXIST,
 	
-	INVALID_REQUESTER_RECV_SITE_INST;
+	INVALID_REQUESTER_RECV_SITE_INST,
+
+	NOT_DISTRIBUTED,
+
+	INVALID_RETURN_QUANTITY,
+
+	SPEC_ALREADY_RETURNED,
+
+	INVALID_RETURN_DATE;
 	
 	@Override
 	public String code() {

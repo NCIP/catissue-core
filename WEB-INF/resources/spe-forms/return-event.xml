@@ -1,0 +1,63 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenReturnEvent</name>
+    <caption>#getMessage("return_event")</caption>
+    <table>OS_SPMN_DISTRIBUTIONS_VIEW</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>quantity</name>
+        <udn>quantity</udn>
+        <caption>#getMessage("order_items_quantity")</caption>
+        <column>RETURN_QUANTITY</column>
+        <mandatory>true</mandatory>
+        <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
+      </numberField>
+    </row>
+
+    <row>
+      <storageContainer>
+        <name>location</name>
+        <udn>location</udn>
+        <caption>#getMessage("return_event_storage_location")</caption>
+        <column>RETURN_CONTAINER_ID</column>
+      </storageContainer>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("return_event_user")</caption>
+        <column>RETURN_USER_ID</column>
+        <showInGrid>true</showInGrid>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("return_event_date")</caption>
+        <column>RETURN_DATE</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("order_comments")</caption>
+        <column>RETURN_COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

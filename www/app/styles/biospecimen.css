@@ -69,6 +69,11 @@
   padding: 0px 4px;
 }
 
+.fa.os-status-returned:before {
+  color: #d533ff;
+  padding: 0px 4px;
+}
+
 .fa.os-status-unplanned:before {
   color: #3B933B;
   padding: 0px 4px;
@@ -118,7 +123,8 @@
 .os-key-values .value.os-status-pending,
 .os-key-values .value.os-status-shipped,
 .os-key-values .value.os-status-received,
-.os-key-values .value.os-status-distributed {
+.os-key-values .value.os-status-distributed,
+.os-key-values .value.os-status-returned {
   width: initial!important;
   border-radius: 4px;
   font-weight: bold;
@@ -143,6 +149,10 @@
 
 .os-key-values .value.os-status-distributed {
   background: #5bc0de;
+}
+
+.os-key-values .value.os-status-returned {
+  background: #d533ff;
 }
 
 .os-key-values .value.os-status-shipped {

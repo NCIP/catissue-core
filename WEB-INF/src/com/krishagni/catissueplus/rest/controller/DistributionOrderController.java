@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
+import com.krishagni.catissueplus.core.administrative.events.DoReturnEventDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -33,7 +35,7 @@ public class DistributionOrderController {
 	
 	@Autowired
 	private DistributionOrderService distributionService;
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -130,7 +132,28 @@ public class DistributionOrderController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryDataExportResult exportDistributionReport(@PathVariable("id") Long orderId) {
-		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(new RequestEvent<Long>(orderId));
+		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(getRequest(orderId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/return-specimen")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public DistributionOrderDetail returnSpecimen(
+		@PathVariable("id")
+		Long orderId,
+
+		@RequestBody
+		List<Map<String, Object>> valueMapList) {
+		DistributionOrderSummary order = new DistributionOrderSummary();
+		order.setId(orderId);
+
+		DoReturnEventDetail eventDetail = new DoReturnEventDetail();
+		eventDetail.setOrder(order);
+		eventDetail.setValueMapList(valueMapList);
+
+		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimen(getRequest(eventDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
