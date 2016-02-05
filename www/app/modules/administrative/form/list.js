@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.form.list', ['os.administrative.models'])
   .controller('FormListCtrl', function(
-    $scope, $state, $modal, $translate, Form,
+    $scope, $state, $modal, $translate, Form, FormEntityReg,
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
@@ -57,6 +57,10 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
                 form: form,
                 cpList: $scope.cpList
               }
+            },
+
+            entities: function(FormEntityReg) {
+              return FormEntityReg.getEntities();
             }
           }
         });
