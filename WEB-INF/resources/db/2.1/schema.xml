@@ -80,21 +80,25 @@
 
   <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in catissue_specimen table">
     <validCheckSum>7:ff0fa5028cf6472252cc5abdb49b9597</validCheckSum>
+    <validCheckSum>7:5d9850a7d64a8b5253d7529bb5a1eb7e</validCheckSum>
     <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify available quantity from double to big decimal in catissue_specimen table">
     <validCheckSum>7:1f012a0c182e8ea1354684d3eda47ceb</validCheckSum>
+    <validCheckSum>7:d47348a821355dfe3e9d2eb4ea486f73</validCheckSum>
     <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify quantity from double to big decimal in os_order_items table">
     <validCheckSum>7:0f5b826dd54303a145a68941ba09f861</validCheckSum>
+    <validCheckSum>7:c0838b43757fb8b2879f04cbd5495e3a</validCheckSum>
     <modifyDataType tableName="OS_ORDER_ITEMS" columnName="QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
   <changeSet author="ahegade" id="Modify quantity from double to big decimal in catissue_cp_req_specimen table">
     <validCheckSum>7:ecbb35ad1bc1dc02ee26f4883e5c6e10</validCheckSum>
+    <validCheckSum>7:1d78eb7f01bab7688f06e5cd65db036f</validCheckSum>
     <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
