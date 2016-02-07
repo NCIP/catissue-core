@@ -37,4 +37,50 @@
     </sql>
   </changeSet>
   
+  <changeSet author="nmarwaha" id="View to compute container hierarchy" runOnChange="true" dbms="mysql">
+    <sql> 
+      create or replace view os_container_hierarchy_view as 
+        select 
+          h.descendent_id as container_id, 
+          group_concat(distinct a.name order by a.identifier separator ' -> ') as hierarchy 
+        from 
+          os_containers_hierarchy h 
+          inner join os_storage_containers a on a.identifier = h.ancestor_id 
+        where 
+          a.activity_status != 'Disabled' 
+        group by 
+          h.descendent_id;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="View to compute container hierarchy" runOnChange="true" dbms="oracle">
+    <sql> 
+      create or replace view cont_hierarchy_view as (
+        select 
+          h.descendent_id as container_id, 
+          LISTAGG(a.name, '->') within group( order by a.identifier) as hierarchy 
+        from 
+          os_containers_hierarchy h 
+          inner join os_storage_containers a on a.identifier = h.ancestor_id 
+        where 
+          a.activity_status != 'Disabled' 
+        group by 
+          h.descendent_id
+      )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="View to assist query containers based on ancestor container names" runOnChange="true">
+    <sql> 
+      create or replace view os_container_ancestors_view as 
+        select 
+          h.descendent_id as container_id, a.name as ancestor_name
+        from 
+          os_containers_hierarchy h 
+          inner join os_storage_containers a on a.identifier = h.ancestor_id 
+        where 
+          a.activity_status != 'Disabled';
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
