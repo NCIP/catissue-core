@@ -315,19 +315,12 @@
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>CONSENT_WITNESS</parentKey>
         <row>  
-          <textField>
-            <name>firstName</name>
-            <udn>firstName</udn>
-            <caption>#getMessage("participant_consent_witness_first_name")</caption>
-            <column>FIRST_NAME</column>
-          </textField>
-          
-          <textField>
-            <name>lastName</name>
-            <udn>lastName</udn>
-            <caption>#getMessage("participant_consent_witness_last_name")</caption>
-            <column>LAST_NAME</column>
-          </textField>
+          <userField>
+            <name>consentWitness</name>
+            <udn>consentWitness</udn>
+            <caption>#getMessage("participant_consent_witness_name")</caption>
+            <column>IDENTIFIER</column>
+          </userField>    
         </row>
       </subForm>
     </row>

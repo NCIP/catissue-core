@@ -357,35 +357,6 @@
 
     <row>
       <subForm>
-        <name>externalIdentifiers</name>
-        <udn>externalIdentifiers</udn>
-        <caption>#getMessage("specimen_external_ids")</caption>
-        <table>CATISSUE_EXTERNAL_IDENTIFIER</table>
-        <foreignKey>SPECIMEN_ID</foreignKey>
-        <parentKey>IDENTIFIER</parentKey>
-        <row>
-          <textField>
-            <name>externalIdentifierName</name>
-            <udn>externalIdentifierName</udn>
-            <caption>#getMessage("specimen_external_ids_name")</caption>
-            <column>NAME</column>
-            <maxLength>255</maxLength>
-          </textField>  
-        </row>
-        <row>
-          <textField>
-            <name>externalIdentifierValue</name>
-            <udn>externalIdentifierValue</udn>
-            <caption>#getMessage("specimen_external_ids_value")</caption>
-            <column>VALUE</column>
-            <maxLength>255</maxLength>
-          </textField>  
-        </row>
-      </subForm>
-    </row>
-
-    <row>
-      <subForm>
         <name>specimenOrders</name>
         <udn>specimenOrders</udn>
         <caption>#getMessage("specimen_order_items")</caption>
