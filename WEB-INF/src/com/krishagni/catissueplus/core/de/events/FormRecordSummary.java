@@ -71,49 +71,12 @@ public class FormRecordSummary {
 	}
 	
 	public void addFieldValue(ControlValue cv) {
-		FieldValue fv = new FieldValue();
-		fv.setName(cv.getControl().getUserDefinedName());
-		fv.setCaption(cv.getControl().getCaption());
-		fv.setValue(cv.getValue());
-		
-		fieldValues.add(fv);
+		fieldValues.add(FieldValue.from(cv));
 	}
 	
 	public void addFieldValues(Collection<ControlValue> cvs) {
 		for (ControlValue cv : cvs) {
 			addFieldValue(cv);
-		}
-	}
-
-	public static class FieldValue {
-		private String name;
-		
-		private String caption;
-		
-		private Object value;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getCaption() {
-			return caption;
-		}
-
-		public void setCaption(String caption) {
-			this.caption = caption;
-		}
-
-		public Object getValue() {
-			return value;
-		}
-
-		public void setValue(Object value) {
-			this.value = value;
 		}
 	}
 }

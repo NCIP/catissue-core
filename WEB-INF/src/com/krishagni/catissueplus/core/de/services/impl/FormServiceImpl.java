@@ -34,7 +34,6 @@ import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
@@ -567,7 +566,16 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	//
+	// Internal APIs
+	//
+	@Override
+	public List<FormData> getSummaryRecords(Long formId, List<Long> recordIds) {
+		FormDataManager mgr = new FormDataManagerImpl(false);
+		return mgr.getSummaryData(formId, recordIds);
+	}
+
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);
