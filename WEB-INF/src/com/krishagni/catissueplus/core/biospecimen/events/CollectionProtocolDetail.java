@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpSpecimenLabelPrintSetting;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
@@ -39,6 +40,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private Boolean manualSpecLabelEnabled;
 	
 	private String spmnLabelPrePrintMode;
+	
+	private List<CpSpecimenLabelPrintSettingDetail> spmnLabelPrintSettings;
 	
 	private Boolean aliquotsInSameContainer;
 
@@ -165,6 +168,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
 	}
 
+	public List<CpSpecimenLabelPrintSettingDetail> getSpmnLabelPrintSettings() {
+		return spmnLabelPrintSettings;
+	}
+
+	public void setSpmnLabelPrintSettings(List<CpSpecimenLabelPrintSettingDetail> spmnLabelPrintSettings) {
+		this.spmnLabelPrintSettings = spmnLabelPrintSettings;
+	}
+
 	public Boolean getAliquotsInSameContainer() {
 		return aliquotsInSameContainer;
 	}
@@ -226,6 +237,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode().name());
+		result.setSpmnLabelPrintSettings(CpSpecimenLabelPrintSettingDetail.from(cp.getSpmnLabelPrintSettings()));
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));

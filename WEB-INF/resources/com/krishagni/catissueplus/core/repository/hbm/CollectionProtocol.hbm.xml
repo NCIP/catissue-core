@@ -64,6 +64,11 @@
       </type>
     </property>
     
+    <set name="spmnLabelPrintSettings" inverse="true" cascade="all-delete-orphan">
+      <key column="CP_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CpSpecimenLabelPrintSetting"/>
+    </set>
+    
     <property name="consentsWaived" column="CONSENTS_WAIVED"/>
 
     <set name="consentTier" table="CATISSUE_CONSENT_TIER" inverse="true" cascade="all-delete-orphan" order-by="id">

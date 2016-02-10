@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- test check-in -->
+
 <hibernate-mapping auto-import="false">
   <class 
     name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
@@ -63,11 +63,13 @@
     <property name="labelAutoPrintMode" column="LABEL_AUTO_PRINT_MODE">
       <type name="org.hibernate.type.EnumType">
         <param name="enumClass">
-          com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement$LabelAutoPrintMode
+          com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol$SpecimenLabelAutoPrintMode
         </param>
         <param name="type">12</param>
       </type>
     </property>
+    
+    <property name="labelPrintCopies" column="LABEL_PRINT_COPIES"/>
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
   

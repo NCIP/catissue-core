@@ -83,4 +83,60 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vgaikwad" id="Specimen label print settings at CP level">
+    <createTable tableName="OS_CP_SPMN_LBL_PRINT_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="LINEAGE" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="PRINT_MODE" type="${text.type}(32)">
+      </column>
+      
+      <column name="COPIES" type="${int.type}">
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="CP specimen label print settings sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SPMN_LBL_PRINT_SETTINGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on specimen label print settings CP">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_SPMN_PRINT_SETTINGS"
+      baseTableName="OS_CP_SPMN_LBL_PRINT_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Only one print setting per (CP, lineage) combination">
+    <addUniqueConstraint 
+      constraintName="OS_CP_SPMN_PRINT_SETTINGS_UQ" 
+      tableName="OS_CP_SPMN_LBL_PRINT_SETTINGS" 
+      columnNames="CP_ID,LINEAGE"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Number of copies of specimen labels to print">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="LABEL_PRINT_COPIES" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Removing unused num copies from print job">
+    <dropColumn tableName="OS_LABEL_PRINT_JOBS" columnName="NUM_COPIES"/>
+  </changeSet>
 </databaseChangeLog>

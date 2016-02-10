@@ -49,6 +49,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	private String labelFmt;
 	
 	private String labelAutoPrintMode;
+
+	private Integer labelPrintCopies;
 	
 	private Integer sortOrder;
 	
@@ -203,6 +205,14 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	public void setLabelAutoPrintMode(String labelAutoPrintMode) {
 		this.labelAutoPrintMode = labelAutoPrintMode;
 	}
+	
+	public Integer getLabelPrintCopies() {
+		return labelPrintCopies;
+	}
+
+	public void setLabelPrintCopies(Integer labelPrintCopies) {
+		this.labelPrintCopies = labelPrintCopies;
+	}
 
 	public Integer getSortOrder() {
 		return sortOrder;
@@ -313,7 +323,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		detail.setCollectionContainer(sr.getCollectionContainer());
 		detail.setReceiver(sr.getReceiver() == null ? null : UserSummary.from(sr.getReceiver()));
 		detail.setLabelFmt(sr.getLabelFormat());
-		detail.setLabelAutoPrintMode(sr.getLabelAutoPrintMode().name());
+		detail.setLabelAutoPrintMode(sr.getLabelAutoPrintMode() == null ? null : sr.getLabelAutoPrintMode().name());
+		detail.setLabelPrintCopies(sr.getLabelPrintCopies());
 		detail.setSortOrder(sr.getSortOrder());
 		detail.setEventId(sr.getCollectionProtocolEvent().getId());
 		

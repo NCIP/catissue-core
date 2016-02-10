@@ -145,15 +145,22 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="srs.auto_print_label">Auto Print Label</label>
+        <label class="control-label col-xs-4" translate="srs.when_to_print">When to Print</label>
         <div class="col-xs-8">
           <os-select name="labelAutoPrintMode" ng-model="sr.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
             display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(sr, 'Primary')" 
-            placeholder="{{'srs.auto_print_label' | translate}}">
+            placeholder="{{'srs.when_to_print' | translate}}">
           </os-select>
           <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!sr.labelFmtSpecified"></div>
         </div>
-
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-4" translate="srs.label_print_copies">Label Print Copies</label>
+        <div class="col-xs-8">
+          <input name="labelPrintCopies" ng-model="sr.labelPrintCopies" class="form-control"
+            type="text" placeholder="{{'srs.label_print_copies' | translate}}" ng-pattern="/^[0-9]+$/">
+          <div os-field-error field="srForm.labelPrintCopies"></div>
+        </div>
       </div>
       <div class="os-divider"></div>
       <div ng-if="!sr.id">
@@ -174,65 +181,72 @@
             </label>
           </div>
         </div>
-        <div ng-if="createPooledSpmns">
-          <div class="form-group clearfix">
-            <label class="control-label col-xs-4">
-              <span translate="specimens.list">Specimens</span>
-            </label>
-            <div class="col-xs-2" ng-if="codingEnabled">
-              <label class="control-label">
-                <span translate="srs.code">Code</span>
-              </label>
-            </div>
-            <div class="col-xs-2">
-              <label class="control-label">
-                <span translate="srs.initial_qty">Initial Quantity</span>
-              </label>
-            </div>
-            <div class="col-xs-3">
-              <label class="control-label">
-                <span translate="srs.auto_print_label">Auto Print Label</span>
-              </label>
-            </div>
-          </div>
-          <div class="form-group clearfix" ng-form="psForm" ng-repeat="poolSpmn in sr.specimensPool">
-            <label class="control-label col-xs-4">
-              <span>{{$index + 1}}</span>
-            </label>
-            <div class="col-xs-2" ng-if="codingEnabled">
-              <input name="code" ng-model="poolSpmn.code" class="form-control" type="text" ng-maxlength="16">
-              <div os-field-error field="psForm.code"></div>
-            </div>
-            <div class="col-xs-2">
-              <div class="input-group">
-                <input name="initialQty" ng-model="poolSpmn.initialQty" class="form-control" type="text"
-                  required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
-                <div class="input-group-addon">
-                  <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
-                </div>
-              </div>
-              <div os-field-error field="psForm.initialQty"></div>
-            </div>
-            <div class="col-xs-3">
-              <os-select name="printLabelEvent" ng-model="poolSpmn.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
-                display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(poolSpmn, 'Primary')">
-              </os-select>
-              <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!poolSpmn.labelFmtSpecified"></div>
-            </div>
-            <div class="col-xs-1">
-              <button class="btn btn-default" ng-click="removeSpecimenPoolReq(poolSpmn)">
-                <span class="fa fa-trash"></span>
-              </button>
-            </div>
-          </div>
-          <div class="form-group clearfix">
-            <div class="col-xs-offset-4 col-xs-8">
+        <div class="form-group clearfix" ng-if="createPooledSpmns">
+          <div class="col-xs-12">
+            <table class="os-table os-table-muted-hdr os-border bulk-edit">
+              <thead class="os-table-head">
+                <tr class="row">
+                  <th class="col os-col-20" ng-if="codingEnabled">
+                    <span translate="srs.code">Code</span>
+                  </th>
+                  <th class="col" ng-class="codingEnabled ? os-col-20 : os-col-30">
+                    <span translate="srs.initial_qty">Quantity</span>
+                  </th>
+                  <th class="col os-col-35">
+                    <span translate="srs.when_to_print">When to Print</span>
+                  </th>
+                  <th class="col" ng-class="codingEnabled ? os-col-20 : os-col-30">
+                    <span translate="srs.label_print_copies">Label Print Copies</span>
+                  </th>
+                  <th class="col os-col-5">
+                    <span>&nbsp;</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="os-table-body">
+                <tr class="row" ng-form="psForm" ng-repeat="poolSpmn in sr.specimensPool">
+                  <td class="col" ng-if="codingEnabled">
+                    <input name="code" ng-model="poolSpmn.code" os-md-input class="form-control" type="text" ng-maxlength="16">
+                    <div os-field-error field="psForm.code"></div>
+                  </td>
+                  <td class="col">
+                    <div class="os-input-addon-grp">
+                      <input name="initialQty" ng-model="poolSpmn.initialQty" os-md-input class="form-control" type="text"
+                        required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
+                      <div class="os-input-addon-right">
+                        <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
+                      </div>
+                    </div>
+                    <div os-field-error field="psForm.initialQty"></div>
+                  </td>
+                  <td class="col">
+                    <os-select name="printMode" ng-model="poolSpmn.labelAutoPrintMode" os-md-input 
+                      list="spmnLabelAutoPrintModes" display-prop="displayName" select-prop="name" 
+                      on-change="ensureLabelFmtSpecified(poolSpmn, 'Primary')">
+                    </os-select>
+                    <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!poolSpmn.labelFmtSpecified"></div>
+                  </td>
+                  <td class="col">
+                    <input name="labelPrintCopies" ng-model="poolSpmn.labelPrintCopies" os-md-input class="form-control" 
+                      type="text" ng-pattern="/^[0-9]+$/">
+                    <div os-field-error field="psForm.labelPrintCopies"></div>
+                  </td>
+                  <td class="col">
+                    <button class="btn btn-xs btn-default" ng-click="removeSpecimenPoolReq(poolSpmn)">
+                      <span class="fa fa-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
               <a ng-click="addSpecimenPoolReq()">
                 <span translate="common.buttons.add_another">Add Another</span>
               </a>
             </div>
           </div>
         </div>
+
         <div class="os-divider"></div>
       </div>
       <div class="form-group">

@@ -157,6 +157,10 @@
     "view_details": "View Details",
     "view_participants": "View Participants",
     "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
+    "print_settings": "Print Settings",
+    "lineage": "Lineage",
+    "when_to_print": "When to Print",
+    "copies": "Copies",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
@@ -217,8 +221,10 @@
       "repository": "Repository",
       "select_repository": "Select Repository"
     },
+
     "label_formats" : "Label Formats",
     "anticipated_participant_count": "Expected Registrations",
+
     "label_format": {
       "specimen": "Specimen",
       "visit": "Visit",
@@ -237,6 +243,12 @@
     "spmn_label_pre_print_modes": {
       "ON_VISIT": "On Visit",
       "NONE": "None"
+    },
+
+     "spmn_lineages": {
+      "New": "Primary",
+      "Derived": "Derivative",
+      "Aliquot": "Aliquot"
     }
   },
 
@@ -582,7 +594,8 @@
     "pathology": "Pathology",
     "storage_type": "Storage Type",
     "label_fmt": "Label Format",
-    "auto_print_label": "Auto Print Label",
+    "when_to_print": "When to Print",
+    "label_print_copies": "Label Print Copies",
     "available_qty": "Available Quantity",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",

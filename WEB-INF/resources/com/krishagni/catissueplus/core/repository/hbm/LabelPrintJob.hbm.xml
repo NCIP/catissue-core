@@ -21,8 +21,6 @@
  
     <property name="submissionDate" column="SUBMISSION_DATE" not-null="true"/>
 
-    <property name="numCopies" column="NUM_COPIES"/>
-
     <set name="items" table="OS_LABEL_PRINT_JOB_ITEMS" inverse="true" cascade="all-delete-orphan" order-by="id asc">
       <key column="JOB_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem"/>

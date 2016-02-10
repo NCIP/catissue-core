@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem.Status;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplToken;
 import com.krishagni.catissueplus.core.common.domain.LabelTmplTokenRegistrar;
+import com.krishagni.catissueplus.core.common.domain.PrintItem;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
@@ -60,7 +61,7 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 	}
 
 	@Override
-	public LabelPrintJob print(List<Specimen> specimens, int numCopies) {		
+	public LabelPrintJob print(List<PrintItem<Specimen>> printItems) {		
 		try {
 			String ipAddr = AuthUtil.getRemoteAddr();
 			User currentUser = AuthUtil.getCurrentUser();
@@ -69,17 +70,17 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			job.setSubmissionDate(Calendar.getInstance().getTime());
 			job.setSubmittedBy(currentUser);
 			job.setItemType(Specimen.getEntityName());
-			job.setNumCopies(numCopies <= 0 ? 1 : numCopies);
 
 			List<Map<String, Object>> labelDataList = new ArrayList<Map<String,Object>>();
-			for (Specimen specimen : specimens) {				
+			for (PrintItem<Specimen> printItem : printItems) {				
 				boolean found = false;
+				Specimen specimen = printItem.getObject();
 				for (SpecimenLabelPrintRule rule : rules) {
 					if (!rule.isApplicableFor(specimen, currentUser, ipAddr)) {
 						continue;
 					}
 					
-					Map<String, String> labelDataItems = rule.getDataItems(specimen);
+					Map<String, String> labelDataItems = rule.getDataItems(printItem);
 
 					LabelPrintJobItem item = new LabelPrintJobItem();
 					item.setJob(job);

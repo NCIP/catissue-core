@@ -55,7 +55,15 @@ public enum CpErrorCode implements ErrorCode {
 	
 	DUP_CP_SITE_CODES,
 	
-	INVALID_SPMN_LABEL_PRE_PRINT_MODE;
+	INVALID_SPMN_LABEL_PRE_PRINT_MODE,
+	
+	SPMN_LINEAGE_REQUIRED,
+	
+	INVALID_SPMN_LINEAGE,
+	
+	INVALID_SPMN_LABEL_PRINT_MODE,
+	
+	DUP_PRINT_SETTING;
 	
 	@Override
 	public String code() {
