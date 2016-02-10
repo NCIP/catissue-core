@@ -9,7 +9,7 @@
         <div class="col-xs-10" style="padding: 0px; word-wrap: break-word;">
           <span>{{item[textAttr]}}</span>
         </div>
-        <div class="col-xs-2">
+        <div class="col-xs-2" ng-if="allowEdit">
           <div class="btn-group pull-right">
             <button class="btn btn-xs btn-default" ng-click="openForEdit($index)">
               <span class="fa fa-pencil"></span>
@@ -35,7 +35,7 @@
         </fieldset>
       </div>
     </div>
-    <a class="list-group-item" ng-if="!addMode" ng-click="showAddItem()">
+    <a class="list-group-item" ng-if="!addMode && allowEdit" ng-click="showAddItem()">
       {{addCaption}}
     </a>
     <div class="list-group-item" ng-if="addMode">

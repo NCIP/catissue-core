@@ -163,6 +163,8 @@
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",
+    "no_consents": "No consents to show",
+    "consents_are_waived": "Consents are waived",
 
     "default_site": "Default Site",
     "clinical_diagnosis": "Clinical Diagnosis",
