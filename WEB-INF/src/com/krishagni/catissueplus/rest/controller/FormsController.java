@@ -34,6 +34,7 @@ import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.FormType;
+import com.krishagni.catissueplus.core.de.events.GetFormFieldPvsOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
@@ -41,6 +42,7 @@ import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp.RemoveType;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.nutility.ContainerJsonSerializer;
 import edu.common.dynamicextensions.nutility.ContainerSerializer;
@@ -82,13 +84,21 @@ public class FormsController {
 
 	@RequestMapping(method = RequestMethod.GET, value="{id}/definition")
 	@ResponseStatus(HttpStatus.OK)
-	public void getFormDefinition(@PathVariable("id") Long formId, Writer writer) 
+	public void getFormDefinition(
+			@PathVariable("id") 
+			Long formId, 
+			
+			@RequestParam(value = "maxPvs", required = false, defaultValue = "0")
+			int maxPvListSize,
+			
+			Writer writer) 
 	throws IOException {
+
 		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequest(formId));		
 		resp.throwErrorIfUnsuccessful();
 		
 		ContainerSerializer serializer = new ContainerJsonSerializer(resp.getPayload(), writer);
-		serializer.serialize();
+		serializer.serialize(maxPvListSize);
 		writer.flush();		
 	}
 	
@@ -294,6 +304,38 @@ public class FormsController {
 			IoUtil.delete(zipFileName);
 			IoUtil.close(fin);
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/permissible-values")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<PermissibleValue> getFormFieldPvs(
+			@PathVariable("id") 
+			Long formId,
+			
+			@RequestParam(value = "controlName", required = true)
+			String controlName,
+
+			@RequestParam(value = "useUdn", required = false, defaultValue = "false")
+			boolean useUdn,
+			
+			@RequestParam(value = "searchString", required = false, defaultValue = "")
+			String searchStr,
+			
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults
+			) {
+
+		GetFormFieldPvsOp op = new GetFormFieldPvsOp();
+		op.setFormId(formId);
+		op.setControlName(controlName);
+		op.setUseUdn(useUdn);
+		op.setSearchString(searchStr);
+		op.setMaxResults(maxResults);
+
+		ResponseEvent<List<PermissibleValue>> resp = formSvc.getPvs(getRequest(op));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	private Map<String, Object> saveOrUpdateFormData(Long formId, Map<String, Object> valueMap) {		

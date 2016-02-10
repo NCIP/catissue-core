@@ -19,12 +19,15 @@ import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
+import com.krishagni.catissueplus.core.de.events.GetFormFieldPvsOp;
+import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
 
 import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.napi.FormData;
 
 public interface FormService {
@@ -64,9 +67,10 @@ public interface FormService {
 	
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req);
 
-
 	/**
 	 * Internal usage
 	 */
 	public List<FormData> getSummaryRecords(Long formId, List<Long> recordIds);
+	
+	public ResponseEvent<List<PermissibleValue>> getPvs(RequestEvent<GetFormFieldPvsOp> req);
 }

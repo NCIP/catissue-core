@@ -36,6 +36,7 @@ import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
+import com.krishagni.catissueplus.core.de.events.GetFormFieldPvsOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -576,6 +577,51 @@ public class FormServiceImpl implements FormService {
 		return mgr.getSummaryData(formId, recordIds);
 	}
 
+	@Override
+	public ResponseEvent<List<PermissibleValue>> getPvs(RequestEvent<GetFormFieldPvsOp> req) {
+		try {
+			GetFormFieldPvsOp input = req.getPayload();
+
+			Container form = Container.getContainer(input.getFormId());
+			if (form == null) {
+				return ResponseEvent.userError(FormErrorCode.NOT_FOUND, input.getFormId());
+			}
+
+			String controlName = input.getControlName();
+			Control control = null;
+			if (input.isUseUdn()) {
+				control = form.getControlByUdn(controlName);
+			} else {
+				control = form.getControl(controlName);
+			}
+
+			if (!(control instanceof SelectControl)) {
+				return ResponseEvent.userError(FormErrorCode.NOT_SELECT_CONTROL, controlName);
+			}
+
+			String searchStr = input.getSearchString();
+			int maxResults = input.getMaxResults() <= 0 ? 100 : input.getMaxResults();
+
+			List<PermissibleValue> pvs = ((SelectControl) control).getPvs();
+			List<PermissibleValue> selectedPvs = new ArrayList<PermissibleValue>();
+			for (PermissibleValue pv : pvs) {
+				if (StringUtils.isNotBlank(searchStr) &&
+						StringUtils.lastIndexOfIgnoreCase(pv.getValue(), searchStr) == -1) {
+					continue;
+				}
+				
+				selectedPvs.add(pv);
+				if (--maxResults == 0) {
+					break;
+				}
+			}
+			
+			return ResponseEvent.response(selectedPvs);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);
