@@ -10,9 +10,8 @@ public class SpecimenYocLabelToken extends AbstractSpecimenLabelToken {
 	public SpecimenYocLabelToken() {
 		this.name = "YR_OF_COLL";
 	}
-	
-	@Override
-	public String getLabel(Specimen specimen) {
+
+	protected int getYearOfCollection(Specimen specimen) {
 		while (specimen.isAliquot() || specimen.isDerivative()) {
 			specimen = specimen.getParentSpecimen();
 		}
@@ -24,7 +23,12 @@ public class SpecimenYocLabelToken extends AbstractSpecimenLabelToken {
 		} else if (specimen.getCreatedOn() != null) {
 			cal.setTime(specimen.getCreatedOn());
 		}
-		
-		return "" + cal.get(Calendar.YEAR);
+
+		return cal.get(Calendar.YEAR);
+	}
+
+	@Override
+	public String getLabel(Specimen specimen) {
+		return String.valueOf(getYearOfCollection(specimen));
 	}
 }
