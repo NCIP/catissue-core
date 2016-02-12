@@ -265,7 +265,7 @@
     "last_name": "Last Name",
     "middle_name": "Middle Name",
     "birth_date": "Birth Date",
-    "uid": "National Identity Number",
+    "uid": "National ID",
     "uid_short": "NIN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
