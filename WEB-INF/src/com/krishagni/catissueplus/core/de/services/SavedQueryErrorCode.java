@@ -36,7 +36,7 @@ public enum SavedQueryErrorCode implements ErrorCode {
 	DESTINATION_FOLDER_NOT_FOUND,
 	
 	MALFORMED,
-	
+
 	EXPORT_DATA_FILE_NOT_FOUND,
 
 	TOO_BUSY,

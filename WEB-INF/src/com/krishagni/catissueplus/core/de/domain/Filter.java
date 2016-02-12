@@ -1,6 +1,10 @@
 package com.krishagni.catissueplus.core.de.domain;
 
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 public class Filter {
 	
 	public enum Op {
@@ -103,5 +107,99 @@ public class Filter {
 
 	public void setParameterized(boolean parameterized) {
 		this.parameterized = parameterized;
+	}
+
+	public void setEqValues(List<Object> values) {
+		if (!isParameterizableConditionValue()) {
+			return;
+		}
+
+		addEqualCondition(values);
+	}
+
+	public void setRangeValues(List<Object> values) {
+		if (!isParameterizableConditionValue()) {
+			return;
+		}
+
+		addRangeCondition(values);
+	}
+
+	private boolean isParameterizableConditionValue() {
+		if (!isParameterized()) {
+			return false;
+		}
+
+		if (StringUtils.isNotBlank(getExpr())) {
+			return true;
+		}
+
+		switch (getOp()) {
+			case NE:
+			case GT:
+			case LT:
+			case CONTAINS:
+			case STARTS_WITH:
+			case ENDS_WITH:
+			case NOT_IN:
+			case NOT_EXISTS:
+				return false;
+
+			default:
+				return true;
+		}
+	}
+
+	private void addEqualCondition(List<Object> values) {
+		String[] cond = values.stream().filter(val -> val != null).map(val -> val.toString()).toArray(String[]::new);
+		if (cond.length == 0) {
+			return;
+		}
+
+		setOp(Op.IN);
+		setValues(cond);
+	}
+
+	private void addRangeCondition(List<Object> values) {
+		if (StringUtils.isBlank(getExpr())) {
+			addFieldRangeCondition(values);
+		} else {
+			addExprRangeCondition(values);
+		}
+	}
+
+	private void addFieldRangeCondition(List<Object> values) {
+		Object minValue = values.get(0);
+		Object maxValue = values.size() > 1 ? values.get(1) : null;
+
+		if (minValue == null && maxValue != null) {
+			setOp(Op.LE);
+			setValues(new String[] {maxValue.toString()});
+		} else if (minValue != null && maxValue == null) {
+			setOp(Op.GE);
+			setValues(new String[] {minValue.toString()});
+		} else if (minValue != null && maxValue != null) {
+			setOp(Op.BETWEEN);
+			setValues(new String[] {minValue.toString(), maxValue.toString()});
+		}
+	}
+
+	private void addExprRangeCondition(List<Object> values) {
+		Object minValue = values.get(0);
+		Object maxValue = values.size() > 1 ? values.get(1) : null;
+
+		String expr = getExpr();
+		if (minValue == null && maxValue != null) {
+			setExpr(getLhs(expr) + " <= " + maxValue.toString());
+		} else if (minValue != null && maxValue == null) {
+			setExpr(getLhs(expr) + " >= " + minValue.toString());
+		} else if (minValue != null && maxValue != null) {
+			setExpr(getLhs(expr) + " between (" + minValue.toString() + ", " + maxValue.toString() + ")");
+		}
+	}
+
+	private String getLhs(String expr) {
+		String[] lhsRhs = expr.split("[<=>!]|\\sany\\s*$|\\sexists\\s*$|\\snot exists\\s*$|\\sbetween\\s");
+		return lhsRhs[0];
 	}
 }
