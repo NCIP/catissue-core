@@ -139,4 +139,11 @@
   <changeSet author="vgaikwad" id="Removing unused num copies from print job">
     <dropColumn tableName="OS_LABEL_PRINT_JOBS" columnName="NUM_COPIES"/>
   </changeSet>
+  
+  <changeSet author="slakhani" id="Token can be null for basic authentication">
+    <dropNotNullConstraint 
+      tableName="OS_USER_API_CALLS_LOG" 
+      columnName="AUTH_TOKEN"
+      columnDataType="${text.type}(64)" />
+  </changeSet>
 </databaseChangeLog>

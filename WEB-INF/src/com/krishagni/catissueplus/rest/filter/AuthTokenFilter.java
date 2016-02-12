@@ -151,11 +151,13 @@ public class AuthTokenFilter extends GenericFilterBean {
 		chain.doFilter(req, resp);
 		AuthUtil.clearCurrentUser();
 	
+		authToken = authToken != null ? AuthUtil.decodeToken(authToken) : null;
+		
 		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(userDetails);
 		userAuditLog.setUrl(httpReq.getRequestURI().toString());
 		userAuditLog.setMethod(httpReq.getMethod());
-		userAuditLog.setAuthToken(AuthUtil.decodeToken(authToken));
+		userAuditLog.setAuthToken(authToken);
 		userAuditLog.setCallStartTime(callStartTime);
 		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
 		userAuditLog.setResponseCode(Integer.toString(httpResp.getStatus()));
