@@ -144,9 +144,10 @@ public class LabelPrintRule {
 		return true;
 	}
 	
-	public Map<String, String> getDataItems(Object obj) {
+	public Map<String, String> getDataItems(PrintItem<?> printItem) {
 		try {
 			Map<String, String> dataItems = new LinkedHashMap<String, String>();
+			
 			if (!isWildCard(labelDesign)) {
 				dataItems.put(getMessageStr("LABELDESIGN"), labelDesign);
 			}
@@ -158,9 +159,13 @@ public class LabelPrintRule {
 			if (!isWildCard(printerName)) {
 				dataItems.put(getMessageStr("PRINTER"), printerName);
 			}
-
+			
+			if (printItem.getCopies() > 1) {
+				dataItems.put(getMessageStr("COPIES"), String.valueOf(printItem.getCopies()));
+			}
+			
 			for (LabelTmplToken token : dataTokens) {
-				dataItems.put(getMessageStr(token.getName()), token.getReplacement(obj));
+				dataItems.put(getMessageStr(token.getName()), token.getReplacement(printItem.getObject()));
 			}
 
 			return dataItems;

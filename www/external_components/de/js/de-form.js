@@ -857,33 +857,154 @@ edu.common.de.BooleanCheckbox = function(id, field) {
   };
 };
 
-edu.common.de.SelectField = function(id, field) {
+edu.common.de.SelectFieldOptions = function(field, args) {
+  var baseUrl;
+
+  var defaultList = [];
+
+  var maxResults = 100;
+
+  var reload = true;
+
+  function init() {
+    if (args.formPvUrl) {
+      baseUrl = args.formPvUrl.replace(":formId", args.id) + "/";
+    }
+
+    reload = args.formPvUrl && field.pvs.length >= maxResults;
+
+    $.each(field.pvs, function(key, option) {
+      defaultList.push({id: option.value, text: option.value});
+    })
+  }
+
+  this.getOptions = function(id, queryTerm, callback) {
+    if (!queryTerm && defaultList.length > 0) {
+      callback(defaultList);
+      return;
+    }
+
+    if (!reload) {
+      callback(defaultList.filter(
+        function(option) {
+          return option.text.toLowerCase().includes(queryTerm.toLowerCase());
+        }
+      ));
+      return;
+    }
+
+    var xhr;
+    if (queryTerm) {
+      var  params = {controlName: id, searchString: queryTerm};
+      xhr = $.ajax({type: 'GET', url: baseUrl, data: params, headers: args.customHdrs});
+    } else if (this.getAllOptionsXhr) {
+      xhr = this.getAllOptionsXhr;
+    } else {
+      xhr = this.getAllOptionsXhr = $.ajax({type: 'GET', url: baseUrl, data: {controlName: id}, headers: args.customHdrs});
+    }
+   
+    xhr.done(
+      function(options) {
+        var result = [];
+        for (var i = 0; i < options.length; ++i) {
+          result.push({id: options[i].value, text: options[i].value});
+        }
+
+        if (!queryTerm) {
+          reload = result.length >= maxResults;
+          defaultList = result;
+        }
+
+        callback(result);
+      }
+    ).fail(
+      function(data) {
+        alert("Failed to load option list");
+      }
+    );
+  };
+
+  init();
+};
+
+//
+// This looks very similar to LookupField now.
+// TODO: Need to merge both implementations to avoid code duplication
+//
+edu.common.de.SelectField = function(id, field, args) {
   this.inputEl = null;
+
+  this.control = null;
+
+  this.value = '';
+
   this.validator;
 
+  var optionsSvc = new edu.common.de.SelectFieldOptions(field, args);
+
+  var timeout = undefined;
+
+  var that = this;
+
+  var qFunc = function(qTerm, qCallback) {
+    var timeInterval = 500;
+    if (qTerm.length == 0) {
+      timeInterval = 0;
+    }
+
+    if (timeout != undefined) {
+      clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(
+      function() { 
+        optionsSvc.getOptions(field.name, qTerm, qCallback); 
+      }, 
+      timeInterval);
+  };
+
+  var onChange = function(selected) { 
+    if (selected instanceof Array) {
+      that.value = selected.map(function(opt) {return opt.id});
+    } else if (selected) {
+      that.value = selected.id;
+    }
+  };
+
+  this.initSelection =  function(value, elem, callback) {
+    if (value instanceof Array) {
+      callback(value.map(
+        function(opt) {
+          return {id: opt, text: opt};
+        }
+      ));
+    } else {
+      callback({id: value, text: value});
+    }
+  }
+
   this.render = function() {
-    var isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox');
-    this.inputEl = $("<select/>")
-      .prop({id: id, multiple: isMultiSelect, title: field.toolTip})
-      .addClass("de-select")
-      .append($("<option/>"));
-
+    this.inputEl = $("<input/>")
+      .prop({id: id, title: field.toolTip, value: field.defaultValue})
+      .css("border", "0px").css("padding", "0px")
+      .val("")
+      .addClass("form-control");
     this.validator = new edu.common.de.FieldValidator(field.validationRules, this);
-    for (var i = 0; i < field.pvs.length; ++i) {
-      var pv = field.pvs[i];
-      this.inputEl.append($("<option/>").prop("value", pv.value).append(pv.value));
-    }
-
-    if (field.defaultValue != undefined) {
-      this.inputEl.val(field.defaultValue.value);
-    }
-
     return this.inputEl;
   };
 
   this.postRender = function() {
-    this.inputEl.select2({allowClear: true});
-    this.inputEl.siblings('div.select2-container').prop({title: field.toolTip});
+    var isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
+    this.control = new Select2Search(this.inputEl, {multiple: isMultiSelect});
+    this.control.onQuery(qFunc).onChange(onChange);
+
+    this.control.onInitSelection(
+      function(elem, callback) {
+        that.initSelection(that.value, elem, callback);
+      }
+    ).render();
+
+    this.control.setValue(this.value);
   };
 
   this.getName = function() {
@@ -899,22 +1020,30 @@ edu.common.de.SelectField = function(id, field) {
   };
 	  
   this.getValue = function() {
-    return {name: field.name, value: this.inputEl.val()};
-  };
-
-  this.setValue = function(recId, value) {
-    value = edu.common.de.Utility.getValueByDataType(field, value);
-    this.recId = recId;
-    this.inputEl.val(value);
-    this.inputEl.trigger('change');
+    return {name: field.name, value: that.value};
   };
 
   this.getDisplayValue = function() {
-    var value = this.inputEl.val();
-    value = (value instanceof Array) ? value.join() : value;
-    return {name: field.name, value: value};
+    if (!this.control) {
+      this.postRender();
+    }
+
+    var val = this.control.getValue();
+    var displayValue = undefined;
+    if (val) {
+      displayValue = val.text;
+    }
+    return {name: field.name, value: displayValue ? displayValue : '' };
+  }
+
+  this.setValue = function(recId, value) {
+    this.recId = recId;
+    this.value = value ? value : '';
+    if (this.control) {
+      this.control.setValue(value);
+    }
   };
-  
+
   this.validate = function() {
     return this.validator.validate();
   };

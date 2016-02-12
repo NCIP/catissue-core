@@ -4,6 +4,8 @@ import java.util.List;
 
 public class QueryExecResult {
 	private String[] columnLabels;
+
+	private String[] columnUrls;
 	
 	private List<String[]> rows;
 	
@@ -15,32 +17,45 @@ public class QueryExecResult {
 		return columnLabels;
 	}
 
-	public void setColumnLabels(String[] columnLabels) {
+	public QueryExecResult setColumnLabels(String[] columnLabels) {
 		this.columnLabels = columnLabels;
+		return this;
+	}
+
+	public String[] getColumnUrls() {
+		return columnUrls;
+	}
+
+	public QueryExecResult setColumnUrls(String[] columnUrls) {
+		this.columnUrls = columnUrls;
+		return this;
 	}
 
 	public List<String[]> getRows() {
 		return rows;
 	}
 
-	public void setRows(List<String[]> rows) {
+	public QueryExecResult setRows(List<String[]> rows) {
 		this.rows = rows;
+		return this;
 	}
 	
 	public Integer[] getColumnIndices() {
 		return columnIndices;
 	}
 
-	public void setColumnIndices(Integer[] columnIndices) {
+	public QueryExecResult setColumnIndices(Integer[] columnIndices) {
 		this.columnIndices = columnIndices;
+		return this;
 	}
 
 	public int getDbRowsCount() {
 		return dbRowsCount;
 	}
 
-	public void setDbRowsCount(int dbRowsCount) {
+	public QueryExecResult setDbRowsCount(int dbRowsCount) {
 		this.dbRowsCount = dbRowsCount;
+		return this;
 	}
 
 	public static QueryExecResult create(String[] labels, List<String[]> rows, int dbRowsCount, Integer[] indices) {

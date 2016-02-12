@@ -30,6 +30,7 @@ project.ext["database_port"]             = props.database_port
 project.ext["database_name"]             = props.database_name
 project.ext["database_username"]         = props.database_username
 project.ext["database_password"]         = props.database_password
+project.ext["show_sql"]                  = props.show_sql
 project.ext["datasource_mysql_dialect"]  = "org.hibernate.dialect.MySQLDialect"
 project.ext["datasource_oracle_dialect"] = "org.hibernate.dialect.Oracle10gDialect"
 project.ext["mysql_driver"]              = "com.mysql.jdbc.Driver"
@@ -225,6 +226,7 @@ processResources {
         database_type: database_type,
         app_data_dir: props.app_data_dir,
         plugin_dir: props.plugin_dir,
+        show_sql: show_sql,
         buildinfo_version : getBranch(),
         buildinfo_date : getTodayDate(),
         buildinfo_commit_revision : getCommitRevision()])

@@ -59,20 +59,13 @@
             <table>USER_VIEW</table>
             <foreignKey>IDENTIFIER</foreignKey>
             <parentKey>PRINCIPAL_INVESTIGATOR_ID</parentKey>
-            <row>          
-              <textField>
-                <name>firstName</name>
-                <udn>firstName</udn>
-                <caption>#getMessage("order_dp_pi_first_name")</caption>
-                <column>FIRST_NAME</column>
-              </textField>
-          
-              <textField>
-                <name>lastName</name>
-                <udn>lastName</udn>
-                <caption>#getMessage("order_dp_pi_last_name")</caption>
-                <column>LAST_NAME</column>
-              </textField>
+            <row>     
+              <userField>
+                <name>investigatorName</name>
+                <udn>investigatorName</udn>
+                <caption>#getMessage("order_dp_pi_name")</caption>
+                <column>IDENTIFIER</column>
+              </userField>      
 
               <textField>
                 <name>email</name>
@@ -134,20 +127,13 @@
         <table>USER_VIEW</table>
         <foreignKey>IDENTIFIER</foreignKey>
         <parentKey>REQUESTER_ID</parentKey>
-        <row>                    
-          <textField>
-            <name>requesterFirstName</name>
-            <udn>requesterFirstName</udn>
-            <caption>#getMessage("order_requester_first_name")</caption>
-            <column>FIRST_NAME</column>
-          </textField>
-          
-          <textField>
-            <name>requesterLastName</name>
-            <udn>requesterLastName</udn>
-            <caption>#getMessage("order_requester_last_name")</caption>
-            <column>LAST_NAME</column>
-          </textField>
+        <row>          
+          <userField>
+            <name>requesterName</name>
+            <udn>requesterName</udn>
+            <caption>#getMessage("order_requester_name")</caption>
+            <column>IDENTIFIER</column>
+          </userField>  
         </row>
       </subForm>
     </row>

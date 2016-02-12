@@ -2,6 +2,10 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+@JsonSerialize(include=Inclusion.NON_NULL)
 public class CprSummary {
 	private ParticipantSummary participant;
 	

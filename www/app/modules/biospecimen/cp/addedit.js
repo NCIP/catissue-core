@@ -9,6 +9,14 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 
+      if (!cp.spmnLabelPrintSettings || cp.spmnLabelPrintSettings.length == 0) {
+        $scope.cp.spmnLabelPrintSettings = [
+          {"lineage": "New"},
+          {"lineage": "Derived"},
+          {"lineage": "Aliquot"}
+        ];
+      }
+
       loadPvs();
 
       $scope.$watch('ppidFmt', function(newVal) {
@@ -40,6 +48,25 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       });
 
       $scope.spmnLabelPrePrintModes = PvManager.getPvs('specimen-label-pre-print-modes');
+      loadLabelAutoPrintModes();
+    }
+
+    function loadLabelAutoPrintModes() {
+      $scope.spmnLabelAutoPrintModes = [];
+
+      PvManager.loadPvs('specimen-label-auto-print-modes').then(
+        function(pvs) {
+          if ($scope.cp.spmnLabelPrePrintMode != 'NONE') {
+            $scope.spmnLabelAutoPrintModes = pvs;
+          } else {
+            $scope.spmnLabelAutoPrintModes = pvs.filter(
+      	      function(pv) {
+      	        return pv.name != 'PRE_PRINT';
+      	      }
+      	    );
+          }
+        }
+      );
     }
 
     function getPpidFmt() {
@@ -92,6 +119,15 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
     $scope.onPrePrintModeChange = function() {
       $scope.prePrintDisabled = !!$scope.cp.id && $scope.cp.spmnLabelPrePrintMode == 'NONE';
+
+      loadLabelAutoPrintModes();
+      if ($scope.prePrintDisabled) {
+        angular.forEach($scope.cp.spmnLabelPrintSettings, function(setting) {
+          if (setting.printMode == 'PRE_PRINT') {
+            setting.printMode = '';
+          }
+        });
+      }
     }
 
     init();

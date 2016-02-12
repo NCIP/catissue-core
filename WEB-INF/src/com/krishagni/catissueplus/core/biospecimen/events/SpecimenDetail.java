@@ -237,7 +237,10 @@ public class SpecimenDetail extends SpecimenInfo {
 		}
 		
 		result.setLabelFmt(specimen.getLabelTmpl());
-		result.setLabelAutoPrintMode(sr != null ? sr.getLabelAutoPrintMode().name(): null);
+		if (sr != null && sr.getLabelAutoPrintModeToUse() != null) {
+			result.setLabelAutoPrintMode(sr.getLabelAutoPrintModeToUse().name());
+		}
+
 		result.setReqCode(sr != null ? sr.getCode() : null);
 		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
@@ -274,7 +277,9 @@ public class SpecimenDetail extends SpecimenInfo {
 		result.setPoolSpecimen(anticipated.isSpecimenPoolReq());
 		result.setChildren(fromAnticipated(anticipated.getChildSpecimenRequirements()));
 		result.setLabelFmt(anticipated.getLabelTmpl());
-		result.setLabelAutoPrintMode(anticipated.getLabelAutoPrintMode().name());
+		if (anticipated.getLabelAutoPrintModeToUse() != null) {
+			result.setLabelAutoPrintMode(anticipated.getLabelAutoPrintModeToUse().name());
+		}
 		result.setReqCode(anticipated.getCode());
 		return result;		
 	}

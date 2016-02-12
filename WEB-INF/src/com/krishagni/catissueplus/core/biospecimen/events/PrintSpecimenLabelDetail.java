@@ -53,7 +53,4 @@ public class PrintSpecimenLabelDetail {
 	public void setNumCopies(int numCopies) {
 		this.numCopies = numCopies;
 	} 
-	
-	
-
 }

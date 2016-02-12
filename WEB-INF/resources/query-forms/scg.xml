@@ -55,7 +55,7 @@
           <dropDown>
             <name>name</name>
             <udn>name</udn>
-            <caption>#getMessage("visit_site_name")</caption>
+            <caption>#getMessage("visit_site")</caption>
             <column>NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>

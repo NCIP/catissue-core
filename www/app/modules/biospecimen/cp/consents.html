@@ -1,38 +1,52 @@
 <div class="clearfix">
   <div class="col-xs-8">
-    <ul class="os-key-values os-one-col" os-inline-editors on-save="editCp">
-      <li class="item" ng-hide="!!consents.tiers && consents.tiers.length > 0">
-        <strong class="key key-sm" translate="cp.consents_waived">Consents Waived</strong>
-        <div class="value value-md">
-          <div class="btn-group btn-group-xs">
-            <button type="button" class="btn btn-default" ng-model="cp.consentsWaived" 
-              btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false" 
-              ng-change="updateConsentsWaived()" translate="common.yes">
-              Yes
-            </button>
-            <button type="button" class="btn btn-default" ng-model="cp.consentsWaived" 
-              btn-checkbox btn-checkbox-true="false" btn-checkbox-false="true" 
-              ng-change="updateConsentsWaived()" translate="common.no">
-              No
-            </button>
-          </div>
-        </div>
-      </li>
-      <li class="item" ng-if="!cp.consentsWaived">
-        <strong class="key key-sm" translate="cp.unsigned_consent_url">Unsigned Consent Form URL</strong>
-        <os-inline-edit editor="fuEditor" name="consentFormUrl" class="value value-md" value="cp.unsignedConsentUrl">
-          <a ng-if="fuEditor.isDisplayMode()" ng-href="{{fuEditor.viewValue | osPrefixHttp}}" target="_blank">
-            {{fuEditor.viewValue | osNoValue}}
-          </a>
-          <input ng-if="fuEditor.isEditMode()" class="form-control" type="text" ng-model="fuEditor.editValue">
-        </os-inline-edit>
-      </li>
-    </ul>
+    <div ng-switch="allowEditConsent">
+      <div ng-switch-when="true">
+        <ul class="os-key-values os-one-col" os-inline-editors on-save="editCp">
+          <li class="item" ng-hide="!!consents.tiers && consents.tiers.length > 0">
+            <strong class="key key-sm" translate="cp.consents_waived">Consents Waived</strong>
+            <div class="value value-md">
+              <div class="btn-group btn-group-xs">
+                <button type="button" class="btn btn-default" ng-model="cp.consentsWaived"
+                  btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+                  ng-change="updateConsentsWaived()" translate="common.yes">
+                  Yes
+                </button>
+                <button type="button" class="btn btn-default" ng-model="cp.consentsWaived"
+                  btn-checkbox btn-checkbox-true="false" btn-checkbox-false="true"
+                  ng-change="updateConsentsWaived()" translate="common.no">
+                  No
+                </button>
+              </div>
+            </div>
+          </li>
+          <li class="item" ng-if="!cp.consentsWaived">
+            <strong class="key key-sm" translate="cp.unsigned_consent_url">Unsigned Consent Form URL</strong>
+            <os-inline-edit editor="fuEditor" name="consentFormUrl" class="value value-md" value="cp.unsignedConsentUrl">
+              <a ng-if="fuEditor.isDisplayMode()" ng-href="{{fuEditor.viewValue | osPrefixHttp}}" target="_blank">
+                {{fuEditor.viewValue | osNoValue}}
+              </a>
+              <input ng-if="fuEditor.isEditMode()" class="form-control" type="text" ng-model="fuEditor.editValue">
+            </os-inline-edit>
+          </li>
+        </ul>
+      </div>
 
-    <os-editable-item-list 
-      items="consents.tiers" text-attr="{{consents.stmtAttr}}"
-      list-title="{{'cp.consent_tiers' | translate}}" add-caption="{{'cp.add_consent_tier' | translate}}"
-      list-changed="listChanged" ng-if="!cp.consentsWaived">
+      <div ng-switch-default>
+        <div ng-if="cp.consentsWaived">
+          <span translate="cp.consents_are_waived">Consents are waived</span>
+        </div>
+
+        <div ng-if="!cp.consentsWaived && consents.tiers.length == 0">
+          <span translate="cp.no_consents">No consents to show</span>
+        </div>
+      </div>
+    </div>
+
+    <os-editable-item-list
+      items="consents.tiers" text-attr="{{consents.stmtAttr}}" list-title="{{'cp.consent_tiers' | translate}}"
+      add-caption="{{'cp.add_consent_tier' | translate}}" list-changed="listChanged"
+      ng-if="!cp.consentsWaived && (allowEditConsent || consents.tiers.length > 0)" allow-edit="allowEditConsent">
     </os-editable-item-list>
   </div>
 </div>

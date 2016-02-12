@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +19,6 @@ import org.hibernate.envers.NotAudited;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -35,7 +35,13 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		ON_VISIT,
 		NONE;
 	}
-	
+
+	public enum SpecimenLabelAutoPrintMode {
+		PRE_PRINT,
+		ON_COLLECTION,
+		NONE;
+	}
+
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");
@@ -79,6 +85,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	private Boolean manualSpecLabelEnabled;
 	
 	private SpecimenLabelPrePrintMode spmnLabelPrePrintMode = SpecimenLabelPrePrintMode.NONE;
+	
+	private Set<CpSpecimenLabelPrintSetting> spmnLabelPrintSettings = new HashSet<CpSpecimenLabelPrintSetting>();
 	
 	private Boolean consentsWaived;
 
@@ -258,6 +266,22 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
 	}
 
+	public Set<CpSpecimenLabelPrintSetting> getSpmnLabelPrintSettings() {
+		return spmnLabelPrintSettings;
+	}
+
+	public void setSpmnLabelPrintSettings(Set<CpSpecimenLabelPrintSetting> spmnLabelPrintSettings) {
+		this.spmnLabelPrintSettings = spmnLabelPrintSettings;
+	}
+	
+	public CpSpecimenLabelPrintSetting getSpmnLabelPrintSetting(String lineage) {
+		Optional<CpSpecimenLabelPrintSetting> setting = getSpmnLabelPrintSettings()
+			.stream()
+			.filter((s) -> s.getLineage().equals(lineage))
+			.findFirst();
+		return setting.isPresent() ? setting.get() : null;
+	}
+	
 	public Boolean isConsentsWaived() {
 		return consentsWaived != null ? consentsWaived: false;
 	}
@@ -355,7 +379,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
-		updateCollectionProtocolSites(cp.getSites());
+		updateSites(cp.getSites());
+		updateSpecimenLabelPrintSettings(cp.getSpmnLabelPrintSettings());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 		updateLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
 	}
@@ -508,13 +533,13 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		return null;
 	}
 	
-	private void updateCollectionProtocolSites(Set<CollectionProtocolSite> newCpSites) {
+	private void updateSites(Set<CollectionProtocolSite> newSites) {
 		Map<Site, CollectionProtocolSite> existingSites = new HashMap<Site, CollectionProtocolSite>();
 		for (CollectionProtocolSite cpSite: getSites()) {
 			existingSites.put(cpSite.getSite(), cpSite);
 		}
 		
-		for (CollectionProtocolSite newSite: newCpSites) {
+		for (CollectionProtocolSite newSite: newSites) {
 			CollectionProtocolSite oldSite = existingSites.get(newSite.getSite());
 			if (oldSite != null) {
 				oldSite.update(newSite);
@@ -548,10 +573,29 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		//
 		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
 			for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
-				if (sr.getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
-					sr.setLabelAutoPrintMode(LabelAutoPrintMode.NONE);
+				if (sr.getLabelAutoPrintMode() == SpecimenLabelAutoPrintMode.PRE_PRINT) {
+					sr.setLabelAutoPrintMode(SpecimenLabelAutoPrintMode.NONE);
 				}
 			}
 		}
+	}
+	
+	private void updateSpecimenLabelPrintSettings(Set<CpSpecimenLabelPrintSetting> newSpmnLblPrintSettings) {
+		Map<String, CpSpecimenLabelPrintSetting> existingSettings = new HashMap<String, CpSpecimenLabelPrintSetting>();
+		for (CpSpecimenLabelPrintSetting spmnLblPrintSetting : getSpmnLabelPrintSettings()) {
+			existingSettings.put(spmnLblPrintSetting.getLineage(), spmnLblPrintSetting);
+		}
+		
+		for (CpSpecimenLabelPrintSetting newSpmnLblPrintSetting : newSpmnLblPrintSettings) {
+			CpSpecimenLabelPrintSetting oldSetting = existingSettings.get(newSpmnLblPrintSetting.getLineage());
+			if (oldSetting != null) {
+				oldSetting.update(newSpmnLblPrintSetting);
+				existingSettings.remove(oldSetting.getLineage());
+			} else {
+				getSpmnLabelPrintSettings().add(newSpmnLblPrintSetting);
+			}
+		}
+		
+		getSpmnLabelPrintSettings().removeAll(existingSettings.values());
 	}
 }

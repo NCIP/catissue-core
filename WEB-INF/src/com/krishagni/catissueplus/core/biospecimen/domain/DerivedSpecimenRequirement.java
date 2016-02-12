@@ -19,6 +19,8 @@ public class DerivedSpecimenRequirement {
 	
 	private String labelAutoPrintMode;
 	
+	private Integer labelPrintCopies;
+	
 	private String name;
 	
 	private String storageType;
@@ -87,6 +89,14 @@ public class DerivedSpecimenRequirement {
 
 	public void setLabelAutoPrintMode(String labelAutoPrintMode) {
 		this.labelAutoPrintMode = labelAutoPrintMode;
+	}
+	
+	public Integer getLabelPrintCopies() {
+		return labelPrintCopies;
+	}
+
+	public void setLabelPrintCopies(Integer labelPrintCopies) {
+		this.labelPrintCopies = labelPrintCopies;
 	}
 
 	public String getName() {

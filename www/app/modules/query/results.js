@@ -137,7 +137,7 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
-      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), 'DEEP').then(
+      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), qc.wideRowMode || 'DEEP').then(
         function(result) {
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {

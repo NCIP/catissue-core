@@ -157,12 +157,18 @@
     "view_details": "View Details",
     "view_participants": "View Participants",
     "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
+    "print_settings": "Print Settings",
+    "lineage": "Lineage",
+    "when_to_print": "When to Print",
+    "copies": "Copies",
 
     "consents_waived": "Is participant consent waived?",
     "consents_waived_updated": "Participant consent {{waived ? 'waived' : 'enabled'}} successfully.",
     "unsigned_consent_url": "Unsigned Consent Form URL",
     "consent_tiers": "Consent Tiers", 
     "add_consent_tier": "Add Statement...",
+    "no_consents": "No consents to show",
+    "consents_are_waived": "Consents are waived",
 
     "default_site": "Default Site",
     "clinical_diagnosis": "Clinical Diagnosis",
@@ -215,8 +221,10 @@
       "repository": "Repository",
       "select_repository": "Select Repository"
     },
+
     "label_formats" : "Label Formats",
     "anticipated_participant_count": "Expected Registrations",
+
     "label_format": {
       "specimen": "Specimen",
       "visit": "Visit",
@@ -235,6 +243,12 @@
     "spmn_label_pre_print_modes": {
       "ON_VISIT": "On Visit",
       "NONE": "None"
+    },
+
+     "spmn_lineages": {
+      "New": "Primary",
+      "Derived": "Derivative",
+      "Aliquot": "Aliquot"
     }
   },
 
@@ -581,7 +595,8 @@
     "pathology": "Pathology",
     "storage_type": "Storage Type",
     "label_fmt": "Label Format",
-    "auto_print_label": "Auto Print Label",
+    "when_to_print": "When to Print",
+    "label_print_copies": "Label Print Copies",
     "available_qty": "Available Quantity",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
@@ -1035,8 +1050,8 @@
     "confirm_delete": "{{caption}} form will be deleted forever. Are you sure you want to proceed?",
     "confirm_delete_with_data": "You will lose data if you delete the {{caption}} form. Do you want to continue?",
     "form_deleted": "{{caption}} form deleted successfully",
-    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.name}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
-    "association_deleted": "Successfully deleted form at {{level.name}} level from {{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}",
+    "confirm_delete_association": "Are you sure you want to delete this form at <b>{{level.caption}}</b> level from <b>{{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}</b>? \n Please note you will no longer be able to access data for this form",
+    "association_deleted": "Successfully deleted form at {{level.caption}} level from {{!collectionProtocol.id ? 'All Protocols' : collectionProtocol.shortTitle}}",
 
     "tooltip": {
       "add": "Click to add new Form",

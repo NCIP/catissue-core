@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -33,9 +34,9 @@ import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetEntityFormRecordsOp;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
+import com.krishagni.catissueplus.core.de.events.GetFormFieldPvsOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -104,21 +105,14 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
     @PlusTransactional
-	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormType> req) {
-		FormType ft = req.getPayload();
-		switch (ft) {
-			case DATA_ENTRY_FORMS:
-				return ResponseEvent.response(formDao.getAllFormsSummary());
-
-			case PARTICIPANT_FORMS:
-			case VISIT_FORMS:
-			case SPECIMEN_FORMS:
-			case SPECIMEN_EVENT_FORMS:
-				return ResponseEvent.response(formDao.getFormsByEntityType(ft.getType()));
-
-			case QUERY_FORMS:
-			default:
-				return ResponseEvent.response(formDao.getQueryForms());
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<String> req) {
+		String entityType = req.getPayload();
+		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
+			return ResponseEvent.response(formDao.getAllFormsSummary());
+		} else if (entityType.equalsIgnoreCase("Query")) {
+			return ResponseEvent.response(formDao.getQueryForms());
+		} else {
+			return ResponseEvent.response(formDao.getFormsByEntityType(entityType));
 		}
 	}
 
@@ -569,6 +563,60 @@ public class FormServiceImpl implements FormService {
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
 			return ResponseEvent.response(formDao.getDependentEntities(req.getPayload()));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	//
+	// Internal APIs
+	//
+	@Override
+	public List<FormData> getSummaryRecords(Long formId, List<Long> recordIds) {
+		FormDataManager mgr = new FormDataManagerImpl(false);
+		return mgr.getSummaryData(formId, recordIds);
+	}
+
+	@Override
+	public ResponseEvent<List<PermissibleValue>> getPvs(RequestEvent<GetFormFieldPvsOp> req) {
+		try {
+			GetFormFieldPvsOp input = req.getPayload();
+
+			Container form = Container.getContainer(input.getFormId());
+			if (form == null) {
+				return ResponseEvent.userError(FormErrorCode.NOT_FOUND, input.getFormId());
+			}
+
+			String controlName = input.getControlName();
+			Control control = null;
+			if (input.isUseUdn()) {
+				control = form.getControlByUdn(controlName);
+			} else {
+				control = form.getControl(controlName);
+			}
+
+			if (!(control instanceof SelectControl)) {
+				return ResponseEvent.userError(FormErrorCode.NOT_SELECT_CONTROL, controlName);
+			}
+
+			String searchStr = input.getSearchString();
+			int maxResults = input.getMaxResults() <= 0 ? 100 : input.getMaxResults();
+
+			List<PermissibleValue> pvs = ((SelectControl) control).getPvs();
+			List<PermissibleValue> selectedPvs = new ArrayList<PermissibleValue>();
+			for (PermissibleValue pv : pvs) {
+				if (StringUtils.isNotBlank(searchStr) &&
+						StringUtils.lastIndexOfIgnoreCase(pv.getValue(), searchStr) == -1) {
+					continue;
+				}
+				
+				selectedPvs.add(pv);
+				if (--maxResults == 0) {
+					break;
+				}
+			}
+			
+			return ResponseEvent.response(selectedPvs);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

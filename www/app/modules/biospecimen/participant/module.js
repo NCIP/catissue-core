@@ -227,7 +227,7 @@ angular.module('os.biospecimen.participant',
           }
         },
         controller: 'ParticipantResultsView',
-        parent: 'cp-view'
+        parent: 'signed-in'
       });
   })
 

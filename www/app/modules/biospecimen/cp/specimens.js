@@ -271,7 +271,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       $scope.parentSr = sr;
       $scope.view = 'addedit_aliquot';
-      $scope.childReq = {labelAutoPrintMode: 'NONE'};
       loadPvs();
     };
 
@@ -312,8 +311,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.parentSr = sr;
       $scope.view = 'addedit_derived';
       $scope.childReq = {
-        pathology: sr.pathology,
-        labelAutoPrintMode: 'NONE'
+        pathology: sr.pathology
       };
       loadPvs();
     };
@@ -344,7 +342,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.addToSpmnPool = function() {
-      $scope.parentSr.addPoolSpecimens([$scope.poolReq]).then(
+      $scope.parentSr.addPoolSpecimens([removeUiProps($scope.poolReq)]).then(
         function(poolSpmns) {
           $scope.parentSr.specimensPool = $scope.parentSr.specimensPool.concat(poolSpmns);
           $scope.parentSr.isOpened = true;

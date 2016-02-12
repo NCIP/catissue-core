@@ -601,17 +601,12 @@
       create or replace view OS_STORAGE_CONT_STATS_VIEW as (
         select 
           dcont.identifier as container_id, dcont.name as container_name, 
-          dcont.no_of_cols * dcont.no_of_rows - count(distinct p.identifier) as free_positions,
-          group_concat(distinct acont.name order by acont.identifier separator ' -> ') as container_hierarchy
+          dcont.no_of_cols * dcont.no_of_rows - count(distinct p.identifier) as free_positions
         from 
           os_storage_containers dcont 
           left join os_container_positions p on p.storage_container_id = dcont.identifier 
-          inner join os_containers_hierarchy h on dcont.identifier = h.descendent_id 
-          inner join os_storage_containers acont on acont.identifier = h.ancestor_id
         group by 
           dcont.identifier, dcont.name, dcont.no_of_cols, dcont.no_of_rows
-        order by 
-          dcont.identifier
       )
     </sql>
   </changeSet>

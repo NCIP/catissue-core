@@ -70,39 +70,39 @@
                       <span translate="srs.ctx_menu.view_sr">View Requirement</span>
                     </a>
                   </li>
-                  <li>
+                  <li show-if-allowed="cpResource.updateOpts">
                     <a ng-click="showEditSr(sr)">
                       <i class="fa fa-pencil"></i>
                       <span translate="srs.ctx_menu.edit_sr">Edit Requirement</span>
                     </a>
                   </li>
-                  <li>
+                  <li show-if-allowed="cpResource.updateOpts">
                     <a ng-click="copyRequirement(sr)">
                       <i class="fa fa-copy"></i>
                       <span translate="srs.ctx_menu.copy_sr">Copy Requirement</span>
                     </a>
                   </li>
                   <li class="divider"></li>
-                  <li ng-if="!sr.pooledSpecimen">
+                  <li ng-if="!sr.pooledSpecimen" show-if-allowed="cpResource.updateOpts">
                     <a ng-click="showCreateAliquots(sr)">
                       <i class="fa fa-share-alt"></i>
                       <span translate="srs.ctx_menu.create_aliquots">Create Aliquots</span>
                     </a>
                   </li>
-                  <li ng-if="!sr.pooledSpecimen">
+                  <li ng-if="!sr.pooledSpecimen" show-if-allowed="cpResource.updateOpts">
                     <a ng-click="showCreateDerived(sr)">
                       <i class="fa fa-flask"></i>
                       <span translate="srs.ctx_menu.create_derivatives">Create Derivative</span>
                     </a>
                   </li>
-                  <li ng-if="sr.specimensPool.length > 0">
+                  <li ng-if="sr.specimensPool.length > 0" show-if-allowed="cpResource.updateOpts">
                     <a ng-click="showCreatePoolSpecimen(sr)">
                       <i class="fa fa-plus-square-o"></i>
                       <span translate="srs.ctx_menu.create_pool_spmn"> Create Pool Specimen </span>
                     </a>
                   </li>
                   <li class="divider" ng-if="!sr.pooledSpecimen"></li>
-                  <li>
+                  <li show-if-allowed="cpResource.updateOpts">
                     <a ng-click="deleteRequirement(sr)">
                       <i class="fa fa-trash"></i>
                       <span translate="srs.ctx_menu.delete">
@@ -135,7 +135,7 @@
     </div>
   </div>
 
-  <a class="list-group-item" ng-click="showAddSr()" translate="srs.buttons.add_sr">
+  <a class="list-group-item" ng-click="showAddSr()" translate="srs.buttons.add_sr" show-if-allowed="cpResource.updateOpts">
     Add Specimen Requirement... 
   </a>
 </div>

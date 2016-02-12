@@ -8,6 +8,19 @@
     <div ng-if="!!cpr.participant.extensionDetail">
       <div os-extension-overview ext-object="cpr.participant.extensionDetail" show-column="2"></div>
     </div>
+    <div class="os-section" ng-init="opCollapsed=false" ng-if="cpr.participant.registeredCps.length > 1">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="opCollapsed=!opCollapsed">
+        <span ng-if="!opCollapsed" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="opCollapsed" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title" translate="participant.other_cps">Other Protocols</h3>
+      <div collapse="opCollapsed">
+        <span ng-repeat="cp in cpr.participant.registeredCps | filter: isOtherProtocol">
+          <a ui-sref="participant-detail.overview({cpId: cp.cpId, cprId: cp.cprId})">{{cp.cpShortTitle}}</a>
+          {{$last ? '' : ','}}
+        </span>
+      </div>
+    </div>
 
     <div class="os-section" ng-init="ovCollapsed=false">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
@@ -86,7 +99,7 @@
                           </span>
                         </a>
                       </li>
-                      <li>
+                      <li show-if-allowed="specimenResource.updateOpts">
                         <a ng-click="printSpecimenLabels({visitId: visit.id})">
                           <i class="fa fa-print"></i>
                           <span translate="visits.ctx_menu.print_specimen_labels">

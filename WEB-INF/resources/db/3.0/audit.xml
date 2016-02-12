@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="vgaikwad" id="Audit specimen label print settings at CP level">
+    <createTable tableName="OS_SPMN_LBL_PRINT_SETTINGS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="REVTYPE" type="${smallint.type}"/>
+      
+      <column name="CP_ID" type="${int.type}"/>
+      
+      <column name="collectionProtocol_MOD" type="${bit.type}"/>
+      
+      <column name="LINEAGE" type="${text.type}(32)"/>
+      
+      <column name="lineage_MOD" type="${bit.type}"/>
+      
+      <column name="PRINT_MODE" type="${text.type}(32)"/>
+      
+      <column name="printMode_MOD" type="${bit.type}"/>
+      
+      <column name="COPIES" type="${int.type}"/>
+      
+      <column name="copies_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Track chnages of print settings at CP level">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="spmnLabelPrintSettings_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Audit number of copies of specimen labels to print">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="LABEL_PRINT_COPIES" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Track changes of copies of specimen labels to print">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="labelPrintCopies_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+ </databaseChangeLog> 

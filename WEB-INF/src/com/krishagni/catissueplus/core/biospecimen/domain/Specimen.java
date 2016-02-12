@@ -1137,6 +1137,14 @@ public class Specimen extends BaseExtensionEntity {
 		return result;
 	}
 
+	public static boolean isValidLineage(String lineage) {
+		if (StringUtils.isBlank(lineage)) {
+			return false;
+		}
+
+		return lineage.equals(NEW) || lineage.equals(DERIVED) || lineage.equals(ALIQUOT);
+	}
+	
 	private void ensureNoActiveChildSpecimens() {
 		for (Specimen specimen : getChildCollection()) {
 			if (specimen.isActiveOrClosed() && specimen.isCollected()) {

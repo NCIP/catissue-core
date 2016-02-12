@@ -95,4 +95,8 @@ public class FormRecordEntryBean {
 	public void setEntityType(String entityType) {
 		this.entityType = entityType;
 	}
+
+	public void delete() {
+		setActivityStatus(Status.CLOSED);
+	}
 }
