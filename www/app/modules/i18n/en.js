@@ -313,9 +313,11 @@
 
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",
+    "bulk_import_master_specimens": "Bulk Import Master Specimens",
     "part_updates": "Participant Updates",
     "part_extensions": "Participant Forms",
     "registrations": "Participant Registrations",
+    "master_specimens": "Master Specimens",
     "registered_cps": "Registered Protocols",
     "other_cps": "Other Protocols",
     

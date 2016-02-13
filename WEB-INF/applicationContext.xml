@@ -604,6 +604,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-derivative.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-aliquot.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/master-specimen.xml</value>
       </list>
     </property>
 
@@ -691,6 +692,15 @@
 
         <entry key="specimenAliquot">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenAliquotImporter">
+            <property name="specimenSvc" ref="specimenSvc"/>
+          </bean>
+        </entry>
+        
+        <entry key="masterSpecimen">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.MasterSpecimenImporter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+            <property name="cprSvc" ref="cprSvc"/>
+            <property name="visitSvc" ref="visitService"/>
             <property name="specimenSvc" ref="specimenSvc"/>
           </bean>
         </entry>

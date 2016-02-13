@@ -502,7 +502,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (!Specimen.isMissed(detail.getStatus()) &&
-			(NumUtil.greaterThan(availableQty, specimen.getInitialQuantity()) || NumUtil.lessThanZero(availableQty))){
+			(availableQty == null || NumUtil.greaterThan(availableQty, specimen.getInitialQuantity()) || NumUtil.lessThanZero(availableQty))){
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}

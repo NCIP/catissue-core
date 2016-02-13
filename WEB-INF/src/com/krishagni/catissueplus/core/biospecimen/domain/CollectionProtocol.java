@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -521,6 +523,20 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	@Override
 	public String getEntityType() {
 		return "CollectionProtocolExtension";
+	}
+	
+	public CollectionProtocolEvent firstEvent() {
+		if (!getCollectionProtocolEvents().isEmpty()) {
+			return getOrderedCpeList().get(0);
+		}
+		
+		return null;
+	}
+	
+	public List<CollectionProtocolEvent> getOrderedCpeList() {
+		List<CollectionProtocolEvent> events = new ArrayList<CollectionProtocolEvent>(getCollectionProtocolEvents());
+		Collections.sort(events);
+		return events;
 	}
 
 	private ConsentTier getConsentTierById(Long ctId) {

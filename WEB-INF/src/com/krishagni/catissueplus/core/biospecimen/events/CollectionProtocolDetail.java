@@ -244,7 +244,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
-			result.setEvents(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents(), true));
+			result.setEvents(CollectionProtocolEventDetail.from(cp.getOrderedCpeList(), true));
 		}
 		
 		return result;

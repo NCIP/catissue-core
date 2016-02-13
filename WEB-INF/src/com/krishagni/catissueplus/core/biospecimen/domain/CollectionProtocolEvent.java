@@ -19,7 +19,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
-public class CollectionProtocolEvent {
+public class CollectionProtocolEvent implements Comparable<CollectionProtocolEvent> {
 	private static final String ENTITY_NAME = "collection_protocol_event";
 	
 	private Long id;
@@ -238,6 +238,18 @@ public class CollectionProtocolEvent {
 			}
 
 			codes.add(sr.getCode());
+		}
+	}
+
+	@Override
+	public int compareTo(CollectionProtocolEvent other) {
+		Double thisEventPoint = this.eventPoint == null ? 0d : this.eventPoint;
+		Double otherEventPoint = other.eventPoint == null ? 0d : other.eventPoint;
+
+		if (thisEventPoint.equals(otherEventPoint)) {
+			return id.compareTo(other.id);
+		} else {
+			return thisEventPoint.compareTo(otherEventPoint);
 		}
 	}
 }

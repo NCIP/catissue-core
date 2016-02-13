@@ -439,7 +439,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			}
 
 			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
-			return ResponseEvent.response(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents()));
+			return ResponseEvent.response(CollectionProtocolEventDetail.from(cp.getOrderedCpeList()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
