@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -105,10 +106,11 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
     @PlusTransactional
-	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<String> req) {
-		String entityType = req.getPayload();
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req) {
+		FormListCriteria crit = req.getPayload();
+		String entityType = crit.getFormType();
 		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
-			return ResponseEvent.response(formDao.getAllFormsSummary());
+			return ResponseEvent.response(formDao.getAllFormsSummary(crit));
 		} else if (entityType.equalsIgnoreCase("Query")) {
 			return ResponseEvent.response(formDao.getQueryForms());
 		} else {

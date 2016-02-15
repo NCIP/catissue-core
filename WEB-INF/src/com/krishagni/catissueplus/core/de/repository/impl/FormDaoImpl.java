@@ -19,6 +19,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -46,8 +47,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FormSummary> getAllFormsSummary() {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_FORMS);
+	public List<FormSummary> getAllFormsSummary(FormListCriteria crit) {
+		Query query = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ALL_FORMS)
+				.setString("caption", "%" + crit.query() + "%")
+				.setFirstResult(crit.startAt())
+				.setMaxResults(crit.maxResults());
+
 		return getForms(query.list());
 	}
 	

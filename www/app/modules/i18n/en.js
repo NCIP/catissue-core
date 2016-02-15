@@ -1060,6 +1060,10 @@
       "delete": "Click to delete Form",
       "search": "Click to search Form",
       "attach_form_to_cp": "Click to attach form to a Collection Protocol"
+    },
+
+    "filter": {
+      "title": "Filters"
     }
   },
 

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -53,8 +53,6 @@ import edu.common.dynamicextensions.nutility.IoUtil;
 @Controller
 @RequestMapping("/forms")
 public class FormsController {
-	@Autowired
-	private HttpServletRequest httpServletRequest;
 
 	private static AtomicInteger formCnt = new AtomicInteger();
 	
@@ -65,10 +63,24 @@ public class FormsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<FormSummary> getForms(
+			@RequestParam(value = "name", required= false, defaultValue = "")
+			String name,
+			
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+			
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			int maxResults,
+			
 			@RequestParam(value="formType", required=false, defaultValue="DataEntry")
 			String formType) {
+		FormListCriteria crit = new FormListCriteria()
+				.query(name)
+				.formType(formType)
+				.startAt(startAt)
+				.maxResults(maxResults);
 		
-		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequest(formType));
+		ResponseEvent<List<FormSummary>> resp = formSvc.getForms(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
