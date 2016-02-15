@@ -20,9 +20,9 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
-import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenReturnEvent;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -791,7 +791,7 @@ public class Specimen extends BaseExtensionEntity {
 		}*/
 	}
 
-	public void returnSpecimen(DistributionOrderItem item) {
+	public void returnSpecimen(DistributionOrderItem item, StorageContainerPosition newLocation) {
 		if (isClosed()) {
 			activate();
 			setAvailableQuantity(item.getReturnQuantity());
@@ -799,22 +799,12 @@ public class Specimen extends BaseExtensionEntity {
 			setAvailableQuantity(getAvailableQuantity().add(item.getReturnQuantity()));
 		}
 
-		StorageContainerPosition position = null;
-		StorageContainer location = item.getReturnLocation();
-		if (location != null) {
-			if (!location.canContain(this)) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.INVALID_COLL_CONTAINER);
-			}
-
-			position = new StorageContainerPosition();
-			position.setContainer(location);
-			position.setPosOneOrdinal(item.getReturnPosOne());
-			position.setPosTwoOrdinal(item.getReturnPosTwo());
-			position.setPosOne(item.getReturnPosOneStr());
-			position.setPosTwo(item.getReturnPosTwoStr());
+		if (newLocation != null && !newLocation.getContainer().canContain(this)) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN,
+				newLocation.getContainer().getName(), getLabel());
 		}
 
-		transferTo(position, item.getReturnDate());
+		transferTo(newLocation, item.getReturnDate());
 		SpecimenReturnEvent.createForDistributionOrderItem(item).saveRecordEntry();
 	}
 	

@@ -43,7 +43,11 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 
 	SPEC_ALREADY_RETURNED,
 
-	INVALID_RETURN_DATE;
+	INVALID_RETURN_DATE,
+
+	USER_REQ,
+
+	DATE_REQ;
 	
 	@Override
 	public String code() {

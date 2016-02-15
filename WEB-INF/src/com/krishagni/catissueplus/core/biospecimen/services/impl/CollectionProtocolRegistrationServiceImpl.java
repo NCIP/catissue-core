@@ -622,10 +622,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	private void setDistributedStatus(List<SpecimenDetail> specimens, Map<Long, String> distStatus) {
 		for (SpecimenDetail detail : specimens) {
-			if (distStatus.containsKey(detail.getId())) {
-				detail.setDistributionStatus(distStatus.get(detail.getId()));
-			}
-
+			detail.setDistributionStatus(distStatus.get(detail.getId()));
 			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 				setDistributedStatus(detail.getChildren(), distStatus);
 			}

@@ -57,9 +57,10 @@
       <div class="panel-heading">
         <span translate="specimens.list">Specimens</span>
         <div class="os-action-btns">
-          <button class="btn btn-primary" ng-if="order.status == 'EXECUTED'" ng-click="returnSpecimens()">
+          <button class="btn btn-primary" ng-if="order.status == 'EXECUTED'" show-if-allowed="orderResource.updateOpts"
+            ng-click="returnSpecimens()">
             <span class="fa fa-plus"></span>
-            <span translate="orders.buttons.return_specimen"></span>
+            <span translate="orders.buttons.return_specimen">Return</span>
           </button>
         </div>
       </div>
@@ -73,19 +74,29 @@
                   <div class="pull-left os-select-specimen-cb" ng-if="order.status == 'EXECUTED'">
                     <os-checkbox ng-model="selection.all" ng-change="toggleAllItemSelect()"></os-checkbox>
                   </div>
-                  <div class="pull-left" style="padding-left: 20px;" translate="orders.spec.label">Label</div>
+                  <div class="pull-left" style="padding-left: 20px;">
+                    <span translate="orders.spec.label">Label</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="col os-col-30" translate="orders.spec.desc">Description</div>
-              <div class="col os-col-20" translate="orders.spec.cp">Collection Protocol</div>
-              <div class="col os-col-10" translate="orders.spec.quantity">Quantity</div>
-              <div class="col os-col-15" translate="orders.status">Status</div>
+              <div class="col os-col-30">
+                <span translate="orders.spec.desc">Description</span>
+              </div>
+              <div class="col os-col-20">
+                <span translate="orders.spec.cp">Collection Protocol</span>
+              </div>
+              <div class="col os-col-10">
+                <span translate="orders.spec.quantity">Quantity</span>
+              </div>
+              <div class="col os-col-15">
+                <span translate="orders.status">Status</span>
+              </div>
             </div>
           </div>
           <div class="os-table-body">
-            <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen"
-              ng-class="{selected: item.selected}">
+            <div class="row" ng-class="{selected: item.selected}" ng-repeat="item in order.orderItems"
+              ng-init="specimen = item.specimen">
               <div class="col os-col-25">
                 <div class="clearfix">
                   <div class="pull-left os-select-specimen-cb" ng-if="order.status == 'EXECUTED'">

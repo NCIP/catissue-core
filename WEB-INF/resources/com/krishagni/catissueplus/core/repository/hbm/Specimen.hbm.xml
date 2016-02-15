@@ -182,13 +182,13 @@
         sp.id in (:specimenIds)
     </query>
 
-    <query name="getSpmnDistributionStatus">
+    <query name="getLatestDistributionAndReturnDates">
       select
         sp.id, max(o.executionDate), max(item.returnDate)
       from
-        com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem item
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder o
+        join o.orderItems item
         join item.specimen sp
-        join item.order o
       where
         o.status = 'EXECUTED' and
         sp.id in (:specimenIds)

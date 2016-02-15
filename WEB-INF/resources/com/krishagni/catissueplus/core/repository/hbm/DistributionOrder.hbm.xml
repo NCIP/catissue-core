@@ -16,8 +16,6 @@
 
     <many-to-one 
       name="requester" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="REQUESTER_ID"/>
       
     <property name="creationDate" column="CREATION_DATE"/>
@@ -49,20 +47,14 @@
     
     <many-to-one 
       name="site" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.Site"
       column="SITE_ID"/>
     
     <many-to-one 
       name="distributionProtocol" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
       column="DISTRIBUTION_PROTOCOL_ID"/>
         
     <many-to-one 
       name="distributor" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="DISTRIBUTOR_ID"/>
       
     <filter name="activeEntity"/>

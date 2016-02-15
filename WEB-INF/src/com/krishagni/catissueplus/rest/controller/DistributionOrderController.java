@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
-import com.krishagni.catissueplus.core.administrative.events.DoReturnEventDetail;
+import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimensDetail;
+import com.krishagni.catissueplus.core.administrative.events.SpecimenReturnDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -137,7 +141,7 @@ public class DistributionOrderController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{id}/return-specimen")
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/return-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public DistributionOrderDetail returnSpecimen(
@@ -146,19 +150,51 @@ public class DistributionOrderController {
 
 		@RequestBody
 		List<Map<String, Object>> valueMapList) {
-		DistributionOrderSummary order = new DistributionOrderSummary();
-		order.setId(orderId);
+		ReturnedSpecimensDetail returnedSpecimensDetail = new ReturnedSpecimensDetail();
+		returnedSpecimensDetail.setOrderId(orderId);
+		returnedSpecimensDetail.setReturnedSpecimens(getSpecimenReturnDetail(valueMapList));
 
-		DoReturnEventDetail eventDetail = new DoReturnEventDetail();
-		eventDetail.setOrder(order);
-		eventDetail.setValueMapList(valueMapList);
-
-		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimen(getRequest(eventDetail));
+		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimen(
+			getRequest(returnedSpecimensDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
+	}
+
+	private List<SpecimenReturnDetail> getSpecimenReturnDetail(List<Map<String, Object>> valueMapList) {
+		List<SpecimenReturnDetail> specReturnDetails = new ArrayList<>();
+		for (Map<String, Object> valueMap : valueMapList) {
+			Map<String, Object> appData = (Map<String, Object>) valueMap.get("appData");
+			SpecimenReturnDetail detail = new SpecimenReturnDetail();
+
+			detail.setItemId(Long.parseLong(appData.get("id").toString()));
+			detail.setQuantity(new BigDecimal(valueMap.get("quantity").toString()));
+
+			Object location = valueMap.get("location");
+			if (location != null) {
+				StorageContainerPositionDetail positionDetail = new StorageContainerPositionDetail();
+				positionDetail.setContainerId(Long.parseLong(location.toString()));
+				detail.setLocation(positionDetail);
+			}
+
+			Object userId = valueMap.get("user");
+			if (userId != null) {
+				detail.setUserId(Long.parseLong(userId.toString()));
+			}
+
+			Object time = valueMap.get("time");
+			if (time != null) {
+				detail.setTime(new Date(Long.parseLong(time.toString())));
+			}
+
+			detail.setComments((String)valueMap.get("comments"));
+
+			specReturnDetails.add(detail);
+		}
+
+		return specReturnDetails;
 	}
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="ckhilosiya" id="Add return event columns to order items table">
+    <addColumn tableName="OS_ORDER_ITEMS">
+      <column name="RETURN_QUANTITY" type="${double.type}"></column>
+      <column name="RETURN_CONTAINER_ID" type="${int.type}"></column>
+      <column name="RETURN_CONTAINER_ROW" type="${text.type}(8)"></column>
+      <column name="RETURN_CONTAINER_COLUMN" type="${text.type}(8)"></column>
+      <column name="RETURN_USER_ID" type="${int.type}"></column>
+      <column name="RETURN_DATE" type="${nullable.ts.type}"></column>
+      <column name="RETURN_COMMENTS" type="${text.type}(255)"></column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Add FK to return container in order items">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_RETURN_CONT_ID"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="RETURN_CONTAINER_ID"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Add FK to return user in order items">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_RETURN_USER_ID"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="RETURN_USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+
+  <changeSet author="ckhilosiya" id="Create updated distribution view for return event" runOnChange="true">
+    <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
+      select
+        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity,
+        item.status as status, item.return_quantity as return_quantity, item.return_container_id as return_container_id,
+        item.return_container_row as return_container_row, item.return_container_column as return_container_column,
+        item.return_user_id as return_user_id, item.return_date as return_date, item.return_comments as return_comments,
+        ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
+        ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
+      from
+        os_order_items item
+        inner join os_orders ord on item.order_id = ord.identifier
+        inner join catissue_distribution_protocol dp on ord.distribution_protocol_id = dp.identifier
+      where
+        ord.status != 'PENDING'
+    </createView>
+  </changeSet>
+</databaseChangeLog>
+

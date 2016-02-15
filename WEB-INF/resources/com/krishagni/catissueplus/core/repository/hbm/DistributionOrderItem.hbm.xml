@@ -13,17 +13,13 @@
     </id>
     
     <many-to-one 
-      name="order" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"
+      name="order"
       column="ORDER_ID"/>
 
     <property name="quantity" column="QUANTITY"/>
       
     <many-to-one 
       name="specimen" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
       column="SPECIMEN_ID"/>
     
     <property name="status" column="STATUS" not-null="true">
@@ -39,20 +35,14 @@
     
     <many-to-one
       name="returnLocation"
-      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
       column="RETURN_CONTAINER_ID"/>
 
-    <property name="returnPosOne" column="RETURN_CONT_POS_ONE"></property>
+    <property name="returnContainerRow" column="RETURN_CONTAINER_ROW"></property>
 
-    <property name="returnPosTwo" column="RETURN_CONT_POS_TWO"></property>
-
-    <property name="returnPosOneStr" column="RETURN_CONT_POS_ONE_STR"></property>
-
-    <property name="returnPosTwoStr" column="RETURN_CONT_POS_TWO_STR"></property>
+    <property name="returnContainerColumn" column="RETURN_CONTAINER_COLUMN"></property>
 
     <many-to-one
       name="returnUser"
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="RETURN_USER_ID"/>
 
     <property name="returnDate" column="RETURN_DATE"/>

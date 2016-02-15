@@ -34,6 +34,7 @@
         <caption>#getMessage("return_event_user")</caption>
         <column>RETURN_USER_ID</column>
         <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
       </userField>
     </row>
 

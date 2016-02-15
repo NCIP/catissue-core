@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
@@ -26,7 +28,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
-import com.krishagni.catissueplus.core.administrative.events.DoReturnEventDetail;
+import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimensDetail;
+import com.krishagni.catissueplus.core.administrative.events.SpecimenReturnDetail;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
@@ -247,28 +251,28 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<DistributionOrderDetail> returnSpecimen(RequestEvent<DoReturnEventDetail> req) {
-		DoReturnEventDetail eventDetail = req.getPayload();
-		DistributionOrder order = daoFactory.getDistributionOrderDao().getById(eventDetail.getOrder().getId());
+	public ResponseEvent<DistributionOrderDetail> returnSpecimen(RequestEvent<ReturnedSpecimensDetail> req) {
+		ReturnedSpecimensDetail returnedDetails = req.getPayload();
+
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		DistributionOrder order = getOrder(returnedDetails.getOrderId(), returnedDetails.getOrderName(), ose);
 		if (order == null) {
-			return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
+			return ResponseEvent.error(ose);
 		}
 
+		AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(order);
 		if (order.getStatus().equals(Status.PENDING)) {
 			return ResponseEvent.userError(DistributionOrderErrorCode.NOT_DISTRIBUTED, order.getName());
 		}
 
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		for (Map<String, Object> valueMap : eventDetail.getValueMapList()) {
-			Map<String, Object> appData = (Map<String, Object>)valueMap.get("appData");
-			Long id = Long.parseLong(appData.get("id").toString());
-			for (DistributionOrderItem item : order.getOrderItems()) {
-				if (item.getId() == id) {
-					updateItemReturnEventData(order, item, valueMap, ose);
-					item.returnSpecimen();
-					break;
-				}
-			}
+		Map<Long, DistributionOrderItem> orderItemsMap = order.getOrderItems().stream()
+			.collect(Collectors.toMap(item -> item.getId(), item -> item));
+
+		for (SpecimenReturnDetail detail : returnedDetails.getReturnedSpecimens()) {
+			DistributionOrderItem item = orderItemsMap.get(detail.getItemId());
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(item.getSpecimen());
+			StorageContainerPosition newLocation = createItemReturnDetail(item, detail, ose);
+			item.returnSpecimen(newLocation);
 		}
 
 		ose.checkAndThrow();
@@ -367,6 +371,52 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		emailService.sendEmail(ORDER_DISTRIBUTED_EMAIL_TMPL, rcpts, props);
 	}
 
+	private DistributionOrder getOrder(Long orderId, String orderName, OpenSpecimenException ose) {
+		DistributionOrder order = null;
+		if (orderId != null) {
+			order = daoFactory.getDistributionOrderDao().getById(orderId);
+		} else if (StringUtils.isNotBlank(orderName)) {
+			order = daoFactory.getDistributionOrderDao().getOrder(orderName);
+		}
+
+		if (order == null) {
+			ose.addError(DistributionOrderErrorCode.NOT_FOUND);
+		}
+
+		return order;
+	}
+
+	private StorageContainerPosition createItemReturnDetail(DistributionOrderItem item, SpecimenReturnDetail returnDetail,
+															OpenSpecimenException ose) {
+		ensureItemIsNotReturned(item, ose);
+
+		validateItemReturnQty(item, returnDetail.getQuantity(), ose);
+		item.setReturnQuantity(returnDetail.getQuantity());
+
+		StorageContainerPositionDetail positionDetail = returnDetail.getLocation();
+		StorageContainerPosition position = null;
+		if (positionDetail != null) {
+			StorageContainer container = daoFactory.getStorageContainerDao().getById(positionDetail.getContainerId());
+			item.setReturnLocation(container);
+			position = container.nextAvailablePosition();
+			item.setReturnContainerRow(position.getPosOne());
+			item.setReturnContainerColumn(position.getPosTwo());
+		}
+
+		if (returnDetail.getUserId() == null) {
+			ose.addError(DistributionOrderErrorCode.USER_REQ);
+		} else {
+			item.setReturnUser(daoFactory.getUserDao().getById(returnDetail.getUserId()));
+		}
+
+		validateItemReturnDate(item, returnDetail.getTime(), ose);
+		item.setReturnDate(returnDetail.getTime());
+
+		item.setReturnComments(returnDetail.getComments());
+
+		return position;
+	}
+
 	private void ensureItemIsNotReturned(DistributionOrderItem item, OpenSpecimenException ose) {
 		if (item.getStatus().equals(DistributionOrderItem.Status.RETURNED)) {
 			ose.addError(DistributionOrderErrorCode.SPEC_ALREADY_RETURNED, item.getSpecimen().getLabel());
@@ -379,42 +429,16 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 		}
 	}
 
-	private void validateItemReturnDate(DistributionOrder order, DistributionOrderItem item, Date returnDate,
-		OpenSpecimenException ose) {
-		if (order.getExecutionDate().after(returnDate)) {
+	private void validateItemReturnDate(DistributionOrderItem item, Date returnDate, OpenSpecimenException ose) {
+		if (returnDate == null) {
+			ose.addError(DistributionOrderErrorCode.DATE_REQ);
+			return;
+		}
+
+		if (item.getOrder().getExecutionDate().after(returnDate)) {
 			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_DATE, item.getSpecimen().getLabel());
 		}
 	}
 
-	private void updateItemReturnEventData(DistributionOrder order, DistributionOrderItem item,
-		Map<String, Object> valueMap, OpenSpecimenException ose) {
-		ensureItemIsNotReturned(item, ose);
-
-		BigDecimal returnQty = new BigDecimal(valueMap.get("quantity").toString());
-		validateItemReturnQty(item, returnQty, ose);
-		item.setReturnQuantity(returnQty);
-
-		Object location = valueMap.get("location");
-		if (location != null) {
-			Long locationId = new Long(location.toString());
-			StorageContainer container = daoFactory.getStorageContainerDao().getById(locationId);
-			item.setReturnLocation(container);
-			StorageContainerPosition position = container.nextAvailablePosition();
-			item.setReturnPosOne(position.getPosOneOrdinal());
-			item.setReturnPosTwo(position.getPosTwoOrdinal());
-			item.setReturnPosOneStr(position.getPosOne());
-			item.setReturnPosTwoStr(position.getPosTwo());
-		}
-
-		Long userId = new Long(valueMap.get("user").toString());
-		item.setReturnUser(daoFactory.getUserDao().getById(userId));
-
-		Date returnDate = new Date(new Long(valueMap.get("time").toString()));
-		validateItemReturnDate(order, item, returnDate, ose);
-		item.setReturnDate(returnDate);
-
-		item.setReturnComments(valueMap.get("comments").toString());
-	}
-	
 	private static final String ORDER_DISTRIBUTED_EMAIL_TMPL = "order_distributed";
 }

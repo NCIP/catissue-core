@@ -27,13 +27,9 @@ public class DistributionOrderItem extends BaseEntity {
 
 	private StorageContainer returnLocation;
 
-	private Integer returnPosOne;
+	private String returnContainerRow;
 
-	private Integer returnPosTwo;
-
-	private String returnPosOneStr;
-
-	private String returnPosTwoStr;
+	private String returnContainerColumn;
 
 	private User returnUser;
 
@@ -89,36 +85,20 @@ public class DistributionOrderItem extends BaseEntity {
 		this.returnLocation = returnLocation;
 	}
 
-	public Integer getReturnPosOne() {
-		return returnPosOne;
+	public String getReturnContainerRow() {
+		return returnContainerRow;
 	}
 
-	public void setReturnPosOne(Integer returnPosOne) {
-		this.returnPosOne = returnPosOne;
+	public void setReturnContainerRow(String returnContainerRow) {
+		this.returnContainerRow = returnContainerRow;
 	}
 
-	public Integer getReturnPosTwo() {
-		return returnPosTwo;
+	public String getReturnContainerColumn() {
+		return returnContainerColumn;
 	}
 
-	public void setReturnPosTwo(Integer returnPosTwo) {
-		this.returnPosTwo = returnPosTwo;
-	}
-
-	public String getReturnPosOneStr() {
-		return returnPosOneStr;
-	}
-
-	public void setReturnPosOneStr(String returnPosOneStr) {
-		this.returnPosOneStr = returnPosOneStr;
-	}
-
-	public String getReturnPosTwoStr() {
-		return returnPosTwoStr;
-	}
-
-	public void setReturnPosTwoStr(String returnPosTwoStr) {
-		this.returnPosTwoStr = returnPosTwoStr;
+	public void setReturnContainerColumn(String returnContainerColumn) {
+		this.returnContainerColumn = returnContainerColumn;
 	}
 
 	public User getReturnUser() {
@@ -153,8 +133,8 @@ public class DistributionOrderItem extends BaseEntity {
 		order.addOnSaveProc(() -> specimen.distribute(this));
 	}
 
-	public void returnSpecimen() {
-		specimen.returnSpecimen(this);
+	public void returnSpecimen(StorageContainerPosition newLocation) {
+		specimen.returnSpecimen(this, newLocation);
 		this.setStatus(Status.RETURNED);
 	}
 }

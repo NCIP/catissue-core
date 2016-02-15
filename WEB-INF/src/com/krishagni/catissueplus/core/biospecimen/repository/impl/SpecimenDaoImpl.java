@@ -25,6 +25,8 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriter
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
+import edu.emory.mathcs.backport.java.util.Collections;
+
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {	
 	public Class<?> getType() {
 		return Specimen.class;
@@ -166,7 +168,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	@Override
 	public Map<Long, String> getDistributionStatus(List<Long> specimenIds) {
 		List<Object[]> rows = getSessionFactory().getCurrentSession()
-			.getNamedQuery(GET_SPMN_DISTRIBUTION_STATUS)
+			.getNamedQuery(GET_LATEST_DISTRIBUTION_AND_RETURN_DATES)
 			.setParameterList("specimenIds", specimenIds)
 			.list();
 
@@ -176,6 +178,12 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		}
 
 		return distStatus;
+	}
+
+	@Override
+	public String getDistributionStatus(Long specimenId) {
+		Map<Long, String> statuses = getDistributionStatus(Collections.singletonList(specimenId));
+		return statuses.get(specimenId);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -331,5 +339,5 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
 
-	private static final String GET_SPMN_DISTRIBUTION_STATUS = FQN + ".getSpmnDistributionStatus";
+	private static final String GET_LATEST_DISTRIBUTION_AND_RETURN_DATES = FQN + ".getLatestDistributionAndReturnDates";
 }
