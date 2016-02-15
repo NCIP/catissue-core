@@ -37,9 +37,9 @@
       name="returnLocation"
       column="RETURN_CONTAINER_ID"/>
 
-    <property name="returnContainerRow" column="RETURN_CONTAINER_ROW"></property>
+    <property name="returnContainerRow" column="RETURN_CONTAINER_ROW"/>
 
-    <property name="returnContainerColumn" column="RETURN_CONTAINER_COLUMN"></property>
+    <property name="returnContainerColumn" column="RETURN_CONTAINER_COLUMN"/>
 
     <many-to-one
       name="returnUser"

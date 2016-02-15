@@ -16,7 +16,7 @@
       tableName="CATISSUE_PART_MEDICAL_ID" 
       constraintName="MRN_SITE_UNIQUE"/>
   </changeSet>
-
+  
   <changeSet author="nmarwaha" id="Added PMBC specimen type under class Cell">
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="0">
@@ -140,4 +140,3 @@
     <dropColumn tableName="OS_LABEL_PRINT_JOBS" columnName="NUM_COPIES"/>
   </changeSet>
 </databaseChangeLog>
-

@@ -34,7 +34,6 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
-
   <changeSet author="ckhilosiya" id="Create updated distribution view for return event" runOnChange="true">
     <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
       select

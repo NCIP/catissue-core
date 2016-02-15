@@ -59,7 +59,7 @@ angular.module('os.administrative.order.detail', ['os.administrative.models'])
       }
 
       SpecimensHolder.setSpecimens($scope.selection.items);
-      $state.go('return-specimen', {orderId: order.id});
+      $state.go('return-specimens', {orderId: order.id});
     };
 
     init();
