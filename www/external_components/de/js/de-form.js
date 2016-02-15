@@ -935,8 +935,10 @@ edu.common.de.SelectField = function(id, field, args) {
   this.inputEl = null;
 
   this.control = null;
+  
+  this.isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
 
-  this.value = '';
+  this.value = this.isMultiSelect ? [] : "";
 
   this.validator;
 
@@ -971,15 +973,15 @@ edu.common.de.SelectField = function(id, field, args) {
     }
   };
 
-  this.initSelection =  function(value, elem, callback) {
-    if (value instanceof Array) {
-      callback(value.map(
+  var initSelection =  function(elem, callback) {
+    if (that.value instanceof Array) {
+      callback(that.value.map(
         function(opt) {
           return {id: opt, text: opt};
         }
       ));
     } else {
-      callback({id: value, text: value});
+      callback({id: that.value, text: that.value});
     }
   }
 
@@ -994,16 +996,9 @@ edu.common.de.SelectField = function(id, field, args) {
   };
 
   this.postRender = function() {
-    var isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
-    this.control = new Select2Search(this.inputEl, {multiple: isMultiSelect});
+    this.control = new Select2Search(this.inputEl, {multiple: this.isMultiSelect});
     this.control.onQuery(qFunc).onChange(onChange);
-
-    this.control.onInitSelection(
-      function(elem, callback) {
-        that.initSelection(that.value, elem, callback);
-      }
-    ).render();
-
+    this.control.onInitSelection(initSelection).render();
     this.control.setValue(this.value);
   };
 
@@ -1020,7 +1015,7 @@ edu.common.de.SelectField = function(id, field, args) {
   };
 	  
   this.getValue = function() {
-    return {name: field.name, value: that.value};
+    return {name: field.name, value: this.value};
   };
 
   this.getDisplayValue = function() {
@@ -1028,17 +1023,13 @@ edu.common.de.SelectField = function(id, field, args) {
       this.postRender();
     }
 
-    var val = this.control.getValue();
-    var displayValue = undefined;
-    if (val) {
-      displayValue = val.text;
-    }
-    return {name: field.name, value: displayValue ? displayValue : '' };
+    var value = (this.value instanceof Array) ? this.value.join() : this.value;
+    return {name: field.name, value: value};
   }
 
   this.setValue = function(recId, value) {
     this.recId = recId;
-    this.value = value ? value : '';
+    this.value = value ? value : (this.isMultiSelect ? [] : "");
     if (this.control) {
       this.control.setValue(value);
     }
