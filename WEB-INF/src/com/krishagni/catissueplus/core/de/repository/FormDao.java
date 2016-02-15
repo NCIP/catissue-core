@@ -1,10 +1,8 @@
 package com.krishagni.catissueplus.core.de.repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import krishagni.catissueplus.beans.FormContextBean;
-import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.repository.Dao;
@@ -13,6 +11,9 @@ import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
+
+import krishagni.catissueplus.beans.FormContextBean;
+import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary();
@@ -70,4 +71,6 @@ public interface FormDao extends Dao<FormContextBean>{
 	public void insertFormChangeLog(String file, String digest, Long formId);
 	
 	public void deleteFormContexts(Long formId);
+
+	public void deleteRecords(Long formCtxtId, Collection<Long> recordIds);
 }
