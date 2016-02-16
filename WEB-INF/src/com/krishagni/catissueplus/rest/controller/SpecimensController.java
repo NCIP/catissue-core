@@ -310,8 +310,8 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/cpr-visit-ids")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public Map<String, Long> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
-		ResponseEvent<Map<String, Long>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
+	public Map<String, Object> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
+		ResponseEvent<Map<String, Object>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -321,8 +321,8 @@ public class SpecimensController {
 	@ResponseBody
 	public FormCtxtSummary getForm(
 			@RequestParam(value = "lineage", required = false, defaultValue="New")
-			String lineage
-			) {
+			String lineage) {
+
 		ListEntityFormsOp op = new ListEntityFormsOp();
 		if (lineage.equals("Aliquot")) {
 			op.setEntityType(EntityType.ALIQUOT_EXTN);

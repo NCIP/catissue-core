@@ -12,6 +12,7 @@
         <udn>id</udn>
         <caption>#getMessage("order_identifier")</caption>
         <column>IDENTIFIER</column>
+        <recordUrl>#/orders/:value/overview</recordUrl>
       </numberField>
     </row>
 
@@ -21,6 +22,7 @@
         <udn>orderName</udn>
         <caption>#getMessage("order_name")</caption>
         <column>NAME</column>
+        <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value=:value</recordUrl>
       </textField>
     </row>
 
@@ -39,6 +41,7 @@
             <udn>distributionProtocolTitle</udn>
             <caption>#getMessage("order_dp_title")</caption>
             <column>TITLE</column>
+            <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value=:value</recordUrl>
           </textField>
         </row>
 
@@ -96,6 +99,7 @@
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
           </dropDown>              
         </row>
       </subForm>

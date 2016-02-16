@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -50,12 +51,13 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
-public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
+public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory cprFactory;
@@ -388,6 +390,21 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+
+	@Override
+	public String getObjectName() {
+		return "cpr";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getCprDao().getCprIds(key, value);
 	}
 
 	private CollectionProtocolRegistrationDetail createRegistration(CollectionProtocolRegistrationDetail input, boolean saveParticipant) {

@@ -15,6 +15,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -133,7 +134,12 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.setParameterList("siteIds", siteIds)
 				.list();
 	}
-	
+
+	@Override
+	public Map<String, Object> getCpIds(String key, Object value) {
+		return getObjectIds("cpId", key, value);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds) {

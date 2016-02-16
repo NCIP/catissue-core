@@ -113,6 +113,11 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> getDpIds(String key, Object value) {
+		return getObjectIds("dpId", key, value);
+	}
+
 	private void addSearchConditions(Criteria query, DpListCriteria crit) {
 		String searchTerm = crit.query();
 		

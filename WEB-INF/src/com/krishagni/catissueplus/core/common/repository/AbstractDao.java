@@ -1,13 +1,16 @@
 
 package com.krishagni.catissueplus.core.common.repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
@@ -111,5 +114,18 @@ public class AbstractDao<T> implements Dao<T> {
 		Session session = sessionFactory.getCurrentSession();
 		session.enableFilter("activeEntity");
 		return session;
+	}
+
+	protected Map<String, Object> getObjectIds(String propName, String key, Object value) {
+		List<Long> rows = getCurrentSession().createCriteria(getType())
+				.setProjection(Projections.projectionList().add(Projections.property("id")))
+				.add(Restrictions.eq(key, value))
+				.list();
+
+		if (CollectionUtils.isEmpty(rows)) {
+			return Collections.emptyMap();
+		}
+
+		return Collections.singletonMap(propName, rows.iterator().next());
 	}
 }

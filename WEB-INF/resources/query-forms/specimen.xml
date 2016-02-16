@@ -16,6 +16,7 @@
         <udn>id</udn>
         <caption>#getMessage("specimen_identifier")</caption>
         <column>IDENTIFIER</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>
 
@@ -39,6 +40,7 @@
         <udn>label</udn>
         <caption>#getMessage("specimen_label")</caption>
         <column>LABEL</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
       </textField>
     </row>
 
@@ -56,6 +58,7 @@
             <udn>parentLabel</udn>
             <caption>#getMessage("specimen_parent_specimen_label")</caption>
             <column>LABEL</column>
+            <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
           </textField>  
         </row>
       </subForm>
@@ -275,6 +278,7 @@
             <caption>#getMessage("specimen_spec_position_container_name")</caption>
             <column>CONTAINER_NAME</column>
             <maxLength>255</maxLength>
+            <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
           </textField>              
 
           <textField>
@@ -330,6 +334,7 @@
                 <caption>#getMessage("specimen_spec_position_container_ancestor_name")</caption>
                 <column>ANCESTOR_NAME</column>
                 <maxLength>255</maxLength>
+                <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
               </textField>
             </row>
           </subForm>

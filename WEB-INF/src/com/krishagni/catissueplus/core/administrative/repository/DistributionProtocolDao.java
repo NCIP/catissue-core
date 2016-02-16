@@ -25,5 +25,6 @@ public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 	public Map<Long, Integer> getSpecimensCountByDpIds(Collection<Long> dpIds);
 	
 	public List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria listCrit);
-	
+
+	public Map<String, Object> getDpIds(String key, Object value);
 }

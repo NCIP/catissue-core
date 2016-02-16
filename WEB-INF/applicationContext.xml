@@ -774,6 +774,22 @@
     <property name="daoFactory" ref="biospecimenDaoFactory" />
     <property name="appProps" ref="appProps"/>
   </bean>
+
+  <bean id="objectStateParamsResolver" class="com.krishagni.catissueplus.core.common.service.impl.ObjectStateParamsResolverFactoryImpl">
+    <property name="resolvers">
+      <list>
+        <ref bean="collectionProtocolService"/>
+        <ref bean="cprSvc"/>
+        <ref bean="visitService"/>
+        <ref bean="specimenSvc"/>
+        <ref bean="storageContainerSvc"/>
+        <ref bean="siteService"/>
+        <ref bean="distributionProtocolService"/>
+        <ref bean="distributionOrderService"/>
+        <ref bean="shipmentSvc"/>
+      </list>
+    </property>
+  </bean>
   
   <task:scheduler id="taskScheduler" pool-size="1"/>
   <task:annotation-driven scheduler="taskScheduler"/>

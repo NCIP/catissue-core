@@ -24,4 +24,7 @@ public interface SiteDao extends Dao<Site> {
 	// related to site
 	//
 	public Map<Long, Integer> getCpCountBySite(Collection<Long> siteIds);
+
+
+	public Map<String, Object> getSiteIds(String key, Object value);
 }

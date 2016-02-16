@@ -74,7 +74,12 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	public Class<DistributionOrder> getType() {
 		return DistributionOrder.class;
 	}
-	
+
+	@Override
+	public Map<String, Object> getOrderIds(String key, Object value) {
+		return getObjectIds("orderId", key, value);
+	}
+
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getOrderList(DistributionOrderListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()

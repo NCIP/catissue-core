@@ -47,10 +47,11 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-public class VisitServiceImpl implements VisitService {
+public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 
 	private VisitFactory visitFactory;
@@ -422,7 +423,22 @@ public class VisitServiceImpl implements VisitService {
 		return daoFactory.getSpecimenDao().getSpecimenVisits(crit);
 	}
 
-	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
+	@Override
+	public String getObjectName() {
+		return "visit";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getVisitsDao().getCprVisitIds(key, value);
+	}
+
+	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {
 		Visit existing = null;
 		String prevStatus = null;   
 		

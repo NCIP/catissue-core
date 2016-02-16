@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -107,6 +111,31 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				.getNamedQuery(GET_VISIT_BY_SPR)
 				.setString("sprNumber", sprNumber)
 				.list();
+	}
+
+	@Override
+	public Map<String, Object> getCprVisitIds(String key, Object value) {
+		List<Object[]> rows = getCurrentSession().createCriteria(Visit.class)
+			.createAlias("registration", "cpr")
+			.createAlias("cpr.collectionProtocol", "cp")
+			.setProjection(
+				Projections.projectionList()
+					.add(Projections.property("id"))
+					.add(Projections.property("cpr.id"))
+					.add(Projections.property("cp.id")))
+			.add(Restrictions.eq(key, value))
+			.list();
+
+		if (CollectionUtils.isEmpty(rows)) {
+			return Collections.emptyMap();
+		}
+
+		Object[] row = rows.iterator().next();
+		Map<String, Object> ids = new HashMap<>();
+		ids.put("visitId", row[0]);
+		ids.put("cprId", row[1]);
+		ids.put("cpId", row[2]);
+		return ids;
 	}
 
 	private String getVisitKey(Long visitId, Long cpeId) {

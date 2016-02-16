@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -57,13 +58,14 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
 
-public class CollectionProtocolServiceImpl implements CollectionProtocolService {
+public class CollectionProtocolServiceImpl implements CollectionProtocolService, ObjectStateParamsResolver {
 
 	private CollectionProtocolFactory cpFactory;
 	
@@ -838,7 +840,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService 
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+
+	@Override
+	public String getObjectName() {
+		return "cp";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getCollectionProtocolDao().getCpIds(key, value);
+	}
+
 	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {
 		ensureCreatorBelongToCpSites(cp);
 	}

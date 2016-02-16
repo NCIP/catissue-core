@@ -13,6 +13,7 @@
         <udn>id</udn>
         <caption>#getMessage("participant_identifier")</caption>
         <column>PARTICIPANT_ID</column>
+        <recordUrl>#/object-state-params-resolver?stateName=participant-detail.overview&amp;objectName=cpr&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>
     <row>
@@ -172,6 +173,7 @@
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
           </dropDown>
         </row>
       </subForm>
@@ -200,6 +202,7 @@
         <udn>ppid</udn>
         <caption>#getMessage("participant_ppid")</caption>
         <column>PPID</column>
+        <recordUrl>#/object-state-params-resolver?stateName=participant-detail.overview&amp;objectName=cpr&amp;key=ppid&amp;value=:value</recordUrl>
       </textField>
     </row>
     <row>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -38,10 +39,11 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.ExportedFileDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
-public class StorageContainerServiceImpl implements StorageContainerService {
+public class StorageContainerServiceImpl implements StorageContainerService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 	
 	private StorageContainerFactory containerFactory;
@@ -297,8 +299,23 @@ public class StorageContainerServiceImpl implements StorageContainerService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
-	}	
-	
+	}
+
+	@Override
+	public String getObjectName() {
+		return "container";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getStorageContainerDao().getContainerIds(key, value);
+	}
+
 	private StorageContainer getContainer(ContainerQueryCriteria crit) {
 		return getContainer(crit.getId(), crit.getName());
 	}

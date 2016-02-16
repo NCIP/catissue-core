@@ -33,12 +33,13 @@ import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
 
-public class SiteServiceImpl implements SiteService {
+public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	private SiteFactory siteFactory;
 
 	private DaoFactory daoFactory;
@@ -174,7 +175,18 @@ public class SiteServiceImpl implements SiteService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	public String getObjectName() {
+		return "site";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		return daoFactory.getSiteDao().getSiteIds(key, value);
+	}
+
 	private void addSiteStats(List<SiteSummary> sites) {
 		if (CollectionUtils.isEmpty(sites)) {
 			return;

@@ -39,13 +39,14 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
-public class DistributionProtocolServiceImpl implements DistributionProtocolService {
+public class DistributionProtocolServiceImpl implements DistributionProtocolService, ObjectStateParamsResolver {
 	
 	private static final Map<String, String> attrDisplayKeys = new HashMap<String, String>() {
 		{
@@ -423,7 +424,18 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	public String getObjectName() {
+		return "distributionProtocol";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		return daoFactory.getDistributionProtocolDao().getDpIds(key, value);
+	}
+
 	private void ensureUniqueReqConstraints(DpRequirement oldDpr, DpRequirement newDpr, OpenSpecimenException ose) {
 		if (oldDpr != null && oldDpr.equalsSpecimenGroup(newDpr)) {
 			return;
