@@ -143,71 +143,121 @@ angular.module('os.common.box', [])
 
     function assignCells(opts, inputLabels, vacateOccupants) {
       var occupants = angular.copy(opts.occupants);
-      var mapIdx = 0, labelIdx = 0;
 
-      var labels = Util.splitStr(inputLabels, /,|\t|\n/, true);
-      var done = false;
-      for (var y = 1; y <= opts.box.numberOfRows(); ++y) {
-        for (var x = 1; x <= opts.box.numberOfColumns(); ++x) {
-          if (labelIdx >= labels.length) {
-            //
-            // we are done with probing/iterating through all input labels
-            //
-            done = true;
-            break;
+      //
+      // Below regular expression will break (A, B) x, y, z into following parts
+      // match[0] = '(A, B) x, y, z' ; entire matched string
+      // match[1] = '(A, B)'; starting cell in parenthesis
+      // match[2] = 'A, B'; starting cell without parenthesis
+      // match[3] = 'x, y, z'; labels to scan or parse
+      //
+      var re = /(\(([^)]+)\))?\s*([^(]+)/g;
+      inputLabels = inputLabels.trim();
+
+      var input = [], match;
+      while ((match = re.exec(inputLabels)) != null) {
+        input.push({startCell: match[2], labels: Util.splitStr(match[3], /,|\t|\n/, true)});
+      }
+
+      var noFreeLocs = false
+      for (var i = 0; i < input.length; ++i) {
+        var startRow = 1, startColumn = 1;
+        var mapIdx = 0, labelIdx = 0;
+
+        var labels = input[i].labels;
+        if (!!input[i].startCell) {
+          //
+          // Explicit starting cell specified
+          //
+          var startCell = input[i].startCell.trim().split(',');
+          if (startCell.length != 2) {
+            alert("Invalid start position: " + input[1].startCell);
+            return;
           }
 
-          var existing = undefined;
-          if (mapIdx < occupants.length && isOccupied(opts, occupants[mapIdx], x, y)) {
-            //
-            // current cell is occupied
-            //
-            if (!vacateOccupants || !opts.isVacatable(occupants[mapIdx])) {
+          startRow    = NumberConverterUtil.toNumber(opts.box.rowLabelingScheme(),    startCell[0].trim());
+          startColumn = NumberConverterUtil.toNumber(opts.box.columnLabelingScheme(), startCell[1].trim());
+
+          //
+          // fast forward map index to point to first occupant in cell (row, column)
+          // such that row > startRow or row == startRow and column > startColumn
+          //
+          while (mapIdx < occupants.length) {
+            if (!isOccupiedBefore(opts, occupants[mapIdx], startRow, startColumn)) {
+              break;
+            }
+
+            ++mapIdx;
+          }
+        }
+
+        var done = false;
+        for (var y = startRow; y <= opts.box.numberOfRows(); ++y) {
+          for (var x = startColumn; x <= opts.box.numberOfColumns(); ++x) {
+            if (labelIdx >= labels.length) {
               //
-              // When asked not to vacate existing occupants or present occupant
-              // is not vacatable, then examine next cell
+              // we are done with probing/iterating through all input labels
               //
-              mapIdx++;
+              done = true;
+              break;
+            }
+
+            var existing = undefined;
+            if (mapIdx < occupants.length && isOccupied(opts, occupants[mapIdx], x, y)) {
+              //
+              // current cell is occupied
+              //
+              if (!vacateOccupants || !opts.isVacatable(occupants[mapIdx])) {
+                //
+                // When asked not to vacate existing occupants or present occupant
+                // is not vacatable, then examine next cell
+                //
+                mapIdx++;
+                continue;
+              }
+
+              existing = occupants[mapIdx];
+              occupants.splice(mapIdx, 1);
+            }
+ 
+            var label = labels[labelIdx++];
+            if ((!label || label.trim().length == 0) && (!vacateOccupants || !existing)) {
+              //
+              // Label is empty. Either asked not to vacate existing occupants or 
+              // present cell is empty
+              //
               continue;
             }
 
-            existing = occupants[mapIdx];
-            occupants.splice(mapIdx, 1);
-          }
- 
-          var label = labels[labelIdx++];
-          if ((!label || label.trim().length == 0) && (!vacateOccupants || !existing)) {
-            //
-            // Label is empty. Either asked not to vacate existing occupants or 
-            // present cell is empty
-            //
-            continue;
+            var cell = undefined;
+            if (!!existing && opts.occupantName(existing).toLowerCase() == label.toLowerCase()) {
+              cell = existing;
+            } else {
+              cell = opts.createCell(label, x, y, existing);
+            }
+
+            occupants.splice(mapIdx, 0, cell);
+            mapIdx++;
           }
 
-          var cell = undefined;
-          if (!!existing && opts.occupantName(existing).toLowerCase() == label.toLowerCase()) {
-            cell = existing;
-          } else {
-            cell = opts.createCell(label, x, y, existing);
+          //
+          // start of next row
+          //
+          startColumn = 1;
+
+          if (done) {
+            break;
+          }
+        }
+
+        while (labelIdx < labels.length) {
+          if (!!labels[labelIdx] && labels[labelIdx].trim().length > 0) {
+            noFreeLocs = true;
+            break;
           }
 
-          occupants.splice(mapIdx, 0, cell);
-          mapIdx++;
+          labelIdx++;
         }
-
-        if (done) {
-          break;
-        }
-      }
-
-      var noFreeLocs = false;
-      while (labelIdx < labels.length) {
-        if (!!labels[labelIdx] && labels[labelIdx].trim().length > 0) {
-          noFreeLocs = true;
-          break;
-        }
-
-        labelIdx++;
       }
 
       return {occupants: occupants, noFreeLocs: noFreeLocs};
@@ -215,6 +265,12 @@ angular.module('os.common.box', [])
 
     function isOccupied(opts, occupant, x, y) {
       return opts.box.row(occupant) == y && opts.box.column(occupant) == x;
+    }
+
+    function isOccupiedBefore(opts, occupant, y, x) {
+      var row = opts.box.row(occupant);
+      var col = opts.box.column(occupant);
+      return (row < y) || (row == y && col < x);
     }
 
     return {
