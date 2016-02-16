@@ -184,6 +184,10 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	@Override
 	@PlusTransactional
 	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
 		return daoFactory.getSiteDao().getSiteIds(key, value);
 	}
 

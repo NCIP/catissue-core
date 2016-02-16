@@ -433,6 +433,10 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@Override
 	@PlusTransactional
 	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
 		return daoFactory.getDistributionProtocolDao().getDpIds(key, value);
 	}
 

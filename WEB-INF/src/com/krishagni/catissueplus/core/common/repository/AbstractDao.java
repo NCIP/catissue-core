@@ -118,9 +118,9 @@ public class AbstractDao<T> implements Dao<T> {
 
 	protected Map<String, Object> getObjectIds(String propName, String key, Object value) {
 		List<Long> rows = getCurrentSession().createCriteria(getType())
-				.setProjection(Projections.projectionList().add(Projections.property("id")))
-				.add(Restrictions.eq(key, value))
-				.list();
+			.setProjection(Projections.projectionList().add(Projections.property("id")))
+			.add(Restrictions.eq(key, value))
+			.list();
 
 		if (CollectionUtils.isEmpty(rows)) {
 			return Collections.emptyMap();
