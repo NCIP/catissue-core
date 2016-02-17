@@ -54,6 +54,7 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             formPvUrl      : baseUrl + '/:formId/permissible-values',
             fileUploadUrl  : filesUrl,
             fileDownloadUrl: ExtensionsUtil.getFileDownloadUrl,
+            formData       : opts.formData,
             recordId       : opts.recordId,
             dateFormat     : $rootScope.global.queryDateFmt.format,
             appData        : {formCtxtId: opts.formCtxtId, objectId: opts.objectId},

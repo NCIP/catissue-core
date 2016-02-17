@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.specimen.addaliquots', [])
   .controller('AddAliquotsCtrl', function(
     $scope, $rootScope, $state, $stateParams, specimen, cpr, visit, extensionCtxt,
-    CollectSpecimensSvc, SpecimenUtil, Util) {
+    CollectSpecimensSvc, SpecimenUtil, ExtensionsUtil) {
 
     function init() {
       $scope.parentSpecimen = specimen;
@@ -20,7 +20,7 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
       }
 
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts($scope.aliquotSpec, extensionCtxt);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.aliquotSpec, extensionCtxt);
     }
 
     function getState() {

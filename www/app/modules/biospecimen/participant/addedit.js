@@ -3,7 +3,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, $translate, $modal, cp, cpr, extensionCtxt,
     CollectionProtocolRegistration, Participant,
-    Site, PvManager, Util, ExtensionsUtil) {
+    Site, PvManager, ExtensionsUtil) {
 
     var availableSites = [];
 
@@ -16,8 +16,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cp = cp;
       $scope.cpr = angular.copy(cpr);
       $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
-      $scope.extnOpts = Util.getExtnOpts($scope.cpr.participant, extensionCtxt); 
-      ExtensionsUtil.createExtensionFieldMap($scope.cpr.participant);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.cpr.participant, extensionCtxt); 
 
       loadPvs();
     };

@@ -1,11 +1,12 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
-  .controller('CpAddEditCtrl', function($scope, $state, cp, extensionCtxt, User, Site, Util, PvManager) {
+  .controller('CpAddEditCtrl', function(
+    $scope, $state, cp, extensionCtxt, User, Site, ExtensionsUtil, PvManager) {
 
     function init() {
       $scope.cp = cp;
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(cp, extensionCtxt);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(cp, extensionCtxt);
       $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 

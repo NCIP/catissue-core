@@ -164,22 +164,6 @@ angular.module('openspecimen')
       return value;
     }
 
-    function getExtnOpts(entity, extnCtxt) {
-      if (!extnCtxt) {
-        return undefined;
-      }
-
-      return {
-        formId: extnCtxt.formId,
-        recordId: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.id : undefined,
-        formCtxtId: parseInt(extnCtxt.formCtxtId),
-        objectId: entity.id,
-        showActionBtns: false,
-        showPanel: false, 
-        labelAlignment: 'horizontal'
-      };
-    }
-    
     function downloadReport(entity, msgClass) {
       var alert = Alerts.info(msgClass + '.report_gen_initiated', {}, false);
       entity.generateReport().then(
@@ -233,8 +217,6 @@ angular.module('openspecimen')
 
       parseDate: parseDate,
 
-      getExtnOpts: getExtnOpts,
-      
       downloadReport : downloadReport,
 
       booleanPromise: booleanPromise,

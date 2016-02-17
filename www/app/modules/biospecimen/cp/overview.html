@@ -74,6 +74,10 @@
       </li>
     </ul>
 
+    <div ng-if="!!cp.extensionDetail">
+      <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
+    </div>
+
     <div class="os-section os-line-section">
       <strong class="key key-sm" translate="cp.label_formats">Label Formats</strong>
       <div>
@@ -163,9 +167,6 @@
       </div>
     </div>
   
-    <div ng-if="!!cp.extensionDetail">
-      <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
-    </div>
   </div>
 
   <!-- div class="col-xs-4">
