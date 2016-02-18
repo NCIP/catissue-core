@@ -4,7 +4,7 @@ angular.module('os.administrative.order',
     'os.administrative.order.list',
     'os.administrative.order.detail',
     'os.administrative.order.addedit',
-    'os.administrative.order.returnspecimen'
+    'os.administrative.order.returnspecimens'
   ])
 
   .config(function($stateProvider) {
@@ -31,6 +31,7 @@ angular.module('os.administrative.order',
       .state('order-addedit', {
         url: '/order-addedit/:orderId',
         templateUrl: 'modules/administrative/order/addedit.html',
+        controller: 'OrderAddEditCtrl',
         resolve: {
           order: function($stateParams , DistributionOrder) {
             if ($stateParams.orderId) {
@@ -39,18 +40,17 @@ angular.module('os.administrative.order',
             return new DistributionOrder({status: 'PENDING', orderItems: []});
           }
         },
-        controller: 'OrderAddEditCtrl',
         parent: 'order-root'
       })
       .state('order-detail', {
         url: '/orders/:orderId',
         templateUrl: 'modules/administrative/order/detail.html',
+        controller: 'OrderDetailCtrl',
         resolve: {
           order: function($stateParams , DistributionOrder) {
             return DistributionOrder.getById($stateParams.orderId);
           }
         },
-        controller: 'OrderDetailCtrl',
         parent: 'order-root'
       })
       .state('order-detail.overview', {
@@ -60,13 +60,13 @@ angular.module('os.administrative.order',
       })
       .state('return-specimens', {
         url: '/orders/:orderId/return-specimens',
+        templateUrl: 'modules/administrative/order/return-specimens.html',
+        controller: 'ReturnSpecimensCtrl',
         resolve: {
           order: function($stateParams, DistributionOrder) {
             return DistributionOrder.getById($stateParams.orderId);
           }
         },
-        templateUrl: 'modules/administrative/order/return-specimen.html',
-        controller: 'ReturnSpecimenCtrl',
         parent: 'order-root'
       });
   });

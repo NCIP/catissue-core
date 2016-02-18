@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
@@ -791,7 +792,7 @@ public class Specimen extends BaseExtensionEntity {
 		}*/
 	}
 
-	public void returnSpecimen(DistributionOrderItem item, StorageContainerPosition newLocation) {
+	public void returnSpecimen(DistributionOrderItem item) {
 		if (isClosed()) {
 			activate();
 			setAvailableQuantity(item.getReturnQuantity());
@@ -799,12 +800,12 @@ public class Specimen extends BaseExtensionEntity {
 			setAvailableQuantity(getAvailableQuantity().add(item.getReturnQuantity()));
 		}
 
-		if (newLocation != null && !newLocation.getContainer().canContain(this)) {
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN,
-				newLocation.getContainer().getName(), getLabel());
+		StorageContainer container = item.getReturnContainer();
+		if (container != null) {
+			StorageContainerPosition position = container.createPosition(item.getReturnRow(), item.getReturnColumn());
+			transferTo(position, item.getReturnDate());
 		}
 
-		transferTo(newLocation, item.getReturnDate());
 		SpecimenReturnEvent.createForDistributionOrderItem(item).saveRecordEntry();
 	}
 	

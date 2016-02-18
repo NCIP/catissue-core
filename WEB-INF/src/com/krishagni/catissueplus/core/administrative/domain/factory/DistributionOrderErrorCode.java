@@ -41,7 +41,7 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 
 	INVALID_RETURN_QUANTITY,
 
-	SPEC_ALREADY_RETURNED,
+	SPECIMEN_ALREADY_RETURNED,
 
 	INVALID_RETURN_DATE,
 

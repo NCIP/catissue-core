@@ -25,5 +25,5 @@ public interface DistributionOrderService {
 	
 	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
 
-	public ResponseEvent<DistributionOrderDetail> returnSpecimen(RequestEvent<ReturnedSpecimensDetail> req);
+	public ResponseEvent<DistributionOrderDetail> returnSpecimens(RequestEvent<ReturnedSpecimensDetail> req);
 }

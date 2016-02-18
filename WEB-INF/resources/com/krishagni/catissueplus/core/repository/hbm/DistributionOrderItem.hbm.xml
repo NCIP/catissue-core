@@ -12,15 +12,11 @@
       </generator>
     </id>
     
-    <many-to-one 
-      name="order"
-      column="ORDER_ID"/>
+    <many-to-one name="order" column="ORDER_ID"/>
 
     <property name="quantity" column="QUANTITY"/>
       
-    <many-to-one 
-      name="specimen" 
-      column="SPECIMEN_ID"/>
+    <many-to-one name="specimen" column="SPECIMEN_ID"/>
     
     <property name="status" column="STATUS" not-null="true">
       <type name="org.hibernate.type.EnumType">
@@ -33,17 +29,13 @@
 
     <property name="returnQuantity" column="RETURN_QUANTITY"/>
     
-    <many-to-one
-      name="returnLocation"
-      column="RETURN_CONTAINER_ID"/>
+    <many-to-one name="returnContainer" column="RETURN_CONTAINER_ID"/>
 
-    <property name="returnContainerRow" column="RETURN_CONTAINER_ROW"/>
+    <property name="returnRow" column="RETURN_ROW"/>
 
-    <property name="returnContainerColumn" column="RETURN_CONTAINER_COLUMN"/>
+    <property name="returnColumn" column="RETURN_COLUMN"/>
 
-    <many-to-one
-      name="returnUser"
-      column="RETURN_USER_ID"/>
+    <many-to-one name="returnUser" column="RETURN_USER_ID"/>
 
     <property name="returnDate" column="RETURN_DATE"/>
 

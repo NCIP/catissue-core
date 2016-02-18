@@ -1415,10 +1415,10 @@
 
     "filters": "Filters",
 
-    "return_specimen": "Return Specimen",
-    "no_specimen_to_return": "Please select at least one specimen to return",
-    "specimen_returned": "Specimens returned successfully",
-    "specimen_already_returned": "The specimen {{spec_label}} is already returned",
+    "return_specimens": "Return Specimens",
+    "no_specimens_to_return": "Please select at least one specimen to return",
+    "specimens_returned": "{{count}} specimens returned successfully",
+    "specimen_already_returned": "The specimen {{label}} is already returned",
    
     "menu": {
       "overview": "Overview"

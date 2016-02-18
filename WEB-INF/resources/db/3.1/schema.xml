@@ -8,15 +8,15 @@
     <addColumn tableName="OS_ORDER_ITEMS">
       <column name="RETURN_QUANTITY" type="${double.type}"></column>
       <column name="RETURN_CONTAINER_ID" type="${int.type}"></column>
-      <column name="RETURN_CONTAINER_ROW" type="${text.type}(8)"></column>
-      <column name="RETURN_CONTAINER_COLUMN" type="${text.type}(8)"></column>
+      <column name="RETURN_ROW" type="${text.type}(8)"></column>
+      <column name="RETURN_COLUMN" type="${text.type}(8)"></column>
       <column name="RETURN_USER_ID" type="${int.type}"></column>
       <column name="RETURN_DATE" type="${nullable.ts.type}"></column>
       <column name="RETURN_COMMENTS" type="${text.type}(255)"></column>
     </addColumn>
   </changeSet>
 
-  <changeSet author="ckhilosiya" id="Add FK to return container in order items">
+  <changeSet author="ckhilosiya" id="FK on returned specimen container">
     <addForeignKeyConstraint
       constraintName="FK_OS_OI_RETURN_CONT_ID"
       baseTableName="OS_ORDER_ITEMS"
@@ -25,7 +25,7 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
-  <changeSet author="ckhilosiya" id="Add FK to return user in order items">
+  <changeSet author="ckhilosiya" id="FK on user who returned specimen">
     <addForeignKeyConstraint
       constraintName="FK_OS_OI_RETURN_USER_ID"
       baseTableName="OS_ORDER_ITEMS"
@@ -34,13 +34,13 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
-  <changeSet author="ckhilosiya" id="Create updated distribution view for return event" runOnChange="true">
+  <changeSet author="ckhilosiya" id="Updated distribution view with return event details" runOnChange="true">
     <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
       select
-        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity,
-        item.status as status, item.return_quantity as return_quantity, item.return_container_id as return_container_id,
-        item.return_container_row as return_container_row, item.return_container_column as return_container_column,
-        item.return_user_id as return_user_id, item.return_date as return_date, item.return_comments as return_comments,
+        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
+        item.return_quantity as return_quantity, item.return_container_id as return_container_id,
+        item.return_row as return_row, item.return_column as return_column, item.return_user_id as return_user_id,
+        item.return_date as return_date, item.return_comments as return_comments,
         ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
         ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
       from
@@ -52,4 +52,3 @@
     </createView>
   </changeSet>
 </databaseChangeLog>
-

@@ -11,12 +11,11 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenEvent;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
-import com.krishagni.catissueplus.core.common.util.NumUtil;
 
 public class SpecimenReturnEvent extends SpecimenEvent {
 	private BigDecimal quantity;
 
-	private StorageContainer storageLocation;
+	private StorageContainer container;
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -35,14 +34,14 @@ public class SpecimenReturnEvent extends SpecimenEvent {
 		this.quantity = quantity;
 	}
 
-	public StorageContainer getStorageLocation() {
+	public StorageContainer getContainer() {
 		loadRecordIfNotLoaded();
-		return storageLocation;
+		return container;
 	}
 
-	public void setStorageLocation(StorageContainer storageLocation) {
+	public void setContainer(StorageContainer container) {
 		loadRecordIfNotLoaded();
-		this.storageLocation = storageLocation;
+		this.container = container;
 	}
 	@Override
 	public String getFormName() {
@@ -53,15 +52,15 @@ public class SpecimenReturnEvent extends SpecimenEvent {
 	protected Map<String, Object> getEventAttrs() {
 		Map<String, Object> attrs = new HashMap<>();
 		attrs.put("quantity", quantity);
-		attrs.put("location", storageLocation.getId());
+		attrs.put("container", container.getId());
 		return attrs;
 	}
 
 	@Override
 	protected void setEventAttrs(Map<String, Object> attrValues) {
 		this.quantity = new BigDecimal(attrValues.get("quantity").toString());
-		Long containerId = new Long(attrValues.get("location").toString());
-		this.storageLocation = daoFactory.getStorageContainerDao().getById(containerId);
+		Long containerId = new Long(attrValues.get("container").toString());
+		this.container = daoFactory.getStorageContainerDao().getById(containerId);
 	}
 
 	public static SpecimenReturnEvent createForDistributionOrderItem(DistributionOrderItem item) {

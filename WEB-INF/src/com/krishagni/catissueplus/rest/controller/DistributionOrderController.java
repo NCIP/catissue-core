@@ -149,52 +149,15 @@ public class DistributionOrderController {
 		Long orderId,
 
 		@RequestBody
-		List<Map<String, Object>> valueMapList) {
-		ReturnedSpecimensDetail returnedSpecimensDetail = new ReturnedSpecimensDetail();
-		returnedSpecimensDetail.setOrderId(orderId);
-		returnedSpecimensDetail.setReturnedSpecimens(getSpecimenReturnDetail(valueMapList));
+		ReturnedSpecimensDetail detail) {
 
-		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimen(
-			getRequest(returnedSpecimensDetail));
+		detail.setOrderId(orderId);
+		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimens(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
-	}
-
-	private List<SpecimenReturnDetail> getSpecimenReturnDetail(List<Map<String, Object>> valueMapList) {
-		List<SpecimenReturnDetail> specReturnDetails = new ArrayList<>();
-		for (Map<String, Object> valueMap : valueMapList) {
-			Map<String, Object> appData = (Map<String, Object>) valueMap.get("appData");
-			SpecimenReturnDetail detail = new SpecimenReturnDetail();
-
-			detail.setItemId(Long.parseLong(appData.get("id").toString()));
-			detail.setQuantity(new BigDecimal(valueMap.get("quantity").toString()));
-
-			Object location = valueMap.get("location");
-			if (location != null) {
-				StorageContainerPositionDetail positionDetail = new StorageContainerPositionDetail();
-				positionDetail.setContainerId(Long.parseLong(location.toString()));
-				detail.setLocation(positionDetail);
-			}
-
-			Object userId = valueMap.get("user");
-			if (userId != null) {
-				detail.setUserId(Long.parseLong(userId.toString()));
-			}
-
-			Object time = valueMap.get("time");
-			if (time != null) {
-				detail.setTime(new Date(Long.parseLong(time.toString())));
-			}
-
-			detail.setComments((String)valueMap.get("comments"));
-
-			specReturnDetails.add(detail);
-		}
-
-		return specReturnDetails;
 	}
 }

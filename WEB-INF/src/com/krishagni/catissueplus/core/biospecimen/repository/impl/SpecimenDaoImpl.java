@@ -1,12 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
@@ -24,8 +26,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {	
 	public Class<?> getType() {
@@ -172,12 +172,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			.setParameterList("specimenIds", specimenIds)
 			.list();
 
-		Map<Long, String> distStatus = new HashMap<>();
-		for (Object[] row : rows) {
-			distStatus.put((Long) row[0], getDistStatus((Date) row[1], (Date) row[2]));
-		}
-
-		return distStatus;
+		return rows.stream()
+			.collect(Collectors.toMap(row -> (Long)row[0], row -> getDistributionStatus((Date)row[1], (Date)row[2])));
 	}
 
 	@Override
@@ -311,16 +307,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 
-	private String getDistStatus(Date execDate, Date returnDate) {
-		if (returnDate == null) {
-			return "Distributed";
-		}
-
-		if (execDate.after(returnDate)) {
-			return  "Distributed";
-		} else {
-			return "Returned";
-		}
+	private String getDistributionStatus(Date execDate, Date returnDate) {
+		return (returnDate == null || execDate.after(returnDate)) ? "Distributed" : "Returned";
 	}
 
 	private static final String FQN = Specimen.class.getName();

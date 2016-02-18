@@ -36,8 +36,9 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       );
     }
 
-    DistributionOrder.prototype.returnSpecimen = function(data) {
-      return $http.post(DistributionOrder.url() + this.$id() + '/return-specimens', data).then(
+    DistributionOrder.prototype.returnSpecimens = function(returnedSpecimens) {
+      var req = {orderId: this.$id(), returnedSpecimens: returnedSpecimens}
+      return $http.post(DistributionOrder.url() + this.$id() + '/return-specimens', req).then(
         function(resp) {
           return resp.data;
         }

@@ -14,9 +14,7 @@
     
     <property name="name" column="NAME"/>
 
-    <many-to-one 
-      name="requester" 
-      column="REQUESTER_ID"/>
+    <many-to-one name="requester" column="REQUESTER_ID"/>
       
     <property name="creationDate" column="CREATION_DATE"/>
     
@@ -35,27 +33,16 @@
 
     <property name="comments" column="COMMENTS"/>
     
-    <set
-      name="orderItems"
-      table="OS_ORDER_ITEMS"
-      cascade="all-delete-orphan"
-      inverse="true">
-
+    <set name="orderItems" table="OS_ORDER_ITEMS" cascade="all-delete-orphan" inverse="true">
       <key column="ORDER_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem"/>
     </set>     
     
-    <many-to-one 
-      name="site" 
-      column="SITE_ID"/>
+    <many-to-one name="site" column="SITE_ID"/>
     
-    <many-to-one 
-      name="distributionProtocol" 
-      column="DISTRIBUTION_PROTOCOL_ID"/>
+    <many-to-one name="distributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"/>
         
-    <many-to-one 
-      name="distributor" 
-      column="DISTRIBUTOR_ID"/>
+    <many-to-one name="distributor" column="DISTRIBUTOR_ID"/>
       
     <filter name="activeEntity"/>
         

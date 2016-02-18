@@ -2,7 +2,9 @@ package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -109,6 +111,10 @@ public class DistributionOrder extends BaseEntity {
 
 	public void setOrderItems(Set<DistributionOrderItem> orderItems) {
 		this.orderItems = orderItems;
+	}
+
+	public Map<Long, DistributionOrderItem> getOrderItemsMap() {
+		return getOrderItems().stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
 	}
 
 	public Status getStatus() {

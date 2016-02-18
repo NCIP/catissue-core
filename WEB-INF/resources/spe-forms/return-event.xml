@@ -20,9 +20,9 @@
 
     <row>
       <storageContainer>
-        <name>location</name>
-        <udn>location</udn>
-        <caption>#getMessage("return_event_storage_location")</caption>
+        <name>container</name>
+        <udn>container</udn>
+        <caption>#getMessage("return_event_container")</caption>
         <column>RETURN_CONTAINER_ID</column>
       </storageContainer>
     </row>

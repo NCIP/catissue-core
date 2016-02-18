@@ -42,14 +42,14 @@ angular.module('os.administrative.order.detail', ['os.administrative.models'])
 
     $scope.returnSpecimens = function() {
       if ($scope.selection.items.length == 0) {
-        Alerts.error('orders.no_specimen_to_return');
+        Alerts.error('orders.no_specimens_to_return');
         return;
       }
 
       var error = false;
       angular.forEach($scope.selection.items, function(item) {
         if (item.status == "RETURNED") {
-          Alerts.error('orders.specimen_already_returned', {spec_label: item.specimen.label});
+          Alerts.error('orders.specimen_already_returned', item.specimen);
           error = true;
         }
       });

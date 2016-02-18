@@ -70,7 +70,7 @@
 }
 
 .fa.os-status-returned:before {
-  color: #d533ff;
+  color: #b37cc6;
   padding: 0px 4px;
 }
 
@@ -152,7 +152,7 @@
 }
 
 .os-key-values .value.os-status-returned {
-  background: #d533ff;
+  background: #b37cc6;
 }
 
 .os-key-values .value.os-status-shipped {

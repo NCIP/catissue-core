@@ -25,11 +25,11 @@ public class DistributionOrderItem extends BaseEntity {
 
 	private BigDecimal returnQuantity;
 
-	private StorageContainer returnLocation;
+	private StorageContainer returnContainer;
 
-	private String returnContainerRow;
+	private String returnRow;
 
-	private String returnContainerColumn;
+	private String returnColumn;
 
 	private User returnUser;
 
@@ -77,28 +77,28 @@ public class DistributionOrderItem extends BaseEntity {
 		this.returnQuantity = returnQuantity;
 	}
 
-	public StorageContainer getReturnLocation() {
-		return returnLocation;
+	public StorageContainer getReturnContainer() {
+		return returnContainer;
 	}
 
-	public void setReturnLocation(StorageContainer returnLocation) {
-		this.returnLocation = returnLocation;
+	public void setReturnContainer(StorageContainer returnContainer) {
+		this.returnContainer = returnContainer;
 	}
 
-	public String getReturnContainerRow() {
-		return returnContainerRow;
+	public String getReturnRow() {
+		return returnRow;
 	}
 
-	public void setReturnContainerRow(String returnContainerRow) {
-		this.returnContainerRow = returnContainerRow;
+	public void setReturnRow(String returnRow) {
+		this.returnRow = returnRow;
 	}
 
-	public String getReturnContainerColumn() {
-		return returnContainerColumn;
+	public String getReturnColumn() {
+		return returnColumn;
 	}
 
-	public void setReturnContainerColumn(String returnContainerColumn) {
-		this.returnContainerColumn = returnContainerColumn;
+	public void setReturnColumn(String returnColumn) {
+		this.returnColumn = returnColumn;
 	}
 
 	public User getReturnUser() {
@@ -129,12 +129,14 @@ public class DistributionOrderItem extends BaseEntity {
 		return getStatus() == Status.DISTRIBUTED_AND_CLOSED;
 	}
 
+	public boolean isReturned() { return getStatus() == Status.RETURNED; }
+
 	public void distribute() {
 		order.addOnSaveProc(() -> specimen.distribute(this));
 	}
 
-	public void returnSpecimen(StorageContainerPosition newLocation) {
-		specimen.returnSpecimen(this, newLocation);
-		this.setStatus(Status.RETURNED);
+	public void returnSpecimen() {
+		specimen.returnSpecimen(this);
+		setStatus(Status.RETURNED);
 	}
 }

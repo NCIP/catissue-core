@@ -1,31 +1,35 @@
-angular.module('os.administrative.order.returnspecimen', [])
-  .controller('ReturnSpecimenCtrl', function($scope, $state, $translate, order, SpecimensHolder, SpecimenEvent,
-    DistributionOrder, Alerts) {
+angular.module('os.administrative.order.returnspecimens', [])
+  .controller('ReturnSpecimensCtrl', function(
+    $scope, $state, $translate, order, SpecimensHolder, SpecimenEvent, DistributionOrder, Alerts) {
+
     function init() {
       $scope.items = [];
       $scope.returnEvent = {};
       $scope.tableCtrl = {};
       $scope.order = order;
 
-      if (angular.isArray(SpecimensHolder.getSpecimens())) {
-        $scope.items = SpecimensHolder.getSpecimens();
-        SpecimensHolder.setSpecimens(null);
-      } else {
+      if (!angular.isArray(SpecimensHolder.getSpecimens())) {
         $state.go('order-detail.overview', {orderId: order.id});
         return;
       }
 
+      $scope.items = SpecimensHolder.getSpecimens();
+      SpecimensHolder.setSpecimens(null);
       loadReturnEvent();
     }
 
     function loadReturnEvent() {
-      SpecimenEvent.getEvents().then(function(events) {
-        $scope.returnEvent = events.filter(function(event) {
-          return event.name == 'SpecimenReturnEvent';
-        })[0];
+      SpecimenEvent.getEvents().then(
+        function(events) {
+          $scope.returnEvent = events.filter(
+            function(event) {
+              return event.name == 'SpecimenReturnEvent'; 
+            }
+          )[0];
 
-        initOpts();
-      });
+          initOpts();
+        }
+      );
     }
 
     function getSpecimenOpts(items) {
@@ -66,17 +70,30 @@ angular.module('os.administrative.order.returnspecimen', [])
       $scope.tableCtrl.ctrl.copyFirstToAll();
     }
 
-    $scope.returnSpecimen = function() {
+    $scope.returnSpecimens = function() {
       var tableCtrl = $scope.tableCtrl.ctrl;
       var data = tableCtrl.getData();
       if (!data) {
         return;
       }
 
-      $scope.order.returnSpecimen(data).then(
-        function(savedData) {
+      var returnedSpecimens = data.map(
+        function(d) {
+          return {
+            itemId: d.appData.id,
+            quantity: parseFloat(d.quantity),
+            location: {containerId: d.container},
+            userId: parseInt(d.user),
+            time: parseInt(d.time),
+            comments: d.comments
+          };
+        }
+      )
+
+      $scope.order.returnSpecimens(returnedSpecimens).then(
+        function() {
           $scope.back();
-          Alerts.success('orders.specimen_returned');
+          Alerts.success('orders.specimens_returned', {count: returnedSpecimens.length});
         }
       );
     }
