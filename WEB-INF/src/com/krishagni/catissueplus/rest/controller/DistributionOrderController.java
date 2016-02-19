@@ -144,7 +144,7 @@ public class DistributionOrderController {
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/return-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionOrderDetail returnSpecimen(
+	public DistributionOrderDetail returnSpecimens(
 		@PathVariable("id")
 		Long orderId,
 

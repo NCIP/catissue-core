@@ -261,7 +261,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			for (SpecimenReturnDetail detail : returnedSpmnsDetail.getReturnedSpecimens()) {
 				DistributionOrderItem item = orderItemsMap.get(detail.getItemId());
 				if (item == null) {
-					// TODO: Invalid item id
+					throw OpenSpecimenException.userError(DistributionOrderErrorCode.ITEM_NOT_FOUND, detail.getItemId(), order.getName());
 				}
 
 				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(item.getSpecimen());
@@ -407,6 +407,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	}
 
 	private void setItemReturnQty(DistributionOrderItem item, BigDecimal returnQty, OpenSpecimenException ose) {
+		if (returnQty == null) {
+			ose.addError(DistributionOrderErrorCode.QTY_REQ);
+			return;
+		}
+
 		if (NumUtil.lessThan(item.getQuantity(), returnQty)) {
 			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_QUANTITY, item.getSpecimen().getLabel());
 			return;
@@ -418,11 +423,15 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private void setItemReturnDate(DistributionOrderItem item, Date returnDate, OpenSpecimenException ose) {
 		if (returnDate == null) {
 			ose.addError(DistributionOrderErrorCode.DATE_REQ);
-		} else if (item.getOrder().getExecutionDate().after(returnDate)) {
-			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_DATE, item.getSpecimen().getLabel());
-		} else {
-			item.setReturnDate(returnDate);
+			return;
 		}
+
+		if (item.getOrder().getExecutionDate().after(returnDate)) {
+			ose.addError(DistributionOrderErrorCode.INVALID_RETURN_DATE, item.getSpecimen().getLabel());
+			return;
+		}
+
+		item.setReturnDate(returnDate);
 	}
 
 	private void setItemReturnPosition(DistributionOrderItem item, StorageContainerPositionDetail positionDetail, OpenSpecimenException ose) {
@@ -468,14 +477,16 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 	private void setItemReturnUser(DistributionOrderItem item, Long userId, OpenSpecimenException ose) {
 		if (userId == null) {
 			ose.addError(DistributionOrderErrorCode.USER_REQ);
-		} else {
-			User user = daoFactory.getUserDao().getById(userId);
-			if (user == null) {
-				ose.addError(UserErrorCode.NOT_FOUND, userId);
-			} else {
-				item.setReturnUser(user);
-			}
+			return;
 		}
+
+		User user = daoFactory.getUserDao().getById(userId);
+		if (user == null) {
+			ose.addError(UserErrorCode.NOT_FOUND, userId);
+			return;
+		}
+
+		item.setReturnUser(user);
 	}
 
 	private static final String ORDER_DISTRIBUTED_EMAIL_TMPL = "order_distributed";

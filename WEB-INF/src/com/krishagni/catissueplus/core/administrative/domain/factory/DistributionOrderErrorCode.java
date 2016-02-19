@@ -45,9 +45,13 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 
 	INVALID_RETURN_DATE,
 
+	QTY_REQ,
+
 	USER_REQ,
 
-	DATE_REQ;
+	DATE_REQ,
+
+	ITEM_NOT_FOUND;
 	
 	@Override
 	public String code() {
