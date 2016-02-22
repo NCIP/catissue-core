@@ -56,7 +56,7 @@
           <textField>
             <name>parentLabel</name>
             <udn>parentLabel</udn>
-            <caption>#getMessage("specimen_parent_specimen_label")</caption>
+            <caption>#getMessage("specimen_parent_specimen")</caption>
             <column>LABEL</column>
             <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
           </textField>  

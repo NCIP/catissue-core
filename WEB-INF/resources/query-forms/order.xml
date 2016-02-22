@@ -39,7 +39,7 @@
           <textField>
             <name>distributionProtocolTitle</name>
             <udn>distributionProtocolTitle</udn>
-            <caption>#getMessage("order_dp_title")</caption>
+            <caption>#getMessage("order_dp")</caption>
             <column>TITLE</column>
             <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value=:value</recordUrl>
           </textField>
