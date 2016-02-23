@@ -283,6 +283,11 @@ public class CollectionProtocol extends BaseExtensionEntity {
 			.findFirst();
 		return setting.isPresent() ? setting.get() : null;
 	}
+
+	public void addSpmnLabelPrintSetting(CpSpecimenLabelPrintSetting setting) {
+		setting.setCollectionProtocol(this);
+		getSpmnLabelPrintSettings().add(setting);
+	}
 	
 	public Boolean isConsentsWaived() {
 		return consentsWaived != null ? consentsWaived: false;
@@ -299,6 +304,14 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	public void setConsentTier(Set<ConsentTier> consentTier) {
 		this.consentTier = consentTier;
+	}
+
+	public ConsentTier addConsentTier(ConsentTier ct) {
+		ct.setId(null);
+		ct.setCollectionProtocol(this);
+		ct.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		getConsentTier().add(ct);
+		return ct;
 	}
 
 	public Set<User> getCoordinators() {
@@ -320,6 +333,11 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	public void setSites(Set<CollectionProtocolSite> sites) {
 		this.sites = sites;
+	}
+
+	public void addSite(CollectionProtocolSite site) {
+		site.setCollectionProtocol(this);
+		getSites().add(site);
 	}
 
 	@NotAudited
@@ -350,15 +368,6 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		this.collectionProtocolRegistrations = collectionProtocolRegistrations;
 	}
 
-	// new	
-	public ConsentTier addConsentTier(ConsentTier ct) {
-		ct.setId(null);
-		ct.setCollectionProtocol(this);
-		ct.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		consentTier.add(ct);
-		return ct;
-	}
-	
 	public void update(CollectionProtocol cp) {
 		setTitle(cp.getTitle()); 
 		setShortTitle(cp.getShortTitle());
@@ -385,6 +394,67 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		updateSpecimenLabelPrintSettings(cp.getSpmnLabelPrintSettings());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 		updateLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
+	}
+	
+	public void copyTo(CollectionProtocol cp) {
+		copySitesTo(cp);
+
+		cp.setTitle(getTitle());
+		cp.setShortTitle(getShortTitle());
+		cp.setCode(getCode());
+		cp.setPrincipalInvestigator(getPrincipalInvestigator());
+		cp.setCoordinators(new HashSet<>(getCoordinators()));
+
+		cp.setStartDate(getStartDate());
+		cp.setEndDate(getEndDate());
+		cp.setIrbIdentifier(getIrbIdentifier());
+		cp.setEnrollment(getEnrollment());
+		cp.setDescriptionURL(getDescriptionURL());
+
+		cp.setPpidFormat(getPpidFormat());
+		cp.setManualPpidEnabled(isManualPpidEnabled());
+		cp.setVisitNameFormat(getVisitNameFormat());
+		cp.setManualVisitNameEnabled(isManualVisitNameEnabled());
+		cp.setSpecimenLabelFormat(getSpecimenLabelFormat());
+		cp.setAliquotLabelFormat(getAliquotLabelFormat());
+		cp.setDerivativeLabelFormat(getDerivativeLabelFormat());
+		cp.setManualSpecLabelEnabled(isManualSpecLabelEnabled());
+		cp.setSpmnLabelPrePrintMode(getSpmnLabelPrePrintMode());
+
+		copyLabelPrintSettingsTo(cp);
+		copyExtensionTo(cp);
+
+		cp.setConsentsWaived(isConsentsWaived());
+		cp.setUnsignedConsentDocumentURL(getUnsignedConsentDocumentURL());
+		copyConsentTierTo(cp);
+
+		copyEventsTo(cp);
+
+		cp.setActivityStatus(getActivityStatus());
+	}
+	
+	public void copyConsentTierTo(CollectionProtocol cp) {
+		for (ConsentTier consentTier : getConsentTier()) {
+			cp.addConsentTier(consentTier.copy());
+		}
+	}
+	
+	public void copyLabelPrintSettingsTo(CollectionProtocol cp) {
+		for (CpSpecimenLabelPrintSetting setting : getSpmnLabelPrintSettings()) {
+			cp.addSpmnLabelPrintSetting(setting.copy());
+		}
+	}
+
+	public void copySitesTo(CollectionProtocol cp) {
+		for (CollectionProtocolSite site : getSites()) {
+			cp.addSite(site.copy());
+		}
+	}
+	
+	public void copyEventsTo(CollectionProtocol cp) {
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			cp.addCpe(cpe.deepCopy());
+		}
 	}
 	
 	public boolean isValidPpid(String ppid) {
@@ -445,6 +515,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		}
 				
 		cpe.setId(null);
+		cpe.setCollectionProtocol(this);
 		getCollectionProtocolEvents().add(cpe);
 	}
 	

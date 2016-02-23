@@ -37,6 +37,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
+import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
@@ -76,33 +77,17 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	private DaoFactory daoFactory;
 	
 	private RbacService rbacSvc;
-
-	public CollectionProtocolFactory getCpFactory() {
-		return cpFactory;
-	}
-
+	
 	public void setCpFactory(CollectionProtocolFactory cpFactory) {
 		this.cpFactory = cpFactory;
-	}
-
-	public CpeFactory getCpeFactory() {
-		return cpeFactory;
 	}
 
 	public void setCpeFactory(CpeFactory cpeFactory) {
 		this.cpeFactory = cpeFactory;
 	}
 	
-	public SpecimenRequirementFactory getSrFactory() {
-		return srFactory;
-	}
-
 	public void setSrFactory(SpecimenRequirementFactory srFactory) {
 		this.srFactory = srFactory;
-	}
-
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
 	}
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -189,24 +174,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> createCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
 		try {
-			CollectionProtocol cp = cpFactory.createCollectionProtocol(req.getPayload());
-			AccessCtrlMgr.getInstance().ensureCreateCpRights(cp);
-			ensureUsersBelongtoCpSites(cp);
-			
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureUniqueTitle(null, cp, ose);
-			ensureUniqueShortTitle(null, cp, ose);
-			ensureUniqueCode(null, cp, ose);
-			ensureUniqueCpSiteCode(cp, ose);
-			ose.checkAndThrow();
-
-			daoFactory.getCollectionProtocolDao().saveOrUpdate(cp);
-			cp.addOrUpdateExtension();
-			
-			//Assign default roles to PI and Coordinators
-			addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
-			addDefaultCoordinatorRoles(cp, cp.getCoordinators());
-			
+			CollectionProtocol cp = createCollectionProtocol(req.getPayload(), null, false);
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -261,6 +229,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			addDefaultCoordinatorRoles(cp, addedCoord);
 			
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolDetail> copyCollectionProtocol(RequestEvent<CopyCpOpDetail> req) {
+		try {
+			CopyCpOpDetail opDetail = req.getPayload();
+			Long cpId = opDetail.getCpId();
+			CollectionProtocol existing = daoFactory.getCollectionProtocolDao().getById(cpId);
+			if (existing == null) {
+				throw OpenSpecimenException.userError(CpeErrorCode.NOT_FOUND, cpId);
+			}
+			
+			AccessCtrlMgr.getInstance().ensureReadCpRights(existing);
+			
+			CollectionProtocol cp = createCollectionProtocol(opDetail.getCp(), existing, true);
+			return ResponseEvent.response(CollectionProtocolDetail.from(cp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -855,6 +845,34 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		}
 
 		return daoFactory.getCollectionProtocolDao().getCpIds(key, value);
+	}
+	
+	private CollectionProtocol createCollectionProtocol(CollectionProtocolDetail detail, CollectionProtocol existing, boolean createCopy) {
+		CollectionProtocol cp = null;
+		if (!createCopy) {
+			cp = cpFactory.createCollectionProtocol(detail);
+		} else {
+			cp = cpFactory.createCpCopy(detail, existing);
+		}
+		
+		AccessCtrlMgr.getInstance().ensureCreateCpRights(cp);
+		ensureUsersBelongtoCpSites(cp);
+		
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		ensureUniqueTitle(null, cp, ose);
+		ensureUniqueShortTitle(null, cp, ose);
+		ensureUniqueCode(null, cp, ose);
+		ensureUniqueCpSiteCode(cp, ose);
+		ose.checkAndThrow();
+
+		daoFactory.getCollectionProtocolDao().saveOrUpdate(cp, true);
+		cp.addOrUpdateExtension();
+		
+		//Assign default roles to PI and Coordinators
+		addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
+		addDefaultCoordinatorRoles(cp, cp.getCoordinators());
+		
+		return cp;
 	}
 
 	private void ensureUsersBelongtoCpSites(CollectionProtocol cp) {

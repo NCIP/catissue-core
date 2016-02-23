@@ -157,10 +157,13 @@
     <property name="sprText2PdfGenerator" ref="sprText2PdfGenerator"/>
   </bean>
 
+  <bean id="cpCopier" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier"/>
+
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>  
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
+    <property name="cpCopier" ref="cpCopier"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -171,7 +174,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
   </bean>
-
+  
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="cpFactory" ref="cpFactory"/>
     <property name="cpeFactory" ref="cpeFactory"/>
@@ -345,6 +348,7 @@
   <bean id="catalogSvc" class="com.krishagni.catissueplus.core.de.services.impl.CatalogServiceImpl">
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="catalogSettingFactory" ref="catalogSettingFact"/>
+    <property name="cpCopier" ref="cpCopier"/>
   </bean>
   
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">

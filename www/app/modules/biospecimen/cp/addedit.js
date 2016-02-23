@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('CpAddEditCtrl', function(
-    $scope, $state, cp, extensionCtxt, User, Site, ExtensionsUtil, PvManager) {
+    $scope, $state, $stateParams, cp, extensionCtxt, User, Site, ExtensionsUtil, PvManager) {
 
     function init() {
       $scope.cp = cp;
@@ -34,6 +34,16 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         sample += (newVal.suffix || '');
         $scope.ppidFmt.samplePpid = sample;
       }, true);
+
+      if (!!cp.id && $stateParams.mode == 'copy') {
+        $scope.mode = 'copy';
+        $scope.copyFrom = cp.id;
+        angular.forEach(cp.cpSites, function(site) {
+          delete site.id;
+        });
+        delete cp.id;
+        cp.title = cp.shortTitle = cp.code = "";
+      }
     };
 
     function loadPvs() {
@@ -94,7 +104,14 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         cp.extensionDetail = formCtrl.getFormData();
       }
 
-      cp.$saveOrUpdate().then(
+      var q;
+      if ($scope.mode == 'copy') {
+        q = cp.copy($scope.copyFrom);
+      } else {
+        q = cp.$saveOrUpdate();
+      }
+
+      q.then(
         function(savedCp) {
           $state.go('cp-detail.overview', {cpId: savedCp.id});
         }

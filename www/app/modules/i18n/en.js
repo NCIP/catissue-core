@@ -200,6 +200,7 @@
     },
 
     "menu_options": {
+      "clone": "Clone",
       "delete": "Delete",
       "export": "Export"
     },

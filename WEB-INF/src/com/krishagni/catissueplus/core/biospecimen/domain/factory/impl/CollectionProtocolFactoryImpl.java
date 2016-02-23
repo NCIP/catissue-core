@@ -23,6 +23,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDeta
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSiteDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpSpecimenLabelPrintSettingDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -38,6 +39,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private LabelGenerator specimenLabelGenerator;
 	
 	private LabelGenerator visitNameGenerator;
+
+	private CollectionProtocolCopier cpCopier;
 	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -53,6 +56,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
 		this.visitNameGenerator = visitNameGenerator;
+	}
+
+	public void setCpCopier(CollectionProtocolCopier cpCopier) {
+		this.cpCopier = cpCopier;
 	}
 
 	@Override
@@ -85,6 +92,43 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setActivityStatus(input, cp, ose);
 		setCollectionProtocolExtension(input, cp, ose);
 
+		ose.checkAndThrow();
+		return cp;
+	}
+	
+	@Override
+	public CollectionProtocol createCpCopy(CollectionProtocolDetail input, CollectionProtocol existing) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
+		CollectionProtocol cp = cpCopier.copy(existing);
+		setTitle(input, cp, ose);
+		setShortTitle(input, cp, ose);
+		setCode(input, cp, ose);
+
+		if (CollectionUtils.isNotEmpty(input.getCpSites())) {
+			setSites(input, cp, ose);
+		}
+		
+		if (input.getPrincipalInvestigator() != null) {
+			setPrincipalInvestigator(input, cp, ose);
+		}
+
+		if (CollectionUtils.isNotEmpty(input.getCoordinators())) {
+			setCoordinators(input, cp, ose);
+		}
+
+		if (input.getStartDate() != null) {
+			cp.setStartDate(input.getStartDate());
+		}
+		
+		if (input.getEndDate() != null) {
+			cp.setEndDate(input.getEndDate());
+		}
+		
+		if (StringUtils.isNotBlank(input.getIrbId())) {
+			cp.setIrbIdentifier(input.getIrbId());
+		}
+		
 		ose.checkAndThrow();
 		return cp;
 	}

@@ -1,14 +1,17 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectCopier.AttributesCopier;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.de.domain.CpCatalogSetting;
@@ -19,18 +22,34 @@ import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 import com.krishagni.catissueplus.core.de.services.CatalogService;
 
-public class CatalogServiceImpl implements CatalogService {
+public class CatalogServiceImpl implements CatalogService, InitializingBean {
 	
 	private DaoFactory daoFactory;
 	
 	private CpCatalogSettingFactory catalogSettingFactory;
-
+	
+	private CollectionProtocolCopier cpCopier;
+	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
 
 	public void setCatalogSettingFactory(CpCatalogSettingFactory catalogSettingFactory) {
 		this.catalogSettingFactory = catalogSettingFactory;
+	}
+
+	public void setCpCopier(CollectionProtocolCopier cpCopier) {
+		this.cpCopier = cpCopier;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		cpCopier.addAttrCopier(new AttributesCopier<CollectionProtocol>()  {
+			@Override
+			public void copy(CollectionProtocol source, CollectionProtocol target) {
+				target.addOnSaveProc(() -> copyCatalogSettings(source, target));
+			}
+		});
 	}
 
 	@Override
@@ -129,6 +148,16 @@ public class CatalogServiceImpl implements CatalogService {
 			setting = daoFactory.getCpCatalogSettingDao().getByCpShortTitle(cp.getShortTitle());
 		}
 		
-		return setting;		
+		return setting;
+	}
+	
+	private void copyCatalogSettings(CollectionProtocol source, CollectionProtocol target) {
+		CpCatalogSetting existing = daoFactory.getCpCatalogSettingDao().getByCpId(source.getId());
+		if (existing == null) {
+			return;
+		}
+		
+		CpCatalogSetting setting = existing.copyTo(target);
+		daoFactory.getCpCatalogSettingDao().saveOrUpdate(setting);
 	}
 }

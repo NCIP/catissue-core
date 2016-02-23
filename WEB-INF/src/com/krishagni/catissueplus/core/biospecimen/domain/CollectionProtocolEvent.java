@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
@@ -182,6 +183,18 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 		sr.setCollectionProtocolEvent(this);
 	}
 	
+	public CollectionProtocolEvent copy() {
+		CollectionProtocolEvent copy = new CollectionProtocolEvent();
+		BeanUtils.copyProperties(this, copy, EXCLUDE_COPY_PROPS);
+		return copy;
+	}
+	
+	public CollectionProtocolEvent deepCopy() {
+		CollectionProtocolEvent result = copy();
+		copySpecimenRequirementsTo(result);
+		return result;
+	}
+	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
 		List<SpecimenRequirement> topLevelSrs = new ArrayList<SpecimenRequirement>(getTopLevelAnticipatedSpecimens());
 		Collections.sort(topLevelSrs);
@@ -252,4 +265,12 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 			return thisEventPoint.compareTo(otherEventPoint);
 		}
 	}
+	
+	private static final String[] EXCLUDE_COPY_PROPS = {
+			"id",
+			"code",
+			"collectionProtocol",
+			"specimenRequirements",
+			"specimenCollectionGroups"
+		};
 }
