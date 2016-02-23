@@ -515,9 +515,10 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenLocationPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPathologyStatusPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPpidPrintToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPrimaryLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenRequirementCodePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitNamePrintToken"/>
       </list>
     </property>
