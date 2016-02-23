@@ -55,7 +55,7 @@
   
   <changeSet author="nmarwaha" id="View to compute container hierarchy" runOnChange="true" dbms="oracle">
     <sql> 
-      create or replace view cont_hierarchy_view as (
+      create or replace view os_cont_hierarchy_view as (
         select 
           h.descendent_id as container_id, 
           LISTAGG(a.name, '->') within group( order by a.identifier) as hierarchy 
