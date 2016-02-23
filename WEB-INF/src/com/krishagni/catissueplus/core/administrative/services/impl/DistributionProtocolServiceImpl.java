@@ -2,7 +2,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,8 +13,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-
-import au.com.bytecode.opencsv.CSVWriter;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
@@ -41,6 +38,8 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
+import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -270,13 +269,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req) {
 		File tempFile = null;
-		CSVWriter csvWriter = null;
+		CsvWriter csvWriter = null;
 		try {
 			DistributionOrderStatListCriteria crit = req.getPayload();
 			List<DistributionOrderStat> orderStats = getOrderStats(crit);
 			
 			tempFile = File.createTempFile("dp-order-stats", null);
-			csvWriter = new CSVWriter(new FileWriter(tempFile));
+			csvWriter = CsvFileWriter.createCsvFileWriter(tempFile);
 			
 			if (crit.dpId() != null && !orderStats.isEmpty()) {
 				DistributionOrderStat orderStat = orderStats.get(0);

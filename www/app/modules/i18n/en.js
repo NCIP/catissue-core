@@ -1692,7 +1692,9 @@
         "welcome_video_url": "Welcome Video URL",
         "welcome_video_url_desc": "URL for welcome video",
         "shipment_export_report": "Shipment export report",
-        "shipment_export_report_desc": "Export Report format for all shipments"
+        "shipment_export_report_desc": "Export Report format for all shipments",
+        "field_separator": "Field Separator",
+        "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator"
       },
 
       "email": {

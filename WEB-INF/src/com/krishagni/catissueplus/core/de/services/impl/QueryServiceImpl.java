@@ -48,6 +48,7 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
 import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
@@ -812,7 +813,7 @@ public class QueryServiceImpl implements QueryService {
 				public Boolean call() throws Exception {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 
-					QueryResultExporter exporter = new QueryResultCsvExporter();
+					QueryResultExporter exporter = new QueryResultCsvExporter(Utility.getFieldSeparator());
 					try {
 						QueryResponse resp = exporter.export(fout, query, getResultScreener(query));
 						insertAuditLog(user, opDetail, resp);

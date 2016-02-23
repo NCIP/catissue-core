@@ -52,6 +52,10 @@ public class ConfigUtil {
 		return cfgSvc.getStrSetting(module, name, defValue);
 	}
 	
+	public Character getCharSetting(String module, String name, char defValue) {
+		return cfgSvc.getCharSetting(module, name, defValue);
+	}
+	
 	public Boolean getBoolSetting(String module, String name, Boolean defValue) {
 		return cfgSvc.getBoolSetting(module, name, defValue);
 	}

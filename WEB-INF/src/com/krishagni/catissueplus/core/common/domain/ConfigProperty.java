@@ -9,7 +9,8 @@ public class ConfigProperty extends BaseEntity {
 		INT,
 		FLOAT,
 		STRING,
-		BOOLEAN
+		BOOLEAN,
+		CHAR
 	};
 	
 	private Module module;
