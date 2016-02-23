@@ -40,6 +40,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	
 	private String spmnLabelPrePrintMode;
 	
+	private List<CpSpecimenLabelPrintSettingDetail> spmnLabelPrintSettings;
+	
 	private Boolean aliquotsInSameContainer;
 
 	private String activityStatus;
@@ -165,6 +167,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
 	}
 
+	public List<CpSpecimenLabelPrintSettingDetail> getSpmnLabelPrintSettings() {
+		return spmnLabelPrintSettings;
+	}
+
+	public void setSpmnLabelPrintSettings(List<CpSpecimenLabelPrintSettingDetail> spmnLabelPrintSettings) {
+		this.spmnLabelPrintSettings = spmnLabelPrintSettings;
+	}
+
 	public Boolean getAliquotsInSameContainer() {
 		return aliquotsInSameContainer;
 	}
@@ -226,13 +236,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
 		result.setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode().name());
+		result.setSpmnLabelPrintSettings(CpSpecimenLabelPrintSettingDetail.from(cp.getSpmnLabelPrintSettings()));
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
-			result.setEvents(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents(), true));
+			result.setEvents(CollectionProtocolEventDetail.from(cp.getOrderedCpeList(), true));
 		}
 		
 		return result;

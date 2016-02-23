@@ -14,7 +14,9 @@ angular.module("os.biospecimen.extensions")
          for (var i = 0; i < scope.extObject.attrs.length; i++) {
            var attr = scope.extObject.attrs[i];
            if (attr.value instanceof Array) {
-             attr.value = attr.value.join(", ");
+             attr.displayValue = attr.value.join(", ");
+           } else {
+             attr.displayValue = attr.value; 
            }
 
            if (attr.type == 'fileUpload') {

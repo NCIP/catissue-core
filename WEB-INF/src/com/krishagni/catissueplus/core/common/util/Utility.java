@@ -113,12 +113,12 @@ public class Utility {
 	
 	public static String stringListToCsv(String[] elements, boolean quotechar) {
 		StringWriter writer = new StringWriter();
-		CSVWriter csvWriter = null;
+		CsvWriter csvWriter = null;
 		try {
 			if (quotechar) {
-				csvWriter = new CSVWriter(writer);
+				csvWriter = CsvFileWriter.createCsvFileWriter(writer);
 			} else {
-				csvWriter = new CSVWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+				csvWriter =  CsvFileWriter.createCsvFileWriter(writer, CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
 			}
 			csvWriter.writeNext(elements);
 			csvWriter.flush();
@@ -260,5 +260,9 @@ public class Utility {
 		}
 		
 		return DateUtils.truncate(date, Calendar.DATE);
+	}
+	
+	public static char getFieldSeparator() {
+		return ConfigUtil.getInstance().getCharSetting("common", "field_separator", CSVWriter.DEFAULT_SEPARATOR); 
 	}
 }

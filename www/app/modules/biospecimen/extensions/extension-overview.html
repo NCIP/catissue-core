@@ -9,9 +9,9 @@
             <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
           </span>
           <span ng-switch-when="datePicker">
-            {{attr.value | date: global.dateFmt}}
+            {{attr.displayValue | date: global.dateFmt}}
           </span>
-          <span ng-switch-default>{{attr.value | osNoValue}}</span>
+          <span ng-switch-default>{{attr.displayValue | osNoValue}}</span>
         </span>
       </li>
     </ul>

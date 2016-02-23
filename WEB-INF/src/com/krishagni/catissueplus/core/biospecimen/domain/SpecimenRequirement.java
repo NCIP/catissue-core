@@ -16,6 +16,7 @@ import org.hibernate.envers.NotAudited;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
@@ -24,12 +25,6 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class SpecimenRequirement extends BaseEntity implements Comparable<SpecimenRequirement> {
-	public enum LabelAutoPrintMode {
-		PRE_PRINT,
-		ON_COLLECTION,
-		NONE;
-	}
-	
 	private String name;
 	
 	private String code;
@@ -64,7 +59,9 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 
 	private String labelFormat;
 	
-	private LabelAutoPrintMode labelAutoPrintMode = LabelAutoPrintMode.NONE;
+	private SpecimenLabelAutoPrintMode labelAutoPrintMode;
+	
+	private Integer labelPrintCopies;
 	
 	private Integer sortOrder;
 
@@ -221,12 +218,38 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		this.labelFormat = labelFormat;
 	}
 	
-	public LabelAutoPrintMode getLabelAutoPrintMode() {
-		return labelAutoPrintMode != null ? labelAutoPrintMode : LabelAutoPrintMode.NONE; 
+	public SpecimenLabelAutoPrintMode getLabelAutoPrintMode() {
+		return labelAutoPrintMode;
+	}
+	
+	public SpecimenLabelAutoPrintMode getLabelAutoPrintModeToUse() {
+		if (labelAutoPrintMode != null) {
+			return labelAutoPrintMode;
+		}
+
+		CpSpecimenLabelPrintSetting setting = getCollectionProtocol().getSpmnLabelPrintSetting(getLineage());
+		return setting != null ? setting.getPrintMode() : null;
 	}
 
-	public void setLabelAutoPrintMode(LabelAutoPrintMode labelAutoPrintMode) {
+	public void setLabelAutoPrintMode(SpecimenLabelAutoPrintMode labelAutoPrintMode) {
 		this.labelAutoPrintMode = labelAutoPrintMode;
+	}
+
+	public Integer getLabelPrintCopies() {
+		return labelPrintCopies;
+	}
+
+	public void setLabelPrintCopies(Integer labelPrintCopies) {
+		this.labelPrintCopies = labelPrintCopies;
+	}
+	
+	public Integer getLabelPrintCopiesToUse() {
+		if (labelPrintCopies != null) {
+			return labelPrintCopies;
+		}
+		
+		CpSpecimenLabelPrintSetting setting = getCollectionProtocol().getSpmnLabelPrintSetting(getLineage());
+		return setting != null ? setting.getCopies() : null;
 	}
 
 	public Integer getSortOrder() {
@@ -340,6 +363,7 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		setStorageType(sr.getStorageType());
 		setLabelFormat(sr.getLabelFormat());
 		setLabelAutoPrintMode(sr.getLabelAutoPrintMode());
+		setLabelPrintCopies(sr.getLabelPrintCopies());
 
 		if (!isAliquot() && !isSpecimenPoolReq()) {
 			update(sr.getConcentration(), sr.getSpecimenClass(), sr.getSpecimenType(), sr.getPathologyStatus());

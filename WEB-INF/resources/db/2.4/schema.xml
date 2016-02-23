@@ -149,7 +149,8 @@
   </changeSet>
   
   <changeSet author="vgaikwad" id="User api calls log table">
-    <validCheckSum>7:39da927a449aa37f957a325e43636558</validCheckSum>  
+    <validCheckSum>7:39da927a449aa37f957a325e43636558</validCheckSum> 
+    <validCheckSum>7:3beee47ae75bba0b2cb14a4bb6013251</validCheckSum> 
     <createTable tableName="OS_USER_API_CALLS_LOG">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
         <constraints primaryKey="true" nullable="false"/>

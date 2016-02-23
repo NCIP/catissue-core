@@ -37,9 +37,10 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
+import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
-import au.com.bytecode.opencsv.CSVWriter;
 
 public class SpecimenListServiceImpl implements SpecimenListService {
 
@@ -477,14 +478,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 	private ExportedFileDetail exportSpecimenList(SpecimenList list, Collection<Specimen> specimens) {
 		FileWriter fileWriter = null;
-		CSVWriter csvWriter = null;
+		CsvWriter csvWriter = null;
 		File dataFile = null;
 
 		try {
 			File dataDir = new File(ConfigUtil.getInstance().getDataDir());
 			dataFile = File.createTempFile("specimen-list-", ".csv", dataDir);
 			fileWriter = new FileWriter(dataFile);
-			csvWriter = new CSVWriter(fileWriter);
+			csvWriter = CsvFileWriter.createCsvFileWriter(fileWriter);
 
 			csvWriter.writeNext(new String[] { getMsg(LIST_NAME), list.getName()});
 			csvWriter.writeNext(new String[] { getMsg(LIST_DESC), list.getDescription()});

@@ -137,7 +137,7 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
-      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), 'DEEP').then(
+      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), qc.wideRowMode || 'DEEP').then(
         function(result) {
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {
@@ -344,11 +344,23 @@ angular.module('os.query.results', ['os.query.models'])
 
           var columnLabel = removeSeparator(columnLabel);
           var width = getColumnWidth(columnLabel);
+
+          var cellTemplate = null;
+          if (result.columnUrls[idx]) {
+            var url = result.columnUrls[idx].replace(":value", "{{row.getProperty(col.field).replace('#', '%23')}}");
+            cellTemplate = '<div class="ngCellText" ng-class="col.colIndex()">' +
+                           '  <a href="' + url + '" target="_blank">' +
+                           '    {{row.getProperty(col.field)}}' +
+                           '  </a>' +
+                           '</div>';
+          }
+
           return {
             field: "col" + idx,
             displayName: columnLabel,
             minWidth: width < 100 ? 100 : width,
             headerCellTemplate: 'modules/query/column-filter.html',
+            cellTemplate: !!cellTemplate ? cellTemplate : undefined,
             showSummary: showColSummary,
             summary: summaryRow[idx]
           };

@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.repository;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -30,6 +31,8 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 	public CollectionProtocol getCpByCode(String code);
 
 	public List<Long> getCpIdsBySiteIds(Collection<Long> siteIds);
+
+	public Map<String, Object> getCpIds(String key, Object value);
 	
 	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds);
 

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -133,8 +134,29 @@ public class CollectionProtocolRegistrationDaoImpl
 		
 		return result.isEmpty() ? null : result.iterator().next();
 	}
-	
-	
+
+	@Override
+	public Map<String, Object> getCprIds(String key, Object value) {
+		List<Object[]> rows = getCurrentSession().createCriteria(CollectionProtocolRegistration.class)
+			.createAlias("collectionProtocol", "cp")
+			.setProjection(
+				Projections.projectionList()
+					.add(Projections.property("id"))
+					.add(Projections.property("cp.id")))
+			.add(Restrictions.eq(key, value))
+			.list();
+
+		if (CollectionUtils.isEmpty(rows)) {
+			return Collections.emptyMap();
+		}
+
+		Object[] row = rows.iterator().next();
+		Map<String, Object> ids = new HashMap<>();
+		ids.put("cprId", row[0]);
+		ids.put("cpId", row[1]);
+		return ids;
+	}
+
 	private Criteria getCprListQuery(CprListCriteria cprCrit) {
 		Criteria query = getSessionFactory().getCurrentSession()
 				.createCriteria(CollectionProtocolRegistration.class)

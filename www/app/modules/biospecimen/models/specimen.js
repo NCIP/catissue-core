@@ -204,7 +204,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       var attrs = [
         'id', 'name', 'pooledSpecimenReqId',
         'collector', 'collectionProcedure', 'collectionContainer',
-        'receiver'
+        'receiver', 'labelPrintCopies'
       ];
 
       attrs.forEach(function(attr) {
@@ -212,11 +212,11 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       });
 
       if (sr.children) {
-        sr.children = sr.children.map(
-          function(childSr) {
-            return toSpecimenAttrs(childSr);
-          }
-        );
+        sr.children = sr.children.map(toSpecimenAttrs);
+      }
+
+      if (sr.specimensPool) {
+        sr.specimensPool = sr.specimensPool.map(toSpecimenAttrs);
       }
 
       return sr;

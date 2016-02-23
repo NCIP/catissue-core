@@ -47,7 +47,7 @@ public interface SpecimenService {
 	public LabelPrinter<Specimen> getLabelPrinter();
 	
 	/** Mostly present for UI **/
-	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req);
+	public ResponseEvent<Map<String, Object>> getCprAndVisitIds(RequestEvent<Long> req);
 
 	public List<Specimen> getSpecimensByLabel(List<String> labels);
 

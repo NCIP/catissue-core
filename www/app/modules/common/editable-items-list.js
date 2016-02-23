@@ -5,11 +5,13 @@ angular.module('openspecimen')
 
       scope: {
         items: '=',
+        allowEdit: '=',
+
         textAttr: '@',
         listTitle: '@',
         addCaption: '@',
 
-        listChanged: '&',
+        listChanged: '&'
       },
 
       link: function(scope, element, attrs) {

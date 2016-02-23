@@ -1,11 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +21,6 @@ import org.hibernate.envers.NotAudited;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
@@ -35,7 +37,13 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		ON_VISIT,
 		NONE;
 	}
-	
+
+	public enum SpecimenLabelAutoPrintMode {
+		PRE_PRINT,
+		ON_COLLECTION,
+		NONE;
+	}
+
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");
@@ -79,6 +87,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	private Boolean manualSpecLabelEnabled;
 	
 	private SpecimenLabelPrePrintMode spmnLabelPrePrintMode = SpecimenLabelPrePrintMode.NONE;
+	
+	private Set<CpSpecimenLabelPrintSetting> spmnLabelPrintSettings = new HashSet<CpSpecimenLabelPrintSetting>();
 	
 	private Boolean consentsWaived;
 
@@ -258,6 +268,27 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		this.spmnLabelPrePrintMode = spmnLabelPrePrintMode;
 	}
 
+	public Set<CpSpecimenLabelPrintSetting> getSpmnLabelPrintSettings() {
+		return spmnLabelPrintSettings;
+	}
+
+	public void setSpmnLabelPrintSettings(Set<CpSpecimenLabelPrintSetting> spmnLabelPrintSettings) {
+		this.spmnLabelPrintSettings = spmnLabelPrintSettings;
+	}
+	
+	public CpSpecimenLabelPrintSetting getSpmnLabelPrintSetting(String lineage) {
+		Optional<CpSpecimenLabelPrintSetting> setting = getSpmnLabelPrintSettings()
+			.stream()
+			.filter((s) -> s.getLineage().equals(lineage))
+			.findFirst();
+		return setting.isPresent() ? setting.get() : null;
+	}
+
+	public void addSpmnLabelPrintSetting(CpSpecimenLabelPrintSetting setting) {
+		setting.setCollectionProtocol(this);
+		getSpmnLabelPrintSettings().add(setting);
+	}
+	
 	public Boolean isConsentsWaived() {
 		return consentsWaived != null ? consentsWaived: false;
 	}
@@ -273,6 +304,14 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	public void setConsentTier(Set<ConsentTier> consentTier) {
 		this.consentTier = consentTier;
+	}
+
+	public ConsentTier addConsentTier(ConsentTier ct) {
+		ct.setId(null);
+		ct.setCollectionProtocol(this);
+		ct.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		getConsentTier().add(ct);
+		return ct;
 	}
 
 	public Set<User> getCoordinators() {
@@ -294,6 +333,11 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	public void setSites(Set<CollectionProtocolSite> sites) {
 		this.sites = sites;
+	}
+
+	public void addSite(CollectionProtocolSite site) {
+		site.setCollectionProtocol(this);
+		getSites().add(site);
 	}
 
 	@NotAudited
@@ -324,15 +368,6 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		this.collectionProtocolRegistrations = collectionProtocolRegistrations;
 	}
 
-	// new	
-	public ConsentTier addConsentTier(ConsentTier ct) {
-		ct.setId(null);
-		ct.setCollectionProtocol(this);
-		ct.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		consentTier.add(ct);
-		return ct;
-	}
-	
 	public void update(CollectionProtocol cp) {
 		setTitle(cp.getTitle()); 
 		setShortTitle(cp.getShortTitle());
@@ -355,9 +390,71 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
-		updateCollectionProtocolSites(cp.getSites());
+		updateSites(cp.getSites());
+		updateSpecimenLabelPrintSettings(cp.getSpmnLabelPrintSettings());
 		CollectionUpdater.update(this.coordinators, cp.getCoordinators());
 		updateLabelPrePrintMode(cp.getSpmnLabelPrePrintMode());
+	}
+	
+	public void copyTo(CollectionProtocol cp) {
+		copySitesTo(cp);
+
+		cp.setTitle(getTitle());
+		cp.setShortTitle(getShortTitle());
+		cp.setCode(getCode());
+		cp.setPrincipalInvestigator(getPrincipalInvestigator());
+		cp.setCoordinators(new HashSet<>(getCoordinators()));
+
+		cp.setStartDate(getStartDate());
+		cp.setEndDate(getEndDate());
+		cp.setIrbIdentifier(getIrbIdentifier());
+		cp.setEnrollment(getEnrollment());
+		cp.setDescriptionURL(getDescriptionURL());
+
+		cp.setPpidFormat(getPpidFormat());
+		cp.setManualPpidEnabled(isManualPpidEnabled());
+		cp.setVisitNameFormat(getVisitNameFormat());
+		cp.setManualVisitNameEnabled(isManualVisitNameEnabled());
+		cp.setSpecimenLabelFormat(getSpecimenLabelFormat());
+		cp.setAliquotLabelFormat(getAliquotLabelFormat());
+		cp.setDerivativeLabelFormat(getDerivativeLabelFormat());
+		cp.setManualSpecLabelEnabled(isManualSpecLabelEnabled());
+		cp.setSpmnLabelPrePrintMode(getSpmnLabelPrePrintMode());
+
+		copyLabelPrintSettingsTo(cp);
+		copyExtensionTo(cp);
+
+		cp.setConsentsWaived(isConsentsWaived());
+		cp.setUnsignedConsentDocumentURL(getUnsignedConsentDocumentURL());
+		copyConsentTierTo(cp);
+
+		copyEventsTo(cp);
+
+		cp.setActivityStatus(getActivityStatus());
+	}
+	
+	public void copyConsentTierTo(CollectionProtocol cp) {
+		for (ConsentTier consentTier : getConsentTier()) {
+			cp.addConsentTier(consentTier.copy());
+		}
+	}
+	
+	public void copyLabelPrintSettingsTo(CollectionProtocol cp) {
+		for (CpSpecimenLabelPrintSetting setting : getSpmnLabelPrintSettings()) {
+			cp.addSpmnLabelPrintSetting(setting.copy());
+		}
+	}
+
+	public void copySitesTo(CollectionProtocol cp) {
+		for (CollectionProtocolSite site : getSites()) {
+			cp.addSite(site.copy());
+		}
+	}
+	
+	public void copyEventsTo(CollectionProtocol cp) {
+		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
+			cp.addCpe(cpe.deepCopy());
+		}
 	}
 	
 	public boolean isValidPpid(String ppid) {
@@ -418,6 +515,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		}
 				
 		cpe.setId(null);
+		cpe.setCollectionProtocol(this);
 		getCollectionProtocolEvents().add(cpe);
 	}
 	
@@ -497,6 +595,20 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	public String getEntityType() {
 		return "CollectionProtocolExtension";
 	}
+	
+	public CollectionProtocolEvent firstEvent() {
+		if (!getCollectionProtocolEvents().isEmpty()) {
+			return getOrderedCpeList().get(0);
+		}
+		
+		return null;
+	}
+	
+	public List<CollectionProtocolEvent> getOrderedCpeList() {
+		List<CollectionProtocolEvent> events = new ArrayList<CollectionProtocolEvent>(getCollectionProtocolEvents());
+		Collections.sort(events);
+		return events;
+	}
 
 	private ConsentTier getConsentTierById(Long ctId) {
 		for (ConsentTier ct : consentTier) {
@@ -508,13 +620,13 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		return null;
 	}
 	
-	private void updateCollectionProtocolSites(Set<CollectionProtocolSite> newCpSites) {
+	private void updateSites(Set<CollectionProtocolSite> newSites) {
 		Map<Site, CollectionProtocolSite> existingSites = new HashMap<Site, CollectionProtocolSite>();
 		for (CollectionProtocolSite cpSite: getSites()) {
 			existingSites.put(cpSite.getSite(), cpSite);
 		}
 		
-		for (CollectionProtocolSite newSite: newCpSites) {
+		for (CollectionProtocolSite newSite: newSites) {
 			CollectionProtocolSite oldSite = existingSites.get(newSite.getSite());
 			if (oldSite != null) {
 				oldSite.update(newSite);
@@ -548,10 +660,29 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		//
 		for (CollectionProtocolEvent cpe : getCollectionProtocolEvents()) {
 			for (SpecimenRequirement sr : cpe.getSpecimenRequirements()) {
-				if (sr.getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
-					sr.setLabelAutoPrintMode(LabelAutoPrintMode.NONE);
+				if (sr.getLabelAutoPrintMode() == SpecimenLabelAutoPrintMode.PRE_PRINT) {
+					sr.setLabelAutoPrintMode(SpecimenLabelAutoPrintMode.NONE);
 				}
 			}
 		}
+	}
+	
+	private void updateSpecimenLabelPrintSettings(Set<CpSpecimenLabelPrintSetting> newSpmnLblPrintSettings) {
+		Map<String, CpSpecimenLabelPrintSetting> existingSettings = new HashMap<String, CpSpecimenLabelPrintSetting>();
+		for (CpSpecimenLabelPrintSetting spmnLblPrintSetting : getSpmnLabelPrintSettings()) {
+			existingSettings.put(spmnLblPrintSetting.getLineage(), spmnLblPrintSetting);
+		}
+		
+		for (CpSpecimenLabelPrintSetting newSpmnLblPrintSetting : newSpmnLblPrintSettings) {
+			CpSpecimenLabelPrintSetting oldSetting = existingSettings.get(newSpmnLblPrintSetting.getLineage());
+			if (oldSetting != null) {
+				oldSetting.update(newSpmnLblPrintSetting);
+				existingSettings.remove(oldSetting.getLineage());
+			} else {
+				getSpmnLabelPrintSettings().add(newSpmnLblPrintSetting);
+			}
+		}
+		
+		getSpmnLabelPrintSettings().removeAll(existingSettings.values());
 	}
 }

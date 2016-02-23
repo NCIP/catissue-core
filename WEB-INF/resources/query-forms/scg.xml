@@ -12,6 +12,7 @@
         <udn>id</udn>
         <caption>#getMessage("visit_identifier")</caption>
         <column>IDENTIFIER</column>
+        <recordUrl>#/object-state-params-resolver?stateName=visit-detail.overview&amp;objectName=visit&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>
     <row>
@@ -20,6 +21,7 @@
         <udn>name</udn>
         <caption>#getMessage("visit_name")</caption>
         <column>NAME</column>
+        <recordUrl>#/object-state-params-resolver?stateName=visit-detail.overview&amp;objectName=visit&amp;key=name&amp;value=:value</recordUrl>
       </textField>
     </row>
     <row>
@@ -55,11 +57,12 @@
           <dropDown>
             <name>name</name>
             <udn>name</udn>
-            <caption>#getMessage("visit_site_name")</caption>
+            <caption>#getMessage("visit_site")</caption>
             <column>NAME</column>
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
           </dropDown>
         </row>
       </subForm>

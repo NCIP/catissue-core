@@ -44,4 +44,10 @@ public class CollectionProtocolSite extends BaseEntity {
 		setCode(other.getCode());
 	}
 	
+	public CollectionProtocolSite copy() {
+		CollectionProtocolSite result = new CollectionProtocolSite();
+		result.setSite(getSite());
+		result.setCode(getCode());
+		return result;
+	}
 }

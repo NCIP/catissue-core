@@ -1,7 +1,9 @@
 
 angular.module('os.biospecimen.cp.consents', ['os.biospecimen.models'])
-  .controller('CpConsentsCtrl', function($scope, $state, $q, cp, consentTiers, DeleteUtil, Alerts) {
+  .controller('CpConsentsCtrl', function($scope, $state, $q, cp, consentTiers, DeleteUtil, Alerts,
+    AuthorizationService) {
     $scope.cp = cp;
+    $scope.allowEditConsent = AuthorizationService.isAllowed($scope.cpResource.updateOpts);
 
     var consents = {
       tiers: consentTiers,

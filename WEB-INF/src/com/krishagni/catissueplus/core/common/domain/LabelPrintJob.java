@@ -14,8 +14,6 @@ public class LabelPrintJob extends BaseEntity {
 	
 	private Date submissionDate;
 	
-	private int numCopies = 1;
-	
 	private Set<LabelPrintJobItem> items = new LinkedHashSet<LabelPrintJobItem>();
 
 	public String getItemType() {
@@ -40,14 +38,6 @@ public class LabelPrintJob extends BaseEntity {
 
 	public void setSubmissionDate(Date submissionDate) {
 		this.submissionDate = submissionDate;
-	}
-
-	public int getNumCopies() {
-		return numCopies;
-	}
-
-	public void setNumCopies(int numCopies) {
-		this.numCopies = numCopies;
 	}
 
 	public Set<LabelPrintJobItem> getItems() {

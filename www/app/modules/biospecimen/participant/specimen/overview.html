@@ -127,16 +127,16 @@
       </li>
     </ul>
 
+    <div ng-if="!!specimen.extensionDetail">
+      <div os-extension-overview ext-object="specimen.extensionDetail" show-column="2"></div>
+    </div>
+
     <div class="os-section os-line-section" ng-if="!!specimen.comments">
       <strong class="key key-sm">
         <span translate="specimens.comments">Comments</span>
         <span>&nbsp;</span>
       </strong>
       <span class="value value-md">{{specimen.comments}}</span>
-    </div>
-
-    <div ng-if="!!specimen.extensionDetail">
-      <div os-extension-overview ext-object="specimen.extensionDetail" show-column="2"></div>
     </div>
 
     <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="treeSpecimens" allowed-ops="specimenAllowedOps" reload="reload()">

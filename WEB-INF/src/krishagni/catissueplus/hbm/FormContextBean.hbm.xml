@@ -82,7 +82,8 @@
             ic.identifier
         ) derived on derived.formId = c.identifier
       where
-        c.deleted_on is null		
+        c.deleted_on is null and
+        c.caption like :caption
       order by
         modificationTime desc
     </sql-query>

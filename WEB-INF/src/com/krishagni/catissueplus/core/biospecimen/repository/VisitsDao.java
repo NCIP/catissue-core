@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
@@ -17,4 +18,6 @@ public interface VisitsDao extends Dao<Visit> {
 	public List<Visit> getByName(Collection<String> names);
 
 	public List<Visit> getBySpr(String sprNumber);
+
+	public Map<String, Object> getCprVisitIds(String key, Object value);
 }

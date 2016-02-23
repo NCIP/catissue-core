@@ -1,12 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode.*;
-import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
-import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
-import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
+import static com.krishagni.catissueplus.core.common.PvAttributes.*;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.math.BigDecimal;
@@ -18,11 +13,11 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
@@ -67,6 +62,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		requirement.setId(detail.getId());
 		requirement.setName(detail.getName());
 		requirement.setLineage(Specimen.NEW);
+		requirement.setLabelPrintCopies(detail.getLabelPrintCopies());
 		
 		setCode(detail, requirement, ose);
 		setLabelFormat(detail, requirement, ose);
@@ -123,6 +119,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setLabelAutoPrintMode(req.getLabelAutoPrintMode(), derived, ose);
 		setCode(req.getCode(), derived, ose);
 		derived.setName(req.getName());
+		derived.setLabelPrintCopies(req.getLabelPrintCopies());
 		
 		ose.checkAndThrow();
 		derived.setParentSpecimenRequirement(parent);
@@ -136,6 +133,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		sr.setName(req.getName());
 		sr.setSortOrder(req.getSortOrder());
+		sr.setLabelPrintCopies(req.getLabelPrintCopies());
 		
 		//
 		// Specimen class and type are set here so that properties dependent on these can
@@ -207,6 +205,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			setStorageType(req.getStorageType(), aliquot, ose);
 			setLabelFormat(req.getLabelFmt(), aliquot, ose);
 			setLabelAutoPrintMode(req.getLabelAutoPrintMode(), aliquot, ose);
+			aliquot.setLabelPrintCopies(req.getLabelPrintCopies());
 			aliquot.setInitialQuantity(req.getQtyPerAliquot());
 			aliquot.setParentSpecimenRequirement(parent);
 			aliquots.add(aliquot);
@@ -285,9 +284,9 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 			return;
 		}
 		
-		LabelAutoPrintMode labelAutoPrintMode = null;
+		SpecimenLabelAutoPrintMode labelAutoPrintMode = null;
 		try {
-			labelAutoPrintMode = LabelAutoPrintMode.valueOf(input); 
+			labelAutoPrintMode = SpecimenLabelAutoPrintMode.valueOf(input);
 		} catch (IllegalArgumentException iae) {
 			ose.addError(INVALID_LABEL_AUTO_PRINT_MODE, input);
 			return;
@@ -452,6 +451,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(req, specimenPoolReq, ose);
 		setCode(req, specimenPoolReq, ose);
 		setLabelAutoPrintMode(req, specimenPoolReq, ose);
+		specimenPoolReq.setLabelPrintCopies(req.getLabelPrintCopies());
 		specimenPoolReq.setPooledSpecimenRequirement(pooledSpmnReq);
 		return specimenPoolReq;
 	}

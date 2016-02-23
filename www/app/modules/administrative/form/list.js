@@ -1,10 +1,11 @@
 
 angular.module('os.administrative.form.list', ['os.administrative.models'])
   .controller('FormListCtrl', function(
-    $scope, $state, $modal, $translate, Form,
+    $scope, $state, $modal, $translate, Form, FormEntityReg,
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
+      $scope.formFilterOpts = {};
       $scope.entityMap = {
         Participant: 'participant', 
         Specimen: 'specimen', 
@@ -13,12 +14,13 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       };
       $scope.cpList = [];
       $scope.formsList = [];
-      loadAllForms();
+      loadForms($scope.formFilterOpts);
       loadCollectionProtocols();
+      Util.filter($scope, 'formFilterOpts', loadForms);
     }
 
-    function loadAllForms() {
-      Form.query().then(function(result) {
+    function loadForms(filterOpts) {
+      Form.query(filterOpts).then(function(result) {
         $scope.formsList = result;
       })
     }
@@ -57,6 +59,10 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
                 form: form,
                 cpList: $scope.cpList
               }
+            },
+
+            entities: function(FormEntityReg) {
+              return FormEntityReg.getEntities();
             }
           }
         });

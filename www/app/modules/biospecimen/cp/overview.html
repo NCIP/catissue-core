@@ -74,6 +74,10 @@
       </li>
     </ul>
 
+    <div ng-if="!!cp.extensionDetail">
+      <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
+    </div>
+
     <div class="os-section os-line-section">
       <strong class="key key-sm" translate="cp.label_formats">Label Formats</strong>
       <div>
@@ -122,10 +126,47 @@
         </ul>
       </div>
     </div>
-  
-    <div ng-if="!!cp.extensionDetail">
-      <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
+
+    <div class="os-section os-line-section">
+      <strong class="key key-sm" translate="cp.print_settings">Print Settings</strong>
+      <div>
+        <span ng-if="cp.spmnLabelPrintSettings.length == 0" translate="common.none">None</span>
+        <table class="os-table os-table-muted-hdr os-border" ng-if="cp.spmnLabelPrintSettings.length > 0">
+          <thead class="os-table-head">
+            <tr class="row">
+              <td class="col os-col-40">
+                <span translate="cp.lineage">Lineage</span>
+              </td>
+              <td class="col os-col-40">
+                <span translate="cp.when_to_print">When to Print</span>
+              </td>
+              <td class="col os-col-20">
+                <span translate="cp.copies">Copies</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="setting in cp.spmnLabelPrintSettings">
+              <td class="col">
+                <span>{{'cp.spmn_lineages.' + setting.lineage | translate}}</span>
+              </td>
+              <td class="col" ng-switch on="!!setting.printMode">
+                <span ng-switch-when="true">
+                  {{'srs.spmn_label_auto_print_modes.' + setting.printMode | translate}}
+                </span>
+                <span ng-switch-default translate="common.not_specified">
+                  Not Specified
+                </span>
+              </td>
+              <td class="col">
+                <span>{{setting.copies | osNoValue}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  
   </div>
 
   <!-- div class="col-xs-4">

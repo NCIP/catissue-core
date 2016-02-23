@@ -91,6 +91,13 @@
               <span translate="specimens.spmn_events">Specimen Events</span>
             </a>
           </li>
+          <!--li class="divider"></li>
+          <li show-if-allowed="participantResource.createOpts">
+            <a ui-sref="import-biospecimen-objs({objectType: 'masterSpecimen'})">
+              <i class="fa fa-user"></i>
+              <span translate="participant.master_specimens">Master Specimens</span>
+            </a>
+          </li-->
           <li class="divider"></li>
           <li ng-if="allowReadJobs">
             <a ui-sref="biospecimen-obj-import-jobs">

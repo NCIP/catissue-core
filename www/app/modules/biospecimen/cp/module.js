@@ -101,6 +101,12 @@ angular.module('os.biospecimen.cp',
                 showImportType: false,
                 importType    : 'CREATE'
               });
+            } else if (objectType == 'masterSpecimen') {
+              angular.extend(importDetail, {
+                title:          'participant.bulk_import_master_specimens',
+                showImportType: false,
+                importType    : 'CREATE'
+              });
             } else if (objectType == 'extensions') {
               var entityType = $stateParams.entityType;
               var title = undefined;
@@ -136,8 +142,8 @@ angular.module('os.biospecimen.cp',
               title: 'cp.bulk_import_biospecimen_obj_jobs',
               objectTypes: [
                 'cpr', 'participant', 'visit', 
-                'specimen', 'specimenDerivative', 'specimenAliquot', 
-                'extensions'
+                'specimen', 'specimenDerivative', 'specimenAliquot',
+                'masterSpecimen', 'extensions'
               ]
             }
           }
@@ -145,7 +151,7 @@ angular.module('os.biospecimen.cp',
         parent: 'cps'
       })
       .state('cp-addedit', {
-        url: '/addedit/:cpId',
+        url: '/addedit/:cpId?mode',
         templateUrl: 'modules/biospecimen/cp/addedit.html',
         resolve: {
           cp: function($stateParams, CollectionProtocol) {

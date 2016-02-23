@@ -84,7 +84,11 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return countMap;
 	}
 
-	
+	@Override
+	public Map<String, Object> getSiteIds(String key, Object value) {
+		return getObjectIds("siteId", key, value);
+	}
+
 	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
 		if (StringUtils.isNotBlank(listCrit.query())) {
 			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;

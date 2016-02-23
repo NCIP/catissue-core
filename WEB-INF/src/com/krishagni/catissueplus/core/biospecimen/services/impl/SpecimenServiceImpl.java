@@ -39,6 +39,7 @@ import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
+import com.krishagni.catissueplus.core.common.domain.PrintItem;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.CommonErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -50,11 +51,12 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class SpecimenServiceImpl implements SpecimenService {
+public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsResolver {
 
 	private DaoFactory daoFactory;
 
@@ -238,9 +240,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 				specimens.add(specimen);
 			}
 
-			List<Specimen> specimensToPrint = getSpecimensToPrint(specimens);
-			getLabelPrinter().print(specimensToPrint, 1);
 
+			getLabelPrinter().print(getSpecimenPrintItems(specimens));
 			return ResponseEvent.response(SpecimenDetail.from(specimens));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -358,8 +359,8 @@ public class SpecimenServiceImpl implements SpecimenService {
 		if (CollectionUtils.isEmpty(specimens)) {
 			return ResponseEvent.userError(SpecimenErrorCode.NO_SPECIMENS_TO_PRINT);
 		}
-		
-		LabelPrintJob job = printer.print(specimens, printDetail.getNumCopies());
+
+		LabelPrintJob job = printer.print(PrintItem.make(specimens, printDetail.getNumCopies()));
 		if (job == null) {
 			return ResponseEvent.userError(SpecimenErrorCode.PRINT_ERROR);
 		}
@@ -380,9 +381,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req) {
+	public ResponseEvent<Map<String, Object>> getCprAndVisitIds(RequestEvent<Long> req) {
 		try {
-			Map<String, Long> ids = daoFactory.getSpecimenDao().getCprAndVisitIds(req.getPayload());
+			Map<String, Object> ids = resolve("id", req.getPayload());
 			if (ids == null || ids.isEmpty()) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, req.getPayload());
 			}
@@ -411,6 +412,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 
 		return getSpecimens(new SpecimenListCriteria().ids(ids));
+	}
+
+	@Override
+	public String getObjectName() {
+		return "specimen";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getSpecimenDao().getCprAndVisitIds(key, value);
 	}
 
 	private List<Specimen> getSpecimens(SpecimenListCriteria crit) {
@@ -653,23 +669,28 @@ public class SpecimenServiceImpl implements SpecimenService {
 	/**
 	 * Filters input collection of specimens based on printLabel flag
 	 */
-	private List<Specimen> getSpecimensToPrint(Collection<Specimen> specimens) {
-		List<Specimen> specimensToPrint = new ArrayList<Specimen>();
+	private List<PrintItem<Specimen>> getSpecimenPrintItems(Collection<Specimen> specimens) {
+		List<PrintItem<Specimen>> printItems = new ArrayList<PrintItem<Specimen>>();
 		for (Specimen specimen : specimens) {
+			Integer copies = null;
+			if (specimen.getSpecimenRequirement() != null) {
+				copies = specimen.getSpecimenRequirement().getLabelPrintCopiesToUse();
+			}
+
 			if (specimen.isPrintLabel()) {
-				specimensToPrint.add(specimen);
+				printItems.add(PrintItem.make(specimen, copies));
 			}
 
 			if (CollectionUtils.isNotEmpty(specimen.getSpecimensPool())) {
-				specimensToPrint.addAll(getSpecimensToPrint(specimen.getSpecimensPool()));
+				printItems.addAll(getSpecimenPrintItems(specimen.getSpecimensPool()));
 			}
 
 			if (CollectionUtils.isNotEmpty(specimen.getChildCollection())) {
-				specimensToPrint.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+				printItems.addAll(getSpecimenPrintItems(specimen.getChildCollection()));
 			}
 		}
 
-		return specimensToPrint;
+		return printItems;
 	}
 
 	private List<Specimen> getFlattenedSpecimens(Collection<Specimen> specimens) {

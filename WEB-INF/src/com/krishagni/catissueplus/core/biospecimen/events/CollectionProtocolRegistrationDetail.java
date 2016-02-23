@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.Date;
+import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -141,11 +142,15 @@ public class CollectionProtocolRegistrationDetail {
 	public void setDerivativeLabelFmt(String derivativeLabelFmt) {
 		this.derivativeLabelFmt = derivativeLabelFmt;
 	}
+	
+	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi) {
+		return from(cpr, excludePhi, null);
+	}
 
-	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi) {		 
+	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi, List<CollectionProtocolRegistration> otherCprs) {
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
 		
-		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant(), excludePhi));
+		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant(), excludePhi, otherCprs));
 		detail.setId(cpr.getId());		
 		detail.setActivityStatus(cpr.getActivityStatus());
 		detail.setBarcode(cpr.getBarcode());
@@ -159,7 +164,6 @@ public class CollectionProtocolRegistrationDetail {
 		detail.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		detail.setAliquotLabelFmt(cp.getAliquotLabelFormat());
 		detail.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
-		
 		return detail;
-	}	
+	}
 }

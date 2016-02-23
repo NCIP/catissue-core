@@ -16,6 +16,7 @@
         <udn>id</udn>
         <caption>#getMessage("specimen_identifier")</caption>
         <column>IDENTIFIER</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>
 
@@ -39,6 +40,7 @@
         <udn>label</udn>
         <caption>#getMessage("specimen_label")</caption>
         <column>LABEL</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
       </textField>
     </row>
 
@@ -54,8 +56,9 @@
           <textField>
             <name>parentLabel</name>
             <udn>parentLabel</udn>
-            <caption>#getMessage("specimen_parent_specimen_label")</caption>
+            <caption>#getMessage("specimen_parent_specimen")</caption>
             <column>LABEL</column>
+            <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
           </textField>  
         </row>
       </subForm>
@@ -275,6 +278,7 @@
             <caption>#getMessage("specimen_spec_position_container_name")</caption>
             <column>CONTAINER_NAME</column>
             <maxLength>255</maxLength>
+            <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
           </textField>              
 
           <textField>
@@ -295,20 +299,42 @@
         </row>
         <row>
           <subForm>
-            <name>containerStats</name>
-            <udn>containerStats</udn>
-            <caption>#getMessage("specimen_spec_position_container_stats")</caption>
-            <table>OS_STORAGE_CONT_STATS_VIEW</table>
+            <name>containerHierarchy</name>
+            <udn>containerHierarchy</udn>
+            <caption>#getMessage("specimen_spec_position_container_hierarchy")</caption>
+            <table>OS_CONTAINER_HIERARCHY_VIEW</table>
             <foreignKey>CONTAINER_ID</foreignKey>
             <parentKey>CONTAINER_IDENTIFIER</parentKey>
             <primaryKey>CONTAINER_ID</primaryKey>
             <row>
               <textField>
-                <name>containerHierarchy</name>
-                <udn>containerHierarchy</udn>
+                <name>hierarchy</name>
+                <udn>hierarchy</udn>
                 <caption>#getMessage("specimen_spec_position_container_hierarchy")</caption>
-                <column>CONTAINER_HIERARCHY</column>
+                <column>HIERARCHY</column>
                 <maxLength>255</maxLength>
+              </textField>
+            </row>
+          </subForm>
+        </row>
+    
+        <row>
+          <subForm>
+            <name>ancestors</name>
+            <udn>ancestors</udn>
+            <caption>#getMessage("specimen_spec_position_container_ancestors")</caption>
+            <table>OS_CONTAINER_ANCESTORS_VIEW</table>
+            <foreignKey>CONTAINER_ID</foreignKey>
+            <parentKey>CONTAINER_IDENTIFIER</parentKey>
+            <primaryKey>CONTAINER_ID</primaryKey>
+            <row>
+              <textField>
+                <name>name</name>
+                <udn>name</udn>
+                <caption>#getMessage("specimen_spec_position_container_ancestor_name")</caption>
+                <column>ANCESTOR_NAME</column>
+                <maxLength>255</maxLength>
+                <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
               </textField>
             </row>
           </subForm>
@@ -332,35 +358,6 @@
           </sql>
         </options>
       </listBox>
-    </row>
-
-    <row>
-      <subForm>
-        <name>externalIdentifiers</name>
-        <udn>externalIdentifiers</udn>
-        <caption>#getMessage("specimen_external_ids")</caption>
-        <table>CATISSUE_EXTERNAL_IDENTIFIER</table>
-        <foreignKey>SPECIMEN_ID</foreignKey>
-        <parentKey>IDENTIFIER</parentKey>
-        <row>
-          <textField>
-            <name>externalIdentifierName</name>
-            <udn>externalIdentifierName</udn>
-            <caption>#getMessage("specimen_external_ids_name")</caption>
-            <column>NAME</column>
-            <maxLength>255</maxLength>
-          </textField>  
-        </row>
-        <row>
-          <textField>
-            <name>externalIdentifierValue</name>
-            <udn>externalIdentifierValue</udn>
-            <caption>#getMessage("specimen_external_ids_value")</caption>
-            <column>VALUE</column>
-            <maxLength>255</maxLength>
-          </textField>  
-        </row>
-      </subForm>
     </row>
 
     <row>
@@ -473,7 +470,7 @@
         </row>
       </subForm>
     </row>
-
+    
     <row>
       <subForm>
         <name>customFields</name>

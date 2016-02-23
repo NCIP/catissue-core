@@ -68,6 +68,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	INVALID_PATHOLOGY_STATUS,
 	
+	COLL_DATE_REQUIRED,
+	
 	INVALID_CREATION_DATE,
 
 	CREATED_ON_GT_CURRENT,

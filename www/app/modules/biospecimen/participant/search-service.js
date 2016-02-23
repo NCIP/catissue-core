@@ -49,7 +49,7 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
     }
 
     $scope.participantDetail = function(cpr) {
-      $state.go('participant-detail.overview', {cprId: cpr.cprId});
+      $state.go('participant-detail.overview', {cpId: cpr.cpId, cprId: cpr.cprId});
     }
 
     init();

@@ -38,6 +38,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.Filter;
@@ -50,7 +51,7 @@ import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 import edu.common.dynamicextensions.query.WideRowMode;
 
-public class DistributionOrderServiceImpl implements DistributionOrderService {
+public class DistributionOrderServiceImpl implements DistributionOrderService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 
 	private DistributionOrderFactory distributionFactory;
@@ -245,7 +246,22 @@ public class DistributionOrderServiceImpl implements DistributionOrderService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	public String getObjectName() {
+		return "order";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getDistributionOrderDao().getOrderIds(key, value);
+	}
+
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
 			DistributionOrder order = daoFactory.getDistributionOrderDao().getOrder(newOrder.getName());

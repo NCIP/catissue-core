@@ -1,10 +1,11 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
-  .controller('SiteAddEditCtrl', function($scope, $state, site, extensionCtxt, Institute, PvManager, Util) {
+  .controller('SiteAddEditCtrl', function(
+    $scope, $state, site, extensionCtxt, Institute, PvManager, ExtensionsUtil) {
 
     function init() {
       $scope.site = site;
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(site, extensionCtxt);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(site, extensionCtxt);
       loadPvs();
     }
 

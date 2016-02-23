@@ -105,9 +105,17 @@
         <div class="form-group">
           <os-select name="labelAutoPrintMode" ng-model="childReq.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
             display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(childReq, 'Derivative')"
-            os-md-input placeholder="{{'srs.auto_print_label' | translate}}">
+            os-md-input placeholder="{{'srs.when_to_print' | translate}}">
           </os-select>
           <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!childReq.labelFmtSpecified"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input name="labelPrintCopies" ng-model="childReq.labelPrintCopies" os-md-input class="form-control" type="text"
+            placeholder="{{'srs.label_print_copies' | translate}}" ng-pattern="/^[0-9]+$/">
+          <div os-field-error field="derivativeForm.labelPrintCopies"></div>
         </div>
       </div>
     </div>

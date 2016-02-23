@@ -1,11 +1,11 @@
 angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
-  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, FormEntityReg, Alerts) {
+  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, entities, Alerts) {
 
     var reload = false;
 
     function init() {
       $scope.showFormCtxts = true;
-      $scope.extnEntities = FormEntityReg.getEntities();
+      $scope.extnEntities = entities;
       $scope.form = args.form;
       $scope.cpList = args.cpList;
 

@@ -55,6 +55,10 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return this.title;
     }
 
+    CollectionProtocol.prototype.copy = function(copyFrom) {
+      return $http.post(CollectionProtocol.url() + copyFrom  + '/copy', this.$saveProps()).then(CollectionProtocol.modelRespTransform);
+    };
+
     CollectionProtocol.prototype.getConsentTiers = function() {
       return this.consentModel.query();
     };

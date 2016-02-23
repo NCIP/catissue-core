@@ -1,9 +1,26 @@
 angular.module('os.administrative.form.entities', [])
   .factory('FormEntityReg', function($translate) {
     var entities = [];
+    var inited = false;
 
     function getEntities() {
-      return entities;
+      return $translate('common.none').then(
+        function() {
+          if (inited) {
+            return entities;
+          }
+
+          entities = entities.map(
+            function(entity) {
+              entity.caption = $translate.instant(entity.key);
+              return entity;
+            }
+          );
+
+          inited = true;
+          return entities;
+        }
+      );
     }
 
     function addEntity(entity) {
@@ -21,30 +38,11 @@ angular.module('os.administrative.form.entities', [])
     }
 
     function init() {
-      var participant = {name: 'Participant', caption: ''};
-      addEntity(participant);
-
-      var visit       = {name: 'SpecimenCollectionGroup', caption: ''};
-      addEntity(visit);
-
-      var specimen    = {name: 'Specimen', caption: ''};
-      addEntity(specimen);
-
-      var event       = {name: 'SpecimenEvent', caption: '', allCps: true};
-      addEntity(event);
-
-      var req         = {name: 'SpecimenRequest', caption: ''};
-      addEntity(req);
-
-      $translate('entities.participant').then(
-        function() { 
-          participant.caption = $translate.instant('entities.participant');
-          visit.caption       = $translate.instant('entities.visit');
-          specimen.caption    = $translate.instant('entities.specimen');
-          event.caption       = $translate.instant('entities.specimen_event');
-          req.caption         = $translate.instant('entities.specimen_request');
-        }
-      );
+      addEntity({name: 'Participant', key: 'entities.participant', caption: ''});
+      addEntity({name: 'SpecimenCollectionGroup', key: 'entities.visit', caption: ''});
+      addEntity({name: 'Specimen', key: 'entities.specimen', caption: ''});
+      addEntity({name: 'SpecimenEvent', caption: '', key: 'entities.specimen_event', allCps: true});
+      addEntity({name: 'SpecimenRequest', caption: '', key: 'entities.specimen_request', allCps: true});
     }
 
     init();

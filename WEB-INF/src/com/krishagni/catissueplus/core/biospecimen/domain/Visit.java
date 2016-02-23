@@ -19,12 +19,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelPrePrintMode;
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement.LabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.common.domain.PrintItem;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -209,7 +210,7 @@ public class Visit extends BaseExtensionEntity {
 	public Set<Specimen> getTopLevelSpecimens() {
 		Set<Specimen> result = new HashSet<Specimen>();
 		if (getSpecimens() == null) {
-			return getSpecimens();
+			return null;
 		}
 		
 		for (Specimen specimen : getSpecimens()) {
@@ -462,10 +463,9 @@ public class Visit extends BaseExtensionEntity {
 
 		//
 		// Go through individual specimen that have pre print enabled
-		// and queue for printing their labels
+		// and create queue of print items by putting specimens and copies to print for printing
 		//
-		List<Specimen> specimens = getSpecimensToPrint(getTopLevelSpecimens());
-		specimenSvc.getLabelPrinter().print(specimens, 1);
+		specimenSvc.getLabelPrinter().print(getSpecimenPrintItems(getTopLevelSpecimens()));
 	}
 		
 	@Override
@@ -532,20 +532,21 @@ public class Visit extends BaseExtensionEntity {
 		return specimen;
 	}
 
-	private List<Specimen> getSpecimensToPrint(Collection<Specimen> specimens) {
-		List<Specimen> specimensToPrint = new ArrayList<Specimen>();
+	private List<PrintItem<Specimen>> getSpecimenPrintItems(Collection<Specimen> specimens) {
+		List<PrintItem<Specimen>> spmnPrintItems = new ArrayList<PrintItem<Specimen>>();
 		specimens = Specimen.sort(specimens);
 
 		for (Specimen specimen : specimens) {
-			if (specimen.getSpecimenRequirement().getLabelAutoPrintMode() == LabelAutoPrintMode.PRE_PRINT) {
-				specimensToPrint.add(specimen);
+			SpecimenRequirement requirement = specimen.getSpecimenRequirement();
+			if (requirement.getLabelAutoPrintModeToUse() == SpecimenLabelAutoPrintMode.PRE_PRINT) {
+				Integer printCopies = requirement.getLabelPrintCopiesToUse();
+				spmnPrintItems.add(PrintItem.make(specimen, printCopies));
 			}
 
-
-			specimensToPrint.addAll(getSpecimensToPrint(specimen.getSpecimensPool()));
-			specimensToPrint.addAll(getSpecimensToPrint(specimen.getChildCollection()));
+			spmnPrintItems.addAll(getSpecimenPrintItems(specimen.getSpecimensPool()));
+			spmnPrintItems.addAll(getSpecimenPrintItems(specimen.getChildCollection()));
 		}
 		
-		return specimensToPrint;
+		return spmnPrintItems;
 	}
 }

@@ -12,13 +12,18 @@ import org.apache.commons.lang.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelPrePrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpSpecimenLabelPrintSetting;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSiteDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CpSpecimenLabelPrintSettingDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -34,6 +39,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private LabelGenerator specimenLabelGenerator;
 	
 	private LabelGenerator visitNameGenerator;
+
+	private CollectionProtocolCopier cpCopier;
 	
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -49,6 +56,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	public void setVisitNameGenerator(LabelGenerator visitNameGenerator) {
 		this.visitNameGenerator = visitNameGenerator;
+	}
+
+	public void setCpCopier(CollectionProtocolCopier cpCopier) {
+		this.cpCopier = cpCopier;
 	}
 
 	@Override
@@ -77,6 +88,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setVisitNameFmt(input, cp, ose);
 		setLabelFormats(input, cp, ose);		
 		setSpecimenLabelPrePrintMode(input, cp, ose);
+		setSpecimenLabelPrintSettings(input, cp, ose);
 		setActivityStatus(input, cp, ose);
 		setCollectionProtocolExtension(input, cp, ose);
 
@@ -84,6 +96,43 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		return cp;
 	}
 	
+	@Override
+	public CollectionProtocol createCpCopy(CollectionProtocolDetail input, CollectionProtocol existing) {
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
+		CollectionProtocol cp = cpCopier.copy(existing);
+		setTitle(input, cp, ose);
+		setShortTitle(input, cp, ose);
+		setCode(input, cp, ose);
+
+		if (CollectionUtils.isNotEmpty(input.getCpSites())) {
+			setSites(input, cp, ose);
+		}
+		
+		if (input.getPrincipalInvestigator() != null) {
+			setPrincipalInvestigator(input, cp, ose);
+		}
+
+		if (CollectionUtils.isNotEmpty(input.getCoordinators())) {
+			setCoordinators(input, cp, ose);
+		}
+
+		if (input.getStartDate() != null) {
+			cp.setStartDate(input.getStartDate());
+		}
+		
+		if (input.getEndDate() != null) {
+			cp.setEndDate(input.getEndDate());
+		}
+		
+		if (StringUtils.isNotBlank(input.getIrbId())) {
+			cp.setIrbIdentifier(input.getIrbId());
+		}
+		
+		ose.checkAndThrow();
+		return cp;
+	}
+
 	private void setSites(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		 if (CollectionUtils.isEmpty(input.getCpSites())) {
 			 ose.addError(CpErrorCode.REPOSITORIES_REQUIRED);
@@ -255,6 +304,55 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setSpmnLabelPrePrintMode(spmnLabelPrePrintMode);
 	}
 	
+	private void setSpecimenLabelPrintSettings(CollectionProtocolDetail input, CollectionProtocol cp, OpenSpecimenException ose) {
+		if (CollectionUtils.isEmpty(input.getSpmnLabelPrintSettings())) {
+			return;
+		}
+
+		Map<String, CpSpecimenLabelPrintSetting> settings = new HashMap<>();
+		for (CpSpecimenLabelPrintSettingDetail detail : input.getSpmnLabelPrintSettings()) {
+			CpSpecimenLabelPrintSetting setting = getSpecimenLabelPrintSetting(detail, cp, ose);
+			if (settings.containsKey(setting.getLineage())) {
+				ose.addError(CpErrorCode.DUP_PRINT_SETTING, setting.getLineage());
+			}
+
+			settings.put(setting.getLineage(), setting);
+		}
+		
+		cp.setSpmnLabelPrintSettings(new HashSet<>(settings.values()));
+	}
+
+	private CpSpecimenLabelPrintSetting getSpecimenLabelPrintSetting(CpSpecimenLabelPrintSettingDetail settingDetail, CollectionProtocol cp, OpenSpecimenException ose) {
+		CpSpecimenLabelPrintSetting setting = new CpSpecimenLabelPrintSetting();
+
+		//
+		// Lineage validation and setting
+		//
+		if (StringUtils.isBlank(settingDetail.getLineage())) {
+			ose.addError(CpErrorCode.SPMN_LINEAGE_REQUIRED);
+		} else if (!Specimen.isValidLineage(settingDetail.getLineage())) {
+			ose.addError(CpErrorCode.INVALID_SPMN_LINEAGE, settingDetail.getLineage());
+		} else {
+			setting.setLineage(settingDetail.getLineage());
+		}
+
+		//
+		// print mode validation and setting
+		//
+		String printMode = settingDetail.getPrintMode();
+		if (StringUtils.isNotBlank(printMode)) {
+			try {
+				setting.setPrintMode(SpecimenLabelAutoPrintMode.valueOf(printMode));
+			} catch (IllegalArgumentException iae) {
+				ose.addError(CpErrorCode.INVALID_SPMN_LABEL_PRINT_MODE, printMode);
+			}
+		}
+
+		setting.setCopies(settingDetail.getCopies());
+		setting.setCollectionProtocol(cp);
+		return setting;
+	}
+
 	private void setCollectionProtocolExtension(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		DeObject extension = DeObject.createExtension(input.getExtensionDetail(), result);
 		result.setExtension(extension);

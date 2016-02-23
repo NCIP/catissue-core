@@ -8,6 +8,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-3">
+        <validCheckSum>7:9d6ca87b5c1bb29a6fcf95d276cf940a</validCheckSum>
         <createTable tableName="CATISSUE_ABSTRACT_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107895" />
@@ -27,6 +28,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-4">
+        <validCheckSum>7:74c90db6eb7a6ae9208aa7324cdd2bcc</validCheckSum>
         <createTable tableName="CATISSUE_ADDRESS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107567" />
@@ -41,6 +43,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-9">
+        <validCheckSum>7:6b4a8e257a5e276781a4cc66e8618b7d</validCheckSum>
         <createTable tableName="CATISSUE_AUTH_DOMAINS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_DOMAIN_ID" />
@@ -52,6 +55,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-10">
+        <validCheckSum>7:ff026cc3c584bb7119eb404205d69ea4</validCheckSum>
         <createTable tableName="CATISSUE_AUTH_PROVIDERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_PROVIDER_ID" />
@@ -65,6 +69,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-11">
+        <validCheckSum>7:939b34756974cf733628863fe95f44fc</validCheckSum>
         <createTable tableName="CATISSUE_BASE_SHIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108062" />
@@ -82,6 +87,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-12">
+        <validCheckSum>7:5d9d24cf12dd057b2e8ba5944f6a8d65</validCheckSum>
         <createTable tableName="CATISSUE_BIOHAZARD">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107553" />
@@ -102,6 +108,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-14">
+        <validCheckSum>7:2b22b00267657ccf85ab26d0f7d21dc4</validCheckSum>
         <createTable tableName="CATISSUE_BULK_OPERATION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="CATISSUE_BULK_OPERATION_SEQ" />
@@ -121,6 +128,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-16">
+        <validCheckSum>7:a16e0606ec2b7042e9e0ce853760e98f</validCheckSum>
         <createTable tableName="CATISSUE_CAPACITY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107592" />
@@ -130,6 +138,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-17">
+        <validCheckSum>7:c513659744eace0a0ef6de016e81a5f1</validCheckSum>
         <createTable tableName="CATISSUE_CDE">
             <column name="PUBLIC_ID" type="VARCHAR2(30 BYTE)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107481" />
@@ -141,6 +150,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-19">
+        <validCheckSum>7:5d591fed3a17c034a4df998cf110d980</validCheckSum>
         <createTable tableName="CATISSUE_CELL_SPE_REVIEW_PARAM">
             <column name="NEOPLASTIC_CELLULARITY_PER" type="FLOAT(126)"/>
             <column name="VIABLE_CELL_PERCENTAGE" type="FLOAT(126)"/>
@@ -154,6 +164,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-21">
+        <validCheckSum>7:55f2546a3816b5bd58de4f31f8cabf11</validCheckSum>
         <createTable tableName="CATISSUE_CLINICAL_DIAGNOSIS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107916" />
@@ -183,6 +194,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-24">
+        <validCheckSum>7:ebef019aa990abf7a351c2c43eaf68cc</validCheckSum>
         <createTable tableName="CATISSUE_COLL_EVENT_PARAM">
             <column name="COLLECTION_PROCEDURE" type="VARCHAR2(50 BYTE)"/>
             <column name="CONTAINER" type="VARCHAR2(50 BYTE)"/>
@@ -197,6 +209,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-25">
+        <validCheckSum>7:3df5f945b7bfb5802b2db4889d9e8d4a</validCheckSum>
         <createTable tableName="CATISSUE_COLL_PROT_EVENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107639" />
@@ -213,6 +226,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-26">
+        <validCheckSum>7:2d13d8a47745da01a20b5416276ee8f8</validCheckSum>
         <createTable tableName="CATISSUE_COLL_PROT_REG">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107623" />
@@ -231,7 +245,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-27">
-        <validCheckSum>7:14ea667e59d7455e646ed57e6465a4f0</validCheckSum>
+        <validCheckSum>7:70f8b21a0de981baeafa752a3c0c6bf2</validCheckSum>
         <createTable tableName="CATISSUE_COLLECTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107490" />
@@ -260,6 +274,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-28">
+        <validCheckSum>7:c41e28319094d0cb51a0e1d002d84b64</validCheckSum>
         <createTable tableName="CATISSUE_CONCEPT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107868" />
@@ -270,6 +285,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-29">
+        <validCheckSum>7:891288789ebbc2b0da7f83128e5a9d21</validCheckSum>
         <createTable tableName="CATISSUE_CONCEPT_CLASSIFICATN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107872" />
@@ -278,6 +294,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-30">
+        <validCheckSum>7:d75a6d6a82435337c912bdeefe34ffc6</validCheckSum>
         <createTable tableName="CATISSUE_CONCEPT_REFERENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107848" />
@@ -292,6 +309,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-31">
+        <validCheckSum>7:c33a83006b00988a77cf2a9d834b3b67</validCheckSum>
         <createTable tableName="CATISSUE_CONSENT_TIER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107794" />
@@ -301,6 +319,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-32">
+        <validCheckSum>7:2b95c2fd88e3b1440378b8a75e99a7fa</validCheckSum>
         <createTable tableName="CATISSUE_CONSENT_TIER_RESPONSE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107790" />
@@ -311,6 +330,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-33">
+        <validCheckSum>7:701520703791dd788168393b6e651aa7</validCheckSum>
         <createTable tableName="CATISSUE_CONSENT_TIER_STATUS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107792" />
@@ -332,6 +352,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-35">
+        <validCheckSum>7:262f977d8fcddc1353f4e950fca96e32</validCheckSum>
         <createTable tableName="CATISSUE_CONTAINER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107509" />
@@ -356,6 +377,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-37">
+        <validCheckSum>7:1b52ca183d293b3ca950614cf22c581f</validCheckSum>
         <createTable tableName="CATISSUE_CONTAINER_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107902" />
@@ -365,6 +387,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-38">
+        <validCheckSum>7:3214aca0e8935bd6134089dd3905ae04</validCheckSum>
         <createTable tableName="CATISSUE_CONTAINER_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107589" />
@@ -380,6 +403,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-39">
+        <validCheckSum>7:ef1d5b595b282ff86c6959f90ece9682</validCheckSum>
         <createTable tableName="CATISSUE_CP_EXTAPP_STUDY_REL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CP_EXTAPP_STUDY_REL" />
@@ -396,6 +420,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-40">
+        <validCheckSum>7:bb2bbe87855e71f40a359342fba330c2</validCheckSum>
         <createTable tableName="CATISSUE_CP_REQ_SPECIMEN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107655" />
@@ -428,6 +453,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-41">
+        <validCheckSum>7:9684604552561c81596638b765c78c41</validCheckSum>
         <createTable tableName="CATISSUE_CP_SITE_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPSITEROLE_ID" />
@@ -438,6 +464,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-42">
+        <validCheckSum>7:a1d276422c99f7b6844cbc1c147ef544</validCheckSum>
         <createTable tableName="CATISSUE_CP_USER_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_CPUSERROLE_ID" />
@@ -448,6 +475,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-44">
+        <validCheckSum>7:ed53fddecf374ab4869dc5d3961c7399</validCheckSum>
         <createTable tableName="CATISSUE_DEIDENTIFIED_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107858" />
@@ -457,6 +485,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-45">
+        <validCheckSum>7:6fcff9feaa5afeed0c99f1462ae6309d</validCheckSum>
         <createTable tableName="CATISSUE_DEPARTMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107615" />
@@ -467,6 +496,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-46">
+        <validCheckSum>7:e2c5243e9c76d2b6b5600cef1fadfed4</validCheckSum>
         <createTable tableName="CATISSUE_DERIEVED_SP_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107804" />
@@ -475,6 +505,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-47">
+        <validCheckSum>7:d4120a164d559a2ddbbf875cb0cd621f</validCheckSum>
         <createTable tableName="CATISSUE_DISPOSAL_EVENT_PARAM">
             <column name="REASON" type="VARCHAR2(255 BYTE)"/>
             <column name="EVENT_TIMESTAMP" type="DATE"/>
@@ -488,7 +519,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-48">
-        <validCheckSum>7:8c92d518fc025d4a811aec2498abc5a6</validCheckSum>
+        <validCheckSum>7:b6c468b25738168d4de7b7cba1c5c304</validCheckSum>
         <createTable tableName="CATISSUE_DISTRI_EVENT_PARAM">
             <column name="DISTRIBUTED_QUANTITY" type="FLOAT(24)"/>
             <column name="DISTRIBUTION_ID" type="NUMBER(19,0)"/>
@@ -505,6 +536,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-49">
+        <validCheckSum>7:5a2ae2d32405a5119505bbd1b5f0e787</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTED_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107579" />
@@ -516,6 +548,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-50">
+        <validCheckSum>7:b580cad5bb757c55a0f94d9349d158b8</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107600" />
@@ -531,7 +564,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-51">
-        <validCheckSum>7:1ec6668a6dba59f1bea0e62b0069799d</validCheckSum>
+        <validCheckSum>7:6bb3b8ae27c683182c788b3e5213f8c3</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107606" />
@@ -548,6 +581,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-52">
+        <validCheckSum>7:90700a87c8eca2d3d4a034c63b5663e4</validCheckSum>
         <createTable tableName="CATISSUE_DISTRIBUTION_SPEC_REQ">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107609" />
@@ -563,6 +597,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-53">
+        <validCheckSum>7:70cded7309f23373f8b46e54f4e6f83a</validCheckSum>
         <createTable tableName="CATISSUE_EMBEDDED_EVENT_PARAM">
             <column name="EMBEDDING_MEDIUM" type="VARCHAR2(50 BYTE)"/>
             <column name="EVENT_TIMESTAMP" type="DATE"/>
@@ -575,6 +610,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-54">
+        <validCheckSum>7:02ec54a4c543a16dcdd72845e527cb57</validCheckSum>
         <createTable tableName="CATISSUE_EQUIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_EQUIPMENT" />
@@ -596,6 +632,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-55">
+        <validCheckSum>7:445482cacaccc40dc004f730992933b1</validCheckSum>
         <createTable tableName="CATISSUE_EXIST_SP_AR_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107812" />
@@ -604,6 +641,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-56">
+        <validCheckSum>7:21bf7d92bc2e66ae31f80abdb8af223d</validCheckSum>
         <createTable tableName="CATISSUE_EXISTING_SP_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107808" />
@@ -612,6 +650,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-57">
+        <validCheckSum>7:6c03c34e74e579fa4dfdcea3e2cb81e8</validCheckSum>
         <createTable tableName="CATISSUE_EXTERNAL_APPLICATION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_EXTERNAL_APPLICATION" />
@@ -625,6 +664,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-58">
+        <validCheckSum>7:cf4210a4b6c6052a12f46a6495bc7db5</validCheckSum>
         <createTable tableName="CATISSUE_EXTERNAL_IDENTIFIER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107612" />
@@ -635,6 +675,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-59">
+        <validCheckSum>7:82c70f488305a2b9667a9e14efb481d5</validCheckSum>
         <createTable tableName="CATISSUE_FIXED_EVENT_PARAM">
             <column name="FIXATION_TYPE" type="VARCHAR2(50 BYTE)">
                 <constraints nullable="false"/>
@@ -650,6 +691,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-61">
+        <validCheckSum>7:f882e46709ca033dfabd03408f1c1396</validCheckSum>
         <createTable tableName="CATISSUE_FLUID_SPE_EVENT_PARAM">
             <column name="CELL_COUNT" type="FLOAT(126)"/>
             <column name="EVENT_TIMESTAMP" type="DATE"/>
@@ -662,6 +704,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-63">
+        <validCheckSum>7:3c2c8e8cdfe45c786979d6ae1ee13eb0</validCheckSum>
         <createTable tableName="CATISSUE_FORM_CONTEXT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_CONTEXT" />
@@ -682,6 +725,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-64">
+        <validCheckSum>7:17b9824909f150aa27831d88337f2e45</validCheckSum>
         <createTable tableName="CATISSUE_FORM_RECORD_ENTRY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_FORM_RECORD_ENTRY" />
@@ -707,6 +751,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-65">
+        <validCheckSum>7:c516f131a695e170502f2bb188790659</validCheckSum>
         <createTable tableName="CATISSUE_FROZEN_EVENT_PARAM">
             <column name="METHOD" type="VARCHAR2(50 BYTE)"/>
             <column name="EVENT_TIMESTAMP" type="DATE"/>
@@ -719,6 +764,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-66">
+        <validCheckSum>7:e7ddab4ab9a59cd085688f82ed33dd44</validCheckSum>
         <createTable tableName="CATISSUE_IDENTIFIED_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107846" />
@@ -728,6 +774,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-67">
+        <validCheckSum>7:cc9fd57cc10f45f7249ae0a64280f9f2</validCheckSum>
         <createTable tableName="CATISSUE_IMAGE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_IMAGE" />
@@ -776,6 +823,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-69">
+        <validCheckSum>7:327aa168021b1cb0dae31cbad932444f</validCheckSum>
         <createTable tableName="CATISSUE_IN_OUT_EVENT_PARAM">
             <column name="STORAGE_STATUS" type="VARCHAR2(100 BYTE)">
                 <constraints nullable="false"/>
@@ -790,6 +838,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-70">
+        <validCheckSum>7:a3fd35b16cb152b68469dcd145066f82</validCheckSum>
         <createTable tableName="CATISSUE_INSTITUTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107531" />
@@ -833,6 +882,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-73">
+        <validCheckSum>7:5aa84aa9036784d4da3b3ff2a61c3867</validCheckSum>
         <createTable tableName="CATISSUE_LOGIN_AUDIT_EVENT_LOG">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107691" />
@@ -845,6 +895,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-75">
+        <validCheckSum>7:94a09dc532e3f699437c5852b70788eb</validCheckSum>
         <createTable tableName="CATISSUE_MOL_SPE_REVIEW_PARAM">
             <column name="GEL_IMAGE_URL" type="VARCHAR2(255 BYTE)"/>
             <column name="QUALITY_INDEX" type="VARCHAR2(50 BYTE)"/>
@@ -863,6 +914,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-77">
+        <validCheckSum>7:db9bfab0f5465358851b82382b9b77f1</validCheckSum>
         <createTable tableName="CATISSUE_NEW_SP_AR_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107814" />
@@ -873,6 +925,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-78">
+        <validCheckSum>7:f1d3c58a1cb2e13f8c0bd5c5ece5fcd7</validCheckSum>
         <createTable tableName="CATISSUE_NEW_SPEC_ORD_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107806" />
@@ -882,6 +935,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-79">
+        <validCheckSum>7:ba60c27d101aa657089ec03d73aeeee9</validCheckSum>
         <createTable tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_NEXTGEN_AUDIT_DETAILS" />
@@ -927,6 +981,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-81">
+        <validCheckSum>7:4ab015f6c6080f1e61e7f42ce04aa7f7</validCheckSum>
         <createTable tableName="CATISSUE_ORDER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107820" />
@@ -941,6 +996,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-82">
+        <validCheckSum>7:5ccbf01a67e9fb6dfa40bca7796801c5</validCheckSum>
         <createTable tableName="CATISSUE_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107818" />
@@ -954,6 +1010,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-83">
+        <validCheckSum>7:98701c98a4ca931afbf385ea86c15e0e</validCheckSum>
         <createTable tableName="CATISSUE_PART_MEDICAL_ID">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107594" />
@@ -964,6 +1021,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-84">
+        <validCheckSum>7:795cec998132b308eae49ff2fe4ee451</validCheckSum>
         <createTable tableName="CATISSUE_PARTICIPANT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107581" />
@@ -985,6 +1043,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-85">
+        <validCheckSum>7:8b4b30a9b61967b438dc714b08df4073</validCheckSum>
         <createTable tableName="CATISSUE_PASSWORD">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107499" />
@@ -995,6 +1054,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-86">
+        <validCheckSum>7:15e0ce71d8b0347a34c68b27d2940d37</validCheckSum>
         <createTable tableName="CATISSUE_PATH_CASE_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107802" />
@@ -1005,6 +1065,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-87">
+        <validCheckSum>7:d8e068354888f0a17f7a99b7d557db18</validCheckSum>
         <createTable tableName="CATISSUE_PATHOLOGY_REPORT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107862" />
@@ -1017,6 +1078,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-88">
+        <validCheckSum>7:8cd6c45ccd1c5531e013158802a82997</validCheckSum>
         <createTable tableName="CATISSUE_PERMISSIBLE_VALUE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107479" />
@@ -1030,6 +1092,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-89">
+        <validCheckSum>7:2d0309d6d0479b7c735e89807b6686a4</validCheckSum>
         <createTable tableName="CATISSUE_PRIVILEGES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_PRIVILEGE_ID" />
@@ -1040,6 +1103,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-90">
+        <validCheckSum>7:1a458aeef17ae4847b5095d916dd8489</validCheckSum>
         <createTable tableName="CATISSUE_PROCEDURE_EVENT_PARAM">
             <column name="URL" type="VARCHAR2(255 BYTE)">
                 <constraints nullable="false"/>
@@ -1067,6 +1131,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-92">
+        <validCheckSum>7:57a5c705040e64b5d188ce54c889dfd3</validCheckSum>
         <createTable tableName="CATISSUE_QUARANTINE_PARAMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107860" />
@@ -1080,6 +1145,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-93">
+        <validCheckSum>7:efa5bba0a8147f3ce3f623c0fb51ab00</validCheckSum>
         <createTable tableName="CATISSUE_QUERY_AUDIT_LOGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_AUDIT_LOGS" />
@@ -1114,6 +1180,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-96">
+        <validCheckSum>7:7a7db83487f4c179f01162eb88c15b82</validCheckSum>
         <createTable tableName="CATISSUE_QUERY_FOLDERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_QUERY_FOLDERS" />
@@ -1128,6 +1195,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-98">
+        <validCheckSum>7:c6588c4d39514cb8bf331dbcb5e1cd4a</validCheckSum>
         <createTable tableName="CATISSUE_RACE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107563" />
@@ -1139,6 +1207,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-99">
+        <validCheckSum>7:219df394766c0094716ca3dfe2c3badf</validCheckSum>
         <createTable tableName="CATISSUE_RECEIVED_EVENT_PARAM">
             <column name="RECEIVED_QUALITY" type="VARCHAR2(255 BYTE)"/>
             <column name="EVENT_TIMESTAMP" type="DATE"/>
@@ -1152,6 +1221,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-101">
+        <validCheckSum>7:ba9580a900f394bb5c198bd52641f5ab</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_BICONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107854" />
@@ -1160,6 +1230,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-102">
+        <validCheckSum>7:79baf91e6098f55691d6be7d98cc6125</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_CONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107850" />
@@ -1168,6 +1239,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-103">
+        <validCheckSum>7:c43d03a44ad6364d0537be94249852e7</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_FILECONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_REPORT_FILECONTENT" />
@@ -1184,6 +1256,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-105">
+        <validCheckSum>7:6411abaf1617707360b90c1d7f6b786e</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_QUEUE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107866" />
@@ -1199,6 +1272,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-106">
+        <validCheckSum>7:7c543dc12db1de2d223fc07c15366130</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_SECTION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107856" />
@@ -1211,6 +1285,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-107">
+        <validCheckSum>7:a6ddadb26fd5426324f35d9c51e11449</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_TEXTCONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107844" />
@@ -1219,6 +1294,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-108">
+        <validCheckSum>7:06c2ca7164f7c255331185e3cd2e836a</validCheckSum>
         <createTable tableName="CATISSUE_REPORT_XMLCONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107864" />
@@ -1227,6 +1303,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-109">
+        <validCheckSum>7:98750f53926cc91ac4b997b70a5c3fb3</validCheckSum>
         <createTable tableName="CATISSUE_REPORTED_PROBLEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107573" />
@@ -1250,6 +1327,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-110">
+        <validCheckSum>7:1526df197aeac03375fa699a6701979c</validCheckSum>
         <createTable tableName="CATISSUE_REVIEW_PARAMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107852" />
@@ -1273,6 +1351,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-112">
+        <validCheckSum>7:52acd54ba03c691e9c691a4a8d654ff0</validCheckSum>
         <createTable tableName="CATISSUE_ROLES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CAT_ROLE_ID" />
@@ -1284,6 +1363,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-113">
+        <validCheckSum>7:72268415da53ddeb6837d59ab6ef2864</validCheckSum>
         <createTable tableName="CATISSUE_SAVED_QUERIES">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SAVED_QUERIES" />
@@ -1309,6 +1389,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-115">
+        <validCheckSum>7:9742657686488f9576fde090c84d170e</validCheckSum>
         <createTable tableName="CATISSUE_SEMANTIC_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107870" />
@@ -1317,6 +1398,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-116">
+        <validCheckSum>7:2c420065820613df8e6a79b018868598</validCheckSum>
         <createTable tableName="CATISSUE_SHIPMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108064" />
@@ -1336,6 +1418,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-118">
+        <validCheckSum>7:2840a74eb9b39d8a80b5ac28fb53a4e2</validCheckSum>
         <createTable tableName="CATISSUE_SHIPMENT_REQUEST">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00108069" />
@@ -1343,6 +1426,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-119">
+        <validCheckSum>7:1d58fc2d77c9e2fcfd1088613a147f60</validCheckSum>
         <createTable tableName="CATISSUE_SITE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107514" />
@@ -1385,6 +1469,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-123">
+        <validCheckSum>7:36d25b07404fc19a60c6ccad6d21242b</validCheckSum>
         <createTable tableName="CATISSUE_SP_ARRAY_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107816" />
@@ -1402,6 +1487,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-125">
+        <validCheckSum>7:9d85f41bf2611b4ce6f3b27b353a0546</validCheckSum>
         <createTable tableName="CATISSUE_SPECI_ARRAY_CONTENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107565" />
@@ -1425,6 +1511,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-127">
+        <validCheckSum>7:c78bbc5a9c77ad3870f30ca57a8cd31a</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107671" />
@@ -1456,6 +1543,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-128">
+        <validCheckSum>7:d59c400b9529cc190b2f33810aa3d812</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_ARRAY">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107575" />
@@ -1468,6 +1556,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-129">
+        <validCheckSum>7:74ba19608760111d5a6e696dda63197c</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_ARRAY_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107577" />
@@ -1486,6 +1575,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-131">
+        <validCheckSum>7:e5c5bbd5edf007c3ddefdd8002557f24</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_COLL_GROUP">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107644" />
@@ -1517,6 +1607,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-132">
+        <validCheckSum>7:a53e5fa017201ca8584fddb2be36d5f1</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_EVENT_PARAM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107586" />
@@ -1535,6 +1626,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-134">
+        <validCheckSum>7:79e8c974ed3f5be01d8cc67747ea3ed4</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_LABEL_COUNT">
             <column name="LABEL_COUNT" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107842" />
@@ -1542,6 +1634,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-135">
+        <validCheckSum>7:849a065443fbd59ceb46e77e7d063dbe</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_ORDER_ITEM">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107810" />
@@ -1550,6 +1643,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-136">
+        <validCheckSum>7:7653ccdae4b88924a5bca500bdbea1da</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_POSITION">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107897" />
@@ -1565,6 +1659,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-138">
+        <validCheckSum>7:f4add899a02b1b4b316bff5af980a3b4</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMEN_REQUIREMENT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107528" />
@@ -1587,6 +1682,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-140">
+        <validCheckSum>7:17dacb5a63c22d1e4caec979f4cff372</validCheckSum>
         <createTable tableName="CATISSUE_SPECIMENLIST_TAGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SPECIMENLIST_TAGS" />
@@ -1600,6 +1696,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-141">
+        <validCheckSum>7:98102c89f96b2b7ead2963dab6a4829c</validCheckSum>
         <createTable tableName="CATISSUE_SPUN_EVENT_PARAMETERS">
             <column name="GFORCE" type="FLOAT(126)"/>
             <column name="DURATION_IN_MINUTES" type="INTEGER"/>
@@ -1697,6 +1794,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-150">
+        <validCheckSum>7:ad4898fbdabfcc4588bc970e07c67967</validCheckSum>
         <createTable tableName="CATISSUE_STORAGE_CONTAINER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107596" />
@@ -1709,6 +1807,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-151">
+        <validCheckSum>7:5b7b722be6496baedd7f895dd48d39f0</validCheckSum>
         <createTable tableName="CATISSUE_STORAGE_CONTAINERS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_STORAGE_CONTAINERS" />
@@ -1734,6 +1833,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-152">
+        <validCheckSum>7:aa4880f2170a73e5bd4981b1637f842a</validCheckSum>
         <createTable tableName="CATISSUE_STORAGE_TYPE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107506" />
@@ -1752,6 +1852,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-154">
+        <validCheckSum>7:5dc3045fd05bf30f6a9ab5dcebb13a13</validCheckSum>
         <createTable tableName="CATISSUE_SYNCH_CP_AUDIT">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_CATISSUE_SYNCH_CP_AUDIT" />
@@ -1771,6 +1872,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-156">
+        <validCheckSum>7:35c0df2be471c32dfc13d71cd905a210</validCheckSum>
         <createTable tableName="CATISSUE_THAW_EVENT_PARAMETERS">
             <column name="EVENT_TIMESTAMP" type="DATE"/>
             <column name="SPECIMEN_ID" type="NUMBER(19,0)"/>
@@ -1782,6 +1884,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-157">
+        <validCheckSum>7:2d78909a7f835ff03d00438dcaf8e435</validCheckSum>
         <createTable tableName="CATISSUE_TIS_SPE_EVENT_PARAM">
             <column name="NEOPLASTIC_CELLULARITY_PER" type="FLOAT(126)"/>
             <column name="NECROSIS_PERCENTAGE" type="FLOAT(126)"/>
@@ -1798,6 +1901,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-160">
+        <validCheckSum>7:06d2805c29dfe45848f7390a169cd5a8</validCheckSum>
         <createTable tableName="CATISSUE_TRANSFER_EVENT_PARAM">
             <column name="FROM_POSITION_DIMENSION_ONE" type="INTEGER"/>
             <column name="FROM_POSITION_DIMENSION_TWO" type="INTEGER"/>
@@ -1816,6 +1920,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-161">
+        <validCheckSum>7:3e6281e219a215323a3984a9d855749f</validCheckSum>
         <createTable tableName="CATISSUE_USER">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107629" />
@@ -1855,6 +1960,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-180">
+        <validCheckSum>7:5e65a46501c9d71c22d935cf1b6a96e9</validCheckSum>
         <createTable tableName="JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(38,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="JOB_DETAILS_SEQ" />
@@ -1874,6 +1980,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-181">
+        <validCheckSum>7:c68109b07995d2cfdd6ca2341bd1c419</validCheckSum>
         <createTable tableName="KEY_SEQ_GENERATOR">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="SYS_C00107926" />
@@ -1888,6 +1995,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-185">
+        <validCheckSum>7:7feb74d004bdfa051a32046c542167b5</validCheckSum>
         <createTable tableName="OS_DISTRIBUTION_PROTOCOL">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_DISTRIBUTION_PROTOCOL" />
@@ -1903,6 +2011,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-186">
+        <validCheckSum>7:7cd5e285baa77742310e93db94816572</validCheckSum>
         <createTable tableName="OS_SPECIMEN_PRINT_RULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_OS_SPECIMEN_PRINT_RULE" />
@@ -1924,6 +2033,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-188">
+        <validCheckSum>7:129ebcb081625a7ad474f11e7bba6556</validCheckSum>
         <createTable tableName="QUERY_TAG_ITEMS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAG_ITEMS" />
@@ -1937,6 +2047,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-189">
+        <validCheckSum>7:dcb203ab9de723e54aaf8e074f86616b</validCheckSum>
         <createTable tableName="QUERY_TAGS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_QUERY_TAGS" />
@@ -1950,6 +2061,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-191">
+        <validCheckSum>7:2e5185e92df90437dc45583f2f075c4d</validCheckSum>
         <createTable tableName="REPORT_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_DETAILS" />
@@ -1968,6 +2080,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-192">
+        <validCheckSum>7:e74aacb0ecb034954566c0106b170938</validCheckSum>
         <createTable tableName="REPORT_JOB_DETAILS">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_GENERATED_FILES" />
@@ -1988,6 +2101,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-193">
+        <validCheckSum>7:cadaab01f7f4d39b0256be072eb3c07b</validCheckSum>
         <createTable tableName="REPORT_SCHEDULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_REPORT_SCHEDULE" />
@@ -1996,6 +2110,7 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-194">
+        <validCheckSum>7:3f5ac10fdbbf5e39ca69cde848464ad0</validCheckSum>
         <createTable tableName="SCHEDULE">
             <column name="IDENTIFIER" type="NUMBER(19,0)">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="PK_SCHEDULE" />
@@ -2034,589 +2149,729 @@
         </createTable>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-198">
+        <validCheckSum>7:dad916cf67dada971e175b8cb298886a</validCheckSum>
         <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, USER_ID" constraintName="SYS_C00107484" tableName="CATISSUE_COLL_COORDINATORS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-199">
+        <validCheckSum>7:c47718371f70751ca41214611bc6a29f</validCheckSum>
         <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, DISTRIBUTION_PROTOCOL_ID" constraintName="SYS_C00107523" tableName="CATISSUE_COLL_DISTRIBUTION_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-200">
+        <validCheckSum>7:2ada81e61aad7ca704c15b78467448c6</validCheckSum>
         <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107544" tableName="CATISSUE_CONT_HOLDS_SPARRTYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-201">
+        <validCheckSum>7:0180838e600ca40228bf102fa349338b</validCheckSum>
         <addPrimaryKey columnNames="FOLDER_ID, USER_ID" constraintName="SYS_C00108290" tableName="CATISSUE_QFOLDER_SHARE_SETTING" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-202">
+        <validCheckSum>7:376f76e2b839d23923e2ed03471702b1</validCheckSum>
         <addPrimaryKey columnNames="FOLDER_ID, QUERY_ID" constraintName="SYS_C00108285" tableName="CATISSUE_QUERY_FOLDER_QUERIES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-203">
+        <validCheckSum>7:c2f8d13751d95583e62f197c6a0b63f3</validCheckSum>
         <addPrimaryKey columnNames="PRIVILEGE_ID, ROLE_ID" constraintName="PK_CAT_RP_ROLEID_PRIVID" tableName="CATISSUE_ROLE_PRIVILEGES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-204">
+        <validCheckSum>7:ba342ea178cc0faea58ee47ca3daebd4</validCheckSum>
         <addPrimaryKey columnNames="BASE_SHIPMENT_ID, CONTAINER_ID" constraintName="SYS_C00108067" tableName="CATISSUE_SHIPMENT_CONTAINR_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-205">
+        <validCheckSum>7:f0187ebe7b88d8f45cc474c1a83504fa</validCheckSum>
         <addPrimaryKey columnNames="SITE_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107907" tableName="CATISSUE_SITE_CP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-206">
+        <validCheckSum>7:e3d8c260d547bc3bb4be56210838f6f2</validCheckSum>
         <addPrimaryKey columnNames="SITE_ID, USER_ID" constraintName="SYS_C00107906" tableName="CATISSUE_SITE_USERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-207">
+        <validCheckSum>7:878e39b8d3280407c7ff41039eff596e</validCheckSum>
         <addPrimaryKey columnNames="SPECIMEN_ID, BIOHAZARD_ID" constraintName="SYS_C00107502" tableName="CATISSUE_SPECIMEN_BIOHZ_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-208">
+        <validCheckSum>7:655a65bfa28d8e53a53a7fd0a0386835</validCheckSum>
         <addPrimaryKey columnNames="SHIPMENT_REQ_ID, SPECIMEN_ID" constraintName="SYS_C00108072" tableName="CATISSUE_SPECI_SHIPMNT_REQ_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-209">
+        <validCheckSum>7:b2f45596b6cf28e1c6d807b38124c086</validCheckSum>
         <addPrimaryKey columnNames="STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID" constraintName="SYS_C00107541" tableName="CATISSUE_STORTY_HOLDS_SPARRTY" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-210">
+        <validCheckSum>7:a6d330091eb9617ffa9f553996a8e1b3</validCheckSum>
         <addPrimaryKey columnNames="STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID" constraintName="SYS_C00107538" tableName="CATISSUE_STOR_TYPE_HOLDS_TYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-211">
+        <validCheckSum>7:bd43176f09add6afb291ef2f1e8ea631</validCheckSum>
         <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107635" tableName="CATISSUE_ST_CONT_COLL_PROT_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-212">
+        <validCheckSum>7:40f212a72e17586664f8da544c1174e0</validCheckSum>
         <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, STORAGE_TYPE_ID" constraintName="SYS_C00107535" tableName="CATISSUE_ST_CONT_ST_TYPE_REL" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-213">
+        <validCheckSum>7:d2e12c469f1eb16237d7d25dc106e9e2</validCheckSum>
         <addPrimaryKey columnNames="USER_ID, COLLECTION_PROTOCOL_ID" constraintName="SYS_C00107908" tableName="CATISSUE_USER_CP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-214">
+        <validCheckSum>7:1a8b9ebc712b9078f4debda1f61878be</validCheckSum>
         <addUniqueConstraint columnNames="DOMAIN_NAME" constraintName="SYS_C00108261" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_DOMAINS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-215">
+        <validCheckSum>7:6bdf28da489d6ddfe05bc88339071760</validCheckSum>
         <addUniqueConstraint columnNames="AUTH_TYPE" constraintName="SYS_C00108275" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_AUTH_PROVIDERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-216">
+        <validCheckSum>7:54f4ec9a65325dc1df98e3f679c138ce</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107554" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BIOHAZARD" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-217">
+        <validCheckSum>7:fc5085c488f887a66e2b80b35f9971e5</validCheckSum>
         <addUniqueConstraint columnNames="OPERATION" constraintName="SYS_C00108017" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-218">
+        <validCheckSum>7:b69f4cd391504e502c3381f7689cc8f0</validCheckSum>
         <addUniqueConstraint columnNames="DROPDOWN_NAME" constraintName="SYS_C00108018" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_BULK_OPERATION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-220">
+        <validCheckSum>7:63a309fee73b8acde1098079fa5f9350</validCheckSum>
         <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_COLL_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_EVENT_PARAM" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-221">
+        <validCheckSum>7:9348101791e043ca65bad0054b1530a7</validCheckSum>
         <addUniqueConstraint columnNames="COLLECTION_PROTOCOL_ID, COLLECTION_POINT_LABEL" constraintName="SYS_C00107640" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_EVENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-222">
+        <validCheckSum>7:6c532e2ab27d1be9a8a15e936669f6b8</validCheckSum>
         <addUniqueConstraint columnNames="PARTICIPANT_ID, COLLECTION_PROTOCOL_ID, ACTIVITY_STATUS" constraintName="CATISSUE_CP_PART_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-223">
+        <validCheckSum>7:3cf49a706b0952da438942dd88218407</validCheckSum>
         <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107624" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_COLL_PROT_REG" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-224">
+        <validCheckSum>7:aaf4c6cc105c008f006bb0e95516d7e2</validCheckSum>
         <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107510" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-225">
+        <validCheckSum>7:8e4b7c9bf4d7514ea1387595b5192f80</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107511" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-226">
+        <validCheckSum>7:9b337abbeed663ca278967261cae28ff</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107590" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_CONTAINER_TYPE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-227">
+        <validCheckSum>7:4322610efb1369e461be39298215b8df</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107616" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_DEPARTMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-228">
+        <validCheckSum>7:8e6aad40d962068715dc0f1fa2c36e9c</validCheckSum>
         <addUniqueConstraint columnNames="EQUIPMENT_ID" constraintName="EQPT_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_EQUIPMENT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-229">
+        <validCheckSum>7:c9d03ff3fa2f3dca0a11ffb256a63b90</validCheckSum>
         <addUniqueConstraint columnNames="EQUIPMENT_ID, EQP_IMAGE_ID" constraintName="EQPT_IMGE_ID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_IMAGE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-230">
+        <validCheckSum>7:f67e93c657f035a69af7812c64697f45</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107532" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_INSTITUTION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-231">
+        <validCheckSum>7:c8c257da1f1190b8ee821b28d5a5f5cd</validCheckSum>
         <addUniqueConstraint columnNames="SOCIAL_SECURITY_NUMBER" constraintName="SYS_C00107582" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PARTICIPANT" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-232">
+        <validCheckSum>7:91af8454848da675ee08134b5358961b</validCheckSum>
         <addUniqueConstraint columnNames="MEDICAL_RECORD_NUMBER, SITE_ID" constraintName="MRN_SITE_UNIQUE" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PART_MEDICAL_ID" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-233">
+        <validCheckSum>7:b7aa595eb9f61e31a0784c15d720ef33</validCheckSum>
         <addUniqueConstraint columnNames="PRIVILEGE" constraintName="SYS_C00108301" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_PRIVILEGES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-234">
+        <validCheckSum>7:529fca928ec7c632a5ee779cb43475eb</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108281" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_QUERY_FOLDERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-235">
+        <validCheckSum>7:7fbd062f8d93b139bd91198e14e051d3</validCheckSum>
         <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="UN_SPEC_ID_REC_EVENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_RECEIVED_EVENT_PARAM" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-237">
+        <validCheckSum>7:385127a1a0f6b60af7090386344f3c02</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108297" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_ROLES" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-239">
+        <validCheckSum>7:4b5bd834f1a02b86e02f99baa16fe37b</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107515" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SITE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-240">
+        <validCheckSum>7:8b7fbd277d7ac2d6d8244609ba99e0e6</validCheckSum>
         <addUniqueConstraint columnNames="LABEL" constraintName="SYS_C00107672" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-241">
+        <validCheckSum>7:160db67e29a4f4c4f83556206bf31b09</validCheckSum>
         <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107673" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-242">
+        <validCheckSum>7:cc0cc7bb5be16f1d5301c6bf660bd6b9</validCheckSum>
         <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="SPECLIST_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMENLIST_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-243">
+        <validCheckSum>7:98dafbde2804b61a33d42d10744375b6</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00107645" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-244">
+        <validCheckSum>7:bf96d7d3a6067e91fe54dd835cae2d82</validCheckSum>
         <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00107646" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_COLL_GROUP" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-245">
+        <validCheckSum>7:dd73ed59c96a2de70bea0c27adbf7861</validCheckSum>
         <addUniqueConstraint columnNames="ANCESTOR_ID, DESCENDENT_ID" constraintName="UK_ANCESTOR_DESCENDENT" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_HIERARCHY" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-246">
+        <validCheckSum>7:e28417367922c88482a9a51612d1bcf3</validCheckSum>
         <addUniqueConstraint columnNames="SPECIMEN_ID" constraintName="CATISSUE_SPEC_POS_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPECIMEN_POSITION" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-247">
+        <validCheckSum>7:fbd3d8569c7d51c3c3663d1798c38ab8</validCheckSum>
         <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="SPECLIST_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_SPEC_TAG_ITEMS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-248">
+        <validCheckSum>7:9f8a20bd32337d6df972b7dd8e79c60e</validCheckSum>
         <addUniqueConstraint columnNames="BARCODE" constraintName="SYS_C00108336" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-249">
+        <validCheckSum>7:41d111023d285c8c67b55075549266c9</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108337" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_STORAGE_CONTAINERS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-251">
+        <validCheckSum>7:7596ee6c33d7454ce0a7a038f024fb7a</validCheckSum>
         <addUniqueConstraint columnNames="LOGIN_NAME" constraintName="SYS_C00107630" deferrable="false" disabled="false" initiallyDeferred="false" tableName="CATISSUE_USER" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-265">
+        <validCheckSum>7:c3037eac7e7bcae92ec5f9ed617db29d</validCheckSum>
         <addUniqueConstraint columnNames="NAME" constraintName="SYS_C00108351" deferrable="false" disabled="false" initiallyDeferred="false" tableName="OS_SPECIMEN_PRINT_RULE" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-266">
+        <validCheckSum>7:16bc832e161d2c0ca6fcaff4e8dc3b98</validCheckSum>
         <addUniqueConstraint columnNames="TAG_LABEL" constraintName="SYS_C00108106" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-267">
+        <validCheckSum>7:841802edc36d827a6c41e3a3a9d6f376</validCheckSum>
         <addUniqueConstraint columnNames="TAG_LABEL, USER_ID" constraintName="USRID_TAGLABEL_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-268">
+        <validCheckSum>7:67561bf2a3198bb76dd5016108dd09d7</validCheckSum>
         <addUniqueConstraint columnNames="TAG_ID, OBJ_ID" constraintName="S_TAGID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="QUERY_TAG_ITEMS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-269">
+        <validCheckSum>7:984531736287f9d456ff9d8c64138a22</validCheckSum>
         <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="Q_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_QUERY_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-270">
+        <validCheckSum>7:4c75c284bddf3b14ec3b5ed62fc8d902</validCheckSum>
         <addUniqueConstraint columnNames="TAG_ID, USER_ID" constraintName="S_TAGID_USERID_UNIQUE_KEY" deferrable="false" disabled="false" initiallyDeferred="false" tableName="SHARED_SPECIMENLIST_TAGS" />
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-272">
+        <validCheckSum>7:d328d50378624a9f421feb80eaf241a9</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_BIOHAZARD_TYPE" tableName="CATISSUE_BIOHAZARD"  unique="false">
             <column name="TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-273">
+        <validCheckSum>7:fac03787cf0edb46b980c4e29289680f</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_CELLEVT_REVNCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM"  unique="false">
             <column name="NEOPLASTIC_CELLULARITY_PER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-274">
+        <validCheckSum>7:0a40a09717489bcf08c5e18771d2e1f8</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_CELLEVT_REVVCP" tableName="CATISSUE_CELL_SPE_REVIEW_PARAM"  unique="false">
             <column name="VIABLE_CELL_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-275">
+        <validCheckSum>7:1638640b9148999885afe4d060141374</validCheckSum>
         <createIndex indexName="IDX_COLLECTION_PROT_TITLE" tableName="CATISSUE_COLLECTION_PROTOCOL"  unique="true">
             <column name="TITLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-276">
+        <validCheckSum>7:ee48853be6a1d3c7711ad536f99a0a1c</validCheckSum>
         <createIndex indexName="CATISSUE_COLL_EVENT_PA_ID_IDX" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-277">
+        <validCheckSum>7:b5e9ac8e3e85325ae82f1179f53f978b</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_COLEVT_CONT" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="CONTAINER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-278">
+        <validCheckSum>7:b17ac472a967b06c68875234ef1ca083</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_COLEVT_PROC" tableName="CATISSUE_COLL_EVENT_PARAM"  unique="false">
             <column name="COLLECTION_PROCEDURE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-279">
+        <validCheckSum>7:e51f371b2ec05d0b66c3db3aecb9987d</validCheckSum>
         <createIndex indexName="INDX_COLPROTO_EVNT_CAL" tableName="CATISSUE_COLL_PROT_EVENT"  unique="false">
             <column name="STUDY_CALENDAR_EVENT_POINT"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-280">
+        <validCheckSum>7:ecc470ca5d5b737d69c6dc1b11695981</validCheckSum>
         <createIndex indexName="CATISSUE_COL_PROT_REG_ACT_STAT" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-281">
+        <validCheckSum>7:022a30bca52617bbe1b64630b8cb8b52</validCheckSum>
         <createIndex indexName="INDX_COLL_PROT_REGID" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="PROTOCOL_PARTICIPANT_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-282">
+        <validCheckSum>7:976a8174aa8fa133afb8e4713ba212a1</validCheckSum>
         <createIndex indexName="INDX_COLL_PROT_REG_DATE" tableName="CATISSUE_COLL_PROT_REG"  unique="false">
             <column name="REGISTRATION_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-283">
+        <validCheckSum>7:37ae1ddeca459e39b8b1e17cae0b1a3a</validCheckSum>
         <createIndex indexName="CATISSUE_COSNT_TR_RES_RESP" tableName="CATISSUE_CONSENT_TIER_RESPONSE"  unique="false">
             <column name="RESPONSE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-284">
+        <validCheckSum>7:8807250ededa720fb53067a5db3402dd</validCheckSum>
         <createIndex indexName="CATISSUE_COSNT_TR_STAT_SCG_ID" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="SPECIMEN_COLL_GROUP_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-285">
+        <validCheckSum>7:6c6e14418e6f853ec42676481a00e12e</validCheckSum>
         <createIndex indexName="CATISSUE_COSNT_TR_STAT_STAT" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-286">
+        <validCheckSum>7:fc4cd32c26a701417cb8effd2718e0bc</validCheckSum>
         <createIndex indexName="CONSENT_TIRE_STATUS_SPECIMEN" tableName="CATISSUE_CONSENT_TIER_STATUS"  unique="false">
             <column name="SPECIMEN_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-287">
+        <validCheckSum>7:d5129ce2f5e8dfbd3f93c083422745fe</validCheckSum>
         <createIndex indexName="IDX_SPECIMEN_REQ_CLASS" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="SPECIMEN_CLASS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-288">
+        <validCheckSum>7:7dc75e538bb64a2ee3028c332bf62b09</validCheckSum>
         <createIndex indexName="IDX_SPECIMEN_REQ_TYPE" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="SPECIMEN_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-289">
+        <validCheckSum>7:0adda05adbc63324a477c2dcdec8c9f5</validCheckSum>
         <createIndex indexName="IDX_SPEC_REQ_PATHOLOGY_STAT" tableName="CATISSUE_CP_REQ_SPECIMEN"  unique="false">
             <column name="PATHOLOGICAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-290">
+        <validCheckSum>7:1be48e123ad81d956cc3dcce48131724</validCheckSum>
         <createIndex indexName="CATISSUE_DISPOSAL_EVEN_ID_IDX" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-291">
+        <validCheckSum>7:f0ab6b365b8ae43aac828c367408ee85</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_COLEVT_RSN" tableName="CATISSUE_DISPOSAL_EVENT_PARAM"  unique="false">
             <column name="REASON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-292">
+        <validCheckSum>7:318dbc4cf2debd182318f7856780a369</validCheckSum>
         <createIndex indexName="IDX_DITRI_TITLE" tableName="CATISSUE_DISTRIBUTION_PROTOCOL"  unique="true">
             <column name="TITLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-293">
+        <validCheckSum>7:45bae2d3921efe8bd88ebec802b05f7f</validCheckSum>
         <createIndex indexName="CATISSUE_DISTRI_EVENT__ID_IDX" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-294">
+        <validCheckSum>7:33829ebc9ed2066fc564e343e9953a6e</validCheckSum>
         <createIndex indexName="DISTRIBUTED_QTY_SEQ" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="DISTRIBUTED_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-295">
+        <validCheckSum>7:764b868b0fc2047a1a287ff616ac3d0f</validCheckSum>
         <createIndex indexName="DISTRI_PARAM_DISTRIBUTION" tableName="CATISSUE_DISTRI_EVENT_PARAM"  unique="false">
             <column name="DISTRIBUTION_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-296">
+        <validCheckSum>7:c1bc7fcf34d686f7d520a4862e675501</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_EMBEVT_MEDI" tableName="CATISSUE_EMBEDDED_EVENT_PARAM"  unique="false">
             <column name="EMBEDDING_MEDIUM"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-297">
+        <validCheckSum>7:fbc695cf08f96e00a452f53085d7fdb3</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_FIXEVT_MIN" tableName="CATISSUE_FIXED_EVENT_PARAM"  unique="false">
             <column name="DURATION_IN_MINUTES"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-298">
+        <validCheckSum>7:0a47e3d0ba0c72b0071f7f3c1163d2f2</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_FIXEVT_TYPE" tableName="CATISSUE_FIXED_EVENT_PARAM"  unique="false">
             <column name="FIXATION_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-299">
+        <validCheckSum>7:df631672842fff5b98383cec16dd2c3a</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_FLDEVT_CELL" tableName="CATISSUE_FLUID_SPE_EVENT_PARAM"  unique="false">
             <column name="CELL_COUNT"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-300">
+        <validCheckSum>7:a9d5dcc30d5ddd38db1e641ac4a9cc17</validCheckSum>
         <createIndex indexName="IDX_FC_DELETED_ON" tableName="CATISSUE_FORM_CONTEXT"  unique="false">
             <column name="DELETED_ON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-301">
+        <validCheckSum>7:eaf600e5fcde9b71e872f8603c0a9996</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_FROZEVT_METH" tableName="CATISSUE_FROZEN_EVENT_PARAM"  unique="false">
             <column name="METHOD"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-302">
+        <validCheckSum>7:a2c8ee5311d0de42487b17c36948ca1b</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_IOEVT_STATUS" tableName="CATISSUE_IN_OUT_EVENT_PARAM"  unique="false">
             <column name="STORAGE_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-305">
+        <validCheckSum>7:834d3dfcfdbab6c0d161655995afe745</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS1" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="ABSORBANCE_AT_260"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-306">
+        <validCheckSum>7:277ef3fb3c9d56005acb1e1591ab7766</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_ABS2" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="ABSORBANCE_AT_280"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-307">
+        <validCheckSum>7:e800c4e80f1f7ac4ff8313c7721ef9c8</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_GEL" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="GEL_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-308">
+        <validCheckSum>7:c8632566d56fca3e5e91370f6a966199</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_LANE" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="LANE_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-309">
+        <validCheckSum>7:c51f4cb6b124cdaf18fae957465e2f46</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_METH" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="GEL_IMAGE_URL"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-310">
+        <validCheckSum>7:171df93348977862429011fdb6f6e0a6</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_MOLEVT_RAT" tableName="CATISSUE_MOL_SPE_REVIEW_PARAM"  unique="false">
             <column name="RATIO_28S_TO_18S"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-311">
+        <validCheckSum>7:9fd31ace3c239e63a79dde7e5a72118f</validCheckSum>
         <createIndex indexName="IDX_AUDIT_OBJECT_ID" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"  unique="false">
             <column name="OBJECT_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-312">
+        <validCheckSum>7:53bee52d235f7700b78be239c46e7de0</validCheckSum>
         <createIndex indexName="IDX_AUDIT_OBJECT_TYPE" tableName="CATISSUE_NEXTGEN_AUDIT_DETAILS"  unique="false">
             <column name="OBJECT_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-313">
+        <validCheckSum>7:5ed316469380590b41097d81de4574bf</validCheckSum>
         <createIndex indexName="CATISSUE_ORDER_STATUS" tableName="CATISSUE_ORDER"  unique="false">
             <column name="STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-314">
+        <validCheckSum>7:8e2e0cfea9b70b0870b585ef1834aae3</validCheckSum>
         <createIndex indexName="CATISSUE_PARTICIPANT_ACT_STAT" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-315">
+        <validCheckSum>7:8df26155cea24dc9aeff0943d7fa7a1a</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_BDATE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="BIRTH_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-316">
+        <validCheckSum>7:15fb6c2a11ea6f9bc01749044f7d45c1</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_DDATE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="DEATH_DATE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-317">
+        <validCheckSum>7:32f5bae49a42acb7a76e4fce4b4f9704</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_ETHNICITY" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="ETHNICITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-318">
+        <validCheckSum>7:c7a31fcdb2e579207316bcbd87912325</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_FNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="FIRST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-319">
+        <validCheckSum>7:56587993342e2f663abd8499e714128f</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_GENDER" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="GENDER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-320">
+        <validCheckSum>7:f9887120b515a91ec67e1a1c9b69219e</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_GENOTYPE" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="GENOTYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-321">
+        <validCheckSum>7:2f57fca1aab09a3d5a78d491f156ee1c</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_LNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="LAST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-322">
+        <validCheckSum>7:fcbea89ce9df3dcc01190048779977bc</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_MNAME" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="MIDDLE_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-323">
+        <validCheckSum>7:3737dd6b92264ce7afe73364dc01097d</validCheckSum>
         <createIndex indexName="INDX_PARTICIPANT_VSTATUS" tableName="CATISSUE_PARTICIPANT"  unique="false">
             <column name="VITAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-324">
+        <validCheckSum>7:248beac058e5682eec7094f6e9514e10</validCheckSum>
         <createIndex indexName="INDX_PART_MEDICAL_RECNO" tableName="CATISSUE_PART_MEDICAL_ID"  unique="false">
             <column name="MEDICAL_RECORD_NUMBER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-325">
+        <validCheckSum>7:9fd1db5deba964182a741881c489002e</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_PROCEVT_NAME" tableName="CATISSUE_PROCEDURE_EVENT_PARAM"  unique="false">
             <column name="NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-326">
+        <validCheckSum>7:243ad1262adc85b6fe3d0e16481399fe</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_PROCEVT_URL" tableName="CATISSUE_PROCEDURE_EVENT_PARAM"  unique="false">
             <column name="URL"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-327">
+        <validCheckSum>7:abda63a0d1da74f8467c700ca4f86ede</validCheckSum>
         <createIndex indexName="INDX_RACE_NAME" tableName="CATISSUE_RACE"  unique="false">
             <column name="RACE_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-328">
+        <validCheckSum>7:8f1665e3a0088278857870edb87510af</validCheckSum>
         <createIndex indexName="CATISSUE_RECEIVED_EVEN_ID_IDX" tableName="CATISSUE_RECEIVED_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-329">
+        <validCheckSum>7:c86386883252043e8c986aadb26f7dac</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_RECEVT_QTY" tableName="CATISSUE_RECEIVED_EVENT_PARAM"  unique="false">
             <column name="RECEIVED_QUALITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-330">
+        <validCheckSum>7:ceea0e9af41cfe6ed6a333fe718b879a</validCheckSum>
         <createIndex indexName="IDX_QUERY_DELETED_ON" tableName="CATISSUE_SAVED_QUERIES"  unique="false">
             <column name="DELETED_ON"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-331">
+        <validCheckSum>7:c22fd8f393ce2b93b003e5ed8ba947d2</validCheckSum>
         <createIndex indexName="INDX_CAT_SITE_TYPE" tableName="CATISSUE_SITE"  unique="false">
             <column name="TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-332">
+        <validCheckSum>7:5b00521fbeb8113c8edfbfe1cd5fd35c</validCheckSum>
         <createIndex indexName="CATISSUE_SPECIMEN_ACT_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="ACTIVITY_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-333">
+        <validCheckSum>7:40b6c72c3df9928d6fee14ef393c3292</validCheckSum>
         <createIndex indexName="CATISSUE_SPECIMEN_COLL_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="COLLECTION_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-334">
+        <validCheckSum>7:9ca68785a7e2d69f29e8edaa5dae3ad4</validCheckSum>
         <createIndex indexName="IDX_INIT_QUANTITY" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="INITIAL_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-335">
+        <validCheckSum>7:a41639eabe952f9b95491671c2665e92</validCheckSum>
         <createIndex indexName="IDX_PATHOLOGY_STAT" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="PATHOLOGICAL_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-336">
+        <validCheckSum>7:bb881704e0f9af167b370923f2b3340f</validCheckSum>
         <createIndex indexName="IDX_SPECIMEN_CLASS" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="SPECIMEN_CLASS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-337">
+        <validCheckSum>7:1bb1857bee45895886c2e4409cabfdb4</validCheckSum>
         <createIndex indexName="IDX_SPECIMEN_LINEAGE" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="LINEAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-338">
+        <validCheckSum>7:926aba90b23bc9ac61905f087f0db07f</validCheckSum>
         <createIndex indexName="IDX_SPECIMEN_TYPE" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="SPECIMEN_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-339">
+        <validCheckSum>7:988fa7f5c3846986ed8860e7e3a4eec7</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_SPECIMEN_AVQTY" tableName="CATISSUE_SPECIMEN"  unique="false">
             <column name="AVAILABLE_QUANTITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-340">
+        <validCheckSum>7:32c9dac88ab87e84e25f020f96aaba8d</validCheckSum>
         <createIndex indexName="INDX_CAT_SPEC_ARRAY_AVA" tableName="CATISSUE_SPECIMEN_ARRAY"  unique="false">
             <column name="AVAILABLE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-341">
+        <validCheckSum>7:4387b280b95a0012e5cd0053579f21bd</validCheckSum>
         <createIndex indexName="CATISSUE_SPC_COL_GRP_COL_STAT" tableName="CATISSUE_SPECIMEN_COLL_GROUP"  unique="false">
             <column name="COLLECTION_STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-342">
+        <validCheckSum>7:33e21e3af2d0fe920aaf77650b5e4b96</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_SPEVT_SPID" tableName="CATISSUE_SPECIMEN_EVENT_PARAM"  unique="false">
             <column name="SPECIMEN_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-343">
+        <validCheckSum>7:6a612029da093eff1ad28e7e83eb2738</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_SPEVT_TIMESTP" tableName="CATISSUE_SPECIMEN_EVENT_PARAM"  unique="false">
             <column name="EVENT_TIMESTAMP"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-344">
+        <validCheckSum>7:bee5cd120f3db01236800dbeb23e9728</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TISEVT_CPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="TOTAL_CELLULARITY_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-345">
+        <validCheckSum>7:4d8b3fc1f54d0c5bdd51a58a91387d51</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TISEVT_HQTY" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="HISTOLOGICAL_QUALITY"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-346">
+        <validCheckSum>7:ef44f89fcba2c5ad832c65ce404a2cb0</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TISEVT_LPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="LYMPHOCYTIC_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-347">
+        <validCheckSum>7:4ff24c1d216f0f5fe715666e23f8d23b</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TISEVT_NCEL" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="NEOPLASTIC_CELLULARITY_PER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-348">
+        <validCheckSum>7:7ec31814b6d8b1a248d22465db704f93</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TISEVT_NPER" tableName="CATISSUE_TIS_SPE_EVENT_PARAM"  unique="false">
             <column name="NECROSIS_PERCENTAGE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-349">
+        <validCheckSum>7:9dc24d33101c6714adc1b97aa3859e88</validCheckSum>
         <createIndex indexName="CATISSUE_TRANSFER_EVEN_ID_IDX" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="IDENTIFIER"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-350">
+        <validCheckSum>7:deba9e5718765e245fd26110b5c9f3a2</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="FROM_POSITION_DIMENSION_ONE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-351">
+        <validCheckSum>7:357607783a5a75d599d67d9698c468c3</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TRANEVT_FDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="FROM_POSITION_DIMENSION_TWO"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-352">
+        <validCheckSum>7:10e335bfa324bd30f6621969ed2bba58</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM1" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="TO_POSITION_DIMENSION_ONE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-353">
+        <validCheckSum>7:e6aeae863e514c3bd439e24130accb2d</validCheckSum>
         <createIndex indexName="INDX_CATISSUE_TRANEVT_TDIM2" tableName="CATISSUE_TRANSFER_EVENT_PARAM"  unique="false">
             <column name="TO_POSITION_DIMENSION_TWO"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-354">
+        <validCheckSum>7:56745e8269c86e2f837d0f43d72300c7</validCheckSum>
         <createIndex indexName="INDX_USER_FNAME" tableName="CATISSUE_USER"  unique="false">
             <column name="FIRST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-355">
+        <validCheckSum>7:1e8e59741871a5736546d916a4d1ca3b</validCheckSum>
         <createIndex indexName="INDX_USER_LNAME" tableName="CATISSUE_USER"  unique="false">
             <column name="LAST_NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-357">
+        <validCheckSum>7:b88c1f99afc6c551d7e7ac3f10eb1d9e</validCheckSum>
         <createIndex indexName="KEY_GENERATOR_KEY_TYPE_INDEX" tableName="KEY_SEQ_GENERATOR"  unique="false">
             <column name="KEY_TYPE"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="oracle" author="OpenSpecimen" id="1427201434763-358">
+        <validCheckSum>7:be5c867e680f25463eace4c74e0ac6be</validCheckSum>
         <createIndex indexName="KEY_SEQ_GENERATOR_INDEX" tableName="KEY_SEQ_GENERATOR"  unique="false">
             <column name="KEY_VALUE"/>
         </createIndex>

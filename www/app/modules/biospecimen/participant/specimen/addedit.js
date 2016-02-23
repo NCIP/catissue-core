@@ -1,6 +1,9 @@
 
 angular.module('os.biospecimen.specimen.addedit', [])
-  .controller('AddEditSpecimenCtrl', function($scope, $state, cpr, visit, specimen, extensionCtxt, PvManager, Util) {
+  .controller('AddEditSpecimenCtrl', function(
+    $scope, $state, cpr, visit, specimen, extensionCtxt, 
+    PvManager, Util, ExtensionsUtil) {
+
     function loadPvs() {
       $scope.loadSpecimenTypes = function(specimenClass, notclear) {
         $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
@@ -80,7 +83,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.currSpecimen.concentration = Util.getNumberInScientificNotation($scope.currSpecimen.concentration);
 
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(currSpecimen, extensionCtxt);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(currSpecimen, extensionCtxt);
     }
 
     $scope.saveSpecimen = function() {

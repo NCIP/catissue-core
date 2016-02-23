@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -109,22 +110,30 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Long> getCprAndVisitIds(Long specimenId) {
-		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_CPR_AND_VISIT_IDS)
-				.setLong("specimenId", specimenId)
-				.list();
-		
+	public Map<String, Object> getCprAndVisitIds(String key, Object value) {
+		List<Object[]> rows = getCurrentSession().createCriteria(Specimen.class)
+			.createAlias("visit", "visit")
+			.createAlias("visit.registration", "cpr")
+			.createAlias("cpr.collectionProtocol", "cp")
+			.setProjection(
+				Projections.projectionList()
+					.add(Projections.property("cp.id"))
+					.add(Projections.property("cpr.id"))
+					.add(Projections.property("visit.id"))
+					.add(Projections.property("id")))
+			.add(Restrictions.eq(key, value))
+			.list();
+
 		if (CollectionUtils.isEmpty(rows)) {
 			return null;
 		}
 		
-		Map<String, Long> result = new HashMap<String, Long>();
+		Map<String, Object> result = new HashMap<>();
 		Object[] row = rows.iterator().next();
-		result.put("cpId", (Long)row[0]);
-		result.put("cprId", (Long)row[1]);
-		result.put("visitId", (Long)row[2]);
-		result.put("specimenId", specimenId);
+		result.put("cpId",       row[0]);
+		result.put("cprId",      row[1]);
+		result.put("visitId",    row[2]);
+		result.put("specimenId", row[3]);
 		return result;
 	}
 	
@@ -309,7 +318,5 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 	
-	private static final String GET_CPR_AND_VISIT_IDS = FQN + ".getCprAndVisitIds";
-
 	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
 }

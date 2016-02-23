@@ -24,7 +24,7 @@
               <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span> 
             </div>
 
-            <div class="os-more-options" dropdown>
+            <div class="os-more-options" dropdown show-if-allowed="cpResource.updateOpts">
               <div class="dropdown-toggle">
                 <span class="fa fa-ellipsis-v"></span>
               </div>
@@ -64,7 +64,8 @@
         </div>
       </div>
 
-      <a class="list-group-item" translate="cp.add_cpe" ng-click="showAddEvent()" ng-if="mode != 'add' && mode != 'copy'">
+      <a ng-if="mode != 'add' && mode != 'copy'" show-if-allowed="cpResource.updateOpts" class="list-group-item"
+        translate="cp.add_cpe" ng-click="showAddEvent()">
         Add Event ...
       </a>
       <div ng-if="mode == 'add' || mode == 'copy'" class="os-inplace-form-edit-po">

@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.visit.addedit', [])
   .controller('AddEditVisitCtrl', function(
     $scope, $state, $stateParams, cpr, visit, extensionCtxt,
-    PvManager, Util, ExtensionsUtil) {
+    PvManager, ExtensionsUtil) {
 
     function loadPvs() {
       $scope.visitStatuses = PvManager.getPvs('visit-status');
@@ -19,8 +19,7 @@ angular.module('os.biospecimen.visit.addedit', [])
       angular.extend(currVisit, {cprId: cpr.id, cpTitle: cpr.cpTitle});
 
       $scope.deFormCtrl = {};
-      $scope.extnOpts = Util.getExtnOpts(currVisit, extensionCtxt);
-      ExtensionsUtil.createExtensionFieldMap(currVisit);
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(currVisit, extensionCtxt);
       
       if (!currVisit.id) {
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate || new Date(), status: 'Complete'});

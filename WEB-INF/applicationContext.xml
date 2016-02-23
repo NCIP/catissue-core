@@ -62,7 +62,7 @@
     <property name="hibernateProperties">
       <props>
         <prop key="hibernate.dialect">${datasource.dialect}</prop>
-        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
         <prop key="org.hibernate.envers.track_entities_changed_in_revision">true</prop>
         <prop key="org.hibernate.envers.global_with_modified_flag">true</prop>
       </props>
@@ -133,6 +133,8 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.PpidLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitYearLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitYear2LabelToken"/>
         <ref bean="extnPvLabelToken"/>
       </list>
     </property>
@@ -155,10 +157,13 @@
     <property name="sprText2PdfGenerator" ref="sprText2PdfGenerator"/>
   </bean>
 
+  <bean id="cpCopier" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier"/>
+
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>  
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
+    <property name="cpCopier" ref="cpCopier"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -169,7 +174,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
   </bean>
-
+  
   <bean id="cpSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
     <property name="cpFactory" ref="cpFactory"/>
     <property name="cpeFactory" ref="cpeFactory"/>
@@ -269,6 +274,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidYocUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenUniqueIdLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYocLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenYoc2LabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidSpecTypeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitSpecTypeLabelToken"/>
@@ -351,6 +357,7 @@
   <bean id="catalogSvc" class="com.krishagni.catissueplus.core.de.services.impl.CatalogServiceImpl">
     <property name="daoFactory" ref="deDaoFactory"/>
     <property name="catalogSettingFactory" ref="catalogSettingFact"/>
+    <property name="cpCopier" ref="cpCopier"/>
   </bean>
   
   <bean id="instituteFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.InstituteFactoryImpl">
@@ -610,6 +617,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-derivative.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-aliquot.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/master-specimen.xml</value>
       </list>
     </property>
 
@@ -700,6 +708,15 @@
             <property name="specimenSvc" ref="specimenSvc"/>
           </bean>
         </entry>
+        
+        <entry key="masterSpecimen">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.MasterSpecimenImporter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+            <property name="cprSvc" ref="cprSvc"/>
+            <property name="visitSvc" ref="visitService"/>
+            <property name="specimenSvc" ref="specimenSvc"/>
+          </bean>
+        </entry>
 
         <entry key="extensions">
           <bean id="extensionImporter" class="com.krishagni.catissueplus.core.de.services.impl.ExtensionsImporter">
@@ -775,6 +792,22 @@
   <bean id="upgradeLogUpdater" class="com.krishagni.catissueplus.core.init.UpgradeLogUpdater">
     <property name="daoFactory" ref="biospecimenDaoFactory" />
     <property name="appProps" ref="appProps"/>
+  </bean>
+
+  <bean id="objectStateParamsResolver" class="com.krishagni.catissueplus.core.common.service.impl.ObjectStateParamsResolverFactoryImpl">
+    <property name="resolvers">
+      <list>
+        <ref bean="collectionProtocolService"/>
+        <ref bean="cprSvc"/>
+        <ref bean="visitService"/>
+        <ref bean="specimenSvc"/>
+        <ref bean="storageContainerSvc"/>
+        <ref bean="siteService"/>
+        <ref bean="distributionProtocolService"/>
+        <ref bean="distributionOrderService"/>
+        <ref bean="shipmentSvc"/>
+      </list>
+    </property>
   </bean>
   
   <task:scheduler id="taskScheduler" pool-size="1"/>

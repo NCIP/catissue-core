@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
@@ -19,7 +20,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
-public class CollectionProtocolEvent {
+public class CollectionProtocolEvent implements Comparable<CollectionProtocolEvent> {
 	private static final String ENTITY_NAME = "collection_protocol_event";
 	
 	private Long id;
@@ -182,6 +183,18 @@ public class CollectionProtocolEvent {
 		sr.setCollectionProtocolEvent(this);
 	}
 	
+	public CollectionProtocolEvent copy() {
+		CollectionProtocolEvent copy = new CollectionProtocolEvent();
+		BeanUtils.copyProperties(this, copy, EXCLUDE_COPY_PROPS);
+		return copy;
+	}
+	
+	public CollectionProtocolEvent deepCopy() {
+		CollectionProtocolEvent result = copy();
+		copySpecimenRequirementsTo(result);
+		return result;
+	}
+	
 	public void copySpecimenRequirementsTo(CollectionProtocolEvent cpe) {
 		List<SpecimenRequirement> topLevelSrs = new ArrayList<SpecimenRequirement>(getTopLevelAnticipatedSpecimens());
 		Collections.sort(topLevelSrs);
@@ -240,4 +253,24 @@ public class CollectionProtocolEvent {
 			codes.add(sr.getCode());
 		}
 	}
+
+	@Override
+	public int compareTo(CollectionProtocolEvent other) {
+		Double thisEventPoint = this.eventPoint == null ? 0d : this.eventPoint;
+		Double otherEventPoint = other.eventPoint == null ? 0d : other.eventPoint;
+
+		if (thisEventPoint.equals(otherEventPoint)) {
+			return id.compareTo(other.id);
+		} else {
+			return thisEventPoint.compareTo(otherEventPoint);
+		}
+	}
+	
+	private static final String[] EXCLUDE_COPY_PROPS = {
+			"id",
+			"code",
+			"collectionProtocol",
+			"specimenRequirements",
+			"specimenCollectionGroups"
+		};
 }

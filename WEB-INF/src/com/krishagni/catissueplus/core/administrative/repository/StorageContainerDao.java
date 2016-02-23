@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
@@ -15,5 +16,7 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public StorageContainer getByBarcode(String barcode);
 	
 	public void delete(StorageContainerPosition position);
+
+	public Map<String, Object> getContainerIds(String key, Object value);
 }
 	
