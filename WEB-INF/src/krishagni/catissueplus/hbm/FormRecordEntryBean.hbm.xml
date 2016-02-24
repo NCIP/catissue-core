@@ -134,7 +134,7 @@
           where
             re.formCtxtId = :formCtxtId and
             re.objectId = :objectId and
-            re.activityStatusStr = 'Active'
+            re.activityStatusStr = 'ACTIVE'
         </query>
     </class>
 </hibernate-mapping>
