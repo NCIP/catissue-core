@@ -8,12 +8,12 @@ public class SpecimenPpidPrintToken extends AbstractLabelTmplToken implements La
 
 	@Override
 	public String getName() {
-		return "specimen_cp_short";
+		return "specimen_ppid";
 	}
 
 	@Override
 	public String getReplacement(Object object) {
 		Specimen specimen = (Specimen)object;
-		return specimen.getCollectionProtocol().getShortTitle();
+		return specimen.getVisit().getRegistration().getPpid();
 	}
 }
