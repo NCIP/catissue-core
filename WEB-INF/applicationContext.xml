@@ -519,6 +519,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenRequirementCodePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitDatePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitNamePrintToken"/>
       </list>
     </property>
