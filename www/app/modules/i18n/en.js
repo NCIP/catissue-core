@@ -1340,6 +1340,7 @@
       "specimen": "Specimens",
       "specimenAliquot": "Specimen Aliquots",
       "specimenDerivative": "Derived Specimens",
+      "masterSpecimen": "Master Specimens",
       "shipment": "Shipment"
     },
 
