@@ -98,5 +98,15 @@
       group by
         dp.id
     </query>
+    
+    <query name="getExpiringDps">
+      select 
+        dp
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol dp
+      where
+        dp.endDate is not null and
+        dp.endDate between :fromDate and :toDate
+    </query>
   </class>
 </hibernate-mapping>

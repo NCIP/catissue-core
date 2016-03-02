@@ -1,4 +1,4 @@
-#set ( $url = "$appUrl/#/cps/${cp.id}/overview" )
+#set ( $url = "$appUrl/#/dps/${dp.id}/overview" )
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
   <tbody>
@@ -9,9 +9,9 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  Hello $cp.principalInvestigator.firstName $cp.principalInvestigator.lastName,
+                  Hello $dp.principalInvestigator.firstName $dp.principalInvestigator.lastName,
                   <br><br>
-                  $cp.title is expiring on $dateFmt.format($cp.endDate).
+                  $dp.title is expiring on $dateFmt.format($dp.endDate).
                   <br><br>
                   A brief description of the protocol is given below:
                   <br>
@@ -23,32 +23,32 @@
                 <table>
                   <tr>
                     <td> Title </td>
-                    <td> : $cp.title </td>
+                    <td> : $dp.title </td>
                   </tr>
                   <tr>
                     <td> Short Title </td>
-                    <td> : $cp.shortTitle </td>
+                    <td> : $dp.shortTitle </td>
                   </tr>
                   <tr>
                     <td> PI Name </td>
-                    <td> : $cp.principalInvestigator.firstName $cp.principalInvestigator.lastName </td>
+                    <td> : $dp.principalInvestigator.firstName $dp.principalInvestigator.lastName </td>
                   </tr>
                   <tr>
                     <td> Start Date </td>
-                    #if ( $cp.startDate )
-                      <td> : $dateFmt.format($cp.startDate) </td>
+                    #if ( $dp.startDate )
+                      <td> : $dateFmt.format($dp.startDate) </td>
                     #else
                       <td> : Not Specified </td>
                     #end
                   </tr>
                   <tr>
                     <td> End Date </td>
-                    <td> : $dateFmt.format($cp.endDate) </td>
+                    <td> : $dateFmt.format($dp.endDate) </td>
                   </tr>
                   <tr>
                     <td> IRB ID </td>
-                    #if ( $cp.irbIdentifier && !$cp.irbIdentifier.trim().isEmpty() )
-                      <td> : $cp.irbIdentifier </td>
+                    #if ( $dp.irbIdentifier && !$dp.irbIdentifier.trim().isEmpty() )
+                      <td> : $dp.irbIdentifier </td>
                     #else
                       <td> : Not Specified </td>
                     #end

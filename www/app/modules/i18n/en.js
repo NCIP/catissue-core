@@ -1631,6 +1631,14 @@
         "verify_token_ip_address": "IP Address Validation",
         "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued."
       },
+      
+      "administrative": {
+        "title": "Administrative",
+        "dp_expiry_rem_notif": "DP Expiry Reminder",
+        "dp_expiry_rem_notif_desc": "Number of days prior to distribution protocol expiry when email notification should be sent to the PI.",
+        "dp_expiry_rem_rept_inter": "Repeat DP Expiry Reminder",
+        "dp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for distribution protocol expiry."
+      },
 
       "biospecimen": {
         "title": "Biospecimen",
@@ -1741,7 +1749,11 @@
         "email_users_signed_up": "User Signup Notification",
         "email_users_signed_up_desc": "Email notifications when a new user signs up.",
         "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
-        "email_shipment_received": "Email notifications when specimens' shipment is received"
+        "email_shipment_received": "Email notifications when specimens' shipment is received",
+        "email_cp_expiring_notification": "CP Expiry Notification",
+        "cp_expiring_notification_desc": "Email notifications for collection protocols expiry",
+        "email_dp_expiring_notification": "DP Expiry Notification",
+        "dp_expiring_notification_desc": "Email notifications for distribution protocols expiry"
       },
 
       "catalog": {

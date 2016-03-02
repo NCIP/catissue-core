@@ -65,6 +65,16 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	}
 	
 	@SuppressWarnings("unchecked")
+ 	@Override
+	public List<DistributionProtocol> getExpiringDps(Date fromDate, Date toDate) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_EXPIRING_DPS)
+				.setDate("fromDate", fromDate)
+				.setDate("toDate", toDate)
+				.list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<Long, Integer> getSpecimensCountByDpIds(Collection<Long> dpIds) {
 		List<Object[]> rows = getSessionFactory().getCurrentSession()
@@ -241,6 +251,8 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	private static final String GET_DP_BY_TITLE = FQN + ".getDistributionProtocolByTitle";
 
 	private static final String GET_DP_BY_SHORT_TITLE = FQN + ".getDistributionProtocolByShortTitle";
+	
+	private static final String GET_EXPIRING_DPS = FQN + ".getExpiringDps";
 	
 	private static final String GET_SPMN_COUNT_BY_DPS = FQN + ".getSpmnCountByDps";
 }
