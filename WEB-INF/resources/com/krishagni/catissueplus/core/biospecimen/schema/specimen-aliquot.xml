@@ -48,7 +48,7 @@
       <attribute>closeParent</attribute>
     </field>
 
-    <record type="extensions" entityType="AliquotExtension">
+    <record type="extensions" entityType="SpecimenExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

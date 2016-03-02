@@ -285,14 +285,6 @@ public class FormServiceImpl implements FormService {
 			    case SPECIMEN_EXTN:
 			    	forms = formDao.getFormContexts(-1L, "SpecimenExtension");
 			    	break;
-			    	
-			    case ALIQUOT_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "AliquotExtension");
-			    	break;
-			    
-			    case DERIVATIVE_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "DerivativeExtension");
-			    	break;
 			}
 			
 			return ResponseEvent.response(forms);			

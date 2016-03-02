@@ -324,18 +324,10 @@ public class SpecimensController {
 			String lineage) {
 
 		ListEntityFormsOp op = new ListEntityFormsOp();
-		if (lineage.equals("Aliquot")) {
-			op.setEntityType(EntityType.ALIQUOT_EXTN);
-		} else if (lineage.equals("Derived")) {
-			op.setEntityType(EntityType.DERIVATIVE_EXTN);
-		} else {
-			op.setEntityType(EntityType.SPECIMEN_EXTN);
-		}
-        
-		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
+		op.setEntityType(EntityType.SPECIMEN_EXTN);
+
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(op));
 		resp.throwErrorIfUnsuccessful();
-		
 		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
 	}
 	

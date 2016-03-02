@@ -32,6 +32,8 @@ angular.module('os.biospecimen.specimen.addedit', [])
       loadPvs();
 
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
+      delete currSpecimen.children;
+
       currSpecimen.visitId = visit.id;
       currSpecimen.createdOn = currSpecimen.createdOn || new Date();
 
