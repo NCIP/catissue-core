@@ -124,7 +124,7 @@ angular.module('os.common.models', [])
 
         var value = this;
         for (var i = 0; i < nameParts.length; ++i) {
-          if (!value) {
+          if (value === undefined || value === null || typeof value != 'object') {
             return undefined;
           }
 
