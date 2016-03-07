@@ -43,8 +43,15 @@
           </div>
         </div>
 
+        <div ng-if="!facet.isRange && (!!facet.searchFor || facet.values.length > 10)">
+          <div class="os-md-input">
+            <input type="text" ng-model="facet.searchFor" placeholder="{{'queries.search_filter_value' | translate}}"
+              ng-change="searchFacetValue(facet)">
+          </div>
+        </div>
+
         <ul>
-          <li class="value" ng-repeat="value in facet.values">
+          <li class="value" ng-repeat="value in facet.values | filter : {value: facet.searchFor}">
             <div class="select-cb">
               <os-checkbox ng-model="value.selected" ng-change="toggleFacetValueSelection(facet, value)">
               </os-checkbox>

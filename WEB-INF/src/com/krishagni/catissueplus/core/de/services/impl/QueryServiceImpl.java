@@ -871,7 +871,7 @@ public class QueryServiceImpl implements QueryService {
 			GetFacetValuesOp op = req.getPayload();
 			List<FacetDetail> result = new ArrayList<FacetDetail>();
 			for (String facet : op.getFacets()) {
-				result.add(getFacetDetail(op.getCpId(), facet));
+				result.add(getFacetDetail(op.getCpId(), facet, op.getSearchTerm()));
 			}
 
 			return ResponseEvent.response(result);
@@ -1175,7 +1175,7 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 
-	private FacetDetail getFacetDetail(Long cpId, String facet) {
+	private FacetDetail getFacetDetail(Long cpId, String facet, String searchTerm) {
 		String[] fieldParts = facet.split("\\.");
 
 		String formName = null, fieldName = null;
@@ -1201,16 +1201,27 @@ public class QueryServiceImpl implements QueryService {
 			throw new IllegalArgumentException("Invalid facet: " + facet);
 		}
 
-		String aql = null;
+		String aqlFmt = "select distinct %s %s where %s %s limit 0, 500";
+		List<Object> aqlFmtArgs = new ArrayList<Object>();
+
 		QueryResultScreener screener = null;
-		Collection<Object> values = new TreeSet<Object>();
 		if (!AuthUtil.isAdmin() && field.isPhi()) {
-			aql = String.format("select distinct %s.id, %s where %s exists limit 0, 500", cpForm, facet, facet);
+			aqlFmtArgs.add(cpForm + ".id, ");
 			screener = new QueryResultScreenerImpl(AuthUtil.getCurrentUser(), false, "");
 		} else {
-			aql = String.format("select distinct %s where %s exists limit 0, 500", facet, facet);
+			aqlFmtArgs.add("");
 		}
 
+		aqlFmtArgs.add(facet);
+		aqlFmtArgs.add(facet);
+
+		if (StringUtils.isNotBlank(searchTerm)) {
+			aqlFmtArgs.add("contains \"" + searchTerm.trim() + "\"");
+		} else {
+			aqlFmtArgs.add("exists");
+		}
+
+		String aql = String.format(aqlFmt, aqlFmtArgs.toArray());
 		Query query = Query.createQuery();
 		query.wideRowMode(WideRowMode.OFF)
 			.compile(fieldParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
@@ -1219,6 +1230,7 @@ public class QueryServiceImpl implements QueryService {
 		QueryResultData queryResult = queryResp.getResultData();
 		queryResult.setScreener(screener);
 
+		Collection<Object> values = new TreeSet<Object>();
 		for (Object[] row : queryResult.getRows()) {
 			if (row[0] != null && !row[0].toString().isEmpty()) {
 				values.add(row[0]);

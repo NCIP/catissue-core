@@ -1281,7 +1281,8 @@
 
     "catalogs": "Catalogs",
     "search_cp": "Search Collection Protocol",
-    "no_catalog": "No catalog configured for {{shortTitle}}"
+    "no_catalog": "No catalog configured for {{shortTitle}}",
+    "search_filter_value": "Search Filter Value"
   },
 
   "entities": {

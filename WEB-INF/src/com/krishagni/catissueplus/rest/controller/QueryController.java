@@ -105,11 +105,15 @@ public class QueryController {
 			List<String> facets,
 
 			@RequestParam(value = "cpId", required = false, defaultValue = "-1")
-			Long cpId) {
+			Long cpId,
+
+			@RequestParam(value = "searchTerm", required = false, defaultValue = "")
+			String searchTerm) {
 
 		GetFacetValuesOp op = new GetFacetValuesOp();
 		op.setFacets(facets);
 		op.setCpId(cpId);
+		op.setSearchTerm(searchTerm);
 
 		ResponseEvent<List<FacetDetail>> resp = querySvc.getFacetValues(getRequest(op));
 		resp.throwErrorIfUnsuccessful();
