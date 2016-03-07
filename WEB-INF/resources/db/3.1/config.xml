@@ -88,7 +88,7 @@
       declare 
         userId number;
       begin 
-        select identifier into userId from catissue_user where email_address like '$system';
+        select identifier into userId from catissue_user where login_name like '$system';
         
         insert into os_scheduled_jobs
           (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
