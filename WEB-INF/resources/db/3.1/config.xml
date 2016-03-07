@@ -66,30 +66,45 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Creating scheduled job for protocol expiry notification" dbms="mysql">
+    <validCheckSum>7:6cce9da769c891659720e988bf1d7787</validCheckSum>
     <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+      
       insert into os_scheduled_jobs
         (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
       values
-        (default, 'CP Expiry Notification', '1', now(), null, 30, 00, null, 
+        (default, 'CP Expiry Notification', @userId, now(), null, 30, 00, null, 
         null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpExpiringNotification', 0, null),
         
-        (default, 'DP Expiry Notification', '1', now(), null, 30, 00, null, 
+        (default, 'DP Expiry Notification', @userId, now(), null, 30, 00, null, 
         null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.administrative.services.impl.DpExpiringNotification', 0, null)
     </sql>
   </changeSet>
   
   <changeSet author="nmarwaha" id="Creating scheduled job for protocol expiry notification" dbms="oracle">
-    <sql>
-      insert into os_scheduled_jobs
-        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
-         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
-      values
-        (OS_SCHEDULED_JOBS_SEQ.nextVal, 'CP Expiry Notification', '1', SYSDATE, null, 30, 00, null, 
-         null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpExpiringNotification', 0, null),
+    <validCheckSum>7:76ca3970f043e151ddf413e3cc174434</validCheckSum>
+    <sql endDelimiter="//">
+      declare 
+        userId number;
+      begin 
+        select identifier into userId from catissue_user where email_address like '$system';
+        
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'CP Expiry Notification', userId, SYSDATE, null, 30, 00, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpExpiringNotification', 0, null);
          
-        (OS_SCHEDULED_JOBS_SEQ.nextVal, 'DP Expiry Notification', '1', SYSDATE, null, 30, 00, null, 
-        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.administrative.services.impl.DpExpiringNotification', 0, null)
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'DP Expiry Notification', userId, SYSDATE, null, 30, 00, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.administrative.services.impl.DpExpiringNotification', 0, null);
+      end;
+      //
     </sql>
   </changeSet>
  </databaseChangeLog>
