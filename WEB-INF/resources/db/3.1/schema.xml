@@ -191,8 +191,8 @@
           ce.container as coll_container, ce.user_id as collector,
           re.event_timestamp as rec_time, re.received_quality as rec_quality,
           re.user_id as receiver, fe.event_timestamp as frozen_time,
-          to_number(numtodsinterval(fe.event_timestamp-re.event_timestamp,''minute'')) as processing_time,
-          to_number(numtodsinterval(fe.event_timestamp-ce.event_timestamp,''minute'')) as ischemia_time,
+          round((cast(fe.event_timestamp as date) - cast(re.event_timestamp as date))*24*60)  as processing_time,
+          round((cast(fe.event_timestamp as date) - cast(ce.event_timestamp as date))*24*60)  as ischemia_time,
           0
         from
           catissue_specimen s 
