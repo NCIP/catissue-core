@@ -441,6 +441,7 @@
         <value>classpath*:errors/messages*</value>
       </list>
     </property>
+    <property name="defaultEncoding" value="UTF-8"/>
   </bean>
 
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider"/>
@@ -485,6 +486,8 @@
         jar.resource.loader.class=com.krishagni.catissueplus.core.common.JarDirectoryResourceLoader
         jar.resource.loader.path=${plugin.dir}
         class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+        input.encoding=utf-8
+        output.encoding=utf-8
       </value>
     </property>
   </bean>

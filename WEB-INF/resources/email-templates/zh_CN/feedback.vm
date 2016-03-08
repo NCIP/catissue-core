@@ -1,9 +1,3 @@
-#if( $jobRun.message )
-  #set ($message = $jobRun.message)
-#else
-  #set ($message = "None")
-#end
-
 
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
   <tbody>
@@ -14,9 +8,9 @@
             <tr>
               <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
                 <p style="margin:10px 0 0 0">
-                  您好 $fname $lname,
+                  Hello,
                   <br><br>
-                  作业 <b>$job.name</b> 已经失败。如下是作业运行的详细记录。请联系管理员做进一步的调查。
+                  一个新的反馈提交细节如下：
                   <br><br>
                 </p>
               </td>
@@ -25,20 +19,29 @@
               <td>
                 <table>
                   <tr>
-                    <td>Job Run ID </td> <td> : $jobRun.id</td>
+                    <td>姓 </td> <td> : $user.lastName</td>
                   </tr>
                   <tr>
-                    <td>开始日期 </td><td> : $dateFmt.format($jobRun.startedAt) </td>
+                    <td>名 </td><td> : $user.firstName </td>
                   </tr>
                   <tr>
-                    <td>结束日期  </td> <td>: $dateFmt.format($jobRun.finishedAt) </td>
+                    <td>用户名 </td> <td>: $user.loginName </td>
                   </tr>
                   <tr>
-                    <td>错误</td><td> : $message </td>
+                    <td>邮箱地址 </td><td> : $user.emailAddress </td>
+                  </tr>
+                  <tr>
+                    <td>AppUrl </td> <td> : $appUrl </td>
+                  </tr>
+                  <tr>
+                    <td>反馈 </td> <td> : $feedback.subject </td>
+                  </tr>
+                  <tr>
+                    <td>反馈 </td> <td> : $feedback.feedback </td>
                   </tr>
                 </table>
               </td>
-            </tr>
+            <tr>
           </tbody>
         </table>
       </td>

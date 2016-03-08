@@ -9,7 +9,7 @@
                 <p style="margin:10px 0 0 0">
                   您好 $user.firstName $user.lastName,
                   <br><br>
-                  你在 openspecimen的密码最近被修改，如果这是你本人操作，请忽略此条消息。
+                  你在 OpenSpecimen的密码最近被修改，如果这是你本人操作，请忽略此条消息。
                   <br><br>
                   如果并非你本人操作，那么你的账户可能已经被盗。如需找回账户，请重置您的密码。
                 </p>
