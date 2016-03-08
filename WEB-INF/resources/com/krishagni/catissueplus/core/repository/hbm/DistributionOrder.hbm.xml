@@ -53,6 +53,19 @@
         name in (:names)
     </query>
 
+    <query name="getDistributedItemsByLabels">
+      select
+        oi
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder o
+        inner join o.orderItems oi
+        inner join oi.specimen spmn
+      where
+        spmn.label in (:labels) and
+        o.status = 'EXECUTED' and
+        (oi.status = 'DISTRIBUTED' or oi.status = 'DISTRIBUTED_AND_CLOSED')
+    </query>
+
     <sql-query name="getSpecimenCountByOrder">
       <return-scalar column="ordId"       type="long"/>
       <return-scalar column="specimenCnt" type="long"/>

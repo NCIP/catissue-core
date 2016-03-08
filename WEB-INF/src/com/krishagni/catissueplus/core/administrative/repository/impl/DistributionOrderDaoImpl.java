@@ -19,6 +19,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -72,6 +73,14 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		return getSessionFactory().getCurrentSession()
 				.getNamedQuery(GET_ORDERS_BY_NAME)
 				.setParameterList("names", names)
+				.list();
+	}
+
+	@Override
+	public List<DistributionOrderItem> getDistributedOrderItems(List<String> specimenLabels) {
+		return getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTED_ITEMS_BY_LABELS)
+				.setParameterList("labels", specimenLabels)
 				.list();
 	}
 
@@ -245,6 +254,8 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	public static final String FQN  = DistributionOrder.class.getName();
 	
 	private static final String GET_ORDERS_BY_NAME = FQN + ".getOrdersByName";
+
+	private static final String GET_DISTRIBUTED_ITEMS_BY_LABELS = FQN + ".getDistributedItemsByLabels";
 	
 	private static final String GET_SPEC_CNT_BY_ORDER = FQN + ".getSpecimenCountByOrder";
 }
