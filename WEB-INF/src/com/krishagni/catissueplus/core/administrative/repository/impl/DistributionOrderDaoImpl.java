@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,14 +63,18 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	@Override
 	@SuppressWarnings("unchecked")
 	public DistributionOrder getOrder(String name) {
-		List<DistributionOrder> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_DIST_ORD_BY_NAME)
-				.setString("name", name)
-				.list();
-				
+		List<DistributionOrder> result = getOrders(Collections.singletonList(name));
 		return result.isEmpty() ? null : result.iterator().next();
 	}
-	
+
+	@Override
+	public List<DistributionOrder> getOrders(List<String> names) {
+		return getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_ORDERS_BY_NAME)
+				.setParameterList("names", names)
+				.list();
+	}
+
 	@Override
 	public Class<DistributionOrder> getType() {
 		return DistributionOrder.class;
@@ -239,7 +244,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	
 	public static final String FQN  = DistributionOrder.class.getName();
 	
-	private static final String GET_DIST_ORD_BY_NAME = FQN + ".getOrderByName";
+	private static final String GET_ORDERS_BY_NAME = FQN + ".getOrdersByName";
 	
 	private static final String GET_SPEC_CNT_BY_ORDER = FQN + ".getSpecimenCountByOrder";
 }

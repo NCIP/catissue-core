@@ -1,10 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,10 +20,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
-import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimensDetail;
-import com.krishagni.catissueplus.core.administrative.events.SpecimenReturnDetail;
-import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
+import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimenDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -141,18 +137,11 @@ public class DistributionOrderController {
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{id}/return-specimens")
+	@RequestMapping(method = RequestMethod.POST, value = "/return-specimens")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DistributionOrderDetail returnSpecimens(
-		@PathVariable("id")
-		Long orderId,
-
-		@RequestBody
-		ReturnedSpecimensDetail detail) {
-
-		detail.setOrderId(orderId);
-		ResponseEvent<DistributionOrderDetail> resp = distributionService.returnSpecimens(getRequest(detail));
+	public List<SpecimenInfo> returnSpecimens(@RequestBody List<ReturnedSpecimenDetail> returnedSpecimens) {
+		ResponseEvent<List<SpecimenInfo>> resp = distributionService.returnSpecimens(getRequest(returnedSpecimens));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

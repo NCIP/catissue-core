@@ -8,11 +8,21 @@
     <primaryKey>IDENTIFIER</primaryKey>
 
     <row>
+      <textField>
+        <name>order</name>
+        <udn>order</udn>
+        <caption>#getMessage("return_event_order")</caption>
+        <column>NAME</column>
+        <mandatory>true</mandatory>
+      </textField>
+    </row>
+
+    <row>
       <numberField>
         <name>quantity</name>
         <udn>quantity</udn>
         <caption>#getMessage("order_items_quantity")</caption>
-        <column>RETURN_QUANTITY</column>
+        <column>RETURNED_QUANTITY</column>
         <mandatory>true</mandatory>
         <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
       </numberField>
@@ -23,8 +33,26 @@
         <name>container</name>
         <udn>container</udn>
         <caption>#getMessage("return_event_container")</caption>
-        <column>RETURN_CONTAINER_ID</column>
+        <column>RETURNING_CONTAINER</column>
       </storageContainer>
+    </row>
+
+    <row>
+      <textField>
+        <name>row</name>
+        <udn>row</udn>
+        <caption>#getMessage("return_event_container_row")</caption>
+        <column>RETURNING_ROW</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>column</name>
+        <udn>column</udn>
+        <caption>#getMessage("return_event_container_column")</caption>
+        <column>RETURNING_COLUMN</column>
+      </textField>
     </row>
 
     <row>
@@ -32,7 +60,7 @@
         <name>user</name>
         <udn>user</udn>
         <caption>#getMessage("return_event_user")</caption>
-        <column>RETURN_USER_ID</column>
+        <column>RETURNED_BY</column>
         <showInGrid>true</showInGrid>
         <mandatory>true</mandatory>
       </userField>

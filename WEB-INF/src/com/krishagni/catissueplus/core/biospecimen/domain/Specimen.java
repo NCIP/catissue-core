@@ -23,7 +23,6 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderIt
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenReturnEvent;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -795,14 +794,14 @@ public class Specimen extends BaseExtensionEntity {
 	public void returnSpecimen(DistributionOrderItem item) {
 		if (isClosed()) {
 			activate();
-			setAvailableQuantity(item.getReturnQuantity());
+			setAvailableQuantity(item.getReturnedQuantity());
 		} else {
-			setAvailableQuantity(getAvailableQuantity().add(item.getReturnQuantity()));
+			setAvailableQuantity(getAvailableQuantity().add(item.getReturnedQuantity()));
 		}
 
-		StorageContainer container = item.getReturnContainer();
+		StorageContainer container = item.getReturningContainer();
 		if (container != null) {
-			StorageContainerPosition position = container.createPosition(item.getReturnRow(), item.getReturnColumn());
+			StorageContainerPosition position = container.createPosition(item.getReturningColumn(), item.getReturningRow());
 			transferTo(position, item.getReturnDate());
 		}
 

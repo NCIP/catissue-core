@@ -39,19 +39,19 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 
 	NOT_DISTRIBUTED,
 
+	RETURN_QTY_REQ,
+
 	INVALID_RETURN_QUANTITY,
 
 	SPECIMEN_ALREADY_RETURNED,
 
+	RETURN_DATE_REQ,
+
 	INVALID_RETURN_DATE,
 
-	QTY_REQ,
+	RETURNED_BY_REQ,
 
-	USER_REQ,
-
-	DATE_REQ,
-
-	ITEM_NOT_FOUND;
+	SPMN_NOT_FOUND;
 	
 	@Override
 	public String code() {

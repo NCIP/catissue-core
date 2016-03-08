@@ -23,15 +23,15 @@ public class DistributionOrderItem extends BaseEntity {
 	
 	private Status status;
 
-	private BigDecimal returnQuantity;
+	private BigDecimal returnedQuantity;
 
-	private StorageContainer returnContainer;
+	private StorageContainer returningContainer;
 
-	private String returnRow;
+	private String returningRow;
 
-	private String returnColumn;
+	private String returningColumn;
 
-	private User returnUser;
+	private User returnedBy;
 
 	private Date returnDate;
 
@@ -69,44 +69,44 @@ public class DistributionOrderItem extends BaseEntity {
 		this.status = status;
 	}
 
-	public BigDecimal getReturnQuantity() {
-		return returnQuantity;
+	public BigDecimal getReturnedQuantity() {
+		return returnedQuantity;
 	}
 
-	public void setReturnQuantity(BigDecimal returnQuantity) {
-		this.returnQuantity = returnQuantity;
+	public void setReturnedQuantity(BigDecimal returnedQuantity) {
+		this.returnedQuantity = returnedQuantity;
 	}
 
-	public StorageContainer getReturnContainer() {
-		return returnContainer;
+	public StorageContainer getReturningContainer() {
+		return returningContainer;
 	}
 
-	public void setReturnContainer(StorageContainer returnContainer) {
-		this.returnContainer = returnContainer;
+	public void setReturningContainer(StorageContainer returningContainer) {
+		this.returningContainer = returningContainer;
 	}
 
-	public String getReturnRow() {
-		return returnRow;
+	public String getReturningRow() {
+		return returningRow;
 	}
 
-	public void setReturnRow(String returnRow) {
-		this.returnRow = returnRow;
+	public void setReturningRow(String returningRow) {
+		this.returningRow = returningRow;
 	}
 
-	public String getReturnColumn() {
-		return returnColumn;
+	public String getReturningColumn() {
+		return returningColumn;
 	}
 
-	public void setReturnColumn(String returnColumn) {
-		this.returnColumn = returnColumn;
+	public void setReturningColumn(String returningColumn) {
+		this.returningColumn = returningColumn;
 	}
 
-	public User getReturnUser() {
-		return returnUser;
+	public User getReturnedBy() {
+		return returnedBy;
 	}
 
-	public void setReturnUser(User returnUser) {
-		this.returnUser = returnUser;
+	public void setReturnedBy(User returnedBy) {
+		this.returnedBy = returnedBy;
 	}
 
 	public Date getReturnDate() {

@@ -3,18 +3,40 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class SpecimenReturnDetail {
+import com.krishagni.catissueplus.core.common.events.UserSummary;
+
+public class ReturnedSpecimenDetail {
+	private String orderName;
+
+	private String specimenLabel;
+
 	private Long itemId;
 
 	private BigDecimal quantity;
 
-	private StorageContainerPositionDetail location;
+	private StorageLocationSummary location;
 
-	private Long userId;
+	private UserSummary user;
 
 	private Date time;
 
 	private String comments;
+
+	public String getOrderName() {
+		return orderName;
+	}
+
+	public void setOrderName(String orderName) {
+		this.orderName = orderName;
+	}
+
+	public String getSpecimenLabel() {
+		return specimenLabel;
+	}
+
+	public void setSpecimenLabel(String specimenLabel) {
+		this.specimenLabel = specimenLabel;
+	}
 
 	public Long getItemId() {
 		return itemId;
@@ -32,20 +54,20 @@ public class SpecimenReturnDetail {
 		this.quantity = quantity;
 	}
 
-	public StorageContainerPositionDetail getLocation() {
+	public StorageLocationSummary getLocation() {
 		return location;
 	}
 
-	public void setLocation(StorageContainerPositionDetail location) {
+	public void setLocation(StorageLocationSummary location) {
 		this.location = location;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public UserSummary getUser() {
+		return user;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser(UserSummary user) {
+		this.user = user;
 	}
 
 	public Date getTime() {

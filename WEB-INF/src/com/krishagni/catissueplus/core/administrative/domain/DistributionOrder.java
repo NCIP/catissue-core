@@ -221,4 +221,11 @@ public class DistributionOrder extends BaseEntity {
 	public boolean isOrderExecuted() {
 		return Status.EXECUTED == status;
 	}
+
+	public DistributionOrderItem getItemBySpecimen(String label) {
+		return getOrderItems().stream()
+			.filter(item -> item.getSpecimen().getLabel().equals(label))
+			.findFirst()
+			.orElse(null);
+	}
 }

@@ -46,11 +46,11 @@
       
     <filter name="activeEntity"/>
         
-    <query name="getOrderByName">
+    <query name="getOrdersByName">
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
       where
-        name = :name
+        name in (:names)
     </query>
 
     <sql-query name="getSpecimenCountByOrder">

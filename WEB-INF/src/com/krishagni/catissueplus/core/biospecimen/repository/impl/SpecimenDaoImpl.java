@@ -181,8 +181,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			.setParameterList("specimenIds", specimenIds)
 			.list();
 
-		return rows.stream()
-			.collect(Collectors.toMap(row -> (Long)row[0], row -> getDistributionStatus((Date)row[1], (Date)row[2])));
+		return rows.stream().collect(
+			Collectors.toMap(
+				row -> (Long)row[0],
+				row -> getDistributionStatus((Date)row[1], (Date)row[2])
+			));
 	}
 
 	@Override

@@ -27,15 +27,15 @@
       </type>
     </property>
 
-    <property name="returnQuantity" column="RETURN_QUANTITY"/>
+    <property name="returnedQuantity" column="RETURNED_QUANTITY"/>
     
-    <many-to-one name="returnContainer" column="RETURN_CONTAINER_ID"/>
+    <many-to-one name="returningContainer" column="RETURNING_CONTAINER"/>
 
-    <property name="returnRow" column="RETURN_ROW"/>
+    <property name="returningRow" column="RETURNING_ROW"/>
 
-    <property name="returnColumn" column="RETURN_COLUMN"/>
+    <property name="returningColumn" column="RETURNING_COLUMN"/>
 
-    <many-to-one name="returnUser" column="RETURN_USER_ID"/>
+    <many-to-one name="returnedBy" column="RETURNED_BY"/>
 
     <property name="returnDate" column="RETURN_DATE"/>
 

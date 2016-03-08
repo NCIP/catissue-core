@@ -4,32 +4,32 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-  <changeSet author="ckhilosiya" id="Add return event columns to order items table">
+  <changeSet author="ckhilosiya" id="Add return specimens fields to order items table">
     <addColumn tableName="OS_ORDER_ITEMS">
-      <column name="RETURN_QUANTITY" type="${double.type}"></column>
-      <column name="RETURN_CONTAINER_ID" type="${int.type}"></column>
-      <column name="RETURN_ROW" type="${text.type}(8)"></column>
-      <column name="RETURN_COLUMN" type="${text.type}(8)"></column>
-      <column name="RETURN_USER_ID" type="${int.type}"></column>
+      <column name="RETURNED_QUANTITY" type="${double.type}"></column>
+      <column name="RETURNING_CONTAINER" type="${int.type}"></column>
+      <column name="RETURNING_ROW" type="${text.type}(8)"></column>
+      <column name="RETURNING_COLUMN" type="${text.type}(8)"></column>
+      <column name="RETURNED_BY" type="${int.type}"></column>
       <column name="RETURN_DATE" type="${nullable.ts.type}"></column>
       <column name="RETURN_COMMENTS" type="${text.type}(255)"></column>
     </addColumn>
   </changeSet>
 
-  <changeSet author="ckhilosiya" id="FK on returned specimen container">
+  <changeSet author="ckhilosiya" id="FK on specimen returning container">
     <addForeignKeyConstraint
-      constraintName="FK_OS_OI_RETURN_CONT_ID"
+      constraintName="FK_OS_OI_RETURNING_CONT"
       baseTableName="OS_ORDER_ITEMS"
-      baseColumnNames="RETURN_CONTAINER_ID"
+      baseColumnNames="RETURNING_CONTAINER"
       referencedTableName="OS_STORAGE_CONTAINERS"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
   <changeSet author="ckhilosiya" id="FK on user who returned specimen">
     <addForeignKeyConstraint
-      constraintName="FK_OS_OI_RETURN_USER_ID"
+      constraintName="FK_OS_OI_RETURNED_BY"
       baseTableName="OS_ORDER_ITEMS"
-      baseColumnNames="RETURN_USER_ID"
+      baseColumnNames="RETURNED_BY"
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
@@ -38,9 +38,9 @@
     <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
       select
         item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
-        item.return_quantity as return_quantity, item.return_container_id as return_container_id,
-        item.return_row as return_row, item.return_column as return_column, item.return_user_id as return_user_id,
-        item.return_date as return_date, item.return_comments as return_comments,
+        item.returned_quantity as returned_quantity, item.returning_container as returning_container,
+        item.returning_row as returning_row, item.returning_column as returning_column,
+        item.returned_by as returned_by, item.return_date as return_date, item.return_comments as return_comments,
         ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
         ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
       from
