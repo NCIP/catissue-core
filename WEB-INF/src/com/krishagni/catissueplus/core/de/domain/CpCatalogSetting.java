@@ -84,5 +84,16 @@ public class CpCatalogSetting extends BaseEntity {
 		setLastUpdatedBy(AuthUtil.getCurrentUser());
 		setLastUpdateTime(Calendar.getInstance().getTime());
 		setActivityStatus(other.getActivityStatus());
-	}	
+	}
+	
+	public CpCatalogSetting copyTo(CollectionProtocol cp) {
+		CpCatalogSetting result = new CpCatalogSetting();
+		result.setQuery(getQuery()); 
+		result.setActivityStatus(getActivityStatus());
+		result.setCp(cp);
+		result.setCreatedBy(AuthUtil.getCurrentUser());
+		result.setCreationTime(Calendar.getInstance().getTime());
+		
+		return result;
+	}
 }

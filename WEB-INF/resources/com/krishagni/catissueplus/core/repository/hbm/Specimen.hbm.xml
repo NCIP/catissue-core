@@ -159,17 +159,6 @@
         s.activityStatus = 'Active'
     </query>
 
-    <query name="getCprAndVisitIds">
-      select
-        cpr.collectionProtocol.id, cpr.id, v.id
-      from
-        com.krishagni.catissueplus.core.biospecimen.domain.Specimen s
-        join s.visit v
-        join v.registration cpr
-      where
-        s.id = :specimenId
-    </query>
-
     <query name="getDistributedSpecimens">
       select
         sp.id

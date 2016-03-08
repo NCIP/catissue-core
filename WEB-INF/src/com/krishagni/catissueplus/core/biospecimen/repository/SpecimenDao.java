@@ -26,7 +26,7 @@ public interface SpecimenDao extends Dao<Specimen> {
 
 	public Specimen getParentSpecimenByVisitAndSr(Long visitId, Long srId);
 
-	public Map<String, Long> getCprAndVisitIds(Long specimenId);
+	public Map<String, Object> getCprAndVisitIds(String key, Object value);
 	
 	public Map<String, Set<Long>> getSpecimenSites(Set<Long> specimenIds);
 

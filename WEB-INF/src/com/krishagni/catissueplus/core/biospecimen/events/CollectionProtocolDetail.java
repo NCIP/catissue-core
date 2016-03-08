@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
-import com.krishagni.catissueplus.core.biospecimen.domain.CpSpecimenLabelPrintSetting;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
@@ -244,7 +243,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
-			result.setEvents(CollectionProtocolEventDetail.from(cp.getCollectionProtocolEvents(), true));
+			result.setEvents(CollectionProtocolEventDetail.from(cp.getOrderedCpeList(), true));
 		}
 		
 		return result;

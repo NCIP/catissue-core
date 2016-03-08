@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -57,7 +58,12 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 				.setParameterList("labels", specimenLabels)
 				.list();
 	}
-	
+
+	@Override
+	public Map<String, Object> getShipmentIds(String key, Object value) {
+		return getObjectIds("shipmentId", key, value);
+	}
+
 	private void addNameRestrictions(Criteria query, ShipmentListCriteria crit) {
 		if (StringUtils.isBlank(crit.name())) {
 			return;

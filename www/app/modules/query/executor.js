@@ -84,8 +84,8 @@ angular.module('os.query.executor', [])
         link.remove();
       },
 
-      getFacetValues: function(cpId, facetExprs) {
-        var params = {facet: facetExprs, cpId: cpId};
+      getFacetValues: function(cpId, facetExprs, searchTerm) {
+        var params = {cpId: cpId, facet: facetExprs, searchTerm: searchTerm};
         return $http.get(queryUrl + '/facet-values', {params: params}).then(
           function(result) {
             return result.data;

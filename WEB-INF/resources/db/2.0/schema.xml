@@ -1333,8 +1333,8 @@
               '-' , concat(
                 sub.subject_id, concat(
                   '-', concat(
-                    coalesce(cast(sub.cp_id as char), 'A') , concat(
-                      '-', coalesce(cast(sub.site_id as char), 'A')
+                    coalesce(cast(sub.cp_id as char(10)), 'A') , concat(
+                      '-', coalesce(cast(sub.site_id as char(10)), 'A')
                     )
                   )
                 )

@@ -1030,7 +1030,7 @@ public class Specimen extends BaseExtensionEntity {
 	
 	@Override
 	public String getEntityType() {
-		return isAliquot() ? "AliquotExtension" : (isDerivative() ? "DerivativeExtension" : "SpecimenExtension");
+		return "SpecimenExtension";
 	}
 
 	//

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 
 	public List<DistributionProtocol> getDistributionProtocols(DpListCriteria criteria);
 	
+	public List<DistributionProtocol> getExpiringDps(Date fromDate, Date toDate);
+	
 	//
 	// At present this is only returning count of specimens distributed by protocol
 	// in future this would be extended to return other stats related to protocol
@@ -25,5 +28,6 @@ public interface DistributionProtocolDao extends Dao<DistributionProtocol> {
 	public Map<Long, Integer> getSpecimensCountByDpIds(Collection<Long> dpIds);
 	
 	public List<DistributionOrderStat> getOrderStats(DistributionOrderStatListCriteria listCrit);
-	
+
+	public Map<String, Object> getDpIds(String key, Object value);
 }

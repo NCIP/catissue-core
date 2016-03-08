@@ -5,6 +5,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
     function init() {
+      $scope.formFilterOpts = {};
       $scope.entityMap = {
         Participant: 'participant', 
         Specimen: 'specimen', 
@@ -13,12 +14,13 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       };
       $scope.cpList = [];
       $scope.formsList = [];
-      loadAllForms();
+      loadForms($scope.formFilterOpts);
       loadCollectionProtocols();
+      Util.filter($scope, 'formFilterOpts', loadForms);
     }
 
-    function loadAllForms() {
-      Form.query().then(function(result) {
+    function loadForms(filterOpts) {
+      Form.query(filterOpts).then(function(result) {
         $scope.formsList = result;
       })
     }

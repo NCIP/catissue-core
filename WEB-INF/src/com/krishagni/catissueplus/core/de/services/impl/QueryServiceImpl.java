@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -47,12 +48,15 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.AqlBuilder;
+import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.QueryAuditLog;
 import com.krishagni.catissueplus.core.de.domain.QueryFolder;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.domain.factory.QueryFolderFactory;
 import com.krishagni.catissueplus.core.de.events.ExecuteQueryEventOp;
+import com.krishagni.catissueplus.core.de.events.ExecuteSavedQueryOp;
 import com.krishagni.catissueplus.core.de.events.FacetDetail;
 import com.krishagni.catissueplus.core.de.events.GetFacetValuesOp;
 import com.krishagni.catissueplus.core.de.events.ListFolderQueriesCriteria;
@@ -111,9 +115,9 @@ public class QueryServiceImpl implements QueryService {
 	private static final int EXPORT_THREAD_POOL_SIZE = getThreadPoolSize();
 	
 	private static final int ONLINE_EXPORT_TIMEOUT_SECS = 30;
-	
+
 	private static ExecutorService exportThreadPool = Executors.newFixedThreadPool(EXPORT_THREAD_POOL_SIZE);
-		
+
 	private DaoFactory daoFactory;
 
 	private UserDao userDao;
@@ -346,6 +350,49 @@ public class QueryServiceImpl implements QueryService {
 					e.printStackTrace();
 				}				
 			}
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<QueryExecResult> executeSavedQuery(RequestEvent<ExecuteSavedQueryOp> req) {
+		try {
+			ExecuteSavedQueryOp input = req.getPayload();
+			SavedQuery query = daoFactory.getSavedQueryDao().getQuery(input.getSavedQueryId());
+			if (query == null) {
+				throw OpenSpecimenException.userError(SavedQueryErrorCode.NOT_FOUND, input.getSavedQueryId());
+			}
+
+			query = query.copy();
+			for (Filter filter : query.getFilters()) {
+				ExecuteSavedQueryOp.Criterion criterion = input.getCriterion(filter.getId());
+				if (criterion == null || CollectionUtils.isEmpty(criterion.getValues())) {
+					continue;
+				}
+
+				switch (criterion.getSearchType()) {
+					case EQUALS:
+						filter.setEqValues(criterion.getValues());
+						break;
+
+					case RANGE:
+						filter.setRangeValues(criterion.getValues());
+						break;
+				}
+			}
+
+			ExecuteQueryEventOp op = new ExecuteQueryEventOp();
+			op.setCpId(query.getCpId());
+			op.setDrivingForm(input.getDrivingForm());
+			op.setRunType(input.getRunType());
+			op.setWideRowMode(input.getWideRowMode());
+			op.setSavedQueryId(query.getId());
+			op.setAql(query.getAql() + " limit " + input.getStartAt() + ", " + input.getMaxResults());
+			return executeQuery(new RequestEvent<ExecuteQueryEventOp>(op));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
@@ -766,7 +813,7 @@ public class QueryServiceImpl implements QueryService {
 				public Boolean call() throws Exception {
 					SecurityContextHolder.getContext().setAuthentication(auth);
 
-					QueryResultExporter exporter = new QueryResultCsvExporter();
+					QueryResultExporter exporter = new QueryResultCsvExporter(Utility.getFieldSeparator());
 					try {
 						QueryResponse resp = exporter.export(fout, query, getResultScreener(query));
 						insertAuditLog(user, opDetail, resp);
@@ -824,7 +871,7 @@ public class QueryServiceImpl implements QueryService {
 			GetFacetValuesOp op = req.getPayload();
 			List<FacetDetail> result = new ArrayList<FacetDetail>();
 			for (String facet : op.getFacets()) {
-				result.add(getFacetDetail(op.getCpId(), facet));
+				result.add(getFacetDetail(op.getCpId(), facet, op.getSearchTerm()));
 			}
 
 			return ResponseEvent.response(result);
@@ -1128,7 +1175,7 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 
-	private FacetDetail getFacetDetail(Long cpId, String facet) {
+	private FacetDetail getFacetDetail(Long cpId, String facet, String searchTerm) {
 		String[] fieldParts = facet.split("\\.");
 
 		String formName = null, fieldName = null;
@@ -1154,16 +1201,27 @@ public class QueryServiceImpl implements QueryService {
 			throw new IllegalArgumentException("Invalid facet: " + facet);
 		}
 
-		String aql = null;
+		String aqlFmt = "select distinct %s %s where %s %s limit 0, 500";
+		List<Object> aqlFmtArgs = new ArrayList<Object>();
+
 		QueryResultScreener screener = null;
-		Collection<Object> values = new TreeSet<Object>();
 		if (!AuthUtil.isAdmin() && field.isPhi()) {
-			aql = String.format("select distinct %s.id, %s where %s exists limit 0, 500", cpForm, facet, facet);
+			aqlFmtArgs.add(cpForm + ".id, ");
 			screener = new QueryResultScreenerImpl(AuthUtil.getCurrentUser(), false, "");
 		} else {
-			aql = String.format("select distinct %s where %s exists limit 0, 500", facet, facet);
+			aqlFmtArgs.add("");
 		}
 
+		aqlFmtArgs.add(facet);
+		aqlFmtArgs.add(facet);
+
+		if (StringUtils.isNotBlank(searchTerm)) {
+			aqlFmtArgs.add("contains \"" + searchTerm.trim() + "\"");
+		} else {
+			aqlFmtArgs.add("exists");
+		}
+
+		String aql = String.format(aqlFmt, aqlFmtArgs.toArray());
 		Query query = Query.createQuery();
 		query.wideRowMode(WideRowMode.OFF)
 			.compile(fieldParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
@@ -1172,6 +1230,7 @@ public class QueryServiceImpl implements QueryService {
 		QueryResultData queryResult = queryResp.getResultData();
 		queryResult.setScreener(screener);
 
+		Collection<Object> values = new TreeSet<Object>();
 		for (Object[] row : queryResult.getRows()) {
 			if (row[0] != null && !row[0].toString().isEmpty()) {
 				values.add(row[0]);

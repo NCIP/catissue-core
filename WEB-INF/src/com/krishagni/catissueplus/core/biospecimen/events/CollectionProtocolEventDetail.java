@@ -2,7 +2,6 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 
 @JsonFilter("withoutId")
 @JsonInclude(Include.NON_NULL)
-public class CollectionProtocolEventDetail implements Comparable<CollectionProtocolEventDetail> {
+public class CollectionProtocolEventDetail {
 	private Long id;
 	
 	private String eventLabel;
@@ -173,19 +172,6 @@ public class CollectionProtocolEventDetail implements Comparable<CollectionProto
 			result.add(CollectionProtocolEventDetail.from(event, fullObject));
 		}
 		
-		Collections.sort(result);
 		return result;
-	}
-
-	@Override
-	public int compareTo(CollectionProtocolEventDetail other) {
-		Double thisEventPoint = this.eventPoint == null ? 0d : this.eventPoint;
-		Double otherEventPoint = other.eventPoint == null ? 0d : other.eventPoint;
-
-		if (thisEventPoint.equals(otherEventPoint)) {
-			return id.compareTo(other.id);
-		} else {
-			return thisEventPoint.compareTo(otherEventPoint);
-		}		
 	}
 }

@@ -16,6 +16,7 @@
         <udn>id</udn>
         <caption>#getMessage("specimen_identifier")</caption>
         <column>IDENTIFIER</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>
 
@@ -39,6 +40,7 @@
         <udn>label</udn>
         <caption>#getMessage("specimen_label")</caption>
         <column>LABEL</column>
+        <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
       </textField>
     </row>
 
@@ -54,8 +56,9 @@
           <textField>
             <name>parentLabel</name>
             <udn>parentLabel</udn>
-            <caption>#getMessage("specimen_parent_specimen_label")</caption>
+            <caption>#getMessage("specimen_parent_specimen")</caption>
             <column>LABEL</column>
+            <recordUrl>#/object-state-params-resolver?stateName=specimen-detail.overview&amp;objectName=specimen&amp;key=label&amp;value=:value</recordUrl>
           </textField>  
         </row>
       </subForm>
@@ -275,6 +278,7 @@
             <caption>#getMessage("specimen_spec_position_container_name")</caption>
             <column>CONTAINER_NAME</column>
             <maxLength>255</maxLength>
+            <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
           </textField>              
 
           <textField>
@@ -330,6 +334,7 @@
                 <caption>#getMessage("specimen_spec_position_container_ancestor_name")</caption>
                 <column>ANCESTOR_NAME</column>
                 <maxLength>255</maxLength>
+                <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value=:value</recordUrl>
               </textField>
             </row>
           </subForm>
@@ -337,6 +342,58 @@
       </subForm>
     </row>
 
+    <row>
+      <subForm>
+        <name>specimenStatistics</name>
+        <udn>specimenStatistics</udn>
+        <caption>#getMessage("specimen_statistics")</caption>
+        <table>OS_SPECIMEN_STATS</table>
+        <foreignKey>SPECIMEN_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <primaryKey>SPECIMEN_ID</primaryKey>
+        <row>
+          <userField>
+            <name>collector</name>
+            <udn>collector</udn>
+            <caption>#getMessage("specimen_collector")</caption>
+            <column>COLLECTOR_ID</column>
+          </userField>    
+        </row>
+        <row>
+          <userField>
+            <name>receiver</name>
+            <udn>receiver</udn>
+            <caption>#getMessage("specimen_receiver")</caption>
+            <column>RECEIVER_ID</column>
+          </userField>    
+        </row>
+        <row>
+          <numberField>
+            <name>processingTime</name>
+            <udn>processingTime</udn>
+            <caption>#getMessage("specimen_processing_time")</caption>
+            <column>PROCESSING_TIME</column>
+          </numberField>
+        </row>
+        <row>
+          <numberField>
+            <name>ischemiaTime</name>
+            <udn>ischemiaTime</udn>
+            <caption>#getMessage("specimen_ischemia_time")</caption>
+            <column>ISCHEMIA_TIME</column>
+          </numberField>
+        </row>
+        <row>
+          <numberField>
+            <name>aliquotSequence</name>
+            <udn>aliquotSequence</udn>
+            <caption>#getMessage("specimen_aliquot_sequence")</caption>
+            <column>ALIQUOT_SEQ</column>
+          </numberField>
+        </row>
+      </subForm>
+    </row>
+    
     <row>
       <listBox>
         <name>biohazards</name>

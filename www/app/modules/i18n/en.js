@@ -200,6 +200,7 @@
     },
 
     "menu_options": {
+      "clone": "Clone",
       "delete": "Delete",
       "export": "Export"
     },
@@ -265,7 +266,7 @@
     "last_name": "Last Name",
     "middle_name": "Middle Name",
     "birth_date": "Birth Date",
-    "uid": "National Identity Number",
+    "uid": "National ID",
     "uid_short": "NIN",
     "mpi": "Master Patient Index",
     "gender": "Gender",
@@ -313,9 +314,11 @@
 
     "bulk_reg_participants": "Bulk Register Participants",
     "bulk_update_participants": "Bulk Update Participants",
+    "bulk_import_master_specimens": "Bulk Import Master Specimens",
     "part_updates": "Participant Updates",
     "part_extensions": "Participant Forms",
     "registrations": "Participant Registrations",
+    "master_specimens": "Master Specimens",
     "registered_cps": "Registered Protocols",
     "other_cps": "Other Protocols",
     
@@ -1059,6 +1062,10 @@
       "delete": "Click to delete Form",
       "search": "Click to search Form",
       "attach_form_to_cp": "Click to attach form to a Collection Protocol"
+    },
+
+    "filter": {
+      "title": "Filters"
     }
   },
 
@@ -1275,7 +1282,8 @@
 
     "catalogs": "Catalogs",
     "search_cp": "Search Collection Protocol",
-    "no_catalog": "No catalog configured for {{shortTitle}}"
+    "no_catalog": "No catalog configured for {{shortTitle}}",
+    "search_filter_value": "Search Filter Value"
   },
 
   "entities": {
@@ -1334,6 +1342,7 @@
       "specimen": "Specimens",
       "specimenAliquot": "Specimen Aliquots",
       "specimenDerivative": "Derived Specimens",
+      "masterSpecimen": "Master Specimens",
       "shipment": "Shipment"
     },
 
@@ -1629,6 +1638,14 @@
         "verify_token_ip_address": "IP Address Validation",
         "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued."
       },
+      
+      "administrative": {
+        "title": "Administrative",
+        "dp_expiry_rem_notif": "DP Expiry Reminder",
+        "dp_expiry_rem_notif_desc": "Number of days prior to distribution protocol expiry when email notification should be sent to the PI.",
+        "dp_expiry_rem_rept_inter": "Repeat DP Expiry Reminder",
+        "dp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for distribution protocol expiry."
+      },
 
       "biospecimen": {
         "title": "Biospecimen",
@@ -1691,7 +1708,9 @@
         "welcome_video_url": "Welcome Video URL",
         "welcome_video_url_desc": "URL for welcome video",
         "shipment_export_report": "Shipment export report",
-        "shipment_export_report_desc": "Export Report format for all shipments"
+        "shipment_export_report_desc": "Export Report format for all shipments",
+        "field_separator": "Field Separator",
+        "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator"
       },
 
       "email": {
@@ -1737,7 +1756,11 @@
         "email_users_signed_up": "User Signup Notification",
         "email_users_signed_up_desc": "Email notifications when a new user signs up.",
         "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
-        "email_shipment_received": "Email notifications when specimens' shipment is received"
+        "email_shipment_received": "Email notifications when specimens' shipment is received",
+        "email_cp_expiring_notification": "CP Expiry Notification",
+        "cp_expiring_notification_desc": "Email notifications for collection protocols expiry",
+        "email_dp_expiring_notification": "DP Expiry Notification",
+        "dp_expiring_notification_desc": "Email notifications for distribution protocols expiry"
       },
 
       "catalog": {

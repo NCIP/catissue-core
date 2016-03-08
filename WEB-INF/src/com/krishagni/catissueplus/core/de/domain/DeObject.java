@@ -163,6 +163,12 @@ public abstract class DeObject {
 		return getForm().hasPhiFields();
 	}
 	
+	public void copyAttrsTo(DeObject other) {
+		for (Attr attr : getAttrs()) {
+			other.getAttrs().add(attr.copy());
+		}
+	}
+	
 	protected void loadRecordIfNotLoaded() {
 		Long recordId = getId();
 		if (recordLoaded || recordId == null) {
@@ -467,6 +473,12 @@ public abstract class DeObject {
 			}
 			attr.setValue(value);
 			
+			return attr;
+		}
+		
+		public Attr copy() {
+			Attr attr = new Attr();
+			BeanUtils.copyProperties(this, attr);
 			return attr;
 		}
 	}

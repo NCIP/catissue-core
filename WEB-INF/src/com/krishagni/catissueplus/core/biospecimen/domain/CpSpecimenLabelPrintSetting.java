@@ -54,4 +54,12 @@ public class CpSpecimenLabelPrintSetting extends BaseEntity {
 		setPrintMode(setting.getPrintMode());
 		setCopies(setting.getCopies());
 	}
+	
+	public CpSpecimenLabelPrintSetting copy() {
+		CpSpecimenLabelPrintSetting result = new CpSpecimenLabelPrintSetting();
+		result.setLineage(getLineage());
+		result.setPrintMode(getPrintMode());
+		result.setCopies(getCopies());
+		return result;
+	}
 }

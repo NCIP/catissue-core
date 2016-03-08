@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -50,12 +51,13 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 
-public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService {
+public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 
 	private CollectionProtocolRegistrationFactory cprFactory;
@@ -93,14 +95,16 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			RegistrationQueryCriteria crit = req.getPayload();
 			CollectionProtocolRegistration cpr = getCpr(crit.getCprId(), crit.getCpId(), crit.getPpid());
 			boolean allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadCprRights(cpr);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, !allowPhiAccess));
+
+			List<CollectionProtocolRegistration> otherCprs = getOtherCprs(cpr);
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, !allowPhiAccess, otherCprs));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolRegistrationDetail> createRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
@@ -388,6 +392,21 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 	}
 
+	@Override
+	public String getObjectName() {
+		return "cpr";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getCprDao().getCprIds(key, value);
+	}
+
 	private CollectionProtocolRegistrationDetail createRegistration(CollectionProtocolRegistrationDetail input, boolean saveParticipant) {
 		CollectionProtocolRegistration cpr = cprFactory.createCpr(input);
 		AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
@@ -651,5 +670,27 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		return path + File.separator;
-	}	
+	}
+	
+	private List<CollectionProtocolRegistration> getOtherCprs(CollectionProtocolRegistration cpr) {
+		Participant participant = cpr.getParticipant();
+		if (participant.getCprs().size() < 2) {
+			return Collections.emptyList();
+		}
+
+		return participant.getCprs().stream()
+			.filter(otherCpr -> {
+				if (otherCpr.equals(cpr)) {
+					return true;
+				}
+
+				try {
+					AccessCtrlMgr.getInstance().ensureReadCprRights(otherCpr);
+					return true;
+				} catch (OpenSpecimenException e) {
+					return false;
+				}
+			})
+			.collect(Collectors.toList());
+	}
 }

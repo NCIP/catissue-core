@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,13 +9,13 @@ import java.util.Locale;
 
 import org.springframework.context.MessageSource;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
+import com.krishagni.catissueplus.core.common.util.CsvWriter;
 
 public class ContainerMapExporterImpl implements ContainerMapExporter {
 	private MessageSource messageSource;
@@ -30,13 +29,13 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 	public File exportToFile(StorageContainer container) 
 	throws IOException {
 		File file = null;
-		CSVWriter writer = null;
+		CsvWriter writer = null;
 		
 		try {
 			file = File.createTempFile("container-", ".csv");
 			file.deleteOnExit();
 			
-			writer = new CSVWriter(new FileWriter(file));
+			writer = CsvFileWriter.createCsvFileWriter(file);
 			
 			exportContainerDetails(writer, container);
 			exportOccupiedPositions(writer, container);
@@ -53,7 +52,7 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 		}		
 	}
 		
-	private void exportContainerDetails(CSVWriter writer, StorageContainer container) 
+	private void exportContainerDetails(CsvWriter writer, StorageContainer container) 
 	throws IOException {
 		writer.writeNext(new String[] { getMessage(CONTAINER_DETAILS) });
 		writer.writeNext(new String[] { getMessage(CONTAINER_NAME), container.getName() });
@@ -89,7 +88,7 @@ public class ContainerMapExporterImpl implements ContainerMapExporter {
 		writer.writeNext(types.toArray(new String[0]));
 	}
 	
-	private void exportOccupiedPositions(CSVWriter writer, StorageContainer container) {
+	private void exportOccupiedPositions(CsvWriter writer, StorageContainer container) {
 		List<String> cells = new ArrayList<String>();
 		cells.add("");
 		for (int i = 1; i <= container.getNoOfColumns(); ++i) {

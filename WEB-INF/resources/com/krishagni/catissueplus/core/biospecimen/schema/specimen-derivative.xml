@@ -89,7 +89,7 @@
       <attribute>closeParent</attribute>
     </field>
 
-    <record type="extensions" entityType="DerivativeExtension">
+    <record type="extensions" entityType="SpecimenExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

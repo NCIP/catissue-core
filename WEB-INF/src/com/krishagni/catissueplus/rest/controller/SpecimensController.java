@@ -310,8 +310,8 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/cpr-visit-ids")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public Map<String, Long> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
-		ResponseEvent<Map<String, Long>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
+	public Map<String, Object> getCprAndVisitIds(@PathVariable("id") Long specimenId) {
+		ResponseEvent<Map<String, Object>> resp = specimenSvc.getCprAndVisitIds(new RequestEvent<Long>(specimenId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -321,21 +321,13 @@ public class SpecimensController {
 	@ResponseBody
 	public FormCtxtSummary getForm(
 			@RequestParam(value = "lineage", required = false, defaultValue="New")
-			String lineage
-			) {
+			String lineage) {
+
 		ListEntityFormsOp op = new ListEntityFormsOp();
-		if (lineage.equals("Aliquot")) {
-			op.setEntityType(EntityType.ALIQUOT_EXTN);
-		} else if (lineage.equals("Derived")) {
-			op.setEntityType(EntityType.DERIVATIVE_EXTN);
-		} else {
-			op.setEntityType(EntityType.SPECIMEN_EXTN);
-		}
-        
-		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
+		op.setEntityType(EntityType.SPECIMEN_EXTN);
+
+		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(op));
 		resp.throwErrorIfUnsuccessful();
-		
 		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
 	}
 	

@@ -27,13 +27,13 @@ public class CsvFileReader implements CsvReader {
 	}
 
 	public static CsvFileReader createCsvFileReader(InputStream inputStream, boolean firstRowHeaderRow) {
-		CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream));
+		CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream), Utility.getFieldSeparator());
 		return new CsvFileReader(csvReader, firstRowHeaderRow);
 	}
-
+	
 	public static CsvFileReader createCsvFileReader(String csvFile, boolean firstRowHeaderRow) {
 		try {
-			CSVReader csvReader = new CSVReader(new FileReader(csvFile));
+			CSVReader csvReader = new CSVReader(new FileReader(csvFile), Utility.getFieldSeparator());
 			return new CsvFileReader(csvReader, firstRowHeaderRow);
 		} catch (IOException e) {
 			throw new CsvException("Error creating CSV file reader", e);

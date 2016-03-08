@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -31,7 +32,7 @@ import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.napi.FormData;
 
 public interface FormService {
-	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<String> req);
+	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req);
 	
 	public ResponseEvent<Container> getFormDefinition(RequestEvent<Long> req);
 	

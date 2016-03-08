@@ -137,6 +137,130 @@ edu.common.de.FieldValidator = function(rules, field, dataEl) {
   }
 };
 
+edu.common.de.SkipLogic = function(form, fieldObj, fieldAttrs) {
+  var rule = undefined;
+  var dtFnRe = /^\s*dt\(\"(.*)\"\)\s*$/;
+  var logicalOpRe = /\s+(and|or)\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
+  var relOpRe = /\s+(<|<=|=|!=|>=|>)\s+(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/;
+
+  function parseRule(logic) {
+    if (!logic || logic.trim().length == 0) {
+      return;
+    }
+
+    var tokens = logic.trim().split(logicalOpRe);
+    if ((tokens.length - 1) % 2 != 0) {
+      alert("Invalid skip logic: " + logic);
+      return;
+    }
+
+    var op = undefined;
+    for (var i = 1; i < tokens.length; i += 2) {
+      if (op == undefined) {
+        op = tokens[i].trim();
+      } else if (tokens[i].trim() != op) {
+        alert("Invalid skip logic: " + logic + " Either all ANDs or ORs allowed");
+        return;
+      }
+    }
+
+    return constructRule(tokens);
+  }
+
+  function constructRule(tokens) {
+    var op, lexpr, rexpr;
+
+    lexpr = constructExpr(tokens[0].trim());
+    if (tokens.length == 1) {
+      op = 'identity';
+    } else {
+      op = tokens[1].trim();
+      rexpr = constructRule(tokens.splice(2));
+    }
+
+    return {op: op, lexpr: lexpr, rexpr: rexpr};
+  }
+
+  function constructExpr(expr) {
+    var tokens = expr.split(relOpRe);
+    if (tokens.length != 3) {
+      alert("Invalid expression: " + expr);
+      return undefined;
+    }
+
+    var value = tokens[2].trim();
+    if (value.charAt(0) == '"' && value.charAt(value.length - 1) == '"') {
+      value = value.substring(1, value.length - 1);
+    }
+
+    return {op: tokens[1].trim(), field: tokens[0].trim(), value: value}
+  }
+
+  function evaluateRule(rule) {
+    var lexprResult = evaluateExpr(rule.lexpr);
+    if (rule.op == 'identity') {
+      return lexprResult;
+    }
+
+    if (rule.op == 'or' && lexprResult == true) {
+      return true;
+    } else if (rule.op == 'and' && lexprResult == false) {
+      return false;
+    }
+
+    return evaluateRule(rule.rexpr);
+  }
+
+  function nullifyTime(dt) {
+    dt.setHours(0); dt.setMinutes(0); dt.setSeconds(0); dt.setMilliseconds(0);
+    return dt.getTime();
+  }
+
+  function evaluateExpr(expr) {
+    var fieldValue = form.skipLogicFieldValue(expr.field);
+    if (fieldValue === null || fieldValue === undefined) {
+      return false;
+    }
+
+    var condValue = expr.value;
+
+    var match = condValue.match(dtFnRe);
+    if (match != null) {
+      condValue = match[1];
+      condValue = nullifyTime($.fn.datepicker.DPGlobal.parseDate(condValue, form.dateFmt()));
+
+      if (fieldValue !== undefined && fieldValue !== null) {
+        if (fieldValue instanceof Array) {
+          fieldValue = fieldValue.map(
+            function(v) {
+              return nullifyTime(new Date(+v));
+            }
+          );
+        } else {
+          fieldValue = nullifyTime(new Date(+fieldValue));
+        }
+      }
+    }
+
+    return edu.common.de.DefFieldSkipLogicCmp(expr.op, fieldValue, condValue);
+  }
+
+  this.evaluate = function() {
+    if (!rule) {
+      return;
+    }
+
+    if (evaluateRule(rule)) {
+      fieldObj.$el.show();
+    } else {
+      fieldObj.$el.hide();
+      fieldObj.setValue(fieldObj.recId, undefined); // clear field value
+    }
+  }
+
+  rule = parseRule(fieldAttrs.showWhen);
+};
+
 edu.common.de.Form = function(args) {
   if (typeof args.formDiv == "string") {
     this.formDiv = $("#" + args.formDiv);
@@ -242,7 +366,24 @@ edu.common.de.Form = function(args) {
       this.formDiv.append(panel);
     }
     this.setValue(this.formData);
+
+    if (this.$hasSkipLogic) {
+      var that = this;
+      var evalSl = function() { that.evaluateSkipLogic(); };
+      this.formDiv.find("input").change(evalSl);
+      this.formDiv.find("textarea").change(evalSl);
+      this.formDiv.find("select").change(evalSl);
+      evalSl();
+    }
   };
+
+  this.evaluateSkipLogic = function() {
+    for (var i = 0; i < this.fieldObjs.length; ++i) {
+      if (this.fieldObjs[i].$skipLogic) {
+        this.fieldObjs[i].$skipLogic.evaluate();
+      }
+    }
+  }
 
   this.setValue = function(formData) {
     var recId = undefined;
@@ -276,6 +417,30 @@ edu.common.de.Form = function(args) {
     return formData;
   };
 
+  this.skipLogicFieldValue = function(fieldUdn) {
+    var extnPrefix = "$extendedObj.";
+    if (fieldUdn.indexOf(extnPrefix) == 0) {
+      if (typeof args.skipLogicFieldValue == 'function') {
+        return args.skipLogicFieldValue(fieldUdn.substring(extnPrefix.length));
+      }
+
+      return undefined;
+    }
+
+    var fields = this.fieldObjs;
+    for (var i = 0; i < fields.length; ++i) {
+      if (fields[i].$attrs.udn == fieldUdn) {
+        return fields[i].skipLogicFieldValue();
+      }
+    }
+
+    return undefined;
+  };
+
+  this.dateFmt = function() {
+    return args.dateFormat;
+  }
+
   this.rowCtrls = function(row) {
     var fields = row;
     var noFields = fields.length;
@@ -301,12 +466,20 @@ edu.common.de.Form = function(args) {
     }
 
     var fieldObj = edu.common.de.FieldFactory.getField(field, undefined, args);
+    fieldObj.$form = this;
+    fieldObj.$attrs = field;
+
     var inputEl = fieldObj.render();
     this.fieldObjs.push(fieldObj);
 
-    var fieldEl = $("<div/>").addClass("form-group");
+    var fieldEl = fieldObj.$el = $("<div/>").addClass("form-group");
     if (labelEl) {
       fieldEl.append(labelEl);
+    }
+
+    if (field.showWhen) {
+      fieldObj.$skipLogic = new edu.common.de.SkipLogic(this, fieldObj, field);
+      this.$hasSkipLogic = true;
     }
   
     return fieldEl.append(inputEl);
@@ -484,6 +657,45 @@ edu.common.de.FieldFactory = {
   }
 };
 
+edu.common.de.DefValueComparator = function(op, leftOperand, rightOperand) {
+  switch(op) {
+    case '<':
+      return leftOperand < rightOperand;
+    case '<=':
+      return leftOperand <= rightOperand;
+    case '>':
+      return leftOperand > rightOperand;
+    case '>=':
+      return leftOperand >= rightOperand;
+    case '=':
+      return leftOperand == rightOperand;
+    case '!=':
+      return leftOperand != rightOperand;
+    case 'exists':
+      return leftOperand !== undefined && leftOperand !== null;
+    case 'not_exists':
+      return leftOperand === undefined || leftOperand === null;
+  }
+}
+
+edu.common.de.DefFieldSkipLogicCmp = function(op, fieldValue, condValue) {
+  if (!(fieldValue instanceof Array)) {
+    fieldValue = [fieldValue];
+  }
+
+  for (var i = 0; i < fieldValue.length; ++i) {
+    if (edu.common.de.DefValueComparator(op, fieldValue[i], condValue)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+edu.common.de.DefSkipLogicFieldValue = function() {
+  return this.getValue().value;
+}
+
 edu.common.de.TextField = function(id, field) {
   this.inputEl = null;
 
@@ -525,6 +737,8 @@ edu.common.de.TextField = function(id, field) {
   this.getDisplayValue = function() {
     return {name: field.name, value: this.inputEl.val()};
   };
+
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue;
   
   this.validate = function() {
     return this.validator.validate();
@@ -537,6 +751,7 @@ edu.common.de.TextField = function(id, field) {
 
 edu.common.de.NumberField = function(id, field) {
   this.inputEl = null;
+
   this.validator;
 
   this.render = function() {
@@ -576,7 +791,9 @@ edu.common.de.NumberField = function(id, field) {
   this.getDisplayValue = function() {
     return {name: field.name, value: this.inputEl.val()};
   };
-  
+
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue;
+
   this.validate = function() {
     return this.validator.validate();
   };
@@ -588,6 +805,7 @@ edu.common.de.NumberField = function(id, field) {
 
 edu.common.de.TextArea = function(id, field) {
   this.inputEl = null;
+
   this.validator;
 
   this.render = function() {
@@ -630,7 +848,9 @@ edu.common.de.TextArea = function(id, field) {
     this.recId = recId;
     this.inputEl.val(value);
   };
-  
+
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue;
+
   this.validate = function() {
     return this.validator.validate();
   };
@@ -786,7 +1006,18 @@ edu.common.de.DatePicker = function(id, field, args) {
   this.getDisplayValue = function() {
     return this.getValue();
   }
-  
+
+  this.skipLogicFieldValue = function() {
+    var value = this.getValue().value;
+    if (!value) {
+      return value;
+    }
+
+    var dt = new Date(+value);
+    dt.setHours(0); dt.setMinutes(0); dt.setSeconds(0); dt.setMilliseconds(0);
+    return dt;
+  }
+
   this.validate = function() {
     return this.validator.validate();
   };
@@ -848,6 +1079,8 @@ edu.common.de.BooleanCheckbox = function(id, field) {
     return {name: field.name, value: value};
   };
   
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue
+
   this.validate = function() {
     return this.validator.validate();
   };
@@ -935,8 +1168,10 @@ edu.common.de.SelectField = function(id, field, args) {
   this.inputEl = null;
 
   this.control = null;
+  
+  this.isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
 
-  this.value = '';
+  this.value = this.isMultiSelect ? [] : "";
 
   this.validator;
 
@@ -971,15 +1206,15 @@ edu.common.de.SelectField = function(id, field, args) {
     }
   };
 
-  this.initSelection =  function(value, elem, callback) {
-    if (value instanceof Array) {
-      callback(value.map(
+  var initSelection =  function(elem, callback) {
+    if (that.value instanceof Array) {
+      callback(that.value.map(
         function(opt) {
           return {id: opt, text: opt};
         }
       ));
     } else {
-      callback({id: value, text: value});
+      callback({id: that.value, text: that.value});
     }
   }
 
@@ -994,16 +1229,9 @@ edu.common.de.SelectField = function(id, field, args) {
   };
 
   this.postRender = function() {
-    var isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
-    this.control = new Select2Search(this.inputEl, {multiple: isMultiSelect});
+    this.control = new Select2Search(this.inputEl, {multiple: this.isMultiSelect});
     this.control.onQuery(qFunc).onChange(onChange);
-
-    this.control.onInitSelection(
-      function(elem, callback) {
-        that.initSelection(that.value, elem, callback);
-      }
-    ).render();
-
+    this.control.onInitSelection(initSelection).render();
     this.control.setValue(this.value);
   };
 
@@ -1020,7 +1248,7 @@ edu.common.de.SelectField = function(id, field, args) {
   };
 	  
   this.getValue = function() {
-    return {name: field.name, value: that.value};
+    return {name: field.name, value: this.value};
   };
 
   this.getDisplayValue = function() {
@@ -1028,21 +1256,19 @@ edu.common.de.SelectField = function(id, field, args) {
       this.postRender();
     }
 
-    var val = this.control.getValue();
-    var displayValue = undefined;
-    if (val) {
-      displayValue = val.text;
-    }
-    return {name: field.name, value: displayValue ? displayValue : '' };
+    var value = (this.value instanceof Array) ? this.value.join() : this.value;
+    return {name: field.name, value: value};
   }
 
   this.setValue = function(recId, value) {
     this.recId = recId;
-    this.value = value ? value : '';
+    this.value = value ? value : (this.isMultiSelect ? [] : "");
     if (this.control) {
       this.control.setValue(value);
     }
   };
+
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue
 
   this.validate = function() {
     return this.validator.validate();
@@ -1148,6 +1374,8 @@ edu.common.de.GroupField = function(id, field) {
     return {name: field.name, value: value};
   };
   
+  this.skipLogicFieldValue = edu.common.de.DefSkipLogicFieldValue
+
   this.validate = function() {
     return this.validator.validate();
   };
@@ -1355,6 +1583,8 @@ edu.common.de.SubFormField = function(id, sfField, args) {
       }
 
       var fieldObj = edu.common.de.FieldFactory.getField(field, this.rowIdx, args);
+      fieldObj.$attrs = field;
+
       var fieldEl = fieldObj.render();
       rowDiv.append(this.cell(fieldEl, getSfFieldWidth(field)));
       fieldObjs.push(fieldObj);
@@ -1570,6 +1800,15 @@ edu.common.de.FileUploadField = function(id, field, args) {
     }
     return {name: field.name, value: filename};
   };
+
+  this.skipLogicFieldValue = function() {
+    var value = this.getValue().value;
+    if (value) {
+      value = value.filename;
+    }
+
+    return value;
+  }
 
   this.validate = function() {
     return this.validator.validate();
@@ -1866,7 +2105,7 @@ edu.common.de.LookupField = function(params, callback) {
   };
 
   this.getDisplayValue = function() {
-    if(!this.control) {
+    if (!this.control) {
       this.postRender();
     }
     var val = this.control.getValue();
@@ -1883,6 +2122,23 @@ edu.common.de.LookupField = function(params, callback) {
       this.control.setValue(value);
     }
   };
+
+  this.skipLogicFieldValue = function() {
+    if (!this.control) {
+      this.postRender();
+    }
+
+    var value = this.control.getValue();
+    if (!(value instanceof Array)) {
+      value = [value];
+    }
+
+    return value.map(
+      function(val) {
+        return !!val ? val.text : undefined;
+      }
+    );
+  }
 
   this.validate = function() {
     return this.validator.validate();

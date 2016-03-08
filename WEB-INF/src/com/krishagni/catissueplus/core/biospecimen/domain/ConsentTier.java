@@ -55,4 +55,11 @@ public class ConsentTier extends BaseEntity {
 				.add(ConsentTierResponse.getEntityName(), responseCount)
 				.build();
 	}
+	
+	public ConsentTier copy() {
+		ConsentTier result = new ConsentTier();
+		result.setStatement(getStatement());
+		result.setActivityStatus(getActivityStatus());
+		return result;
+	}
 }

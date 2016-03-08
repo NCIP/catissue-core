@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitFactory;
@@ -45,10 +47,11 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-public class VisitServiceImpl implements VisitService {
+public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
 
 	private VisitFactory visitFactory;
@@ -203,12 +206,26 @@ public class VisitServiceImpl implements VisitService {
 	@PlusTransactional
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req) {		
 		try {
+			//
+			// Step 1: Create visit
+			//
 			VisitDetail inputVisit = req.getPayload().getVisit();
 			VisitDetail savedVisit = saveOrUpdateVisit(inputVisit, inputVisit.getId() != null, false);			
 			
 			List<SpecimenDetail> specimens = req.getPayload().getSpecimens();
 			setVisitId(savedVisit.getId(), specimens);
-						
+			
+			// 
+			// Step 2: Set IDs of specimens that are pre-created for the visit
+			// 
+			Visit visit = daoFactory.getVisitsDao().getById(savedVisit.getId());
+			Map<Long, Specimen> reqSpecimenMap = visit.getSpecimens().stream()
+				.collect(Collectors.toMap(s -> s.getSpecimenRequirement().getId(), s -> s));
+			setSpecimenIds(specimens, reqSpecimenMap);
+			
+			// 
+			// Step 3: Collect specimens
+			//
 			RequestEvent<List<SpecimenDetail>> collectSpecimensReq = new RequestEvent<List<SpecimenDetail>>(specimens);
 			ResponseEvent<List<SpecimenDetail>> collectSpecimensResp = specimenSvc.collectSpecimens(collectSpecimensReq);
 			collectSpecimensResp.throwErrorIfUnsuccessful();
@@ -223,7 +240,7 @@ public class VisitServiceImpl implements VisitService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprFileDownloadDetail> req) {
@@ -406,7 +423,22 @@ public class VisitServiceImpl implements VisitService {
 		return daoFactory.getSpecimenDao().getSpecimenVisits(crit);
 	}
 
-	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {		
+	@Override
+	public String getObjectName() {
+		return "visit";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getVisitsDao().getCprVisitIds(key, value);
+	}
+
+	private VisitDetail saveOrUpdateVisit(VisitDetail input, boolean update, boolean partial) {
 		Visit existing = null;
 		String prevStatus = null;   
 		
@@ -589,5 +621,33 @@ public class VisitServiceImpl implements VisitService {
 	
 	private boolean isPdfType(FileType type) {
 		return type != null && type.equals(FileType.PDF);
+	}
+	
+	private void setSpecimenIds(List<SpecimenDetail> inputSpecimens, Map<Long, Specimen> reqSpecimenMap) {
+		if (reqSpecimenMap.isEmpty()) {
+			return;
+		}
+		
+		for (SpecimenDetail specimenDetail : inputSpecimens) {
+			if (specimenDetail.getReqId() != null) {
+				Specimen specimen = reqSpecimenMap.get(specimenDetail.getReqId());
+				if (specimen == null) {
+					//
+					// Anticipated specimen not yet created; therefore none of its children either
+					//
+					continue;
+				}
+
+				specimenDetail.setId(specimen.getId());
+			}
+
+			if (CollectionUtils.isNotEmpty(specimenDetail.getSpecimensPool())) {
+				setSpecimenIds(specimenDetail.getSpecimensPool(), reqSpecimenMap);
+			}
+			
+			if (CollectionUtils.isNotEmpty(specimenDetail.getChildren())) {
+				setSpecimenIds(specimenDetail.getChildren(), reqSpecimenMap);
+			}
+		}
 	}
 }

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
@@ -19,4 +20,6 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 	public CollectionProtocolRegistration getCprByBarcode(String barcode);
 
 	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId);
+
+	public Map<String, Object> getCprIds(String key, Object value);
 }

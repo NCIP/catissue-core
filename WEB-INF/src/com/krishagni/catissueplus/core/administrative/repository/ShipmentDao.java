@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
@@ -13,4 +14,6 @@ public interface ShipmentDao extends Dao<Shipment> {
 	public Shipment getShipmentByName(String name);
 	
 	public List<Specimen> getShippedSpecimensByLabels(List<String> specimenLabels);
+
+	public Map<String, Object> getShipmentIds(String key, Object value);
 }

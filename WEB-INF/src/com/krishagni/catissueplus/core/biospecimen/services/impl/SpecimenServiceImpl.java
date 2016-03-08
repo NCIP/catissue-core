@@ -51,11 +51,12 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
+import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class SpecimenServiceImpl implements SpecimenService {
+public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsResolver {
 
 	private DaoFactory daoFactory;
 
@@ -378,9 +379,9 @@ public class SpecimenServiceImpl implements SpecimenService {
 		
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Map<String, Long>> getCprAndVisitIds(RequestEvent<Long> req) {
+	public ResponseEvent<Map<String, Object>> getCprAndVisitIds(RequestEvent<Long> req) {
 		try {
-			Map<String, Long> ids = daoFactory.getSpecimenDao().getCprAndVisitIds(req.getPayload());
+			Map<String, Object> ids = resolve("id", req.getPayload());
 			if (ids == null || ids.isEmpty()) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, req.getPayload());
 			}
@@ -409,6 +410,21 @@ public class SpecimenServiceImpl implements SpecimenService {
 		}
 
 		return getSpecimens(new SpecimenListCriteria().ids(ids));
+	}
+
+	@Override
+	public String getObjectName() {
+		return "specimen";
+	}
+
+	@Override
+	@PlusTransactional
+	public Map<String, Object> resolve(String key, Object value) {
+		if (key.equals("id")) {
+			value = Long.valueOf(value.toString());
+		}
+
+		return daoFactory.getSpecimenDao().getCprAndVisitIds(key, value);
 	}
 
 	private List<Specimen> getSpecimens(SpecimenListCriteria crit) {

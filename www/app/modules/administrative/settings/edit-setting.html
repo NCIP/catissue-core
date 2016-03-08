@@ -40,6 +40,8 @@
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
           ng-if="setting.type == 'STRING'" required></input>
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
+          ng-maxlength="1" ng-if="setting.type == 'CHAR'" required></input>
+        <input type="text" name="value" class="form-control" ng-model="setting.value" 
           ng-pattern="/^[0-9]*$/" ng-if="setting.type == 'INT'" required></input>
         <div ng-if="setting.type == 'BOOLEAN'">
           <div class="btn-group">

@@ -58,8 +58,12 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	public void delete(StorageContainerPosition position) {
 		sessionFactory.getCurrentSession().delete(position);		
 	}
-	
-	
+
+	@Override
+	public Map<String, Object> getContainerIds(String key, Object value) {
+		return getObjectIds("containerId", key, value);
+	}
+
 	private class ListQueryBuilder {
 		private StorageContainerListCriteria crit;
 		

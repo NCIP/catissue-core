@@ -5,4 +5,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDeta
 
 public interface CollectionProtocolFactory {
 	public CollectionProtocol createCollectionProtocol(CollectionProtocolDetail cp);
+	
+	public CollectionProtocol createCpCopy(CollectionProtocolDetail input, CollectionProtocol existing);
 }

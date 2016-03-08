@@ -23,8 +23,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.events.MergedObject;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -34,6 +32,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
+import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
@@ -293,7 +293,7 @@ public class ImportServiceImpl implements ImportService {
 			ObjectImporter<Object, Object> importer = importerFactory.getImporter(job.getName());
 			
 			ObjectReader objReader = null;
-			CSVWriter csvWriter = null;
+			CsvWriter csvWriter = null;
 			long totalRecords = 0, failedRecords = 0;
 			try {
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
@@ -323,7 +323,7 @@ public class ImportServiceImpl implements ImportService {
 			}
 		}
 		
-		private void processSingleRowPerObj(ObjectReader objReader, CSVWriter csvWriter, ObjectImporter<Object, Object> importer) {
+		private void processSingleRowPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {
 			long totalRecords = 0, failedRecords = 0;
 
 			while (true) {
@@ -360,7 +360,7 @@ public class ImportServiceImpl implements ImportService {
 			saveJob(totalRecords, failedRecords, Status.COMPLETED);
 		}
 		
-		private void processMultipleRowsPerObj(ObjectReader objReader, CSVWriter csvWriter, ObjectImporter<Object, Object> importer) {
+		private void processMultipleRowsPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {
 			long totalRecords = 0, failedRecords = 0;
 			LinkedEhCacheMap<String, MergedObject> objectsMap =  new LinkedEhCacheMap<String, MergedObject>();
 			
@@ -482,12 +482,12 @@ public class ImportServiceImpl implements ImportService {
 			});
 		}
 
-		private CSVWriter getOutputCsvWriter(ImportJob job) 
+		private CsvWriter getOutputCsvWriter(ImportJob job) 
 		throws IOException {
-			return new CSVWriter(new FileWriter(getJobOutputFilePath(job.getId())));
+			return CsvFileWriter.createCsvFileWriter(new FileWriter(getJobOutputFilePath(job.getId())));
 		}
 				
-		private void closeQueitly(CSVWriter writer) {
+		private void closeQueitly(CsvWriter writer) {
 			if (writer != null) {
 				try {
 					writer.close();

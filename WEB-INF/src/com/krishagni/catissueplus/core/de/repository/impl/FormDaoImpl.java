@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.de.repository.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
@@ -45,8 +47,13 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FormSummary> getAllFormsSummary() {
-		Query query = sessionFactory.getCurrentSession().getNamedQuery(GET_ALL_FORMS);
+	public List<FormSummary> getAllFormsSummary(FormListCriteria crit) {
+		Query query = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_ALL_FORMS)
+				.setString("caption", "%" + crit.query() + "%")
+				.setFirstResult(crit.startAt())
+				.setMaxResults(crit.maxResults());
+
 		return getForms(query.list());
 	}
 	
@@ -475,8 +482,15 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			.setLong("formId", formId)
 			.executeUpdate(); 
 	}
-	
-		
+
+	@Override
+	public void deleteRecords(Long formCtxtId, Collection<Long> recordIds) {
+		getCurrentSession().createSQLQuery(SOFT_DELETE_RECS_SQL)
+			.setLong("formCtxtId", formCtxtId)
+			.setParameterList("recordIds", recordIds)
+			.executeUpdate();
+	}
+
 	@SuppressWarnings("unchecked")
 	private ObjectCpDetail getObjectIdForParticipant(Map<String, Object> dataHookingInformation) {
 		ObjectCpDetail objCp = new ObjectCpDetail();
@@ -682,7 +696,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_RECORD_ENTRIES = RE_FQN + ".getRecordEntries";
 
 	private static final String GET_REC_BY_FORM_N_REC_ID = RE_FQN + ".getRecordEntryByFormAndRecId";
-	
+
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
@@ -690,7 +704,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_RECORD_CNT = FQN + ".getRecordCount"; 
 	
 	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";
-	
+
 	private static final String GET_RECS = FQN + ".getRecords";
 	
 	private static final String GET_DEPENDENT_ENTITIES = FQN + ".getDependentEntities";
@@ -717,5 +731,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String SOFT_DELETE_FORM_CONTEXTS_SQL = 
 			"update catissue_form_context set deleted_on = :deletedOn where container_id = :formId";
+
+	private static final String SOFT_DELETE_RECS_SQL =
+			"update catissue_form_record_entry " +
+			"set " +
+			"  activity_status = 'CLOSED' " +
+			"where " +
+			"  form_ctxt_id = :formCtxtId and record_id in (:recordIds)";
 
 }

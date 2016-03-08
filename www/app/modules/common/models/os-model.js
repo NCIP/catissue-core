@@ -119,6 +119,38 @@ angular.module('os.common.models', [])
         })
       }
 
+      Model.prototype.attrValue = function(attrName) {
+        var nameParts = attrName.split(".");
+
+        var value = this;
+        for (var i = 0; i < nameParts.length; ++i) {
+          if (value === undefined || value === null || typeof value != 'object') {
+            return undefined;
+          }
+
+          if (value instanceof Array) {
+            var mv = undefined;
+            if (i == nameParts.length - 1) {
+              mv = [];
+              angular.forEach(value, function(val) {
+                if (val instanceof Array) {
+                  mv = mv.concat(val);
+                } else {
+                  mv.push(val[nameParts[i]]);
+                }
+              });
+            }
+
+            value = mv;
+            break;
+          }
+
+          value = value[nameParts[i]];
+        }
+
+        return value;
+      }
+
       Model.getExtensionCtxt = function(params) {
         return $http.get(url + "extension-form", {params: params}).then(function(result) { return result.data; });
       }

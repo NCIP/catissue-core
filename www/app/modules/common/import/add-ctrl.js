@@ -30,6 +30,7 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       if (importDetail.objectType == 'extensions') {
         Form.listForms(importDetail.entityType).then(
           function(forms) {
+            forms = forms.filter(function(form) { return !form.sysForm; });
             $scope.extn.formsList = forms;
             if (forms.length > 0) {
               $scope.extn.selectedForm = forms[0];

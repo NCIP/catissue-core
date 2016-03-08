@@ -1,0 +1,141 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>masterSpecimen</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.MasterSpecimenDetail</name>
+    
+    <field>
+      <caption>#getMessage("participant_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("participant_ppid")</caption>
+      <attribute>ppid</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_collection_site")</caption>
+      <attribute>collectionSite</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_label")</caption>
+      <attribute>label</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_class")</caption>
+      <attribute>specimenClass</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_type")</caption>
+      <attribute>type</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_lineage")</caption>
+      <attribute>lineage</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_parent_specimen_label")</caption>
+      <attribute>parentLabel</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_anatomic_site")</caption>
+      <attribute>anatomicSite</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_laterality")</caption>
+      <attribute>laterality</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_pathological_status")</caption>
+      <attribute>pathology</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_quantity")</caption>
+      <attribute>initialQty</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_concentration")</caption>
+      <attribute>concentration</attribute>
+    </field>
+
+    <field>
+      <type>datetime</type>
+      <caption>#getMessage("specimen_created_on")</caption>
+      <attribute>createdOn</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_location_container")</caption>
+      <attribute>container</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_location_row")</caption>
+      <attribute>positionY</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_location_column")</caption>
+      <attribute>positionX</attribute>
+    </field>
+
+    <field>
+      <type>datetime</type>
+      <caption>#getMessage("specimen_collection_date")</caption>
+      <attribute>collectionDate</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_collection_procedure")</caption>
+      <attribute>collectionProcedure</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_collection_container")</caption>
+      <attribute>collectionContainer</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_collector")</caption>
+      <attribute>collector</attribute>
+    </field>
+
+    <field>
+      <type>datetime</type>
+      <caption>#getMessage("specimen_received_date")</caption>
+      <attribute>receivedDate</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_received_quality")</caption>
+      <attribute>receivedQuality</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_receiver")</caption>
+      <attribute>receiver</attribute>
+    </field>
+
+    <record type="extensions" entityType="SpecimenExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
+  </record>
+</object-schema>
