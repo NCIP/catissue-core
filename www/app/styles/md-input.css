@@ -99,7 +99,7 @@
 .os-table.bulk-edit .os-md-input .ui-select-match,
 .os-table.bulk-edit .os-md-input .ui-select-search {
   margin-top: 0px;
-  height: 26px!important;
+  /*height: 26px!important;*/
   background: transparent;
 }
 
@@ -137,3 +137,8 @@
   border: none;
   background-color: inherit;
 }
+
+.bulk-edit .os-md-input .os-date-picker {
+  margin-top: 0px!important;
+}
+

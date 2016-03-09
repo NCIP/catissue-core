@@ -109,6 +109,8 @@
     "match": "This field does not match with above field",
     "dist_qty_gt_avail_qty": "Distribution quantity greater than available",
     "dist_qty_le_zero": "Distribution quantity cannot be less than or equals zero",
+    "ret_qty_gt_dist_qty": "Return quantity greater than distributed",
+    "ret_qty_le_zero": "Return quantity cannot be less than or equals zero",
     "nan": "Not a valid number",
     "dup_item": "Duplicate value"
   },
@@ -1425,9 +1427,12 @@
     "filters": "Filters",
 
     "return_specimens": "Return Specimens",
-    "no_specimens_to_return": "Please select at least one specimen to return",
+    "get_dist_details": "Get Details",
+    "paste_return_specimen_labels": "Paste or scan labels of specimens to be returned",
     "specimens_returned": "{{count}} specimens returned successfully",
-    "specimen_already_returned": "The specimen {{label}} is already returned",
+    "return_qty": "Return Quantity",
+    "user": "User",
+    "comments": "Comments",
    
     "menu": {
       "overview": "Overview"
@@ -1458,7 +1463,7 @@
       "distribute": "Distribute",
       "save_draft": "Save Draft",
       "download_report": "Download Report",
-      "return_specimen": "Return",
+      "return_specimens": "Return Specimens",
       "copy_first_to_all": "Copy First To All"
     },
 

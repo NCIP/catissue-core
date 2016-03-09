@@ -6,45 +6,136 @@
           <span translate="orders.list">Distribution Orders</span>
         </a>
       </li>
-      <li>
-        <a ui-sref="order-detail.overview({orderId: order.id})">
-          <span>{{order.name}}</span>
-        </a>
-      </li>
     </ul>
+
     <h3>
-      <span translate="orders.return_specimens">Return Specimens</span>
+      <span translate="orders.return_specimens">
+        Return Specimens
+      </span>
     </h3>
   </div>
 
   <div class="container">
-    <form name="returnForm" class="form-horizontal" os-form-validator="returnForm" novalidate>
-      <div class="form-group">
-        <div clas="col-xs-9">
-          <button class="btn os-btn-text" ng-click="copyFirstToAll()">
+    <div class="col-xs-12">
+      <form name="returnForm" class="form-horizontal" os-form-validator="returnForm" novalidate>
+        <div class="form-group">
+          <div class="input-group" os-textarea-input-group>
+            <textarea class="form-control" style="resize: none;" ng-model="input.labels" rows="2"
+              placeholder="{{'orders.paste_return_specimen_labels' | translate}}" os-enable-tab>
+            </textarea>
+            <span class="input-group-btn">
+              <button class="btn btn-primary" ng-click="getSpecimenDetails()">
+                <span translate="orders.get_dist_details">Get Details</span>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="input.orderedLabels.length > 0">
+          <a ng-click="copyFirstToAll()">
             <span translate="orders.buttons.copy_first_to_all">Copy First To All</span>
-          </button>
+          </a>
         </div>
-      </div>
 
-      <div class="form-group">
-        <div class="col-xs-12">
-          <div os-de-table opts="returnOpts" ctrl="tableCtrl"></div>
+        <div class="form-group" ng-if="input.orderedLabels.length > 0">
+          <table class="os-table bulk-edit os-border os-table-muted-hdr">
+            <thead class="os-table-head">
+              <tr class="row">
+                <th class="col os-col-10">
+                  <span translate="orders.spec.label">Label</span>
+                </th>
+                <th class="col os-col-15">
+                  <span translate="orders.title">Order</span>
+                </th>
+                <th class="col os-col-10">
+                  <span translate="orders.return_qty">Return Quantity</span>
+                </th>
+                <th class="col os-col-25">
+                  <span translate="orders.spec.location">Location</span>
+                </th>
+                <th class="col os-col-15">
+                  <span translate="orders.user">User</span>
+                </th>
+                <th class="col os-col-12">
+                  <span translate="orders.date">Date</span>
+                </th>
+                <th class="col os-col-10">
+                  <span translate="orders.comments">Comments</span>
+                </th>
+                <th class="col os-col-2">
+                  <span>&nbsp;</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="os-table-body">
+              <tr class="row" ng-repeat="label in input.orderedLabels"
+                ng-init="item = input.returnItems[label]" ng-form="sform">
+                <td class="col">
+                  <a ui-sref="specimen({specimenId: item.specimen.id})">
+                    <span>{{item.specimen.label}}</span>
+                  </a>
+                </td>
+                <td class="col">
+                  <os-select name="orderName" os-md-input ng-model="item.orderName" list="item.orders"
+                    display-prop="name" select-prop="name" on-select="orderSelected(item)" required>
+                  </os-select>
+                  <div os-field-error field="sform.orderName"></div>
+                </td>
+                <td class="col">
+                  <div class="os-input-addon-grp">
+                    <input name="qty" os-md-input ng-model="item.quantity" required
+                      os-ensure-range="[
+                        {tgt: item.distQty, cmp: 'le', errorKey: 'retQtyGtDistQty'},
+                        {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
+                      ]"
+                      ng-model-options="{allowInvalid: 'true'}">
+                    <div class="os-input-addon-right os-md-input-addon">
+                      <os-specimen-unit specimen-class="item.specimen.specimenClass" type="item.specimen.type">
+                      </os-specimen-unit>
+                    </div>
+                  </div>
+                  <div os-field-error field="sform.qty"></div>
+                </td>
+                <td class="col">
+                  <os-storage-position os-md-input entity="item.specimen" cp-id="item.specimen.cpId" 
+                    container-list-cache="containerListCache" hide-placeholder>
+                  </os-storage-position>
+                </td>
+                <td class="col">
+                  <div class="os-md-input">
+                    <os-users ng-model="item.user" required></os-users>
+                  </div>
+                </td>
+                <td class="col">
+                  <os-date-picker name="returnDate" date="item.time" md-type="true">
+                  </os-date-picker>
+                </td>
+                <td class="col">
+                  <input os-md-input ng-model="item.comments">
+                </td>
+                <td class="col">
+                  <a class="btn" ng-click="removeSpecimen(label)">
+                    <span class="fa fa-times-circle"></span>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <div class="os-divider"></div>
+        <div class="os-divider"></div>
 
-      <div class="form-group right-btns">
-        <div class="col-xs-offset-3 col-xs-9">
-          <button class="btn os-btn-text" ng-click="back()">
-            <span translate="common.buttons.cancel">Cancel</span>
-          </button>
-          <button class="btn btn-primary" os-form-submit="returnSpecimens()">
-            <span translate="common.buttons.save">Save</span>
-          </button>
+        <div class="form-group right-btns">
+          <div class="col-xs-offset-3 col-xs-9">
+            <button class="btn os-btn-text" ng-click="back()">
+              <span translate="common.buttons.cancel">Cancel</span>
+            </button>
+            <button class="btn btn-primary" os-form-submit="returnSpecimens()" ng-disabled="input.orderedLabels.length == 0">
+              <span translate="common.buttons.submit">Submit</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>

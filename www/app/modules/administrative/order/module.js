@@ -58,15 +58,10 @@ angular.module('os.administrative.order',
         templateUrl: 'modules/administrative/order/overview.html',
         parent: 'order-detail'
       })
-      .state('return-specimens', {
-        url: '/orders/:orderId/return-specimens',
+      .state('order-return-specimens', {
+        url: '/return-specimens',
         templateUrl: 'modules/administrative/order/return-specimens.html',
-        controller: 'ReturnSpecimensCtrl',
-        resolve: {
-          order: function($stateParams, DistributionOrder) {
-            return DistributionOrder.getById($stateParams.orderId);
-          }
-        },
+        controller: 'OrderReturnSpecimensCtrl',
         parent: 'order-root'
       });
   });

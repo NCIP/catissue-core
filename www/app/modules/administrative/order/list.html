@@ -9,6 +9,10 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <button show-if-allowed="orderResource.updateOpts" class="default" ui-sref="order-return-specimens">
+        <span class="fa fa-undo"></span>
+        <span translate="orders.buttons.return_specimens">Return Specimens</span>
+      </button>
       <button class="default" os-right-drawer-toggle title="{{'orders.tooltip.search' | translate}}"
         ng-click="loadSearchPvs()">
         <span class="fa fa-search"></span>

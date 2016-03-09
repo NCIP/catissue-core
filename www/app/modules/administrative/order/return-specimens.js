@@ -1,99 +1,126 @@
 angular.module('os.administrative.order.returnspecimens', [])
-  .controller('ReturnSpecimensCtrl', function(
-    $scope, $state, $translate, order, SpecimensHolder, SpecimenEvent, DistributionOrder, Alerts) {
+  .controller('OrderReturnSpecimensCtrl', function(
+    $rootScope, $scope, $state, DistributionOrder, Util, Alerts) {
 
     function init() {
-      $scope.items = [];
-      $scope.returnEvent = {};
-      $scope.tableCtrl = {};
-      $scope.order = order;
+      $scope.containerListCache = {};
 
-      if (!angular.isArray(SpecimensHolder.getSpecimens())) {
-        $state.go('order-detail.overview', {orderId: order.id});
+      $scope.input = {
+        labels: '',
+        returnItems: {},
+        orderedLabels: []
+      }
+    }
+
+    function uiReturnItem(distItem) {
+      distItem.specimen.storageLocation = distItem.specimen.storageLocation || {};
+
+      return {
+        specimen: distItem.specimen,
+        orders: [{name: distItem.orderName, quantity: distItem.quantity}],
+        orderName: distItem.orderName,
+        quantity: distItem.quantity,
+        distQty: distItem.quantity,
+        user: $rootScope.currentUser,
+        time: new Date(),
+        comments: ''
+      }
+    }
+
+    $scope.getSpecimenDetails = function() {
+      var labels = Util.splitStr($scope.input.labels, /,|\t|\n/);
+      labels = labels.filter(
+        function(label) {
+          return !$scope.input.returnItems[label.toLowerCase()];
+        }
+      );
+
+      if (labels.length == 0) {
         return;
       }
 
-      $scope.items = SpecimensHolder.getSpecimens();
-      SpecimensHolder.setSpecimens(null);
-      loadReturnEvent();
-    }
-
-    function loadReturnEvent() {
-      SpecimenEvent.getEvents().then(
-        function(events) {
-          $scope.returnEvent = events.filter(
-            function(event) {
-              return event.name == 'SpecimenReturnEvent'; 
+      var returnItems = $scope.input.returnItems;
+      DistributionOrder.getDistributionDetails(labels).then(
+        function(distItems) {
+          angular.forEach(distItems,
+            function(distItem) {
+              var key = distItem.specimen.label.toLowerCase();
+              var returnItem = returnItems[key];
+              if (!returnItem) {
+                returnItems[key] = uiReturnItem(distItem);
+                $scope.input.orderedLabels.push(key);
+              } else {
+                returnItem.orders.push({name: distItem.orderName, quantity: distItem.quantity});
+                returnItem.distQty = returnItem.orderName = returnItem.quantity = undefined;
+              }
             }
-          )[0];
-
-          initOpts();
+          );
         }
       );
     }
 
-    function getSpecimenOpts(items) {
-      return items.map(
-        function(item) {
-          return {
-            key: {
-              id: item.id,
-              objectId: item.specimen.id,
-              label: item.specimen.label,
-            },
-            appColumnsData: {},
-            records: []
-          };
+    $scope.orderSelected = function(retItem) {
+      var selectedOrder = undefined;
+      for (var i = 0; i < retItem.orders.length; ++i) {
+        if (retItem.orders[i].name == retItem.orderName) {
+          retItem.distQty = retItem.quantity = retItem.orders[i].quantity;
+          break;
         }
-      );
+      }
     }
 
-    function initOpts() {
-      var opts = {
-        formId            : $scope.returnEvent.formId,
-        appColumns        : [],
-        tableData         : getSpecimenOpts($scope.items),
-        idColumnLabel     : $translate.instant('specimens.title'),
-        mode              : 'add',
-        allowRowSelection : false,
-        onValidationError : onValidationError
-      };
+    $scope.removeSpecimen = function(label) {
+      var idx = $scope.input.orderedLabels.indexOf(label);
+      if (idx == -1) {
+        return;
+      }
 
-      $scope.returnOpts = opts;
-    }
-
-    function onValidationError() {
-      Alerts.error('common.form_validation_error');
+      delete $scope.input.returnItems[label];
+      $scope.input.orderedLabels.splice(idx, 1);
     }
 
     $scope.copyFirstToAll = function() {
-      $scope.tableCtrl.ctrl.copyFirstToAll();
-    }
-
-    $scope.returnSpecimens = function() {
-      var tableCtrl = $scope.tableCtrl.ctrl;
-      var data = tableCtrl.getData();
-      if (!data) {
+      if ($scope.input.orderedLabels.length < 1) {
         return;
       }
 
-      var returnedSpecimens = data.map(
-        function(d) {
-          return {
-            itemId: d.appData.id,
-            quantity: parseFloat(d.quantity),
-            location: {containerId: d.container},
-            userId: parseInt(d.user),
-            time: parseInt(d.time),
-            comments: d.comments
-          };
-        }
-      )
+      var key = $scope.input.orderedLabels[0].toLowerCase();
+      var srcItem = $scope.input.returnItems[key];
+      angular.forEach($scope.input.returnItems,
+        function(tgtItem, idx) {
+          if (idx == 0) {
+            return;
+          }
 
-      $scope.order.returnSpecimens(returnedSpecimens).then(
-        function() {
-          $scope.back();
-          Alerts.success('orders.specimens_returned', {count: returnedSpecimens.length});
+          tgtItem.specimen.storageLocation = {name: srcItem.specimen.storageLocation.name};
+          tgtItem.user = srcItem.user;
+          tgtItem.time = srcItem.time;
+          tgtItem.comments = srcItem.comments;
+        }
+      );
+    }
+
+    $scope.returnSpecimens = function() {
+      var returnItems = [];
+      angular.forEach($scope.input.orderedLabels,
+        function(label) {
+          var retItem = $scope.input.returnItems[label];
+          returnItems.push({
+            orderName: retItem.orderName,
+            specimenLabel: retItem.specimen.label,
+            quantity: retItem.quantity,
+            location: retItem.specimen.storageLocation,
+            user: retItem.user,
+            time: retItem.time,
+            comments: retItem.comments
+          });
+        }
+      );
+
+      DistributionOrder.returnSpecimens(returnItems).then(
+        function(spmns) {
+          Alerts.success("orders.specimens_returned", {count: spmns.length});
+          $state.go('order-list');
         }
       );
     }
