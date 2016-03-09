@@ -85,6 +85,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 			fields.add(getField("specimenLabel", "Specimen Label"));
 		}
 		
+		fields.add(getField("activityStatus", "Activity Status"));
 		record.setFields(fields);
 		
 		Record formValueMap = getFormRecord(form);
