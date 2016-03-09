@@ -20,9 +20,11 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenReturnEvent;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -787,6 +789,23 @@ public class Specimen extends BaseExtensionEntity {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.PARENT_CREATED_ON_GT_CHILDREN);
 			}
 		}*/
+	}
+
+	public void returnSpecimen(DistributionOrderItem item) {
+		if (isClosed()) {
+			activate();
+			setAvailableQuantity(item.getReturnedQuantity());
+		} else {
+			setAvailableQuantity(getAvailableQuantity().add(item.getReturnedQuantity()));
+		}
+
+		StorageContainer container = item.getReturningContainer();
+		if (container != null) {
+			StorageContainerPosition position = container.createPosition(item.getReturningColumn(), item.getReturningRow());
+			transferTo(position, item.getReturnDate());
+		}
+
+		SpecimenReturnEvent.createForDistributionOrderItem(item).saveRecordEntry();
 	}
 	
 	private void addDisposalEvent(User user, Date time, String reason) {

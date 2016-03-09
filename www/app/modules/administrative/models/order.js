@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.models.order', ['os.common.models'])
-  .factory('DistributionOrder', function(osModel, $http) {
+  .factory('DistributionOrder', function(osModel, $http, Specimen) {
     var DistributionOrder = osModel('distribution-orders');
 
     DistributionOrder.prototype.getType = function() {
@@ -9,13 +9,6 @@ angular.module('os.administrative.models.order', ['os.common.models'])
 
     DistributionOrder.prototype.getDisplayName = function() {
       return this.name;
-    }
-
-    DistributionOrder.getItemStatusPvs = function() {
-      return [
-        'DISTRIBUTED',
-        'DISTRIBUTED_AND_CLOSED'
-      ];
     }
 
     DistributionOrder.prototype.$saveProps = function() {
@@ -35,6 +28,34 @@ angular.module('os.administrative.models.order', ['os.common.models'])
         }
       );
     }
-    
+
+    DistributionOrder.getItemStatusPvs = function() {
+      return [
+        'DISTRIBUTED',
+        'DISTRIBUTED_AND_CLOSED'
+      ];
+    }
+
+    DistributionOrder.getDistributionDetails = function(labels) {
+      return $http.get(DistributionOrder.url() + 'specimens', {params: {label: labels}}).then(
+        function(resp) {
+          return resp.data.map(
+            function(item) {
+              item.specimen = new Specimen(item.specimen);
+              return item;
+            }
+          );
+        }
+      );
+    }
+
+    DistributionOrder.returnSpecimens = function(returnedSpmns) {
+      return $http.post(DistributionOrder.url() + 'return-specimens', returnedSpmns).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return DistributionOrder;
   });

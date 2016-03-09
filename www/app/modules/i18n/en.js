@@ -109,6 +109,8 @@
     "match": "This field does not match with above field",
     "dist_qty_gt_avail_qty": "Distribution quantity greater than available",
     "dist_qty_le_zero": "Distribution quantity cannot be less than or equals zero",
+    "ret_qty_gt_dist_qty": "Return quantity greater than distributed",
+    "ret_qty_le_zero": "Return quantity cannot be less than or equals zero",
     "nan": "Not a valid number",
     "dup_item": "Duplicate value"
   },
@@ -575,7 +577,8 @@
       "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
       "details": "Event Details",
       "copy_first_to_all": "Copy First To All",
-      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them"
+      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
+      "events_saved": "Event saved successfully"
     }
   },
 
@@ -1387,11 +1390,8 @@
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By",
     "add_event": "Add Event",
-    "visit": "Visit",
-    "ppid": "PPID",
     "location": "Storage Location",
-    "no_specimens_to_add_event": "Please select at least one specimen to add event",
-    "events_saved": "Event saved successfully"
+    "no_specimens_to_add_event": "Please select at least one specimen to add event"
   },
 
   "orders": {
@@ -1425,6 +1425,14 @@
     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
 
     "filters": "Filters",
+
+    "return_specimens": "Return Specimens",
+    "get_dist_details": "Get Details",
+    "paste_return_specimen_labels": "Paste or scan labels of specimens to be returned",
+    "specimens_returned": "{{count}} specimens returned successfully",
+    "return_qty": "Return Quantity",
+    "user": "User",
+    "comments": "Comments",
    
     "menu": {
       "overview": "Overview"
@@ -1447,13 +1455,16 @@
 
     "item_statuses": {
       "DISTRIBUTED": "Distribute",
-      "DISTRIBUTED_AND_CLOSED": "Distribute and Close"
+      "DISTRIBUTED_AND_CLOSED": "Distribute and Close",
+      "RETURNED": "Returned"
     },
 
     "buttons": {
       "distribute": "Distribute",
       "save_draft": "Save Draft",
-      "download_report": "Download Report"
+      "download_report": "Download Report",
+      "return_specimens": "Return Specimens",
+      "copy_first_to_all": "Copy First To All"
     },
 
     "tooltip": {

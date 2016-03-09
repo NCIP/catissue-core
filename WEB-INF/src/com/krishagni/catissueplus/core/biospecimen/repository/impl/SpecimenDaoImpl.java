@@ -1,11 +1,14 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
@@ -172,13 +175,25 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Long> getDistributedSpecimens(List<Long> specimenIds) {
-		return (List<Long>) getSessionFactory().getCurrentSession()
-			.getNamedQuery(GET_DISTRIBUTED_SPECIMENS)
+	public Map<Long, String> getDistributionStatus(List<Long> specimenIds) {
+		List<Object[]> rows = getSessionFactory().getCurrentSession()
+			.getNamedQuery(GET_LATEST_DISTRIBUTION_AND_RETURN_DATES)
 			.setParameterList("specimenIds", specimenIds)
 			.list();
+
+		return rows.stream().collect(
+			Collectors.toMap(
+				row -> (Long)row[0],
+				row -> getDistributionStatus((Date)row[1], (Date)row[2])
+			));
 	}
-	
+
+	@Override
+	public String getDistributionStatus(Long specimenId) {
+		Map<Long, String> statuses = getDistributionStatus(Collections.singletonList(specimenId));
+		return statuses.get(specimenId);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Visit> getSpecimenVisits(SpecimenListCriteria crit) {
@@ -304,6 +319,10 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 
+	private String getDistributionStatus(Date execDate, Date returnDate) {
+		return (returnDate == null || execDate.after(returnDate)) ? "Distributed" : "Returned";
+	}
+
 	private static final String FQN = Specimen.class.getName();
 	
 	private static final String GET_BY_LABEL = FQN + ".getByLabel";
@@ -318,5 +337,5 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 	
-	private static final String GET_DISTRIBUTED_SPECIMENS = FQN + ".getDistributedSpecimens";
+	private static final String GET_LATEST_DISTRIBUTION_AND_RETURN_DATES = FQN + ".getLatestDistributionAndReturnDates";
 }

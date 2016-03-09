@@ -874,7 +874,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   top: 3px;
 }
 
-.os-col-5,.os-col-10,.os-col-15,.os-col-20,.os-col-25,
+.os-col-2,.os-col-5,.os-col-10,.os-col-12,.os-col-15,.os-col-20,.os-col-25,
 .os-col-30,.os-col-35,.os-col-40,.os-col-45,.os-col-50,
 .os-col-55,.os-col-60,.os-col-65,.os-col-70,.os-col-75,
 .os-col-80,.os-col-85,.os-col-90,.os-col-95,.os-col-100 {
@@ -883,11 +883,20 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding-right: 15px;
 }
 
+.os-col-2 {
+  width: 2%;
+}
+
 .os-col-5 {
   width: 5%;
 }
+
 .os-col-10 {
   width: 10%;
+}
+
+.os-col-12 {
+  width: 12%;
 }
 
 .os-col-15 {

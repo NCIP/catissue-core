@@ -86,14 +86,13 @@ angular.module('os.biospecimen.specimen.bulkaddevent', ['os.biospecimen.models']
       SpecimenEvent.save($scope.selectedEvent.formId, data).then(
         function(savedData) {
           $scope.back();
-          Alerts.success("specimen_list.events_saved");
+          Alerts.success("specimens.bulk_events.events_saved");
         }
       );
     }
 
     $scope.copyFirstToAll = function () {
-      var tableCtrl = $scope.eventTableCtrl.ctrl;
-      tableCtrl.copyFirstToAll();
+      $scope.eventTableCtrl.ctrl.copyFirstToAll();
     }
     
     init();

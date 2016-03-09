@@ -635,18 +635,15 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return;
 		}
 		
-		List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(specimenIds);
-		setDistributedStatus(specimens, distributedSpecimenIds);
+		Map<Long, String> distStatus = daoFactory.getSpecimenDao().getDistributionStatus(specimenIds);
+		setDistributedStatus(specimens, distStatus);
 	}
 
-	private void setDistributedStatus(List<SpecimenDetail> specimens, List<Long> distributedSpecimenIds) {
+	private void setDistributedStatus(List<SpecimenDetail> specimens, Map<Long, String> distStatus) {
 		for (SpecimenDetail detail : specimens) {
-			if (distributedSpecimenIds.contains(detail.getId())) {
-				detail.setDistributed(true);
-			}
-
+			detail.setDistributionStatus(distStatus.get(detail.getId()));
 			if (CollectionUtils.isNotEmpty(detail.getChildren())) {
-				setDistributedStatus(detail.getChildren(), distributedSpecimenIds);
+				setDistributedStatus(detail.getChildren(), distStatus);
 			}
 		}
 	}
