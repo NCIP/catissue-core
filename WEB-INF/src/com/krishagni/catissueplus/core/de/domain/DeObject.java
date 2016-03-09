@@ -30,6 +30,7 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
+import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
 
@@ -214,6 +215,8 @@ public abstract class DeObject {
 	public abstract Long getCpId();
 	
 	public Map<String, Object> getAttrValues() {
+		loadRecordIfNotLoaded();
+		
 		Map<String, Object> vals = new HashMap<String, Object>();
 		for (Attr attr: attrs) {
 			if (isUseUdn()) {
@@ -470,6 +473,8 @@ public abstract class DeObject {
 			Object value = cv.getValue();
 			if (value != null && value.getClass().isArray()) {
 				value = Arrays.asList((String[])value);
+			} else if (value instanceof FileControlValue) {
+				value = ((FileControlValue) value).toValueMap();
 			}
 			attr.setValue(value);
 			

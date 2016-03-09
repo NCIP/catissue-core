@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.domain.nui.FileUploadControl;
 import edu.common.dynamicextensions.domain.nui.MultiSelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 
@@ -106,7 +107,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		for (Control ctrl : form.getOrderedControlList()) {
 			if (ctrl instanceof SubFormControl) {
 				subRecords.add(getSubRecord((SubFormControl)ctrl, useUdn));
-			} else {
+			} else if (!(ctrl instanceof FileUploadControl)) {
 				fields.add(getField(ctrl, useUdn));
 			}
 		}
