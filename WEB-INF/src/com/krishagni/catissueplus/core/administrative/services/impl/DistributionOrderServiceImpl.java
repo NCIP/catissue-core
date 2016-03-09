@@ -260,7 +260,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 			}
 
-			List<String> labels = specimens.stream().map(specimen -> specimen.getLabel()).collect(Collectors.toList());
+			List<String> labels = specimens.stream().map(Specimen::getLabel).collect(Collectors.toList());
 			List<DistributionOrderItem> items = daoFactory.getDistributionOrderDao().getDistributedOrderItems(labels);
 			Set<DistributionOrder> accessAllowed = new HashSet<>();
 			for (DistributionOrderItem item : items) {

@@ -19,6 +19,4 @@ public interface DistributionOrderDao extends Dao<DistributionOrder> {
 	public List<DistributionOrderItem> getDistributedOrderItems(List<String> specimenLabels);
 
 	public Map<String, Object> getOrderIds(String key, Object value);
-
-
 }
