@@ -17,10 +17,14 @@ public class DpRequirementDetail {
 	private String anatomicSite;
 	
 	private String pathologyStatus;
+
+	private String clinicalDiagnosis;
 	
 	private Long specimenCount;
 	
 	private BigDecimal quantity;
+
+	private Long distributedCnt;
 	
 	private BigDecimal distributedQty;
 	
@@ -68,6 +72,14 @@ public class DpRequirementDetail {
 		this.pathologyStatus = pathologyStatus;
 	}
 
+	public String getClinicalDiagnosis() {
+		return clinicalDiagnosis;
+	}
+
+	public void setClinicalDiagnosis(String clinicalDiagnosis) {
+		this.clinicalDiagnosis = clinicalDiagnosis;
+	}
+
 	public Long getSpecimenCount() {
 		return specimenCount;
 	}
@@ -83,7 +95,15 @@ public class DpRequirementDetail {
 	public void setQuantity(BigDecimal quantity) {
 		this.quantity = quantity;
 	}
-	
+
+	public Long getDistributedCnt() {
+		return distributedCnt;
+	}
+
+	public void setDistributedCnt(Long distributedCnt) {
+		this.distributedCnt = distributedCnt;
+	}
+
 	public BigDecimal getDistributedQty() {
 		return distributedQty;
 	}
@@ -116,6 +136,7 @@ public class DpRequirementDetail {
 		detail.setSpecimenType(dpr.getSpecimenType());
 		detail.setAnatomicSite(dpr.getAnatomicSite());
 		detail.setPathologyStatus(dpr.getPathologyStatus());
+		detail.setClinicalDiagnosis(dpr.getClinicalDiagnosis());
 		detail.setSpecimenCount(dpr.getSpecimenCount());
 		detail.setQuantity(dpr.getQuantity());
 		detail.setComments(dpr.getComments());

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog 
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
@@ -348,5 +348,32 @@
       end;
       //
     </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements specimen type optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="SPECIMEN_TYPE"
+      columnDataType="${text.type}(50)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements anatomic site optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="ANATOMIC_SITE"
+      columnDataType="${text.type}(150)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements pathology status optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="PATHOLOGY_STATUS"
+      columnDataType="${text.type}(50)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Adding clinical diagnosis as criteria for DP requirement">
+    <addColumn tableName="OS_DP_REQUIREMENTS">
+      <column name="CLINICAL_DAIGNOSIS" type="${text.type}(255)"></column>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

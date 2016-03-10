@@ -215,7 +215,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		props.put("specimenType", "specimen.specimenType");
 		props.put("anatomicSite", "specimen.tissueSite");
 		props.put("pathologyStatus", "specimen.pathologicalStatus");
-		
+
 		return props;
 	}
 	

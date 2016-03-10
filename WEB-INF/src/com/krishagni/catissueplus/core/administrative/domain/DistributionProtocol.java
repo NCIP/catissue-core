@@ -201,9 +201,9 @@ public class DistributionProtocol extends BaseEntity {
 		return sites;
 	}
 	
-	public boolean hasRequirement(String specimenType, String anatomicSite, String pathologyStatus) {
+	public boolean hasRequirement(String specimenType, String anatomicSite, String pathologyStatus, String clinicalDiagnosis) {
 		for (DpRequirement req : getRequirements()) {
-			if (req.equalsSpecimenGroup(specimenType, anatomicSite, pathologyStatus)) {
+			if (req.equalsSpecimenGroup(specimenType, anatomicSite, pathologyStatus, clinicalDiagnosis)) {
 				return true;
 			}
 		}

@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSt
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
+import com.krishagni.catissueplus.core.administrative.events.DprStat;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.administrative.services.DistributionProtocolService;
@@ -323,10 +324,16 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			}
 			
 			List<DpRequirementDetail> reqDetails = DpRequirementDetail.from(dp.getRequirements());
-			Map<Long, BigDecimal> distributedQty = getDprDao().getDistributedQtyByDp(dpId);
+			Map<Long, DprStat> distributionStat = getDprDao().getDistributionStatByDp(dpId);
 			for (DpRequirementDetail reqDetail : reqDetails) {
-				BigDecimal qty = distributedQty.get(reqDetail.getId());
-				reqDetail.setDistributedQty(qty == null ? BigDecimal.ZERO : qty);
+				DprStat stat = distributionStat.get(reqDetail.getId());
+				if (stat != null) {
+					reqDetail.setDistributedCnt(stat.getDistributedCnt());
+					reqDetail.setDistributedQty(stat.getDistributedQty());
+				} else {
+					reqDetail.setDistributedCnt(new Long(0));
+					reqDetail.setDistributedQty(BigDecimal.ZERO);
+				}
 			}
 			
 			return ResponseEvent.response(reqDetails);
@@ -364,6 +371,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			DpRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());	
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureSpecimenPropertyPresent(dpr, ose);
 			ensureUniqueReqConstraints(null, dpr, ose);
 			ose.checkAndThrow();
 
@@ -390,6 +398,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 			DpRequirement newDpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			ensureSpecimenPropertyPresent(newDpr, ose);
 			ensureUniqueReqConstraints(existing, newDpr, ose);
 			ose.checkAndThrow();
 
@@ -439,16 +448,21 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		return daoFactory.getDistributionProtocolDao().getDpIds(key, value);
 	}
 
+	private void ensureSpecimenPropertyPresent(DpRequirement dpr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(dpr.getSpecimenType()) && StringUtils.isBlank(dpr.getAnatomicSite()) &&
+			StringUtils.isBlank(dpr.getPathologyStatus()) && StringUtils.isBlank(dpr.getClinicalDiagnosis())) {
+			ose.addError(DpRequirementErrorCode.SPEC_PROPERTY_REQUIRED);
+		}
+	}
+
 	private void ensureUniqueReqConstraints(DpRequirement oldDpr, DpRequirement newDpr, OpenSpecimenException ose) {
 		if (oldDpr != null && oldDpr.equalsSpecimenGroup(newDpr)) {
 			return;
 		}
 		
 		DistributionProtocol dp = newDpr.getDistributionProtocol();
-		if (dp.hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus())) {
-			ose.addError(
-				DpRequirementErrorCode.ALREADY_EXISTS, 
-				newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus());
+		if (dp.hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus(), newDpr.getClinicalDiagnosis())) {
+			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS);
 		}
 	}
 	

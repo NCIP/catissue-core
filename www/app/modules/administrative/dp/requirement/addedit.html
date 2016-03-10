@@ -3,33 +3,39 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_type">Specimen Type</label>
       <div class="col-xs-6">
-        <os-select name="type" ng-model="dpr.specimenType" list="specimenTypes"
-          required placeholder="{{'dp.distribution_order.specimen_type' | translate}}">
+        <os-select ng-model="dpr.specimenType" list="specimenTypes"
+          placeholder="{{'dp.distribution_order.specimen_type' | translate}}">
         </os-select>
-        <div os-field-error field="dprForm.type"></div>
       </div>
     </div>
      
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.anatomic_site">Anatomic Site</label>
       <div class="col-xs-6">
-        <os-pvs name="anatomicSite" ng-model="dpr.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
-          required placeholder="{{'dp.distribution_order.anatomic_site' | translate}}">
+        <os-pvs ng-model="dpr.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
+          placeholder="{{'dp.distribution_order.anatomic_site' | translate}}">
         </os-pvs>
-        <div os-field-error field="dprForm.anatomicSite"></div>
       </div>
     </div>
     
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.pathology_status">Pathology Status</label>
       <div class="col-xs-6">
-        <os-select name="pathology" ng-model="dpr.pathologyStatus" list="pathologyStatuses"
-          required placeholder="{{'dp.distribution_order.pathology_status' | translate}}">
-        </os-select>
-        <div os-field-error field="dprForm.pathology"></div>
+        <os-pvs ng-model="dpr.pathologyStatus" attribute="pathology-status"
+          placeholder="{{'dp.distribution_order.pathology_status' | translate}}">
+        </os-pvs>
       </div>
     </div>
-     
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.clinical_diagnosis">Clinical Diagnosis</label>
+      <div class="col-xs-6">
+        <os-pvs ng-model="dpr.clinicalDiagnosis" attribute="clinical-diagnosis"
+          placeholder="{{'dp.distribution_order.clinical_diagnosis' | translate}}">
+        </os-pvs>
+      </div>
+    </div>
+    
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_cnt">Specimen Count</label>
       <div class="col-xs-6">

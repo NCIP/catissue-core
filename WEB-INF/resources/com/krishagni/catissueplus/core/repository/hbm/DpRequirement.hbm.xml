@@ -23,6 +23,8 @@
     <property name="anatomicSite" column="ANATOMIC_SITE" />
     
     <property name="pathologyStatus" column="PATHOLOGY_STATUS" />
+
+    <property name="clinicalDiagnosis" column="CLINICAL_DAIGNOSIS"/>
     
     <property name="specimenCount" column="SPECIMEN_COUNT" />
     
@@ -34,21 +36,23 @@
     
     <filter name="activeEntity" />
     
-    <query name="getDistributionQty">
+    <query name="getDistributionStat">
       select
-        dpr.id, sum(item.quantity)
+        dpr.id, count(spec.id), sum(item.quantity)
       from
         com.krishagni.catissueplus.core.administrative.domain.DpRequirement dpr
         join dpr.distributionProtocol dp
         join dp.distributionOrders do
         join do.orderItems item
         join item.specimen spec
+        join spec.visit visit
       where
         dp.id = :dpId and
         do.status = 'EXECUTED' and
-        dpr.specimenType = spec.specimenType and
-        dpr.anatomicSite = spec.tissueSite and
-        dpr.pathologyStatus = spec.pathologicalStatus
+        (dpr.specimenType is null or dpr.specimenType = spec.specimenType) and
+        (dpr.anatomicSite is null or dpr.anatomicSite = spec.tissueSite) and
+        (dpr.pathologyStatus is null or dpr.pathologyStatus = spec.pathologicalStatus) and
+        (dpr.clinicalDiagnosis is null or dpr.clinicalDiagnosis = visit.clinicalDiagnosis)
       group by
         dpr.id
     </query>
