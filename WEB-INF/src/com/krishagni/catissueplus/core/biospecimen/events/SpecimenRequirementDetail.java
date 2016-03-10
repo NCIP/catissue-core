@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
@@ -61,6 +63,12 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 	private Long pooledSpecimenReqId;
 
 	private List<SpecimenRequirementDetail> specimensPool;
+	
+	private String cpShortTitle;
+	
+	private String eventLabel;
+	
+	private String parentSrCode;
 
 	public Long getId() {
 		return id;
@@ -252,6 +260,33 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 
 	public void setSpecimensPool(List<SpecimenRequirementDetail> specimensPool) {
 		this.specimensPool = specimensPool;
+	}
+	
+	@JsonIgnore
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
+	}
+
+	@JsonIgnore
+	public String getEventLabel() {
+		return eventLabel;
+	}
+
+	public void setEventLabel(String eventLabel) {
+		this.eventLabel = eventLabel;
+	}
+	
+	@JsonIgnore
+	public String getParentSrCode() {
+		return parentSrCode;
+	}
+
+	public void setParentSrCode(String parentSrCode) {
+		this.parentSrCode = parentSrCode;
 	}
 
 	@Override

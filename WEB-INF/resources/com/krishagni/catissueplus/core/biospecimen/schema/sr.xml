@@ -1,0 +1,155 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>sr</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail</name>
+
+    <field>
+      <caption>#getMessage("sr_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_label")</caption>
+      <attribute>eventLabel</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_parent_sr_code")</caption>
+      <attribute>parentSrCode</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_name")</caption>
+      <attribute>name</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_code")</caption>
+      <attribute>code</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_lineage")</caption>
+      <attribute>lineage</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_specimen_class")</caption>
+      <attribute>specimenClass</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_specimen_type")</caption>
+      <attribute>type</attribute>
+    </field>
+  
+    <field>
+      <caption>#getMessage("sr_anatomic_site")</caption>
+      <attribute>anatomicSite</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_laterality")</caption>
+      <attribute>laterality</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_pathology")</caption>
+      <attribute>pathology</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_storage_type")</caption>
+      <attribute>storageType</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_initial_qty")</caption>
+      <attribute>initialQty</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_concentration")</caption>
+      <attribute>concentration</attribute>
+    </field>
+    
+    <record>
+      <attribute>collector</attribute>
+      <caption>#getMessage("sr_collector")</caption>
+      
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <caption>#getMessage("sr_coll_container")</caption>
+      <attribute>collectionContainer</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_coll_procedure")</caption>
+      <attribute>collectionProcedure</attribute>
+    </field>
+    
+    <record>
+      <attribute>receiver</attribute>
+      <caption>#getMessage("sr_receiver")</caption>
+      
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <caption>#getMessage("sr_label_fmt")</caption>
+      <attribute>labelFmt</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_label_auto_print_mode")</caption>
+      <attribute>labelAutoPrintMode</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_label_print_copies")</caption>
+      <attribute>labelPrintCopies</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("sr_sort_order")</caption>
+      <attribute>sortOrder</attribute>
+    </field>
+    
+    <record>
+      <attribute>specimensPool</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("sr_specimens_pool")</caption>
+      
+      <field>
+        <caption>#getMessage("sr_initial_qty")</caption>
+        <attribute>initialQty</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("sr_code")</caption>
+        <attribute>code</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("sr_label_auto_print_mode")</caption>
+        <attribute>labelAutoPrintMode</attribute>
+      </field>
+    
+      <field>
+        <caption>#getMessage("sr_label_print_copies")</caption>
+        <attribute>labelPrintCopies</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

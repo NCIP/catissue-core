@@ -126,5 +126,18 @@
         spec.collectionStatus = 'Collected'
         and sr.id = :srId
     </query>
+    
+    <query name="getByCpEventLabelAndSrCode">
+      select
+        sr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+        join sr.collectionProtocolEvent event
+        join event.collectionProtocol cp
+      where
+        cp.shortTitle = :cpShortTitle
+        and event.eventLabel = :eventLabel
+        and sr.code = :code
+    </query>
   </class>
 </hibernate-mapping>

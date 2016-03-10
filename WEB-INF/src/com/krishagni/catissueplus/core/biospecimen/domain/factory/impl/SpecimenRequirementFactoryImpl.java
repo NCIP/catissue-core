@@ -93,14 +93,20 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	@Override
 	public SpecimenRequirement createDerived(DerivedSpecimenRequirement req) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		String cpShortTitle = req.getCpShortTitle();
+		String eventLabel = req.getEventLabel();
+		String srCode = req.getParentSrCode();
 		
-		Long parentId = req.getParentSrId();
-		if (parentId == null) {
+		SpecimenRequirement parent = null;
+		if (req.getParentSrId() != null) {
+			parent = daoFactory.getSpecimenRequirementDao().getById(req.getParentSrId());
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(eventLabel) && StringUtils.isNotBlank(srCode)){
+			parent = daoFactory.getSpecimenRequirementDao().getByCpEventLabelAndSrCode(cpShortTitle, eventLabel, srCode);
+		} else {
 			ose.addError(PARENT_REQ_REQUIRED);
 			throw ose;
 		}
 		
-		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(parentId);
 		if (parent == null) {
 			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
 			throw ose;
@@ -170,14 +176,20 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	@Override
 	public List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement req) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+		String cpShortTitle = req.getCpShortTitle();
+		String eventLabel = req.getEventLabel();
+		String srCode = req.getParentSrCode();
 		
-		Long parentSrId = req.getParentSrId();
-		if (parentSrId == null) {
+		SpecimenRequirement parent = null;
+		if (req.getParentSrId() != null) {
+			parent = daoFactory.getSpecimenRequirementDao().getById(req.getParentSrId());
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(eventLabel) && StringUtils.isNotBlank(srCode)){
+			parent = daoFactory.getSpecimenRequirementDao().getByCpEventLabelAndSrCode(cpShortTitle, eventLabel, srCode);
+		} else {
 			ose.addError(PARENT_REQ_REQUIRED);
 			throw ose;
 		}
 		
-		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(parentSrId);
 		if (parent == null) {
 			ose.addError(SrErrorCode.PARENT_NOT_FOUND);
 			throw ose;
@@ -418,12 +430,19 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 
 	private void setCpe(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		Long eventId = detail.getEventId();
-		if (eventId == null) {
+		String cpShortTitle = detail.getCpShortTitle();
+		String eventLabel = detail.getEventLabel();
+		
+		CollectionProtocolEvent cpe = null;
+		if (eventId != null) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(eventLabel)) {
+			cpe = daoFactory.getCollectionProtocolDao().getCpeByShortTitleAndEventLabel(cpShortTitle, eventLabel);
+		} else {
 			ose.addError(CPE_REQUIRED);
 			return;
 		}
 		
-		CollectionProtocolEvent cpe = daoFactory.getCollectionProtocolDao().getCpe(eventId);
 		if (cpe == null) {
 			ose.addError(CpeErrorCode.NOT_FOUND);
 		}
@@ -491,8 +510,10 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		User user = null;
 		if (userSummary.getId() != null) {
 			user = daoFactory.getUserDao().getById(userSummary.getId());
-		} else if (userSummary.getLoginName() != null && userSummary.getDomain() != null) {
+		} else if (StringUtils.isNotBlank(userSummary.getLoginName()) && StringUtils.isNotBlank(userSummary.getDomain())) {
 			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
+		} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
+			user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
 		}
 		
 		if (user == null) {
@@ -500,5 +521,5 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		}
 		
 		return user;		
-	}	
+	}
 }

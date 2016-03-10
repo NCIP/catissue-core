@@ -23,6 +23,8 @@ public class CollectionProtocolEventDetail {
 	
 	private String collectionProtocol;
 	
+	private String cpShortTitle;
+	
 	private String defaultSite;
 	
 	private String clinicalDiagnosis;
@@ -70,6 +72,14 @@ public class CollectionProtocolEventDetail {
 
 	public void setCollectionProtocol(String collectionProtocol) {
 		this.collectionProtocol = collectionProtocol;
+	}
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public String getDefaultSite() {
@@ -141,6 +151,7 @@ public class CollectionProtocolEventDetail {
 		detail.setClinicalDiagnosis(event.getClinicalDiagnosis());
 		detail.setClinicalStatus(event.getClinicalStatus());
 		detail.setCollectionProtocol(event.getCollectionProtocol().getTitle());
+		detail.setCpShortTitle(event.getCollectionProtocol().getShortTitle());
 		detail.setActivityStatus(event.getActivityStatus());
 		detail.setCode(event.getCode());
 		detail.setOffset(event.getOffset());

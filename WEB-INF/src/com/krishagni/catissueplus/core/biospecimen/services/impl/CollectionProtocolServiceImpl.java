@@ -327,7 +327,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			resp.throwErrorIfUnsuccessful();
 						
 			importConsents(resp.getPayload().getId(), cpDetail.getConsents());
-			importEvents(cpDetail.getTitle(), cpDetail.getEvents());		
+			importEvents(cpDetail.getTitle(), cpDetail.getEvents());
 			
 			return resp;
 		} catch (OpenSpecimenException ose) {
@@ -1022,9 +1022,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	private List<SpecimenRequirement> createAliquots(AliquotSpecimensRequirement requirement) {
 		List<SpecimenRequirement> aliquots = srFactory.createAliquots(requirement);
-		AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquots.iterator().next().getCollectionProtocol());
+		SpecimenRequirement aliquot = aliquots.iterator().next();
+		AccessCtrlMgr.getInstance().ensureUpdateCpRights(aliquot.getCollectionProtocol());
 
-		SpecimenRequirement parent = daoFactory.getSpecimenRequirementDao().getById(requirement.getParentSrId());
+		SpecimenRequirement parent = aliquot.getParentSpecimenRequirement();
 		if (StringUtils.isNotBlank(requirement.getCode())) {
 			setAliquotCode(parent, aliquots, requirement.getCode());
 		}
