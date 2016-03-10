@@ -1,22 +1,20 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.MessageSource;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder.Status;
@@ -56,6 +54,7 @@ import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.Filter;
 import com.krishagni.catissueplus.core.de.domain.Filter.Op;
@@ -74,8 +73,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	
 	private QueryService querySvc;
 	
-	private MessageSource messageSource;
-	
 	private EmailService emailService;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -88,10 +85,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	
 	public void setQuerySvc(QueryService querySvc) {
 		this.querySvc = querySvc;
-	}
-	
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 	
 	public void setEmailService(EmailService emailService) {
@@ -374,22 +367,26 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {			
 			@Override
 			public void headers(OutputStream out) {
-				PrintWriter writer = new PrintWriter(out);
-				writer.println(getMessage("dist_order_name")       + ", " + order.getName());
-				writer.println(getMessage("dist_dp_title")         + ", " + order.getDistributionProtocol().getTitle());
-				writer.println(getMessage("dist_requestor_name")   + ", " + order.getRequester().formattedName());
-				writer.println(getMessage("dist_requested_date")   + ", " + Utility.getDateString(order.getExecutionDate()));
-				writer.println(getMessage("dist_receiving_site")   + ", " + order.getSite().getName());
-				writer.println(getMessage("dist_exported_by")      + ", " + AuthUtil.getCurrentUser().formattedName());
-				writer.println(getMessage("dist_exported_on")      + ", " + Utility.getDateString(Calendar.getInstance().getTime()));
-				writer.println();
-				writer.flush();
+				@SuppressWarnings("serial")
+				Map<String, String> headers = new LinkedHashMap<String, String>() {{
+					put(getMessage("dist_order_name"),     order.getName());
+					put(getMessage("dist_dp_title"),       order.getDistributionProtocol().getTitle());
+					put(getMessage("dist_requestor_name"), order.getRequester().formattedName());
+					put(getMessage("dist_requested_date"), Utility.getDateString(order.getExecutionDate()));
+					put(getMessage("dist_receiving_site"), order.getSite().getName());
+					put(getMessage("dist_exported_by"),    AuthUtil.getCurrentUser().formattedName());
+					put(getMessage("dist_exported_on"),    Utility.getDateString(Calendar.getInstance().getTime()));
+
+					put("", ""); // blank line
+				}};
+
+				Utility.writeKeyValuesToCsv(out, headers);
 			}
 		});
 	}
 	
 	private String getMessage(String code) {
-		return messageSource.getMessage(code, null, Locale.getDefault());
+		return MessageUtil.getInstance().getMessage(code);
 	}
 	
 	private void sendOrderProcessedEmail(DistributionOrder order, Status oldStatus) {

@@ -402,7 +402,6 @@
     <property name="daoFactory"          ref="biospecimenDaoFactory"/>
     <property name="distributionFactory" ref="distributionFactory" />
     <property name="querySvc"            ref="querySvc"/>
-    <property name="messageSource"       ref="messageSource"/>
     <property name="emailService" ref="emailService"/>
   </bean>
   
