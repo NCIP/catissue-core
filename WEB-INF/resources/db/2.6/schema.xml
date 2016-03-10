@@ -77,7 +77,7 @@
   </changeSet>
   
   <changeSet author="vlonushte" id="Migrating distributed event data">
-    <validCheckSum>7:cb8a3cc4f3210d48579fccbc8124adf5</validCheckSum>
+    <validCheckSum>7:9ca0a9e0815d23e54b995596f4b875b7</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="1">
         select
