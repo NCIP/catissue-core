@@ -1763,9 +1763,9 @@
         "email_shipment_shipped": "Email notifications when specimens' shipment is shipped",
         "email_shipment_received": "Email notifications when specimens' shipment is received",
         "email_cp_expiring_notification": "CP Expiry Notification",
-        "cp_expiring_notification_desc": "Email notifications for collection protocols expiry",
+        "email_cp_expiring_notification_desc": "Email notifications for collection protocols expiry",
         "email_dp_expiring_notification": "DP Expiry Notification",
-        "dp_expiring_notification_desc": "Email notifications for distribution protocols expiry"
+        "email_dp_expiring_notification_desc": "Email notifications for distribution protocols expiry"
       },
 
       "catalog": {
