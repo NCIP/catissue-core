@@ -107,4 +107,14 @@
       //
     </sql>
   </changeSet>
+  
+  <changeSet author="slakhani" id="Training card url setting">
+    <sql>
+      call add_cfg_prop(
+        'common', 'training_url',
+        'training_url', 'training_url_desc',
+        'STRING', 'https://openspecimen.atlassian.net/wiki/x/UQDi'
+      );
+    </sql>
+  </changeSet>
  </databaseChangeLog>

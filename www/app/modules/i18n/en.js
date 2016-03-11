@@ -16,6 +16,7 @@
     "distribution_orders": "Distribution Orders",
     "shipping_and_tracking": "Shipping and Tracking",
     "jobs": "Jobs",
+    "training": "Training",
 
     "cp_desc": "Create, update SOP of visits and specimens",
     "dp_desc": "Create, update procedures for distributing specimens",
@@ -30,7 +31,8 @@
     "settings_desc": "Manage application configuration settings",
     "distribution_orders_desc": "Create, execute request orders for distributing specimens",
     "shipping_and_tracking_desc": "Create, ship, track and receive specimen shipments",
-    "jobs_desc": "Create, schedule, execute jobs"
+    "jobs_desc": "Create, schedule, execute jobs",
+    "training_desc": "User manual and training videos portal"
   },
 
   "common": {
@@ -1717,7 +1719,9 @@
         "shipment_export_report": "Shipment export report",
         "shipment_export_report_desc": "Export Report format for all shipments",
         "field_separator": "Field Separator",
-        "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator"
+        "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator",
+        "training_url": "Training URL ",
+        "training_url_desc": "Training documentation URL"
       },
 
       "email": {
