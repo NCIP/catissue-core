@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -16,6 +17,8 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
 	
 	private String activityStatus;
+
+	private Map<String, Object> extraAttrs;
 
 	public UserSummary getDistributor() {
 		return distributor;
@@ -55,6 +58,14 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 
 	public void setActivityStatus(String activityStatus) {
 		this.activityStatus = activityStatus;
+	}
+
+	public Map<String, Object> getExtraAttrs() {
+		return extraAttrs;
+	}
+
+	public void setExtraAttrs(Map<String, Object> extraAttrs) {
+		this.extraAttrs = extraAttrs;
 	}
 
 	public static DistributionOrderDetail from(DistributionOrder order) {

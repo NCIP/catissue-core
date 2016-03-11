@@ -20,6 +20,9 @@
       <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="passThrough">
         <div ng-include src="'orders/addedit-order-specimens.html'"></div>
       </os-wizard-step>
+
+      <os-plugin-hooks view-name="'order-addedit'" sec-name="'wizard'" default-tmpl="">
+      </os-plugin-hooks>
     </div>
   </div>
 </div>
@@ -239,12 +242,20 @@
         <button class="btn os-btn-secondary" ng-click="doWizard.previous(false)">
           <span translate="common.buttons.previous"> Previous </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!order.orderItems.length">
-          <span translate="orders.buttons.save_draft"> Save as Draft </span>
+
+        <button class="btn btn-primary" os-form-submit="doWizard.next(false)" ng-if="!doWizard.isLastStep()">
+          <span translate="common.buttons.next"> Next </span>
         </button>
-        <button class="btn btn-primary" os-form-submit="distribute()" ng-disabled="!order.orderItems.length">
-          <span translate="orders.buttons.distribute"> Distribute </span>
-        </button>
+
+        <span ng-if="doWizard.isLastStep()">
+          <button class="btn btn-primary" os-form-submit="saveDraft()" ng-disabled="!order.orderItems.length">
+            <span translate="orders.buttons.save_draft"> Save as Draft </span>
+          </button>
+
+          <button class="btn btn-primary" os-form-submit="distribute()" ng-disabled="!order.orderItems.length">
+            <span translate="orders.buttons.distribute"> Distribute </span>
+          </button>
+        </span>
       </div>
     </div>
   </form>
