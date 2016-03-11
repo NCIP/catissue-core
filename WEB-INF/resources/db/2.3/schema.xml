@@ -9,7 +9,7 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext 
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-  <changeSet author="ahegade" id="Modify concentration from double to big decimal in catissue_specimen table">
+  <changeSet author="ahegade" id="Modify concentration from double to big decimal in catissue_specimen table" dbms="mysql">
     <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="CONCENTRATION" newDataType="${decimal.type}(24,8)" />
   </changeSet>
 
