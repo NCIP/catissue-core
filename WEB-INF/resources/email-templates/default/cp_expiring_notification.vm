@@ -30,8 +30,16 @@
                     <td> : $cp.shortTitle </td>
                   </tr>
                   <tr>
+                    <td> PI Name </td>
+                    <td> : $cp.principalInvestigator.firstName $cp.principalInvestigator.lastName </td>
+                  </tr>
+                  <tr>
                     <td> Start Date </td>
-                    <td> : $dateFmt.format($cp.startDate) </td>
+                    #if ( $cp.startDate )
+                      <td> : $dateFmt.format($cp.startDate) </td>
+                    #else
+                      <td> : Not Specified </td>
+                    #end
                   </tr>
                   <tr>
                     <td> End Date </td>

@@ -411,7 +411,6 @@
     <property name="daoFactory"          ref="biospecimenDaoFactory"/>
     <property name="distributionFactory" ref="distributionFactory" />
     <property name="querySvc"            ref="querySvc"/>
-    <property name="messageSource"       ref="messageSource"/>
     <property name="emailService" ref="emailService"/>
   </bean>
   
@@ -450,6 +449,7 @@
         <value>classpath*:errors/messages*</value>
       </list>
     </property>
+    <property name="defaultEncoding" value="UTF-8"/>
   </bean>
 
   <bean id="appCtxProvider" class="com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider"/>
@@ -494,6 +494,8 @@
         jar.resource.loader.class=com.krishagni.catissueplus.core.common.JarDirectoryResourceLoader
         jar.resource.loader.path=${plugin.dir}
         class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+        input.encoding=utf-8
+        output.encoding=utf-8
       </value>
     </property>
   </bean>
@@ -524,9 +526,11 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenLocationPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPathologyStatusPrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPpidPrintToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenPrimaryLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenQtyPrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenRequirementCodePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.SpecimenTypePrintToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitDatePrintToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.print.VisitNamePrintToken"/>
       </list>
     </property>
@@ -611,6 +615,9 @@
         <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/shipment.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/cp.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/cpe.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/visit.xml</value>
@@ -670,8 +677,25 @@
             <property name="shipmentSvc" ref="shipmentSvc"/>
           </bean>
         </entry>
-        
 
+        <entry key="cp">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CpImporter">
+            <property name="cpSvc" ref="cpSvc"/>
+          </bean>
+        </entry>
+        
+        <entry key="cpe">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CpeImporter">
+            <property name="cpSvc" ref="cpSvc"/>
+          </bean>
+        </entry>
+        
+        <entry key="sr">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenRequirementImporter">
+            <property name="cpSvc" ref="cpSvc"/>
+          </bean>
+        </entry>
+        
         <entry key="cpr">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CprImporter">
             <property name="cprSvc" ref="cprSvc"/>

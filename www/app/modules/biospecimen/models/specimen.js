@@ -150,7 +150,7 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
     };
 
     Specimen.prototype.getExtensionCtxt = function() {
-      return Specimen.getExtensionCtxt({lineage: this.lineage});
+      return Specimen.getExtensionCtxt();
     }
 
     Specimen.prototype.getForms = function(params) {

@@ -77,7 +77,7 @@
   </changeSet>
   
   <changeSet author="vlonushte" id="Migrating distributed event data">
-    <validCheckSum>7:cb8a3cc4f3210d48579fccbc8124adf5</validCheckSum>
+    <validCheckSum>7:9ca0a9e0815d23e54b995596f4b875b7</validCheckSum>
     <preConditions onFail="MARK_RAN">
       <sqlCheck expectedResult="1">
         select
@@ -109,22 +109,22 @@
 
     <sql dbms="oracle" endDelimiter="//">
       declare 
-        form_ctxt_id number;
+        ctxt_id number;
       begin 
         select 
-          fc.identifier into form_ctxt_id 
+          fc.identifier into ctxt_id 
         from 
           catissue_form_context fc 
           inner join dyextn_containers dc on dc.identifier = fc.container_id 
         where 
           dc.name = 'SpecimenDistributedEvent';
 
-        delete from catissue_form_record_entry where form_ctxt_id = form_ctxt_id;
+        delete from catissue_form_record_entry where form_ctxt_id = ctxt_id;
 
         insert into catissue_form_record_entry
           (identifier, form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status)
         (select 
-           catissue_form_rec_entry_seq.nextval, form_ctxt_id, do.specimen_id, 
+           catissue_form_rec_entry_seq.nextval, ctxt_id, do.specimen_id, 
            do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
          from 
            os_spmn_distributions_view do);

@@ -6,9 +6,9 @@ angular.module('openspecimen')
       restrict: 'A',
 
       link: function(scope, element, attr, modelCtrl) {
-        var props = scope.$eval(attr.osEnsureRange);
-
         modelCtrl.$validators.ensureRange = function(modelValue, viewValue) {
+          var props = scope.$eval(attr.osEnsureRange);
+
           //
           // To begin with, all restrictions/rules are satisfied
           //

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
+import com.krishagni.catissueplus.core.administrative.events.DprStat;
 import com.krishagni.catissueplus.core.administrative.repository.DpRequirementDao;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
@@ -19,22 +20,25 @@ public class DpRequirementDaoImpl extends AbstractDao<DpRequirement>
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<Long, BigDecimal> getDistributedQtyByDp(Long dpId) {
-		List<Object []> data = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_DISTRIBUTION_QTY)
+	public Map<Long, DprStat> getDistributionStatByDp(Long dpId) {
+		List<Object[]> rows = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_DISTRIBUTION_STAT)
 				.setLong("dpId", dpId)
 				.list();
 		
-		Map<Long, BigDecimal> result = new HashMap<Long, BigDecimal>();
-		for (Object []row : data) {
-			result.put((Long)row[0], (BigDecimal)row[1]);
+		Map<Long, DprStat> result = new HashMap<Long, DprStat>();
+		for (Object[] row : rows) {
+			DprStat stat = new DprStat();
+			stat.setDistributedCnt((Long) row[1]);
+			stat.setDistributedQty((BigDecimal) row[2]);
+			result.put((Long)row[0], stat);
 		}
-		
+
 		return result;
 	}
 	
 	private static final String FQN = DpRequirement.class.getName();
 	
-	private static final String GET_DISTRIBUTION_QTY = FQN + ".getDistributionQty";
+	private static final String GET_DISTRIBUTION_STAT = FQN + ".getDistributionStat";
 	
 }

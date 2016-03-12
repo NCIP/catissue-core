@@ -1,0 +1,49 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>cpe</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail</name>
+
+    <field>
+      <caption>#getMessage("cpe_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("cpe_code")</caption>
+      <attribute>code</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_point")</caption>
+      <attribute>eventPoint</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_label")</caption>
+      <attribute>eventLabel</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_clinical_diagnosis")</caption>
+      <attribute>clinicalDiagnosis</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_clinical_status")</caption>
+      <attribute>clinicalStatus</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_default_site")</caption>
+      <attribute>defaultSite</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cpe_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>
+  </record>
+</object-schema>

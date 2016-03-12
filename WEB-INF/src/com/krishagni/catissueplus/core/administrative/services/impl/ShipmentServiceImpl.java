@@ -1,10 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,8 +16,8 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
 import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
@@ -469,36 +469,39 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {
 			@Override
 			public void headers(OutputStream out) {
-				PrintWriter writer = new PrintWriter(out);
-				writeHeaderLine(writer, "shipment_name", shipment.getName());
-				writeHeaderLine(writer, "shipment_courier_name", shipment.getCourierName());
-				writeHeaderLine(writer, "shipment_tracking_number", shipment.getTrackingNumber());
-				writeHeaderLine(writer, "shipment_tracking_url", shipment.getTrackingUrl());
-				writeHeaderLine(writer, "shipment_sending_site", shipment.getSendingSite().getName());
-				writeHeaderLine(writer, "shipment_sender", shipment.getSender().formattedName());
-				writeHeaderLine(writer, "shipment_shipped_date", Utility.getDateString(shipment.getShippedDate()));
-				writeHeaderLine(writer, "shipment_sender_comments", shipment.getSenderComments());
-				writeHeaderLine(writer, "shipment_recv_site", shipment.getReceivingSite().getName());
+				@SuppressWarnings("serial")
+				Map<String, String> headers = new LinkedHashMap<String, String>() {{
+					put(getMessage("shipment_name"),            shipment.getName());
+					put(getMessage("shipment_courier_name"),    shipment.getCourierName());
+					put(getMessage("shipment_tracking_number"), shipment.getTrackingNumber());
+					put(getMessage("shipment_tracking_url"),    shipment.getTrackingUrl());
+					put(getMessage("shipment_sending_site"),    shipment.getSendingSite().getName());
+					put(getMessage("shipment_sender"),          shipment.getSender().formattedName());
+					put(getMessage("shipment_shipped_date"),    Utility.getDateString(shipment.getShippedDate()));
+					put(getMessage("shipment_sender_comments"), shipment.getSenderComments());
+					put(getMessage("shipment_recv_site"),       shipment.getReceivingSite().getName());
+					
+					if (shipment.getReceiver() != null) {
+						put(getMessage("shipment_receiver"), shipment.getReceiver().formattedName());
+					}
+					
+					if (shipment.getReceivedDate() != null) {
+						put(getMessage("shipment_received_date"), Utility.getDateString(shipment.getReceivedDate()));
+					}
+					
+					put(getMessage("shipment_receiver_comments"), shipment.getReceiverComments());
+					put(getMessage("shipment_status"),            shipment.getStatus().getName());
+
+					put("", ""); // blank line
+				}};
 				
-				if (shipment.getReceiver() != null) {
-					writeHeaderLine(writer, "shipment_receiver", shipment.getReceiver().formattedName());
-				}
-				
-				if (shipment.getReceivedDate() != null) {
-					writeHeaderLine(writer, "shipment_received_date",
-							Utility.getDateString(shipment.getReceivedDate()));
-				}
-				
-				writeHeaderLine(writer, "shipment_receiver_comments", shipment.getReceiverComments());
-				writeHeaderLine(writer, "shipment_status", shipment.getStatus().getName());
-				
-				writer.flush();
+				Utility.writeKeyValuesToCsv(out, headers);
 			}
 		});
 	}
 	
-	private void writeHeaderLine(PrintWriter writer, String msgCode, String value) {
-		writer.println(MessageUtil.getInstance().getMessage(msgCode) + ", " + (value == null ? "" : value));
+	private String getMessage(String code) {
+		return MessageUtil.getInstance().getMessage(code);
 	}
 	
 	private ShipmentDao getShipmentDao() {

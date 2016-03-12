@@ -6,7 +6,7 @@ var Select2 = function(element, config) {
 
   var that = this;
   this.element.bind("change", function(e) {
-    e.stopImmediatePropagation();
+    //e.stopImmediatePropagation();
     var selectedOpt = element.select2('data');
 
     if (!that.config.onSelect) {
@@ -133,7 +133,7 @@ var Select2Search = function(element, opts) {
 
   var that = this;
   this.element.bind("change", function(e) {
-    e.stopImmediatePropagation();
+    //e.stopImmediatePropagation();
     var selected = that.element.select2('data');
     if (that.onChangeFn) {
       that.onChangeFn(selected);

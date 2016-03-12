@@ -1,0 +1,67 @@
+#if( $jobRun.logFilePath )
+  #set ($url = "$appUrl/rest/ng/scheduled-jobs/$job.id/runs/$jobRun.id/result-file")
+#else
+  #set ($url = "")
+#end
+
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  您好 $fname $lname,
+                  <br><br>
+                  作业 <b>$job.name</b> 已经成功的运行完成。如下给出作业运行的详细情况。
+                  <br><br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td>Job Run ID </td> <td> : $jobRun.id</td>
+                  </tr>
+                  <tr>
+                    <td>开始日期 </td><td> : $dateFmt.format($jobRun.startedAt) </td>
+                  </tr>
+                  <tr>
+                    <td>结束日期  </td> <td>: $dateFmt.format($jobRun.finishedAt) </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            #if ( $url )
+            <tr>
+              <td style="border-collapse:collapse;padding: 10px 0px;">
+                <table cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;color:#333">
+                  <tbody>
+                    <tr>
+                      <td style="background:#3068a2;background:-moz-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-webkit-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-o-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-ms-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:linear-gradient(top,#4687ce 0%,#3068a2 100%);padding:0px;border-collapse:collapse;border-radius:3px;padding:5px;margin:0px">
+                        <a style="color:#3b73af;text-decoration:none;color:#fff;font-weight:bold;padding:6px;font-size:14px;line-height:1.429;font-family:Arial,sans-serif" href="$url" target="_blank">下载结果文件</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            #end
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

@@ -1,7 +1,7 @@
 <div class="os-entity-extn-overview" ng-if="extObject.attrs.length > 0">
   <div class="os-content">
     <ul class="os-key-values" ng-class="{'os-one-col': showColumn == 1, 'os-two-cols': showColumn == 2}">
-      <li class="item" ng-repeat="attr in extObject.attrs">
+      <li class="item" ng-repeat="attr in extObject.attrs" ng-if="!!attr.value || attr.value === 0">
         <strong class="key key-sm">{{attr.caption}}</strong>
         <span class="value value-md" ng-switch on="attr.type">
           <span ng-switch-when="fileUpload">

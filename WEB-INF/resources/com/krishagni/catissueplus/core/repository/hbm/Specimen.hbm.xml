@@ -170,5 +170,19 @@
         o.status = 'EXECUTED' and
         sp.id in (:specimenIds)
     </query>
+
+    <query name="getLatestDistributionAndReturnDates">
+      select
+        sp.id, max(o.executionDate), max(item.returnDate)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder o
+        join o.orderItems item
+        join item.specimen sp
+      where
+        o.status = 'EXECUTED' and
+        sp.id in (:specimenIds)
+      group by
+        sp.id
+    </query>
   </class>
 </hibernate-mapping>

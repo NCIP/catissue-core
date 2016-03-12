@@ -13,6 +13,12 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           return this.form.validate();
         }
 
+        this.evaluateSkipLogic = function() {
+          if (this.form) {
+            this.form.evaluateSkipLogic();
+          }
+        }
+
         this.getFormData = function() {
           var attrValues = [];
           angular.forEach(this.form.getValue(), function(value, key) {
@@ -65,7 +71,11 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             onDelete       : opts.onDelete,
             showActionBtns : opts.showActionBtns,
             showPanel      : opts.showPanel,
-            customHdrs     : hdrs
+            customHdrs     : hdrs,
+            skipLogicFieldValue   : opts.skipLogicFieldValue ||
+              function(attrName) {
+                return ctrl.extendedObj ? ctrl.extendedObj.attrValue(attrName) : undefined
+              }
           };
 
           ctrl.form = new edu.common.de.Form(args);
@@ -74,6 +84,16 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
           LocationChangeListener.preventChange();
           addWatchForDomChanges(opts); 
         }, true);
+
+        if (attrs.extendedObj) {
+          scope.$watch(attrs.extendedObj,
+            function(extendedObj) {
+              ctrl.extendedObj = extendedObj;
+              ctrl.evaluateSkipLogic();
+            },
+            true
+          );
+        }
 
         function addWatchForDomChanges(opts) {
           if (opts.labelAlignment == 'horizontal') {

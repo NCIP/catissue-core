@@ -276,7 +276,11 @@ public class VisitFactoryImpl implements VisitFactory {
 		String visitSite = visitDetail.getSite();
 		if (StringUtils.isBlank(visitSite)) {
 			if (visit.isCompleted()) {
-				ose.addError(VisitErrorCode.SITE_REQUIRED);
+				if (visit.getCpEvent() == null || visit.getCpEvent().getDefaultSite() == null) {
+					ose.addError(VisitErrorCode.SITE_REQUIRED);
+				} else {
+					visit.setSite(visit.getCpEvent().getDefaultSite());
+				}
 			}
 		} else {
 			Site site = daoFactory.getSiteDao().getSiteByName(visitSite);

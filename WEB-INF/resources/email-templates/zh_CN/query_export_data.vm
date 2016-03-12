@@ -9,12 +9,12 @@
                 <p style="margin:10px 0 0 0">
                   您好 $user.firstName $user.lastName,
                   <br><br>
-                  请点击下面的链接下载导出的数据
+                  请点击下面的链接下载导出的数据 
                   <br/>
                   #if($query)
-                    query <i>$query.title</i>
+                    查询 <i>$query.title</i>
                   #else
-                    unsaved query
+                    未保存的查询
                   #end
 
                   <br>

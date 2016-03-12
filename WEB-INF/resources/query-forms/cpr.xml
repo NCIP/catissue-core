@@ -12,7 +12,7 @@
         <name>id</name>
         <udn>id</udn>
         <caption>#getMessage("participant_identifier")</caption>
-        <column>PARTICIPANT_ID</column>
+        <column>CPR_ID</column>
         <recordUrl>#/object-state-params-resolver?stateName=participant-detail.overview&amp;objectName=cpr&amp;key=id&amp;value=:value</recordUrl>
       </numberField>
     </row>

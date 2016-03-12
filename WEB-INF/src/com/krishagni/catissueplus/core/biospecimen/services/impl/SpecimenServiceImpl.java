@@ -99,10 +99,8 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 			SpecimenDetail detail = SpecimenDetail.from(specimen, false, !allowPhi);
 
-			List<Long> distributedSpecimenIds = daoFactory.getSpecimenDao().getDistributedSpecimens(Collections.singletonList(specimen.getId()));
-			if (CollectionUtils.isNotEmpty(distributedSpecimenIds)) {
-				detail.setDistributed(distributedSpecimenIds.contains(detail.getId()));
-			}
+			String status = daoFactory.getSpecimenDao().getDistributionStatus(detail.getId());
+			detail.setDistributionStatus(status);
 
 			return ResponseEvent.response(detail);
 		} catch (Exception e) {

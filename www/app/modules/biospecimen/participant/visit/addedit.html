@@ -136,7 +136,7 @@
 
       <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
         <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" 
-          ng-hide="currVisit.status == 'Missed Collection'"></div>
+          extended-obj="currVisit" ng-hide="currVisit.status == 'Missed Collection'"></div>
       </div>
 
       <div class="os-divider"></div>

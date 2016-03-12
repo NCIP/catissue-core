@@ -84,6 +84,7 @@
   </changeSet>
   
   <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="oracle">
+    <validCheckSum>7:8ef3e17aa5772eaa5bba974d98844110</validCheckSum>
     <sql>
       merge into catissue_order ordr using (
         select 
@@ -93,7 +94,7 @@
           join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
           join catissue_user usr on usr.identifier = dp.principal_investigator_id
       ) t on (ordr.identifier = t.order_id) 
-      when matched then update set ordr.requester_id = t.order_id
+      when matched then update set ordr.requester_id = t.user_id
     </sql>
   </changeSet>
   

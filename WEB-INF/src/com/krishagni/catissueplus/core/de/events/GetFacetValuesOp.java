@@ -7,6 +7,8 @@ public class GetFacetValuesOp {
 
 	private List<String> facets;
 
+	private String searchTerm;
+
 	public Long getCpId() {
 		return cpId;
 	}
@@ -21,5 +23,13 @@ public class GetFacetValuesOp {
 
 	public void setFacets(List<String> facets) {
 		this.facets = facets;
+	}
+
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
 	}
 }

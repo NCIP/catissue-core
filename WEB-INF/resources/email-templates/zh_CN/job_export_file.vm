@@ -9,13 +9,13 @@
                 <p style="margin:10px 0 0 0">
                   您好 $fname $lname,
                   <br><br>
-                  请点击下面的链接下载导出的数据 job $jobName
+                  请点击以下链接下载您工作输出的数据。$jobName
                   <br/>
                   <br/>
                   <br>
                   <a href=$appUrl/rest/ng/scheduled-jobs/export?fileId=$filename>$appUrl/rest/ng/scheduled-jobs/export?fileId=$filename</a>
                   <br/><br/>
-                  该链接有效期为30天
+                  该链接有效期为30天。
                   <br/><br/>
                 </p>
               </td>

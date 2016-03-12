@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
+import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSummary;
+import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimenDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -33,7 +36,7 @@ public class DistributionOrderController {
 	
 	@Autowired
 	private DistributionOrderService distributionService;
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -130,7 +133,29 @@ public class DistributionOrderController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryDataExportResult exportDistributionReport(@PathVariable("id") Long orderId) {
-		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(new RequestEvent<Long>(orderId));
+		ResponseEvent<QueryDataExportResult> resp = distributionService.exportReport(getRequest(orderId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<DistributionOrderItemDetail> getDistributedSpecimens(
+		@RequestParam(value = "label", required = true)
+		List<String> specimenLabels) {
+
+		RequestEvent<List<String>> req = getRequest(specimenLabels);
+		ResponseEvent<List<DistributionOrderItemDetail>> resp = distributionService.getDistributedSpecimens(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/return-specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenInfo> returnSpecimens(@RequestBody List<ReturnedSpecimenDetail> returnedSpecimens) {
+		ResponseEvent<List<SpecimenInfo>> resp = distributionService.returnSpecimens(getRequest(returnedSpecimens));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

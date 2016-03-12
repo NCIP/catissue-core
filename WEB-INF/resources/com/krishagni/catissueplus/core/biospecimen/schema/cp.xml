@@ -1,0 +1,162 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>cp</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail</name>
+    
+    <record>
+      <attribute>cpSites</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("cp_sites")</caption>
+      
+      <field>
+        <caption>#getMessage("cp_site_name")</caption>
+        <attribute>siteName</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("cp_site_code")</caption>
+        <attribute>code</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <caption>#getMessage("cp_title")</caption>
+      <attribute>title</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_short_title")</caption>
+      <attribute>shortTitle</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_code")</caption>
+      <attribute>code</attribute>
+    </field>
+    
+    <record>
+      <attribute>principalInvestigator</attribute>
+      <caption>#getMessage("cp_pi")</caption>
+      
+      <field>
+        <caption>#getMessage("cp_pi_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+    
+    <record>
+      <attribute>coordinators</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("cp_coordinator")</caption>
+      
+      <field>
+        <caption>#getMessage("cp_coordinator_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <type>date</type>
+      <caption>#getMessage("cp_start_date")</caption>
+      <attribute>startDate</attribute>
+    </field>
+  
+    <field>
+      <type>date</type>
+      <caption>#getMessage("cp_end_date")</caption>
+      <attribute>endDate</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_irb_id")</caption>
+      <attribute>irbId</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_anticipated_participants_cnt")</caption>
+      <attribute>anticipatedParticipantsCount</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_ppid_fmt")</caption>
+      <attribute>ppidFmt</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_visit_name_fmt")</caption>
+      <attribute>visitNameFmt</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_spmn_label_fmt")</caption>
+      <attribute>specimenLabelFmt</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_derivative_label_fmt")</caption>
+      <attribute>derivativeLabelFmt</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_aliquot_label_fmt")</caption>
+      <attribute>aliquotLabelFmt</attribute>
+    </field>
+    
+    <field>
+      <type>boolean</type>
+      <caption>#getMessage("cp_manual_ppid_enabled")</caption>
+      <attribute>manualPpidEnabled</attribute>
+    </field>
+    
+    <field>
+      <type>boolean</type>
+      <caption>#getMessage("cp_manual_visit_name_enabled")</caption>
+      <attribute>manualVisitNameEnabled</attribute>
+    </field>
+    
+    <field>
+      <type>boolean</type>
+      <caption>#getMessage("cp_manual_spmn_label_enabled")</caption>
+      <attribute>manualSpecLabelEnabled</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_spmn_label_pre_print_mode")</caption>
+      <attribute>spmnLabelPrePrintMode</attribute>
+    </field>
+    
+    <record>
+      <attribute>spmnLabelPrintSettings</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("cp_spmn_label_print_settings")</caption>
+      
+      <field>
+        <caption>#getMessage("cp_spmn_label_print_settings_lineage")</caption>
+        <attribute>lineage</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("cp_spmn_label_print_settings_print_mode")</caption>
+        <attribute>printMode</attribute>
+      </field>
+      
+      <field>
+        <caption>#getMessage("cp_spmn_label_print_settings_copies")</caption>
+        <attribute>copies</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <caption>#getMessage("cp_description_url")</caption>
+      <attribute>descriptionUrl</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("cp_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>
+  </record>
+</object-schema>

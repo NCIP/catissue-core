@@ -9,7 +9,7 @@
                 <p style="margin:10px 0 0 0">
                   您好 $sharedWith.firstName $sharedWith.lastName,
                   <br><br>
-                  $user.firstName $user.lastName $姓同你共享了一个报告文件夹 ($folder.name) 。如果你现在想访问它,请点击下面。
+                  $user.firstName $user.lastName 同你共享了一个报告文件夹 ($folder.name) 。如果你现在想访问它,请点击下面。
                 </p>
               </td>
             </tr>

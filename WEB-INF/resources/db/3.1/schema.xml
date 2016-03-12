@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="ckhilosiya" id="Add return specimens fields to order items table">
+    <addColumn tableName="OS_ORDER_ITEMS">
+      <column name="RETURNED_QUANTITY" type="${double.type}"></column>
+      <column name="RETURNING_CONTAINER" type="${int.type}"></column>
+      <column name="RETURNING_ROW" type="${text.type}(8)"></column>
+      <column name="RETURNING_COLUMN" type="${text.type}(8)"></column>
+      <column name="RETURNED_BY" type="${int.type}"></column>
+      <column name="RETURN_DATE" type="${nullable.ts.type}"></column>
+      <column name="RETURN_COMMENTS" type="${text.type}(255)"></column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="FK on specimen returning container">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_RETURNING_CONT"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="RETURNING_CONTAINER"
+      referencedTableName="OS_STORAGE_CONTAINERS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="FK on user who returned specimen">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_OI_RETURNED_BY"
+      baseTableName="OS_ORDER_ITEMS"
+      baseColumnNames="RETURNED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Updated distribution view with return event details" runOnChange="true">
+    <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
+      select
+        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
+        item.returned_quantity as returned_quantity, item.returning_container as returning_container,
+        item.returning_row as returning_row, item.returning_column as returning_column,
+        item.returned_by as returned_by, item.return_date as return_date, item.return_comments as return_comments,
+        ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
+        ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
+      from
+        os_order_items item
+        inner join os_orders ord on item.order_id = ord.identifier
+        inner join catissue_distribution_protocol dp on ord.distribution_protocol_id = dp.identifier
+      where
+        ord.status != 'PENDING'
+    </createView>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Procedure to populate the specimen statistics" runOnChange="true" dbms="mysql">
+    <sql>
+      drop procedure if exists create_specimen_stats_table;
+    </sql>
+    <sql endDelimiter="//">
+      create procedure create_specimen_stats_table()
+      begin
+      
+        drop table if exists tmp_specimen_stats;
+      
+        create table tmp_specimen_stats (
+          specimen_id bigint(19) not null,
+          collector_id bigint(19) default null,
+          collection_procedure varchar(50) not null,
+          collection_container varchar(50) not null,
+          collection_time timestamp null default null,
+          receiver_id bigint(19) default null,
+          received_quality varchar(255) not null,
+          received_time timestamp null default null,
+          frozen_time timestamp null default null,
+          processing_time bigint(19) default null,
+          ischemia_time bigint(19) default null,
+          aliquot_seq bigint(19) default null
+        );
+      
+      end;
+      //
+    </sql>   
+    <sql>
+      drop procedure if exists populate_specimen_stats;
+    </sql>
+    <sql endDelimiter="//">
+      create procedure populate_specimen_stats()
+      begin
+        
+        insert into tmp_specimen_stats (
+          specimen_id, 
+          collection_time, collection_procedure,
+          collection_container, collector_id,
+          received_time,
+          received_quality, receiver_id, 
+          frozen_time, processing_time, ischemia_time,
+          aliquot_seq
+        )
+      
+        select
+          c.identifier as specimen_id, 
+          ce.event_timestamp as coll_time, ce.collection_procedure as coll_procedure,
+          ce.container as collection_container, ce.user_id as collector_id,
+          re.event_timestamp as received_time, 
+          re.received_quality as received_quality, re.user_id as receiver_id, 
+          fe.event_timestamp as frozen_time,
+          MINUTE(TIMEDIFF(fe.event_timestamp, re.event_timestamp)) as processing_time,
+          MINUTE(TIMEDIFF(fe.event_timestamp, ce.event_timestamp)) as ischemia_time,
+          0
+        from
+          catissue_specimen s
+          inner join catissue_form_record_entry cre on cre.object_id = s.identifier
+          inner join catissue_form_context cfc on cfc.identifier = cre.form_ctxt_id
+          inner join dyextn_containers cf on cf.identifier = cfc.container_id and cf.name = 'SpecimenCollectionEvent'
+          inner join catissue_coll_event_param ce on ce.identifier = cre.record_id
+          inner join catissue_form_record_entry rre on rre.object_id = s.identifier
+          inner join catissue_form_context rfc on rfc.identifier = rre.form_ctxt_id
+          inner join dyextn_containers rf on rf.identifier = rfc.container_id and rf.name = 'SpecimenReceivedEvent'
+          inner join catissue_received_event_param re on re.identifier = rre.record_id
+          left join (
+            select
+              fre.object_id as specimen_id, min(fep.event_timestamp) as event_timestamp
+            from
+              catissue_frozen_event_param fep
+              inner join catissue_form_record_entry fre on fre.record_id = fep.identifier
+              inner join catissue_form_context ffc on ffc.identifier = fre.form_ctxt_id
+              inner join dyextn_containers ff on ff.identifier = ffc.container_id and ff.name = 'SpecimenFrozenEvent'
+            group by
+              fre.object_id  
+          ) fe on fe.specimen_id = s.identifier
+          inner join catissue_specimen_hierarchy h on h.ancestor_id = s.identifier
+          inner join catissue_specimen c on c.identifier = h.descendent_id
+        where
+          s.parent_specimen_id is null and s.collection_status != 'Pending' and
+          s.activity_status != 'Disabled' and c.activity_status != 'Disabled' and
+          c.collection_status = 'Collected';
+
+        set @num := 0, @parent := 0;
+
+        update 
+          tmp_specimen_stats stats
+          join (
+            select
+              t.identifier, @num as counter
+            from (
+              select 
+                identifier,parent_specimen_id
+              from
+                catissue_specimen 
+              where 
+                lineage = 'Aliquot' and activity_status = 'Active' and collection_status = 'Collected'
+              order by 
+                parent_specimen_id
+              ) t
+            where
+              (@num := if(t.parent_specimen_id = @parent, @num + 1, 1)) is not null and 
+              (@parent := t.parent_specimen_id) is not null
+           ) ctr
+        set
+          stats.aliquot_seq = ctr.counter
+        where
+          stats.specimen_id = ctr.identifier;
+        
+      end;
+      //
+    </sql>
+    <sql>
+      drop procedure if exists refresh_specimen_stats;
+    </sql>
+    <sql endDelimiter="//">
+      create procedure refresh_specimen_stats()
+      begin
+        
+        call create_specimen_stats_table();
+        
+        call populate_specimen_stats();
+        
+        drop table if exists os_specimen_stats;
+
+        alter table tmp_specimen_stats rename os_specimen_stats;  
+        
+        create index os_specimen_stats_idx on os_specimen_stats (specimen_id);
+        
+      end;
+      //
+    </sql>  
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Procedure to populate the specimen statistics" runOnChange="true" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure create_specimen_stats_table AUTHID CURRENT_USER is
+
+	  ctr number := 0;
+      begin
+        declare 
+          table_does_not_exist exception;
+          pragma exception_init(table_does_not_exist, -942); -- ORA-00942
+        begin
+          execute immediate 'drop table tmp_specimen_stats';
+        exception
+          when table_does_not_exist then null;
+        end;
+            
+        execute immediate 'create table tmp_specimen_stats (
+          specimen_id number(19) not null,
+          collector_id number(19) default null,
+          collection_procedure varchar2(50) not null,
+          collection_container varchar2(50) not null,
+          collection_time timestamp default null,
+          receiver_id number(19) default null,
+          received_quality varchar2(255) not null,
+          received_time timestamp default null,
+          frozen_time timestamp default null,
+          processing_time number(19) default null,
+          ischemia_time number(19) default null,
+          aliquot_seq number(19) default null
+        )';
+      end;
+      //
+    </sql>
+    <sql endDelimiter="//">
+      create or replace procedure populate_specimen_stats is
+      
+      begin
+      
+        execute immediate 'insert into tmp_specimen_stats (
+          specimen_id, 
+          collection_time, collection_procedure,
+          collection_container, collector_id,
+          received_time, 
+          received_quality, receiver_id, 
+          frozen_time, processing_time, ischemia_time,
+          aliquot_seq
+        )
+      
+        select
+          c.identifier as specimen_id, 
+          ce.event_timestamp as coll_time, ce.collection_procedure as coll_procedure,
+          ce.container as coll_container, ce.user_id as collector,
+          re.event_timestamp as rec_time, re.received_quality as rec_quality,
+          re.user_id as receiver, fe.event_timestamp as frozen_time,
+          round((cast(fe.event_timestamp as date) - cast(re.event_timestamp as date))*24*60)  as processing_time,
+          round((cast(fe.event_timestamp as date) - cast(ce.event_timestamp as date))*24*60)  as ischemia_time,
+          0
+        from
+          catissue_specimen s 
+          inner join catissue_form_record_entry cre on cre.object_id = s.identifier
+          inner join catissue_form_context cfc on cfc.identifier = cre.form_ctxt_id
+          inner join dyextn_containers cf on cf.identifier = cfc.container_id and cf.name = ''SpecimenCollectionEvent''
+          inner join catissue_coll_event_param ce on ce.identifier = cre.record_id
+          inner join catissue_form_record_entry rre on rre.object_id = s.identifier
+          inner join catissue_form_context rfc on rfc.identifier = rre.form_ctxt_id
+          inner join dyextn_containers rf on rf.identifier = rfc.container_id and rf.name = ''SpecimenReceivedEvent''
+          inner join catissue_received_event_param re on re.identifier = rre.record_id
+          left join (
+            select
+              fre.object_id as specimen_id, min(fep.event_timestamp) as event_timestamp
+            from
+              catissue_frozen_event_param fep
+              inner join catissue_form_record_entry fre on fre.record_id = fep.identifier
+              inner join catissue_form_context ffc on ffc.identifier = fre.form_ctxt_id
+              inner join dyextn_containers ff on ff.identifier = ffc.container_id and ff.name = ''SpecimenFrozenEvent''
+            group by
+              fre.object_id  
+          ) fe on fe.specimen_id = s.identifier
+          inner join catissue_specimen_hierarchy h on h.ancestor_id = s.identifier
+          inner join catissue_specimen c on c.identifier = h.descendent_id
+        where
+          s.parent_specimen_id is null and s.collection_status = ''Collected'' and
+          s.activity_status != ''Disabled'' and c.activity_status != ''Disabled'' and
+          c.collection_status = ''Collected''';
+       
+        execute immediate 'merge into tmp_specimen_stats us using (
+          select 
+            sp.specimen_id as specimen_id, ctr.order_num as aliquot_seq
+          from 
+            tmp_specimen_stats sp
+            inner join (
+              select 
+                identifier as specimen_id,
+                row_number() over (partition by parent_specimen_id order by identifier) order_num
+              from 
+                catissue_specimen
+              where 
+                parent_specimen_id is not null and lineage = ''Aliquot'' and activity_status = ''Active'' and collection_status = ''Collected''
+            ) ctr on ctr.specimen_id = sp.specimen_id
+          ) t on (us.specimen_id = t.specimen_id) 
+        when matched then update set us.aliquot_seq = t.aliquot_seq';
+        
+      end;
+      //
+    </sql>  
+    <sql endDelimiter="//">
+      create or replace procedure refresh_specimen_stats AUTHID CURRENT_USER is
+        ctr number := 0;
+      begin
+        
+        create_specimen_stats_table();
+		
+        populate_specimen_stats();
+        
+        declare 
+          table_does_not_exist exception;
+          pragma exception_init(table_does_not_exist, -942); -- ORA-00942
+        begin
+          execute immediate 'drop table os_specimen_stats';
+        exception
+          when table_does_not_exist then null;
+        end;
+        
+        execute immediate 'alter table tmp_specimen_stats rename to os_specimen_stats';
+        
+        execute immediate 'create index os_specimen_stats_idx on os_specimen_stats (specimen_id)';
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating scheduled job to refresh the specimen statistics schema" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+      
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+        scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+      values(
+        default, 'Scheduler to refresh Specimen additional details', @userId, now(), null, 30, 00, null, 
+        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.RefreshSpecimenDetailsJob', 0, null
+        )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating scheduled job to refresh the specimen statistics schema" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        userId number;
+      begin 
+        select identifier into userId from catissue_user where login_name = '$system';
+        
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Scheduler to refresh Specimen additional details', userId, SYSDATE, null, 30, 00, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.RefreshSpecimenDetailsJob', 0, null);
+      
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements specimen type optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="SPECIMEN_TYPE"
+      columnDataType="${text.type}(50)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements anatomic site optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="ANATOMIC_SITE"
+      columnDataType="${text.type}(150)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Making DP requirements pathology status optional">
+    <dropNotNullConstraint
+      tableName="OS_DP_REQUIREMENTS"
+      columnName="PATHOLOGY_STATUS"
+      columnDataType="${text.type}(50)"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Adding clinical diagnosis as criteria for DP requirement">
+    <addColumn tableName="OS_DP_REQUIREMENTS">
+      <column name="CLINICAL_DAIGNOSIS" type="${text.type}(255)"></column>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

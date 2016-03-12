@@ -14,11 +14,7 @@
     
     <property name="name" column="NAME"/>
 
-    <many-to-one 
-      name="requester" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
-      column="REQUESTER_ID"/>
+    <many-to-one name="requester" column="REQUESTER_ID"/>
       
     <property name="creationDate" column="CREATION_DATE"/>
     
@@ -37,46 +33,39 @@
 
     <property name="comments" column="COMMENTS"/>
     
-    <set
-      name="orderItems"
-      table="OS_ORDER_ITEMS"
-      cascade="all-delete-orphan"
-      inverse="true">
-
+    <set name="orderItems" table="OS_ORDER_ITEMS" cascade="all-delete-orphan" inverse="true">
       <key column="ORDER_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem"/>
     </set>     
     
-    <many-to-one 
-      name="site" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.Site"
-      column="SITE_ID"/>
+    <many-to-one name="site" column="SITE_ID"/>
     
-    <many-to-one 
-      name="distributionProtocol" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol"
-      column="DISTRIBUTION_PROTOCOL_ID"/>
+    <many-to-one name="distributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"/>
         
-    <many-to-one 
-      name="distributor" 
-      cascade="none" 
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
-      column="DISTRIBUTOR_ID"/>
+    <many-to-one name="distributor" column="DISTRIBUTOR_ID"/>
 
-    <many-to-one
-      name="request"
-      class="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest"
-      column="REQUEST_ID"/>
+    <many-to-one name="request" column="REQUEST_ID"/>
       
     <filter name="activeEntity"/>
         
-    <query name="getOrderByName">
+    <query name="getOrdersByName">
       from 
         com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
       where
-        name = :name
+        name in (:names)
+    </query>
+
+    <query name="getDistributedItemsByLabels">
+      select
+        oi
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder o
+        inner join o.orderItems oi
+        inner join oi.specimen spmn
+      where
+        spmn.label in (:labels) and
+        o.status = 'EXECUTED' and
+        (oi.status = 'DISTRIBUTED' or oi.status = 'DISTRIBUTED_AND_CLOSED')
     </query>
 
     <sql-query name="getSpecimenCountByOrder">

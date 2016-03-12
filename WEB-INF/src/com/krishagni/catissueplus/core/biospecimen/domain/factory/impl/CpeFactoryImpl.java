@@ -116,7 +116,15 @@ public class CpeFactoryImpl implements CpeFactory {
 	}
 	
 	public void setCp(CollectionProtocolEventDetail detail, CollectionProtocolEvent cpe, OpenSpecimenException ose) {
-		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCollectionProtocol());
+		CollectionProtocol cp = null;
+		if (StringUtils.isNotBlank(detail.getCollectionProtocol())) {
+			cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(detail.getCollectionProtocol());
+		} else if (StringUtils.isNotBlank(detail.getCpShortTitle())) {
+			cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(detail.getCpShortTitle());
+		} else {
+			ose.addError(CpeErrorCode.CP_REQUIRED);
+			return;
+		}
 		
 		if (cp == null) {
 			ose.addError(CpErrorCode.NOT_FOUND);

@@ -196,16 +196,12 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 	private void setPrincipalInvestigator(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		UserSummary user = input.getPrincipalInvestigator();		
-		User pi = null;
-		if (user != null && user.getId() != null) {
-			pi = daoFactory.getUserDao().getById(user.getId());
-		} else if (user != null && user.getLoginName() != null && user.getDomain() != null) {
-			pi = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
-		} else {			
+		if (user == null) {
 			ose.addError(CpErrorCode.PI_REQUIRED);
 			return;
 		}
 		
+		User pi = getUser(user);
 		if (pi == null) {
 			ose.addError(CpErrorCode.PI_NOT_FOUND);
 			return;
@@ -222,14 +218,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		
 		Set<User> coordinators = new HashSet<User>();		
 		for (UserSummary user : users) {
-			User coordinator = null;
-			
-			if (user.getId() != null) {
-				coordinator = daoFactory.getUserDao().getById(user.getId());
-			} else if (user.getLoginName() != null && user.getDomain() != null) {
-				coordinator = daoFactory.getUserDao().getUser(user.getLoginName(), user.getDomain());
-			} 
-			
+			User coordinator = getUser(user);
 			if (coordinator == null) {
 				ose.addError(CpErrorCode.INVALID_COORDINATORS);
 				return;
@@ -356,5 +345,22 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private void setCollectionProtocolExtension(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		DeObject extension = DeObject.createExtension(input.getExtensionDetail(), result);
 		result.setExtension(extension);
+	}
+	
+	private User getUser(UserSummary userDetail) {
+		if (userDetail == null) {
+			return null;
+		}
+
+		User user = null;
+		if (userDetail.getId() != null) {
+			user = daoFactory.getUserDao().getById(userDetail.getId());
+		} else if (StringUtils.isNotBlank(userDetail.getLoginName()) && StringUtils.isNotBlank(userDetail.getDomain())) {
+			user = daoFactory.getUserDao().getUser(userDetail.getLoginName(), userDetail.getDomain());
+		} else if (StringUtils.isNotBlank(userDetail.getEmailAddress())) {
+			user = daoFactory.getUserDao().getUserByEmailAddress(userDetail.getEmailAddress());
+		}
+		
+		return user;
 	}
 }

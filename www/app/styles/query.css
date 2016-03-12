@@ -390,8 +390,9 @@
   padding-right: 5px;
 }
 
-.os-query-facets-panel .facet .facet-range .os-md-input input {
+.os-query-facets-panel .facet .os-md-input input {
   margin-top: 0px;
+  margin-bottom: 5px;
 }
 
 /** Results view grid customisation **/

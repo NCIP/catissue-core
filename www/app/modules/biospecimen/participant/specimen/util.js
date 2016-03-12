@@ -92,6 +92,7 @@ angular.module('os.biospecimen.specimen')
 
       return Specimen.save(specimensToSave).then(
         function(result) {
+          scope.parentSpecimen.children.push(result[0]);
           scope.revertEdit();
         }
       );

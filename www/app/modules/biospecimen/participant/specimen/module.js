@@ -179,7 +179,7 @@ angular.module('os.biospecimen.specimen',
         },
         resolve: {
           extensionCtxt: function(Specimen) {
-            return Specimen.getExtensionCtxt({"lineage": "Aliquot"});
+            return Specimen.getExtensionCtxt();
           }
         },
         controller: 'AddAliquotsCtrl',

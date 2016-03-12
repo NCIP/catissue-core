@@ -16,7 +16,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
   })
   .controller('QueryResultsCtrl', function(
-    $scope, $state, $stateParams, $modal, $document, $timeout, currentUser,
+    $rootScope, $scope, $state, $stateParams, $modal, $document, $timeout, currentUser,
     queryCtx, cps, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
@@ -255,19 +255,41 @@ angular.module('os.query.results', ['os.query.models'])
       };
     }
 
-    function loadFacetValues(facet) {
-      if (facet.valuesQ || facet.values || facet.dataType != 'STRING') {
+    function loadFacetValues(facet, searchTerm) {
+      if (facet.dataType != 'STRING' || facet.subset) {
         return;
       }
 
-      facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr]);
-      facet.valuesQ.then(
+      var q = undefined;
+      if (!!searchTerm) {
+        q = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr], searchTerm);
+      }
+
+      if (!q) {
+        if (facet.valuesQ) {
+          q = facet.valuesQ;
+        } else {
+          q = facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr]);
+        }
+      }
+
+      q.then(
         function(result) {
           facet.values = result[0].values.map(
             function(value) {
               return {value: value, selected: false}
             }
           );
+          facet.searchValues = !!searchTerm;
+
+          var selectedValues = facet.selectedValues;
+          if (!selectedValues || selectedValues.length == 0) {
+            return;
+          }
+
+          angular.forEach(facet.values, function(val) {
+            val.selected = (selectedValues.indexOf(val.value) != -1);
+          });
         }
       );
     }
@@ -566,7 +588,7 @@ angular.module('os.query.results', ['os.query.models'])
       );
     }
 
-    $scope.toggleFacetValueSelection = function(facet) {
+    $scope.toggleFacetValueSelection = function(facet, toggledValue) {
       angular.forEach($scope.queryCtx.filters, function(filter) {
         if (filter.id != facet.id) {
           return;
@@ -610,11 +632,21 @@ angular.module('os.query.results', ['os.query.models'])
           }
         } else {
           filter.op = QueryUtil.getOp('qin');
-          filter.value = facet.values
-            .filter(function(value) { return value.selected })
-            .map(function(value) { return value.value });
-          facet.selectedValues = filter.value;
 
+          if (!toggledValue) {
+            filter.value = [];
+          } else {
+            filter.value = filter.value || [];
+
+            var valueIdx = filter.value.indexOf(toggledValue.value);
+            if (toggledValue.selected && valueIdx == -1) {
+              filter.value.push(toggledValue.value);
+            } else if (!toggledValue.selected && valueIdx != -1) {
+              filter.value.splice(valueIdx, 1);
+            }
+          }
+
+          facet.selectedValues = filter.value;
           if (facet.selectedValues.length == 0) {
             if (facet.subset) {
               filter.op = QueryUtil.getOp('qin');
@@ -640,7 +672,26 @@ angular.module('os.query.results', ['os.query.models'])
       });
 
       $scope.toggleFacetValueSelection(facet);
+      facet.isOpen = false;
     }
+
+    $scope.searchFacetValue = function(facet) {
+      if (facet.values.length < 500 && !facet.searchValues) {
+        return;
+      }
+
+      if (facet.searchQ) {
+        $timeout.cancel(facet.searchQ);
+      }
+
+      facet.searchQ = $timeout(
+        function() {
+          loadFacetValues(facet, facet.searchFor);
+        },
+        $rootScope.global.filterWaitInterval
+      );
+    }
+
 
     $scope.addRangeCond = function(facet) {
       var fns = RANGE_FNS[facet.dataType];

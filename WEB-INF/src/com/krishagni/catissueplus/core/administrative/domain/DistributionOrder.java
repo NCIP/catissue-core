@@ -117,6 +117,10 @@ public class DistributionOrder extends BaseEntity {
 		this.orderItems = orderItems;
 	}
 
+	public Map<Long, DistributionOrderItem> getOrderItemsMap() {
+		return getOrderItems().stream().collect(Collectors.toMap(item -> item.getId(), item -> item));
+	}
+
 	public Status getStatus() {
 		return status;
 	}
@@ -256,5 +260,12 @@ public class DistributionOrder extends BaseEntity {
 		} else {
 			throw OpenSpecimenException.userError(DistributionOrderErrorCode.STATUS_CHANGE_NOT_ALLOWED);
 		}
+	}
+	
+	public DistributionOrderItem getItemBySpecimen(String label) {
+		return getOrderItems().stream()
+			.filter(item -> item.getSpecimen().getLabel().equals(label))
+			.findFirst()
+			.orElse(null);
 	}
 }
