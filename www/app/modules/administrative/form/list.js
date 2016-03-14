@@ -25,6 +25,10 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       })
     }
 
+    function reloadForms() {
+      loadForms($scope.formFilterOpts);
+    }
+
     function loadCollectionProtocols() {
       CollectionProtocol.list().then(
         function(cpList) {
@@ -37,7 +41,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       form.$remove().then(
         function(resp) {
           Alerts.success('form.form_deleted', form);
-          loadAllForms();
+          reloadForms();
         }
       );
     }
@@ -67,11 +71,12 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
           }
         });
 
-        formCtxtsModal.result.then(function(reloadForms) {
-          if (reloadForms) {
-            loadAllForms();
-          }
-        });
+        formCtxtsModal.result.then(
+          function(reload) {
+            if (reload) {
+              reloadForms();
+            }
+          });
       });
     };
 
