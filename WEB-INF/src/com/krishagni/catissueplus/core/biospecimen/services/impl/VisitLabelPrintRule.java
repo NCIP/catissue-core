@@ -39,5 +39,12 @@ public class VisitLabelPrintRule extends LabelPrintRule {
 		}
 
 		return true;
-	}	
+	}
+
+	public String toString() {
+		return new StringBuilder(super.toString())
+			.append(", cp = ").append(getCpShortTitle())
+			.append(", visit site = ").append(getVisitSite())
+			.toString();
+	}
 }

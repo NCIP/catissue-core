@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -174,6 +175,19 @@ public class LabelPrintRule {
 		}
 	}
 
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		result.append("label design = ").append(getLabelDesign())
+			.append(", label type = ").append(getLabelType())
+			.append(", user = ").append(getUserLogin())
+			.append(", printer = ").append(getPrinterName());
+
+		String tokens = getDataTokens().stream()
+			.map(token -> getMessageStr(token.getName()))
+			.collect(Collectors.joining(";"));
+		result.append(", tokens = ").append(tokens);
+		return result.toString();
+	}
 	protected boolean isWildCard(String str) {
 		return StringUtils.isNotBlank(str) && str.trim().equals("*");
 	}

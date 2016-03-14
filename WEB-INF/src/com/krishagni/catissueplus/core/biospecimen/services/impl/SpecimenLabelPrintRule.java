@@ -67,5 +67,14 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 		}
 		
 		return true;
-	}	
+	}
+
+	public String toString() {
+		return new StringBuilder(super.toString())
+			.append(", cp = ").append(getCpShortTitle())
+			.append(", visit site = ").append(getVisitSite())
+			.append(", specimen class = ").append(getSpecimenClass())
+			.append(", specimen type = ").append(getSpecimenType())
+			.toString();
+	}
 }

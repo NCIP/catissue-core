@@ -164,6 +164,7 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 				}
 				
 				rules.add(rule);
+				logger.info(String.format("Adding print rule: [%s]", rule));
 			}
 			
 			this.rules = rules;
@@ -186,9 +187,9 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 				return null;
 			}
 			
-			String[] ruleLineFields = ruleLine.split("\\s+");
+			String[] ruleLineFields = ruleLine.split("\\t");
 			if (ruleLineFields == null || ruleLineFields.length != 12) {
-				logger.error("Invalid rule: " + ruleLine);
+				logger.error(String.format("Invalid rule [%s]. Expected variables: 12, Actual: [%d]", ruleLine, ruleLineFields.length));
 				return null;
 			}
 			
@@ -212,7 +213,7 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			for (String labelToken : labelTokens) {
 				LabelTmplToken token = printLabelTokensRegistrar.getToken(labelToken);
 				if (token == null) {
-					logger.error("Unknown token: " + token);
+					logger.error(String.format("Invalid rule [%s]. Unknown token: [%s]", ruleLine, labelToken));
 					badTokens = true;
 					break;
 				}
