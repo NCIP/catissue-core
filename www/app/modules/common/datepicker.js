@@ -40,11 +40,15 @@ angular.module('openspecimen')
           value = parseInt(value);
         }
         
-        return new Date(value).toISOString();        
+        return new Date(value).toISOString();
       });
 
+      if (attrs.dateOnly != "true") {
+        return;
+      }
+
       // View -> Model
-      /*ngModel.$parsers.push(function(val) {
+      ngModel.$parsers.push(function(val) {
         try {
           if (!val) {
             return '';
@@ -54,7 +58,7 @@ angular.module('openspecimen')
         } catch (e) {
           return val;
         }
-      });*/
+      });
     }
 
     return {
@@ -84,9 +88,9 @@ angular.module('openspecimen')
       compile: function (tElement, tAttrs) {
         if (tAttrs.mdType == 'true') {
           tElement.children().find('div')
-           .attr('os-md-input', '')
-           .attr('placeholder', tAttrs.placeholder)
-           .attr('ng-model', tAttrs.date)
+            .attr('os-md-input', '')
+            .attr('placeholder', tAttrs.placeholder)
+            .attr('ng-model', tAttrs.date)
         }
 
         var inputEl = tElement.find('input');
@@ -95,7 +99,9 @@ angular.module('openspecimen')
             inputEl.attr(inputAttr, tAttrs[inputAttr]);
           } 
         });
-        inputEl.attr('ng-model', tAttrs.date);
+
+        inputEl.attr('ng-model', tAttrs.date)
+          .attr('date-only', tAttrs.dateOnly);
  
         var fmt = tAttrs.dateFormat;
         if (!fmt) {
