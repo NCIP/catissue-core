@@ -42,7 +42,7 @@
           <tr class="row" ng-repeat="dpr in dprs">
             <td class="col os-col-15">{{dpr.specimenType}}</td>
             <td class="col os-col-15">{{dpr.anatomicSite}}</td>
-            <td class="col os-col-15">{{dpr.pathologyStatus}}</td>
+            <td class="col os-col-15">{{dpr.pathologyStatuses | osArrayJoin}}</td>
             <td class="col os-col-20">{{dpr.clinicalDiagnosis}}</td>
             <td class="col os-col-10">{{dpr.specimenCount * dpr.quantity}}</td>
             <td class="col os-col-10">{{dpr.distributedQty}}</td>
@@ -62,4 +62,4 @@
       </table>
     </div>
   </div>
-
+</div>

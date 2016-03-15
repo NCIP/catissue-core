@@ -376,4 +376,35 @@
       <column name="CLINICAL_DAIGNOSIS" type="${text.type}(255)"></column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ckhilosiya" id="DP requirement pathology statuses">
+    <createTable tableName="OS_DPR_PATHOLOGY_STATUSES">
+      <column name="DPR_ID" type="${int.type}"></column>
+      <column name="PATHOLOGY_STATUS" type="${text.type}(50)"></column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="FK for distribution protocol requirement">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_DPR_PATH_DPR_ID"
+      baseTableName="OS_DPR_PATHOLOGY_STATUSES"
+      baseColumnNames="DPR_ID"
+      referencedTableName="OS_DP_REQUIREMENTS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Transfer DP requirement pathology status data">
+    <sql>
+      insert into os_dpr_pathology_statuses
+        (dpr_id, pathology_status)
+      select
+        identifier, pathology_status
+      from
+        os_dp_requirements
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Delete pathology status as it is moved to dpr pathology statuses table">
+    <dropColumn tableName="OS_DP_REQUIREMENTS" columnName="PATHOLOGY_STATUS"/>
+  </changeSet>
 </databaseChangeLog>
