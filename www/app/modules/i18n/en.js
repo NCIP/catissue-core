@@ -304,6 +304,7 @@
       "responses": "Consent Responses",
       "signature_date": "Consent Signature Date",
       "witness": "Consent Witness",
+      "comments": "Comments",
       "clear": "Clear response"
      },
 

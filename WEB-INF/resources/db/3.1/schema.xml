@@ -407,4 +407,37 @@
   <changeSet author="ckhilosiya" id="Delete pathology status as it is moved to dpr pathology statuses table">
     <dropColumn tableName="OS_DP_REQUIREMENTS" columnName="PATHOLOGY_STATUS"/>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Dropping cpr view because referred consent_doc_url column will be renamed">
+    <dropView viewName="cpr_view"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Treat consent document url as consent comments">
+    <renameColumn 
+      tableName="CATISSUE_COLL_PROT_REG"
+      oldColumnName="CONSENT_DOC_URL"
+      newColumnName="CONSENT_COMMENTS" 
+      columnDataType="${text.type}(1000)"/> 
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Recreating cpr view after referred consent_doc_url column renamed">
+    <createView viewName="cpr_view">
+      select 
+        cpr.identifier as cpr_id, cpr.collection_protocol_id as cp_id,
+        cpr.participant_id as participant_id, p.first_name as first_name,
+        p.middle_name as middle_name, p.last_name as last_name,
+        p.birth_date as dob, p.social_security_number as ssn,
+        cpr.activity_status as activity_status, p.gender as gender,
+        p.genotype as genotype, cpr.registration_date as registration_date,
+        cpr.protocol_participant_id as ppid, p.vital_status as vital_status,
+        p.death_date as death_date, p.ethnicity as ethnicity,
+        p.empi_id as empi_id, cpr.barcode as barcode,
+        cpr.consent_sign_date as consent_sign_date, cpr.consent_witness as consent_witness,
+        cpr.consent_comments as consent_comments
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_participant p on cpr.participant_id = p.identifier
+    </createView> 
+  </changeSet>
+
 </databaseChangeLog>

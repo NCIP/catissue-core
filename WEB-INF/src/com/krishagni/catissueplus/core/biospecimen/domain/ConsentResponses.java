@@ -7,23 +7,15 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class ConsentResponses {
-	private String signedConsentDocumentUrl;
-
 	private Date consentSignDate;
 
 	private User consentWitness;
 	
+	private String consentComments;
+	
 	private String signedConsentDocumentName;
 
 	private Set<ConsentTierResponse> consentResponses = new HashSet<ConsentTierResponse>();
-
-	public String getSignedConsentDocumentUrl() {
-		return signedConsentDocumentUrl;
-	}
-
-	public void setSignedConsentDocumentUrl(String signedConsentDocumentUrl) {
-		this.signedConsentDocumentUrl = signedConsentDocumentUrl;
-	}
 
 	public Date getConsentSignDate() {
 		return consentSignDate;
@@ -39,6 +31,14 @@ public class ConsentResponses {
 
 	public void setConsentWitness(User consentWitness) {
 		this.consentWitness = consentWitness;
+	}
+
+	public String getConsentComments() {
+		return consentComments;
+	}
+
+	public void setConsentComments(String consentComments) {
+		this.consentComments = consentComments;
 	}
 
 	public String getSignedConsentDocumentName() {

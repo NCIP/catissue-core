@@ -62,36 +62,61 @@
           <div ng-switch on="editMode">
             <div ng-switch-when="true">
               <div class="col-xs-6">
-                <os-date-picker name="consentDate" date="consent.consentSignatureDate" md-type="true"
-                  placeholder="{{'participant.consent.signature_date'|translate}}">
-                </os-date-picker>
+                <div class="form-group">
+                  <os-date-picker name="consentDate" date="consent.consentSignatureDate" md-type="true"
+                    placeholder="{{'participant.consent.signature_date' | translate}}">
+                  </os-date-picker>
+                </div>
               </div>
               <div class="col-xs-6">
-                <div os-md-input ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
-                  <os-users ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}"> </os-users>
+                <div class="form-group">
+                  <div os-md-input ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
+                    <os-users ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
+                    </os-users>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <textarea os-md-input ng-model="consent.comments"
+                    placeholder="{{'participant.consent.comments' | translate}}" rows="1">
+                  </textarea>
                 </div>
               </div>
             </div>
             <div ng-switch-when="false">
-              <div class="col-xs-6 os-md-input read">
-                <label class="os-md-input-label">
-                  <span translate="participant.consent.signature_date">Consent Signature Date</span>
-                </label>
-                <span>{{consent.consentSignatureDate | date: global.dateFmt | osNoValue}}</span>
+              <div class="col-xs-6">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.signature_date">Consent Signature Date</span>
+                  </label>
+                  <span>{{consent.consentSignatureDate | date: global.dateFmt | osNoValue}}</span>
+                </div>
               </div>
-              <div class="col-xs-6 os-md-input read">
-                <label class="os-md-input-label">
-                  <span translate="participant.consent.witness">Consent Witness</span>
-                </label>
-                <span ng-if="consent.witness">{{consent.witness | osUserDisplayName}}</span>
-                <span ng-if="!consent.witness" translate="common.not_specified">Not Specified</span>
+              <div class="col-xs-6">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.witness">Consent Witness</span>
+                  </label>
+                  <span ng-if="consent.witness">{{consent.witness | osUserDisplayName}}</span>
+                  <span ng-if="!consent.witness" translate="common.not_specified">Not Specified</span>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.comments">Comments</span>
+                  </label>
+                  <span>{{consent.comments | osNoValue}}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="list-group-item clearfix" ng-repeat="consentTierResponse in consent.consentTierResponses" ng-init="consentTierResponseIdx = $index">
+      <div class="list-group-item clearfix" 
+        ng-repeat="consentTierResponse in consent.consentTierResponses" ng-init="consentTierResponseIdx = $index">
         <div>
           <div class="os-consent-stmt">
             <span title="{{consentTierResponse.statement}}">{{consentTierResponse.statement}}</span>

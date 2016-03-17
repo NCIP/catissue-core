@@ -35,19 +35,15 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		ConsentResponses consentResponses = new ConsentResponses();
-		setConsentDocumentUrl(detail, consentResponses);
 		setConsentSignDate(detail, consentResponses);
 		setConsentWitness(detail, consentResponses, ose);
+		setConsentComments(detail, consentResponses);
 		setConsentResponses(detail, consentResponses, ose);
 
 		ose.checkAndThrow();
 		return consentResponses;
 	}
 	
-	private void setConsentDocumentUrl(ConsentDetail detail, ConsentResponses consentResponses) {
-		consentResponses.setSignedConsentDocumentUrl(detail.getConsentDocumentUrl());
-	}
-
 	private void setConsentSignDate(ConsentDetail detail, ConsentResponses consentResponses) {
 		if (detail.getConsentSignatureDate() != null) {
 			consentResponses.setConsentSignDate(detail.getConsentSignatureDate());
@@ -74,6 +70,10 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		}
 		
 		consentResponses.setConsentWitness(witness);
+	}
+	
+	private void setConsentComments(ConsentDetail detail, ConsentResponses consentResponses) {
+		consentResponses.setConsentComments(detail.getComments());
 	}
 	
 	private void setConsentResponses(ConsentDetail detail, ConsentResponses consentResponses, OpenSpecimenException ose) {
