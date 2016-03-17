@@ -70,27 +70,17 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 
 	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setId(order.getId());
-		detail.setName(order.getName());
-		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
-		detail.setInstituteName(order.getInstitute().getName());
-		if (order.getSite() != null) {
-			detail.setSiteId(order.getSite().getId());
-			detail.setSiteName(order.getSite().getName());
-		}
-		
-		detail.setRequester(UserSummary.from(order.getRequester()));
-		detail.setCreationDate(order.getCreationDate());
-		detail.setExecutionDate(order.getExecutionDate());
-		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));		
-		detail.setStatus(order.getStatus().toString());
-		detail.setActivityStatus(order.getActivityStatus());
-		detail.setTrackingUrl(order.getTrackingUrl());
-		detail.setComments(order.getComments());
+
+		copy(order, detail);
 		if (order.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}
-		
+
+		detail.setTrackingUrl(order.getTrackingUrl());
+		detail.setComments(order.getComments());
+		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
+		detail.setActivityStatus(order.getActivityStatus());
+
 		return detail;
 	}
 	

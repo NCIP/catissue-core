@@ -1,7 +1,11 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class DistributionOrderSummary {
@@ -113,5 +117,37 @@ public class DistributionOrderSummary {
 
 	public void setSpecimenCnt(Long specimenCnt) {
 		this.specimenCnt = specimenCnt;
+	}
+
+	public static DistributionOrderSummary from(DistributionOrder order) {
+		DistributionOrderSummary detail = new DistributionOrderSummary();
+		copy(order, detail);
+		return detail;
+	}
+
+	public static List<DistributionOrderSummary> from(Collection<DistributionOrder> orders) {
+		List<DistributionOrderSummary> list = new ArrayList<DistributionOrderSummary>();
+
+		for (DistributionOrder order: orders) {
+			list.add(from(order));
+		}
+
+		return list;
+	}
+
+	public static void copy(DistributionOrder order, DistributionOrderSummary detail) {
+		detail.setId(order.getId());
+		detail.setName(order.getName());
+		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
+		detail.setInstituteName(order.getInstitute().getName());
+		if (order.getSite() != null) {
+			detail.setSiteId(order.getSite().getId());
+			detail.setSiteName(order.getSite().getName());
+		}
+
+		detail.setRequester(UserSummary.from(order.getRequester()));
+		detail.setCreationDate(order.getCreationDate());
+		detail.setExecutionDate(order.getExecutionDate());
+		detail.setStatus(order.getStatus().toString());
 	}
 }
