@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -70,8 +71,8 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 
 	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
+		fromTo(order, detail);
 
-		copy(order, detail);
 		if (order.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}
@@ -80,17 +81,10 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 		detail.setComments(order.getComments());
 		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
 		detail.setActivityStatus(order.getActivityStatus());
-
 		return detail;
 	}
 	
 	public static List<DistributionOrderDetail> from(List<DistributionOrder> orders) {
-		List <DistributionOrderDetail> list = new ArrayList<DistributionOrderDetail>();
-		
-		for (DistributionOrder order : orders) {
-			list.add(from(order));
-		}
-		
-		return list;
+		return orders.stream().map(DistributionOrderDetail::from).collect(Collectors.toList());
 	}
 }
