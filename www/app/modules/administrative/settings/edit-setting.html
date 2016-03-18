@@ -38,7 +38,9 @@
       <label class="col-xs-2 control-label" translate="settings.new_value">New Value</label>
       <div class="col-xs-10">
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
-          ng-if="setting.type == 'STRING'" required></input>
+          ng-if="setting.type == 'STRING' && !setting.secured" required></input>
+        <input type="password" name="value" class="form-control" ng-model="setting.value" 
+          ng-if="setting.type == 'STRING' && setting.secured" required></input>
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
           ng-maxlength="1" ng-if="setting.type == 'CHAR'" required></input>
         <input type="text" name="value" class="form-control" ng-model="setting.value" 

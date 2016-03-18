@@ -29,6 +29,8 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 	private String descCode;
 	
 	private Date activationDate;
+	
+	private boolean secured;
 
 	public String getModule() {
 		return module;
@@ -94,6 +96,14 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 		this.activationDate = activationDate;
 	}
 	
+	public boolean isSecured() {
+		return secured;
+	}
+
+	public void setSecured(boolean secured) {
+		this.secured = secured;
+	}
+
 	@Override
 	public int compareTo(ConfigSettingDetail o) {
 		int cmp = module.compareTo(o.module);
@@ -116,7 +126,8 @@ public class ConfigSettingDetail implements Comparable<ConfigSettingDetail> {
 		result.setAllowedValues(new HashSet<String>(property.getAllowedValues()));
 		result.setDescCode(property.getDescCode());
 		result.setDisplayNameCode(property.getDisplayNameCode());
-		result.setValue(setting.getValue());
+		result.setSecured(property.isSecured());
+		result.setValue(property.isSecured() ? "********" : setting.getValue());
 		result.setActivationDate(setting.getActivationDate());
 		return result;
 	}

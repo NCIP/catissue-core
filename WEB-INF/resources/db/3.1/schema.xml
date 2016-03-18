@@ -440,4 +440,64 @@
     </createView> 
   </changeSet>
 
+  <changeSet author="slakhani" id="Column to specify whether config property value needs to be secured">
+    <addColumn tableName="OS_CFG_PROPS">
+      <column name="IS_SECURE" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Create procedure to add secured config property" dbms="mysql">
+    <sql endDelimiter="//">
+      create procedure add_secured_cfg_prop(
+        in moduleName text, 
+        in propName text,
+        in propCode text,
+        in propDesc text,
+        in propType text,
+        in defValue text
+      )
+      begin
+        call add_cfg_prop(moduleName, propName, propCode, propDesc, propType, defValue);
+        
+        select identifier into @module_id from os_modules where name = moduleName;
+
+        update
+          os_cfg_props
+        set
+          is_secure = 1
+        where
+          module_id = @module_id and name = propName;
+      end
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Create procedure to add secured config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure add_secured_cfg_prop(
+        moduleName in varchar2, 
+        propName   in varchar2,
+        propCode   in varchar2,
+        propDesc   in varchar2,
+        propType   in varchar2,
+        defValue   in varchar2
+      ) is
+        module_id number(20);
+      begin
+        add_cfg_prop(moduleName, propName, propCode, propDesc, propType, defValue);
+        
+        select identifier into module_id from os_modules where name = moduleName;
+
+        update
+          os_cfg_props
+        set
+          is_secure = 1
+        where
+          module_id = module_id and name = propName;
+      end;
+      //
+    </sql>
+  </changeSet>
 </databaseChangeLog>
