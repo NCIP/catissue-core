@@ -2,6 +2,8 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -16,6 +18,8 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
 	
 	private String activityStatus;
+
+	private Map<String, Object> extraAttrs;
 
 	public UserSummary getDistributor() {
 		return distributor;
@@ -57,39 +61,30 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 		this.activityStatus = activityStatus;
 	}
 
+	public Map<String, Object> getExtraAttrs() {
+		return extraAttrs;
+	}
+
+	public void setExtraAttrs(Map<String, Object> extraAttrs) {
+		this.extraAttrs = extraAttrs;
+	}
+
 	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
-		detail.setId(order.getId());
-		detail.setName(order.getName());
-		detail.setDistributionProtocol(DistributionProtocolDetail.from(order.getDistributionProtocol()));
-		detail.setInstituteName(order.getInstitute().getName());
-		if (order.getSite() != null) {
-			detail.setSiteId(order.getSite().getId());
-			detail.setSiteName(order.getSite().getName());
-		}
-		
-		detail.setRequester(UserSummary.from(order.getRequester()));
-		detail.setCreationDate(order.getCreationDate());
-		detail.setExecutionDate(order.getExecutionDate());
-		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));		
-		detail.setStatus(order.getStatus().toString());
-		detail.setActivityStatus(order.getActivityStatus());
-		detail.setTrackingUrl(order.getTrackingUrl());
-		detail.setComments(order.getComments());
+		fromTo(order, detail);
+
 		if (order.getDistributor() != null ) {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}
-		
+
+		detail.setTrackingUrl(order.getTrackingUrl());
+		detail.setComments(order.getComments());
+		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));
+		detail.setActivityStatus(order.getActivityStatus());
 		return detail;
 	}
 	
 	public static List<DistributionOrderDetail> from(List<DistributionOrder> orders) {
-		List <DistributionOrderDetail> list = new ArrayList<DistributionOrderDetail>();
-		
-		for (DistributionOrder order : orders) {
-			list.add(from(order));
-		}
-		
-		return list;
+		return orders.stream().map(DistributionOrderDetail::from).collect(Collectors.toList());
 	}
 }

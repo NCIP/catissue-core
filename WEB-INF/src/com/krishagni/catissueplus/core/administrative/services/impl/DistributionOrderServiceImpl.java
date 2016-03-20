@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
+import com.krishagni.catissueplus.core.common.EntityCrudListener;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -74,6 +76,8 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	private QueryService querySvc;
 	
 	private EmailService emailService;
+
+	private List<EntityCrudListener<DistributionOrderDetail, DistributionOrder>> listeners = new ArrayList<>();
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -119,7 +123,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		try {
 			DistributionOrder order = getOrder(req.getPayload(), null);
 			AccessCtrlMgr.getInstance().ensureReadDistributionOrderRights(order);
-			return ResponseEvent.response(DistributionOrderDetail.from(order));
+
+			DistributionOrderDetail output = DistributionOrderDetail.from(order);
+			listeners.forEach(listener -> listener.onRead(output, order));
+			return ResponseEvent.response(output);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -131,8 +138,8 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	@PlusTransactional
 	public ResponseEvent<DistributionOrderDetail> createOrder(RequestEvent<DistributionOrderDetail> req) {
 		try {
-			DistributionOrderDetail detail = req.getPayload();
-			DistributionOrder order = distributionFactory.createDistributionOrder(detail, Status.PENDING);
+			DistributionOrderDetail input = req.getPayload();
+			DistributionOrder order = distributionFactory.createDistributionOrder(input, Status.PENDING);
 			
 			AccessCtrlMgr.getInstance().ensureCreateDistributionOrderRights(order);
 			
@@ -144,18 +151,17 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			
 			ose.checkAndThrow();
 			
-			Status inputStatus = Status.valueOf(detail.getStatus());
+			Status inputStatus = Status.valueOf(input.getStatus());
 			if (inputStatus == Status.EXECUTED) {
 				order.distribute();
 			}
 			
-			//
-			//  Saved to obtain IDs to make distributed events
-			//
 			daoFactory.getDistributionOrderDao().saveOrUpdate(order, true);
-			
 			sendOrderProcessedEmail(order, null);
-			return ResponseEvent.response(DistributionOrderDetail.from(order));
+
+			DistributionOrderDetail output = DistributionOrderDetail.from(order);
+			listeners.forEach(listener -> listener.onSave(input, output, order));
+			return ResponseEvent.response(output);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -167,15 +173,15 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	@PlusTransactional
 	public ResponseEvent<DistributionOrderDetail> updateOrder(RequestEvent<DistributionOrderDetail> req) {
 		try {
-			DistributionOrderDetail detail = req.getPayload();
-			Long orderId = detail.getId();
+			DistributionOrderDetail input = req.getPayload();
+			Long orderId = input.getId();
 			DistributionOrder existingOrder = daoFactory.getDistributionOrderDao().getById(orderId);
 			if (existingOrder == null) {
 				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
 			}			
 			
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(existingOrder);
-			DistributionOrder newOrder = distributionFactory.createDistributionOrder(detail, null);
+			DistributionOrder newOrder = distributionFactory.createDistributionOrder(input, null);
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(newOrder);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -190,7 +196,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			existingOrder.update(newOrder);
 			daoFactory.getDistributionOrderDao().saveOrUpdate(existingOrder, true);
 			sendOrderProcessedEmail(existingOrder, oldStatus);
-			return ResponseEvent.response(DistributionOrderDetail.from(existingOrder));
+
+			DistributionOrderDetail output = DistributionOrderDetail.from(existingOrder);
+			listeners.forEach(listener -> listener.onSave(input, output, existingOrder));
+			return ResponseEvent.response(output);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -294,6 +303,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	}
 
 	@Override
+	public void addListener(EntityCrudListener<DistributionOrderDetail, DistributionOrder> listener) {
+		listeners.add(listener);
+	}
+
+	@Override
 	public String getObjectName() {
 		return "order";
 	}
@@ -307,6 +321,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 
 		return daoFactory.getDistributionOrderDao().getOrderIds(key, value);
 	}
+
 
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {
