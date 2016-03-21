@@ -478,17 +478,22 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	}
 
 	private ExportedFileDetail exportSpecimenList(SpecimenList list, Collection<Specimen> specimens) {
+		String listName = list.getName();
 		FileWriter fileWriter = null;
 		CsvWriter csvWriter = null;
 		File dataFile = null;
 
 		try {
+			if (list.isDefaultList()) {
+				listName = list.getOwner().formattedName() + " " + getMsg(LIST_DEFAULT);
+			}
+
 			File dataDir = new File(ConfigUtil.getInstance().getDataDir());
 			dataFile = File.createTempFile("specimen-list-", ".csv", dataDir);
 			fileWriter = new FileWriter(dataFile);
 			csvWriter = CsvFileWriter.createCsvFileWriter(fileWriter);
 
-			csvWriter.writeNext(new String[] { getMsg(LIST_NAME), list.getName()});
+			csvWriter.writeNext(new String[] { getMsg(LIST_NAME), listName});
 			csvWriter.writeNext(new String[] { getMsg(LIST_DESC), list.getDescription()});
 			csvWriter.writeNext(new String[0]);
 
@@ -509,7 +514,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			IOUtils.closeQuietly(csvWriter);
 		}
 
-		return new ExportedFileDetail(list.getName(), dataFile);
+		return new ExportedFileDetail(listName, dataFile);
 	}
 
 	private String[] getHeaderRow() {
@@ -557,6 +562,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	private static final String LIST_NAME      = "specimen_list_name";
 
 	private static final String LIST_DESC      = "specimen_list_description";
+
+	private static final String LIST_DEFAULT   = "specimen_list_default_user_list";
 
 	private static final String SPMN_LABEL     = "specimen_label";
 
