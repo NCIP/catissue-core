@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vlonushte" id="Audit consent comments">
+    <renameColumn 
+      tableName="CATISSUE_COLL_PROT_REG_AUD"
+      oldColumnName="CONSENT_DOC_URL"
+      newColumnName="CONSENT_COMMENTS" 
+      columnDataType="${text.type}(1000)"/> 
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Track consent comment modifications">
+    <renameColumn 
+      tableName="CATISSUE_COLL_PROT_REG_AUD"
+      oldColumnName="signedConsentDocumentUrl_MOD"
+      newColumnName="consentComments_MOD" 
+      columnDataType="${bit.type}"/> 
+  </changeSet>
+</databaseChangeLog>

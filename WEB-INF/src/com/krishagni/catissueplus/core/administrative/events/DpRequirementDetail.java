@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 
@@ -16,7 +18,7 @@ public class DpRequirementDetail {
 	
 	private String anatomicSite;
 	
-	private String pathologyStatus;
+	private Set<String> pathologyStatuses;
 
 	private String clinicalDiagnosis;
 	
@@ -64,12 +66,12 @@ public class DpRequirementDetail {
 		this.anatomicSite = anatomicSite;
 	}
 
-	public String getPathologyStatus() {
-		return pathologyStatus;
+	public Set<String> getPathologyStatuses() {
+		return pathologyStatuses;
 	}
 
-	public void setPathologyStatus(String pathologyStatus) {
-		this.pathologyStatus = pathologyStatus;
+	public void setPathologyStatuses(Set<String> pathologyStatuses) {
+		this.pathologyStatuses = pathologyStatuses;
 	}
 
 	public String getClinicalDiagnosis() {
@@ -135,7 +137,7 @@ public class DpRequirementDetail {
 		detail.setDp(DistributionProtocolSummary.from(dpr.getDistributionProtocol()));
 		detail.setSpecimenType(dpr.getSpecimenType());
 		detail.setAnatomicSite(dpr.getAnatomicSite());
-		detail.setPathologyStatus(dpr.getPathologyStatus());
+		detail.setPathologyStatuses(new HashSet<String>(dpr.getPathologyStatuses()));
 		detail.setClinicalDiagnosis(dpr.getClinicalDiagnosis());
 		detail.setSpecimenCount(dpr.getSpecimenCount());
 		detail.setQuantity(dpr.getQuantity());

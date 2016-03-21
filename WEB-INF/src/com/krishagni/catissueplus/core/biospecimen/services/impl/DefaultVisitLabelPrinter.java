@@ -163,6 +163,7 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 				}
 				
 				rules.add(rule);
+				logger.info(String.format("Adding rule [%s]", rule));
 			}
 			
 			this.rules = rules;
@@ -183,9 +184,9 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 				return null;
 			}
 			
-			String[] ruleLineFields = ruleLine.split("\\s+");
-			if (ruleLineFields == null || ruleLineFields.length != 10) {
-				logger.error("Invalid rule: " + ruleLine);
+			String[] ruleLineFields = ruleLine.split("\\t");
+			if (ruleLineFields.length != 10) {
+				logger.error(String.format("Invalid rule [%s]. Expected variables: 10, Actual: [%d]", ruleLine, ruleLineFields.length));
 				return null;
 			}
 			
@@ -207,7 +208,7 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 			for (String labelToken : labelTokens) {
 				LabelTmplToken token = printLabelTokensRegistrar.getToken(labelToken);
 				if (token == null) {
-					logger.error("Unknown token: " + token);
+					logger.error(String.format("Invalid rule [%s]. Unknown token: [%s]", ruleLine, labelToken));
 					badTokens = true;
 					break;
 				}

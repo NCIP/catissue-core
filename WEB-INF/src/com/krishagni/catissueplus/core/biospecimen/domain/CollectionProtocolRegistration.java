@@ -41,11 +41,11 @@ public class CollectionProtocolRegistration {
 
 	private String activityStatus;
 
-	private String signedConsentDocumentUrl;
-
 	private Date consentSignDate;
 
 	private User consentWitness;
+	
+	private String consentComments;
 	
 	private String signedConsentDocumentName;
 
@@ -120,15 +120,7 @@ public class CollectionProtocolRegistration {
 		
 		this.activityStatus = activityStatus;
 	}
-
-	public String getSignedConsentDocumentUrl() {
-		return signedConsentDocumentUrl;
-	}
-
-	public void setSignedConsentDocumentUrl(String signedConsentDocumentUrl) {
-		this.signedConsentDocumentUrl = signedConsentDocumentUrl;
-	}
-
+	
 	public Date getConsentSignDate() {
 		return consentSignDate;
 	}
@@ -143,6 +135,14 @@ public class CollectionProtocolRegistration {
 
 	public void setConsentWitness(User consentWitness) {
 		this.consentWitness = consentWitness;
+	}
+
+	public String getConsentComments() {
+		return consentComments;
+	}
+
+	public void setConsentComments(String consentComments) {
+		this.consentComments = consentComments;
 	}
 
 	public String getSignedConsentDocumentName() {
@@ -228,8 +228,8 @@ public class CollectionProtocolRegistration {
 	public void updateConsents(ConsentResponses consentResponses) {
 		setConsentSignDate(consentResponses.getConsentSignDate());
 		setConsentWitness(consentResponses.getConsentWitness());
+		setConsentComments(consentResponses.getConsentComments());
 		setConsentTierResponses(consentResponses.getConsentResponses());
-		setSignedConsentDocumentUrl(consentResponses.getSignedConsentDocumentUrl());
 	}
 	
 	public void setPpidIfEmpty() {

@@ -36,5 +36,7 @@
       <key column="PROPERTY_ID"/>
       <element column="VALUE" type="string"/>
     </set>
+    
+    <property name="secured" column="IS_SECURE"/>
   </class>
 </hibernate-mapping>

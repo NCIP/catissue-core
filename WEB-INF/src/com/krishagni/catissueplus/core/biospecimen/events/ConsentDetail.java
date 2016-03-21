@@ -17,12 +17,12 @@ public class ConsentDetail {
 	
 	private String ppid;
 	
-	private String consentDocumentUrl;
-
 	private Date consentSignatureDate;
 
 	private UserSummary witness;
-
+	
+	private String comments;
+	
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 	
 	private String consentDocumentName;
@@ -51,14 +51,6 @@ public class ConsentDetail {
 		this.ppid = ppid;
 	}
 
-	public String getConsentDocumentUrl() {
-		return consentDocumentUrl;
-	}
-
-	public void setConsentDocumentUrl(String consentDocumentUrl) {
-		this.consentDocumentUrl = consentDocumentUrl;
-	}
-
 	public Date getConsentSignatureDate() {
 		return consentSignatureDate;
 	}
@@ -73,6 +65,14 @@ public class ConsentDetail {
 
 	public void setWitness(UserSummary witness) {
 		this.witness = witness;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 
 	public List<ConsentTierResponseDetail> getConsentTierResponses() {
@@ -93,8 +93,8 @@ public class ConsentDetail {
 	
 	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr) {
 		ConsentDetail consent = new ConsentDetail();
-		consent.setConsentDocumentUrl(cpr.getSignedConsentDocumentUrl());
 		consent.setConsentSignatureDate(cpr.getConsentSignDate());
+		consent.setComments(cpr.getConsentComments());
 		
 		String fileName = cpr.getSignedConsentDocumentName();
 		if (fileName != null) {

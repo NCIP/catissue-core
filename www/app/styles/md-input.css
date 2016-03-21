@@ -72,7 +72,7 @@
 #data-table tbody td textarea,
 .os-md-input textarea {
   resize: none;
-  margin-top: 0px !important;
+  margin-top: 15px;
   border: 0;
   padding: 2px 0px;
   box-shadow: none !important;
@@ -96,6 +96,7 @@
 }*/
 
 .os-table.bulk-edit .os-md-input input,
+.os-table.bulk-edit .os-md-input textarea,
 .os-table.bulk-edit .os-md-input .ui-select-match,
 .os-table.bulk-edit .os-md-input .ui-select-search {
   margin-top: 0px;

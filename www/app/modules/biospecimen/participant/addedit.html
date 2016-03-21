@@ -15,7 +15,7 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
           <div class="col-xs-6">
-            <os-date-picker name="regDate" date="cpr.registrationDate"
+            <os-date-picker name="regDate" date="cpr.registrationDate" date-only="true"
               required placeholder="{{'participant.regDate' | translate}}">
             </os-date-picker>
             <div os-field-error field="pform.regDate"></div>
@@ -53,7 +53,7 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="participant.birth_date">Birth Date</label>
           <div class="col-xs-6">
-            <os-date-picker name="birthDate" date="cpr.participant.birthDate"
+            <os-date-picker name="birthDate" date="cpr.participant.birthDate" date-only="true"
               placeholder="{{'participant.birth_date' | translate}}">
             </os-date-picker>
             <div os-field-error field="pform.birthDate"></div>

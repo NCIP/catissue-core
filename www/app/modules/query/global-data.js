@@ -39,9 +39,14 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
         cp.forms = [];
         this.formsQ.then(
           function(forms) { 
-            Util.unshiftAll(cp.forms, forms);
+            Util.unshiftAll(cp.forms, angular.copy(forms));
+
+            var refCp = new CollectionProtocol(cp);
+            delete refCp.forms;
+
             angular.forEach(cp.forms, function(form) {
-              form.cp = cp;
+              form.cp = refCp;
+              form.fields = undefined;
             });
             d.resolve(cp.forms);
           }

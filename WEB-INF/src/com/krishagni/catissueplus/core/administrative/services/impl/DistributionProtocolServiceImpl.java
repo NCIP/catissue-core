@@ -450,7 +450,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	private void ensureSpecimenPropertyPresent(DpRequirement dpr, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(dpr.getSpecimenType()) && StringUtils.isBlank(dpr.getAnatomicSite()) &&
-			StringUtils.isBlank(dpr.getPathologyStatus()) && StringUtils.isBlank(dpr.getClinicalDiagnosis())) {
+			CollectionUtils.isEmpty(dpr.getPathologyStatuses()) && StringUtils.isBlank(dpr.getClinicalDiagnosis())) {
 			ose.addError(DpRequirementErrorCode.SPEC_PROPERTY_REQUIRED);
 		}
 	}
@@ -461,7 +461,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 		
 		DistributionProtocol dp = newDpr.getDistributionProtocol();
-		if (dp.hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatus(), newDpr.getClinicalDiagnosis())) {
+		if (dp.hasRequirement(newDpr.getSpecimenType(), newDpr.getAnatomicSite(), newDpr.getPathologyStatuses(),
+			newDpr.getClinicalDiagnosis())) {
 			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS);
 		}
 	}

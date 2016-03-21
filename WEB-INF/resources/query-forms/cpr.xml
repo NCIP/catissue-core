@@ -309,23 +309,22 @@
         <format>MM-dd-yyyy</format>
       </datePicker>
     </row>
-    <row>
-      <subForm>
+    <row>  
+      <userField>
         <name>consentWitness</name>
         <udn>consentWitness</udn>
         <caption>#getMessage("participant_consent_witness")</caption>
-        <table>USER_VIEW</table>
-        <foreignKey>IDENTIFIER</foreignKey>
-        <parentKey>CONSENT_WITNESS</parentKey>
-        <row>  
-          <userField>
-            <name>consentWitness</name>
-            <udn>consentWitness</udn>
-            <caption>#getMessage("participant_consent_witness_name")</caption>
-            <column>IDENTIFIER</column>
-          </userField>    
-        </row>
-      </subForm>
+        <column>CONSENT_WITNESS</column>
+      </userField>    
+    </row>
+    <row>
+      <textField>
+        <name>consentComments</name>
+        <udn>consentComments</udn>
+        <caption>#getMessage("participant_consent_comments")</caption>
+        <column>CONSENT_COMMENTS</column>
+        <maxLength>1000</maxLength>
+      </textField>
     </row>
     <row>
       <subForm>

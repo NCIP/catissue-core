@@ -1,13 +1,17 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
 import static com.krishagni.catissueplus.core.common.PvAttributes.CLINICAL_DIAG;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
 import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
+import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
@@ -15,8 +19,8 @@ import com.krishagni.catissueplus.core.administrative.domain.DpRequirement;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DpRequirementFactory;
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolSummary;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -42,7 +46,7 @@ public class DpRequirementFactoryImpl implements DpRequirementFactory {
 		setDistributionProtocol(detail, dpr, ose);
 		setSpecimenType(detail, dpr, ose);
 		setAnatomicSite(detail, dpr, ose);
-		setPathologyStatus(detail, dpr, ose);
+		setPathologyStatuses(detail, dpr, ose);
 		setClinicalDiagnosis(detail, dpr, ose);
 		setSpecimenCount(detail, dpr, ose);
 		setQuantity(detail, dpr, ose);
@@ -98,14 +102,22 @@ public class DpRequirementFactoryImpl implements DpRequirementFactory {
 		dpr.setAnatomicSite(anatomicSite);
 	}
 	
-	private void setPathologyStatus(DpRequirementDetail detail, DpRequirement dpr, OpenSpecimenException ose) {
-		String pathologyStatus = detail.getPathologyStatus();
-		if (!isValid(PATH_STATUS, pathologyStatus)) {
-			ose.addError(SpecimenErrorCode.INVALID_PATHOLOGY_STATUS);
+	private void setPathologyStatuses(DpRequirementDetail detail, DpRequirement dpr, OpenSpecimenException ose) {
+		Set<String> pathologyStatuses = detail.getPathologyStatuses();
+		if (CollectionUtils.isEmpty(pathologyStatuses)) {
 			return;
 		}
-		
-		dpr.setPathologyStatus(pathologyStatus);
+
+		List<String> invalidPathStatuses = pathologyStatuses.stream()
+			.filter(pathology -> !isValid(PATH_STATUS, pathology))
+			.collect(Collectors.toList());
+
+		if (CollectionUtils.isNotEmpty(invalidPathStatuses)) {
+			ose.addError(DpRequirementErrorCode.INVALID_PATHOLOGY_STATUSES, StringUtils.join(invalidPathStatuses));
+			return;
+		}
+
+		dpr.setPathologyStatuses(pathologyStatuses);
 	}
 
 	private void setClinicalDiagnosis(DpRequirementDetail detail, DpRequirement dpr, OpenSpecimenException ose) {

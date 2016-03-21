@@ -376,4 +376,128 @@
       <column name="CLINICAL_DAIGNOSIS" type="${text.type}(255)"></column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ckhilosiya" id="DP requirement pathology statuses">
+    <createTable tableName="OS_DPR_PATHOLOGY_STATUSES">
+      <column name="DPR_ID" type="${int.type}"></column>
+      <column name="PATHOLOGY_STATUS" type="${text.type}(50)"></column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="FK for distribution protocol requirement">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_DPR_PATH_DPR_ID"
+      baseTableName="OS_DPR_PATHOLOGY_STATUSES"
+      baseColumnNames="DPR_ID"
+      referencedTableName="OS_DP_REQUIREMENTS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Transfer DP requirement pathology status data">
+    <sql>
+      insert into os_dpr_pathology_statuses
+        (dpr_id, pathology_status)
+      select
+        identifier, pathology_status
+      from
+        os_dp_requirements
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Delete pathology status as it is moved to dpr pathology statuses table">
+    <dropColumn tableName="OS_DP_REQUIREMENTS" columnName="PATHOLOGY_STATUS"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Dropping cpr view because referred consent_doc_url column will be renamed">
+    <dropView viewName="cpr_view"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Treat consent document url as consent comments">
+    <renameColumn 
+      tableName="CATISSUE_COLL_PROT_REG"
+      oldColumnName="CONSENT_DOC_URL"
+      newColumnName="CONSENT_COMMENTS" 
+      columnDataType="${text.type}(1000)"/> 
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Recreating cpr view after referred consent_doc_url column renamed">
+    <createView viewName="cpr_view">
+      select 
+        cpr.identifier as cpr_id, cpr.collection_protocol_id as cp_id,
+        cpr.participant_id as participant_id, p.first_name as first_name,
+        p.middle_name as middle_name, p.last_name as last_name,
+        p.birth_date as dob, p.social_security_number as ssn,
+        cpr.activity_status as activity_status, p.gender as gender,
+        p.genotype as genotype, cpr.registration_date as registration_date,
+        cpr.protocol_participant_id as ppid, p.vital_status as vital_status,
+        p.death_date as death_date, p.ethnicity as ethnicity,
+        p.empi_id as empi_id, cpr.barcode as barcode,
+        cpr.consent_sign_date as consent_sign_date, cpr.consent_witness as consent_witness,
+        cpr.consent_comments as consent_comments
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_participant p on cpr.participant_id = p.identifier
+    </createView> 
+  </changeSet>
+
+  <changeSet author="slakhani" id="Column to specify whether config property value needs to be secured">
+    <addColumn tableName="OS_CFG_PROPS">
+      <column name="IS_SECURE" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Create procedure to add secured config property" dbms="mysql">
+    <sql endDelimiter="//">
+      create procedure add_secured_cfg_prop(
+        in moduleName text, 
+        in propName text,
+        in propCode text,
+        in propDesc text,
+        in propType text,
+        in defValue text
+      )
+      begin
+        call add_cfg_prop(moduleName, propName, propCode, propDesc, propType, defValue);
+        
+        select identifier into @module_id from os_modules where name = moduleName;
+
+        update
+          os_cfg_props
+        set
+          is_secure = 1
+        where
+          module_id = @module_id and name = propName;
+      end
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Create procedure to add secured config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure add_secured_cfg_prop(
+        moduleName in varchar2, 
+        propName   in varchar2,
+        propCode   in varchar2,
+        propDesc   in varchar2,
+        propType   in varchar2,
+        defValue   in varchar2
+      ) is
+        module_id number(20);
+      begin
+        add_cfg_prop(moduleName, propName, propCode, propDesc, propType, defValue);
+        
+        select identifier into module_id from os_modules where name = moduleName;
+
+        update
+          os_cfg_props
+        set
+          is_secure = 1
+        where
+          module_id = module_id and name = propName;
+      end;
+      //
+    </sql>
+  </changeSet>
 </databaseChangeLog>

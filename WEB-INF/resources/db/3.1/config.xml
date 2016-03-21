@@ -4,7 +4,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-        
+
   <changeSet author="vlonushte" id="CSV file field separator setting">
     <sql>
       call add_cfg_prop(
@@ -117,4 +117,20 @@
       );
     </sql>
   </changeSet>
- </databaseChangeLog>
+  
+  <changeSet author="slakhani" id="Email account password value should be secured">
+    <sql>
+      update 
+        os_cfg_props
+      set
+        is_secure = 1
+      where
+        module_id = (select identifier from os_modules where name = 'email') and
+        name = 'account_password';
+    </sql>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Securing existing email account password value">
+    <customChange class="com.krishagni.catissueplus.core.init.ConfigEmailPasswordUpdator"></customChange>
+  </changeSet>
+</databaseChangeLog>
