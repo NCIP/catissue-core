@@ -160,6 +160,7 @@
     "specimen_count": "Specimens",
     "view_details": "View Details",
     "view_participants": "View Participants",
+    "view_catalog": "View Catalog",
     "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
     "print_settings": "Print Settings",
     "lineage": "Lineage",
