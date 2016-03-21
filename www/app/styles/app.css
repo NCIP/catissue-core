@@ -448,6 +448,11 @@ h4 + .btn-group {
   margin-right: 0px!important;
 }
 
+.os-table-body .os-more-option-btns {
+  /* max 2 buttons and one vertical ellipsis so that they don't contract and show up on different lines */
+  min-width: 71px;
+}
+
 .os-btn-icon, a {
   cursor: pointer;
 }
