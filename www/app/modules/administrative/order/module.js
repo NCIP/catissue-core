@@ -42,8 +42,13 @@ angular.module('os.administrative.order',
           },
 
           spmnRequest: function($stateParams, $injector, order) {
-            var SpecimenRequest       = $injector.get('spmnReqSpecimenRequest');
-            var SpecimenRequestHolder = $injector.get('spmnReqHolder');
+            var SpecimenRequest       = undefined;
+            var SpecimenRequestHolder = undefined;
+            if ($injector.has('spmnReqSpecimenRequest')) {
+              SpecimenRequest = $injector.get('spmnReqSpecimenRequest');
+              SpecimenRequestHolder = $injector.get('spmnReqHolder');
+            }
+
 
             if (angular.isDefined(order.id)) {
               return !!order.request ? SpecimenRequest.getById(order.request.id) : undefined;
