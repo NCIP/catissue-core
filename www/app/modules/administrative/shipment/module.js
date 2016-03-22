@@ -41,7 +41,10 @@ angular.module('os.administrative.shipment',
             return new Shipment({status: 'Pending', shipmentItems: []});
           },
 
-          spmnRequest: function($stateParams, shipment, SpecimenRequest, SpecimenRequestHolder) {
+          spmnRequest: function($stateParams, $injector, shipment) {
+            var SpecimenRequest       = $injector.get('spmnReqSpecimenRequest');
+            var SpecimenRequestHolder = $injector.get('spmnReqHolder');
+
             if (angular.isDefined(shipment.id)) {
               return !!shipment.request ? SpecimenRequest.getById(shipment.request.id) : undefined;
             }

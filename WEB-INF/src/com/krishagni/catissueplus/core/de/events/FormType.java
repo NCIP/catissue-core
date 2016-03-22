@@ -11,8 +11,6 @@ public enum FormType {
 	
 	SPECIMEN_EVENT_FORMS("SpecimenEvent"),
 
-	SPECIMEN_REQUEST_FORMS("SpecimenRequest"),
-	
 	SITE_EXTN_FORM("SiteExtension"),
 	
 	CP_EXTN_FORM("CollectionProtocolExtension"),

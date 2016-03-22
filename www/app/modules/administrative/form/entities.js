@@ -42,7 +42,6 @@ angular.module('os.administrative.form.entities', [])
       addEntity({name: 'SpecimenCollectionGroup', key: 'entities.visit', caption: ''});
       addEntity({name: 'Specimen', key: 'entities.specimen', caption: ''});
       addEntity({name: 'SpecimenEvent', caption: '', key: 'entities.specimen_event', allCps: true});
-      addEntity({name: 'SpecimenRequest', caption: '', key: 'entities.specimen_request', allCps: true});
     }
 
     init();

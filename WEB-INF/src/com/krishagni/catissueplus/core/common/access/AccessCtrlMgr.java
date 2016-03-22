@@ -1021,31 +1021,6 @@ public class AccessCtrlMgr {
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 
-	///////////////////////////////////////////////////////////////////////
-	//                                                                   //
-	//       Specimen request access control helper methods              //
-	//                                                                   //
-	///////////////////////////////////////////////////////////////////////
-	public Set<Long> getSpecimenRequestReadAccessSiteIds() {
-		Set<Site> sites = getSpecimenRequestReadAccessSites();
-		if (sites == null) {
-			return null;
-		}
-
-		return Utility.collect(sites, "id", true);
-	}
-
-	public Set<Site> getSpecimenRequestReadAccessSites() {
-		if (AuthUtil.isAdmin()) {
-			return null;
-		}
-
-		Set<Site> allowedSites = new HashSet<Site>();
-		allowedSites.addAll(getCreateUpdateAccessDistributionOrderSites());
-		allowedSites.addAll(getCreateUpdateAccessShipmentSites());
-		return allowedSites;
-	}
-
 	//
 	// Utility method
 	//

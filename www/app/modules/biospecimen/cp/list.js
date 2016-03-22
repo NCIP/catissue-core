@@ -1,20 +1,13 @@
 
 angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
   .controller('CpListCtrl', 
-    function($scope, $state, cpList, CollectionProtocol, Util, PvManager, SpecimenRequest, AuthorizationService) {
+    function($scope, $state, cpList, CollectionProtocol, Util, PvManager, AuthorizationService) {
 
     function init() {
       $scope.cpFilterOpts = {};
       $scope.cpList = cpList;
       $scope.sites = PvManager.getSites();
       Util.filter($scope, 'cpFilterOpts', filter);
-
-      $scope.haveRequests = false;
-      SpecimenRequest.haveRequests().then(
-        function(haveRequests) {
-          $scope.haveRequests = haveRequests;
-        }
-      );
 
       $scope.allowReadJobs = AuthorizationService.isAllowed($scope.participantResource.createOpts) ||
         AuthorizationService.isAllowed($scope.participantResource.updateOpts) ||

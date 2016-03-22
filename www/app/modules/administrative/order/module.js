@@ -41,7 +41,10 @@ angular.module('os.administrative.order',
             return new DistributionOrder({status: 'PENDING', orderItems: []});
           },
 
-          spmnRequest: function($stateParams, order, SpecimenRequest, SpecimenRequestHolder) {
+          spmnRequest: function($stateParams, $injector, order) {
+            var SpecimenRequest       = $injector.get('spmnReqSpecimenRequest');
+            var SpecimenRequestHolder = $injector.get('spmnReqHolder');
+
             if (angular.isDefined(order.id)) {
               return !!order.request ? SpecimenRequest.getById(order.request.id) : undefined;
             }

@@ -163,7 +163,6 @@
     "view_details": "View Details",
     "view_participants": "View Participants",
     "view_catalog": "View Catalog",
-    "spmn_requests": "Requests",
     "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
     "print_settings": "Print Settings",
     "lineage": "Lineage",
@@ -1316,8 +1315,7 @@
     "specimen_list": "Specimen Cart",
     "consent_response": "Consent Response",
     "consent": "Consent",
-    "container": "Container",
-    "specimen_request": "Specimen Request"
+    "container": "Container"
   },
 
   "bulk_imports": {
@@ -1408,7 +1406,6 @@
     "no_specimens_for_distribution": "Please select at least one specimen to create distribution order",
     "no_specimens_for_shipment": "Please select at least one specimen to create shipment",
     "created_by": "Created By",
-    "clear_list_on_req": "Clear cart on request submission",
     "checkout": "Checkout",
     "add_event": "Add Event",
     "location": "Storage Location",
@@ -1564,31 +1561,6 @@
     "tooltip": {
       "create": "Create new shipment",
       "search": "Filter out shipments"
-    }
-  },
-
-  "specimen_requests": {
-    "list": "Specimen Requests",
-    "request_spmns": "Request Specimens",
-    "request_submitted": "Specimen request submitted successfully",
-    "loading_forms": "Please wait for a moment while we load specimens request forms...",
-    "req_id": "Request ID",
-    "cp": "Collection Protocol",
-    "requestor": "Requestor",
-    "date_of_request": "Request Date",
-    "specimens": "Specimens",
-    "request": "Specimen Request",
-    "status": "Status",
-    "req_closed": "Successfully closed request #{{id}}",
-    "statuses": {
-      "pending": "Pending",
-      "distributed": "Distributed",
-      "shipped": "Shipped",
-      "closed": "Closed"
-    },
-    "tab": {
-      "overview": "Overview",
-      "specimens": "Specimens"
     }
   },
 
@@ -1762,8 +1734,6 @@
         "welcome_video_url_desc": "URL for welcome video",
         "shipment_export_report": "Shipment export report",
         "shipment_export_report_desc": "Export Report format for all shipments",
-        "spmn_req_based_dist_or_ship": "Request based Distribution or Shipping",
-        "spmn_req_based_dist_or_ship_desc": "Specifies whether an explicit request needs to be created for distribution or shipping of specimens",
         "field_separator": "Field Separator",
         "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator",
         "training_url": "Training URL ",

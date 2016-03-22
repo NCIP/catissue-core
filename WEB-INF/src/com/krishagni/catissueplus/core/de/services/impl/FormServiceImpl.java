@@ -634,7 +634,28 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	public void addFormContextProc(String entity, FormContextProcessor proc) {
+		List<FormContextProcessor> procs = ctxtProcs.get(entity);
+		if (procs == null) {
+			procs = new ArrayList<>();
+			ctxtProcs.put(entity, procs);
+		}
+
+		boolean exists = false;
+		for (FormContextProcessor existing : procs) {
+			if (existing == proc) {
+				exists = true;
+				break;
+			}
+		}
+
+		if (!exists) {
+			procs.add(proc);
+		}
+	}
+
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);

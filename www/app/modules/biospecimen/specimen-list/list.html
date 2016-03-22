@@ -19,14 +19,11 @@
     </h3>
 
     <div class="os-btns right">
-      <button class="default" ui-sref="specimen-list-request({listId: lists.selectedList.id})">
-        <span class="fa fa-inbox"></span>
-        <span translate="specimen_requests.request_spmns">Request Specimens</span>
-      </button>
       <a class="btn default" target="_blank" href="{{lists.url + '/' + lists.selectedList.id + '/csv-file'}}">
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
+      <os-plugin-hooks view-name="'specimen-list'" sec-name="'page-header'"></os-plugin-hooks>
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>

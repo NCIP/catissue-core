@@ -4,8 +4,7 @@ angular.module('os.biospecimen.specimenlist',
     'os.biospecimen.specimenlist.list',
     'os.biospecimen.specimenlist.addedit',
     'os.biospecimen.specimenlist.specimensholder',
-    'os.biospecimen.specimenlist.assignto',
-    'os.biospecimen.specimenlist.reqspmns'
+    'os.biospecimen.specimenlist.assignto'
   ])
 
   .config(function($stateProvider) {
@@ -33,21 +32,6 @@ angular.module('os.biospecimen.specimenlist',
           }
         },
         controller: 'AddEditSpecimenListCtrl',
-        parent: 'signed-in'
-      })
-      .state('specimen-list-request', {
-        url: '/specimen-list/:listId/request-specimens',
-        templateUrl: 'modules/biospecimen/specimen-list/request-specimens.html',
-        resolve: {
-          list: function($stateParams, SpecimenList) {
-            return SpecimenList.getById($stateParams.listId);
-          },
-
-          reqFormIds: function($stateParams, SpecimenRequest) {
-            return SpecimenRequest.getRequestFormIds($stateParams.listId);
-          }
-        },
-        controller: 'RequestSpecimensCtrl',
         parent: 'signed-in'
       });
   });
