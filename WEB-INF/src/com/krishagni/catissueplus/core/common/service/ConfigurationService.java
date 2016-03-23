@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.common.service;
 import java.util.List;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -10,6 +11,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface ConfigurationService {
 	
 	public ResponseEvent<List<ConfigSettingDetail>> getSettings(RequestEvent<String> req);
+
+	public ResponseEvent<ConfigSettingDetail> getSetting(RequestEvent<Pair<String, String>> req);
 	
 	public ResponseEvent<ConfigSettingDetail> saveSetting(RequestEvent<ConfigSettingDetail> req);
 		

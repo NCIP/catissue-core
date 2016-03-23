@@ -23,6 +23,7 @@
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
+      <os-plugin-hooks view-name="'specimen-list'" sec-name="'page-header'"></os-plugin-hooks>
       <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
@@ -35,13 +36,13 @@
               <span translate="common.buttons.delete">Delete</span>
             </a>
           </li>
-          <li show-if-allowed="orderCreateOpts">
+          <li show-if-allowed="orderCreateOpts" ng-if="!lists.reqBasedDistOrShip">
             <a ng-click="distributeSpecimens()">
               <span class="fa fa-share"></span>
               <span translate="specimen_list.distribute">Distribute</span>
             </a>
           </li>
-          <li show-if-allowed="shipmentCreateOpts">
+          <li show-if-allowed="shipmentCreateOpts" ng-if="!lists.reqBasedDistOrShip">
             <a ng-click="shipSpecimens()">
               <span class="fa fa-paper-plane-o"></span>
               <span translate="specimen_list.ship">Ship</span>

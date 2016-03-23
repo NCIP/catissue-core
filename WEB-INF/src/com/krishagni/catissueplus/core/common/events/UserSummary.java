@@ -27,6 +27,8 @@ public class UserSummary implements Serializable {
 	
 	private String emailAddress;
 
+	private String instituteName;
+
 	private Boolean admin;
 
 	private int cpCount;
@@ -81,6 +83,14 @@ public class UserSummary implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
+	public String getInstituteName() {
+		return instituteName;
+	}
+
+	public void setInstituteName(String instituteName) {
+		this.instituteName = instituteName;
+	}
+
 	public Boolean getAdmin() {
 		return admin;
 	}
@@ -115,7 +125,6 @@ public class UserSummary implements Serializable {
 		userSummary.setEmailAddress(user.getEmailAddress());
 		userSummary.setAdmin(user.isAdmin());
 		userSummary.setCreationDate(user.getCreationDate());
-
 		return userSummary;
 	}
 	

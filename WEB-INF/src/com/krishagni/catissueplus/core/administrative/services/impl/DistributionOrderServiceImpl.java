@@ -23,10 +23,12 @@ import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderIt
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionOrderFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
@@ -150,6 +152,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			getValidSpecimens(order.getDistributionProtocol(), specimenLabels, ose);
 			
 			ose.checkAndThrow();
+
+			SpecimenRequest request = order.getRequest();
+			if (request != null && request.isClosed()) {
+				throw OpenSpecimenException.userError(SpecimenRequestErrorCode.CLOSED, request.getId());
+			}
 			
 			Status inputStatus = Status.valueOf(input.getStatus());
 			if (inputStatus == Status.EXECUTED) {

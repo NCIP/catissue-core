@@ -99,6 +99,10 @@ public class SpecimenList {
 		this.specimens.removeAll(specimens);
 	}
 
+	public void clear() {
+		specimens.clear();
+	}
+
 	public void addSharedUsers(List<User> users) {
 		sharedWith.addAll(users);
 	}

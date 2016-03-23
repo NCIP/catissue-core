@@ -54,3 +54,6 @@
   height: 14px;
 }
 
+.os-dist-spmns-table.os-table.bulk-edit .os-checkbox {
+  top: 2px!important;
+}

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
@@ -163,12 +163,12 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	}
 	
 	private void addInstCondition(Criteria query, DpListCriteria crit) {
-		Long instituteId = crit.instituteId();
-		if (instituteId == null) {
+		if (StringUtils.isBlank(crit.receivingInstitute())) {
 			return;
 		}
-		
-		query.add(Restrictions.eq("institute.id", instituteId));
+
+		query.createAlias("institute", "institute")
+			.add(Restrictions.eq("institute.name", crit.receivingInstitute().trim()));
 	}
 	
 	private void addDistSitesCondition(Criteria query, DpListCriteria crit) {

@@ -54,6 +54,8 @@
       <key column="SHIPMENT_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
+
+    <many-to-one name="request" column="REQUEST_ID"/>
     
     <filter name="activeEntity"/>
     

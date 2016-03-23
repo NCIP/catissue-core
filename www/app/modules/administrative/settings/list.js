@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.setting.list', ['os.administrative.models'])
   .controller('SettingsListCtrl', function(
-    $scope, $state, $stateParams, Setting, Alerts) {
+    $scope, $state, $stateParams, Setting, SettingUtil, Alerts) {
 
     function init() {
       $scope.isEdit = false;
@@ -36,6 +36,7 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
           Alerts.success('settings.success_message');
           angular.extend($scope.existingSetting, resp);
           $scope.isEdit = false;
+          SettingUtil.clearSetting(resp.module, resp.name);
         }
       );
     }

@@ -532,7 +532,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			
 			AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
 		} else {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSites();
+			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSiteIds();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
 				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 			}

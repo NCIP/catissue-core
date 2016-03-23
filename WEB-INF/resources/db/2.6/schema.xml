@@ -161,7 +161,7 @@
       incrementBy="1" 
       ordered="true" />
   </changeSet>
-  
+
   <changeSet author="nmarwaha" id="Add covering index for use in cpr specimen stat view" dbms="mysql">
     <createIndex indexName="OS_CPR_SPMN_STAT_VIEW_IDX" tableName="CATISSUE_SPECIMEN">
       <column name="SPECIMEN_COLLECTION_GROUP_ID"/>
@@ -225,5 +225,4 @@
         cpr.identifier
     </createView>
   </changeSet>
-  
 </databaseChangeLog>

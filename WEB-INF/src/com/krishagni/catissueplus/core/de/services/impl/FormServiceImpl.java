@@ -44,6 +44,7 @@ import com.krishagni.catissueplus.core.de.events.ListFormFields;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
+import com.krishagni.catissueplus.core.de.services.FormContextProcessor;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -86,7 +87,7 @@ public class FormServiceImpl implements FormService {
 	private static Set<String> staticExtendedForms = new HashSet<String>();
 	
 	private static Map<String, List<String>> customFieldForms = new HashMap<String, List<String>>();
-	
+
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
@@ -99,11 +100,17 @@ public class FormServiceImpl implements FormService {
 	}
 	
 	private FormDao formDao;
-	
+
+	private Map<String, List<FormContextProcessor>> ctxtProcs = new HashMap<String, List<FormContextProcessor>>();
+
 	public void setFormDao(FormDao formDao) {
 		this.formDao = formDao;
 	}
-	
+
+	public void setCtxtProcs(Map<String, List<FormContextProcessor>> ctxtProcs) {
+		this.ctxtProcs = ctxtProcs;
+	}
+
 	@Override
     @PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req) {
@@ -211,20 +218,25 @@ public class FormServiceImpl implements FormService {
 				Long formId = formCtxtDetail.getFormId();
 				Long cpId = formCtxtDetail.getCollectionProtocol().getId();
 				String entity = formCtxtDetail.getLevel();
-				Integer sortOrder = formCtxtDetail.getSortOrder();
-				boolean isMultiRecord = formCtxtDetail.isMultiRecord();
+
 				FormContextBean formCtxt = formDao.getFormContext(formId, cpId, entity);
 				if (formCtxt == null) {
 					formCtxt = new FormContextBean();
 					formCtxt.setContainerId(formId);
 					formCtxt.setCpId(entity == SPECIMEN_EVENT_FORM ? -1 : cpId);
 					formCtxt.setEntityType(entity);
-					formCtxt.setMultiRecord(isMultiRecord);
+					formCtxt.setMultiRecord(formCtxtDetail.isMultiRecord());
+				}
+				formCtxt.setSortOrder(formCtxtDetail.getSortOrder());
+
+				List<FormContextProcessor> procs = ctxtProcs.get(entity);
+				if (procs != null) {
+					for (FormContextProcessor proc : procs) {
+						proc.onSaveOrUpdate(formCtxt);
+					}
 				}
 
-				formCtxt.setSortOrder(sortOrder);
 				formDao.saveOrUpdate(formCtxt);
-
 				formCtxtDetail.setFormCtxtId(formCtxt.getIdentifier());
 			}
 			
@@ -461,6 +473,13 @@ public class FormServiceImpl implements FormService {
 			if (formCtx.isSysForm()) {
 				return ResponseEvent.userError(FormErrorCode.SYS_FORM_DEL_NOT_ALLOWED);
 			}
+
+			List<FormContextProcessor> procs = ctxtProcs.get(formCtx.getEntityType());
+			if (procs != null) {
+				for (FormContextProcessor proc : procs) {
+					proc.onRemove(formCtx);
+				}
+			}
 			
 			switch (opDetail.getRemoveType()) {
 				case SOFT_REMOVE:
@@ -615,7 +634,28 @@ public class FormServiceImpl implements FormService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	public void addFormContextProc(String entity, FormContextProcessor proc) {
+		List<FormContextProcessor> procs = ctxtProcs.get(entity);
+		if (procs == null) {
+			procs = new ArrayList<>();
+			ctxtProcs.put(entity, procs);
+		}
+
+		boolean exists = false;
+		for (FormContextProcessor existing : procs) {
+			if (existing == proc) {
+				exists = true;
+				break;
+			}
+		}
+
+		if (!exists) {
+			procs.add(proc);
+		}
+	}
+
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);

@@ -9,6 +9,7 @@ import com.krishagni.catissueplus.core.administrative.repository.PermissibleValu
 import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao;
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.administrative.repository.SiteDao;
+import com.krishagni.catissueplus.core.administrative.repository.SpecimenRequestDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.audit.repository.AuditDao;
@@ -63,6 +64,8 @@ public interface DaoFactory {
 	public DpRequirementDao getDistributionProtocolRequirementDao();
 	
 	public ShipmentDao getShipmentDao();
+
+	public SpecimenRequestDao getSpecimenRequestDao();
 	
 	public UpgradeLogDao getUpgradeLogDao();
 } 

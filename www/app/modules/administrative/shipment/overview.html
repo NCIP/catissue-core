@@ -1,6 +1,15 @@
 <div class="clearfix">
   <div class="col-xs-10">
     <ul class="os-key-values os-two-cols">
+      <li class="item" ng-if="!!shipment.request">
+        <strong class="key key-sm" translate="shipments.request">Request</strong>
+        <span class="value value-md">
+          <a ui-sref="specimen-request-detail.overview({requestId: shipment.request.id})">
+            <span>#{{shipment.request.id}}</span>
+          </a>
+        </span>
+      </li>
+
       <li class="item">
         <strong class="key key-sm" translate="shipments.courier_name">Courier Name</strong>
         <span class="value value-md">{{shipment.courierName | osNoValue}}</span>

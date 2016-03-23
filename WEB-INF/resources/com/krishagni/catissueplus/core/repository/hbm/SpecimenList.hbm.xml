@@ -4,9 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-  <class 
-    name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList" 
-    table="CATISSUE_SPECIMENLIST_TAGS">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList" table="CATISSUE_SPECIMENLIST_TAGS">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
@@ -18,23 +16,14 @@
 
     <property name="description" column="DESCRIPTION"/>
 
-    <many-to-one 
-      name="owner"
-      class="com.krishagni.catissueplus.core.administrative.domain.User"
-      cascade="none"
-      column="USER_ID"
-     />
+    <many-to-one name="owner" column="USER_ID"/>
      
-    <set 
-      name="sharedWith" 
-      table="SHARED_SPECIMENLIST_TAGS">
+    <set name="sharedWith" table="SHARED_SPECIMENLIST_TAGS">
       <key column="TAG_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
     </set>
 	
-    <set 
-      name="specimens" 
-      table="CATISSUE_SPEC_TAG_ITEMS">
+    <set name="specimens" table="CATISSUE_SPEC_TAG_ITEMS">
       <key column="TAG_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" column="OBJ_ID">
         <filter name="activeEntity"/>
@@ -71,5 +60,33 @@
       where 
         l.id = :listId 
     </query>
-  </class> 
+
+    <query name="getListCpSpecimens">
+      select
+        cp.id, s
+      from
+        SpecimenList l
+        join l.specimens s
+        join s.visit v
+        join v.registration cpr
+        join cpr.collectionProtocol cp
+      where
+        l.id = :listId and
+        l.deletedOn is null
+    </query>
+
+    <query name="getListSpecimensCpIds">
+      select
+        distinct cp.id
+      from
+        SpecimenList l
+        join l.specimens s
+        join s.visit v
+        join v.registration cpr
+        join cpr.collectionProtocol cp
+      where
+        l.id = :listId and
+        l.deletedOn is null
+    </query>
+  </class>
 </hibernate-mapping>

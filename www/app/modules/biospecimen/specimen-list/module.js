@@ -13,10 +13,15 @@ angular.module('os.biospecimen.specimenlist',
         url: '/specimen-list?listId',
         templateUrl: 'modules/biospecimen/specimen-list/list.html',
         controller: 'SpecimenListsCtrl',
+        resolve: {
+          reqBasedDistOrShip: function(SettingUtil) {
+            return SettingUtil.getSetting('common', 'spmn_req_based_dist_or_ship');
+          }
+        },
         parent: 'signed-in'
       })
       .state('specimen-list-addedit', {
-        url: '/specimen-list-addedit/:listId',
+        url: '/specimen-list/:listId/addedit',
         templateUrl: 'modules/biospecimen/specimen-list/addedit.html',
         resolve: {
           list: function($stateParams, SpecimenList) {

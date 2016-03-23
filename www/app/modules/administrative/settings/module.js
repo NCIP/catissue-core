@@ -1,6 +1,7 @@
 angular.module('os.administrative.setting', 
   [ 
-    'os.administrative.setting.list'
+    'os.administrative.setting.list',
+    'os.administrative.setting.util'
   ])
 
   .config(function($stateProvider) {

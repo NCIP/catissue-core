@@ -27,13 +27,13 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -184,7 +184,7 @@ public class SpecimensController {
 			Long specimenId,
 
 			@RequestBody
-			SpecimenStatusDetail detail) {
+			EntityStatusDetail detail) {
 
 		detail.setId(specimenId);
 
@@ -198,7 +198,7 @@ public class SpecimensController {
 	@ResponseBody
 	public List<SpecimenDetail> updateSpecimensStatus(
 			@RequestBody
-			List<SpecimenStatusDetail> details) {
+			List<EntityStatusDetail> details) {
 		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.updateSpecimensStatus(getRequest(details));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

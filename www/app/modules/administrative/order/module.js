@@ -29,7 +29,7 @@ angular.module('os.administrative.order',
         parent: 'order-root'
       })
       .state('order-addedit', {
-        url: '/order-addedit/:orderId',
+        url: '/order-addedit/:orderId?requestId',
         templateUrl: 'modules/administrative/order/addedit.html',
         controller: 'OrderAddEditCtrl',
         resolve: {
@@ -37,7 +37,34 @@ angular.module('os.administrative.order',
             if ($stateParams.orderId) {
               return DistributionOrder.getById($stateParams.orderId);
             }
+
             return new DistributionOrder({status: 'PENDING', orderItems: []});
+          },
+
+          spmnRequest: function($stateParams, $injector, order) {
+            var SpecimenRequest       = undefined;
+            var SpecimenRequestHolder = undefined;
+            if ($injector.has('spmnReqSpecimenRequest')) {
+              SpecimenRequest = $injector.get('spmnReqSpecimenRequest');
+              SpecimenRequestHolder = $injector.get('spmnReqHolder');
+            }
+
+
+            if (angular.isDefined(order.id)) {
+              return !!order.request ? SpecimenRequest.getById(order.request.id) : undefined;
+            }
+
+            if (!angular.isDefined($stateParams.requestId)) {
+              return undefined;
+            }
+
+            var request = SpecimenRequestHolder.get();
+            SpecimenRequestHolder.clear();
+            if (!request) {
+              request = SpecimenRequest.getById($stateParams.requestId);
+            }
+
+            return request;
           }
         },
         parent: 'order-root'

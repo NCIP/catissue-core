@@ -14,6 +14,8 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 	private String trackingUrl;
 	
 	private String comments;
+
+	private SpecimenRequestSummary request;
 	
 	private List<DistributionOrderItemDetail> orderItems = new ArrayList<DistributionOrderItemDetail>();
 	
@@ -43,6 +45,14 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+
+	public SpecimenRequestSummary getRequest() {
+		return request;
+	}
+
+	public void setRequest(SpecimenRequestSummary request) {
+		this.request = request;
 	}
 
 	public List<DistributionOrderItemDetail> getOrderItems() {
@@ -77,6 +87,10 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 			detail.setDistributor(UserSummary.from(order.getDistributor()));
 		}
 
+		if (order.getRequest() != null) {
+			detail.setRequest(SpecimenRequestSummary.from(order.getRequest()));
+		}
+		
 		detail.setTrackingUrl(order.getTrackingUrl());
 		detail.setComments(order.getComments());
 		detail.setOrderItems(DistributionOrderItemDetail.from(order.getOrderItems()));

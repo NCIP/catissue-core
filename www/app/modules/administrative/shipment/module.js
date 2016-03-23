@@ -30,14 +30,48 @@ angular.module('os.administrative.shipment',
         parent: 'shipment-root'
       })
       .state('shipment-addedit', {
-        url: '/shipment-addedit/:shipmentId',
+        url: '/shipment-addedit/:shipmentId?requestId',
         templateUrl: 'modules/administrative/shipment/addedit.html',
         resolve: {
           shipment: function($stateParams , Shipment) {
             if ($stateParams.shipmentId) {
               return Shipment.getById($stateParams.shipmentId);
             }
+
             return new Shipment({status: 'Pending', shipmentItems: []});
+          },
+
+          spmnRequest: function($stateParams, $injector, shipment) {
+            var SpecimenRequest       = undefined;
+            var SpecimenRequestHolder = undefined;
+            if ($injector.has('spmnReqSpecimenRequest')) {
+              SpecimenRequest = $injector.get('spmnReqSpecimenRequest');
+              SpecimenRequestHolder = $injector.get('spmnReqHolder');
+            }
+
+            if (angular.isDefined(shipment.id)) {
+              return !!shipment.request ? SpecimenRequest.getById(shipment.request.id) : undefined;
+            }
+
+            if (!angular.isDefined($stateParams.requestId)) {
+              return undefined;
+            }
+
+            var request = SpecimenRequestHolder.get();
+            SpecimenRequestHolder.clear();
+            if (!request) {
+              request = SpecimenRequest.getById($stateParams.requestId);
+            }
+
+            return request;
+          },
+
+          cp: function(spmnRequest, CollectionProtocol) {
+            if (!spmnRequest) {
+              return undefined;
+            }
+
+            return CollectionProtocol.getById(spmnRequest.cp.id);
           },
 
           isEditAllowed: function(shipment, Util) {

@@ -30,7 +30,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -158,13 +158,13 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatus(RequestEvent<List<SpecimenStatusDetail>> req) {
+	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatus(RequestEvent<List<EntityStatusDetail>> req) {
 		try {
 			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			for (SpecimenStatusDetail detail : req.getPayload()) {
-				Specimen specimen = getSpecimen(detail.getId(), detail.getLabel(), ose);
+			for (EntityStatusDetail detail : req.getPayload()) {
+				Specimen specimen = getSpecimen(detail.getId(), detail.getName(), ose);
 				if (specimen == null) {
 					return ResponseEvent.error(ose);
 				}

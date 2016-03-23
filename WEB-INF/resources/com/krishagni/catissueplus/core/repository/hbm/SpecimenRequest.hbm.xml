@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest" table="OS_SPECIMEN_REQUESTS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SPECIMEN_REQUESTS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one name="cp" column="CP_ID"/>
+
+    <many-to-one name="requestor" column="REQUESTOR_ID"/>
+
+    <property name="dateOfRequest" column="REQUEST_DATE"/>
+
+    <many-to-one name="processedBy" column="PROCESSOR_ID"/>
+
+    <property name="dateOfProcessing" column="PROCESSING_DATE"/>
+
+    <property name="comments" column="COMMENTS"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <set name="items" table="OS_SPECIMEN_REQUEST_ITEMS" inverse="true" cascade="all-delete-orphan">
+      <key column="REQUEST_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem"/>
+    </set>
+
+    <filter name="activeEntity"/>
+  </class>
+</hibernate-mapping>

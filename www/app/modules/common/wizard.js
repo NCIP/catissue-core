@@ -11,7 +11,7 @@ angular.module('openspecimen')
         $scope.steps = [];
 
         this.addStep = function(step) {
-          angular.extend(step, {selected: false, finished: false});
+          angular.extend(step, {selected: $scope.steps.length == 0, finished: false});
           $scope.steps.push(step);
         };
 
@@ -122,7 +122,9 @@ angular.module('openspecimen')
 
           post: function (scope, element, attributes, controller) {
             scope.selectedStep = 0;
-            scope.steps[0].selected = true;
+            if (scope.steps.length > 0) {
+              scope.steps[0].selected = true;
+            }
           }
         }
       },

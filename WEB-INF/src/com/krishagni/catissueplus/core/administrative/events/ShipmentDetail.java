@@ -51,6 +51,8 @@ public class ShipmentDetail implements Mergeable<String, ShipmentDetail>, Serial
 	private List<ShipmentItemDetail> shipmentItems = new ArrayList<ShipmentItemDetail>();
 	
 	private List<UserSummary> notifyUsers = new ArrayList<UserSummary>();
+
+	private SpecimenRequestSummary request;
 	
 	//
 	// For BO template
@@ -203,6 +205,14 @@ public class ShipmentDetail implements Mergeable<String, ShipmentDetail>, Serial
 		this.notifyUsers = notifyUsers;
 	}
 
+	public SpecimenRequestSummary getRequest() {
+		return request;
+	}
+
+	public void setRequest(SpecimenRequestSummary request) {
+		this.request = request;
+	}
+
 	public ShipmentItemDetail getShipmentItem() {
 		return shipmentItem;
 	}
@@ -241,6 +251,10 @@ public class ShipmentDetail implements Mergeable<String, ShipmentDetail>, Serial
 		
 		if (shipment.isPending()) {
 			detail.setNotifyUsers(UserSummary.from(shipment.getNotifyUsers()));
+		}
+
+		if (shipment.getRequest() != null) {
+			detail.setRequest(SpecimenRequestSummary.from(shipment.getRequest()));
 		}
 		
 		return detail;

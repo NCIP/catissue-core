@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
   .controller('SpecimenListsCtrl', function(
-    $scope, $modal, $state, $stateParams, currentUser, 
+    $scope, $modal, $state, $stateParams, currentUser, reqBasedDistOrShip,
     SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
 
     function init() { 
@@ -18,6 +18,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
         selectedList: undefined,
         myLists: [],
         sharedLists: [],
+        reqBasedDistOrShip: (reqBasedDistOrShip.value == 'true'),
         url: SpecimenList.url()
       }
 

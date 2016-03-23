@@ -338,7 +338,6 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			} else {
 				list = getDefaultList(AuthUtil.getCurrentUser(), null);
 			}
-
 			key = listId;
 		} else if (StringUtils.isNotBlank(listName)) {
 			list = daoFactory.getSpecimenListDao().getSpecimenListByName(listName);

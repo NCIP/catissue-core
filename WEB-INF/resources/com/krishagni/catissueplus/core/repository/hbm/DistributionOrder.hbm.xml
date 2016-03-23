@@ -43,6 +43,8 @@
     <many-to-one name="distributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"/>
         
     <many-to-one name="distributor" column="DISTRIBUTOR_ID"/>
+
+    <many-to-one name="request" column="REQUEST_ID"/>
       
     <filter name="activeEntity"/>
         

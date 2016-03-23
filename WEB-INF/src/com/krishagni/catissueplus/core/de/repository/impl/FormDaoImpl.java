@@ -129,7 +129,17 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		List<Object> queryFormContext = query.setLong("formId", formId).setString("entityType", "Query").list();
 		return (FormContextBean)(queryFormContext.size() == 1 ? queryFormContext.get(0) : null);
 	}
-	
+
+	@Override
+	public List<FormContextBean> getFormContexts(Collection<Long> cpIds, String entityType) {
+		return sessionFactory.getCurrentSession()
+			.createCriteria(FormContextBean.class)
+			.add(Restrictions.in("cpId", cpIds))
+			.add(Restrictions.eq("entityType", entityType))
+			.add(Restrictions.isNull("deletedOn"))
+			.list();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormCtxtSummary> getCprForms(Long cprId) {
@@ -700,7 +710,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_FORM_IDS = FQN + ".getFormIds";
 	
 	private static final String GET_QUERY_FORM_CONTEXT = FQN + ".getQueryFormCtxtByContainerId";
-	
+
 	private static final String GET_RECORD_CNT = FQN + ".getRecordCount"; 
 	
 	private static final String GET_RECS_BY_TYPE_AND_OBJECT = FQN  + ".getRecordsByEntityAndObject";

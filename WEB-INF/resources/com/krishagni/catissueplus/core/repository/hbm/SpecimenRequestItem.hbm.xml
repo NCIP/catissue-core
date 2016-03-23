@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem" table="OS_SPECIMEN_REQUEST_ITEMS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SPECIMEN_REQUEST_ITEMS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one name="request" column="REQUEST_ID"/>
+
+    <many-to-one name="specimen" column="SPECIMEN_ID"/>
+
+    <property name="status" column="STATUS">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.SpecimenRequestItem$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <many-to-one name="distribution" column="DISTRIBUTION_ID"/>
+
+    <many-to-one name="shipment" column="SHIPMENT_ID"/>
+  </class>
+</hibernate-mapping>

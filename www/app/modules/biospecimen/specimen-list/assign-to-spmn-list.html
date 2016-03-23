@@ -22,8 +22,15 @@
       </ul>
     </li>
     <li class="divider"></li>
-    <li ng-click="addToList()">
-      <a translate="specimen_list.create_new_list"></a>
+    <li>
+      <a ng-click="addToList()">
+        <span translate="specimen_list.create_new_list">Create New</span>
+      </a>
+    </li>
+    <li ng-if="specimenLists.length > 0">
+      <a ui-sref="specimen-list">
+        <span translate="specimen_list.manage_lists">Manage Carts</span>
+      </a>
     </li>
   </ul>
 </div>
