@@ -36,6 +36,11 @@
   </li>
 
   <li class="item">
+    <strong class="key key-sm" translate="participant.middle_name">Middle Name</strong>
+    <span class="value value-md">{{cpr.participant.middleName | osNoValue}}</span>
+  </li>
+
+  <li class="item">
     <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
     <os-inline-edit editor="bdEditor" name="birthDate" class="value value-md" value="cpr.participant.birthDate">
       <span ng-if="bdEditor.isDisplayMode()">{{bdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
