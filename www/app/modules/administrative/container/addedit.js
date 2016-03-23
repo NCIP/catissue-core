@@ -1,7 +1,7 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
   .controller('ContainerAddEditCtrl', function(
-    $scope, $state, $stateParams, $q, container, 
-    Site, Container, CollectionProtocol, PvManager, Util) {
+    $scope, $state, $stateParams, $q, container, containerType,
+    Site, Container, ContainerType, CollectionProtocol, PvManager, Util) {
 
     var allSpecimenTypes = undefined;
     var allowedCps = undefined;
@@ -45,6 +45,10 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         restrictCpsAndSpecimenTypes();
       }
 
+      $scope.mode = $stateParams.mode;
+      loadContainerTypes();
+      setContainerTypeProps(containerType);
+
       watchParentContainer();
     };
 
@@ -64,7 +68,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function loadPvs() {
       $scope.positionLabelingSchemes = PvManager.getPvs('container-position-labeling-schemes');
-      
+
       var op = !!$scope.container.id ? 'Update' : 'Create';
       $scope.sites = [];
       Site.listForContainers(op).then(function(sites) {
@@ -79,6 +83,13 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     };
 
+    function loadContainerTypes() {
+      $scope.containerTypes = [];
+      ContainerType.query().then(function(containerTypes) {
+        $scope.containerTypes = containerTypes;
+      });
+    }
+    
     function restrictCpsAndSpecimenTypes() {
       var parentName = $scope.container.storageLocation.name;
       Container.getByName(parentName).then(
@@ -161,9 +172,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       );
     };
 
-    $scope.loadAllCps = loadAllCps;
-          
-    $scope.save = function() {
+    function saveContainer() {
       var container = angular.copy($scope.container);
       container.$saveOrUpdate().then(
         function(result) {
@@ -175,6 +184,51 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         }
       );
     };
+
+    function createHierarchy() {
+      Container.createHierarchy($scope.container).then(
+        function(resp) {
+          if (resp[0].storageLocation && resp[0].storageLocation.id) {
+            //
+            // hierarchy created under an existing container
+            // go to that container detail
+            //
+            $state.go('container-detail.overview', {containerId: resp[0].storageLocation.id});
+          } else {
+            //
+            // hierarchy created for top-level container. go to list view
+            //
+            $state.go('container-list');
+          }
+        }
+      )
+    };
+
+    function setContainerTypeProps(containerType) {
+      if (!containerType) {
+        return;
+      }
+
+      $scope.container.typeName = containerType.name;
+      $scope.container.noOfRows = containerType.noOfRows;
+      $scope.container.noOfColumns = containerType.noOfColumns;
+      $scope.container.rowLabelingScheme = containerType.rowLabelingScheme;
+      $scope.container.columnLabelingScheme = containerType.columnLabelingScheme;
+      $scope.container.temperature = containerType.temperature;
+      $scope.container.storeSpecimensEnabled = containerType.storeSpecimenEnabled;
+    };
+
+    $scope.loadAllCps = loadAllCps;
+
+    $scope.onSelectContainerType = setContainerTypeProps;
+
+    $scope.save = function() {
+      if ($scope.mode == 'createHierarchy') {
+        createHierarchy();
+      } else {
+        saveContainer();
+      }
+    }
 
     init();
   });

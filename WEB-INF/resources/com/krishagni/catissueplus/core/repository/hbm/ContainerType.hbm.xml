@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.ContainerType" 
+    table="OS_CONTAINER_TYPES">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_CONTAINER_TYPES_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME"/>
+
+    <property name="nameFormat" column="NAME_FORMAT"/>
+
+    <property name="temperature" column="TEMPERATURE"/>
+
+    <property name="noOfColumns" column="NO_OF_COLS"/>
+
+    <property name="noOfRows" column="NO_OF_ROWS"/>
+
+    <property name="columnLabelingScheme" column="COLUMN_LABELING_SCHEME"/>
+
+    <property name="rowLabelingScheme" column="ROW_LABELING_SCHEME"/>
+
+    <property name="storeSpecimenEnabled" column="STORE_SPECIMENS"/>
+
+    <many-to-one name="canHold" column="CAN_HOLD"/>
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+    
+    <set name="containers" table="OS_STORAGE_CONTAINERS">
+      <key column="TYPE_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <set name="canBeStoredIn" table="OS_CONTAINER_TYPES">
+      <key column="CAN_HOLD"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.ContainerType"/>
+      <filter name="activeEntity"/>
+    </set>
+    
+    <filter name="activeEntity"/>
+     
+    <query name="getByName">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.ContainerType containerType
+      where
+        containerType.name = :name and 
+        activityStatus = 'Active' 
+    </query>
+
+  </class>
+</hibernate-mapping>

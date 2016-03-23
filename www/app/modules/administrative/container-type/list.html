@@ -1,0 +1,55 @@
+<div>
+  <div os-page-header>
+    <h3> 
+      <span translate="container_type.list">Container Types</span>
+    </h3>
+    <div class="os-btns right">
+      <button show-if-admin class="primary" title="{{'container_type.tooltip.add' | translate}}" 
+        ui-sref="container-type-addedit({containerTypeId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" os-right-drawer-toggle title="{{'container_type.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="container.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="container_type.name_format">Name Format</span>
+          </th>
+          <th class="col">
+            <span translate="container.dimension">Dimension</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="containerType in containerTypes"
+          os-row-click="showContainerTypeOverview(containerType)">
+          <td class="col">
+            <a ui-sref="container-type-detail.overview({containerTypeId: containerType.id})">
+              <span>{{containerType.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{containerType.nameFormat}}</span>
+          </td>
+          <td class="col">
+            <span>{{containerType.noOfRows}} X {{containerType.noOfColumns}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/container-type/search.html'"></div>
+
+</div>

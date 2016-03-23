@@ -349,7 +349,7 @@
       //
     </sql>
   </changeSet>
-
+  
   <changeSet author="ckhilosiya" id="Making DP requirements specimen type optional">
     <dropNotNullConstraint
       tableName="OS_DP_REQUIREMENTS"
@@ -669,5 +669,83 @@
       baseColumnNames="REQUEST_ID"
       referencedTableName="OS_SPECIMEN_REQUESTS"
       referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Container types">
+    <createTable tableName="OS_CONTAINER_TYPES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false"/>
+      </column>
+
+      <column name="NAME_FORMAT" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="TEMPERATURE" type="${double.type}">
+      </column>
+
+      <column name="NO_OF_COLS" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="NO_OF_ROWS" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="COLUMN_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ROW_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STORE_SPECIMENS" type="${boolean.type}" defaultValue="0">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CAN_HOLD" type="${int.type}">
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on container types can hold">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_CONT_TYPE_CAN_HOLD"
+      baseTableName="OS_CONTAINER_TYPES"
+      baseColumnNames="CAN_HOLD"
+      referencedTableName="OS_CONTAINER_TYPES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Container types sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_CONTAINER_TYPES_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Column to specify container type">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="TYPE_ID" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on container type">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_TYPE_ID"
+      baseTableName="OS_STORAGE_CONTAINERS"
+      baseColumnNames="TYPE_ID"
+      referencedTableName="OS_CONTAINER_TYPES"
+      referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 </databaseChangeLog>

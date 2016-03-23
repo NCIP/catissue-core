@@ -50,6 +50,7 @@
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
     "view_jobs": "View Jobs",
+    "view_import_jobs": "View Import Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
     "enabled": "Enabled",
@@ -926,6 +927,7 @@
     "list": "Containers",
     "name": "Name",
     "barcode": "Barcode",
+    "type": "Type",
     "create_container": "Create Storage Container",
     "update_container": "Update Storage Container",
     "parent_container": "Parent Container",
@@ -970,8 +972,12 @@
     "pos_selector": "Container Position Selector",
     "selected_pos": "Selected Position: ",
 
-    "bulk_import": "Import Storage Containers",
-    "bulk_import_jobs": "Import Storage Containers Jobs List",
+    "bulk_import": "Import Containers",
+    "bulk_import_jobs": "Import Containers Jobs List",
+
+    "create_hierarchy": "Create Hierarchy",
+    "create_container_hierarchy": "Create Container Hierarchy",
+    "num_of_containers": "Number of Containers",
 
     "tooltip": {
       "view_details": "Click to view Storage Container details",
@@ -993,6 +999,28 @@
 
     "menu_options": {
       "delete": "Delete"
+    }
+  },
+
+  "container_type": {
+    "list": "Container Types",
+    "create_container_type": "Create Container Type",
+    "update_container_type": "Update Container Type",
+    "name_format": "Name Format",
+    "can_hold": "Can Hold",
+
+    "tooltip": {
+      "add": "Click to add new Container Type",
+      "edit": "Click to edit Container Type",
+      "search": "Click to search Container Types"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "filter": {
+      "title": "Filters"
     }
   },
 
@@ -1315,7 +1343,8 @@
     "specimen_list": "Specimen Cart",
     "consent_response": "Consent Response",
     "consent": "Consent",
-    "container": "Container"
+    "container": "Container",
+    "container_type": "Container Type"
   },
 
   "bulk_imports": {

@@ -116,5 +116,13 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       );
     };
 
+    Container.createHierarchy = function(hierarchyDetail) {
+      return $http.post(Container.url() + 'create-hierarchy', hierarchyDetail).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return Container;
   });

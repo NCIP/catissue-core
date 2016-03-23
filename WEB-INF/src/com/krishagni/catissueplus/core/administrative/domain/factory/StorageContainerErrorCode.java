@@ -50,8 +50,10 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	INVALID_POSITIONS,
 	
-	INVALID_CPS;
-
+	INVALID_CPS, 
+	
+	TYPE_REQUIRED;
+	
 	@Override
 	public String code() {
 		return "STORAGE_CONTAINER_" + this.name();

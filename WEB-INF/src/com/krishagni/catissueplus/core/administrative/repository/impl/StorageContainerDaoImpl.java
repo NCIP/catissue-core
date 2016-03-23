@@ -32,6 +32,11 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	}
 	
 	@Override
+	public int getStorageContainersCount(StorageContainerListCriteria listCrit) {
+		return ((Number) new ListQueryBuilder(listCrit, true).query().uniqueResult()).intValue();
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public StorageContainer getByName(String name) {
 		List<StorageContainer> result = sessionFactory.getCurrentSession()
@@ -53,7 +58,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 		return result.isEmpty() ? null : result.iterator().next();		
 	}
-	
+
 	@Override
 	public void delete(StorageContainerPosition position) {
 		sessionFactory.getCurrentSession().delete(position);		
@@ -67,6 +72,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	private class ListQueryBuilder {
 		private StorageContainerListCriteria crit;
 		
+		private StringBuilder select = new StringBuilder();
+		
 		private StringBuilder from = new StringBuilder();
 		
 		private StringBuilder where = new StringBuilder();
@@ -74,22 +81,13 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		private Map<String, Object> params = new HashMap<String, Object>();
 		
 		public ListQueryBuilder(StorageContainerListCriteria crit) {
-			this.crit = crit;
-				
-			
-			if (crit.hierarchical()) {
-				from = new StringBuilder("select distinct c from ").append(getType().getName()).append(" c")
-						.append(" join c.descendentContainers dc");
-				where = new StringBuilder("where dc.activityStatus = :activityStatus");
-			} else {
-				from = new StringBuilder("select c from ").append(getType().getName()).append(" c");
-				where = new StringBuilder("where c.activityStatus = :activityStatus");						
-			}
-
-			from.append(" left join fetch c.position pos ");
-			params.put("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+			prepareQuery(crit, false);
 		}
 		
+		public ListQueryBuilder(StorageContainerListCriteria crit, boolean countReq) {
+			prepareQuery(crit, countReq);
+		}
+
 		public Query query() {						
 			addNameRestriction();		
 			addSiteRestriction();
@@ -101,9 +99,11 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			
 			addParentRestriction();
 			
-			String hql = new StringBuilder(from).append(" ").append(where)
-					.append(" order by c.id asc")
-					.toString();
+			String hql = new StringBuilder(select)
+				.append(" ").append(from)
+				.append(" ").append(where)
+				.append(" order by c.id asc")
+				.toString();
 			
 			Query query = sessionFactory.getCurrentSession().createQuery(hql)
 					.setFirstResult(crit.startAt())
@@ -118,6 +118,23 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 			
 			return query;
+		}
+		
+		private void prepareQuery(StorageContainerListCriteria crit, boolean countReq) {
+			this.crit = crit;
+				
+			if (crit.hierarchical()) {
+				select = new  StringBuilder(countReq ? "select count (distinct c.id)" : "select distinct c");
+				from = new StringBuilder("from ").append(getType().getName()).append(" c join c.descendentContainers dc");
+				where = new StringBuilder("where dc.activityStatus = :activityStatus");
+			} else {
+				select = new StringBuilder(countReq ? "select count(c.id)" : "select c");
+				from = new StringBuilder("from ").append(getType().getName()).append(" c");
+				where = new StringBuilder("where c.activityStatus = :activityStatus");						
+			}
+
+			from.append(countReq ? " left join c.position pos " : " left join fetch c.position pos ");
+			params.put("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 		}
 		
 		private void addAnd() {
@@ -251,6 +268,5 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
-	}	
-	
+	}
 }
