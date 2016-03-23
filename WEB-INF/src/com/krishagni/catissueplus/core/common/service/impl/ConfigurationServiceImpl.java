@@ -88,7 +88,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		Pair<String, String> payload = req.getPayload();
 		try {
 			Map<String, ConfigSetting> moduleSettings = configSettings.get(payload.first());
-			if (moduleSettings == null || moduleSettings.isEmpty()) {
+			if (moduleSettings == null) {
 				return ResponseEvent.userError(ConfigErrorCode.MODULE_NOT_FOUND);
 			}
 
