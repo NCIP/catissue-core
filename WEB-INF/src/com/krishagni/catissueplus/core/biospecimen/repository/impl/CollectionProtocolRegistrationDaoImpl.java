@@ -119,10 +119,19 @@ public class CollectionProtocolRegistrationDaoImpl
 				.setString("shortTitle", cpShortTitle)
 				.setString("ppid", ppid)
 				.list();
-		
 		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();		
 	}
-	
+
+	@Override
+	public CollectionProtocolRegistration getCprByCpShortTitleAndEmpi(String cpShortTitle, String empi) {
+		List<CollectionProtocolRegistration> result = getCurrentSession()
+				.getNamedQuery(GET_BY_CP_SHORT_TITLE_AND_EMPI)
+				.setString("shortTitle", cpShortTitle)
+				.setString("empi", empi)
+				.list();
+		return CollectionUtils.isEmpty(result) ? null : result.iterator().next();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId) {		
@@ -346,6 +355,8 @@ public class CollectionProtocolRegistrationDaoImpl
 	private static final String GET_BY_CP_TITLE_AND_PPID = FQN + ".getCprByCpTitleAndPpid";
 	
 	private static final String GET_BY_CP_SHORT_TITLE_AND_PPID = FQN + ".getCprByCpShortTitleAndPpid";
+
+	private static final String GET_BY_CP_SHORT_TITLE_AND_EMPI = FQN + ".getCprByCpShortTitleAndEmpi";
 	
 	private static final String GET_BY_CP_ID_AND_PID = FQN + ".getCprByCpIdAndPid";
 }

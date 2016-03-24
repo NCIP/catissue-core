@@ -17,6 +17,8 @@ public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtoco
 	
 	public CollectionProtocolRegistration getCprByCpShortTitleAndPpid(String cpShortTitle, String ppid);
 
+	public CollectionProtocolRegistration getCprByCpShortTitleAndEmpi(String cpShortTitle, String empi);
+
 	public CollectionProtocolRegistration getCprByBarcode(String barcode);
 
 	public CollectionProtocolRegistration getCprByParticipantId(Long cpId, Long participantId);
