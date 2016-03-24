@@ -51,8 +51,7 @@
       from
         com.krishagni.catissueplus.core.administrative.domain.ContainerType containerType
       where
-        containerType.name = :name and 
-        activityStatus = 'Active' 
+        containerType.name = :name
     </query>
 
   </class>
