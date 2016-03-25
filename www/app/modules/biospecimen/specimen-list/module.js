@@ -14,8 +14,12 @@ angular.module('os.biospecimen.specimenlist',
         templateUrl: 'modules/biospecimen/specimen-list/list.html',
         controller: 'SpecimenListsCtrl',
         resolve: {
-          reqBasedDistOrShip: function(SettingUtil) {
-            return SettingUtil.getSetting('common', 'spmn_req_based_dist_or_ship');
+          reqBasedDistOrShip: function($injector) {
+            if ($injector.has('spmnReqCfgUtil')) {
+              return $injector.get('spmnReqCfgUtil').isReqBasedDistOrShippingEnabled();
+            } else {
+              return {value: false};
+            }
           }
         },
         parent: 'signed-in'
