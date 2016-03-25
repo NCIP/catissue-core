@@ -38,13 +38,13 @@
       <label class="col-xs-2 control-label" translate="settings.new_value">New Value</label>
       <div class="col-xs-10">
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
-          ng-if="setting.type == 'STRING' && !setting.secured" required></input>
+          ng-if="setting.type == 'STRING' && !setting.secured"></input>
         <input type="password" name="value" class="form-control" ng-model="setting.value" 
-          ng-if="setting.type == 'STRING' && setting.secured" required></input>
+          ng-if="setting.type == 'STRING' && setting.secured"></input>
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
-          ng-maxlength="1" ng-if="setting.type == 'CHAR'" required></input>
+          ng-maxlength="1" ng-if="setting.type == 'CHAR'"></input>
         <input type="text" name="value" class="form-control" ng-model="setting.value" 
-          ng-pattern="/^[0-9]*$/" ng-if="setting.type == 'INT'" required></input>
+          ng-pattern="/^[0-9]*$/" ng-if="setting.type == 'INT'"></input>
         <div ng-if="setting.type == 'BOOLEAN'">
           <div class="btn-group">
             <button type="button" class="btn btn-default" name="value" ng-model="setting.value" 
