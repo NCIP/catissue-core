@@ -48,15 +48,30 @@ angular.module('os.biospecimen.extensions.util', [])
     
     function createExtensionFieldMap(entity) {
       var extensionDetail = entity.extensionDetail;
-      if (extensionDetail) {
-        extensionDetail.attrsMap = {
-          id: extensionDetail.id,
-          containerId: extensionDetail.formId
-        };
-        angular.forEach(extensionDetail.attrs, function(attr) {
-          extensionDetail.attrsMap[attr.name] = attr.value;
-        });
+      if (!extensionDetail) {
+        return;
       }
+
+      extensionDetail.attrsMap = {
+        id: extensionDetail.id,
+        containerId: extensionDetail.formId
+      };
+
+      angular.forEach(extensionDetail.attrs, function(attr) {
+        extensionDetail.attrsMap[attr.name] = attr.type != 'subForm' ? attr.value : getSubformFieldMap(attr);
+      });
+    }
+
+    function getSubformFieldMap(sf) {
+      var attrsMap = [];
+      angular.forEach(sf.value, function(attrs, idx) {
+        attrsMap[idx] = {};
+        angular.forEach(attrs, function(attr) {
+          attrsMap[idx][attr.name] = attr.value;
+        });
+      })
+
+      return attrsMap; 
     }
 
     function getExtnOpts(entity, extnCtxt) {

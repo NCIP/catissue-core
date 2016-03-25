@@ -1,20 +1,56 @@
 <div class="os-entity-extn-overview" ng-if="extObject.attrs.length > 0">
   <div class="os-content">
     <ul class="os-key-values" ng-class="{'os-one-col': showColumn == 1, 'os-two-cols': showColumn == 2}">
-      <li class="item" ng-repeat="attr in extObject.attrs" ng-if="!!attr.value || attr.value === 0">
+      <li class="item" ng-repeat="attr in extObject.attrs | filter: {type: '!subForm'}" ng-if="!!attr.value || attr.value === 0">
         <strong class="key key-sm">{{attr.caption}}</strong>
-        <span class="value value-md" ng-switch on="attr.type">
-          <span ng-switch-when="fileUpload">
-            <a href="{{attr.fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
-            <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
-          </span>
-          <span ng-switch-when="datePicker">
-            {{attr.displayValue | date: global.dateFmt}}
-          </span>
-          <span ng-switch-default>{{attr.displayValue | osNoValue}}</span>
+        <span class="value value-md">
+          <span ng-include src="'modules/biospecimen/extensions/display-value'"></span>
         </span>
       </li>
     </ul>
+
+    <div class="os-section" ng-repeat="sf in extObject.attrs | filter: {type: 'subForm'}" 
+      ng-init="sfCollapse=true" ng-if="sf.value && sf.value.length > 0">
+      <button class="os-btn-section-collapse os-btn-transparent" ng-click="sfCollapse=!sfCollapse">
+        <span ng-if="!sfCollapse" class="fa fa-chevron-circle-down"></span>
+        <span ng-if="sfCollapse" class="fa fa-chevron-circle-right"></span>
+      </button>
+      <h3 class="os-sub-section-title">
+        <span>{{sf.caption}}</span>
+      </h3>
+      <div collapse="sfCollapse">
+        <table class="os-table os-table-muted-hdr os-border">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col" ng-repeat="attr in sf.value[0]">
+                <span>{{attr.caption}}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="record in sf.value">
+              <td class="col" ng-repeat="attr in record">
+                <span ng-include src="'modules/biospecimen/extensions/display-value'"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
+<script type="text/ng-template" id="modules/biospecimen/extensions/display-value">
+  <span ng-switch on="attr.type">
+    <span ng-switch-when="fileUpload">
+      <a href="{{attr.fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
+      <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
+    </span>
+    <span ng-switch-when="datePicker">
+      {{attr.displayValue | date: global.dateFmt | osNoValue}}
+    </span>
+    <span ng-switch-default>
+      {{attr.displayValue | osNoValue}}
+    </span>
+  </span>
+</script>
