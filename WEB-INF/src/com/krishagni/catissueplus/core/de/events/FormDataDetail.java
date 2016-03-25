@@ -8,6 +8,8 @@ public class FormDataDetail {
 	private Long recordId;
 	
 	private FormData formData;
+	
+	private boolean partial;
 
 	public Long getFormId() {
 		return formId;
@@ -33,6 +35,14 @@ public class FormDataDetail {
 		this.formData = formData;
 	}
 	
+	public boolean isPartial() {
+		return partial;
+	}
+
+	public void setPartial(boolean partial) {
+		this.partial = partial;
+	}
+
 	public static FormDataDetail ok(Long formId, Long recordId, FormData formData) {
 		FormDataDetail resp = new FormDataDetail();
 		resp.setFormId(formId);

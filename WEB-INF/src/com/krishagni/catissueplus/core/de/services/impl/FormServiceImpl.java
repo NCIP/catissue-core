@@ -58,6 +58,7 @@ import edu.common.dynamicextensions.domain.nui.PermissibleValue;
 import edu.common.dynamicextensions.domain.nui.SelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.ValidationErrors;
+import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
@@ -351,7 +352,7 @@ public class FormServiceImpl implements FormService {
 		
 		try {
 			User user = AuthUtil.getCurrentUser();
-			FormData formData = saveOrUpdateFormData(user, detail.getRecordId(), detail.getFormData());
+			FormData formData = saveOrUpdateFormData(user, detail.getRecordId(), detail.getFormData(), detail.isPartial());
 			return ResponseEvent.response(FormDataDetail.ok(formData.getContainer().getId(), formData.getRecordId(), formData));
 		} catch (ValidationErrors ve) {
 			return ResponseEvent.userError(FormErrorCode.INVALID_DATA, ve.getMessage());
@@ -372,7 +373,7 @@ public class FormServiceImpl implements FormService {
 			List<FormData> formDataList = req.getPayload();
 			List<FormData> savedFormDataList = new ArrayList<FormData>();
 			for (FormData formData : formDataList) {
-				FormData savedFormData = saveOrUpdateFormData(user, formData.getRecordId(), formData);
+				FormData savedFormData = saveOrUpdateFormData(user, formData.getRecordId(), formData, false);
 				savedFormDataList.add(savedFormData);
 			}
 			
@@ -679,7 +680,7 @@ public class FormServiceImpl implements FormService {
 		return field;
 	}
 		
-	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData ) {
+	private FormData saveOrUpdateFormData(User user, Long recordId, FormData formData, boolean isPartial) {
 		Map<String, Object> appData = formData.getAppData();
 		if (appData.get("formCtxtId") == null || appData.get("objectId") == null) {
 			throw new IllegalArgumentException("Invalid form context id or object id ");
@@ -692,6 +693,13 @@ public class FormServiceImpl implements FormService {
 		List<FormContextBean> formContexts = formDao.getFormContextsById(formCtxtId);
 		if (CollectionUtils.isEmpty(formContexts)) {
 			throw new IllegalArgumentException("Invalid form context id");
+		}
+		
+		boolean isInsert = (recordId == null);
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		if (!isInsert && isPartial) {
+			FormData existing = formDataMgr.getFormData(formData.getContainer(), formData.getRecordId());
+			formData = updateFormData(existing, formData);
 		}
 		
 		formData.validate();
@@ -709,7 +717,6 @@ public class FormServiceImpl implements FormService {
 
 		formData.setRecordId(recordId);
 		
-		boolean isInsert = (recordId == null);
 		FormRecordEntryBean recordEntry = null;
 		
 		if (isInsert) {
@@ -729,7 +736,7 @@ public class FormServiceImpl implements FormService {
 			}
 		}
 
-		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		
 		recordId = formDataMgr.saveOrUpdateFormData(null, formData);
 
 		recordEntry.setFormCtxtId(formContext.getIdentifier());
@@ -818,5 +825,14 @@ public class FormServiceImpl implements FormService {
 		} else {
 			return ctrl.getDataType();
 		}
+	}
+	
+	private FormData updateFormData(FormData existing, FormData formData) {
+		existing.setAppData(formData.getAppData());
+		for (ControlValue ctrlValue : formData.getFieldValues()) {
+			existing.addFieldValue(ctrlValue);
+		}
+		
+		return existing;
 	}
 }

@@ -140,6 +140,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		formDataDetail.setFormId(form.getId());
 		formDataDetail.setRecordId(formData.getRecordId());
 		formDataDetail.setFormData(formData);
+		formDataDetail.setPartial(true);
 		ResponseEvent<FormDataDetail> resp = formSvc.saveFormData(new RequestEvent<FormDataDetail>(formDataDetail));
 		resp.throwErrorIfUnsuccessful();
 		
