@@ -1447,18 +1447,18 @@ edu.common.de.SubFormField = function(id, sfField, args) {
     return fields;
   };
 
-  this.getWidthClass = function(numFields) {
-    var width = Math.floor(95 / numFields);
+  this.getFieldWidth = function(numFields) {
+    var width = Math.floor(95 / numFields) - 1;
     if (width < 20) {
       width = 20;
     }
 
-    return width + "%";
+    return width;
   };
 
   this.fields = this.getFields();
 
-  this.widthCls = this.getWidthClass(this.getFields().length);
+  this.fieldWidth = this.getFieldWidth(this.getFields().length);
 
   this.render = function() {
     this.sfFieldsEl = $("<div/>");
@@ -1527,23 +1527,30 @@ edu.common.de.SubFormField = function(id, sfField, args) {
     return sfField.name;
   };
 
-  var getSfFieldWidth = function(field) { 
-    if (field.type != 'datePicker') {
-      return 20 + "%";
+  var getSfFieldMinWidth = function(field) {
+    if (field.type == 'datePicker') {
+      if (field.format && field.format.indexOf('HH:mm') != -1) {
+        //
+        // Minimum container width required to display both date and time picker
+        //
+        return '250px';
+      } else {
+        //
+        // Minimum container width required to display only date picker
+        //
+        return '150px';
+      }
+    } else {
+      return undefined;
     }
-
-    if (field.format && field.format.indexOf("HH:mm") != -1) {
-      return 25 + "%";
-    }
-
-    return 20 + "%";
   };
-    
+
   this.getHeading = function() {
     var heading = $("<div/>").addClass("form-group clearfix").css("white-space", "nowrap");
     for (var i = 0; i < this.fields.length; ++i) {
       var field = this.fields[i];
-      var column = $("<div/>").css("width", getSfFieldWidth(field))
+      var column = $("<div/>").css("width", this.fieldWidth + '%')
+        .css("min-width", getSfFieldMinWidth(field))
         .addClass("de-sf-cell")
         .append(field.caption);
       heading.append(column);
@@ -1586,7 +1593,7 @@ edu.common.de.SubFormField = function(id, sfField, args) {
       fieldObj.$attrs = field;
 
       var fieldEl = fieldObj.render();
-      rowDiv.append(this.cell(fieldEl, getSfFieldWidth(field)));
+      rowDiv.append(this.cell(fieldEl, this.fieldWidth, getSfFieldMinWidth(field)));
       fieldObjs.push(fieldObj);
     }
 
@@ -1607,12 +1614,15 @@ edu.common.de.SubFormField = function(id, sfField, args) {
     this.rowIdx++;
   };
 
-  this.cell = function(el, width) {
+  this.cell = function(el, width, minWidth) {
     if (!width) {
-      width = this.widthCls;
+      width = this.fieldWidth;
     }
 
-    return $("<div/>").css("width", width).addClass("de-sf-cell").append(el);
+    return $("<div/>").css("width", width + '%')
+      .css("min-width", minWidth)
+      .addClass("de-sf-cell")
+      .append(el);
   };
   
   this.validate = function() {
