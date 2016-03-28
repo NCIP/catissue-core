@@ -47,10 +47,10 @@
       <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
     </span>
     <span ng-switch-when="datePicker">
-      {{attr.displayValue | date: global.dateFmt | osNoValue}}
+      {{attr.value | date: global.dateFmt | osNoValue}}
     </span>
     <span ng-switch-default>
-      {{attr.displayValue | osNoValue}}
+      <span>{{attr.value | osArrayJoin | osNoValue}}</span>
     </span>
   </span>
 </script>

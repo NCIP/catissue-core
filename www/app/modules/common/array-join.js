@@ -5,6 +5,10 @@ angular.module('openspecimen')
         return '';
       }
 
+      if (!(collection instanceof Array)) {
+        return collection;
+      }
+
       if(!fun) {
          return collection.join(", ");
       }

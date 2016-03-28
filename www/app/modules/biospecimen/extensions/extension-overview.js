@@ -10,12 +10,6 @@ angular.module("os.biospecimen.extensions")
              })
            }
          } else {
-           if (attr.value instanceof Array) {
-             attr.displayValue = attr.value.join(", ");
-           } else {
-             attr.displayValue = attr.value;
-           }
-
            if (attr.type == 'fileUpload') {
              attr.fileDownloadUrl = ExtensionsUtil.getFileDownloadUrl(formId, objectId, attr.name);
            }
