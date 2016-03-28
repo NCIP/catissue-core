@@ -1,3 +1,24 @@
+function osRequired($timeout) {
+  return {
+    require: '^form',
+    restrict: 'A',
+    link: function(scope, element, attrs, ctrl) {
+      var setDirty = function() {
+        var form = scope.$eval(ctrl.$name);
+        form[attrs.name].$setDirty(true);
+      }
+
+      if (element.hasClass('os-select-container') || element.children().first().is('ui-select')) {
+        $timeout(function() {
+          element.find('.ui-select-focusser, .ui-select-search').bind('blur', setDirty);
+        })
+      } else {
+        element.bind('blur', setDirty);
+      }
+    }
+  };
+}
+
 angular.module('os.common.form', [])
   .directive('osFormValidator', function(LocationChangeListener) {
     return {
@@ -196,4 +217,8 @@ angular.module('os.common.form', [])
         '  </div>' +
         '</div>'
     };
-  });
+  })
+
+  .directive('required', osRequired)
+
+  .directive('ngRequired', osRequired);

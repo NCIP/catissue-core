@@ -101,7 +101,7 @@
   },
 
   "form_errors": {
-    "required": "Please fill out this field",
+    "required": "Please fill this field",
     "min": "This field value is too less",
     "minlength": "This field value is too short",
     "maxlength": "This field value is too long",

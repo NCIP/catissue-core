@@ -24,15 +24,17 @@ edu.common.de.RequiredValidator = function(field, dataEl) {
       if (dataEl.prop('type') == 'checkbox') {
         valid = dataEl.prop('checked');
       } else {
-        valid = dataEl.val() && dataEl.val().length != 0;
+        valid = field.getValue() &&
+                (field.getValue().value || field.getValue().value == 0) &&
+                field.getValue().value.length != 0;
       }
       el = field.inputEl;
     }
 
     if (!valid) {
-      edu.common.de.Utility.highlightError(el, field.getCaption() + ' is required field');
+      edu.common.de.Utility.highlightError(el, 'Please fill this field');
     } else {
-      edu.common.de.Utility.unHighlightError(el, field.getTooltip());
+      edu.common.de.Utility.unHighlightError(el);
     }
 
     return valid;
@@ -48,13 +50,13 @@ edu.common.de.RangeValidator = function(field, dataEl, params) {
 
     var number = Number(val);
     if ($.isNumeric(params.min) && number < Number(params.min)) {
-      edu.common.de.Utility.highlightError(field.inputEl, field.getCaption() + " cannot be less than " + params.min);
+      edu.common.de.Utility.highlightError(field.inputEl, "This field value is too less");
       return false;
     } else if ($.isNumeric(params.max) && number > Number(params.max)) {
-      edu.common.de.Utility.highlightError(field.inputEl, field.getCaption() + " cannot be more than " + params.max);
+      edu.common.de.Utility.highlightError(field.inputEl, "This field value is too more");
       return false;
     } else {
-      edu.common.de.Utility.unHighlightError(field.inputEl, field.getTooltip());
+      edu.common.de.Utility.unHighlightError(field.inputEl);
       return true;
     }
   };
@@ -68,7 +70,7 @@ edu.common.de.NumericValidator = function(field, dataEl, params) {
     }
 
     if (!$.isNumeric(val)) {
-      edu.common.de.Utility.highlightError(field.inputEl, field.getCaption() + " must be a numeric");
+      edu.common.de.Utility.highlightError(field.inputEl, "This field value is not valid");
       return false;
     }
 
@@ -84,7 +86,7 @@ edu.common.de.NumericValidator = function(field, dataEl, params) {
       }
     } 
 
-    edu.common.de.Utility.unHighlightError(field.inputEl, field.getTooltip());
+    edu.common.de.Utility.unHighlightError(field.inputEl);
     return true;
   };
 };
@@ -124,8 +126,8 @@ edu.common.de.FieldValidator = function(rules, field, dataEl) {
     }
 
     return valid;
-  } 
-
+  }
+ 
   if (dataEl instanceof Array) {
     for (var i = 0; i < dataEl.length; ++i) {
       dataEl[i].change(this.validate);
@@ -133,7 +135,11 @@ edu.common.de.FieldValidator = function(rules, field, dataEl) {
     field.clusterEl.focusout(this.validate);
   } else {
     dataEl.change(this.validate);
-    dataEl.focusout(this.validate);
+    if (field.selectField) {
+      dataEl.on('select2-blur', this.validate);
+    } else {
+      dataEl.focusout(this.validate);
+    }
   }
 };
 
@@ -1165,6 +1171,8 @@ edu.common.de.SelectFieldOptions = function(field, args) {
 // TODO: Need to merge both implementations to avoid code duplication
 //
 edu.common.de.SelectField = function(id, field, args) {
+  this.selectField = true;
+
   this.inputEl = null;
 
   this.control = null;
@@ -1938,20 +1946,17 @@ edu.common.de.Utility = {
              .append($("<span/>").addClass("glyphicon glyphicon-" + options.icon));
   },
 
-  highlightError: function(el, tooltip) {
-    if (el.is('select')) {
-      el.siblings('div.select2-container').attr('title', tooltip);
+  highlightError: function(el, errorMessage) {
+    var errEl = el.next(".alert-danger");
+    if (!errEl.length) {
+      el.after($("<div/>").addClass("alert alert-danger de-form-err-msg").append(errorMessage));
     }
-    el.addClass('de-input-error').attr('title', tooltip);
   },
 
-  unHighlightError: function(el, tooltip) {
-    if (el.is('select')) {
-      el.siblings('div.select2-container').attr('title', tooltip);
-    }
-    el.removeClass('de-input-error').attr('title', tooltip);
+  unHighlightError: function(el) {
+    el.next('.alert-danger').remove();
   },
-  
+
   getValueByDataType: function(field, value) {
     if (value == undefined || field.dataType == "STRING" || field.dataType == "BOOLEAN") {
       return value;
@@ -2006,6 +2011,8 @@ edu.common.de.Extend = function(props) {
 };
 
 edu.common.de.LookupField = function(params, callback) {
+  this.selectField = true;
+
   this.inputEl = null;
 
   this.control = null;

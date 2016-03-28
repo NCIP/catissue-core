@@ -273,3 +273,21 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   border-radius: 4px;
 }
 
+.alert.de-form-err-msg {
+  margin: 5px 0px 0px 0px;
+  padding: 7px 15px;
+  position: relative;
+}
+
+.alert.de-form-err-msg:after {
+  position: absolute;
+  top: -10px;
+  content: "";
+  left: 20px;
+  border-style: solid;
+  border-width: 5px;
+}
+
+.alert-danger.de-form-err-msg:after {
+  border-color: transparent transparent #ebccd1;
+}

@@ -113,18 +113,18 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
         }
 
         function alignLabelsHorizontally() {
-          element.find(".col-xs-8")
-            .each(function(index) {
-               angular.element(this)
-                 .addClass("col-xs-12")
-                 .removeClass("col-xs-8");
-            });
+          element.find(".col-xs-8").each(
+            function(index) {
+              angular.element(this).removeClass("col-xs-8").addClass("col-xs-12");
+            }
+          );
 
-          element.find('label.control-label')
-            .each(function(index) {
-               angular.element(this).addClass("col-xs-3");
-               angular.element(this).next().wrap("<div class='col-xs-6'></div>");
-            });
+          element.find('label.control-label').each(
+            function(index) {
+              angular.element(this).addClass("col-xs-3");
+              angular.element(this).siblings().wrapAll("<div class='col-xs-6'></div>");
+            }
+          );
         }
       }
     }
