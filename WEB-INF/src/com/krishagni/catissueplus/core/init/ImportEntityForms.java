@@ -27,7 +27,7 @@ public class ImportEntityForms extends ImportForms {
 		try {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
 	
-			Resource[] resources = resolver.getResources("classpath:/entity-forms/*_extension.xml");
+			Resource[] resources = resolver.getResources("classpath*:/entity-forms/*_extension.xml");
 			for (Resource resource: resources) {
 				String filename = resource.getFilename();
 				String entityType = StringUtils.capitalize(filename.split("_")[0]) + "Extension";
@@ -53,7 +53,7 @@ public class ImportEntityForms extends ImportForms {
 		formCtx.setMultiRecord(false);
 		formCtx.setSortOrder(null);
 		formCtx.setSysForm(true);
-		return formCtx;		
+		return formCtx;
 	}
 
 	@Override
