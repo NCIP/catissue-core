@@ -57,6 +57,9 @@ public class StorageContainersController {
 			
 			@RequestParam(value = "site", required = false)
 			String siteName,
+
+			@RequestParam(value = "canHold", required = false)
+			String canHold,
 			
 			@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
 			boolean onlyFreeContainers,
@@ -98,6 +101,7 @@ public class StorageContainersController {
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
 			.query(name)
 			.siteName(siteName)
+			.canHold(canHold)
 			.onlyFreeContainers(onlyFreeContainers)
 			.startAt(startAt)
 			.maxResults(maxRecords)

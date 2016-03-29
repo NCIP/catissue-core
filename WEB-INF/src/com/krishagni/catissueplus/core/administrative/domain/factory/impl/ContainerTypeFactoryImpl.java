@@ -132,6 +132,11 @@ public class ContainerTypeFactoryImpl implements ContainerTypeFactory {
 		if (typeDetail == null) {
 			return;
 		}
+
+		if (containerType.isStoreSpecimenEnabled()) {
+			ose.addError(ContainerTypeErrorCode.CANNOT_HOLD_CONTAINER, containerType.getName());
+			return;
+		}
 		
 		Object key = null;
 		ContainerType canHold = null;

@@ -22,6 +22,8 @@ public enum ContainerTypeErrorCode implements ErrorCode {
 
 	NAME_FORMAT_REQUIRED,
 
+	CANNOT_HOLD_CONTAINER,
+
 	INVALID_NAME_FORMAT;
 
 	@Override

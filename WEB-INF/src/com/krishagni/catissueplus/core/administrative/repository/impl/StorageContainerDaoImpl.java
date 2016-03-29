@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 
@@ -98,6 +98,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			addStoreSpecimenRestriction();
 			
 			addParentRestriction();
+			addCanHoldRestriction();
 			
 			String hql = new StringBuilder(select)
 				.append(" ").append(from)
@@ -188,7 +189,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 		}
 
-		private void addParentRestriction() {			
+		private void addParentRestriction() {
 			if (!crit.topLevelContainers() && crit.parentContainerId() == null) {
 				return;
 			}
@@ -207,6 +208,19 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				where.append("pc.id = :parentId");
 				params.put("parentId", parentId);						
 			}
+		}
+
+		private void addCanHoldRestriction() {
+			if (StringUtils.isBlank(crit.canHold())) {
+				return;
+			}
+
+			from.append(" left join c.type type");
+			from.append(" left join type.canHold canHold");
+
+			addAnd();
+			where.append("(type is null or canHold.name = :canHold)");
+			params.put("canHold", crit.canHold());
 		}
 
 		private void addSpecimenRestriction() {			

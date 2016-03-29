@@ -18,6 +18,10 @@ angular.module('os.administrative.containertype.addedit', ['os.administrative.mo
       );
     }
 
+    $scope.onStoreSpecimenEnabled = function() {
+      $scope.containerType.canHold = undefined;
+    };
+
     $scope.save = function() {
       var containerType = angular.copy($scope.containerType);
       containerType.$saveOrUpdate().then(

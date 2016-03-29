@@ -929,7 +929,6 @@
     "barcode": "Barcode",
     "type": "Type",
     "create_container": "Create Storage Container",
-    "update_container": "Update Storage Container",
     "parent_container": "Parent Container",
     "parent_site": "Parent Site",
     "site": "Site",
@@ -975,14 +974,14 @@
     "bulk_import": "Import Containers",
     "bulk_import_jobs": "Import Containers Jobs List",
 
+    "creating_hierarchy": "Creating Hierarchy",
     "create_hierarchy": "Create Hierarchy",
-    "create_container_hierarchy": "Create Container Hierarchy",
     "num_of_containers": "Number of Containers",
 
     "tooltip": {
-      "view_details": "Click to view Storage Container details",
-      "add": "Click to add new Storage Container",
-      "edit": "Click to edit Storage Container",
+      "view_details": "Click to view Container details",
+      "add": "Click to add new Container",
+      "edit": "Click to edit Container",
       "count_free_locations": "Count of free locations",
       "search": "Click to search Storage Containers"
     },
@@ -993,8 +992,7 @@
     },
 
     "filter": {
-      "title": "Filters",
-      "name": "Type the Name"
+      "title": "Filters"
     },
 
     "menu_options": {
@@ -1004,15 +1002,18 @@
 
   "container_type": {
     "list": "Container Types",
+    "create_container": "Create Container",
     "create_container_type": "Create Container Type",
-    "update_container_type": "Update Container Type",
     "name_format": "Name Format",
     "can_hold": "Can Hold",
+
 
     "tooltip": {
       "add": "Click to add new Container Type",
       "edit": "Click to edit Container Type",
-      "search": "Click to search Container Types"
+      "container_list": "Click to view Containers",
+      "search": "Click to search Container Types",
+      "delete": "Click to delete Container Type"
     },
 
     "menu": {

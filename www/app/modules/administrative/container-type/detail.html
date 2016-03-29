@@ -11,31 +11,24 @@
       <span>{{containerType.name}}</span>
     </h3>
     <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'container_type.tooltip.add' | translate}}" 
+      <button show-if-allowed="containerResource.createOpts" class="primary"
+        title="{{'container.tooltip.add' | translate}}"
+        ui-sref="container-addedit({containerTypeId: containerType.id, mode: 'createHierarchy'})">
+        <span class="fa fa-dropbox"></span>
+        <span translate="container_type.create_container">Create Container</span>
+      </button>
+
+      <button show-if-admin class="primary" title="{{'container_type.tooltip.edit' | translate}}"
         ui-sref="container-type-addedit({containerTypeId: containerType.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
 
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-allowed="containerResource.createOpts">
-            <a ui-sref="container-addedit({containerTypeId: containerType.id, mode: 'createHierarchy'})">
-              <span class="fa fa-sitemap"></span>
-              <span translate="container.create_container_hierarchy">Create Container Hierarchy</span>
-          </li>
-          <li show-if-admin>
-            <a ng-click="deleteContainerType()">
-              <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <button show-if-admin class="default" title="{{'container_type.tooltip.delete' | translate}}"
+        ng-click="deleteContainerType()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
     </div>
   </div>
 

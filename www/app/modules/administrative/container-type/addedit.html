@@ -89,7 +89,8 @@
         </label>
         <div class="col-xs-9">
           <label class="radio-inline">
-            <input type="radio" name="storesSpecimen" ng-model="containerType.storeSpecimenEnabled" ng-value="true"> 
+            <input type="radio" name="storesSpecimen" ng-model="containerType.storeSpecimenEnabled" ng-value="true" 
+              ng-change="onStoreSpecimenEnabled()"> 
             <span translate="common.yes">Yes</span>
           </label>
           <label class="radio-inline">
@@ -99,7 +100,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" ng-if="!containerType.storeSpecimenEnabled">
         <label class="col-xs-3 control-label">
           <span translate="container_type.can_hold">Can Hold</span>
         </label>
