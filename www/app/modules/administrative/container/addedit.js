@@ -9,6 +9,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     function init() {
       container.storageLocation = container.storageLocation || {};
       $scope.container = container;
+      $scope.ctx = {createHierarchy: $stateParams.mode == 'createHierarchy'};
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -45,7 +46,6 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         restrictCpsAndSpecimenTypes();
       }
 
-      $scope.mode = $stateParams.mode;
       loadContainerTypes();
       setContainerTypeProps(containerType);
 
@@ -223,11 +223,18 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     $scope.onSelectContainerType = setContainerTypeProps;
 
     $scope.save = function() {
-      if ($scope.mode == 'createHierarchy') {
+      if ($scope.ctx.createHierarchy) {
         createHierarchy();
       } else {
         saveContainer();
       }
+    }
+
+    $scope.onCreateHierarchyClick = function(createHierarchy) {
+      var attrsToDelete = createHierarchy ? ['name', 'barcode'] : ['numOfContainers'];
+      attrsToDelete.forEach(function(attr) {
+        delete $scope.container[attr];
+      });
     }
 
     init();

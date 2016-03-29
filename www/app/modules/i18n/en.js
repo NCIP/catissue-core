@@ -975,7 +975,6 @@
     "bulk_import_jobs": "Import Containers Jobs List",
 
     "creating_hierarchy": "Creating Hierarchy",
-    "create_hierarchy": "Create Hierarchy",
     "num_of_containers": "Number of Containers",
 
     "tooltip": {
