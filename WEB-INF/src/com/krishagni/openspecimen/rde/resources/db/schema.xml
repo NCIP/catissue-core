@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <property name="boolean.type" value="boolean" dbms="mysql" />
+  <property name="boolean.type" value="number(1,0)" dbms="oracle" />
+
+  <property name="int.type" value="bigint" dbms="mysql" />
+  <property name="int.type" value="number(19,0)" dbms="oracle" />
+
+  <property name="smallint.type" value="smallint" dbms="mysql" />
+  <property name="smallint.type" value="number(5,0)" dbms="oracle" />
+
+  <property name="text.type" value="varchar" dbms="mysql" />
+  <property name="text.type" value="varchar2" dbms="oracle" />
+
+  <property name="double.type" value="double"/>
+
+  <property name="autoIncrement" value="true" dbms="mysql"/>
+  <property name="autoIncrement" value="false" dbms="oracle"/>
+
+  <property name="timestamp.type" value="timestamp" dbms="mysql" />
+  <property name="timestamp.type" value="timestamp" dbms="oracle" />
+
+  <property name="nullable.ts.type" value="timestamp null" dbms="mysql" />
+  <property name="nullable.ts.type" value="timestamp" dbms="oracle" />
+
+  <property name="clob.type" value="text" dbms="mysql"/>
+  <property name="clob.type" value="clob" dbms="oracle"/>
+  
+  <property name="clob.long.type" value="longtext" dbms="mysql"/>
+  <property name="clob.long.type" value="clob" dbms="oracle"/>
+
+  <property name="decimal.type" value="decimal" dbms="mysql"/>
+  <property name="decimal.type" value="number" dbms="oracle"/>
+
+  <changeSet author="vgaikwad" id="Table to store barcode based specimen collection sessions">
+    <createTable tableName="OS_BDE_SPMN_COLL_SESSIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+     
+      <column name="SESSION_DATA" type="${clob.long.type}">
+      </column>
+     
+      <column name="CREATED_ON" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet> 
+  
+  <changeSet author="vgaikwad" id="Barcode based specimen collection sessions table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_BDE_SPMN_COLL_SESSIONS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on user of bde specimen collection sessions table">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_BDE_SESSIONS_USER_ID"
+      baseTableName="OS_BDE_SPMN_COLL_SESSIONS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>  
+  
+  <changeSet author="vgaikwad" id="Add index to barcode based specimen collection sessions table on user identifier">
+    <createIndex indexName="OS_BDE_SESSIONS_USER_IDX" tableName="OS_BDE_SPMN_COLL_SESSIONS">
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

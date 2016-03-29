@@ -1,0 +1,71 @@
+#set ( $notSpecified = $messageSource.getMessage("common_not_specified", null, $locale) )
+#set ( $tissue = $messageSource.getMessage("specimen_class_tissue", null, $locale) )
+#set ( $fluid = $messageSource.getMessage("specimen_class_fluid", null, $locale) )
+#set ( $from = $messageSource.getMessage("common_from", null, $locale) )
+#set ( $collectedIn = $messageSource.getMessage("common_collected_in", null, $locale) )
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Greetings,
+                  <br><br>
+                  Given below is status of primary specimens received from site <b>$siteName</b> for collection protocol <b>$cpShortTitle</b>:
+                  <br><br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border-collapse: collpase;padding:0px;padding-bottom:10px">
+                <table width="100%" cellpadding="5" style="border-collapse: collpase;">
+                  <tr>
+                    <th align="left" style="border-bottom:2px solid #e3e3e3;">Description</th>
+                    <th align="left" style="border-bottom:2px solid #e3e3e3;">Label</th>
+                    <th align="left" style="border-bottom:2px solid #e3e3e3;">Quantity</th>
+                    <th align="left" style="border-bottom:2px solid #e3e3e3;">Collection Status</th>
+                  </tr>
+                  #foreach( $spmn in $spmns )
+                    #set($desc = "")
+                    #if ($spmn.pathology && !$spmn.pathology.equals($notSpecified))
+                      #set($desc = "${desc}${spmn.pathology} ")
+                    #end
+
+                    #set($desc = "${desc}${spmn.type} ")
+                    
+                    #if ($spmn.specimenClass.equals($tissue) && $spmn.anatomicSite && !$spmn.anatomicSite.equals($notSpecified))
+                      #set($desc = "${desc}${from} ${spmn.anatomicSite}")
+                    #end
+ 
+                    #if ($spmn.specimenClass.equals($fluid) && $spmn.collectionContainer && !$spmn.collectionContainer.equals($notSpecified))
+                      #set($desc = "${desc}${collectedIn} ${spmn.collectionContainer}")
+                    #end
+                  
+                    <tr style="padding-top: 10px; padding-bottom: 10px;">
+                      <td style="border-top: 1px solid #e3e3e3">$desc</td>
+                      <td style="border-top: 1px solid #e3e3e3">$spmn.label</td>
+                      <td style="border-top: 1px solid #e3e3e3">$spmn.initialQty</td>
+                      <td style="border-top: 1px solid #e3e3e3">$spmn.status</td>
+                    </tr>
+                  #end
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    </tr>
+  </tbody>
+</table>
