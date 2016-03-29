@@ -1,0 +1,66 @@
+<div>
+  <div os-page-header>
+    <h3>Collect Visit Details</h3>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12">
+      <form name="visitsForm" os-form-validator="visitsForm" novalidate>
+        <table class="os-table os-table-fixed bulk-edit">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col os-col-20">
+                <span>Collection Protocol</span>
+              </th>
+              <th class="col os-col-20">
+                <span>Participant ID</span>
+              </th>
+              <th class="col os-col-20">
+                <span>Protocol Participant ID</span>
+              </th>
+              <th class="col os-col-20">
+                <span>Date of Receipt</span>
+              </th>
+              <th class="col os-col-20">
+                <span>Event</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body" ng-repeat="participant in participants" ng-form="vform">
+            <tr class="row">
+              <td class="col os-col-20">
+                <span>{{participant.cpShortTitle}}</span>
+              </td>
+              <td class="col os-col-20">
+                <span>{{participant.empi | osNoValue}}</span>
+              </td>
+              <td class="col os-col-20">
+                <span>{{participant.ppid | osNoValue}}</span>
+              </td>
+              <td class="col os-col-20">
+                <span>{{participant.regDate | date: global.dateFmt}}</span>
+              </td>
+              <td class="col os-col-20" style="overflow: visible;">
+                <os-select name="eventLabel" os-md-input ng-model="participant.eventLabel" list="participant.events" 
+                  select-prop="eventLabel" display-prop="eventLabel" ng-click="loadCpEvents(participant)" required>
+                </os-select>
+                <div os-field-error field-name="vform.eventLabel"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="os-divider"></div>
+
+        <div>
+          <button class="btn btn-primary" ng-click="registerVisits()">
+            <span>Add Visits</span>
+          </button>
+          <button class="btn os-btn-text" >
+            <span>Cancel</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div>
+  <div class="os-modal-header">
+    <span>Confirm Specimen Collection Session Delete</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <p>
+      Session created on {{entity.createdOn | date: global.dateTimeFmt}} for collecting specimens of following visits will be deleted.
+      <br/><br/>
+      {{entity.dataObj.visits | osArrayJoin: props.getVisitDisplayName}}
+      <br/><br/>
+      Are you sure you want to proceed with deleting session?
+    </p>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.no">No</span>
+    </button>
+    <button class="btn btn-danger" ng-click="ok()">
+      <span translate="common.yes">Yes</span>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div ng-switch on="ctx.view">
+  <div ng-switch-when="listSessions">
+    <div ng-include src="'modules/rde/new-or-old-session.html'"> </div>
+  </div>
+  <div ng-switch-when="selectWorkflow">
+    <div ng-include src="'modules/rde/select-workflow.html'"> </div>
+  </div>
+  <div ng-switch-when="collectVisitBcs">
+    <div ng-include src="'modules/rde/collect-visit-barcodes.html'"> </div>
+  </div>
+  <div ng-switch-when="collectParticipantDetails">
+    <div ng-include src="'modules/rde/collect-participant-details.html'"> </div>
+  </div>
+  <div ng-switch-when="visitBcDetails">
+    <div ng-include src="'modules/rde/visit-barcode-details.html'"> </div>
+  </div>
+  <div ng-switch-when="collectVisitDetails">
+    <div ng-include src="'modules/rde/collect-visit-details.html'"> </div>
+  </div>
+  <div ng-switch-when="collectPrimarySpmns">
+    <div ng-include src="'modules/rde/collect-primary-specimens.html'"> </div>
+  </div>
+  <div ng-switch-when="printLabels">
+    <div ng-include src="'modules/rde/print-specimen-labels.html'"> </div>
+  </div>
+  <div ng-switch-when="selectContainer">
+    <div ng-include src="'modules/rde/container-selector.html'"> </div>
+  </div>
+  <div ng-switch-when="assignPositions">
+    <div ng-include src="'modules/rde/assign-positions.html'"> </div>
+  </div>
+  <div ng-switch-when="collectChildSpmns">
+    <div ng-include src="'modules/rde/collect-child-specimens.html'"> </div>
+  </div>
+</div>

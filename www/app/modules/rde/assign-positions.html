@@ -1,0 +1,93 @@
+<style>
+  .os-table.os-error-header > .os-table-head > .row > .col {
+    background: #d9534f!important;
+    color: #fff!important;
+  }
+</style>
+
+<div>
+  <div os-page-header>
+    <h3 ng-switch on="ctx.virtualAliquots">
+      <span ng-switch-when="true">Scan Virtual Aliquot Labels</span>
+      <span ng-switch-default>Assign Aliquot Locations</span>
+    </h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="saveSession()">
+        <span>Save Session</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-1 col-xs-9">
+      <div class="form-group">
+        <div class="input-group" os-textarea-input-group>
+          <textarea ng-model="ctx.aliquotLabels" class="form-control" 
+            placeholder="Paste or scan specimen barcodes separated by comma or tab or newline"
+            rows="2" style="resize: none;" 
+            ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
+          </textarea>
+          <span class="input-group-btn">
+            <button ng-click="processAliquots()" class="btn btn-primary">
+              <span>Process Aliquots</span>
+            </button>
+          </span>
+        </div>
+        <div>
+          <a ng-click="showContainerSelector()" ng-switch on="ctx.virtualAliquots">
+            <span ng-switch-when="true">Back</span>
+            <span ng-switch-default>Choose different container</span>
+          </a>
+        </div>
+      </div>
+
+      <div ng-if="ctx.aliquotErrors.length > 0">
+        <table class="os-table os-table-muted-hdr os-border os-error-header">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col os-col-30">
+                <span>Label</span>
+              </th>
+              <th class="col os-col-70">
+                <span>Error</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="error in ctx.aliquotErrors track by $index">
+              <td class="col os-col-30">
+                <span>{{error.label}}</span>
+              </td>
+              <td class="col os-col-70" ng-switch on="!!error.msg">
+                <span ng-switch-when="true">{{error.msg}}</span>
+                <span ng-switch-default>
+                  <span ng-switch on="error.status">
+                    <span ng-switch-when="no_visit_in_session">
+                      Specimen does not belong to any visit collected in this session
+                    </span>
+                    <span ng-switch-when="spmn_already_collected">
+                      Specimen already collected
+                    </span>
+                    <span ng-switch-when="primary_spmn_not_collected">
+                      Primary specimen not yet collected
+                    </span>
+                    <span ng-switch-default>
+                      No anticipated specimen with this label
+                    </span>
+                  </span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div ng-if="!ctx.virtualAliquots" style="overflow-x: auto;width: 100%;">
+        <os-container-map 
+          container="ctx.selectedContainer" 
+          occupancy-map="ctx.contOccupancyMap">
+        </os-container-map>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div>
+  <div os-page-header>
+    <h3>Collect Visits</h3>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-2 col-xs-8">
+      <form name="visitsForm" os-form-validator="visitsForm" novalidate>
+        <div class="list-group">
+          <div class="list-group-item os-section-hdr">
+            <span>Visits</span>
+          </div>
+
+          <div class="list-group-item" ng-if="visits.length == 0">
+            <div class="alert alert-warning">
+              <span>There are no visits to show. Add a new visit by clicking Add Visit ...</span>
+            </div>
+          </div>
+
+          <div class="list-group-item" ng-if="visits.length > 0">
+            <table class="os-table os-table-fixed bulk-edit">
+              <thead class="os-table-head">
+                <tr class="row">
+                  <th class="col os-col-45">
+                    <span>Clinical Barcode</span>
+                  </th>
+                  <th class="col os-col-45">
+                    <span>Date of Receipt</span>
+                  </th>
+                  <th class="col os-col-10">
+                    <span>&nbsp;</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="os-table-body" os-unique-items>
+                <tr class="row" ng-repeat="visit in visits" ng-form="vform">
+                  <td class="col os-col-45">
+                    <input os-md-input class="form-control" type="text" 
+                      name="barcode" ng-model="visit.barcode" required os-unique-item
+                      ng-model-options="{allowInvalid: true, updateOn: 'blur'}">
+                    <div os-field-error field="vform.barcode"></div>
+                  </td>
+                  <td class="col os-col-45">
+                    <os-date-picker md-type="true" name="visitDate" date="visit.visitDate"
+                      required placeholder="">
+                    </os-date-picker>
+                    <div os-field-error field="vform.visitDate"></div>
+                  </td>
+                  <td class="col os-col-10">
+                    <button class="btn btn-xs btn-default" ng-click="removeVisit(visit)">
+                      <span class="fa fa-remove"></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="list-group-item">
+            <a ng-click="addVisit()"> 
+              <span>Add Visit</span>
+            </a>
+          </div>
+        </div>
+
+        <div ng-if="visits.length > 0">
+          <div class="os-divider"></div>
+
+          <div>
+            <button class="btn btn-primary" os-form-submit="validateVisitBarcodes()">
+              <span>Validate</span>
+            </button>
+            <button class="btn os-btn-text">
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

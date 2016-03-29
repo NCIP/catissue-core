@@ -1,0 +1,156 @@
+<div>
+  <os-tabs>
+    <os-tab title="Barcode Scan Settings">
+      <div ng-include src="'modules/rde/barcode-scan-settings'"></div>
+    </os-tab>
+    <os-tab title="Email Notifications">
+      <div ng-include src="'modules/rde/email-notif-settings'"></div>
+    </os-tab>
+  </os-tabs>
+</div>
+
+<script type="text/ng-template" id="modules/rde/barcode-scan-settings">
+  <div>
+    <div class="form-group clearfix">
+      <div class="col-xs-10">
+        <label>
+          Do you want to enable primary specimen barcode scanning?
+        </label>
+        <div>
+          <div class="btn-group btn-group-sm">
+            <button type="button" class="btn btn-default" ng-model="bdeWf.data.primarySpmnScanning"
+              btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+              ng-change="updateBdeWf()">
+              <span translate="common.yes">Yes</span>
+            </button>
+            <button type="button" class="btn btn-default" ng-model="bdeWf.data.primarySpmnScanning"
+              btn-checkbox btn-checkbox-true="false" btn-checkbox-false="true"
+              ng-change="updateBdeWf()">
+              <span translate="common.no">No</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="col-xs-10" ng-if="bdeWf.data.primarySpmnScanning">
+        <div class="list-group">
+          <div class="list-group-item clearfix os-section-hdr">
+            <span>Primary specimen barcode scan settings</span>
+          </div>
+          <div class="list-group-item">
+            <os-select os-md-input ng-model="ctx.selectedEvent" list="events" display-prop="displayLabel"
+              on-select="showEventReq()" placeholder="Select Event">
+            </os-select>
+          </div>
+          <div class="list-group-item" ng-if="ctx.selectedEvent">
+            <table class="os-table">
+              <thead class="os-table-head">
+                <tr class="row">
+                  <th class="col os-col-40">
+                    <span>Name</span>
+                  </th>
+                  <th class="col os-col-20">
+                    <span>Type</span>
+                  </th>
+                  <th class="col os-col-20">
+                    <span>Quantity</span>
+                  </th>
+                  <th class="col os-col-20">
+                    <span>Enable Scanning?</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="os-table-body">
+                <tr class="row" ng-repeat="sr in ctx.selectedEvent.requirements">
+                  <td class="col os-col-40">
+                    <os-specimen-desc specimen="sr"></os-specimen-desc>
+                  </td>
+                  <td class="col os-col-20">
+                    <span>{{sr.type | osNoValue}}</span>
+                  </td>
+                  <td class="col os-col-20">
+                    <span>{{sr.initialQty}}</span>
+                    <os-specimen-qty-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-qty-unit>
+                  </td>
+                  <td class="col os-col-20">
+                    <div class="btn-group btn-group-xs">
+                      <button type="button" class="btn btn-default" ng-model="bdeWf.data.spmnScanning[sr.id]"
+                        btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false"
+                        ng-change="updateBdeWf()">
+                        <span translate="common.yes">Yes</span>
+                      </button>
+                      <button type="button" class="btn btn-default" ng-model="bdeWf.data.spmnScanning[sr.id]"
+                        btn-checkbox btn-checkbox-true="false" btn-checkbox-false="true"
+                        ng-change="updateBdeWf()">
+                        <span translate="common.no">No</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/rde/email-notif-settings">
+  <div class="clearfix">
+    <div class="col-xs-10">
+      <div class="form-group">
+        <label>Please specify email IDs of site users to be notified on receipt of primary specimens</label>
+      </div>
+
+      <table class="os-table">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col col-xs-3">
+              <span>Site</span>
+            </th>
+            <th class="col col-xs-8">
+              <span>Recipient Email IDs</span>
+            </th>
+            <th class="col col-xs-1">
+              <span>&nbsp;</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="cpSite in cp.cpSites">
+            <td class="col col-xs-3">
+              <span>{{cpSite.siteName}}</span>
+            </td>
+            <td class="col col-xs-8" ng-switch on="cpSite.id != ctx.selectedSite.id">
+              <span ng-switch-when="true">
+                {{bdeWf.data.emailNotifs[cpSite.id] | osArrayJoin | osNoValue}}
+              </span> 
+              <span ng-switch-when="false">
+                <textarea os-md-input rows="1" name="label" ng-model="ctx.rcptEmailIds">
+                </textarea>
+              </span>
+            </td>
+            <td class="col col-xs-1 action" ng-switch on="cpSite.id != ctx.selectedSite.id">
+              <div class="btn-group" ng-switch-when="true">                   
+                <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditSiteNotif(cpSite)">
+                  <span class="fa fa-pencil"></span>
+                </button>
+              </div>
+              <div class="btn-group" ng-switch-when="false">                   
+                <button class="btn btn-xs btn-primary os-btn-icon" ng-click="updateSiteNotif()">
+                  <span class="fa fa-check"></span>
+                </button>
+                <button class="btn btn-xs btn-default os-btn-icon" ng-click="revertSiteNotifEdit()">
+                  <span class="fa fa-remove"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</script>

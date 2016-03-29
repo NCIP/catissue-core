@@ -1,0 +1,163 @@
+<style>
+.os-compact-form .form-group {
+  margin-bottom: 5px!important;
+}
+
+.os-compact-form .panel-body {
+  padding-top: 5px!important;
+  padding-bottom: 5px!important;
+}
+
+.os-table .os-md-input .os-date-picker {
+  margin-top: 0px!important;
+}
+
+</style>
+
+<div>
+  <div os-page-header>
+    <h3>Collect Child Specimens</h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="saveSession()">
+        <span>Save Session</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 os-compact-form">
+      <form name="cspecimens" class="form-horizontal" os-form-validator="cspecimens" novalidate>
+        <div class="panel panel-default" ng-repeat="visit in ctx.visitsToReview" ng-form="vcform">
+          <div class="panel-heading">
+            <div class="panel-title">Participant: {{visit.ppid}} ({{visit.name}})</div>
+          </div>
+          <div class="panel-body">
+            <div ng-include src="'modules/rde/visit-info.html'"></div>
+            <div ng-include src="'modules/rde/specimens-table.html'"></div>
+          </div>
+        </div>
+
+        <div class="os-divider"></div>
+
+        <div>
+          <button class="btn btn-primary" os-form-submit="saveAliquots()">
+            <span translate="common.buttons.submit">Submit</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="reAssignLocations()">
+            <span>Back</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/rde/specimens-table.html">
+  <div class="os-section"></div>
+
+  <table class="os-table bulk-edit">
+    <thead class="os-table-head">
+      <tr class="row">
+        <th class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}">
+          <span>Description</span>
+        </th>
+        <th class="col os-col-20">
+          <span>Label</span>
+        </th>
+        <th class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}">
+          <span>Container</span>
+        </th>
+        <th class="col os-col-10">
+          <span>Quantity</span>
+        </th>
+        <th class="col os-col-10" ng-if="visit.hasCellSpmns">
+          <span>Volume</span>
+        </th>
+        <th class="col os-col-15">
+          <span>Frozen By</span>
+        </th>
+        <th class="col os-col-15">
+          <span>Frozen Time</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="os-table-body">
+      <tr class="row" ng-repeat="spmn in visit.spmnsToReview track by $index" ng-form="sform">
+        <td class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}">
+          <div style="padding-left: {{spmn.depth * 20}}px">
+            <os-specimen-desc specimen="spmn"></os-specimen-desc>
+          </div>
+        </td>
+        <td class="col os-col-20">
+          <span>{{spmn.label}}</span>
+        </td>
+        <td class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}"
+          ng-switch on="!!spmn.storageLocation && !!spmn.storageLocation.name">
+          <span ng-switch-when="true">
+            <span>{{spmn.storageLocation.name}}</span>
+            <span>({{spmn.storageLocation.positionY}} x {{spmn.storageLocation.positionX}})</span>
+          </span>
+          <span ng-switch-default>Virtual</span>
+        </td>
+        <td class="col os-col-10">
+          <div class="os-input-addon-grp">
+            <input type="text" os-md-input edit-when="spmn.toSave" name="qty" ng-model="spmn.initialQty"
+              ng-pattern="/^([1-9][0-9]*|[0-9]*\.[0-9]+)$/" required ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-right os-md-input-addon">
+              <os-specimen-unit specimen-class="spmn.specimenClass" type="spmn.type">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div os-field-error field="sform.qty"></div>
+        </td>
+        <td class="col os-col-10" ng-if="visit.hasCellSpmns"
+          ng-switch on="spmn.specimenClass == 'Cell' && (spmn.toSave || spmn.volume)">
+          <div ng-switch-when="true">
+            <div class="os-input-addon-grp">
+              <input type="text" os-md-input edit-when="spmn.toSave" name="vol" ng-model="spmn.volume"
+                ng-pattern="/^([1-9][0-9]*|[0-9]*\.[0-9]+)$/" ng-model-options="{allowInvalid: 'true'}">
+              <div class="os-input-addon-right os-md-input-addon">
+                <os-specimen-unit specimen-class="'Fluid'">
+                </os-specimen-unit>
+              </div>
+            </div>
+            <div os-field-error field="sform.vol"></div>
+          </div>
+          <div ng-switch-default>
+            <span>&nbsp;</span>
+          </div>
+        </td>
+        <td class="col os-col-15" ng-switch on="!!spmn.toSave">
+          <div ng-switch-when="true">
+            <div class="os-md-input">
+              <os-users name="frozenBy" ng-model="spmn.frozenBy" default-list="users" required>
+              </os-users>
+            </div>
+            <div os-field-error field="sform.frozenBy"></div>
+          </div>
+          <div ng-switch-default>
+            <span>&nbsp;</span>
+          </div>
+        </td>
+        <td class="col os-col-15" ng-switch on="!!spmn.toSave">
+          <div class="clearfix" ng-switch-when="true">
+            <div class="col-xs-9" style="padding-left: 0px; padding-right: 5px;">
+              <os-date-picker name="frozenTime" date="spmn.frozenTime" md-type="true" required>
+              </os-date-picker>
+              <div os-field-error field="sform.frozenTime"></div>
+            </div>
+            <div class="col-xs-3" style="padding-left: 0px; padding-right: 0px;">
+              <div class="os-md-input">
+                <timepicker class="os-time-no-wheels" ng-model="spmn.frozenTime" show-meridian="false">
+                </timepicker>
+              </div>
+            </div>
+          </div>
+          <div ng-switch-default>
+            <span>&nbsp;</span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>

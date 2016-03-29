@@ -1,0 +1,49 @@
+<div>
+  <div os-page-header>
+    <h3>Specimen Collection Sessions</h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="newSession()">
+        <span>New Session</span>
+      </button>
+    </div>
+  </div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span>Date and Time</span>
+          </th>
+          <th class="col">
+            <span>Clinical Barcodes</span>
+          </th>
+          <th class="col">
+            <span>State</span>
+          </th>
+          <th class="col">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="session in sessions" os-row-click="oldSession(session)">
+          <td class="col">
+            <span>{{session.createdOn | date: global.dateTimeFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{session.dataObj.visits | osArrayJoin: getVisitDisplayName}}</span>
+          </td>
+          <td class="col">
+            <span>{{'rde.session.views.' + session.dataObj.view | translate}}</span>
+          </td>
+          <td class="col os-click-esc">
+            <button class="btn btn-xs btn-default" ng-click="confirmDeleteSession(session)">
+              <span class="fa fa-trash"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

@@ -1,0 +1,44 @@
+<style>
+  .os-aliquot-virtual-cb .checkbox {
+    float: left;
+    height: 16px;
+    margin-top: 4px;
+  }
+
+  .os-aliquot-virtual-cb .message {
+    float: left;
+    color: #707070;
+  }
+
+  .os-aliquot-virtual-cb:after {
+    content: ' ';
+    display: block;
+    clear: both;
+  }
+</style>
+
+<div>
+  <div os-page-header>
+    <h3>Select Storage Container</h3>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-1 col-xs-9">
+      <div>
+        <div class="os-aliquot-virtual-cb">
+          <div class="checkbox">
+            <os-checkbox ng-model="ctx.virtualAliquots" ng-change="showScanVirtualAliquots()"></os-checkbox>
+          </div>
+          <div class="message">
+            <span>Scan Virtual Aliquot Labels</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <os-container-selector type="ctx.contListOpts.type" criteria="ctx.contListOpts.criteria"
+          on-toggle-selection="toggleContainerSel(container)">
+        </os-container-selector>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1803,5 +1803,29 @@
         "max_recs_in_memory": "In-memory Records Limit",
         "max_recs_in_memory_desc": "Maximum number of query records that are allowed to be cached in-memory. When limit is reached, excessive records are spooled to disk"
       }
+    },
+
+    "rde": {
+      "errors": {
+        "INVALID": "Invalid value",
+        "SPECIMENS_ALREADY_COLLECTED": "Visit has one or more collected specimens"
+      },
+
+      "entities": {
+        "rde_session": "Session"
+      },
+
+      "session": {
+        "saved": "Session saved successfully",
+        "views": {
+          "collectVisitBcs": "Collect Visits",
+          "visitBcDetails": "Visit Details",
+          "collectPrimarySpmns": "Collect Primary Specimens",
+          "printLabels": "Print Specimen Labels",
+          "selectContainer": "Select Storage Container",
+          "assignPositions": "Assign Aliquot Locations",
+          "collectChildSpmns": "Collect Child Specimens"
+        }
+      }
     }
 }

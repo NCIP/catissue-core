@@ -1,0 +1,41 @@
+<div>
+  <div os-page-header>
+    <h3>Select Workflow</h3>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-2 col-xs-8">
+      <div class="list-group">
+        <div class="list-group-item os-section-hdr">
+          <span>Workflow Options</span>
+        </div>
+
+        <div class="list-group-item">
+          <div class="form-group">
+            <label>Please select workflow to proceed with: </label>
+          </div>
+          <div class="form-group">
+            <div class="radio">
+              <label>
+                <input type="radio" ng-click="collectVisitBcs()">
+                Scan Visit Barcodes
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" ng-click="collectVisitDetails()">
+                Manually Input Visit Details
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" ng-click="collectAliquots()">
+                Process Aliquots
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
