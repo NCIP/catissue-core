@@ -368,6 +368,21 @@
     <property name="siteFactory" ref="siteFactory" />
     <property name="rbacSvc" ref="rbacSvc"/>
   </bean>
+
+  <bean id="containerTokenRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerAlphabetSeqLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerNameLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.administrative.label.container.SiteUniqueIdLabelToken"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="containerNameGenerator" class="com.krishagni.catissueplus.core.common.service.impl.LabelGeneratorImpl">
+    <property name="tokenRegistrar" ref="containerTokenRegistrar"/>
+  </bean>
 	
   <bean id="storageContainerFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.StorageContainerFactoryImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -381,8 +396,19 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="containerFactory" ref="storageContainerFactory"/>
     <property name="mapExporter" ref="containerMapExporter"/>
+    <property name="nameGenerator" ref="containerNameGenerator"/>
   </bean>
-	
+
+  <bean id="containerTypeFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ContainerTypeFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="nameGenerator" ref="containerNameGenerator"/>
+  </bean>
+  
+  <bean id="containerTypeSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.ContainerTypeServiceImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="containerTypeFactory" ref="containerTypeFactory"/>
+  </bean>
+  
   <bean id="distributionProtocolFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionProtocolFactoryImpl">
     <property name="daoFactory"   ref="biospecimenDaoFactory"/>
     <property name="deDaoFactory" ref="deDaoFactory"/>

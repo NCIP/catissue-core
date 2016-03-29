@@ -67,7 +67,7 @@ public class Utility {
 
 		return ((Number)number).longValue();
 	}
-	
+
 	public static boolean isEmptyOrSuperset(Set<?> leftOperand, Set<?> rightOperand) {
 		if (CollectionUtils.isEmpty(leftOperand)) {
 			return true;

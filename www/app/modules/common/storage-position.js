@@ -25,7 +25,10 @@ angular.module('openspecimen')
           return;
         }
 
-        angular.extend(params, {site: scope.entity.siteName});
+        angular.extend(params, {
+          site: scope.entity.siteName,
+          canHold: scope.entity.typeName
+        });
       }
 
       var q = scope.containerListCache[JSON.stringify(params)];
@@ -46,8 +49,8 @@ angular.module('openspecimen')
     };
 
     function watchOccupyingEntityChanges(scope) {
-      var objType = scope.entity.getType() == 'specimen' ? 'entity.type' : 'entity.siteName';
-      scope.$watch(objType, function(newVal, oldVal) {
+      var objType = scope.entity.getType() == 'specimen' ? ['entity.type'] : ['entity.siteName', 'entity.typeName'];
+      scope.$watchGroup(objType, function(newVal, oldVal) {
         if (!newVal || newVal == oldVal) {
           return;
         }

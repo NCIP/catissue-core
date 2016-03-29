@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
+import com.krishagni.catissueplus.core.administrative.events.ContainerHierarchyDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
 import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
@@ -39,4 +40,6 @@ public interface StorageContainerService {
 	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req);
 	
 	public ResponseEvent<Boolean> replicateStorageContainer(RequestEvent<ContainerReplicationDetail> req);
+
+	public ResponseEvent<List<StorageContainerSummary>> createContainerHierarchy(RequestEvent<ContainerHierarchyDetail> req);
 }

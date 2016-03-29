@@ -13,6 +13,8 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	private Long parentContainerId;
 	
 	private String siteName;
+
+	private String canHold;
 	
 	private boolean includeChildren;
 	
@@ -63,7 +65,16 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 		this.siteName = siteName;
 		return self();
 	}
-	
+
+	public String canHold() {
+		return canHold;
+	}
+
+	public StorageContainerListCriteria canHold(String canHold) {
+		this.canHold = canHold;
+		return self();
+	}
+
 	public boolean includeChildren() {
 		return includeChildren;
 	}

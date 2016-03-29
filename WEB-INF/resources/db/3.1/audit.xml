@@ -6,18 +6,84 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
   <changeSet author="vlonushte" id="Audit consent comments">
-    <renameColumn 
+    <renameColumn
       tableName="CATISSUE_COLL_PROT_REG_AUD"
       oldColumnName="CONSENT_DOC_URL"
-      newColumnName="CONSENT_COMMENTS" 
-      columnDataType="${text.type}(1000)"/> 
+      newColumnName="CONSENT_COMMENTS"
+      columnDataType="${text.type}(1000)"/>
   </changeSet>
 
   <changeSet author="vlonushte" id="Track consent comment modifications">
-    <renameColumn 
+    <renameColumn
       tableName="CATISSUE_COLL_PROT_REG_AUD"
       oldColumnName="signedConsentDocumentUrl_MOD"
-      newColumnName="consentComments_MOD" 
-      columnDataType="${bit.type}"/> 
+      newColumnName="consentComments_MOD"
+      columnDataType="${bit.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Audit container types">
+    <createTable tableName="OS_CONTAINER_TYPES_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="REVTYPE" type="${smallint.type}"/>
+      
+      <column name="NAME" type="${text.type}(64)"/>
+      
+      <column name="name_MOD" type="${bit.type}"/>
+
+      <column name="NAME_FORMAT" type="${text.type}(255)"/>
+
+      <column name="nameFormat_MOD" type="${bit.type}"/>
+      
+      <column name="TEMPERATURE" type="${double.type}"/>
+      
+      <column name="temperature_MOD" type="${bit.type}"/>
+      
+      <column name="NO_OF_COLS" type="${int.type}"/>
+      
+      <column name="noOfColumns_MOD" type="${bit.type}"/>
+      
+      <column name="NO_OF_ROWS" type="${int.type}"/>
+      
+      <column name="noOfRows_MOD" type="${bit.type}"/>
+      
+      <column name="COLUMN_LABELING_SCHEME" type="${text.type}(64)"/>
+      
+      <column name="columnLabelingScheme_MOD" type="${bit.type}"/>
+      
+      <column name="ROW_LABELING_SCHEME" type="${text.type}(64)"/>
+      
+      <column name="rowLabelingScheme_MOD" type="${bit.type}"/>
+      
+      <column name="STORE_SPECIMENS" type="${boolean.type}"/>
+      
+      <column name="storeSpecimenEnabled_MOD" type="${bit.type}"/>
+      
+      <column name="CAN_HOLD" type="${int.type}"/>
+      
+      <column name="canHold_MOD" type="${bit.type}"/>
+      
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+      
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Column to specify container type">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="TYPE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Track changes of container type of container">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="type_MOD" type="${bit.type}"/>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

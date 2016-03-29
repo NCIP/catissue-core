@@ -1,12 +1,16 @@
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li><a ui-sref="container-list" translate="container.list">Storage Containers</a></li>
+      <li>
+        <a ui-sref="container-list">
+          <span translate="container.list">Storage Containers</span>
+        </a>
+      </li>
     </ul>
     <h3>{{container.name}}</h3>
     <div class="os-btns right">
       <button show-if-allowed="containerResource.updateOpts" class="primary"
-        title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: container.id})">
+        title="{{'container.tooltip.edit' | translate}}" ui-sref="container-addedit({containerId: container.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>

@@ -11,14 +11,17 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.ContainerType;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.ContainerTypeErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
+import com.krishagni.catissueplus.core.administrative.events.ContainerHierarchyDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -51,6 +54,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		
 		setName(detail, container, ose);
 		setBarcode(detail, container, ose);
+		setType(detail, container, ose);
 		setTemperature(detail, container, ose);
 		setCapacity(detail, container, ose);
 		setLabelingSchemes(detail, container, ose);
@@ -67,7 +71,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		ose.checkAndThrow();
 		return container;
 	}
-	
+
 	@Override
 	public StorageContainer createStorageContainer(StorageContainer existing, StorageContainerDetail detail) {
 		StorageContainer container = new StorageContainer();
@@ -82,6 +86,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		
 		setName(detail, existing, container, ose);
 		setBarcode(detail, existing, container, ose);
+		setType(detail, existing, container, ose);
 		setTemperature(detail, existing, container, ose);
 		setCapacity(detail, existing, container, ose);
 		setLabelingSchemes(detail, existing, container, ose);
@@ -96,6 +101,63 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setComputedRestrictions(container);
 		
 		ose.checkAndThrow();
+		return container;
+	}
+	
+	@Override
+	public StorageContainer createStorageContainer(String name, ContainerHierarchyDetail input) {
+		ContainerType type = getType(input.getTypeId(), input.getTypeName());
+		StorageContainerDetail detail = getStorageContainerDetail(type);
+		detail.setName(name);
+		detail.setSiteName(input.getSiteName());
+		detail.setStorageLocation(input.getStorageLocation());
+		detail.setAllowedSpecimenClasses(input.getAllowedSpecimenClasses());
+		detail.setAllowedSpecimenTypes(input.getAllowedSpecimenTypes());
+		detail.setAllowedCollectionProtocols(input.getAllowedCollectionProtocols());
+		
+		if (input.getNoOfColumns() > 0) {
+			detail.setNoOfColumns(input.getNoOfColumns());
+		}
+
+		if (input.getNoOfRows() > 0) {
+			detail.setNoOfRows(input.getNoOfRows());
+		}
+
+		if (StringUtils.isNotBlank(input.getColumnLabelingScheme())) {
+			detail.setColumnLabelingScheme(input.getColumnLabelingScheme());
+		}
+
+		if (StringUtils.isNotBlank(input.getRowLabelingScheme())) {
+			detail.setRowLabelingScheme(input.getRowLabelingScheme());
+		}
+
+		if (input.getTemperature() != null) {
+			detail.setTemperature(input.getTemperature());
+		}
+
+		if (input.getStoreSpecimensEnabled() != null) {
+			detail.setStoreSpecimensEnabled(input.getStoreSpecimensEnabled());
+		}
+		
+		StorageContainer container = createStorageContainer(detail);
+		container.setType(type);
+		return container;
+	}
+	
+	@Override
+	public StorageContainer createStorageContainer(String name, ContainerType type, StorageContainer parentContainer) {
+		StorageContainerDetail detail = getStorageContainerDetail(type);
+		detail.setName(name);
+		detail.setSiteName(parentContainer.getSite().getName());
+
+		StorageContainer container = createStorageContainer(detail);
+		container.setParentContainer(parentContainer);
+
+		StorageContainerPosition position = parentContainer.nextAvailablePosition();
+		position.setOccupyingContainer(container);
+		container.setPosition(position);
+		setComputedRestrictions(container);
+		container.setType(type);
 		return container;
 	}
 	
@@ -128,6 +190,22 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			container.setBarcode(existing.getBarcode());
 		}
 	}
+	
+	private void setType(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		if (detail.getTypeId() == null && StringUtils.isBlank(detail.getTypeName())) {
+			return;
+		}
+		
+		container.setType(getType(detail.getTypeId(), detail.getTypeName()));
+	}
+	
+	private void setType(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
+		if (detail.isAttrModified("typeId") || detail.isAttrModified("typeName")) {
+			setType(detail, container, ose);
+		} else {
+			container.setType(existing.getType());
+		}
+	}	
 	
 	private void setTemperature(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		container.setTemperature(detail.getTemperature());
@@ -456,5 +534,38 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		container.setCompAllowedSpecimenClasses(container.computeAllowedSpecimenClasses());
 		container.setCompAllowedSpecimenTypes(container.computeAllowedSpecimenTypes());
 		container.setCompAllowedCps(container.computeAllowedCps());
+	}
+	
+	private ContainerType getType(Long id, String name) {
+		ContainerType type = null;
+		Object key = null;
+
+		if (id != null) {
+			type = daoFactory.getContainerTypeDao().getById(id);
+			key = id;
+		} else if (StringUtils.isNotBlank(name)) {
+			type = daoFactory.getContainerTypeDao().getByName(name);
+			key = name;
+		} else {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.TYPE_REQUIRED);
+		}
+		
+		if (type == null) {
+			throw OpenSpecimenException.userError(ContainerTypeErrorCode.NOT_FOUND, key);
+		}
+
+		return type;
+	}
+	
+
+	private StorageContainerDetail getStorageContainerDetail(ContainerType type) {
+		StorageContainerDetail detail = new StorageContainerDetail();
+		detail.setNoOfColumns(type.getNoOfColumns());
+		detail.setNoOfRows(type.getNoOfRows());
+		detail.setColumnLabelingScheme(type.getColumnLabelingScheme());
+		detail.setRowLabelingScheme(type.getRowLabelingScheme());
+		detail.setTemperature(type.getTemperature());
+		detail.setStoreSpecimensEnabled(type.isStoreSpecimenEnabled());
+		return detail;
 	}
 }

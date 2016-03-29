@@ -29,6 +29,11 @@
     <property name="storeSpecimenEnabled" column="STORE_SPECIMENS"/>
 
     <many-to-one
+      name="type"
+      class="com.krishagni.catissueplus.core.administrative.domain.ContainerType"
+      column="TYPE_ID"/>
+
+    <many-to-one
       name="site"
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
       column="SITE_ID"/>
@@ -47,7 +52,7 @@
 
     <property name="comments" column="COMMENTS"/>
 
-    <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true">
+    <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true" cascade="all-delete-orphan">
       <key column="PARENT_CONTAINER_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
       <filter name="activeEntity"/>
@@ -115,5 +120,6 @@
       update="false" insert="false"/>
 
     <filter name="activeEntity"/>
+    
   </class>
 </hibernate-mapping>
