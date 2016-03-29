@@ -471,7 +471,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setInitialQuantity(existing.getInitialQuantity());
 		}
 		
-		if (existing == null || detail.isAttrModified("availableQty")) {
+		if (existing == null || existing.isPending() || detail.isAttrModified("availableQty")) {
 			setAvailableQty(detail, specimen, ose);
 		} else {
 			specimen.setAvailableQuantity(existing.getAvailableQuantity());
