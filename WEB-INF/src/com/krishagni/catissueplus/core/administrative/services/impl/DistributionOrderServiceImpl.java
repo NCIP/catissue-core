@@ -395,7 +395,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 					put(getMessage("dist_dp_title"),       order.getDistributionProtocol().getTitle());
 					put(getMessage("dist_requestor_name"), order.getRequester().formattedName());
 					put(getMessage("dist_requested_date"), Utility.getDateString(order.getExecutionDate()));
-					put(getMessage("dist_receiving_site"), order.getSite().getName());
+					put(getMessage("dist_receiving_site"), order.getSite() == null ? getMessage("common_not_specified") : order.getSite().getName());
 					put(getMessage("dist_exported_by"),    AuthUtil.getCurrentUser().formattedName());
 					put(getMessage("dist_exported_on"),    Utility.getDateString(Calendar.getInstance().getTime()));
 
