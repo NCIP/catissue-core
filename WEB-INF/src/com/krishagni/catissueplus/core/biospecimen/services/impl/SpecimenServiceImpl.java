@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
@@ -283,7 +285,6 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 			}
 
-
 			List<SpecimenDetail> aliquots = new ArrayList<SpecimenDetail>();
 			for (int i = 0; i < count; ++i) {
 				SpecimenDetail aliquot = new SpecimenDetail();
@@ -293,6 +294,8 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 				aliquot.setParentLabel(parentSpecimen.getLabel());
 				aliquot.setParentId(parentSpecimen.getId());
 				aliquot.setCreatedOn(spec.getCreatedOn());
+				aliquot.setFreezeThawCycles(spec.getFreezeThawCycles());
+				aliquot.setIncrParentFreezeThaw(spec.getIncrParentFreezeThaw());
 				aliquot.setExtensionDetail(spec.getExtensionDetail());
 				
 				StorageLocationSummary location = new StorageLocationSummary();
@@ -323,17 +326,23 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> createDerivative(RequestEvent<SpecimenDetail> derivedReq) {
-		SpecimenDetail spmnDetail = derivedReq.getPayload();
-		spmnDetail.setLineage(Specimen.DERIVED);
-		spmnDetail.setStatus(Specimen.COLLECTED);
+		try {
+			SpecimenDetail spmnDetail = derivedReq.getPayload();
+			spmnDetail.setLineage(Specimen.DERIVED);
+			spmnDetail.setStatus(Specimen.COLLECTED);
 
-		ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(spmnDetail));
-		if (resp.isSuccessful() && spmnDetail.closeParent()) {
-			Specimen parent = getSpecimen(spmnDetail.getParentId(), spmnDetail.getParentLabel(), null);
-			parent.close(AuthUtil.getCurrentUser(), new Date(), "");
+			ResponseEvent<SpecimenDetail> resp = createSpecimen(new RequestEvent<SpecimenDetail>(spmnDetail));
+			if (resp.isSuccessful() && spmnDetail.closeParent()) {
+				Specimen parent = getSpecimen(spmnDetail.getParentId(), spmnDetail.getParentLabel(), null);
+				parent.close(AuthUtil.getCurrentUser(), new Date(), "");
+			}
+
+			return resp;
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
-
-		return resp;
 	}
 
 	@Override
@@ -572,29 +581,24 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 			specimen = saveOrUpdate(detail, existing, parent);
 		}
-		
+
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
 			for (SpecimenDetail childDetail : detail.getChildren()) {
 				collectSpecimen(childDetail, specimen);
 			}
 		}
-		
-		boolean closeAfterChildrenCreation = false;
-		if (detail.getCloseAfterChildrenCreation() != null) {
-			closeAfterChildrenCreation = detail.getCloseAfterChildrenCreation();
-		}
-		
-		if (closeAfterChildrenCreation) {
+
+		if (BooleanUtils.isTrue(detail.getCloseAfterChildrenCreation())) {
 			specimen.close(AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), "");
 		}
-		
+
 		return specimen;
 	}
 	
 	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
 		ensureEditAllowed(detail, existing);
-		
-		Specimen specimen = null;		
+
+		Specimen specimen = null;
 		if (existing != null) {
 			specimen = specimenFactory.createSpecimen(existing, detail, parent);
 		} else {
@@ -622,6 +626,8 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			specimen.occupyPosition();
 			specimen.checkPoolStatusConstraints();
 		}
+
+		incrParentFreezeThawCycles(detail, specimen);
 
 		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
@@ -721,5 +727,24 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		}
 		
 		return specimen;
+	}
+
+	private void incrParentFreezeThawCycles(SpecimenDetail detail, Specimen spec) {
+		if (spec.getParentSpecimen() == null) {
+			return;
+		}
+
+		Specimen parentSpecimen = spec.getParentSpecimen();
+		if (detail.getIncrParentFreezeThaw() != null && detail.getIncrParentFreezeThaw() > 0) {
+			parentSpecimen.incrementFreezeThaw(detail.getIncrParentFreezeThaw());
+		}
+
+		if (spec.getId() != null) {
+			return;
+		}
+
+		if (ObjectUtils.compare(parentSpecimen.getFreezeThawCycles(), spec.getFreezeThawCycles()) == 1) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.FREEZE_THAW_CYCLE_LT_PARENT);
+		}
 	}
 }

@@ -14,6 +14,9 @@
   <property name="int.type" value="bigint" dbms="mysql" />
   <property name="int.type" value="number(19,0)" dbms="oracle" />
 
+  <property name="mediumint.type" value="mediumint" dbms="mysql" />
+  <property name="mediumint.type" value="number(7,0)" dbms="oracle" />
+
   <property name="smallint.type" value="smallint" dbms="mysql" />
   <property name="smallint.type" value="number(5,0)" dbms="oracle" />
 

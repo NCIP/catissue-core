@@ -128,6 +128,11 @@
         <strong class="key key-sm" translate="specimens.created_on">Created On</strong>
         <span class="value value-md">{{specimen.createdOn | date: global.dateTimeFmt | osNoValue}}</span>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</strong>
+        <span class="value value-md">{{specimen.freezeThawCycles | osNoValue}}</span>
+      </li>
     </ul>
 
     <div ng-if="!!specimen.extensionDetail">

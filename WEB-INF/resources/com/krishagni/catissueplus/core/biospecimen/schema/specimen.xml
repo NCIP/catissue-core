@@ -83,6 +83,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_freeze_thaw_cycles")</caption>
+      <attribute>freezeThawCycles</attribute>
+    </field>
+
+    <field>
       <type>datetime</type>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>

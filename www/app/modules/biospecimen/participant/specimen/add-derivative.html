@@ -146,13 +146,35 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
+        <div class="col-xs-6">
+          <input name="freezeThawCycles" ng-model="derivative.freezeThawCycles"
+            class="form-control" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
+            ng-pattern="/^[0-9]*$/">
+          <div os-field-error field="derivativeForm.freezeThawCycles"></div>
+          <div class="os-text-checkbox">
+            <div class="checkbox">
+              <os-checkbox ng-model="derivative.incrParentFreezeThaw" ng-true-value="1" ng-false-value="0"
+                ng-change="toggleIncrParentFreezeThaw()">
+              </os-checkbox>
+            </div>
+            <div class="message os-ctrl-padding-top">
+              <span translate="specimens.increment_parent_freeze_thaw">
+                Increment parent specimen's Freeze/Thaw cycle count
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
         <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="derivative">
         </div>
       </div>
 
-      <div class="form-group clearfix">
-        <div class="col-xs-offset-3 col-xs-6 os-spmn-close-parent os-no-left-padding">
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6 os-text-checkbox">
           <div class="checkbox">
             <os-checkbox ng-model="derivative.closeParent"></os-checkbox>
           </div>

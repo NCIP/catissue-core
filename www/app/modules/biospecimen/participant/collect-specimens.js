@@ -488,7 +488,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
             if (visited.indexOf(uiSpecimen) >= 0 || // already visited
                 !uiSpecimen.selected || // not selected
                 (uiSpecimen.existingStatus == 'Collected' && 
-                !uiSpecimen.closeAfterChildrenCreation)) { // collected and not close after children creation
+                !uiSpecimen.closeAfterChildrenCreation)) {
+                // collected and not close after children creation
               return;
             }
 
@@ -530,6 +531,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           status: uiSpecimen.status,
           closeAfterChildrenCreation: uiSpecimen.closeAfterChildrenCreation,
           createdOn: uiSpecimen.lineage != 'New' ? uiSpecimen.createdOn : undefined,
+          freezeThawCycles: uiSpecimen.freezeThawCycles,
+          incrParentFreezeThaw: uiSpecimen.incrParentFreezeThaw,
           extensionDetail: uiSpecimen.extensionDetail
         };
 

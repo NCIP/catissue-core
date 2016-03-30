@@ -592,7 +592,17 @@
     <property name="postFormSaveFilters">
       <map>
         <entry key="SpecimenReceivedEvent">
-          <bean id="receivedEventFilter" class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenReceivedEventFilter">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenReceivedEventFilter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+          </bean>
+        </entry>
+        <entry key="SpecimenFrozenEvent">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenFreezeThawEventFilter">
+            <property name="daoFactory" ref="biospecimenDaoFactory"/>
+          </bean>
+        </entry>
+        <entry key="SpecimenThawEvent">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenFreezeThawEventFilter">
             <property name="daoFactory" ref="biospecimenDaoFactory"/>
           </bean>
         </entry>

@@ -249,18 +249,18 @@
   padding-left: 0px;
 }
 
-.os-spmn-close-parent:after {
+.os-text-checkbox:after {
   display: block;
   content: ' ';
   clear: both;
 }
 
-.os-spmn-close-parent .checkbox {
+.os-text-checkbox .checkbox {
   margin-top: 4px;
   float: left;
 }
 
-.os-spmn-close-parent .message {
+.os-text-checkbox .message {
   color: #707070;
   float: left;
 }

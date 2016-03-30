@@ -5,6 +5,13 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
+  <changeSet author="ckhilosiya" id="Specimen freeze/thaw cycles audit value">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="FREEZE_THAW_CYCLES" type="${mediumint.type}"/>
+      <column name="freezeThawCycles_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="vlonushte" id="Audit consent comments">
     <renameColumn
       tableName="CATISSUE_COLL_PROT_REG_AUD"

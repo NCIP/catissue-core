@@ -4,6 +4,24 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+  <changeSet author="ckhilosiya" id="Freeze/thaw cycles field for specimen">
+    <addColumn tableName="CATISSUE_SPECIMEN">
+      <column name="FREEZE_THAW_CYCLES" type="${mediumint.type}" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Track whether freeze/thaw cycle of specimen was incremented when frozen event was created">
+    <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+      <column name="INCREMENT_FREEZE_THAW" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Track whether freeze/thaw cycle of specimen was incremented when thaw event was created">
+    <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+      <column name="INCREMENT_FREEZE_THAW" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="ckhilosiya" id="Add return specimens fields to order items table">
     <addColumn tableName="OS_ORDER_ITEMS">
       <column name="RETURNED_QUANTITY" type="${double.type}"></column>
