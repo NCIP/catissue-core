@@ -4,37 +4,38 @@
   </div>
 
   <div class="container">
-    <div class="col-xs-offset-2 col-xs-8">
+    <div class="col-xs-7">
       <div class="list-group">
         <div class="list-group-item os-section-hdr">
-          <span>Workflow Options</span>
+          <span>Options</span>
         </div>
 
-        <div class="list-group-item">
-          <div class="form-group">
-            <label>Please select workflow to proceed with: </label>
-          </div>
-          <div class="form-group">
-            <div class="radio">
-              <label>
-                <input type="radio" ng-click="collectVisitBcs()">
-                Scan Visit Barcodes
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" ng-click="collectVisitDetails()">
-                Manually Input Visit Details
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" ng-click="collectAliquots()">
-                Process Aliquots
-              </label>
-            </div>
-          </div>
-        </div>
+        <a class="list-group-item" ui-sref="rde-collect-visit-names" ui-sref-active="active">
+          <h5 class="list-group-item-heading">
+            <span>Process Visits (fast)</span>
+          </h5>
+          <span class="list-group-item-text">
+            Scan or type visit names to create new participants or add visits to pre-registered participants
+          </span>
+        </a>
+
+        <a class="list-group-item" ui-sref="rde-collect-participant-details" ui-sref-active="active">
+          <h5 class="list-group-item-heading">
+            <span>Process Visits (slow)</span>
+          </h5>
+          <span class="list-group-item-text">
+            Manually enter participant and visit details
+          </span>
+        </a>
+
+        <a class="list-group-item" ui-sref="rde-process-aliquots" ui-sref-active="active">
+          <h5 class="list-group-item-heading">
+            <span>Process Aliquots</span>
+          </h5>
+          <span class="list-group-item-text">
+            Scan or type aliquot labels to assign storage locations
+          </span>
+        </a>
       </div>
     </div>
   </div>

@@ -11,13 +11,13 @@
             <span>Participants</span>
           </div>
 
-          <div class="list-group-item" ng-if="participants.length == 0">
+          <div class="list-group-item" ng-if="input.participants.length == 0">
             <div class="alert alert-warning">
               <span>There are no participants to show. Add a new participant by clicking Add Participant ...</span>
             </div>
           </div>
 
-          <div class="list-group-item" ng-if="participants.length > 0">
+          <div class="list-group-item" ng-if="input.participants.length > 0">
             <table class="os-table os-table-fixed bulk-edit">
               <thead class="os-table-head">
                 <tr class="row">
@@ -38,10 +38,10 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="os-table-body" ng-repeat="participant in participants" ng-form="pform">
+              <tbody class="os-table-body" ng-repeat="participant in input.participants" ng-form="pform">
                 <tr class="row">
                   <td class="col os-col-25" style="overflow: visible;">
-                    <os-select os-md-input name="cp" ng-model="participant.cpShortTitle" list="cps" 
+                    <os-select os-md-input name="cp" ng-model="participant.cpShortTitle" list="input.cps"
                       select-prop="shortTitle" display-prop="shortTitle" required>
                     </os-select>
                     <div os-field-error field="pform.cp"></div>
@@ -81,14 +81,14 @@
           </div>
         </div>
 
-        <div ng-if="participants.length > 0">
+        <div ng-if="input.participants.length > 0">
           <div class="os-divider"></div>
 
           <div>
             <button class="btn btn-primary" os-form-submit="registerParticipants()">
               <span>Register</span>
             </button>
-            <button class="btn os-btn-text" >
+            <button class="btn os-btn-text">
               <span>Cancel</span>
             </button>
           </div>

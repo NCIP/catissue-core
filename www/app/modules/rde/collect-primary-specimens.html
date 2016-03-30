@@ -23,7 +23,7 @@
   <div class="container">
     <div class="col-xs-offset-1 col-xs-9 os-compact-form">
       <form name="pspecimens" class="form-horizontal" os-form-validator="pspecimens" novalidate>
-        <div class="panel panel-default" ng-repeat="visit in visits" ng-form="psform">
+        <div class="panel panel-default" ng-repeat="visit in input.visits" ng-form="psform">
           <div class="panel-heading">
             <div class="panel-title">
               <span>Participant: {{visit.ppid}} ({{visit.name}})</span>
@@ -159,39 +159,3 @@
     </tbody>
   </table>
 </script>
-
-<!-- script type="text/ng-template" id="primary-specimen.html">
-  <tr class="row"> 
-    <td class="col os-col-40">
-      <span class="fa fa-circle"
-        ng-class="{'os-status-collected': specimen.status == 'Collected',
-                   'os-status-pending': specimen.status == 'Pending',
-                   'os-status-not-collected': specimen.status == 'Missed Collection'}">
-      </span>
-      <os-specimen-desc specimen="specimen"></os-specimen-desc>
-    </td>
-    <td class="col os-col-40">
-      <span>{{specimen.label}}</span>
-    </td>
-    <td class="col os-col-20">
-      <div class="os-input-addon-grp">
-        <input type="text" os-md-input name="qty" ng-model="specimen.initialQty" 
-          ng-pattern="/^([1-9][0-9]*|[0-9]*\.[0-9]+)$/" required ng-model-options="{allowInvalid: 'true'}">
-        <div class="os-input-addon-right os-md-input-addon">
-          <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-          </os-specimen-qty-unit>
-        </div>
-      </div>
-      <div os-field-error field="sform.qty"></div>
-    </td>
-  </tr> 
-  <tr class="row" ng-if="specimen.status == 'Missed Collection'"> 
-    <td class="col os-col-100" colspan="3" style="border-top: 0px;">
-      <div style="margin-top: 10px;">
-        <input type="text" os-md-input name="missedReason" ng-model="specimen.comments" 
-          placeholder="Reason for missed specimen collection" required>
-        <div os-field-error field="sform.missedReason"></div>
-      </div>
-    </td>
-  </tr>
-</script -->

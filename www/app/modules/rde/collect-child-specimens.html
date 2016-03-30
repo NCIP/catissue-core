@@ -27,7 +27,7 @@
   <div class="container">
     <div class="col-xs-12 os-compact-form">
       <form name="cspecimens" class="form-horizontal" os-form-validator="cspecimens" novalidate>
-        <div class="panel panel-default" ng-repeat="visit in ctx.visitsToReview" ng-form="vcform">
+        <div class="panel panel-default" ng-repeat="visit in input.visitsToReview" ng-form="vcform">
           <div class="panel-heading">
             <div class="panel-title">Participant: {{visit.ppid}} ({{visit.name}})</div>
           </div>

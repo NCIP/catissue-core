@@ -27,7 +27,7 @@
       <div>
         <div class="os-aliquot-virtual-cb">
           <div class="checkbox">
-            <os-checkbox ng-model="ctx.virtualAliquots" ng-change="showScanVirtualAliquots()"></os-checkbox>
+            <os-checkbox ng-model="input.virtualAliquots" ng-change="scanVirtualAliquots()"></os-checkbox>
           </div>
           <div class="message">
             <span>Scan Virtual Aliquot Labels</span>
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div>
-        <os-container-selector type="ctx.contListOpts.type" criteria="ctx.contListOpts.criteria"
+        <os-container-selector type="input.listOpts.type" criteria="input.listOpts.criteria"
           on-toggle-selection="toggleContainerSel(container)">
         </os-container-selector>
       </div>

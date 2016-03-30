@@ -17,22 +17,22 @@
           <thead class="os-table-head">
             <tr class="row">
               <th class="col os-col-15">
-                <span>Clinical Barcode</span>
+                <span>Visit Name</span>
               </th>
-              <th class="col" style="width: {{ctx.visitBcHeaderWidth}}%" ng-repeat="header in ctx.visitBcHeaders">
+              <th class="col" style="width: {{input.columnWidth}}%" ng-repeat="header in input.headers">
                 <span>{{header.caption}}</span>
               </th>
             </tr>
           </thead>
           <tbody class="os-table-body" os-unique-items>
-            <tr class="row" ng-repeat="visit in visits" ng-form="vform">
+            <tr class="row" ng-repeat="visit in input.visits" ng-form="vform">
               <td class="col os-col-15">
                 <input os-md-input class="form-control" type="text" 
                   name="barcode" ng-model="visit.barcode" required os-unique-item
                   ng-model-options="{allowInvalid: true}">
                 <div os-field-error field="vform.barcode"></div>
               </td>
-              <td class="col" style="width: {{ctx.visitBcHeaderWidth}}%" ng-repeat="header in ctx.visitBcHeaders"
+              <td class="col" style="width: {{input.columnWidth}}%" ng-repeat="header in input.headers"
                 ng-class="{'error': !!visit.detail[header.token].errorCode}">
                 <div style="position: relative;">
                   <span>{{visit.detail[header.token].displayValue}} ({{visit.detail[header.token].code}})</span>
@@ -51,11 +51,11 @@
         </table>
 
         <div>
-          <span ng-switch on="!ctx.error && !visitsForm.$dirty">
+          <span ng-switch on="!input.error && !visitsForm.$dirty">
             <button class="btn btn-primary" os-form-submit="addOrUpdateVisits()" ng-switch-when="true">
               <span>Proceed to Collect Specimens</span>
             </button>
-            <button class="btn btn-primary" os-form-submit="validateVisitBarcodes(visitsForm)" ng-switch-default>
+            <button class="btn btn-primary" os-form-submit="validate(visitsForm)" ng-switch-default>
               <span>Re-validate</span>
             </button>
           </span>
