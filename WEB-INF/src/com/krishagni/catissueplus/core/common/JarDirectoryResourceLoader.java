@@ -9,7 +9,7 @@ import java.util.jar.JarFile;
 
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.runtime.resource.loader.JarResourceLoader;
 
 
@@ -23,7 +23,12 @@ public class JarDirectoryResourceLoader extends JarResourceLoader {
 
 		List<String> jarFileNames = new ArrayList<String>();
 		for (Object path : paths) {
-			jarFileNames.addAll(getJarFileNames((String)path));
+			String pathStr = (String)path;
+			if (StringUtils.isBlank(pathStr)) {
+				continue;
+			}
+
+			jarFileNames.addAll(getJarFileNames(pathStr));
 		}
 
 		if (jarFileNames.isEmpty()) {
@@ -37,6 +42,10 @@ public class JarDirectoryResourceLoader extends JarResourceLoader {
 	private List<String> getJarFileNames(String dirPath) {
 		List<String> jarFileNames = new ArrayList<String>();
 		File jarDirFile = new File(dirPath);
+		if (!jarDirFile.isDirectory()) {
+			throw new RuntimeException("Invalid directory path: " + dirPath);
+		}
+
 		for (File file : jarDirFile.listFiles()) {
 			if (file.isDirectory() || !file.getName().endsWith(".jar")) {
 				continue;
