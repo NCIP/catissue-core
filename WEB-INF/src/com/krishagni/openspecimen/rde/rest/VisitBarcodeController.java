@@ -1,7 +1,9 @@
 package com.krishagni.openspecimen.rde.rest;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -74,13 +76,24 @@ public class VisitBarcodeController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public List<VisitSpecimenDetail> getVisits(
-			@RequestParam(value = "aliquotLabels", required = true)
-			List<String> aliquotLabels) {
-		RequestEvent<List<String>> req = new RequestEvent<List<String>>(aliquotLabels);
-		
-		ResponseEvent<List<VisitSpecimenDetail>> resp = visitRegSvc.getVisits(req);
+		@RequestParam(value = "aliquotLabels", required = false)
+		List<String> aliquotLabels,
+
+		@RequestParam(value = "visitNames", required = false)
+		List<String> visitNames) {
+
+		ResponseEvent<List<VisitSpecimenDetail>> resp = null;
+		if (CollectionUtils.isNotEmpty(aliquotLabels)) {
+			RequestEvent<List<String>> req = new RequestEvent<List<String>>(aliquotLabels);
+			resp = visitRegSvc.getVisitsBySpecimens(req);
+		} else if (CollectionUtils.isNotEmpty(visitNames)) {
+			RequestEvent<List<String>> req = new RequestEvent<>(visitNames);
+			resp = visitRegSvc.getVisitsByNames(req);
+		} else {
+			resp = new ResponseEvent(Collections.emptyList());
+		}
+
 		resp.throwErrorIfUnsuccessful();
-		
 		return resp.getPayload();
 	}
 

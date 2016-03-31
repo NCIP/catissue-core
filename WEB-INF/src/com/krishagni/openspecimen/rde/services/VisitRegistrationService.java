@@ -26,7 +26,9 @@ public interface VisitRegistrationService {
 	
 	public ResponseEvent<List<SpecimenDetail>> savePrimarySpecimens(RequestEvent<List<SpecimenDetail>> req);
 	
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisits(RequestEvent<List<String>> req);
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req);
+
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req);
 	
 	public ResponseEvent<ContainerOccupancyDetail> validateOccupancyEligibility(RequestEvent<ContainerOccupancyDetail> req);
 	

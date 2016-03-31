@@ -250,8 +250,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisits(RequestEvent<List<String>> req) {
-			
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req) {
 		List<Visit> visits = visitSvc.getSpecimenVisits(req.getPayload());
 		
 		List<VisitSpecimenDetail> visitSpmnDetails = new ArrayList<VisitSpecimenDetail>();
@@ -263,7 +262,23 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		}
 		
 		return ResponseEvent.response(visitSpmnDetails);
-	}	
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req) {
+		List<Visit> visits = visitSvc.getVisitsByName(req.getPayload());
+
+		List<VisitSpecimenDetail> visitSpmnDetails = new ArrayList<VisitSpecimenDetail>();
+		for (Visit visit : visits) {
+			VisitSpecimenDetail visitSpmnDetail = new VisitSpecimenDetail();
+			visitSpmnDetail.setVisit(VisitDetail.from(visit));
+			visitSpmnDetail.setSpecimens(SpecimenDetail.from(visit.getTopLevelSpecimens()));
+			visitSpmnDetails.add(visitSpmnDetail);
+		}
+
+		return ResponseEvent.response(visitSpmnDetails);
+	}
 
 	@Override
 	@PlusTransactional
