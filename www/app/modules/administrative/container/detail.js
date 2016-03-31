@@ -34,7 +34,12 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
     }
 
     $scope.deleteContainer = function() {
-      DeleteUtil.delete($scope.container, {
+      var container = new Container({
+        id: $scope.container.id,
+        name: $scope.container.name
+      });
+
+      DeleteUtil.delete(container, {
         onDeleteState: 'container-list',
         confirmDelete: 'container.confirm_delete'
       });

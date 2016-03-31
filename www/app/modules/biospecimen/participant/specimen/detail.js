@@ -42,11 +42,15 @@ angular.module('os.biospecimen.specimen.detail', [])
     }
 
     $scope.deleteSpecimen = function() {
+      var specimen = new Specimen({
+        id: $scope.specimen.id,
+        label: $scope.specimen.label
+      });
       var params = {cpId: cpr.cpId, cprId: cpr.id, visitId: visit.id};
       var parentId = $scope.specimen.parentId;
 
       DeleteUtil.delete(
-        $scope.specimen, 
+        specimen,
         {
           onDeletion: function() {
             if (!parentId) {
