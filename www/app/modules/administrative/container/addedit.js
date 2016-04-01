@@ -209,6 +209,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         return;
       }
 
+      $scope.container.typeId = containerType.id;
       $scope.container.typeName = containerType.name;
       $scope.container.noOfRows = containerType.noOfRows;
       $scope.container.noOfColumns = containerType.noOfColumns;
