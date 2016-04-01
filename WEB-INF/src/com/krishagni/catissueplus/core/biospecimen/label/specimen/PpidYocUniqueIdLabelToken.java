@@ -26,7 +26,7 @@ public class PpidYocUniqueIdLabelToken extends AbstractSpecimenLabelToken {
 	}
 	
 	@Override
-	public java.lang.String getLabel(Specimen specimen) {	
+	public String getLabel(Specimen specimen) {
 		String ppid = specimen.getVisit().getRegistration().getPpid();
 
 		while (specimen.isAliquot() || specimen.isDerivative()) {
