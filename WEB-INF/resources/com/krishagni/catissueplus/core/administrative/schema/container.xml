@@ -16,6 +16,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("container_type")</caption>
+      <attribute>typeName</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("container_activity_status")</caption>
       <attribute>activityStatus</attribute>
     </field>
