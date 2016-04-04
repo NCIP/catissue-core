@@ -773,7 +773,7 @@
 
   <changeSet author="vgaikwad" id="Number of copies of labels to print">
     <addColumn tableName="OS_LABEL_PRINT_JOB_ITEMS">
-      <column name="COPIES" type="${int.type}">
+      <column name="COPIES" type="${int.type}" defaultValueNumeric="1">
         <constraints nullable="false"/>
       </column>
     </addColumn>
