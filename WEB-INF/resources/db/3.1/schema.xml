@@ -766,4 +766,8 @@
       referencedTableName="OS_CONTAINER_TYPES"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Replace fixed string based ppid format with token based format">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.CpPpidFormatUpdater"></customChange>
+  </changeSet>
 </databaseChangeLog>

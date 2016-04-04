@@ -15,13 +15,14 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -57,7 +58,8 @@ public class CollectionProtocolRegistration {
 	private String barcode;
 	
 	@Autowired
-	private DaoFactory daoFactory;
+	@Qualifier("ppidGenerator")
+	private LabelGenerator labelGenerator;
 
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -262,11 +264,10 @@ public class CollectionProtocolRegistration {
 		CollectionProtocol cp = getCollectionProtocol();
 		String ppidFmt = cp.getPpidFormat();
 		if (StringUtils.isNotBlank(ppidFmt)) {
-			Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("PPID", cp.getId().toString());
-			setPpid(String.format(ppidFmt, uniqueId.intValue()));
+			setPpid(labelGenerator.generateLabel(ppidFmt, this));
 		} else {
 			setPpid(cp.getId() + "_" + participant.getId());
-		}		
+		}
 	}
 	
 	public void addVisits(Collection<Visit> visits) {

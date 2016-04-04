@@ -218,6 +218,21 @@
     <property name="consentResponsesFactory" ref="consentResponsesFactory"/>
     <property name="participantService" ref="participantSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
+    <property name="labelGenerator" ref="ppidGenerator"/>
+  </bean>
+  
+  <bean id="ppidTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.CpUniqueIdPpidToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.CpCodePpidToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.SiteCodePpidToken"/>
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="ppidGenerator" class="com.krishagni.catissueplus.core.common.service.impl.LabelGeneratorImpl">
+    <property name="tokenRegistrar" ref="ppidTokensRegistrar"/>
   </bean>
 
   <bean id="userFact" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.UserFactoryImpl">

@@ -1,10 +1,7 @@
-package com.krishagni.catissueplus.core.init;
+package com.krishagni.catissueplus.core.upgrade;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-
-import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -16,7 +13,7 @@ import liquibase.exception.SetupException;
 import liquibase.exception.ValidationErrors;
 import liquibase.resource.ResourceAccessor;
 
-public class ConfigEmailPasswordUpdator implements CustomTaskChange {
+public class ConfigEmailPasswordUpdater implements CustomTaskChange {
 	@Override
 	public String getConfirmationMessage() {
 		return "Email account password updated successfully.";

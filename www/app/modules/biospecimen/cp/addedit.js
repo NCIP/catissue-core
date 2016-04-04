@@ -7,7 +7,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.cp = cp;
       $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts(cp, extensionCtxt);
-      $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.coordinators = [];
 
       if (!cp.spmnLabelPrintSettings || cp.spmnLabelPrintSettings.length == 0) {
@@ -19,21 +18,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       }
 
       loadPvs();
-
-      $scope.$watch('ppidFmt', function(newVal) {
-        var sample = newVal.prefix || '';
-
-        if (newVal.digitsWidth && newVal.digitsWidth > 0) {
-          for (var i = 0; i < newVal.digitsWidth - 1; ++i) {
-            sample += '0';
-          }
-
-          sample += '7';  
-        }
-
-        sample += (newVal.suffix || '');
-        $scope.ppidFmt.samplePpid = sample;
-      }, true);
 
       if (!!cp.id && $stateParams.mode == 'copy') {
         $scope.mode = 'copy';
@@ -80,16 +64,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       );
     }
 
-    function getPpidFmt() {
-      var result = $scope.ppidFmt.prefix || '';
-      if ($scope.ppidFmt.digitsWidth) {
-        result += '%0' + $scope.ppidFmt.digitsWidth + 'd';
-      }
-
-      result += ($scope.ppidFmt.suffix || '');
-      return result;
-    };
-
     $scope.createCp = function() {
       var formCtrl = $scope.deFormCtrl.ctrl;
       if (formCtrl && !formCtrl.validate()) {
@@ -98,7 +72,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
       var cp = angular.copy($scope.cp);
       delete cp.repositoryNames;
-      cp.ppidFmt = getPpidFmt();
 
       if (formCtrl) {
         cp.extensionDetail = formCtrl.getFormData();

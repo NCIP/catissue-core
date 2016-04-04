@@ -163,20 +163,8 @@
 <script id="modules/biospecimen/cp/label-settings.html" type="text/ng-template">
   <div class="form-group">
     <label class="control-label col-xs-3" translate="cp.ppid_fmt">De-ID Format</label>
-    <div class="col-xs-2">
-      <input type="text" ng-model="ppidFmt.prefix" class="form-control" placeholder="{{'cp.ppid_prefix' | translate}}">
-    </div>
-    <div class="col-xs-2">
-      <input type="text" name="ppidDigits" ng-model="ppidFmt.digitsWidth" class="form-control" 
-        placeholder="{{'cp.ppid_digits' | translate}}" ng-pattern="/^([1-9]|[1][0-9])$/" 
-        ng-required="!!ppidFmt.prefix || !!ppidFmt.suffix">
-      <div os-field-error field="cpForm.ppidDigits"></div>
-    </div>
-    <div class="col-xs-2">
-      <input type="text" ng-model="ppidFmt.suffix" class="form-control" placeholder="{{'cp.ppid_suffix' | translate}}">
-    </div>
-    <div class="col-xs-2" ng-if="ppidFmt.samplePpid">
-      <span>{{ppidFmt.samplePpid}}</span>
+    <div class="col-xs-6">
+      <input type="text" ng-model="cp.ppidFmt" class="form-control" placeholder="{{'cp.ppid_fmt' | translate}}">
     </div>
   </div>
   
