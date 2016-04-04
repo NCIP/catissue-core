@@ -1,13 +1,14 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
@@ -17,6 +18,15 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 
 public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
+	//
+	// format: <item_label>_<yyyyMMddHHmm>_<unique_os_run_num>_<copy>.txt
+	// E.g. TCP-0003-S-01-P1_201604040807_1_1.txt, TCP-0003-S-01-P1_201604040807_1_2.txt etc
+	//
+	private static final String LABEL_FILENAME_FMT = "%s_%s_%d_%d.txt";
+
+	private static final String TSTAMP_FMT = "yyyyMMddHHmm";
+
+	private AtomicInteger uniqueNum = new AtomicInteger();
 
 	protected Map<String, Object> makeLabelData(LabelPrintJobItem item, LabelPrintRule rule, Map<String, String> dataItems) {
 		Map<String, Object> labelData = new HashMap<String, Object>();
@@ -41,26 +51,22 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 			return;
 		}
 
-		PrintWriter writer = null;
 		try {
-			String file = rule.getCmdFilesDir() + File.separator + jobItem.getItemLabel() + ".txt";
-			writer = new PrintWriter(new FileWriter(file));
-
+			String content = null;
 			switch (rule.getCmdFileFmt()) {
 				case CSV:
-					writer.println(getCommaSeparatedValueFields(dataItems));
+					content = getCommaSeparatedValueFields(dataItems);
 					break;
 
 				case KEY_VALUE:
-					writer.println(getKeyValueFields(dataItems));
+					content = getKeyValueFields(dataItems);
 					break;
 			}
 
+			writeToFile(jobItem, rule, content);
 			jobItem.setStatus(Status.QUEUED);
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
-		} finally {
-			IOUtils.closeQuietly(writer);
 		}
 	}
 
@@ -89,4 +95,16 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 
 		return content.toString();
 	}
+
+	private void writeToFile(LabelPrintJobItem item, LabelPrintRule rule, String content)
+	throws IOException {
+		String tstamp = new SimpleDateFormat(TSTAMP_FMT).format(item.getJob().getSubmissionDate());
+		int labelCount = uniqueNum.incrementAndGet();
+
+		for (int i = 0; i < item.getCopies(); ++i) {
+			String filename = String.format(LABEL_FILENAME_FMT, item.getItemLabel(), tstamp, labelCount, (i + 1));
+			FileUtils.write(new File(rule.getCmdFilesDir(), filename), content);
+		}
+	}
+
 }
