@@ -620,7 +620,7 @@ public class Specimen extends BaseExtensionEntity {
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		if (NumUtil.greaterThanZero(getAliquotQuantity())) {
+		if (NumUtil.greaterThanZero(getAvailableQuantity())) {
 			setIsAvailable(true);
 		}
 		
@@ -806,8 +806,8 @@ public class Specimen extends BaseExtensionEntity {
 
 	public void returnSpecimen(DistributionOrderItem item) {
 		if (isClosed()) {
-			activate();
 			setAvailableQuantity(item.getReturnedQuantity());
+			activate();
 		} else {
 			setAvailableQuantity(getAvailableQuantity().add(item.getReturnedQuantity()));
 		}
