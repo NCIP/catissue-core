@@ -1479,6 +1479,7 @@
     "paste_return_specimen_labels": "Paste or scan labels of specimens to be returned",
     "specimens_returned": "{{count}} specimens returned successfully",
     "return_qty": "Return Quantity",
+    "freeze_thaw_on_return": "Freeze/Thaw",
     "user": "User",
     "comments": "Comments",
    

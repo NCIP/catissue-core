@@ -20,6 +20,8 @@ public class ReturnedSpecimenDetail {
 
 	private Date time;
 
+	private Integer incrFreezeThaw;
+
 	private String comments;
 
 	public String getOrderName() {
@@ -76,6 +78,14 @@ public class ReturnedSpecimenDetail {
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public Integer getIncrFreezeThaw() {
+		return incrFreezeThaw;
+	}
+
+	public void setIncrFreezeThaw(Integer incrFreezeThaw) {
+		this.incrFreezeThaw = incrFreezeThaw;
 	}
 
 	public String getComments() {

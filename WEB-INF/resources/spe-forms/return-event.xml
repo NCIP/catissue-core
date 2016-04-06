@@ -80,6 +80,15 @@
     </row>
 
     <row>
+      <numberField>
+        <name>incrementFreezeThaw</name>
+        <udn>incrementFreezeThaw</udn>
+        <caption>#getMessage("specimen_increment_freeze_thaw")</caption>
+        <column>FREEZE_THAW_INCR_ON_RETURN</column>
+      </numberField>
+    </row>
+
+    <row>
       <textArea>
         <name>comments</name>
         <udn>comments</udn>

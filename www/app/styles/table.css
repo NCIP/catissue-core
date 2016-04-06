@@ -30,6 +30,16 @@
   border-top: 0;
 }
 
+.os-table.os-no-border .os-table-head .row .col,
+.os-table.os-no-border .os-table-body .row .col {
+  border: 0px;
+}
+
+.os-table.os-alt-border .row:nth-child(even) .col {
+  border-top: 0px;
+  padding-top: 0px;
+}
+
 .os-table-muted-hdr > .os-table-head > .row > .col {
   color: #707070;
   font-size: 12px;

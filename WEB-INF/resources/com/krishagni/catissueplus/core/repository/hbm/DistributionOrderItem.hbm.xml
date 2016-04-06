@@ -39,6 +39,8 @@
 
     <property name="returnDate" column="RETURN_DATE"/>
 
+    <property name="freezeThawIncrOnReturn" column="FREEZE_THAW_INCR_ON_RETURN"/>
+
     <property name="returnComments" column="RETURN_COMMENTS"/>
   </class>
 </hibernate-mapping>

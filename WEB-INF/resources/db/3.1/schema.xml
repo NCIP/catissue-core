@@ -52,13 +52,20 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
+  <changeSet author="ckhilosiya" id="Track by how much freeze/thaw cycle of specimen was incremented when it was returned">
+    <addColumn tableName="OS_ORDER_ITEMS">
+      <column name="FREEZE_THAW_INCR_ON_RETURN" type="${smallint.type}"></column>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="ckhilosiya" id="Updated distribution view with return event details" runOnChange="true">
     <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
       select
         item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
         item.returned_quantity as returned_quantity, item.returning_container as returning_container,
         item.returning_row as returning_row, item.returning_column as returning_column,
-        item.returned_by as returned_by, item.return_date as return_date, item.return_comments as return_comments,
+        item.returned_by as returned_by, item.return_date as return_date,
+        item.freeze_thaw_incr_on_return as freeze_thaw_incr_on_return, item.return_comments as return_comments,
         ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
         ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
       from

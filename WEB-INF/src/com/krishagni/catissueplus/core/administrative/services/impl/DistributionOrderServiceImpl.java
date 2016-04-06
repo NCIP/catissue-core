@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -265,7 +264,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	public ResponseEvent<List<DistributionOrderItemDetail>> getDistributedSpecimens(RequestEvent<List<String>> req) {
 		try {
 			List<Specimen> specimens = getReadAccessSpecimens(req.getPayload());
-			if (specimens == null) {
+			if (CollectionUtils.isEmpty(specimens)) {
 				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 			}
 
@@ -490,6 +489,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		setItemReturnDate(item, detail.getTime());
 		setItemReturnedBy(item, detail.getUser());
 		setItemReturningPosition(item, detail.getLocation(), containersMap);
+		setItemFreezeThawIncrOnReturn(item, detail.getIncrFreezeThaw());
 		item.setReturnComments(detail.getComments());
 		item.returnSpecimen();
 	}
@@ -576,6 +576,11 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		item.setReturningContainer(container);
 		item.setReturningRow(position.getPosTwo());
 		item.setReturningColumn(position.getPosOne());
+	}
+
+	private void setItemFreezeThawIncrOnReturn(DistributionOrderItem item, Integer incrFreezeThaw) {
+		item.getSpecimen().incrementFreezeThaw(incrFreezeThaw);
+		item.setFreezeThawIncrOnReturn(incrFreezeThaw);
 	}
 
 	private void setItemReturnedBy(DistributionOrderItem item, UserSummary userDetail) {
