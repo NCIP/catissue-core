@@ -9,10 +9,6 @@
     <property name="changeLog" value="classpath:com/krishagni/openspecimen/rde/resources/db/db-changelog.xml" />
   </bean>	
   
-  <bean id="barcodeSvc" class="com.krishagni.openspecimen.rde.services.impl.BarcodeServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="visitRegSvc" class="com.krishagni.openspecimen.rde.services.impl.VisitRegistrationServiceImpl">
     <property name="msgSource" ref="messageSource"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
@@ -23,6 +19,15 @@
     <property name="emailSvc" ref="emailService"/>
   </bean>
 
+  <bean id="ppidBarcodeToken" class="com.krishagni.openspecimen.rde.tokens.impl.PpidBarcodeToken">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpCodeBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpUidBarcodeToken"/>
+      </list>
+    </property>
+  </bean>
+
   <bean id="barcodeTokenRegistrar" class="com.krishagni.openspecimen.rde.services.impl.BarcodeTokenRegistrarImpl">
     <property name="tokens">
       <list>
@@ -30,12 +35,13 @@
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpCodeBarcodeToken"/>
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpSiteCodeBarcodeToken"/>
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.EventCodeBarcodeToken"/>
-        <bean class="com.krishagni.openspecimen.rde.tokens.impl.PpidBarcodeToken"/>
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.VisitYearBarcodeToken"/>
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.VisitYear2BarcodeToken"/>
         <bean class="com.krishagni.openspecimen.rde.tokens.impl.ExtensionPvAttrBarcodeToken">
           <property name="daoFactory" ref="biospecimenDaoFactory"/>
         </bean>
+
+        <ref bean="ppidBarcodeToken"/>
       </list>
     </property>
   </bean>

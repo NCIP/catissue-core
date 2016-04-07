@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -29,6 +30,7 @@ public class BarcodeParserImpl implements BarcodeParser {
 	private Map<String, CollectionProtocol> cpCache = new HashMap<String, CollectionProtocol>();
 	
 	@Autowired
+	@Qualifier("barcodeTokenRegistrar")
 	private BarcodeTokenRegistrar registrar;
 	
 	@Autowired
