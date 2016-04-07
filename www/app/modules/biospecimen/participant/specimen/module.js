@@ -118,7 +118,12 @@ angular.module('os.biospecimen.specimen',
               function(specimen, formName, formData) {
                 if (formName == "SpecimenReceivedEvent") {
                   specimen.createdOn = formData.time
+                } else if (formName == "SpecimenFrozenEvent" && formData.incrementFreezeThaw == 1) {
+                  ++specimen.freezeThawCycles;
+                } else if (formName == "SpecimenThawEvent" && formData.incrementFreezeThaw == 1) {
+                  ++specimen.freezeThawCycles;
                 }
+
                 return formData
               }
             ];

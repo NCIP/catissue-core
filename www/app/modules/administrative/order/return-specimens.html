@@ -38,12 +38,9 @@
         </div>
 
         <div class="form-group" ng-if="input.orderedLabels.length > 0">
-          <table class="os-table bulk-edit os-border os-table-muted-hdr">
+          <table class="os-table bulk-edit os-border os-table-muted-hdr os-alt-border">
             <thead class="os-table-head">
               <tr class="row">
-                <th class="col os-col-10">
-                  <span translate="orders.spec.label">Label</span>
-                </th>
                 <th class="col os-col-15">
                   <span translate="orders.title">Order</span>
                 </th>
@@ -60,6 +57,9 @@
                   <span translate="orders.date">Date</span>
                 </th>
                 <th class="col os-col-10">
+                  <span translate="orders.freeze_thaw_on_return">Freeze/Thaw</span>
+                </th>
+                <th class="col os-col-10">
                   <span translate="orders.comments">Comments</span>
                 </th>
                 <th class="col os-col-2">
@@ -67,14 +67,16 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="os-table-body">
-              <tr class="row" ng-repeat="label in input.orderedLabels"
+            <tbody class="os-table-body" ng-repeat="label in input.orderedLabels"
                 ng-init="item = input.returnItems[label]" ng-form="sform">
-                <td class="col">
+              <tr class="row">
+                <td class="col" colspan="8">
                   <a ui-sref="specimen({specimenId: item.specimen.id})">
                     <span>{{item.specimen.label}}</span>
                   </a>
                 </td>
+              </tr>
+              <tr class="row">
                 <td class="col">
                   <os-select name="orderName" os-md-input ng-model="item.orderName" list="item.orders"
                     display-prop="name" select-prop="name" on-select="orderSelected(item)" required>
@@ -109,6 +111,9 @@
                 <td class="col">
                   <os-date-picker name="returnDate" date="item.time" md-type="true">
                   </os-date-picker>
+                </td>
+                <td class="col">
+                  <input os-md-input ng-model="item.incrFreezeThaw" ng-pattern="/^[0-9]*$/">
                 </td>
                 <td class="col">
                   <input os-md-input ng-model="item.comments">

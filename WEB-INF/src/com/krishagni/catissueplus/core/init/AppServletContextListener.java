@@ -57,6 +57,9 @@ public class AppServletContextListener implements ServletContextListener {
 	private void loadPluginResources(String pluginDir) 
 	throws IOException {
 		File pluginDirFile = new File(pluginDir);
+		if (!pluginDirFile.isDirectory()) {
+			throw new RuntimeException("Invalid plugin directory: " + pluginDir);
+		}
 
 		for (File file : pluginDirFile.listFiles()) {
 			if (file.isDirectory() || !file.getName().endsWith(".jar")) {

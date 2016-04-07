@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.envers.AuditTable;
@@ -45,8 +43,6 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	}
 
 	private static final String ENTITY_NAME = "collection_protocol";
-	
-	private static final Pattern digitsPtrn = Pattern.compile("%(\\d+)d");
 	
 	private String title;
 
@@ -457,25 +453,6 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		}
 	}
 	
-	public boolean isValidPpid(String ppid) {
-		String ppidFmt = getPpidFormat();
-		if (StringUtils.isBlank(ppidFmt)) {
-			return true;
-		}
-		
-		Matcher matcher = digitsPtrn.matcher(ppidFmt);
-		if (!matcher.find()) {
-			return ppidFmt.equals(ppid);
-		}
-		
-		int matchStartIdx = ppidFmt.indexOf(matcher.group(0));
-		String beforeDigits = ppidFmt.substring(0, matchStartIdx);
-		String afterDigits = ppidFmt.substring(matchStartIdx + matcher.group(0).length());
-		
-		String regex = beforeDigits + "\\d{" + matcher.group(1) + "}" + afterDigits;
-		return Pattern.matches(regex, ppid);		
-	}
-		
 	public ConsentTier updateConsentTier(ConsentTier ct) {
 		if (ct.getId() == null) {
 			throw OpenSpecimenException.userError(CpErrorCode.CONSENT_TIER_NOT_FOUND);

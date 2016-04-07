@@ -42,6 +42,8 @@ angular.module('os.biospecimen.specimen')
         cprId: scope.cpr.id,
         visitId: parent.visitId,
         createdOn: spec.createdOn,
+        freezeThawCycles: spec.freezeThawCycles,
+        incrParentFreezeThaw: spec.incrParentFreezeThaw,
 
         selected: true,
         parent: parent,
@@ -92,7 +94,17 @@ angular.module('os.biospecimen.specimen')
 
       return Specimen.save(specimensToSave).then(
         function(result) {
-          scope.parentSpecimen.children.push(result[0]);
+          if (closeParent) {
+            scope.parentSpecimen.children.push(result[0].children[0]);
+            scope.parentSpecimen.activityStatus = 'Closed';
+          } else {
+            scope.parentSpecimen.children.push(result[0]);
+          }
+
+          if (scope.derivative.incrParentFreezeThaw) {
+            scope.parentSpecimen.freezeThawCycles++;
+          }
+
           scope.revertEdit();
         }
       );
@@ -107,7 +119,9 @@ angular.module('os.biospecimen.specimen')
         visitId: scope.visit.id,
         pathology: scope.parentSpecimen.pathology,
         closeParent: false,
-        createdOn : new Date()
+        createdOn : new Date(),
+        incrParentFreezeThaw: 1,
+        freezeThawCycles: scope.parentSpecimen.freezeThawCycles + 1
       });
     }
 

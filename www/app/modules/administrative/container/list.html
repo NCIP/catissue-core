@@ -9,22 +9,29 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <div show-if-allowed="containerResource.createOpts" dropdown class="inline">
+      <div dropdown os-show-if-menu-items-present class="inline">
         <button class="default dropdown-toggle">
-          <span translate="common.buttons.import">Import</span>
+          <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
           <li>
-            <a ui-sref="container-import">
-              <i class="fa fa-dropbox"></i>
-              <span translate="container.list">Storage Containers</span>
+            <a ui-sref="container-type-list">
+              <span class="fa fa-cubes"></span>
+              <span translate="container_type.list">Container Types</span>
             </a>
           </li>
-          <li>
+          <li class="divider"></li>
+          <li show-if-allowed="containerResource.createOpts">
+            <a ui-sref="container-import">
+              <i class="fa fa-dropbox"></i>
+              <span translate="container.bulk_import">Import Containers</span>
+            </a>
+          </li>
+          <li show-if-allowed="containerResource.createOpts">
             <a ui-sref="container-import-jobs">
               <i class="fa fa-table"></i>
-              <span translate="common.view_jobs">View Jobs</span>
+              <span translate="common.view_import_jobs">View Import Jobs</span>
             </a>
           </li>
         </ul>

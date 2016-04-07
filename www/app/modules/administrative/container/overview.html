@@ -2,6 +2,14 @@
   <div class="col-xs-9">
     <ul class="os-key-values os-one-col" os-inline-editors on-save="editContainer">
       <li class="item">
+        <strong class="key key-sm" translate="container.type">Type</strong>
+        <a ng-if="container.typeId"
+          ui-sref="container-type-detail.overview({containerTypeId: container.typeId})">
+          <span class="value value-md">{{container.typeName}}</span>
+        </a>
+        <span ng-if="!container.typeId" class="value value-md" translate="common.not_specified">Not Specified</span>
+      </li>
+      <li class="item">
         <strong class="key key-sm" translate="container.barcode">Barcode</strong>
         <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
           <span ng-if="barcodeEditor.isDisplayMode()">{{barcodeEditor.viewValue | osNoValue}}</span>

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,8 @@ public class StorageContainer extends BaseEntity {
 
 	private String barcode;
 
+	private ContainerType type;
+	
 	private Double temperature;
 	
 	private int noOfColumns;
@@ -64,7 +67,7 @@ public class StorageContainer extends BaseEntity {
 	
 	private String comments;
 	
-	private Set<StorageContainer> childContainers = new HashSet<StorageContainer>();
+	private Set<StorageContainer> childContainers = new LinkedHashSet<StorageContainer>();
 	
 	private Set<StorageContainer> ancestorContainers = new HashSet<StorageContainer>();
 	
@@ -98,7 +101,6 @@ public class StorageContainer extends BaseEntity {
 
 	private transient StorageContainerPosition lastAssignedPos;
 
-
 	public StorageContainer() {
 		ancestorContainers.add(this);
 	}
@@ -121,6 +123,14 @@ public class StorageContainer extends BaseEntity {
 
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
+	}
+
+	public ContainerType getType() {
+		return type;
+	}
+
+	public void setType(ContainerType type) {
+		this.type = type;
 	}
 
 	public Double getTemperature() {
@@ -246,6 +256,11 @@ public class StorageContainer extends BaseEntity {
 	public void setChildContainers(Set<StorageContainer> childContainers) {
 		this.childContainers = childContainers;
 	}
+	
+	public void addChildContainer(StorageContainer container) {
+		container.setParentContainer(this);
+		childContainers.add(container);
+	}
 
 	@NotAudited
 	public Set<StorageContainer> getAncestorContainers() {
@@ -360,6 +375,7 @@ public class StorageContainer extends BaseEntity {
 		
 		setName(other.name);
 		setBarcode(other.barcode);
+		setType(other.type);
 		setTemperature(other.temperature);
 		updateCapacity(other.noOfColumns, other.noOfRows);
 		updateLabelingScheme(other.columnLabelingScheme, other.rowLabelingScheme);
@@ -694,6 +710,28 @@ public class StorageContainer extends BaseEntity {
 				}
 			}
 		}
+	}
+	
+	public StorageContainer copy() {
+		StorageContainer copy = new StorageContainer();
+		copy.setType(getType());
+		copy.setSite(getSite());
+		copy.setParentContainer(getParentContainer());
+		copy.setNoOfColumns(getNoOfColumns());
+		copy.setNoOfRows(getNoOfRows());
+		copy.setColumnLabelingScheme(getColumnLabelingScheme());
+		copy.setRowLabelingScheme(getRowLabelingScheme());
+		copy.setTemperature(getTemperature());
+		copy.setStoreSpecimenEnabled(isStoreSpecimenEnabled());
+		copy.setComments(getComments());
+		copy.setCreatedBy(getCreatedBy());
+		copy.setAllowedSpecimenClasses(new HashSet<String>(getAllowedSpecimenClasses()));		
+		copy.setAllowedSpecimenTypes(new HashSet<String>(getAllowedSpecimenTypes()));
+		copy.setAllowedCps(new HashSet<CollectionProtocol>(getAllowedCps()));
+		copy.setCompAllowedSpecimenClasses(computeAllowedSpecimenClasses());
+		copy.setCompAllowedSpecimenTypes(computeAllowedSpecimenTypes());
+		copy.setCompAllowedCps(computeAllowedCps());
+		return copy;
 	}
 	
 	private void deleteWithoutCheck() {

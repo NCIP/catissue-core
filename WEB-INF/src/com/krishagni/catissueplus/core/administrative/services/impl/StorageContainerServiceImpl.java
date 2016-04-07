@@ -7,14 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.ContainerType;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerFactory;
 import com.krishagni.catissueplus.core.administrative.events.AssignPositionsOp;
+import com.krishagni.catissueplus.core.administrative.events.ContainerHierarchyDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail.DestinationDetail;
@@ -50,6 +53,8 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	
 	private ContainerMapExporter mapExporter;
 
+	private LabelGenerator nameGenerator;
+
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
 	}
@@ -68,6 +73,10 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	
 	public void setMapExporter(ContainerMapExporter mapExporter) {
 		this.mapExporter = mapExporter;
+	}
+
+	public void setNameGenerator(LabelGenerator nameGenerator) {
+		this.nameGenerator = nameGenerator;
 	}
 
 	@Override
@@ -300,6 +309,42 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			return ResponseEvent.serverError(e);
 		}
 	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<StorageContainerSummary>> createContainerHierarchy(RequestEvent<ContainerHierarchyDetail> req) {
+		ContainerHierarchyDetail input = req.getPayload();
+		List<StorageContainer> containers = new ArrayList<StorageContainer>();
+
+		try {
+			StorageContainer container = containerFactory.createStorageContainer("dummyName", input);
+			AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
+			container.validateRestrictions();
+
+			for (int i = 1; i <= input.getNumOfContainers(); i++) {
+				StorageContainer cloned = null;
+				if (i == 1) {
+					cloned = container;
+				} else {
+					cloned = container.copy();
+					setPosition(cloned);
+				}
+
+				generateName(cloned);
+				ensureUniqueConstraints(null, cloned);
+				
+				createContainerHierarchy(cloned.getType().getCanHold(), cloned);
+				daoFactory.getStorageContainerDao().saveOrUpdate(cloned);
+				containers.add(cloned);
+			}
+			
+			return ResponseEvent.response(StorageContainerDetail.from(containers));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	public String getObjectName() {
@@ -344,7 +389,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		ose.checkAndThrow();
 		return container;
 	}
-	
+
 	private ResponseEvent<StorageContainerDetail> updateStorageContainer(RequestEvent<StorageContainerDetail> req, boolean partial) {
 		try {
 			StorageContainerDetail input = req.getPayload();			
@@ -358,7 +403,6 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			} else {
 				container = containerFactory.createStorageContainer(input); 
 			}
-			
 			
 			ensureUniqueConstraints(existing, container);			
 			existing.update(container);			
@@ -539,7 +583,48 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			replica.getParentContainer().addPosition(replica.getPosition());
 		}
 	}
-	
+
+	private void createContainerHierarchy(ContainerType containerType, StorageContainer parentContainer) {
+		if (containerType == null) {
+			return;
+		}
+		
+		StorageContainer container = containerFactory.createStorageContainer("dummyName", containerType, parentContainer);
+		int noOfContainers = parentContainer.getNoOfRows() * parentContainer.getNoOfColumns();
+		for (int i = 1; i <= noOfContainers; i++) {
+			StorageContainer cloned = null;
+			if (i == 1) {
+				cloned = container;
+			} else {
+				cloned = container.copy();
+				setPosition(cloned);
+			}
+
+			generateName(cloned);
+			parentContainer.addChildContainer(cloned);
+			createContainerHierarchy(containerType.getCanHold(), cloned);
+		}
+	}
+
+	private void generateName(StorageContainer container) {
+		container.setName(nameGenerator.generateLabel(container.getType().getNameFormat(), container));
+	}
+
+	private void setPosition(StorageContainer container) {
+		StorageContainer parentContainer = container.getParentContainer();
+		if (parentContainer == null) {
+			return;
+		}
+		
+		StorageContainerPosition position = parentContainer.nextAvailablePosition(true);
+		if (position == null) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, parentContainer.getName());
+		} 
+		
+		position.setOccupyingContainer(container);
+		container.setPosition(position);
+	}
+
 	private StorageContainer getContainerCopy(StorageContainer source) {
 		StorageContainer copy = new StorageContainer();
 		copy.setTemperature(source.getTemperature());

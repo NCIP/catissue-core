@@ -312,6 +312,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		AliquotSpecimensRequirement req = new AliquotSpecimensRequirement();
 		req.setNoOfAliquots(noOfAliquots);
 		req.setLabelFmt(getLabelFmt());
+		req.setLabelAutoPrintMode(getLabelAutoPrintMode());
+		req.setLabelPrintCopies(getLabelPrintCopies());
 		req.setParentSrId(parentSrId);
 		req.setQtyPerAliquot(getInitialQty());
 		req.setStorageType(getStorageType());
@@ -323,6 +325,8 @@ public class SpecimenRequirementDetail implements Comparable<SpecimenRequirement
 		DerivedSpecimenRequirement req = new DerivedSpecimenRequirement();
 		req.setConcentration(getConcentration());
 		req.setLabelFmt(getLabelFmt());
+		req.setLabelAutoPrintMode(getLabelAutoPrintMode());
+		req.setLabelPrintCopies(getLabelPrintCopies());
 		req.setName(getName());
 		req.setParentSrId(parentSrId);
 		req.setQuantity(getInitialQty());

@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.specimen.addderivative', [])
   .controller('AddDerivativeCtrl', function(
     $scope, specimen, cpr, visit, extensionCtxt, 
-    SpecimenUtil, ExtensionsUtil) {
+    SpecimenUtil, ExtensionsUtil, Alerts) {
 
     function init() {
       $scope.parentSpecimen = specimen;
@@ -16,11 +16,28 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.derivative, extensionCtxt);
     }
 
+    $scope.toggleIncrParentFreezeThaw = function() {
+      if ($scope.derivative.incrParentFreezeThaw) {
+        if ($scope.parentSpecimen.freezeThawCycles == $scope.derivative.freezeThawCycles) {
+          $scope.derivative.freezeThawCycles = $scope.parentSpecimen.freezeThawCycles + 1;
+        }
+      } else {
+        if (($scope.parentSpecimen.freezeThawCycles + 1) == $scope.derivative.freezeThawCycles) {
+          $scope.derivative.freezeThawCycles = $scope.parentSpecimen.freezeThawCycles;
+        }
+      }
+    };
+
     $scope.loadSpecimenTypes = function(specimenClass, notClear) {
       SpecimenUtil.loadSpecimenTypes($scope, specimenClass, notClear);
     };
 
     $scope.createDerivative = function() {
+      if ($scope.parentSpecimen.freezeThawCycles > $scope.derivative.freezeThawCycles) {
+        Alerts.error('specimens.freeze_thaw_cycle_lt_parent');
+        return;
+      }
+
       SpecimenUtil.createDerivatives($scope);
     };
 

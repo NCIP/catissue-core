@@ -55,5 +55,14 @@
         <height>2</height>
       </textArea>
     </row>
+
+    <row>
+      <booleanCheckBox>
+        <name>incrementFreezeThaw</name>
+        <udn>incrementFreezeThaw</udn>
+        <caption>#getMessage("specimen_increment_freeze_thaw")</caption>
+        <column>INCREMENT_FREEZE_THAW</column>
+      </booleanCheckBox>
+    </row>
   </view>
 </form>

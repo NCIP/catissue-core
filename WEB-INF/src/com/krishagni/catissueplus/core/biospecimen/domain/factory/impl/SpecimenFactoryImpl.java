@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
@@ -118,8 +119,9 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		setQuantity(detail, existing, specimen, ose);
 		setConcentration(detail, existing, specimen, ose);
 		setBiohazards(detail, existing, specimen, ose);
+		setFreezeThawCycles(detail, existing, specimen, ose);
 		setComments(detail, existing, specimen, ose);
-				
+
 		if (sr != null && 
 				(!sr.getSpecimenClass().equals(specimen.getSpecimenClass()) ||
 					!sr.getSpecimenType().equals(specimen.getSpecimenType()))) {
@@ -471,7 +473,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setInitialQuantity(existing.getInitialQuantity());
 		}
 		
-		if (existing == null || detail.isAttrModified("availableQty")) {
+		if (existing == null || existing.isPending() || detail.isAttrModified("availableQty")) {
 			setAvailableQty(detail, specimen, ose);
 		} else {
 			specimen.setAvailableQuantity(existing.getAvailableQuantity());
@@ -659,7 +661,28 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setBiohazards(existing.getBiohazards());
 		}
 	}
-	
+
+	private void setFreezeThawCycles(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+		if (detail.getFreezeThawCycles() == null) {
+			return;
+		}
+
+		if (detail.getFreezeThawCycles() < 0) {
+			ose.addError(SpecimenErrorCode.INVALID_FREEZE_THAW_CYCLES, detail.getFreezeThawCycles());
+			return;
+		}
+
+		specimen.setFreezeThawCycles(detail.getFreezeThawCycles());
+	}
+
+	private void setFreezeThawCycles(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing == null || detail.isAttrModified("freezeThawCycles")) {
+			setFreezeThawCycles(detail, specimen, ose);
+		} else {
+			specimen.setFreezeThawCycles(existing.getFreezeThawCycles());
+		}
+	}
+
 	private void setComments(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
 		if (existing == null || detail.isAttrModified("comments")) {
 			specimen.setComment(detail.getComments());
@@ -667,7 +690,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setComment(existing.getComment());
 		}
 	}
-	
+
 	private void setSpecimenPosition(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		StorageContainer container = null;
 

@@ -4,7 +4,6 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
 
     function init() {
       $scope.cp = cp;
-      $scope.ppidFmt = cp.getUiPpidFmt();
       $scope.cp.repositoryNames = cp.getRepositoryNames();
       $scope.downloadUri = CollectionProtocol.url() + cp.id + '/definition';
       $scope.sites = PvManager.getSites();

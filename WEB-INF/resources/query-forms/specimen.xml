@@ -261,6 +261,15 @@
         <column>COMMENTS</column>
       </textField>
     </row>
+    
+    <row>
+      <numberField>
+        <name>freezThawCycles</name>
+        <udn>freezeThawCycles</udn>
+        <caption>#getMessage("specimen_freeze_thaw_cycles")</caption>
+        <column>FREEZE_THAW_CYCLES</column>
+      </numberField>
+    </row>
 
     <row>
       <subForm>

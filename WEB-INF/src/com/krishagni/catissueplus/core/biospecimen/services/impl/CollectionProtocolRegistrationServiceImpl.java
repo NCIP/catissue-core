@@ -51,6 +51,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
@@ -67,6 +68,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private ParticipantService participantService;
 	
 	private ConfigurationServiceImpl cfgSvc;
+	
+	private LabelGenerator labelGenerator;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -86,6 +89,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	public void setCfgSvc(ConfigurationServiceImpl cfgSvc) {
 		this.cfgSvc = cfgSvc;
+	}
+
+	public void setLabelGenerator(LabelGenerator labelGenerator) {
+		this.labelGenerator = labelGenerator;
 	}
 
 	@Override
@@ -564,8 +571,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return;
 			}
 			
-			
-			if (!cp.isValidPpid(ppid)) {
+			if (!labelGenerator.validate(cp.getPpidFormat(), cpr, ppid)) {
 				ose.addError(CprErrorCode.INVALID_PPID, ppid);
 				return;
 			}

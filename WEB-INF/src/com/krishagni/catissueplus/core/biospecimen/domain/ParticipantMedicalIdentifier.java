@@ -7,7 +7,7 @@ import org.hibernate.envers.NotAudited;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 
 @Audited
-public class ParticipantMedicalIdentifier extends BaseEntity {
+public class ParticipantMedicalIdentifier extends BaseEntity implements Comparable<ParticipantMedicalIdentifier> {
 	private static final String ENTITY_NAME = "medical_record_number";
 
 	private String medicalRecordNumber;
@@ -43,5 +43,10 @@ public class ParticipantMedicalIdentifier extends BaseEntity {
 
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
+	}
+
+	@Override
+	public int compareTo(ParticipantMedicalIdentifier other) {
+		return getId().compareTo(other.getId());
 	}
 }

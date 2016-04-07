@@ -131,6 +131,7 @@
   </changeSet>
 
   <changeSet author="slakhani" id="Securing existing email account password value">
-    <customChange class="com.krishagni.catissueplus.core.init.ConfigEmailPasswordUpdator"></customChange>
+    <validCheckSum>7:5d8ea3bbc00fce3f107fe32b9976f50d</validCheckSum>
+    <customChange class="com.krishagni.catissueplus.core.upgrade.ConfigEmailPasswordUpdater"></customChange>
   </changeSet>
 </databaseChangeLog>

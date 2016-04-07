@@ -50,6 +50,7 @@
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
     "view_jobs": "View Jobs",
+    "view_import_jobs": "View Import Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
     "enabled": "Enabled",
@@ -142,9 +143,6 @@
     "end_date": "End Date",
     "ethics_approval_id": "Ethics Approval ID",
     "ppid_fmt": "PPID Format",
-    "ppid_prefix": "Prefix",
-    "ppid_digits": "No. of digits",
-    "ppid_suffix": "Suffix",
     "clinical_diagnoses": "Clinical Diagnoses",
     "anticipated_participants_cnt": "Anticipated Participants Count",
     "desc_url": "Description URL",
@@ -457,6 +455,8 @@
     "qty_per_aliquot": "Quantity per Aliquot",
     "close_parent_q": "Do you want to close parent specimen?",
     "concentration": "Concentration",
+    "freeze_thaw_cycles": "Freeze/Thaw Cycles",
+    "increment_parent_freeze_thaw": "Increment parent specimen's Freeze/Thaw cycles?",
     "comments": "Comments",
     "qty": "Quantity",
     "aliquot": "Aliquot",
@@ -522,6 +522,7 @@
     "create_aliquots": "Create Aliquots",
     "specimen_type": "Specimen Type",
     "anatomic_site": "Anatomic Site",
+    "freeze_thaw_cycle_lt_parent": "Child specimen's freeze/thaw cycle count can not be less than that of parent specimen",
 
     "col_event": {
       "title": "Collection Details",
@@ -926,8 +927,8 @@
     "list": "Containers",
     "name": "Name",
     "barcode": "Barcode",
+    "type": "Type",
     "create_container": "Create Storage Container",
-    "update_container": "Update Storage Container",
     "parent_container": "Parent Container",
     "parent_site": "Parent Site",
     "site": "Site",
@@ -970,13 +971,16 @@
     "pos_selector": "Container Position Selector",
     "selected_pos": "Selected Position: ",
 
-    "bulk_import": "Import Storage Containers",
-    "bulk_import_jobs": "Import Storage Containers Jobs List",
+    "bulk_import": "Import Containers",
+    "bulk_import_jobs": "Import Containers Jobs List",
+
+    "creating_hierarchy": "Creating Hierarchy",
+    "num_of_containers": "Number of Containers",
 
     "tooltip": {
-      "view_details": "Click to view Storage Container details",
-      "add": "Click to add new Storage Container",
-      "edit": "Click to edit Storage Container",
+      "view_details": "Click to view Container details",
+      "add": "Click to add new Container",
+      "edit": "Click to edit Container",
       "count_free_locations": "Count of free locations",
       "search": "Click to search Storage Containers"
     },
@@ -987,12 +991,36 @@
     },
 
     "filter": {
-      "title": "Filters",
-      "name": "Type the Name"
+      "title": "Filters"
     },
 
     "menu_options": {
       "delete": "Delete"
+    }
+  },
+
+  "container_type": {
+    "list": "Container Types",
+    "create_container": "Create Container",
+    "create_container_type": "Create Container Type",
+    "name_format": "Name Format",
+    "can_hold": "Can Hold",
+
+
+    "tooltip": {
+      "add": "Click to add new Container Type",
+      "edit": "Click to edit Container Type",
+      "container_list": "Click to view Containers",
+      "search": "Click to search Container Types",
+      "delete": "Click to delete Container Type"
+    },
+
+    "menu": {
+      "overview": "Overview"
+    },
+
+    "filter": {
+      "title": "Filters"
     }
   },
 
@@ -1315,7 +1343,8 @@
     "specimen_list": "Specimen Cart",
     "consent_response": "Consent Response",
     "consent": "Consent",
-    "container": "Container"
+    "container": "Container",
+    "container_type": "Container Type"
   },
 
   "bulk_imports": {
@@ -1450,6 +1479,7 @@
     "paste_return_specimen_labels": "Paste or scan labels of specimens to be returned",
     "specimens_returned": "{{count}} specimens returned successfully",
     "return_qty": "Return Quantity",
+    "freeze_thaw_on_return": "Freeze/Thaw",
     "user": "User",
     "comments": "Comments",
    

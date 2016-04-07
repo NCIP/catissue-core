@@ -18,5 +18,7 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public void delete(StorageContainerPosition position);
 
 	public Map<String, Object> getContainerIds(String key, Object value);
+
+	public int getStorageContainersCount(StorageContainerListCriteria listCrit);
 }
 	

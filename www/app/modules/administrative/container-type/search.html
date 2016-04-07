@@ -1,0 +1,19 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title">
+      <span translate="container_type.filter.title">Filters</span>
+    </h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="containerTypeFilterOpts.name" class="form-control"
+        placeholder="{{'container.name' | translate}}">
+    </div>
+    <div class="form-group">
+      <os-select os-md-input ng-model="containerTypeFilterOpts.canHold" list="canHolds"
+        placeholder="{{'container_type.can_hold' | translate}}" select-prop="name" display-prop="name">
+      </os-select>
+    </div>
+  </div>
+</div>

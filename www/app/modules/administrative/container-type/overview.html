@@ -1,0 +1,42 @@
+<div class="clearfix">
+  <div class="col-xs-9">
+    <ul class="os-key-values os-one-col">
+      <li class="item">
+        <strong class="key key-sm" translate="container_type.name_format">Name Format</strong>
+        <span class="value value-md">{{containerType.nameFormat}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
+        <span class="value value-md">{{containerType.temperature | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.dimension">Dimension</strong>
+        <span class="value value-md">{{containerType.noOfRows}} x {{containerType.noOfColumns}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labeling Scheme</strong>
+        <span class="value value-md">{{containerType.rowLabelingScheme}} x {{containerType.columnLabelingScheme}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container.stores_specimens">Stores Specimens</strong>
+        <span class="value value-md" ng-switch on="containerType.storeSpecimenEnabled">
+          <span ng-switch-when="true" translate="common.yes">Yes</span>
+          <span ng-switch-default translate="common.no">No</span>
+        </span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="container_type.can_hold">Can Hold</strong>
+        <a ng-if="containerType.canHold" ui-sref="container-type-detail.overview({containerTypeId: containerType.canHold.id})">
+          <span class="value value-md">{{containerType.canHold.name}}</span> 
+        </a>
+        <span ng-if="!containerType.canHold" class="value value-md" translate="common.not_specified">Not Specified</span>
+      </li>
+    </ul>
+  </div>
+</div>
+

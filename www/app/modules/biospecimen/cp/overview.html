@@ -84,14 +84,7 @@
         <ul class="os-key-values os-one-col">
           <li class="item">
             <strong class="key key-sm" translate="cp.label_format.ppid">PPID Format</strong>
-            <span class="value value-md" ng-if="!cp.ppidFmt" translate="common.not_specified"></span>
-            <span class="value value-md" ng-if="!!cp.ppidFmt">
-              <span ng-if="ppidFmt.prefix">{{ppidFmt.prefix}}</span>
-              <span ng-if="ppidFmt.digitsWidth">
-                [{{ppidFmt.digitsWidth}} <span translate="common.digits"></span>]
-              </span>
-              <span ng-if="ppidFmt.suffix">{{ppidFmt.suffix}}</span>
-            </span>
+            <span class="value value-md">{{cp.ppidFmt | osNoValue}}</span>
           </li>
 
           <li class="item">

@@ -7,7 +7,7 @@
       <os-select ng-model="queryLocal.currFilter.op"
         list="queryLocal.currFilter.ops" display-prop="desc"
         placeholder="{{'queries.select_op' | translate}}"
-        on-change="onOpSelect" required>
+        on-change="onOpSelect">
       </os-select>
     </div>
 
@@ -19,7 +19,7 @@
         <div ng-switch-when="select">
           <os-select ng-model="queryLocal.currFilter.value"
             list="queryLocal.currFilter.field.pvs"
-            placeholder="{{'queries.select_cond_value' | translate}}" required>
+            placeholder="{{'queries.select_cond_value' | translate}}">
           </os-select>
         </div>
         <div ng-switch-when="multiSelect">

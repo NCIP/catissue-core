@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
@@ -18,6 +20,10 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	private String name;
 
 	private String barcode;
+	
+	private Long typeId;
+	
+	private String typeName;
 
 	private String activityStatus;
 
@@ -33,7 +39,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	
 	private int freePositions;
 	
-	private boolean storeSpecimensEnabled;
+	private Boolean storeSpecimensEnabled;
 	
 	private List<StorageContainerSummary> childContainers;
 	
@@ -59,6 +65,22 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
+	}
+
+	public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 
 	public String getActivityStatus() {
@@ -117,11 +139,18 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		this.freePositions = freePositions;
 	}
 
+	@JsonProperty
 	public boolean isStoreSpecimensEnabled() {
+		return storeSpecimensEnabled != null ? storeSpecimensEnabled : false;
+	}
+	
+	@JsonIgnore
+	public Boolean getStoreSpecimensEnabled() {
 		return storeSpecimensEnabled;
 	}
 
-	public void setStoreSpecimensEnabled(boolean storeSpecimensEnabled) {
+	@JsonProperty
+	public void setStoreSpecimensEnabled(Boolean storeSpecimensEnabled) {
 		this.storeSpecimensEnabled = storeSpecimensEnabled;
 	}
 
@@ -147,6 +176,11 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		result.setNoOfRows(container.getNoOfRows());
 		result.setFreePositions(container.freePositionsCount());
 		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
+		
+		if (container.getType() != null) {
+			result.setTypeId(container.getType().getId());
+			result.setTypeName(container.getType().getName());
+		}
 	}
 	
 	public static StorageContainerSummary from(StorageContainer container) {

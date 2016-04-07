@@ -3,18 +3,18 @@
 <object-schema>
   <name>specimenAliquot</name>
 
-  <record> 
+  <record>
     <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec</name>
    
     <field>
       <caption>#getMessage("specimen_parent_specimen_label")</caption>
       <attribute>parentLabel</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_qty_per_aliquot")</caption>
       <attribute>qtyPerAliquot</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_no_of_aliquots")</caption>
@@ -40,6 +40,16 @@
       <type>datetime</type>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_freeze_thaw_cycles")</caption>
+      <attribute>freezeThawCycles</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_increment_parent_freeze_thaw")</caption>
+      <attribute>incrParentFreezeThaw</attribute>
     </field>
 
     <field>

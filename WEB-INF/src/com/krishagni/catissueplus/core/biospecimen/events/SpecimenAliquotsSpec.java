@@ -18,6 +18,10 @@ public class SpecimenAliquotsSpec {
 	
 	private String containerName;
 
+	private Integer freezeThawCycles;
+
+	private Integer incrParentFreezeThaw;
+
 	private Boolean closeParent;
 
 	private String positionX;
@@ -72,6 +76,22 @@ public class SpecimenAliquotsSpec {
 
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
+	}
+
+	public Integer getFreezeThawCycles() {
+		return freezeThawCycles;
+	}
+
+	public void setFreezeThawCycles(Integer freezeThawCycles) {
+		this.freezeThawCycles = freezeThawCycles;
+	}
+
+	public Integer getIncrParentFreezeThaw() {
+		return incrParentFreezeThaw;
+	}
+
+	public void setIncrParentFreezeThaw(Integer incrParentFreezeThaw) {
+		this.incrParentFreezeThaw = incrParentFreezeThaw;
 	}
 
 	public Boolean getCloseParent() {

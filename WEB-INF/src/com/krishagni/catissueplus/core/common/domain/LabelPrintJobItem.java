@@ -14,6 +14,8 @@ public class LabelPrintJobItem extends BaseEntity {
 	private LabelPrintJob job;
 	
 	private String itemLabel;
+
+	private int copies;
 	
 	private Date printDate;
 	
@@ -39,6 +41,14 @@ public class LabelPrintJobItem extends BaseEntity {
 
 	public void setItemLabel(String itemLabel) {
 		this.itemLabel = itemLabel;
+	}
+
+	public int getCopies() {
+		return copies;
+	}
+
+	public void setCopies(int copies) {
+		this.copies = copies;
 	}
 
 	public Date getPrintDate() {

@@ -34,7 +34,7 @@ angular.module('os.administrative.container',
         parent: 'container-root'
       })
       .state('container-addedit', {
-        url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName',
+        url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName&mode&containerTypeId',
         templateUrl: 'modules/administrative/container/addedit.html',
         resolve: {
           container: function($stateParams, Container) {
@@ -43,7 +43,14 @@ angular.module('os.administrative.container',
             }
 
             return new Container({allowedCollectionProtocols: [], allowedSpecimenClasses: [], allowedSpecimenTypes: []});
-          } 
+          },
+          containerType: function($stateParams, ContainerType) {
+            if ($stateParams.containerTypeId) {
+              return ContainerType.getById($stateParams.containerTypeId);
+            }
+            
+            return null;
+          }
         },
         controller: 'ContainerAddEditCtrl',
         parent: 'container-root'

@@ -20,6 +20,8 @@
       column="JOB_ID"/>
  
     <property name="itemLabel" column="ITEM_LABEL"/>
+
+    <property name="copies" column="COPIES"/>
  
     <property name="printDate" column="PRINT_DATE"/>
 

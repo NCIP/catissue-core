@@ -3,43 +3,43 @@
 <object-schema>
   <name>specimenDerivative</name>
 
-  <record> 
+  <record>
     <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
-   
+
     <field>
       <caption>#getMessage("specimen_parent_specimen_label")</caption>
       <attribute>parentLabel</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_label")</caption>
       <attribute>label</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_barcode")</caption>
       <attribute>barcode</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_class")</caption>
       <attribute>specimenClass</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_type")</caption>
       <attribute>type</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_collection_status")</caption>
       <attribute>status</attribute>
-    </field>  
+    </field>
 
     <field>
       <caption>#getMessage("specimen_pathological_status")</caption>
       <attribute>pathology</attribute>
-    </field> 
+    </field>
 
     <field>
       <caption>#getMessage("specimen_initial_quantity")</caption>
@@ -81,6 +81,16 @@
       <type>datetime</type>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_freeze_thaw_cycles")</caption>
+      <attribute>freezeThawCycles</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_increment_parent_freeze_thaw")</caption>
+      <attribute>incrParentFreezeThaw</attribute>
     </field>
 
     <field>

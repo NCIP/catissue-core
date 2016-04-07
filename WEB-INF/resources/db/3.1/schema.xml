@@ -4,6 +4,24 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+  <changeSet author="ckhilosiya" id="Freeze/thaw cycles field for specimen">
+    <addColumn tableName="CATISSUE_SPECIMEN">
+      <column name="FREEZE_THAW_CYCLES" type="${mediumint.type}" defaultValue="0"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Track whether freeze/thaw cycle of specimen was incremented when frozen event was created">
+    <addColumn tableName="CATISSUE_FROZEN_EVENT_PARAM">
+      <column name="INCREMENT_FREEZE_THAW" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Track whether freeze/thaw cycle of specimen was incremented when thaw event was created">
+    <addColumn tableName="CATISSUE_THAW_EVENT_PARAMETERS">
+      <column name="INCREMENT_FREEZE_THAW" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="ckhilosiya" id="Add return specimens fields to order items table">
     <addColumn tableName="OS_ORDER_ITEMS">
       <column name="RETURNED_QUANTITY" type="${double.type}"></column>
@@ -34,13 +52,20 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
 
+  <changeSet author="ckhilosiya" id="Track by how much freeze/thaw cycle of specimen was incremented when it was returned">
+    <addColumn tableName="OS_ORDER_ITEMS">
+      <column name="FREEZE_THAW_INCR_ON_RETURN" type="${smallint.type}"></column>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="ckhilosiya" id="Updated distribution view with return event details" runOnChange="true">
     <createView viewName="OS_SPMN_DISTRIBUTIONS_VIEW" replaceIfExists="true">
       select
         item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
         item.returned_quantity as returned_quantity, item.returning_container as returning_container,
         item.returning_row as returning_row, item.returning_column as returning_column,
-        item.returned_by as returned_by, item.return_date as return_date, item.return_comments as return_comments,
+        item.returned_by as returned_by, item.return_date as return_date,
+        item.freeze_thaw_incr_on_return as freeze_thaw_incr_on_return, item.return_comments as return_comments,
         ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id,
         ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
       from
@@ -349,7 +374,7 @@
       //
     </sql>
   </changeSet>
-
+  
   <changeSet author="ckhilosiya" id="Making DP requirements specimen type optional">
     <dropNotNullConstraint
       tableName="OS_DP_REQUIREMENTS"
@@ -669,5 +694,95 @@
       baseColumnNames="REQUEST_ID"
       referencedTableName="OS_SPECIMEN_REQUESTS"
       referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Container types">
+    <createTable tableName="OS_CONTAINER_TYPES">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(64)">
+        <constraints unique="true" nullable="false"/>
+      </column>
+
+      <column name="NAME_FORMAT" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="TEMPERATURE" type="${double.type}">
+      </column>
+
+      <column name="NO_OF_COLS" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="NO_OF_ROWS" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="COLUMN_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ROW_LABELING_SCHEME" type="${text.type}(64)" defaultValue="Numbers">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STORE_SPECIMENS" type="${boolean.type}" defaultValue="0">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CAN_HOLD" type="${int.type}">
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on container types can hold">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_CONT_TYPE_CAN_HOLD"
+      baseTableName="OS_CONTAINER_TYPES"
+      baseColumnNames="CAN_HOLD"
+      referencedTableName="OS_CONTAINER_TYPES"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Container types sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_CONTAINER_TYPES_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Column to specify container type">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="TYPE_ID" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on container type">
+    <addForeignKeyConstraint
+      constraintName="FK_OS_ST_CONT_TYPE_ID"
+      baseTableName="OS_STORAGE_CONTAINERS"
+      baseColumnNames="TYPE_ID"
+      referencedTableName="OS_CONTAINER_TYPES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace fixed string based ppid format with token based format">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.CpPpidFormatUpdater"></customChange>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Number of copies of labels to print">
+    <addColumn tableName="OS_LABEL_PRINT_JOB_ITEMS">
+      <column name="COPIES" type="${int.type}" defaultValueNumeric="1">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

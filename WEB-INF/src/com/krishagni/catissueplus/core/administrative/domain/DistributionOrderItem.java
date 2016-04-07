@@ -35,6 +35,8 @@ public class DistributionOrderItem extends BaseEntity {
 
 	private Date returnDate;
 
+	private Integer freezeThawIncrOnReturn;
+
 	private String returnComments;
 
 	private transient SpecimenRequestItem requestItem;
@@ -117,6 +119,14 @@ public class DistributionOrderItem extends BaseEntity {
 
 	public void setReturnDate(Date returnDate) {
 		this.returnDate = returnDate;
+	}
+
+	public Integer getFreezeThawIncrOnReturn() {
+		return freezeThawIncrOnReturn;
+	}
+
+	public void setFreezeThawIncrOnReturn(Integer freezeThawIncrOnReturn) {
+		this.freezeThawIncrOnReturn = freezeThawIncrOnReturn;
 	}
 
 	public String getReturnComments() {

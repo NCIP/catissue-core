@@ -2,18 +2,68 @@
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li><a ui-sref="container-list" translate="container.list">Storage Containers</a></li>
+      <li>
+        <a ui-sref="container-list">
+          <span translate="container.list">Storage Containers</span>
+        </a>
+      </li>
     </ul>
-    <h3> 
-      <span ng-if="!container.id" translate="container.create_container">Create Container</span>
-      <span ng-if="!!container.id">{{container.name}}</span>
+    <h3>
+      <span>
+        <span ng-if="!container.id" translate="container.create_container">Create Container</span>
+        <span ng-if="!!container.id">{{container.name}}</span>
+      </span>
     </h3>
   </div>
-
+  
   <div class="container">
     <form name="cform" class="form-horizontal" os-form-validator="cform" validator="cformValidator" novalidate>
+      <div class="form-group" ng-if="!container.id">
+        <label class="col-xs-3 control-label">
+          <span translate="container.creating_hierarchy">Creating Hierarchy</span>
+        </label>
+        <div class="col-xs-9">
+          <label class="radio-inline">
+            <input type="radio" name="createHierarchy" ng-model="ctx.createHierarchy" ng-value="true"
+              ng-change="onCreateHierarchyClick(true)">
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="createHierarchy" ng-model="ctx.createHierarchy" ng-value="false"
+              ng-change="onCreateHierarchyClick(false)">
+            <span translate="common.no">No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="ctx.createHierarchy">
+        <label class="col-xs-3 control-label">
+          <span translate="container.num_of_containers">Number of Containers</span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="numOfContainers" ng-model="container.numOfContainers" class="form-control"
+            placeholder="{{'container.num_of_containers' | translate}}" ng-pattern="/^[0-9]*$/" required>
+          <div os-field-error field="cform.numOfContainers"></div>
+        </div>
+      </div>
+
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.name">Name</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.type">Type</span>
+        </label>
+        <div class="col-xs-6">
+          <os-select ng-model="container.typeName" list="containerTypes" name="type" display-prop="name"
+            select-prop="name" placeholder="{{'container.type' | translate}}"
+            on-select="onSelectContainerType($item)" ng-required="ctx.createHierarchy">
+          </os-select>
+          <div os-field-error field="cform.type"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!ctx.createHierarchy">
+        <label class="col-xs-3 control-label">
+          <span translate="container.name">Name</span>
+        </label>
         <div class="col-xs-6">
           <input type="text" name="name" ng-model="container.name" class="form-control"
             required placeholder="{{'container.name' | translate}}" ng-maxlength="255">
@@ -21,8 +71,10 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.barcode">Barcode</label>
+      <div class="form-group" ng-if="!ctx.createHierarchy">
+        <label class="col-xs-3 control-label">
+          <span translate="container.barcode">Barcode</span>
+        </label>
         <div class="col-xs-6">
           <input type="text" name="barcode" ng-model="container.barcode" class="form-control"
             placeholder="{{'container.barcode' | translate}}" ng-maxlength="255">
@@ -31,7 +83,9 @@
       </div>
 
       <div class="form-group" ng-if="!locationSelected">
-        <label class="col-xs-3 control-label" translate="container.parent_site">Parent Site</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.parent_site">Parent Site</span>
+        </label>
         <div class="col-xs-6">
           <os-select ng-model="container.siteName" list="sites" placeholder="{{'container.site' | translate}}"
             name="parentSite" on-change="loadAllCps" required>
@@ -41,14 +95,18 @@
       </div>
 
       <div class="form-group" ng-if="!locationSelected">
-        <label class="col-xs-3 control-label" translate="container.parent_container">Parent Container</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.parent_container">Parent Container</span>
+        </label>
         <div class="col-xs-6">
           <os-storage-position entity="container"></os-storage-position>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.dimension">Dimension</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.dimension">Dimension</span>
+        </label>
         <div class="col-xs-3">
           <input type="text" name="noOfRows" ng-model="container.noOfRows" class="form-control"
             placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
@@ -62,7 +120,9 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.labeling_scheme">Labeling Scheme</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.labeling_scheme">Labeling Scheme</span>
+        </label>
         <div class="col-xs-3">
           <os-select ng-model="container.rowLabelingScheme" list="positionLabelingSchemes"
             name="rowLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
@@ -78,7 +138,9 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.temperature">Temperature (Celsius)</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.temperature">Temperature (Celsius)</span>
+        </label>
         <div class="col-xs-6">
           <input type="text" name="temperature" ng-model="container.temperature" class="form-control"
             placeholder="{{'container.temperature' | translate}}" ng-pattern="/^[-]?[0-9]*$/">
@@ -89,7 +151,9 @@
       <div class="os-divider"></div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.stores_specimens">Stores Specimens</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.stores_specimens">Stores Specimens</span>
+        </label>
         <div class="col-xs-9">
           <label class="radio-inline">
             <input type="radio" name="storesSpecimen" ng-model="container.storeSpecimensEnabled" ng-value="true"> 
@@ -103,7 +167,9 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.collection_protocol">Collection Protocol</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.collection_protocol">Collection Protocol</span>
+        </label>
         <div class="col-xs-6">
           <os-select multiple ng-model="container.allowedCollectionProtocols" list="cps" 
             placeholder="{{container.collection_protocol | translate}}"> 
@@ -112,7 +178,9 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="container.specimen_types">Specimen Types</label>
+        <label class="col-xs-3 control-label">
+          <span translate="container.specimen_types">Specimen Types</span>
+        </label>
         <div class="col-xs-6">
           <os-group-selector 
             placeholder="{{container.specimen_types | translate}}"
@@ -131,7 +199,9 @@
             <span ng-if="!container.id"  translate="common.buttons.create"> Create </span>
             <span ng-if="!!container.id" translate="common.buttons.update"> Update </span>
           </button>
-          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
         </div>
       </div>
     </form>

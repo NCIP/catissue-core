@@ -23,6 +23,7 @@ angular.module('os.administrative.order.returnspecimens', [])
         distQty: distItem.quantity,
         user: $rootScope.currentUser,
         time: new Date(),
+        incrFreezeThaw: 1,
         comments: ''
       }
     }
@@ -112,6 +113,7 @@ angular.module('os.administrative.order.returnspecimens', [])
             location: retItem.specimen.storageLocation,
             user: retItem.user,
             time: retItem.time,
+            incrFreezeThaw: retItem.incrFreezeThaw,
             comments: retItem.comments
           });
         }
