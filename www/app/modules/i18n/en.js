@@ -1382,7 +1382,8 @@
       "specimenAliquot": "Specimen Aliquots",
       "specimenDerivative": "Derived Specimens",
       "masterSpecimen": "Master Specimens",
-      "shipment": "Shipment"
+      "shipment": "Shipment",
+      "distributionOrder": "Distribution Order"
     },
 
     "import_types": {
@@ -1471,6 +1472,8 @@
     "report_gen_initiated": "Generating distribution order report...",
     "downloading_report": "Downloading distribution order report...",
     "report_will_be_emailed": "Generating distribution order report is taking more time than anticipated. Link to download report will be sent to you by email",
+    "bulk_import": "Bulk Import Distribution Orders",
+    "bulk_import_jobs": "Import Distribution Orders Job List",
 
     "filters": "Filters",
 

@@ -180,11 +180,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	public ResponseEvent<DistributionOrderDetail> updateOrder(RequestEvent<DistributionOrderDetail> req) {
 		try {
 			DistributionOrderDetail input = req.getPayload();
-			Long orderId = input.getId();
-			DistributionOrder existingOrder = daoFactory.getDistributionOrderDao().getById(orderId);
-			if (existingOrder == null) {
-				return ResponseEvent.userError(DistributionOrderErrorCode.NOT_FOUND);
-			}			
+			DistributionOrder existingOrder = getOrder(input.getId(), input.getName());
 			
 			AccessCtrlMgr.getInstance().ensureUpdateDistributionOrderRights(existingOrder);
 			DistributionOrder newOrder = distributionFactory.createDistributionOrder(input, null);

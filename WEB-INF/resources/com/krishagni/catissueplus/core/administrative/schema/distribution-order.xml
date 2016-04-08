@@ -1,0 +1,96 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>distributionOrder</name>
+  <record>
+    <name>com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail</name>
+
+    <field>
+      <caption>#getMessage("order_name")</caption>
+      <attribute>name</attribute>
+      <key>true</key>
+    </field>
+
+    <record>
+      <attribute>distributionProtocol</attribute>
+      <caption>#getMessage("order_dp")</caption>
+
+      <field>
+        <caption>#getMessage("dp_short_title")</caption>
+        <attribute>shortTitle</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("order_site")</caption>
+      <attribute>siteName</attribute>
+    </field>
+
+    <record>
+      <attribute>requester</attribute>
+      <caption>#getMessage("order_requester")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <record>
+      <attribute>distributor</attribute>
+      <caption>#getMessage("order_distributor")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("order_execution_date")</caption>
+      <attribute>executionDate</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("order_tracking_url")</caption>
+      <attribute>trackingUrl</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("order_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("order_status")</caption>
+      <attribute>status</attribute>
+    </field>
+
+    <record>
+      <attribute>orderItem</attribute>
+      <caption>#getMessage("order_item")</caption>
+
+      <record>
+        <attribute>specimen</attribute>
+        <multiple>false</multiple>
+        <caption>#getMessage("specimen")</caption>
+
+        <field>
+          <caption>#getMessage("order_item_spec_label")</caption>
+          <attribute>label</attribute>
+        </field>
+      </record>
+
+      <field>
+        <caption>#getMessage("order_item_quantity")</caption>
+        <attribute>quantity</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("order_item_status")</caption>
+        <attribute>status</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

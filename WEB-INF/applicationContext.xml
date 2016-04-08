@@ -659,6 +659,7 @@
         <value>com/krishagni/catissueplus/core/administrative/schema/user-roles.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/container.xml</value>
         <value>com/krishagni/catissueplus/core/administrative/schema/shipment.xml</value>
+        <value>com/krishagni/catissueplus/core/administrative/schema/distribution-order.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cp.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpe.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
@@ -719,6 +720,12 @@
         <entry key="shipment">
           <bean class="com.krishagni.catissueplus.core.administrative.services.impl.ShipmentImporter">
             <property name="shipmentSvc" ref="shipmentSvc"/>
+          </bean>
+        </entry>
+
+        <entry key="distributionOrder">
+          <bean class="com.krishagni.catissueplus.core.administrative.services.impl.DistributionOrderImporter">
+            <property name="orderSvc" ref="distributionOrderService"/>
           </bean>
         </entry>
 

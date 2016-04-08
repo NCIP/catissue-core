@@ -9,6 +9,26 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <div show-if-allowed="orderResource.createOpts" dropdown class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="order-import">
+              <i class="fa fa-share"></i>
+              <span translate="orders.list">Distribution Orders</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="order-import-jobs">
+              <i class="fa fa-table"></i>
+              <span translate="common.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
       <button show-if-allowed="orderResource.updateOpts" class="default" ui-sref="order-return-specimens">
         <span class="fa fa-undo"></span>
         <span translate="orders.buttons.return_specimens">Return Specimens</span>

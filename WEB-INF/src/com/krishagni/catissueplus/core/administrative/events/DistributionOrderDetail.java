@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.stream.Collectors;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class DistributionOrderDetail extends DistributionOrderSummary {
+public class DistributionOrderDetail extends DistributionOrderSummary implements Mergeable<String, DistributionOrderDetail>, Serializable {
 	private UserSummary distributor;
 	
 	private String trackingUrl;
@@ -22,6 +23,11 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 	private String activityStatus;
 
 	private Map<String, Object> extraAttrs;
+
+	//
+	// For BO template
+	//
+	private DistributionOrderItemDetail orderItem;
 
 	public UserSummary getDistributor() {
 		return distributor;
@@ -79,6 +85,14 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 		this.extraAttrs = extraAttrs;
 	}
 
+	public DistributionOrderItemDetail getOrderItem() {
+		return orderItem;
+	}
+
+	public void setOrderItem(DistributionOrderItemDetail orderItem) {
+		this.orderItem = orderItem;
+	}
+
 	public static DistributionOrderDetail from(DistributionOrder order) {
 		DistributionOrderDetail detail = new DistributionOrderDetail();
 		fromTo(order, detail);
@@ -100,5 +114,15 @@ public class DistributionOrderDetail extends DistributionOrderSummary {
 	
 	public static List<DistributionOrderDetail> from(List<DistributionOrder> orders) {
 		return orders.stream().map(DistributionOrderDetail::from).collect(Collectors.toList());
+	}
+
+	@Override
+	public String getMergeKey() {
+		return getName();
+	}
+
+	@Override
+	public void merge(DistributionOrderDetail other) {
+		getOrderItems().add(other.getOrderItem());
 	}
 }
