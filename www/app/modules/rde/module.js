@@ -4,7 +4,7 @@ angular.module('os.rde', [])
     $stateProvider
       .state('cp-detail.rde-config', {
         url: '/rde-config',
-        templateUrl: 'modules/rde/cp-cfg.html',
+        templateUrl: 'modules/rde/cp-config.html',
         controller: 'RdeConfigCtrl',
         parent: 'cp-detail'
       })
