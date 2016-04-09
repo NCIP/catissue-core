@@ -1,7 +1,7 @@
 angular.module('os.rde')
   .controller('RdeCollectVisitBarcodesCtrl', function($scope, $state, session) {
     function init() {
-      $scope.ctx.workflow = 'process-visits-fast';
+      $scope.ctx.workflow = 'process_visits_fast';
       $scope.input = {visits: session.getVisitBarcodes()};
     }
 

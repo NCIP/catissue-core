@@ -205,9 +205,7 @@ angular.module('os.rde')
         return;
       }
 
-      alert(ctx.workflow);
-      if (ctx.workflow != 'process-aliquots') {
-        alert("in here");
+      if (ctx.workflow != 'process_aliquots') {
         processAliquots(aliquots);
         return;
       }

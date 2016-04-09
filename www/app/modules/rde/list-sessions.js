@@ -8,12 +8,8 @@ angular.module('os.rde')
     }
 
     function removeSession(session) {
-      for (var i = 0; i < $scope.sessions.length; ++i) {
-        if ($scope.sessions[i].id == session.id) {
-          $scope.sessions.splice(i, 1);
-          break;
-        }
-      }
+      var idx = $scope.sessions.indexOf(session);
+      $scope.sessions.splice(idx, 1);
 
       if ($scope.sessions.length == 0) {
         newSession();
@@ -26,16 +22,16 @@ angular.module('os.rde')
 
     $scope.newSession = newSession;
 
-    $scope.oldSession = function(session) {
+    $scope.restoreSession = function(session) {
       $state.go(session.data.step, {sessionId: session.id});
     }
 
-    $scope.confirmDeleteSession = function(session) {
+    $scope.deleteSession = function(session) {
       DeleteUtil.confirmDelete({
         entity: session,
         templateUrl: 'modules/rde/confirm-delete-session.html',
         delete: function() {
-          session.$remove().then(removeSession);
+          session.$remove().then(function() { removeSession(session) });
         }
       });
     }

@@ -100,3 +100,13 @@
 .os-desc-column {
   width: 375px;
 }
+
+.os-table-body .row .col.error {
+  background: #d9534f;
+  color: #fff;
+}
+
+.os-table.os-error-header > .os-table-head > .row > .col {
+  background: #d9534f!important;
+  color: #fff!important;
+}

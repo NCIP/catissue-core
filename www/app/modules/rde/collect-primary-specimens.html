@@ -1,21 +1,13 @@
-<style>
-.os-compact-form .form-group {
-  margin-bottom: 5px!important;
-}
-
-.os-compact-form .panel-body {
-  padding-top: 5px!important;
-  padding-bottom: 5px!important;
-}
-
-</style>
-
 <div>
   <div os-page-header>
-    <h3>Collect Primary Specimens</h3>
+    <h3>
+      <span translate="rde.collect_primary_spmns">
+        Collect Primary Specimens
+      </span>
+    </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -26,7 +18,8 @@
         <div class="panel panel-default" ng-repeat="visit in input.visits" ng-form="psform">
           <div class="panel-heading">
             <div class="panel-title">
-              <span>Participant: {{visit.ppid}} ({{visit.name}})</span>
+              <span translate="rde.participant">Participant: </span>
+              <span>{{visit.ppid}} ({{visit.name}})</span>
             </div>
           </div>
           <div class="panel-body">
@@ -50,16 +43,16 @@
 <script type="text/ng-template" id="modules/rde/specimen-coll-info.html">
   <div class="form-group os-compact-fg">
     <div class="col-xs-6">
-      <div os-md-input ng-model="visit.collDetail.user" placeholder="Collected By">
+      <div os-md-input ng-model="visit.collDetail.user" placeholder="{{'rde.collected_by' | translate}}">
         <os-users name="collector" ng-model="visit.collDetail.user" default-list="users"
-          placeholder="Collected By" required append-to-body="false">
+          placeholder="{{'rde.collected_by' | translate}}" required append-to-body="false">
         </os-users>
         <div os-field-error field="psform.collector"></div>
       </div>
     </div>
     <div class="col-xs-4">
       <os-date-picker name="collectedOn" date="visit.collDetail.time"
-        md-type="true" placeholder="Collected On" required>
+        md-type="true" placeholder="{{'rde.collected_on' | translate}}" required>
       </os-date-picker>
       <div os-field-error field="psform.collectedOn"></div>
     </div>
@@ -71,16 +64,16 @@
   </div>
   <div class="form-group os-compact-fg">
     <div class="col-xs-6">
-      <div os-md-input ng-model="visit.recvDetail.user" placeholder="Received By">
+      <div os-md-input ng-model="visit.recvDetail.user" placeholder="{{'rde.received_by' | translate}}">
         <os-users name="receiver" ng-model="visit.recvDetail.user" default-list="users"
-          placeholder="Received By" required append-to-body="false">
+          placeholder="{{'rde.received_by' | translate}}" required append-to-body="false">
         </os-users>
         <div os-field-error field="psform.receiver"></div>
       </div>
     </div>
     <div class="col-xs-4">
       <os-date-picker name="receivedOn" date="visit.recvDetail.time"
-        md-type="true" placeholder="Received On" required>
+        md-type="true" placeholder="{{'rde.received_on' | translate}}" required>
       </os-date-picker>
       <div os-field-error field="psform.receivedOn"></div>
     </div>
@@ -93,7 +86,7 @@
   <div class="form-group os-compact-fg">
     <div class="col-xs-12">
       <input ng-model="visit.comments" class="form-control" type="text"
-        os-md-input placeholder="Comments" os-tabable="true">
+        os-md-input placeholder="{{'rde.comments' | translate}}" os-tabable="true">
     </div>
   </div>
 </script>
@@ -102,7 +95,7 @@
   <div class="os-section">
     <div style="margin-top: 20px;" ng-if="visit.scanEnabled">
       <textarea class="form-control" rows="2" style="resize: none;" ng-model="visit.primarySpmnLabels"
-        placeholder="Paste or scan specimen barcodes separated by comma or tab or newline"
+        placeholder="{{'rde.scan_spmn_labels' | translate}}"
         ng-change="parsePrimarySpmnLabels(visit)" ng-model-options="{debounce: 500}" os-enable-tab>
       </textarea>
     </div>
@@ -140,8 +133,8 @@
             <input type="text" os-md-input name="qty" ng-model="specimen.initialQty" 
               ng-pattern="/^([1-9][0-9]*|[0-9]*\.[0-9]+)$/" required ng-model-options="{allowInvalid: 'true'}">
             <div class="os-input-addon-right os-md-input-addon">
-              <os-specimen-qty-unit specimen-class="specimen.specimenClass" type="specimen.type">
-              </os-specimen-qty-unit>
+              <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+              </os-specimen-unit>
             </div>
           </div>
           <div os-field-error field="sform.qty"></div>
@@ -151,7 +144,7 @@
         <td class="col os-col-100" colspan="3" style="border-top: 0px;">
           <div style="margin-top: 10px;">
             <input type="text" os-md-input name="missedReason" ng-model="specimen.comments" 
-              placeholder="Reason for missed specimen collection" required>
+              placeholder="{{'rde.missed_collection_reason' | translate}}" required>
             <div os-field-error field="sform.missedReason"></div>
           </div>
         </td>

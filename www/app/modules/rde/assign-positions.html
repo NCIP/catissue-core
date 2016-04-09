@@ -1,19 +1,16 @@
-<style>
-  .os-table.os-error-header > .os-table-head > .row > .col {
-    background: #d9534f!important;
-    color: #fff!important;
-  }
-</style>
-
 <div>
   <div os-page-header>
     <h3 ng-switch on="!input.container">
-      <span ng-switch-when="true">Scan Virtual Aliquot Labels</span>
-      <span ng-switch-default>Assign Aliquot Locations</span>
+      <span ng-switch-when="true" translate="rde.scan_virtual_aliquots">
+        Scan Virtual Aliquot Labels
+      </span>
+      <span ng-switch-default translate="rde.assign_aliquot_locations">
+        Assign Aliquot Locations
+      </span>
     </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -23,20 +20,24 @@
       <div class="form-group">
         <div class="input-group" os-textarea-input-group>
           <textarea ng-model="input.aliquotLabels" class="form-control"
-            placeholder="Paste or scan specimen barcodes separated by comma or tab or newline"
+            placeholder="{{'rde.scan_spmn_labels' | translate}}"
             rows="2" style="resize: none;" 
             ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
           </textarea>
           <span class="input-group-btn">
             <button ng-click="processAliquots()" class="btn btn-primary">
-              <span>Process Aliquots</span>
+              <span translate="rde.process_aliquots">Process Aliquots</span>
             </button>
           </span>
         </div>
         <div>
           <a ui-sref="rde-select-container" ng-switch on="!input.container">
-            <span ng-switch-when="true">Back</span>
-            <span ng-switch-default>Choose different container</span>
+            <span ng-switch-when="true" translate="common.buttons.back">
+              Back
+            </span>
+            <span ng-switch-default translate="rde.choose_another_container">
+              Choose another container
+            </span>
           </a>
         </div>
       </div>
@@ -46,10 +47,10 @@
           <thead class="os-table-head">
             <tr class="row">
               <th class="col os-col-30">
-                <span>Label</span>
+                <span translate="specimens.label">Label</span>
               </th>
               <th class="col os-col-70">
-                <span>Error</span>
+                <span translate="rde.error">Error</span>
               </th>
             </tr>
           </thead>
@@ -62,16 +63,16 @@
                 <span ng-switch-when="true">{{error.msg}}</span>
                 <span ng-switch-default>
                   <span ng-switch on="error.status">
-                    <span ng-switch-when="no_visit_in_session">
+                    <span ng-switch-when="no_visit_in_session" translate="rde.no_visit_in_session">
                       Specimen does not belong to any visit collected in this session
                     </span>
-                    <span ng-switch-when="spmn_already_collected">
+                    <span ng-switch-when="spmn_already_collected" translate="rde.spmn_already_collected">
                       Specimen already collected
                     </span>
-                    <span ng-switch-when="primary_spmn_not_collected">
+                    <span ng-switch-when="primary_spmn_not_collected" translate="rde.primary_spmn_not_collected">
                       Primary specimen not yet collected
                     </span>
-                    <span ng-switch-default>
+                    <span ng-switch-default translate="rde.no_anticipated_spmn">
                       No anticipated specimen with this label
                     </span>
                   </span>

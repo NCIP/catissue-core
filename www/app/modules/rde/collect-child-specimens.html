@@ -1,25 +1,13 @@
-<style>
-.os-compact-form .form-group {
-  margin-bottom: 5px!important;
-}
-
-.os-compact-form .panel-body {
-  padding-top: 5px!important;
-  padding-bottom: 5px!important;
-}
-
-.os-table .os-md-input .os-date-picker {
-  margin-top: 0px!important;
-}
-
-</style>
-
 <div>
   <div os-page-header>
-    <h3>Collect Child Specimens</h3>
+    <h3>
+      <span translate="rde.collect_child_spmns">
+        Collect Child Specimens
+      </span>
+    </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -29,7 +17,10 @@
       <form name="cspecimens" class="form-horizontal" os-form-validator="cspecimens" novalidate>
         <div class="panel panel-default" ng-repeat="visit in input.visitsToReview" ng-form="vcform">
           <div class="panel-heading">
-            <div class="panel-title">Participant: {{visit.ppid}} ({{visit.name}})</div>
+            <div class="panel-title">
+              <span translate="rde.participant">Participant:</span>
+              <span>{{visit.ppid}} ({{visit.name}}) </span>
+            </div>
           </div>
           <div class="panel-body">
             <div ng-include src="'modules/rde/visit-info.html'"></div>
@@ -44,7 +35,7 @@
             <span translate="common.buttons.submit">Submit</span>
           </button>
           <button class="btn os-btn-text" ng-click="reAssignLocations()">
-            <span>Back</span>
+            <span translate="common.buttons.back">Back</span>
           </button>
         </div>
       </form>
@@ -59,25 +50,25 @@
     <thead class="os-table-head">
       <tr class="row">
         <th class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}">
-          <span>Description</span>
+          <span translate="specimens.description">Description</span>
         </th>
         <th class="col os-col-20">
-          <span>Label</span>
+          <span translate="specimens.label">Label</span>
         </th>
         <th class="col" ng-class="{'os-col-20': !visit.hasCellSpmns, 'os-col-15': visit.hasCellSpmns}">
-          <span>Container</span>
+          <span translate="specimens.location">Container</span>
         </th>
         <th class="col os-col-10">
-          <span>Quantity</span>
+          <span translate="specimens.qty">Quantity</span>
         </th>
         <th class="col os-col-10" ng-if="visit.hasCellSpmns">
-          <span>Volume</span>
+          <span translate="rde.volume">Volume</span>
         </th>
         <th class="col os-col-15">
-          <span>Frozen By</span>
+          <span translate="rde.frozen_by">Frozen By</span>
         </th>
         <th class="col os-col-15">
-          <span>Frozen Time</span>
+          <span translate="rde.frozen_time">Frozen Time</span>
         </th>
       </tr>
     </thead>
@@ -97,7 +88,7 @@
             <span>{{spmn.storageLocation.name}}</span>
             <span>({{spmn.storageLocation.positionY}} x {{spmn.storageLocation.positionX}})</span>
           </span>
-          <span ng-switch-default>Virtual</span>
+          <span ng-switch-default translate="specimens.virtually_located">Virtual</span>
         </td>
         <td class="col os-col-10">
           <div class="os-input-addon-grp">

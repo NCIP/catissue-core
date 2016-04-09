@@ -1,9 +1,13 @@
 <div>
   <div os-page-header>
-    <h3>Collect Visit Details</h3>
+    <h3>
+      <span translate="rde.collect_visits">
+        Collect Visit Details
+      </span>
+    </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -15,19 +19,19 @@
           <thead class="os-table-head">
             <tr class="row">
               <th class="col os-col-20">
-                <span>Collection Protocol</span>
+                <span translate="rde.cp">Collection Protocol</span>
               </th>
               <th class="col os-col-20">
-                <span>Participant ID</span>
+                <span translate="rde.pid">Participant ID</span>
               </th>
               <th class="col os-col-20">
-                <span>Protocol Participant ID</span>
+                <span translate="rde.ppid">Protocol Participant ID</span>
               </th>
               <th class="col os-col-20">
-                <span>Date of Receipt</span>
+                <span translate="rde.visit_date">Date of Receipt</span>
               </th>
               <th class="col os-col-20">
-                <span>Event</span>
+                <span translate="rde.event">Event</span>
               </th>
             </tr>
           </thead>
@@ -59,10 +63,10 @@
 
         <div>
           <button class="btn btn-primary" ng-click="registerVisits()">
-            <span>Add Visits</span>
+            <span translate="rde.collect_specimens">Proceed to Collect Specimens</span>
           </button>
           <button class="btn os-btn-text" >
-            <span>Cancel</span>
+            <span translate="common.buttons.back">Back</span>
           </button>
         </div>
       </form>

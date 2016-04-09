@@ -1,7 +1,7 @@
 angular.module('os.rde')
   .controller('RdeCollectParticipantDetailsCtrl', function($scope, $state, session, cps, RdeApis) {
     function init() {
-      $scope.ctx.workflow = 'process-visits-slow';
+      $scope.ctx.workflow = 'process_visits_slow';
       $scope.input = {
         cps: cps,
         participants: session.getParticipants()

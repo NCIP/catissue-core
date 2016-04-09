@@ -1,9 +1,13 @@
 <div>
   <div os-page-header>
-    <h3>Register Participants</h3>
+    <h3>
+      <span translate="rde.register_participants">
+        Register Participants
+      </span>
+    </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -13,12 +17,14 @@
       <form name="participantsForm" os-form-validator="participantsForm" novalidate>
         <div class="list-group">
           <div class="list-group-item os-section-hdr">
-            <span>Participants</span>
+            <span translate="rde.participants">Participants</span>
           </div>
 
           <div class="list-group-item" ng-if="input.participants.length == 0">
             <div class="alert alert-warning">
-              <span>There are no participants to show. Add a new participant by clicking Add Participant ...</span>
+              <span translate="rde.no_participants">
+                There are no participants to show. Add a new participant by clicking Add Another ...
+              </span>
             </div>
           </div>
 
@@ -27,16 +33,16 @@
               <thead class="os-table-head">
                 <tr class="row">
                   <th class="col os-col-25">
-                    <span>Collection Protocol</span>
+                    <span translate="rde.cp">Collection Protocol</span>
                   </th>
                   <th class="col os-col-25">
-                    <span>Participant ID</span>
+                    <span translate="rde.pid">Participant ID</span>
                   </th>
                   <th class="col os-col-25">
-                    <span>Protocol Participant ID</span>
+                    <span translate="rde.ppid">Protocol Participant ID</span>
                   </th>
                   <th class="col os-col-20">
-                    <span>Date of Receipt</span>
+                    <span translate="rde.visit_date">Date of Receipt</span>
                   </th>
                   <th class="col os-col-5">
                     <span>&nbsp;</span>
@@ -81,7 +87,7 @@
 
           <div class="list-group-item">
             <a ng-click="addParticipant()"> 
-              <span>Add Participant</span>
+              <span translate="common.buttons.add_another">Add Participant</span>
             </a>
           </div>
         </div>
@@ -91,10 +97,10 @@
 
           <div>
             <button class="btn btn-primary" os-form-submit="registerParticipants()">
-              <span>Register</span>
+              <span translate="rde.register">Register</span>
             </button>
             <button class="btn os-btn-text">
-              <span>Cancel</span>
+              <span translate="common.buttons.cancel">Cancel</span>
             </button>
           </div>
         </div>

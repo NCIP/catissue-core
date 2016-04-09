@@ -97,7 +97,9 @@
       "add_another": "Add Another",
       "download": "Download",
       "reset_password": "Reset Password",
-      "print": "Print"
+      "print": "Print",
+      "skip": "Skip",
+      "back": "Back"
     }
   },
 
@@ -1836,6 +1838,89 @@
     },
 
     "rde": {
+      "sessions_list": "Specimen Collection Sessions",
+      "new_session": "New Session",
+      "save_session": "Save Session",
+      "session_time": "Date and Time",
+      "session_workflow": "Workflow",
+      "session_step": "Step",
+
+      "steps": {
+        "rde-collect-visit-names": "Collect Visit Details",
+        "rde-validate-visit-names": "Validate Visit Details",
+        "rde-collect-participant-details": "Collect Participant Details",
+        "rde-collect-visit-details": "Collect Visit Details",
+        "rde-collect-primary-specimens": "Collect Primary Specimens",
+        "rde-print-labels": "Print Labels",
+        "rde-select-container": "Select Container",
+        "rde-assign-positions": "Assign Storage Locations",
+        "rde-collect-child-specimens": "Collect Child Specimen Details"
+      },
+
+      "select_workflow": "Select Workflow",
+      "workflow_options": "Options",
+
+      "workflows": {
+        "process_visits_fast": "Process Visits (fast)",
+        "process_visits_fast_desc": "Scan or type visit names to create new participants or add visits to pre-registered participants",
+        "process_visits_slow": "Process Visits (manual)",
+        "process_visits_slow_desc": "Manually enter participant and visit details",
+        "process_aliquots": "Process Aliquots",
+        "process_aliquots_desc": "Scan or type aliquot labels to assign storage locations"
+      },
+
+      "collect_visits": "Collect Visit Details",
+      "visit_name": "Visit Name",
+      "visit_date": "Date of Receipt",
+      "validate_visit_names": "Validate",
+      "visit_details": "Visit Details",
+      "revalidate_visit_names": "Re-validate",
+      "collect_specimens": "Proceed to Collect Specimens",
+
+      "register_participants": "Register Participants",
+      "participants": "Participants",
+      "pid": "Participant ID",
+      "register": "Register",
+      "no_participants": "There are no participants to show. Add a new participant by clicking Add Another ...",
+
+      "collect_primary_spmns": "Collect Primary Specimens",
+      "participant": "Participant: ",
+      "collected_by": "Collected by",
+      "collected_on": "Collected on",
+      "received_by" : "Received by",
+      "received_on" : "Received on",
+      "comments": "Comments",
+      "scan_spmn_labels": "Paste or scan specimen labels separated by comma or tab or newline",
+      "missed_collection_reason": "Reason for missed specimen collection",
+
+      "print_labels": "Print Specimen Labels",
+
+      "cp": "Collection Protocol",
+      "ppid": "PPID",
+      "event": "Event",
+      "site": "Site",
+      "cohort": "Cohort",
+
+      "select_container": "Select Storage Container",
+      "scan_virtual_aliquots": "Scan Virtual Aliquot Labels",
+
+      "process_aliquots": "Process Aliquots",
+      "assign_aliquot_locations": "Assign Aliquot Locations",
+      "choose_another_container": "Choose another container",
+      "no_anticipated_spmn": "No anticipated specimen with this label",
+      "no_visit_in_session": "Specimen does not belong to any visit collected in this session",
+      "spmn_already_collected": "Specimen already collected",
+      "primary_spmn_not_collected": "Primary specimen not yet collected",
+      "error": "Error",
+
+      "collect_child_spmns": "Collect Child Specimens",
+      "volume": "Volume",
+      "frozen_by": "Frozen By",
+      "frozen_time": "Frozen Time",
+
+      "confirm_exit": "Confirm Exit",
+      "continue_session": "Would you like to continue to add more specimens to new container(s)?",
+
       "errors": {
         "INVALID": "Invalid value",
         "SPECIMENS_ALREADY_COLLECTED": "Visit has one or more collected specimens"
@@ -1846,16 +1931,7 @@
       },
 
       "session": {
-        "saved": "Session saved successfully",
-        "views": {
-          "collectVisitBcs": "Collect Visits",
-          "visitBcDetails": "Visit Details",
-          "collectPrimarySpmns": "Collect Primary Specimens",
-          "printLabels": "Print Specimen Labels",
-          "selectContainer": "Select Storage Container",
-          "assignPositions": "Assign Aliquot Locations",
-          "collectChildSpmns": "Collect Child Specimens"
-        }
+        "saved": "Session saved successfully"
       }
     }
 }

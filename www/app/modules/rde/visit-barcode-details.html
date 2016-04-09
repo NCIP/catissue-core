@@ -1,17 +1,14 @@
-<style>
-  .os-table-body .row .col.error {
-    background: #d9534f;
-    color: #fff;
-  }
-</style>
-
 <div>
   <div os-page-header>
-    <h3>Visit Details</h3>
+    <h3>
+      <span translate="rde.visit_details">
+        Visit Details
+      </span>
+    </h3>
 
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -23,7 +20,7 @@
           <thead class="os-table-head">
             <tr class="row">
               <th class="col os-col-15">
-                <span>Visit Name</span>
+                <span translate="rde.visit_name">Visit Name</span>
               </th>
               <th class="col" style="width: {{input.columnWidth}}%" ng-repeat="header in input.headers">
                 <span>{{header.caption}}</span>
@@ -59,14 +56,14 @@
         <div>
           <span ng-switch on="!input.error && !visitsForm.$dirty">
             <button class="btn btn-primary" os-form-submit="addOrUpdateVisits()" ng-switch-when="true">
-              <span>Proceed to Collect Specimens</span>
+              <span translate="rde.collect_specimens">Proceed to Collect Specimens</span>
             </button>
             <button class="btn btn-primary" os-form-submit="validate(visitsForm)" ng-switch-default>
-              <span>Re-validate</span>
+              <span translate="rde.revalidate_visit_names">Re-validate</span>
             </button>
           </span>
-          <button class="btn os-btn-text" ng-click="collectVisitBcs()">
-            <span>Back</span>
+          <button class="btn os-btn-text">
+            <span translate="common.buttons.back">Back</span>
           </button>
         </div>
       </form>

@@ -1,10 +1,14 @@
 <div>
   <div os-page-header>
-    <h3>Collect Visits</h3>
+    <h3>
+      <span translate="rde.collect_visits">
+        Collect Visits
+      </span>
+    </h3>
 
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -16,10 +20,10 @@
           <thead class="os-table-head">
             <tr class="row">
               <th class="col os-col-45">
-                <span>Clinical Barcode</span>
+                <span translate="rde.visit_name">Clinical Barcode</span>
               </th>
               <th class="col os-col-45">
-                <span>Date of Receipt</span>
+                <span translate="rde.visit_date">Date of Receipt</span>
               </th>
               <th class="col os-col-10">
                 <span>&nbsp;</span>
@@ -49,7 +53,9 @@
             <tr class="row">
               <td class="col" colspan="3">
                 <a ng-click="addVisit()">
-                  <span>Add Visit</span>
+                  <span translate="common.buttons.add_another">
+                    Add Another
+                  </span>
                 </a>
               </td>
             </tr>
@@ -60,10 +66,10 @@
 
         <div>
           <button class="btn btn-primary" os-form-submit="validate()" local-form="true">
-            <span>Validate</span>
+            <span translate="rde.validate_visit_names">Validate</span>
           </button>
           <button class="btn os-btn-text">
-            <span>Cancel</span>
+            <span translate="common.buttons.cancel">Cancel</span>
           </button>
         </div>
       </form>

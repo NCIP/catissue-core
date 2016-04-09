@@ -1,9 +1,13 @@
 <div>
   <div os-page-header>
-    <h3>Print Specimen Labels</h3>
+    <h3>
+      <span translate="rde.print_labels">
+        Print Specimen Labels
+      </span>
+    </h3>
     <div class="os-btns right">
       <button class="primary" ng-click="saveSession()">
-        <span>Save Session</span>
+        <span translate="rde.save_session">Save Session</span>
       </button>
     </div>
   </div>
@@ -13,7 +17,8 @@
       <accordion close-others="true">
         <accordion-group ng-repeat="visit in input.visits">
           <accordion-heading>
-            <span> Participant: {{visit.ppid}} ({{visit.name}})</span>
+            <span translate="rde.participant">Participant:</span>
+            <span>{{visit.ppid}} ({{visit.name}})</span>
           </accordion-heading>
 
           <div>
@@ -30,7 +35,7 @@
           <span translate="common.buttons.print">Print</span>
         </button>
         <button class="btn os-btn-text" ng-click="skipPrintLabels()">
-          <span>Skip</span>
+          <span translate="common.buttons.skip">Skip</span>
         </button>
       </div>
     </div>
@@ -54,15 +59,16 @@
           </div>
         </th>
         <th class="col os-col-40">
-          <span>Label</span>
+          <span translate="specimens.label">Label</span>
         </th>
         <th class="col os-col-20">
-          <span>Quantity</span>
+          <span translate="specimens.qty">Quantity</span>
         </th>
       </tr>
     </thead>
     <tbody class="os-table-body">
-      <tr class="row" ng-repeat="spmn in visit.specimensForPrint track by $index" ng-class="{'os-pooled-specimen': spmn.pooled}">
+      <tr class="row" ng-repeat="spmn in visit.specimensForPrint track by $index"
+        ng-class="{'os-pooled-specimen': spmn.pooled}">
         <td class="col os-col-40">
           <div class="clearfix">
             <div class="os-select-specimen-cb">

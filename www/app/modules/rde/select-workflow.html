@@ -1,38 +1,48 @@
 <div>
   <div os-page-header>
-    <h3>Select Workflow</h3>
+    <h3>
+      <span translate="rde.select_workflow">
+        Select Workflow
+      </span>
+    </h3>
   </div>
 
   <div class="container">
     <div class="col-xs-7">
       <div class="list-group">
         <div class="list-group-item os-section-hdr">
-          <span>Options</span>
+          <span translate="rde.workflow_options">Options</span>
         </div>
 
         <a class="list-group-item" ui-sref="rde-collect-visit-names({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
-            <span>Process Visits (fast)</span>
+            <span translate="rde.workflows.process_visits_fast">
+              Process Visits (fast)
+            </span>
           </h5>
-          <span class="list-group-item-text">
+          <span class="list-group-item-text" translate="rde.workflows.process_visits_fast_desc">
             Scan or type visit names to create new participants or add visits to pre-registered participants
           </span>
         </a>
 
         <a class="list-group-item" ui-sref="rde-collect-participant-details({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
-            <span>Process Visits (slow)</span>
+            <span translate="rde.workflows.process_visits_slow">
+              Process Visits (slow)
+            </span>
           </h5>
-          <span class="list-group-item-text">
+          <span class="list-group-item-text" translate="rde.workflows.process_visits_slow_desc">
             Manually enter participant and visit details
           </span>
         </a>
 
         <a class="list-group-item" ui-sref="rde-process-aliquots({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
-            <span>Process Aliquots</span>
+            <span translate="rde.workflows.process_aliquots">
+              Process Aliquots
+            </span>
           </h5>
-          <span class="list-group-item-text">
+          <span class="list-group-item-text" translate="rde.workflows.process_aliquots_desc">
             Scan or type aliquot labels to assign storage locations
           </span>
         </a>

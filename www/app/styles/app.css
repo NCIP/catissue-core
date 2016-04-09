@@ -1149,3 +1149,12 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding: 5px 10px;
   width: 66%;
 }
+
+.os-compact-form .form-group {
+  margin-bottom: 5px!important;
+}
+
+.os-compact-form .panel-body {
+  padding-top: 5px!important;
+  padding-bottom: 5px!important;
+}

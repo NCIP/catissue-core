@@ -123,7 +123,7 @@ angular.module('os.rde', [])
 
       .state('rde-process-aliquots', {
         controller: function($scope, $state, ctx, session) {
-          ctx.workflow = 'process-aliquots';
+          ctx.workflow = 'process_aliquots';
           angular.extend(session.data, {
             workflow: ctx.workflow,
             step: 'rde-select-container'
