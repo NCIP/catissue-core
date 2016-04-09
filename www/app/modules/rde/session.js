@@ -1,22 +1,50 @@
 
 angular.module('os.rde')
-  .factory('SpmnCollSession', function(osModel) {
-    var SpmnCollSession = new osModel(
-      'specimen-collection-sessions',
-      function(obj) {
-        if (obj.data) {
-          obj.dataObj = JSON.parse(obj.data);
+  .factory('RdeSession', function(osModel, RdeApis) {
+    var RdeSession = new osModel('specimen-collection-sessions');
+
+    RdeSession.prototype.getVisitBarcodes = function() {
+      if (!this.data || !this.data.visits || this.data.visits.length == 0) {
+        return [{visitDate: new Date()}];
+      }
+
+      return this.data.visits.map(
+        function(v) {
+          return {barcode: v.name, visitDate: new Date(v.visitDate)}
         }
+      );
+    }
+
+    RdeSession.prototype.getParticipants = function() {
+      if (!this.data || !this.data.participants || this.data.participants.length == 0) {
+        return [{regDate: new Date()}];
+      } else {
+        angular.forEach(this.data.participants,
+          function(p) {
+            p.regDate = new Date(p.regDate);
+          }
+        );
+
+        return this.data.participants;
       }
-    );
+    }
 
-
-    SpmnCollSession.prototype.$saveProps = function() {
-      return {
-        id: this.$id,
-        data: JSON.stringify(this.dataObj)
+    RdeSession.prototype.loadVisitsSpmns = function(input) {
+      if (input.visitsSpmns && input.visitsSpmns.length > 0) {
+        return input.visitsSpmns;
       }
-    };
 
-    return SpmnCollSession;
+      if (!this.data || !this.data.visits || this.data.visits.length == 0) {
+        return [];
+      }
+
+      var visitNames = this.data.visits.map(function(v) { return v.name; });
+      return RdeApis.getVisits(visitNames).then(
+        function(visitsSpmns) {
+          return (input.visitsSpmns = angular.copy(visitsSpmns));
+        }
+      );
+    }
+
+    return RdeSession;
   });

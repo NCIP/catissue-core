@@ -1,10 +1,19 @@
 angular.module('os.rde')
-  .controller('RdeCollectVisitBarcodesCtrl', function($scope, $state) {
+  .controller('RdeCollectVisitBarcodesCtrl', function($scope, $state, session) {
     function init() {
       $scope.ctx.workflow = 'process-visits-fast';
-      $scope.input = {
-        visits: [{visitDate: new Date()}]
-      };
+      $scope.input = {visits: session.getVisitBarcodes()};
+    }
+
+    function saveSession(step) {
+      var sessionData = {
+        workflow: $scope.ctx.workflow,
+        step:     step || $state.$current.name,
+        visits:   $scope.input.visits.map(function(v) { return {name: v.barcode, visitDate: v.visitDate}; })
+      }
+
+      angular.extend(session.data, sessionData);
+      return session.$saveOrUpdate()
     }
 
     $scope.addVisit = function() {
@@ -17,9 +26,16 @@ angular.module('os.rde')
     }
 
     $scope.validate = function() {
-      $scope.ctx.visits = $scope.input.visits;
-      $state.go('rde-validate-visit-names');
+      var nextStep = 'rde-validate-visit-names';
+      saveSession(nextStep).then(
+        function() {
+          $scope.ctx.visits = $scope.input.visits;
+          $state.go(nextStep, {sessionId: session.id});
+        }
+      );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

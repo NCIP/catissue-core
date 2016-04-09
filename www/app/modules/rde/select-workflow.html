@@ -10,7 +10,7 @@
           <span>Options</span>
         </div>
 
-        <a class="list-group-item" ui-sref="rde-collect-visit-names" ui-sref-active="active">
+        <a class="list-group-item" ui-sref="rde-collect-visit-names({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
             <span>Process Visits (fast)</span>
           </h5>
@@ -19,7 +19,7 @@
           </span>
         </a>
 
-        <a class="list-group-item" ui-sref="rde-collect-participant-details" ui-sref-active="active">
+        <a class="list-group-item" ui-sref="rde-collect-participant-details({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
             <span>Process Visits (slow)</span>
           </h5>
@@ -28,7 +28,7 @@
           </span>
         </a>
 
-        <a class="list-group-item" ui-sref="rde-process-aliquots" ui-sref-active="active">
+        <a class="list-group-item" ui-sref="rde-process-aliquots({sessionId: ctx.sessionId})" ui-sref-active="active">
           <h5 class="list-group-item-heading">
             <span>Process Aliquots</span>
           </h5>

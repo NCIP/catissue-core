@@ -1,8 +1,12 @@
 angular.module('os.rde')
-  .controller('RdeCollectChildSpecimensCtrl', function($scope, $modal, $state, visits, Specimen, RdeApis) {
+  .controller('RdeCollectChildSpecimensCtrl', function($scope, $modal, $state, session, visits, Specimen, RdeApis) {
     function init() {
+      var sessionData = session.data.collectChildSpecimens || {};
+
       var visitsToReview = [];
       angular.forEach(visits, function(visit) {
+        mergeVisit(visit, sessionData[visit.name]);
+
         var spmnsToReview = getSpmnsToReview(visit.specimens);
         if (spmnsToReview.length > 0) {
           visit.spmnsToReview = Specimen._flatten(spmnsToReview, 'childrenToReview');
@@ -15,6 +19,23 @@ angular.module('os.rde')
         visits: visits,
         visitsToReview: visitsToReview
       }
+    }
+
+    function mergeVisit(visit, sessionSpmns) {
+      var spmnsMap = {};
+      initSpmnsMap(visit.specimens, spmnsMap);
+
+      angular.forEach(sessionSpmns, function(sessionSpmn) {
+        sessionSpmn.frozenTime = new Date(sessionSpmn.frozenTime);
+        angular.extend(spmnsMap[sessionSpmn.label], sessionSpmn);
+      });
+    }
+
+    function initSpmnsMap(spmns, spmnsMap) {
+      angular.forEach(spmns, function(spmn) {
+        spmnsMap[spmn.label] = spmn;
+        initSpmnsMap(spmn.children, spmnsMap);
+      });
     }
 
     function hasAnySpecimenToSave(specimens) {
@@ -164,13 +185,63 @@ angular.module('os.rde')
         function(moreToAdd) {
           if (moreToAdd) {
             $scope.ctx.visitsSpmns = $scope.input.visits;
-            $state.go('rde-select-container');
+
+            var nextStep = 'rde-select-container';
+            angular.extend(session.data, {
+              step: nextStep,
+              selectedContainer: undefined,
+              assignPositions: undefined
+            });
+            session.$saveOrUpdate().then(
+              function() {
+                $state.go(nextStep, {sessionId: session.id});
+              }
+            );
           } else {
-            $state.go('rde-select-workflow');
+            session.$remove().then(
+              function() {
+                $state.go('rde-sessions');
+              }
+            );
           }
         }
       );
     }
+
+    function saveSession() {
+      var sessionData = {};
+      angular.forEach(visits, function(visit) {
+        sessionData[visit.name] = getSpecimensToSave(visit.specimens);
+      });
+
+      angular.extend(session.data, {
+        step: 'rde-collect-child-specimens',
+        collectChildSpecimens: sessionData
+      });
+
+      session.$saveOrUpdate();
+    }
+
+    function getSpecimensToSave(specimens) {
+      var spmnsToSave = [];
+      angular.forEach(specimens, function(specimen) {
+        if (specimen.toSave) {
+          var spmnToSave = angular.extend({}, specimen);
+          delete spmnToSave.children;
+          delete spmnToSave.parent;
+          delete spmnToSave.pooledSpmn;
+          delete spmnToSave.specimensPool;
+          delete spmnToSave.childrenToReview;
+
+          spmnsToSave.push(spmnToSave);
+        }
+
+        spmnsToSave = spmnsToSave.concat(getSpecimensToSave(specimen.children));
+      });
+
+      return spmnsToSave;
+    }
+
 
     $scope.saveAliquots = function() {
       var spmnsToSave = getAliquotsToSave();
@@ -181,6 +252,8 @@ angular.module('os.rde')
         }
       );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

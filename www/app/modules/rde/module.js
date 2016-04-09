@@ -9,8 +9,20 @@ angular.module('os.rde', [])
         parent: 'cp-detail'
       })
 
-      .state('rde-workflow', {
-        url: '/rde-workflow',
+      .state('rde-sessions', {
+        url: '/rde-sessions',
+        templateUrl: 'modules/rde/list-sessions.html',
+        controller: 'RdeListSessionsCtrl',
+        resolve: {
+          sessions: function(RdeSession) {
+            return RdeSession.query();
+          }
+        },
+        parent: 'signed-in'
+      })
+
+      .state('rde', {
+        url: '/rde',
         template: '<div ui-view></div>',
         controller: function($scope, ctx) {
           $scope.ctx = ctx;
@@ -27,15 +39,41 @@ angular.module('os.rde', [])
       .state('rde-select-workflow', {
         url: '/select-workflow',
         templateUrl: 'modules/rde/select-workflow.html',
-        controller: function() { },
-        parent: 'rde-workflow'
+        controller: function($scope) {
+          $scope.ctx = {
+            sessionId: Math.floor(Math.random() * 0x10000)
+          }
+        },
+        parent: 'rde'
+      })
+
+      .state('rde-session', {
+        url: '/:sessionId',
+        template: '<div ui-view></div>',
+        controller: function($scope, session) {
+          $scope.ctx.workflow = session.data.workflow;
+        },
+        resolve: {
+          session: function($stateParams, RdeSession) {
+            return RdeSession.getById($stateParams.sessionId).then(
+              function(session) {
+                if (session.id != $stateParams.sessionId) {
+                  session = new RdeSession({id: $stateParams.sessionId, data: {}});
+                }
+                return session;
+              }
+            );
+          }
+        },
+        abstract: true,
+        parent: 'rde'
       })
 
       .state('rde-collect-visit-names', {
         url: '/collect-visit-names',
         templateUrl: 'modules/rde/collect-visit-barcodes.html',
         controller: 'RdeCollectVisitBarcodesCtrl',
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-validate-visit-names', {
@@ -43,12 +81,16 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/visit-barcode-details.html',
         controller: 'RdeVisitBarcodeDetailsCtrl',
         resolve: {
-          visitDetails: function(ctx, RdeApis) {
-            var barcodes = ctx.visits.map(function(v) { return v.barcode; });
+          visitDetails: function(ctx, session, RdeApis) {
+            if (!ctx.visits || ctx.visits.length == 0) {
+              ctx.visits = session.getVisitBarcodes();
+            }
+
+            var barcodes = ctx.visits.map(function(v) { return v.barcode });
             return RdeApis.getBarcodeDetails(barcodes);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-collect-participant-details', {
@@ -60,7 +102,7 @@ angular.module('os.rde', [])
             return CollectionProtocol.listForRegistrations();
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-collect-visit-details', {
@@ -68,19 +110,32 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/collect-visit-details.html',
         controller: 'RdeCollectVisitDetailsCtrl',
         resolve: {
-          participants: function(ctx) {
+          participants: function(ctx, session) {
+            if (!ctx.participants || ctx.participants.length == 0) {
+              ctx.participants = session.data.participants;
+            }
+
             return angular.copy(ctx.participants);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-process-aliquots', {
-        controller: function($scope, $state, ctx) {
-          ctx.workflow = 'process-aliquots',
-          $state.go('rde-select-container')
+        controller: function($scope, $state, ctx, session) {
+          ctx.workflow = 'process-aliquots';
+          angular.extend(session.data, {
+            workflow: ctx.workflow,
+            step: 'rde-select-container'
+          });
+
+          session.$saveOrUpdate().then(
+            function() {
+              $state.go('rde-select-container', {sessionId: session.id})
+            }
+          );
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-collect-primary-specimens', {
@@ -88,13 +143,13 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/collect-primary-specimens.html',
         controller: 'RdeCollectPrimarySpmnsCtrl',
         resolve: {
-          visits: function(ctx) {
-            return angular.copy(ctx.visitsSpmns);
+          visits: function(ctx, session) {
+            return session.loadVisitsSpmns(ctx);
           },
 
-          cpRdeWfCfg: function($q, ctx, CollectionProtocol) {
+          cpRdeWfCfg: function($q, visits, CollectionProtocol) {
             var cpIds = [];
-            angular.forEach(ctx.visitsSpmns, function(visit) {
+            angular.forEach(visits, function(visit) {
               if (cpIds.indexOf(visit.cpId) == -1) {
                 cpIds.push(visit.cpId);
               }
@@ -118,7 +173,7 @@ angular.module('os.rde', [])
             );
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-print-labels', {
@@ -126,11 +181,11 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/print-specimen-labels.html',
         controller: 'RdePrintSpecimenLabelsCtrl',
         resolve: {
-          visits: function(ctx) {
-            return ctx.visitsSpmns;
+          visits: function(ctx, session) {
+            return session.loadVisitsSpmns(ctx);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-select-container', {
@@ -138,11 +193,11 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/container-selector.html',
         controller: 'RdeContainerSelectorCtrl',
         resolve: {
-          visits: function(ctx) {
-            return ctx.visitsSpmns;
+          visits: function(ctx, session) {
+            return session.loadVisitsSpmns(ctx);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-assign-positions', {
@@ -150,27 +205,32 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/assign-positions.html',
         controller: 'RdeAssignPositionsCtrl',
         resolve: {
-          container: function(ctx, Container) {
+          container: function(ctx, session, Container) {
             if (ctx.container) {
               return Container.getById(ctx.container.id);
+            } else if (session.data.selectedContainer == -1) {
+              return undefined;
+            } else if (angular.isDefined(session.data.selectedContainer)) {
+              return Container.getById(session.data.selectedContainer);
             } else {
               return undefined;
             }
           },
 
-          occupancyMap: function(ctx, Container) {
-            if (ctx.container) {
-              return ctx.container.getOccupiedPositions();
+          occupancyMap: function(ctx, container, Container) {
+            ctx.container = container;
+            if (container) {
+              return container.getOccupiedPositions();
             } else {
               return undefined;
             }
           },
 
-          visits: function(ctx) {
-            return angular.copy(ctx.visitsSpmns || []);
+          visits: function(ctx, session) {
+            return session.loadVisitsSpmns(ctx);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
 
       .state('rde-collect-child-specimens', {
@@ -178,10 +238,10 @@ angular.module('os.rde', [])
         templateUrl: 'modules/rde/collect-child-specimens.html',
         controller: 'RdeCollectChildSpecimensCtrl',
         resolve: {
-          visits: function(ctx) {
-            return angular.copy(ctx.visitsSpmns || []);
+          visits: function(ctx, session) {
+            return session.loadVisitsSpmns(ctx);
           }
         },
-        parent: 'rde-workflow'
+        parent: 'rde-session'
       })
   });

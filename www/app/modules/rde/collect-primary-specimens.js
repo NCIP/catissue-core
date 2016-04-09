@@ -1,39 +1,67 @@
 angular.module('os.rde')
-  .controller('RdeCollectPrimarySpmnsCtrl', function($rootScope, $scope, $state, visits, cpRdeWfCfg, Util, RdeApis) {
+  .controller('RdeCollectPrimarySpmnsCtrl', function(
+    $rootScope, $scope, $state, session, visits, cpRdeWfCfg, Util, RdeApis) {
+
     function init() {
       var user = $rootScope.currentUser;
       var time = new Date().getTime();
+      var sessionVisits = session.data.collectPrimarySpmns || {};
 
       angular.forEach(visits, function(visit) {
-        visit.collDetail = {user: user, time: time};
-        visit.recvDetail = {user: user, time: time};
+        var sessionVisit = sessionVisits[visit.name];
+        if (sessionVisit) {
+          mergeVisit(visit, sessionVisit);
+        } else {
+          initVisit(visit, user, time);
+        }
 
-        visit.primarySpmnLabels = '';
-
-        var cfg = cpRdeWfCfg[visit.cpShortTitle].data || {};
-        visit.scanEnabled = (cfg.primarySpmnScanning == true);
-             
-        var scanRequired = false;
-        angular.forEach(visit.specimens, function(specimen) {
-          if (!visit.scanEnabled || (cfg.spmnScanning && cfg.spmnScanning[specimen.reqId] == false)) {
-            specimen.status = 'Collected';
-          } else {
-            specimen.status = 'Missed Collection';
-            specimen.scanEnabled = true;
-            scanRequired = true;
-          }
-           
-          angular.forEach(specimen.specimensPool, function(poolSpmn) {
-            poolSpmn.status = specimen.status;
-            poolSpmn.scanEnabled = specimen.scanEnabled;
-          });
-        });
-
-        visit.scanEnabled = scanRequired;
         setPrimarySpmns(visit);
       });
 
-      $scope.input = {visits: visits};
+      $scope.input = {visits: visits}
+    }
+
+    function mergeVisit(visit, sessionVisit) {
+      var spmnsMap = {};
+      angular.forEach(visit.specimens, function(s) {
+        spmnsMap[s.label] = s;
+      });
+
+      angular.extend(visit, sessionVisit);
+      visit.collDetail.time = new Date(visit.collDetail.time);
+      visit.recvDetail.time = new Date(visit.recvDetail.time);
+
+      angular.forEach(visit.specimens, function(s) {
+        s.children = spmnsMap[s.label] ? (spmnsMap[s.label].children || []) : [];
+      });
+    }
+
+    function initVisit(visit, user, time) {
+      visit.collDetail = {user: user, time: time};
+      visit.recvDetail = {user: user, time: time};
+
+      visit.primarySpmnLabels = '';
+
+      var cfg = cpRdeWfCfg[visit.cpShortTitle].data || {};
+      visit.scanEnabled = (cfg.primarySpmnScanning == true);
+             
+      var scanRequired = false;
+      angular.forEach(visit.specimens, function(specimen) {
+        if (!visit.scanEnabled || (cfg.spmnScanning && cfg.spmnScanning[specimen.reqId] == false)) {
+          specimen.status = 'Collected';
+        } else {
+          specimen.status = 'Missed Collection';
+          specimen.scanEnabled = true;
+          scanRequired = true;
+        }
+           
+        angular.forEach(specimen.specimensPool, function(poolSpmn) {
+          poolSpmn.status = specimen.status;
+          poolSpmn.scanEnabled = specimen.scanEnabled;
+        });
+      });
+
+      visit.scanEnabled = scanRequired;
     }
 
     function setPrimarySpmns(visit) {
@@ -45,6 +73,27 @@ angular.module('os.rde')
           visit.primarySpmns = visit.primarySpmns.concat(specimen.specimensPool);
         }
       });
+    }
+
+    function saveSession(step) {
+      var sessionVisits = {};
+      angular.forEach(angular.copy(visits), function(visit) {
+        delete visit.primarySpmns;
+        delete visit.specimensForPrint;
+
+        angular.forEach(visit.specimens, function(specimen) {
+          delete specimen.children;
+        });
+
+        sessionVisits[visit.name] = visit;
+      });
+
+      angular.extend(session.data, {
+        step: step || $state.$current.name,
+        collectPrimarySpmns: sessionVisits
+      });
+
+      return session.$saveOrUpdate()
     }
 
     function getSpecimenToSave(visit, spmn) {
@@ -174,12 +223,19 @@ angular.module('os.rde')
 
       RdeApis.savePrimarySpecimens(spmnsToSave).then(
         function(savedSpmns) {
-          removeMissedSpmns($scope.input.visits, savedSpmns);
-          $scope.ctx.visitsSpmns = $scope.input.visits;
-          $state.go('rde-print-labels');
+          var nextStep = 'rde-print-labels';
+          saveSession(nextStep).then(
+            function() {
+              //removeMissedSpmns($scope.input.visits, savedSpmns);
+              $scope.ctx.visitsSpmns = $scope.input.visits;
+              $state.go(nextStep, {sessionId: session.id});
+            }
+          );
         }
       );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

@@ -1,5 +1,7 @@
 angular.module('os.rde')
-  .controller('RdeCollectVisitDetailsCtrl', function($scope, $state, ctx, participants, CollectionProtocolEvent, RdeApis) {
+  .controller('RdeCollectVisitDetailsCtrl', function(
+    $scope, $state, session, ctx, participants, CollectionProtocolEvent, RdeApis) {
+
     function init() {
       $scope.input = {
         cpEvents: {},
@@ -7,13 +9,13 @@ angular.module('os.rde')
       }
 
       angular.forEach(participants, function(participant) {
-        participant.eventLabel = participant.nextEventLabel;
+        participant.eventLabel = participant.eventLabel || participant.nextEventLabel;
         participant.events = $scope.input.cpEvents[participant.cpId] || []
         if (participant.eventLabel && participant.events.length == 0) {
           participant.events.push({eventLabel: participant.eventLabel});
         }
 
-        participant.regDate = new Date();
+        participant.visitDate = new Date();
       });
     }
 
@@ -31,27 +33,48 @@ angular.module('os.rde')
       )
     }
 
-    $scope.registerVisits = function() {
-      var visits = $scope.input.participants.map(
+    function getVisitsToSave() {
+      return $scope.input.participants.map(
         function(participant) {
           return {
             cpShortTitle: participant.cpShortTitle,
             cpId: participant.cpId,
             cprId: participant.cprId,
             ppid: participant.ppid,
-            visitDate: participant.regDate,
+            visitDate: participant.visitDate,
             eventLabel: participant.eventLabel
           }
         }
       );
+    }
 
+    function saveSession(visitsSpmns, step) {
+      angular.extend(session.data, {
+        participants: $scope.input.participants,
+        step: step || $state.$current.name,
+        visits: (visitsSpmns || []).map(function(v) { return {name: v.name, visitDate: v.visitDate}; })
+      });
+
+      return session.$saveOrUpdate();
+    }
+
+    $scope.registerVisits = function() {
+      var visits = getVisitsToSave();
       RdeApis.saveVisits(visits).then(
         function(visitsSpmns) {
           ctx.visitsSpmns = visitsSpmns;
-          $state.go('rde-collect-primary-specimens');
+
+          var nextStep = 'rde-collect-primary-specimens';
+          saveSession(visitsSpmns, nextStep).then(
+            function() {
+              $state.go(nextStep, {sessionId: session.id});
+            }
+          );
         }
       );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

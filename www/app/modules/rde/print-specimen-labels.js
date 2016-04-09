@@ -1,6 +1,8 @@
 angular.module('os.rde')
-  .controller('RdePrintSpecimenLabelsCtrl', function($scope, $state, visits, Specimen, RdeApis, Alerts) {
+  .controller('RdePrintSpecimenLabelsCtrl', function($scope, $state, session, visits, Specimen, RdeApis, Alerts) {
     function init() {
+      var sessionData = session.data.printLabels;
+
       angular.forEach(visits, function(visit) {
         visit.specimensForPrint = Specimen.flatten(visit.specimens);
         angular.forEach(visit.specimensForPrint, function(spmn) {
@@ -11,10 +13,18 @@ angular.module('os.rde')
             spmn.pooledSpecimen = undefined;
           }
 
-          if (!angular.isDefined(spmn.selected)) {
+          if (angular.isDefined(spmn.selected)) {
+            return;
+          }
+
+          if (sessionData) {
+            spmn.selected = sessionData[visit.name].indexOf(spmn.label) != -1;
+          } else {
             spmn.selected = (spmn.labelAutoPrintMode == 'ON_COLLECTION');
           }
         });
+
+        visit.selAllForPrint = areAllSpmnsSelected(visit);
       });
 
       $scope.input = {visits: visits};
@@ -42,6 +52,18 @@ angular.module('os.rde')
       return result;
     }
 
+    function areAllSpmnsSelected(visit) {
+      var allSel = true;
+      for (var i = 0; i < visit.specimensForPrint.length; ++i) {
+        if (!visit.specimensForPrint[i].selected) {
+          allSel = false;
+          break;
+        }
+      }
+
+      return allSel;
+    }
+
     function hasAnySpmnToPrint(specimen) {
       if (specimen.selected) {
         return true;
@@ -66,6 +88,27 @@ angular.module('os.rde')
       return false;
     }
 
+    function saveSession(step) {
+      var printLabels = {};
+      angular.forEach(visits, function(visit) {
+        printLabels[visit.name] = [];
+        angular.forEach(visit.specimensForPrint, function(spmn) {
+          if (!spmn.selected) {
+            return;
+          }
+
+          printLabels[visit.name].push(spmn.label);
+        });
+      });
+
+      angular.extend(session.data, {
+        step: step || $state.$current.name,
+        printLabels: printLabels
+      });
+
+      return session.$saveOrUpdate()
+    }
+
     $scope.toggleAllSpmnsSelForPrint = function(visit) {
       angular.forEach(visit.specimensForPrint, function(spmn) {
         spmn.selected = visit.selAllForPrint;
@@ -74,15 +117,7 @@ angular.module('os.rde')
 
     $scope.toggleSpmnSelForPrint = function(visit, spmn) {
       if (spmn.selected) {
-        var allSel = true;
-        for (var i = 0; i < visit.specimensForPrint.length; ++i) {
-          if (!visit.specimensForPrint[i].selected) {
-            allSel = false;
-            break;
-          }
-        }
-
-        visit.selAllForPrint = allSel;
+        visit.selAllForPrint = areAllSpmnsSelected(visit);
       } else {
         if (visit.selAllForPrint) {
           visit.selAllForPrint = false;
@@ -110,12 +145,19 @@ angular.module('os.rde')
     }
 
     $scope.skipPrintLabels = function() {
-      angular.forEach($scope.input.visits, function(visit) {
-        delete visit.specimensForPrint;
-      });
+      var nextStep = 'rde-select-container';
+      saveSession(nextStep).then(
+        function() {
+          angular.forEach($scope.input.visits, function(visit) {
+            delete visit.specimensForPrint;
+          });
 
-      $state.go('rde-select-container');
+          $state.go(nextStep, {sessionId: session.id});
+        }
+      );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

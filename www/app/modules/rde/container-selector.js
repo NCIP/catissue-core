@@ -1,5 +1,5 @@
 angular.module('os.rde')
-  .controller('RdeContainerSelectorCtrl', function($scope, $state, visits) {
+  .controller('RdeContainerSelectorCtrl', function($scope, $state, session, visits) {
     function init() {
       $scope.input = {
         listOpts: {
@@ -24,9 +24,24 @@ angular.module('os.rde')
       );
     }
 
+    function saveSession(step) {
+      angular.extend(session.data, {
+        step: step || $state.$current.name,
+        selectedContainer: !!$scope.ctx.container ? $scope.ctx.container.id : -1
+      });
+
+      return session.$saveOrUpdate();
+    }
+
     $scope.toggleContainerSel = function(container) {
       $scope.ctx.container = container;
-      $state.go('rde-assign-positions');
+
+      var nextStep = 'rde-assign-positions';
+      saveSession(nextStep).then(
+        function() {
+          $state.go(nextStep, {sessionId: session.id});
+        }
+      );
     }
 
     $scope.scanVirtualAliquots = function() {

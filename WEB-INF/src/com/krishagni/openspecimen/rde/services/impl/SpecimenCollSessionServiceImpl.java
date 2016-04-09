@@ -50,7 +50,8 @@ public class SpecimenCollSessionServiceImpl implements SpecimenCollSessionServic
 		SpecimenCollSessionDetail detail = req.getPayload();
 		SpecimenCollectionSession session = specimenCollSessionDao.getById(detail.getId());
 		if (session == null) {
-			return ResponseEvent.userError(SpecimenCollSessionErrorCode.NOT_FOUND);
+			//return ResponseEvent.userError(SpecimenCollSessionErrorCode.NOT_FOUND);
+			return createSession(req);
 		}
 		
 		ensureAccessAllowed(session);

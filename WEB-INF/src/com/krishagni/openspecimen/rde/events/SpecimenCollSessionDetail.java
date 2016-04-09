@@ -3,13 +3,14 @@ package com.krishagni.openspecimen.rde.events;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.openspecimen.rde.domain.SpecimenCollectionSession;
 
 public class SpecimenCollSessionDetail {
 	private Long id;
 	
-	private String data;
+	private Map<String, Object> data;
 	
 	private Date createdOn;
 
@@ -21,11 +22,11 @@ public class SpecimenCollSessionDetail {
 		this.id = id;
 	}
 
-	public String getData() {
+	public Map<String, Object> getData() {
 		return data;
 	}
 
-	public void setData(String data) {
+	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
 

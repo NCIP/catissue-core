@@ -1,5 +1,5 @@
 angular.module('os.rde')
-  .controller('RdeVisitBarcodeDetailsCtrl', function($scope, $state, ctx, visitDetails, RdeApis) {
+  .controller('RdeVisitBarcodeDetailsCtrl', function($scope, $state, ctx, visitDetails, session, RdeApis) {
     function init() {
       $scope.input = getInputCtx(ctx.visits, visitDetails);
     }
@@ -14,9 +14,9 @@ angular.module('os.rde')
 
       angular.forEach(visits, function(visit) {
         input.visits.push({
-          barcode: visit.barcode,
+          barcode  : visit.barcode,
           visitDate: visit.visitDate,
-          detail: visitDetails.visits[visit.barcode].detail
+          detail   : visitDetails.visits[visit.barcode].detail
         });
 
         if (visitDetails.visits[visit.barcode].error) {
@@ -27,8 +27,14 @@ angular.module('os.rde')
       return input;
     };
 
-    function getBarcodes(visits) {
-      return visits.map(function(v) { return v.barcode; });
+    function saveSession(step) {
+      var sessionData = {
+        step:   step || $state.$current.name,
+        visits: $scope.input.visits.map(function(v) { return {name: v.barcode, visitDate: v.visitDate}; })
+      }
+
+      angular.extend(session.data, sessionData);
+      return session.$saveOrUpdate()
     }
 
     $scope.validate = function(form) {
@@ -42,19 +48,20 @@ angular.module('os.rde')
     }
 
     $scope.addOrUpdateVisits = function(form) {
-      var visits = $scope.input.visits.map(
-        function(visit) {
-          return {barcode: visit.barcode, visitDate: visit.visitDate}
-        }
-      );
-
-      RdeApis.saveVisitBarcodes(visits).then(
+      RdeApis.saveVisitBarcodes($scope.input.visits).then(
         function(visitsSpmns) {
-          ctx.visitsSpmns = visitsSpmns;
-          $state.go('rde-collect-primary-specimens');
+          var nextState = 'rde-collect-primary-specimens';
+          saveSession(nextState).then(
+            function() {
+              ctx.visitsSpmns = visitsSpmns;
+              $state.go(nextState, {sessionId: session.id});
+            }
+          );
         }
       );
     }
+
+    $scope.saveSession = saveSession;
 
     init();
   });

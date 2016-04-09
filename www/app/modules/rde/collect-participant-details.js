@@ -1,12 +1,34 @@
 angular.module('os.rde')
-  .controller('RdeCollectParticipantDetailsCtrl', function($scope, $state, cps, RdeApis) {
-
+  .controller('RdeCollectParticipantDetailsCtrl', function($scope, $state, session, cps, RdeApis) {
     function init() {
       $scope.ctx.workflow = 'process-visits-slow';
       $scope.input = {
         cps: cps,
-        participants: [{regDate: new Date()}]
+        participants: session.getParticipants()
       }
+    }
+
+    function saveSession(participants, step) {
+      angular.extend(session.data, {
+        workflow: $scope.ctx.workflow,
+        step: step || $state.$current.name,
+        participants: participants
+      });
+
+      return session.$saveOrUpdate();
+    }
+
+    function getParticipantsToSave() {
+      return $scope.input.participants.map(
+        function(p) {
+          return {
+            cpShortTitle: p.cpShortTitle,
+            empi: p.empi,
+            ppid: p.ppid,
+            regDate: p.regDate
+          }
+        }
+      );
     }
 
     $scope.addParticipant = function() {
@@ -19,18 +41,7 @@ angular.module('os.rde')
     }
 
     $scope.registerParticipants = function() {
-      var participants = $scope.input.participants.map(
-        function(p) {
-          return {
-            cpShortTitle: p.cpShortTitle,
-            empi: p.empi,
-            ppid: p.ppid,
-            regDate: p.regDate
-          }
-        }
-      );
-
-      RdeApis.registerParticipants(participants).then(
+      RdeApis.registerParticipants(getParticipantsToSave()).then(
         function(savedParticipants) {
           var error = false;
           angular.forEach(savedParticipants, function(participant, index) {
@@ -41,11 +52,20 @@ angular.module('os.rde')
           });
 
           if (!error) {
-            $scope.ctx.participants = savedParticipants;
-            $state.go('rde-collect-visit-details');
+            var nextStep = 'rde-collect-visit-details';
+            saveSession(savedParticipants, nextStep).then(
+              function() {
+                $scope.ctx.participants = savedParticipants;
+                $state.go(nextStep, {sessionId: session.id});
+              }
+            );
           }
         }
       );
+    }
+
+    $scope.saveSession = function() {
+      saveSession(getParticipantsToSave());
     }
 
     init();

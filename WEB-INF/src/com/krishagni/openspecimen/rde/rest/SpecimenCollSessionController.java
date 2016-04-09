@@ -31,6 +31,22 @@ public class SpecimenCollSessionController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public SpecimenCollSessionDetail getSession(@PathVariable Long id) {
+		ResponseEvent<List<SpecimenCollSessionDetail>> resp = specimenCollSessionSvc.getSessions();
+		resp.throwErrorIfUnsuccessful();
+
+		for (SpecimenCollSessionDetail session : resp.getPayload()) {
+			if (session.getId().equals(id)) {
+				return session;
+			}
+		}
+
+		return null;
+	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)

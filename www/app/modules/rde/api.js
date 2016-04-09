@@ -33,16 +33,22 @@ angular.module('os.rde')
       );
     }
 
+    function getVisitSpmns(input) {
+      var visit = input.visit;
+      visit.specimens = input.specimens;
+      return visit;
+    }
+
     function saveVisitBarcodes(visits) {
-      return $http.post(baseUrl + 'visit-barcodes', visits).then(
+      var payload = visits.map(
+        function(v) {
+          return {barcode: v.barcode, visitDate: v.visitDate};
+        }
+      );
+
+      return $http.post(baseUrl + 'visit-barcodes', payload).then(
         function(result) {
-          return result.data.map(
-            function(visitSpmns) {
-              var visit = visitSpmns.visit;
-              visit.specimens = visitSpmns.specimens;
-              return visit;
-            }
-          );
+          return result.data.map(getVisitSpmns);
         }   
       );  
     }
@@ -58,27 +64,23 @@ angular.module('os.rde')
     function saveVisits(visits) {
       return $http.post(baseUrl + 'visit-barcodes/visits', visits).then(
         function(result) {
-          return result.data.map(
-            function(visitSpmns) {
-              var visit = visitSpmns.visit;
-              visit.specimens = visitSpmns.specimens;
-              return visit;
-            }
-          );
+          return result.data.map(getVisitSpmns);
         }   
       );
     }
 
+    function getVisits(visitNames) {
+      return getVisitsSpecimens({visitNames: visitNames});
+    }
+
     function getSpecimenVisits(specimenLabels) {
-      return $http.get(baseUrl + 'visit-barcodes/visits', {params: {aliquotLabels: specimenLabels}}).then(
+      return getVisitsSpecimens({aliquotLabels: specimenLabels});
+    }
+
+    function getVisitsSpecimens(params) {
+      return $http.get(baseUrl + 'visit-barcodes/visits', {params: params}).then(
         function(result) {
-          return result.data.map(
-            function(visitSpmns) {
-              var visit = visitSpmns.visit;
-              visit.specimens = visitSpmns.specimens;
-              return visit;
-            }
-          );
+          return result.data.map(getVisitSpmns);
         }
       );
     }
@@ -123,6 +125,8 @@ angular.module('os.rde')
       registerParticipants: registerParticipants,
 
       saveVisits: saveVisits,
+
+      getVisits: getVisits,
 
       getSpecimenVisits: getSpecimenVisits,
 

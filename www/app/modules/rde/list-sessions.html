@@ -15,10 +15,10 @@
             <span>Date and Time</span>
           </th>
           <th class="col">
-            <span>Clinical Barcodes</span>
+            <span>Workflow</span>
           </th>
           <th class="col">
-            <span>State</span>
+            <span>Step</span>
           </th>
           <th class="col">
             <span>&nbsp;</span>
@@ -31,10 +31,10 @@
             <span>{{session.createdOn | date: global.dateTimeFmt}}</span>
           </td>
           <td class="col">
-            <span>{{session.dataObj.visits | osArrayJoin: getVisitDisplayName}}</span>
+            <span>{{'rde.workflows.' + session.data.workflow | translate}}</span>
           </td>
           <td class="col">
-            <span>{{'rde.session.views.' + session.dataObj.view | translate}}</span>
+            <span>{{'rde.steps.' + session.data.step | translate}}</span>
           </td>
           <td class="col os-click-esc">
             <button class="btn btn-xs btn-default" ng-click="confirmDeleteSession(session)">

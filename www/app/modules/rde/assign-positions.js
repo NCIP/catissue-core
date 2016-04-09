@@ -1,6 +1,6 @@
 angular.module('os.rde')
   .controller('RdeAssignPositionsCtrl', function(
-    $rootScope, $scope, $state, ctx, container, occupancyMap, visits,
+    $rootScope, $scope, $state, ctx, session, container, occupancyMap, visits,
     ContainerUtil, RdeApis, Util, Alerts) {
 
     function init() {
@@ -8,11 +8,19 @@ angular.module('os.rde')
         container.occupiedPositions = occupancyMap;
       }
 
+      var aliquotLabels = "";
+      if (session.data.assignPositions) {
+        aliquotLabels = session.data.assignPositions.labels;
+      }
+
       $scope.input = {
         visits: visits,
         container: container,
+        aliquotLabels: aliquotLabels,
         occupancyMap: occupancyMap
       }
+
+      $scope.showUpdatedMap();
     }
 
     function getVirtualAliquots() {
@@ -65,8 +73,7 @@ angular.module('os.rde')
       }
 
       if (!$scope.input.container) {
-        ctx.visitsSpmns = $scope.input.visits;
-        $state.go('rde-collect-child-specimens');
+        gotoCollectChildSpecimens($scope.input);
         return;
       }
 
@@ -89,8 +96,7 @@ angular.module('os.rde')
             return;
           }
 
-          ctx.visitsSpmns = $scope.input.visits;
-          $state.go('rde-collect-child-specimens');
+          gotoCollectChildSpecimens($scope.input);
         }
       );
     }
@@ -217,6 +223,57 @@ angular.module('os.rde')
           processAliquots(aliquots);
         }
       );
+    }
+
+    function gotoCollectChildSpecimens(input) {
+      var sessionData = {};
+      angular.forEach(input.visits, function(visit) {
+        sessionData[visit.name] = getSpecimensToSave(visit.specimens);
+      });
+
+      var nextStep = 'rde-collect-child-specimens';
+      angular.extend(session.data, {
+        step: nextStep,
+        visits: input.visits.map(function(v) { return {name: v.name, visitDate: v.visitDate} }),
+        assignPositions: {labels: input.aliquotLabels},
+        collectChildSpecimens: sessionData
+      });
+
+      ctx.visitSpmns = input.visits;
+      return session.$saveOrUpdate().then(
+        function() {
+          $state.go(nextStep, {sessionId: session.id});
+        }
+      );
+    }
+
+    function getSpecimensToSave(specimens) {
+      var spmnsToSave = [];
+      angular.forEach(specimens, function(specimen) {
+        if (specimen.toSave) {
+          var spmnToSave = angular.extend({}, specimen);
+          delete spmnToSave.children;
+          delete spmnToSave.parent;
+          delete spmnToSave.pooledSpmn;
+          delete spmnToSave.specimensPool;
+          delete spmnToSave.childrenToReview;
+
+          spmnsToSave.push(spmnToSave);
+        }
+
+        spmnsToSave = spmnsToSave.concat(getSpecimensToSave(specimen.children));
+      });
+
+      return spmnsToSave;
+    }
+
+    $scope.saveSession = function() {
+      angular.extend(session.data, {
+        step: $state.$current.name,
+        assignPositions: {labels: $scope.input.aliquotLabels},
+      });
+
+      session.$saveOrUpdate();
     }
 
     init();

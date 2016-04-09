@@ -5,9 +5,7 @@
   </div>
   <div class="os-modal-body">
     <p>
-      Session created on {{entity.createdOn | date: global.dateTimeFmt}} for collecting specimens of following visits will be deleted.
-      <br/><br/>
-      {{entity.dataObj.visits | osArrayJoin: props.getVisitDisplayName}}
+      Session created on {{entity.createdOn | date: global.dateTimeFmt}} using workflow {{entity.data.workflow}} for collecting specimens will be deleted.
       <br/><br/>
       Are you sure you want to proceed with deleting session?
     </p>
