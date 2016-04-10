@@ -2,6 +2,8 @@ package com.krishagni.openspecimen.rde.tokens.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -25,7 +27,7 @@ public class CpCodeBarcodeToken extends AbstractLabelTmplToken implements Barcod
 		}
 
 		if (visit == null) {
-			return null;
+			return StringUtils.EMPTY;
 		}
 
 		return visit.getCollectionProtocol().getCode();
@@ -50,5 +52,4 @@ public class CpCodeBarcodeToken extends AbstractLabelTmplToken implements Barcod
 
 		return result;
 	}
-
 }

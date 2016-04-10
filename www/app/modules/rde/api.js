@@ -1,10 +1,10 @@
 angular.module('os.rde')
   .factory('RdeApis', function($http, ApiUrls) {
 
-    var baseUrl = ApiUrls.getBaseUrl();
+    var baseUrl = ApiUrls.getBaseUrl() + 'rde-workflow/';
 
     function getBarcodeDetails(barcodes) {
-      return $http.post(baseUrl + 'visit-barcodes/validate', barcodes).then(
+      return $http.post(baseUrl + 'validate-visit-names', barcodes).then(
         function(result) {
           var headers = [], visits = {};
           angular.forEach(result.data, function(bcDetail) {
@@ -46,7 +46,7 @@ angular.module('os.rde')
         }
       );
 
-      return $http.post(baseUrl + 'visit-barcodes', payload).then(
+      return $http.post(baseUrl + 'register-visit-names', payload).then(
         function(result) {
           return result.data.map(getVisitSpmns);
         }   
@@ -54,7 +54,7 @@ angular.module('os.rde')
     }
 
     function registerParticipants(participants) {
-      return $http.post(baseUrl + 'visit-barcodes/participants', participants).then(
+      return $http.post(baseUrl + 'register-participants', participants).then(
         function(resp) {
           return resp.data;
         }
@@ -62,7 +62,7 @@ angular.module('os.rde')
     }
 
     function saveVisits(visits) {
-      return $http.post(baseUrl + 'visit-barcodes/visits', visits).then(
+      return $http.post(baseUrl + 'register-visits', visits).then(
         function(result) {
           return result.data.map(getVisitSpmns);
         }   
@@ -74,11 +74,11 @@ angular.module('os.rde')
     }
 
     function getSpecimenVisits(specimenLabels) {
-      return getVisitsSpecimens({aliquotLabels: specimenLabels});
+      return getVisitsSpecimens({labels: specimenLabels});
     }
 
     function getVisitsSpecimens(params) {
-      return $http.get(baseUrl + 'visit-barcodes/visits', {params: params}).then(
+      return $http.get(baseUrl + 'visits', {params: params}).then(
         function(result) {
           return result.data.map(getVisitSpmns);
         }
@@ -86,7 +86,7 @@ angular.module('os.rde')
     }
  
     function savePrimarySpecimens(spmns) {
-      return $http.post(baseUrl + 'visit-barcodes/primary-specimens', spmns).then(
+      return $http.post(baseUrl + 'collect-primary-specimens', spmns).then(
         function(result) {
           return result.data;
         }
@@ -94,7 +94,7 @@ angular.module('os.rde')
     }
 
     function printSpecimenLabels(spmns) {
-      return $http.post(baseUrl + 'visit-barcodes/specimen-labels-print-jobs', spmns).then(
+      return $http.post(baseUrl + 'print-specimen-labels', spmns).then(
         function(result) {
           return result.data;
         }
@@ -102,7 +102,7 @@ angular.module('os.rde')
     }
 
     function validateSpecimenPositions(occupancyDetail) {
-      return $http.post(baseUrl + 'visit-barcodes/validate-specimens-occupancy', occupancyDetail).then(
+      return $http.post(baseUrl + 'validate-occupancy-eligibility', occupancyDetail).then(
         function(result) {
           return result.data.positions;
         }
@@ -110,7 +110,7 @@ angular.module('os.rde')
     }
 
     function saveChildSpecimens(childSpmns) {
-      return $http.post(baseUrl + 'visit-barcodes/child-specimens', childSpmns).then(
+      return $http.post(baseUrl + 'collect-child-specimens', childSpmns).then(
         function(result) {
           return result.data;
         }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
-public class SpecimenCollectionSession extends BaseEntity {
+public class Session extends BaseEntity {
 	private User user;
 	
 	private Map<String, Object> data;

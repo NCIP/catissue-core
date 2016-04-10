@@ -1,7 +1,7 @@
 package com.krishagni.openspecimen.rde.events;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.krishagni.openspecimen.rde.tokens.BarcodePart;
 
@@ -67,11 +67,6 @@ public class BarcodePartDetail {
 	}
 	
 	public static List<BarcodePartDetail> from(List<BarcodePart> parts) {
-		List<BarcodePartDetail> result = new ArrayList<BarcodePartDetail>();
-		for (BarcodePart part : parts) {
-			result.add(BarcodePartDetail.from(part));
-		}
-		
-		return result;
+		return parts.stream().map(BarcodePartDetail::from).collect(Collectors.toList());
 	}
 }

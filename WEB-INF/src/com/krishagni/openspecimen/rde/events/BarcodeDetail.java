@@ -6,7 +6,7 @@ import java.util.List;
 public class BarcodeDetail {
 	private String barcode;
 	
-	private List<BarcodePartDetail> parts = new ArrayList<BarcodePartDetail>();
+	private List<BarcodePartDetail> parts = new ArrayList<>();
 	
 	private boolean erroneous;
 

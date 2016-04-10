@@ -41,22 +41,23 @@ public class EventCodeBarcodeToken extends AbstractLabelTmplToken implements Bar
 				
 		CollectionProtocol cp = (CollectionProtocol)contextMap.get("cp");
 		for (CollectionProtocolEvent event : cp.getCollectionProtocolEvents()) {
-			if (eventCode.equals(event.getCode())) {
-				result.setValue(event);
-
-				if (event.getEventPoint() != null) {
-					if (event.getEventPoint() < 0) {
-						result.setDisplayValue("-T" + (-1 * event.getEventPoint().intValue()) + ": ");
-					} else {
-						result.setDisplayValue("T" + event.getEventPoint().intValue() + ": ");
-					}
-				} else {
-					result.setDisplayValue("TEOS: ");
-				}
-
-				result.setDisplayValue(result.getDisplayValue() + event.getEventLabel());
-				break;
+			if (!eventCode.equals(event.getCode())) {
+				continue;
 			}
+
+			result.setValue(event);
+			if (event.getEventPoint() != null) {
+				if (event.getEventPoint() < 0) {
+					result.setDisplayValue("-T" + (-1 * event.getEventPoint().intValue()) + ": ");
+				} else {
+					result.setDisplayValue("T" + event.getEventPoint().intValue() + ": ");
+				}
+			} else {
+				result.setDisplayValue("TEOS: ");
+			}
+
+			result.setDisplayValue(result.getDisplayValue() + event.getEventLabel());
+			break;
 		}
 		 
 		return result;

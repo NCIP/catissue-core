@@ -15,21 +15,21 @@ import com.krishagni.openspecimen.rde.events.SpecimenAndFrozenEventDetail;
 import com.krishagni.openspecimen.rde.events.SpecimenPrintDetail;
 import com.krishagni.openspecimen.rde.events.VisitRegDetail;
 
-public interface VisitRegistrationService {
+public interface SpecimenCollectionService {
 	public ResponseEvent<List<ParticipantRegDetail>> registerParticipants(RequestEvent<List<ParticipantRegDetail>> req);
 
-	public ResponseEvent<List<BarcodeDetail>> validateVisits(RequestEvent<List<String>> req);
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req);
+
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req);
+
+	public ResponseEvent<List<BarcodeDetail>> validateVisitNames(RequestEvent<List<String>> req);
 	
-	public ResponseEvent<List<VisitSpecimenDetail>> registerVisitBarcodes(RequestEvent<List<VisitRegDetail>> req);
+	public ResponseEvent<List<VisitSpecimenDetail>> registerVisitNames(RequestEvent<List<VisitRegDetail>> req);
 
 	public ResponseEvent<List<VisitSpecimenDetail>> registerVisits(RequestEvent<List<VisitDetail>> req);
 	
-	public ResponseEvent<List<SpecimenDetail>> savePrimarySpecimens(RequestEvent<List<SpecimenDetail>> req);
-	
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req);
+	public ResponseEvent<List<SpecimenDetail>> collectPrimarySpecimens(RequestEvent<List<SpecimenDetail>> req);
 
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req);
-	
 	public ResponseEvent<ContainerOccupancyDetail> validateOccupancyEligibility(RequestEvent<ContainerOccupancyDetail> req);
 	
 	public ResponseEvent<SpecimenAndFrozenEventDetail> collectChildSpecimens(RequestEvent<SpecimenAndFrozenEventDetail> req);

@@ -1,7 +1,7 @@
 
 angular.module('os.rde')
   .factory('RdeSession', function(osModel, RdeApis) {
-    var RdeSession = new osModel('specimen-collection-sessions');
+    var RdeSession = new osModel('rde-sessions');
 
     RdeSession.prototype.getVisitBarcodes = function() {
       if (!this.data || !this.data.visits || this.data.visits.length == 0) {

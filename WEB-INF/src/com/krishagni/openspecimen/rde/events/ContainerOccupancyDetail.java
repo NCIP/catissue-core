@@ -7,7 +7,7 @@ public class ContainerOccupancyDetail {
 	
 	private String containerName;
 	
-	private List<Position> positions = new ArrayList<Position>();
+	private List<Position> positions = new ArrayList<>();
 		
 	public String getContainerName() {
 		return containerName;

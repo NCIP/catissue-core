@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import com.krishagni.openspecimen.rde.domain.SpecimenCollectionSession;
+import com.krishagni.openspecimen.rde.domain.Session;
 
-public class SpecimenCollSessionDetail {
+public class SessionDetail {
 	private Long id;
 	
 	private Map<String, Object> data;
@@ -37,21 +38,16 @@ public class SpecimenCollSessionDetail {
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
-	
-	public static List<SpecimenCollSessionDetail> from(List<SpecimenCollectionSession> sessions) {
-		List<SpecimenCollSessionDetail> result = new ArrayList<SpecimenCollSessionDetail>();
-		for (SpecimenCollectionSession session : sessions) {
-			result.add(from(session));
-		}
-		
-		return result;
-	}
-	
-	public static SpecimenCollSessionDetail from(SpecimenCollectionSession session) {
-		SpecimenCollSessionDetail detail = new SpecimenCollSessionDetail();
+
+	public static SessionDetail from(Session session) {
+		SessionDetail detail = new SessionDetail();
 		detail.setId(session.getId());
 		detail.setData(session.getData());
 		detail.setCreatedOn(session.getCreatedOn());
 		return detail;
+	}
+
+	public static List<SessionDetail> from(List<Session> sessions) {
+		return sessions.stream().map(SessionDetail::from).collect(Collectors.toList());
 	}
 }

@@ -8,16 +8,10 @@ import com.krishagni.catissueplus.core.common.domain.AbstractLabelTmplToken;
 import com.krishagni.openspecimen.rde.tokens.BarcodePart;
 import com.krishagni.openspecimen.rde.tokens.BarcodeToken;
 
-public class CpUidBarcodeToken extends AbstractLabelTmplToken implements BarcodeToken {
+public class CpUidBarcodeToken extends EmptyBarcodeToken {
 	@Override
 	public String getName() {
 		return "CP_UID";
-	}
-
-	@Override
-	public String getReplacement(Object object) {
-		// not sure what to return here
-		return null;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
@@ -59,6 +61,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
@@ -71,13 +74,12 @@ import com.krishagni.openspecimen.rde.events.SpecimenAndFrozenEventDetail;
 import com.krishagni.openspecimen.rde.events.SpecimenAndFrozenEventDetail.EventDetail;
 import com.krishagni.openspecimen.rde.events.SpecimenPrintDetail;
 import com.krishagni.openspecimen.rde.events.VisitRegDetail;
-import com.krishagni.openspecimen.rde.services.BarcodeError;
+import com.krishagni.openspecimen.rde.domain.RdeError;
 import com.krishagni.openspecimen.rde.services.BarcodeParser;
-import com.krishagni.openspecimen.rde.services.ContainerErrorCode;
-import com.krishagni.openspecimen.rde.services.VisitRegistrationService;
+import com.krishagni.openspecimen.rde.services.SpecimenCollectionService;
 import com.krishagni.openspecimen.rde.tokens.BarcodePart;
 
-public class VisitRegistrationServiceImpl implements VisitRegistrationService {
+public class SpecimenCollectionServiceImpl implements SpecimenCollectionService {
 
 	private CollectionProtocolRegistrationService cprSvc;
 	
@@ -86,8 +88,6 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 	private SpecimenService spmnSvc;
 	
 	private DaoFactory daoFactory;
-	
-	private MessageSource msgSource;
 	
 	private JdbcTemplate jdbcTmpl;
 
@@ -109,10 +109,6 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		this.daoFactory = daoFactory;
 	}
 	
-	public void setMsgSource(MessageSource msgSource) {
-		this.msgSource = msgSource;
-	}
-
 	public void setJdbcTmpl(JdbcTemplate jdbcTmpl) {
 		this.jdbcTmpl = jdbcTmpl;
 	}
@@ -149,7 +145,21 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<BarcodeDetail>> validateVisits(RequestEvent<List<String>> req) {
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req) {
+		List<Visit> visits = visitSvc.getVisitsByName(req.getPayload());
+		return ResponseEvent.response(getVisitsSpecimens(visits));
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req) {
+		List<Visit> visits = visitSvc.getSpecimenVisits(req.getPayload());
+		return ResponseEvent.response(getVisitsSpecimens(visits));
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<BarcodeDetail>> validateVisitNames(RequestEvent<List<String>> req) {
 		try {			
 			List<BarcodeDetail> result = new ArrayList<BarcodeDetail>();
 			Map<String, BarcodeDetail> barcodeMap = new HashMap<String, BarcodeDetail>();
@@ -166,7 +176,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 				}
 			}
 
-			initBarcodeTokenDispNames(result);
+			addTokenCaptions(result);
 
 			if (barcodeMap.isEmpty()) {
 				return ResponseEvent.response(result);
@@ -174,7 +184,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 			
 			List<Visit> visits = daoFactory.getVisitsDao().getByName(barcodeMap.keySet());
 			for (Visit visit : visits) {
-				if (!hasCollectedSpecimens(visit)) {
+				if (!hasCollectedSpecimens(visit)) { // TODO: Do we need this check?
 					continue;
 				}
 				
@@ -182,7 +192,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 				bcDetail.setErroneous(true);
 				for (BarcodePartDetail part : bcDetail.getParts()) {
 					if (part.getToken().equals("EVENT_CODE")) {
-						part.setErrorCode(BarcodeError.SPECIMENS_ALREADY_COLLECTED.name());
+						part.setErrorCode(RdeError.SPECIMENS_ALREADY_COLLECTED.name());
 						break;
 					}
 				}
@@ -196,10 +206,10 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<VisitSpecimenDetail>> registerVisitBarcodes(RequestEvent<List<VisitRegDetail>> req) {
+	public ResponseEvent<List<VisitSpecimenDetail>> registerVisitNames(RequestEvent<List<VisitRegDetail>> req) {
 		try {
-			Map<String, List<BarcodePart>> barcodeParts = new LinkedHashMap<String, List<BarcodePart>>();
-			Map<String, VisitRegDetail> visitsMap = new LinkedHashMap<String, VisitRegDetail>();
+			Map<String, List<BarcodePart>> barcodeParts = new LinkedHashMap<>();
+			Map<String, VisitRegDetail> visitsMap = new LinkedHashMap<>();
 			BarcodeParser parser = new BarcodeParserImpl();
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
@@ -207,7 +217,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 				String barcode = visitReg.getBarcode();
 				List<BarcodePart> parts = parser.parseVisitBarcode(barcode);
 				if (isErroneous(parts)) {
-					ose.addError(BarcodeError.INVALID, barcode);
+					ose.addError(RdeError.INVALID, barcode);
 					continue;
 				}
 				
@@ -216,12 +226,11 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 			}
 			
 			ose.checkAndThrow();
-			
-			List<VisitSpecimenDetail> visits = new ArrayList<VisitSpecimenDetail>();
-			for (Map.Entry<String, List<BarcodePart>> barcode : barcodeParts.entrySet()) {
-				visits.add(registerVisit(visitsMap.get(barcode.getKey()), barcode.getValue()));
-			}
-			
+
+			List<VisitSpecimenDetail> visits = barcodeParts
+				.entrySet().stream()
+				.map(e -> registerVisit(visitsMap.get(e.getKey()), e.getValue()))
+				.collect(Collectors.toList());
 			return ResponseEvent.response(visits);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -234,12 +243,12 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 	@PlusTransactional
 	public ResponseEvent<List<VisitSpecimenDetail>> registerVisits(RequestEvent<List<VisitDetail>> req) {
 		try {
-			List<VisitSpecimenDetail> visits = new ArrayList<>();
-			for (VisitDetail visitDetail : req.getPayload()) {
-				visitDetail.setStatus(Visit.VISIT_STATUS_COMPLETED);
-				visits.add(saveOrUpdateVisit(null, visitDetail));
-			}
-
+			List<VisitSpecimenDetail> visits = req.getPayload()
+				.stream().map(v -> {
+					v.setStatus(Visit.VISIT_STATUS_COMPLETED);
+					return saveOrUpdateVisit(null, v);
+				})
+				.collect(Collectors.toList());
 			return ResponseEvent.response(visits);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -250,39 +259,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsBySpecimens(RequestEvent<List<String>> req) {
-		List<Visit> visits = visitSvc.getSpecimenVisits(req.getPayload());
-		
-		List<VisitSpecimenDetail> visitSpmnDetails = new ArrayList<VisitSpecimenDetail>();
-		for (Visit visit : visits) {
-			VisitSpecimenDetail visitSpmnDetail = new VisitSpecimenDetail();
-			visitSpmnDetail.setVisit(VisitDetail.from(visit));
-			visitSpmnDetail.setSpecimens(SpecimenDetail.from(visit.getTopLevelSpecimens()));
-			visitSpmnDetails.add(visitSpmnDetail);
-		}
-		
-		return ResponseEvent.response(visitSpmnDetails);
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<List<VisitSpecimenDetail>> getVisitsByNames(RequestEvent<List<String>> req) {
-		List<Visit> visits = visitSvc.getVisitsByName(req.getPayload());
-
-		List<VisitSpecimenDetail> visitSpmnDetails = new ArrayList<VisitSpecimenDetail>();
-		for (Visit visit : visits) {
-			VisitSpecimenDetail visitSpmnDetail = new VisitSpecimenDetail();
-			visitSpmnDetail.setVisit(VisitDetail.from(visit));
-			visitSpmnDetail.setSpecimens(SpecimenDetail.from(visit.getTopLevelSpecimens()));
-			visitSpmnDetails.add(visitSpmnDetail);
-		}
-
-		return ResponseEvent.response(visitSpmnDetails);
-	}
-
-	@Override
-	@PlusTransactional
-	public ResponseEvent<List<SpecimenDetail>> savePrimarySpecimens(RequestEvent<List<SpecimenDetail>> req) {
+	public ResponseEvent<List<SpecimenDetail>> collectPrimarySpecimens(RequestEvent<List<SpecimenDetail>> req) {
 		try {
 			ResponseEvent<List<SpecimenDetail>> resp = spmnSvc.collectSpecimens(req);
 			if (resp.isSuccessful()) {
@@ -307,17 +284,17 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND, containerName);
 			}
 			
-			Map<String, CollectionProtocol> cpMap = new HashMap<String, CollectionProtocol>();			
+			Map<String, CollectionProtocol> cpMap = new HashMap<>();
 			for (Position pos : occupancy.getPositions()) {
 				try {
 					String posX = pos.getPositionX(), posY = pos.getPositionY();
 					if (!isValidPosition(container, pos)) {
-						setError(pos, ContainerErrorCode.INVALID_POS, posX, posY);
+						setError(pos, RdeError.INVALID_CONT_POS, posX, posY);
 						continue;
 					}
 					
 					if (container.isPositionOccupied(posX, posY)) {
-						setError(pos, ContainerErrorCode.POS_OCCUPIED, posX, posY);
+						setError(pos, RdeError.CONT_POS_OCCUPIED, posX, posY);
 						continue;
 					}
 					
@@ -326,7 +303,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 					if (cp == null) {
 						cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(cpShortTitle);
 						if (cp == null) {
-							setError(pos, ContainerErrorCode.INVALID_CP, cpShortTitle);
+							setError(pos, RdeError.INVALID_CP, cpShortTitle);
 							continue;
 						}
 						
@@ -336,7 +313,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 					String spmnClass = pos.getSpecimenClass();
 					String spmnType = pos.getType();
 					if (!container.canContainSpecimen(cp, spmnClass, spmnType)) {
-						setError(pos, ContainerErrorCode.CANNOT_CONTAIN_SPECIMEN, cpShortTitle, spmnClass, spmnType);
+						setError(pos, RdeError.CANNOT_CONTAIN_SPECIMEN, cpShortTitle, spmnClass, spmnType);
 					}
 				} catch (OpenSpecimenException ose) {
 					ParameterizedError pe = ose.getErrors().iterator().next();
@@ -361,20 +338,18 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 			//
 			// Step 1: collect child specimens
 			//
-			RequestEvent<List<SpecimenDetail>> collectChildSpmnsReq = new RequestEvent<List<SpecimenDetail>>(detail.getSpecimens());
-			ResponseEvent<List<SpecimenDetail>> collectChildSpmnsResp = spmnSvc.collectSpecimens(collectChildSpmnsReq);
-			collectChildSpmnsResp.throwErrorIfUnsuccessful();
-	
+			List<SpecimenDetail> specimens = response(spmnSvc.collectSpecimens(request(detail.getSpecimens())));
+
 			//
 			// Step 2: add frozen events
 			//
-			addFrozenEvents(getReqSpecimenIdMap(collectChildSpmnsResp.getPayload()), detail.getEvents());
+			addFrozenEvents(getReqSpecimenIdMap(specimens), detail.getEvents());
 			
 			//
 			// Step 3: construct response
 			//			
 			SpecimenAndFrozenEventDetail respDetail = new SpecimenAndFrozenEventDetail();
-			respDetail.setSpecimens(collectChildSpmnsResp.getPayload());
+			respDetail.setSpecimens(specimens);
 			respDetail.setEvents(detail.getEvents());
 			return ResponseEvent.response(respDetail);			
 		} catch (OpenSpecimenException ose) {
@@ -441,10 +416,8 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		participant.setEmpi(detail.getEmpi());
 		cprDetail.setParticipant(participant);
 
-		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.createRegistration(new RequestEvent<>(cprDetail));
-		resp.throwErrorIfUnsuccessful();
-
-		return daoFactory.getCprDao().getById(resp.getPayload().getId());
+		cprDetail = response(cprSvc.createRegistration(request(cprDetail)));
+		return daoFactory.getCprDao().getById(cprDetail.getId());
 	}
 
 	private String getNextVisitEvent(String cpShortTitle, CollectionProtocolRegistration cpr, Map<String, List<CollectionProtocolEvent>> cpEventsMap) {
@@ -479,6 +452,84 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		return nextVisitEvent == null ? null : nextVisitEvent.getEventLabel();
 	}
 
+	private List<VisitSpecimenDetail> getVisitsSpecimens(List<Visit> visits) {
+		return visits.stream().map(visit -> new VisitSpecimenDetail(visit)).collect(Collectors.toList());
+	}
+
+	private void addTokenCaptions(Collection<BarcodeDetail> barcodes) {
+		Map<String, List<BarcodePartDetail>> attrBcParts = new HashMap<>();
+
+		for (BarcodeDetail barcode : barcodes) {
+			for (BarcodePartDetail part : barcode.getParts()) {
+				if (!part.getToken().startsWith("$extn.")) {
+					part.setCaption(getTokenCaption(part.getToken()));
+				} else {
+					String attr = part.getToken().substring("$extn.".length());
+					List<BarcodePartDetail> bcParts = attrBcParts.get(attr);
+					if (bcParts == null) {
+						bcParts = new ArrayList<>();
+						attrBcParts.put(attr, bcParts);
+					}
+
+					bcParts.add(part);
+				}
+			}
+		}
+
+		Map<String, String> attrCaptions = getAttrCaptions(attrBcParts.keySet());
+		for (Map.Entry<String, String> attrCaption : attrCaptions.entrySet()) {
+			List<BarcodePartDetail> bcParts = attrBcParts.get(attrCaption.getKey());
+			for (BarcodePartDetail bcPart : bcParts) {
+				bcPart.setCaption(attrCaption.getValue());
+			}
+		}
+	}
+
+	private String getTokenCaption(String token) {
+		return MessageUtil.getInstance().getMessage("rde_token_" + token.toLowerCase());
+	}
+
+	private Map<String, String> getAttrCaptions(Collection<String> attrs) {
+		if (CollectionUtils.isEmpty(attrs)) {
+			return Collections.emptyMap();
+		}
+
+		String sql = String.format(GET_PV_ATTR_CAPTIONS_SQL, getSqlParamPlaceholders(attrs.size()));
+		return jdbcTmpl.query(sql, attrs.toArray(new String[0]), new ResultSetExtractor<Map<String, String>>() {
+			@Override
+			public Map<String, String> extractData(ResultSet rs)
+					throws SQLException, DataAccessException {
+				Map<String, String> result = new HashMap<String, String>();
+				while (rs.next()) {
+					result.put(rs.getString("attr"), rs.getString("caption"));
+				}
+
+				return result;
+			}
+		});
+	}
+
+	private String getSqlParamPlaceholders(int count) {
+		StringBuilder placeholders = new StringBuilder();
+		for (int i = 0; i < count; ++i) {
+			placeholders.append("?, ");
+		}
+
+		return placeholders.delete(placeholders.length() - 2, placeholders.length()).toString();
+	}
+
+	private boolean hasCollectedSpecimens(Visit visit) {
+		boolean hasCollectedSpecimens = false;
+		for (Specimen specimen : visit.getTopLevelSpecimens()) {
+			if (specimen.isCollected() || specimen.isMissed()) {
+				hasCollectedSpecimens = true;
+				break;
+			}
+		}
+
+		return hasCollectedSpecimens;
+	}
+
 	private VisitSpecimenDetail registerVisit(VisitRegDetail regDetail, List<BarcodePart> parts) {
 		CollectionProtocol cp = getCp(parts);
 		String ppid = getPpid(parts);
@@ -491,32 +542,96 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		
 		CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByPpid(cp.getId(), ppid);
 		if (cpr == null) {
-			visitDetail.setCprId(registerParticipant(cp.getId(), ppid, regDetail.getVisitDate(), siteName));
-			cpr = daoFactory.getCprDao().getById(visitDetail.getCprId());
+			Long cprId = registerParticipant(cp.getId(), ppid, regDetail.getVisitDate(), siteName);
+			visitDetail.setCprId(cprId);
+			cpr = daoFactory.getCprDao().getById(cprId);
 		} else {
 			visitDetail.setCprId(cpr.getId());
 		}
 
 		String visitName = regDetail.getBarcode();
-		for (Visit existingVisit : cpr.getVisits()) {
-			if (visitName.equals(existingVisit.getName())) {
-				visitDetail = VisitDetail.from(existingVisit);
-				break;
-			}
+		Visit existingVisit = cpr.getVisitByName(visitName);
+		if (existingVisit != null) {
+			visitDetail = VisitDetail.from(existingVisit);
 		}
 
-		visitDetail.setName(visitName);
-		visitDetail.setSite(siteName);
-		
 		CollectionProtocolEvent cpe = getCpe(parts); 
 		visitDetail.setEventId(cpe.getId());
-		
+		visitDetail.setName(visitName);
+		visitDetail.setSite(siteName);
 		visitDetail.setStatus(Visit.VISIT_STATUS_COMPLETED);
 		visitDetail.setVisitDate(regDetail.getVisitDate());
 		setExtensionAttrs(visitDetail, parts);
 		return saveOrUpdateVisit(cpe, visitDetail);		
 	}
-	
+
+	private CollectionProtocol getCp(List<BarcodePart> parts) {
+		BarcodePart cpPart = getBarcodePart(parts, "CP_CODE");
+		return (CollectionProtocol)cpPart.getValue();
+	}
+
+	private String getPpid(List<BarcodePart> parts) {
+		BarcodePart ppidPart = getBarcodePart(parts, "PPI");
+		return (String)ppidPart.getValue();
+
+	}
+
+	private String getCohort(List<BarcodePart> parts) {
+		BarcodePart cohortPart = getBarcodePart(parts, "COHORT");
+		if (cohortPart == null) {
+			return null;
+		}
+
+		return (String)cohortPart.getDisplayValue();
+	}
+
+	private String getCpSiteName(List<BarcodePart> parts) {
+		BarcodePart sitePart = getBarcodePart(parts, "CP_SITE_CODE");
+
+		String siteName = null;
+		if (sitePart != null) {
+			siteName = ((Site)sitePart.getValue()).getName();
+		}
+
+		return siteName;
+	}
+
+	private CollectionProtocolEvent getCpe(List<BarcodePart> parts) {
+		BarcodePart cpePart = getBarcodePart(parts, "EVENT_CODE");
+		if (cpePart == null) {
+			return null;
+		}
+
+		return (CollectionProtocolEvent)cpePart.getValue();
+	}
+
+	private BarcodePart getBarcodePart(List<BarcodePart> parts, String key) {
+		for (BarcodePart part : parts) {
+			if (part.getToken().equals(key)) {
+				return part;
+			}
+		}
+
+		return null;
+	}
+
+	private Long registerParticipant(Long cpId, String ppid, Date regDate, String siteName) {
+		ParticipantDetail participant = new ParticipantDetail();
+		if (StringUtils.isNotBlank(siteName)) {
+			PmiDetail pmi = new PmiDetail();
+			pmi.setSiteName(siteName);
+			pmi.setMrn(ppid);
+			participant.setPmis(Collections.singletonList(pmi));
+		}
+
+		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
+		cprDetail.setCpId(cpId);
+		cprDetail.setPpid(ppid);
+		cprDetail.setRegistrationDate(regDate);
+		cprDetail.setParticipant(participant);
+		return response(cprSvc.createRegistration(request(cprDetail))).getId();
+	}
+
 	private void setExtensionAttrs(VisitDetail visitDetail, List<BarcodePart> parts) {
 		ExtensionDetail extnDetail = visitDetail.getExtensionDetail();
 		if (extnDetail == null) {
@@ -543,243 +658,30 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		}
 	}
 
-	private Long registerParticipant(Long cpId, String ppid, Date regDate, String siteName) {
-		ParticipantDetail participant = new ParticipantDetail();
-		if (StringUtils.isNotBlank(siteName)) {
-			PmiDetail pmi = new PmiDetail();
-			pmi.setSiteName(siteName);
-			pmi.setMrn(ppid);
-			participant.setPmis(Collections.singletonList(pmi));
-		}
-		
-		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
-		cprDetail.setCpId(cpId);
-		cprDetail.setPpid(ppid);
-		cprDetail.setRegistrationDate(regDate);				
-		cprDetail.setParticipant(participant);
-		
-		RequestEvent<CollectionProtocolRegistrationDetail> req = new RequestEvent<CollectionProtocolRegistrationDetail>(cprDetail);		
-		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.createRegistration(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return resp.getPayload().getId();
-	}
-	
 	private VisitSpecimenDetail saveOrUpdateVisit(CollectionProtocolEvent event, VisitDetail input) {
-		RequestEvent<VisitDetail> req = new RequestEvent<VisitDetail>(input);
-		ResponseEvent<VisitDetail> resp;
+		VisitDetail visitDetail = null;
 		if (input.getId() != null) {
-			resp = visitSvc.updateVisit(req);
+			visitDetail = response(visitSvc.updateVisit(request(input)));
 		} else {
-			resp = visitSvc.addVisit(req);
+			visitDetail = response(visitSvc.addVisit(request(input)));
 		}
-		resp.throwErrorIfUnsuccessful();
-		
-		VisitDetail visitDetail = resp.getPayload();
-		
+
 		Visit visit = daoFactory.getVisitsDao().getById(visitDetail.getId());
-		//
-		// If pre-print is not set, create all pending specimens with their labels set 
-		// so that we can scan anticipated specimen labels to collect
-		//
 		if (!visit.isPrePrintEnabled()) {
+			//
+			// If CP level pre-print is not enabled, create all pending specimens with their labels
+			// so that we can scan anticipated specimen labels to collect
+			//
 			visit.createPendingSpecimens();
 		}
-		List<SpecimenDetail> spmns = SpecimenDetail.from(
-				(Collection<Specimen>) Specimen.sort(visit.getTopLevelSpecimens()));
 
-		VisitSpecimenDetail result = new VisitSpecimenDetail();
-		result.setVisit(visitDetail);
-		result.setSpecimens(spmns);
-		return result;
-	}
-		
-	private boolean isValidPosition(StorageContainer container, Position pos) {
-		try {
-			if (container.areValidPositions(pos.getPositionX(), pos.getPositionY())) {
-				return true;
-			}
-		} catch (Exception e) {
-			// invalid position
-		}
-		
-		return false;
-	}
-	
-	private void setError(Position pos, ErrorCode code, Object ... params) {
-		pos.setErrorCode(code.code());
-		pos.setErrorMsg(getMessage(code, params));
-	}
-	
-	private String getMessage(ErrorCode code, Object ... params) {
-		return msgSource.getMessage(code.code().toLowerCase(), params, Locale.getDefault());
-	}
-
-	private Map<String, Long> getReqSpecimenIdMap(List<SpecimenDetail> specimens) {
-		Map<String, Long> result = new HashMap<String, Long>();
-		
-		if (specimens == null) {
-			return result;
-		}
-		
-		for (SpecimenDetail specimen : specimens) {
-			result.put(specimen.getVisitId() + "-" + specimen.getReqId(), specimen.getId());
-			result.putAll(getReqSpecimenIdMap(specimen.getChildren()));			
-		}
-		
-		return result;
-	}
-	
-	private void addFrozenEvents(Map<String, Long> reqSpecimenIdMap, List<EventDetail> events) {
-		for (EventDetail event : events) {
-			Long specimenId = event.getSpecimenId();
-			if (specimenId == null && event.getVisitId() != null && event.getReqId() != null) {
-				specimenId = reqSpecimenIdMap.get(event.getVisitId() + "-" + event.getReqId());
-				event.setSpecimenId(specimenId);
-			}
-
-			if (specimenId == null) {
-				continue;
-			}
-			
-			Long userId = AuthUtil.getCurrentUser().getId();
-			if (event.getUser() != null && event.getUser().getId() != null) {
-				userId = event.getUser().getId();
-			}
-			
-			Date time = Calendar.getInstance().getTime();
-			if (event.getTime() != null) {
-				time = event.getTime();
-			}
-			
-			event.setId(addFrozenEvent(specimenId, userId, time));
-		}
-	}
-		
-	private Long addFrozenEvent(Long specimenId, Long userId, Date time) {
-		Map<String, Object> values = new HashMap<String, Object>();
-		values.put("user", userId);
-		values.put("time", time != null ? time.getTime() : null);		
-		return DeObject.saveFormData("SpecimenFrozenEvent", "SpecimenEvent", -1L, specimenId, values);		
-	}
-	
-	private boolean isErroneous(List<BarcodePart> parts) {
-		for (BarcodePart part : parts) {
-			if (part.getValue() == null) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private CollectionProtocol getCp(List<BarcodePart> parts) {
-		BarcodePart cpPart = getBarcodePart(parts, "CP_CODE");
-		return (CollectionProtocol)cpPart.getValue();
-	}
-	
-	private String getPpid(List<BarcodePart> parts) {
-		BarcodePart ppidPart = getBarcodePart(parts, "PPI");
-		return (String)ppidPart.getValue();
-		
-	}
-	
-	private String getCohort(List<BarcodePart> parts) {
-		BarcodePart cohortPart = getBarcodePart(parts, "COHORT");
-		if (cohortPart == null) {
-			return null;
-		}
-		
-		return (String)cohortPart.getDisplayValue();
-	}
-	
-	private String getCpSiteName(List<BarcodePart> parts) {
-		BarcodePart sitePart = getBarcodePart(parts, "CP_SITE_CODE");
-		
-		String siteName = null;
-		if (sitePart != null) {
-			siteName = ((Site)sitePart.getValue()).getName();
-		}
-		
-		return siteName;		
-	}
-	
-	private CollectionProtocolEvent getCpe(List<BarcodePart> parts) {
-		BarcodePart cpePart = getBarcodePart(parts, "EVENT_CODE");
-		if (cpePart == null) {
-			return null;
-		}
-		
-		return (CollectionProtocolEvent)cpePart.getValue(); 
-	}
-		
-	private BarcodePart getBarcodePart(List<BarcodePart> parts, String key) {
-		for (BarcodePart part : parts) {
-			if (part.getToken().equals(key)) {
-				return part;
-			}
-		}
-		
-		return null;
-	}
-
-	private void initBarcodeTokenDispNames(Collection<BarcodeDetail> barcodes) {
-		Map<String, List<BarcodePartDetail>> attrBcParts = new HashMap<String, List<BarcodePartDetail>>();
-
-		for (BarcodeDetail barcode : barcodes) {
-			for (BarcodePartDetail part : barcode.getParts()) {
-				if (!part.getToken().startsWith("$extn.")) {
-					part.setCaption(getTokenCaption(part.getToken()));
-				} else {
-					String attr = part.getToken().substring("$extn.".length());
-					List<BarcodePartDetail> bcParts = attrBcParts.get(attr);
-					if (bcParts == null) {
-						bcParts = new ArrayList<BarcodePartDetail>();
-						attrBcParts.put(attr, bcParts);
-					}
-
-					bcParts.add(part);
-				}
-			}
-		}
-
-		Map<String, String> attrCaptions = getAttrCaptions(attrBcParts.keySet());
-		for (Map.Entry<String, String> attrCaption : attrCaptions.entrySet()) {
-			List<BarcodePartDetail> bcParts = attrBcParts.get(attrCaption.getKey());
-			for (BarcodePartDetail bcPart : bcParts) {
-				bcPart.setCaption(attrCaption.getValue());
-			}
-		}
-	}
-
-	private String getTokenCaption(String token) {
-		return msgSource.getMessage("bde_token_" + token.toLowerCase(), null, Locale.getDefault());
-	}
-
-	private Map<String, String> getAttrCaptions(Collection<String> attrs) {
-		if (CollectionUtils.isEmpty(attrs)) {
-			return Collections.emptyMap();
-		}
-
-		String sql = String.format(GET_PV_ATTR_DISP_NAMES_SQL, getSqlParamPlaceholders(attrs.size()));
-		return jdbcTmpl.query(sql, attrs.toArray(new String[0]), new ResultSetExtractor<Map<String, String>>() {
-			@Override
-			public Map<String, String> extractData(ResultSet rs)
-			throws SQLException, DataAccessException {
-				Map<String, String> result = new HashMap<String, String>();
-				while (rs.next()) {
-					result.put(rs.getString("attr"), rs.getString("caption"));
-				}
-
-				return result;
-			}
-		});
+		return new VisitSpecimenDetail(visit);
 	}
 
 	@PlusTransactional
 	private void sendEmailNotifs(List<SpecimenDetail> specimens) {
-		Set<Long> cpIds = new HashSet<Long>();
-		Set<Long> visitIds = new HashSet<Long>();
+		Set<Long> cpIds = new HashSet<>();
+		Set<Long> visitIds = new HashSet<>();
 		for (SpecimenDetail spmn : specimens) {
 			cpIds.add(spmn.getCpId());
 			visitIds.add(spmn.getVisitId());
@@ -798,7 +700,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		//
 		// Building map of {cp site id, site name} => {specimens}
 		//
-		Map<Pair<Long, String>, List<SpecimenDetail>> siteSpmnsMap = new HashMap<Pair<Long, String>, List<SpecimenDetail>>();
+		Map<Pair<Long, String>, List<SpecimenDetail>> siteSpmnsMap = new HashMap<>();
 		for (SpecimenDetail spmn : specimens) {
 			Pair<Long, String> cpSite = visitSiteIdsMap.get(spmn.getVisitId());
 			if (cpSite == null) {
@@ -807,7 +709,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 			List<SpecimenDetail> siteSpmns = siteSpmnsMap.get(cpSite);
 			if (siteSpmns == null) {
-				siteSpmns = new ArrayList<SpecimenDetail>();
+				siteSpmns = new ArrayList<>();
 				siteSpmnsMap.put(cpSite, siteSpmns);
 			}
 
@@ -816,15 +718,15 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 
 		for (Map.Entry<Pair<Long, String>, List<SpecimenDetail>> siteSpmns : siteSpmnsMap.entrySet()) {
 			sendEmailNotif(
-				siteEmailRcpts.get(siteSpmns.getKey().first()),
-				siteSpmns.getKey().second(),
-				siteSpmns.getValue());
+					siteEmailRcpts.get(siteSpmns.getKey().first()),
+					siteSpmns.getKey().second(),
+					siteSpmns.getValue());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private Map<Long, List<String>> getSiteEmailRcpts(Set<Long> cpIds) {
-		Map<Long, List<String>> siteEmailRcpts = new HashMap<Long, List<String>>();
+		Map<Long, List<String>> siteEmailRcpts = new HashMap<>();
 
 		for (CpWorkflowConfig cpWf : getCpWorkflowsCfg(cpIds)) {
 			Workflow wf = cpWf.getWorkflows().get("bde");
@@ -850,7 +752,7 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		return jdbcTmpl.query(sql, visitIds.toArray(new Long[0]), new ResultSetExtractor<Map<Long, Pair<Long, String>>>() {
 			@Override
 			public Map<Long, Pair<Long, String>> extractData(ResultSet rs)
-			throws SQLException, DataAccessException {
+					throws SQLException, DataAccessException {
 				Map<Long, Pair<Long, String>> visitSites = new HashMap<Long, Pair<Long, String>>();
 				while (rs.next()) {
 					Pair<Long, String> site = Pair.make(rs.getLong("siteId"), rs.getString("siteName"));
@@ -862,61 +764,113 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		});
 	}
 
-	private String getSqlParamPlaceholders(int count) {
-		StringBuilder placeholders = new StringBuilder();
-		for (int i = 0; i < count; ++i) {
-			placeholders.append("?, ");
-		}
-
-		return placeholders.delete(placeholders.length() - 2, placeholders.length()).toString();
-	}
-
 	private void sendEmailNotif(List<String> rcpts, String siteName, List<SpecimenDetail> spmns) {
 		if (CollectionUtils.isEmpty(rcpts)) {
 			return;
 		}
 
-		Map<String, Object> props = new HashMap<String, Object>();
+		Map<String, Object> props = new HashMap<>();
 		props.put("cpShortTitle", spmns.iterator().next().getCpShortTitle());
 		props.put("siteName", siteName);
-		props.put("spmns", (Object)spmns);
+		props.put("spmns", spmns);
 
-		emailSvc.sendEmail(
-			PRIMARY_SPMN_COLL_EMAIL_TMPL,
-			rcpts.toArray(new String[0]),
-			props);
+		emailSvc.sendEmail(PRIMARY_SPMN_COLL_EMAIL_TMPL, rcpts.toArray(new String[0]), props);
 	}
 
-	private List<PrintItem<Specimen>> getSpecimenPrintItems(List<SpecimenPrintDetail> spmnsPrintDetail) {
-		List<PrintItem<Specimen>> result = new ArrayList<PrintItem<Specimen>>();
-		for (SpecimenPrintDetail spmnPrintDetail : spmnsPrintDetail) {
-			result.addAll(getSpecimenPrintItems(spmnPrintDetail, null, null));
+	private boolean isValidPosition(StorageContainer container, Position pos) {
+		try {
+			if (container.areValidPositions(pos.getPositionX(), pos.getPositionY())) {
+				return true;
+			}
+		} catch (Exception e) {
+			// invalid position
+		}
+
+		return false;
+	}
+
+	private void setError(Position pos, ErrorCode code, Object ... params) {
+		pos.setErrorCode(code.code());
+		pos.setErrorMsg(getMessage(code, params));
+	}
+
+	private String getMessage(ErrorCode code, Object ... params) {
+		return MessageUtil.getInstance().getMessage(code.code().toLowerCase(), params);
+	}
+
+	private Map<String, Long> getReqSpecimenIdMap(List<SpecimenDetail> specimens) {
+		Map<String, Long> result = new HashMap<>();
+
+		if (specimens == null) {
+			return result;
+		}
+
+		for (SpecimenDetail specimen : specimens) {
+			result.put(specimen.getVisitId() + "-" + specimen.getReqId(), specimen.getId());
+			result.putAll(getReqSpecimenIdMap(specimen.getChildren()));
 		}
 
 		return result;
 	}
 
-	private List<PrintItem<Specimen>> getSpecimenPrintItems(SpecimenPrintDetail detail, Specimen parent, Specimen pooledSpecimen) {
-		List<PrintItem<Specimen>> printItems = new ArrayList<PrintItem<Specimen>>();
-		
-		Specimen specimen = getSpecimenForPrint(detail);
-		if (specimen.getId() == null) {
-			if (parent != null) {
-				specimen.setParentSpecimen(parent);
-				specimen.setVisit(parent.getVisit());
-			} else if (pooledSpecimen != null) {
-				specimen.setPooledSpecimen(pooledSpecimen);
-				specimen.setVisit(pooledSpecimen.getVisit());
-			} else if (StringUtils.isNotBlank(detail.getVisitName())) {
-				Visit visit = daoFactory.getVisitsDao().getByName(detail.getVisitName());
-				if (visit == null) {
-					throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitName());
-				}
-
-				specimen.setVisit(visit);
-			} else {
-				throw OpenSpecimenException.userError(VisitErrorCode.NAME_REQUIRED);
+	private void addFrozenEvents(Map<String, Long> reqSpecimenIdMap, List<EventDetail> events) {
+		for (EventDetail event : events) {
+			Long specimenId = event.getSpecimenId();
+			if (specimenId == null && event.getVisitId() != null && event.getReqId() != null) {
+				specimenId = reqSpecimenIdMap.get(event.getVisitId() + "-" + event.getReqId());
+				event.setSpecimenId(specimenId);
 			}
+
+			if (specimenId == null) {
+				continue;
+			}
+
+			Long userId = AuthUtil.getCurrentUser().getId();
+			if (event.getUser() != null && event.getUser().getId() != null) {
+				userId = event.getUser().getId();
+			}
+
+			Date time = Calendar.getInstance().getTime();
+			if (event.getTime() != null) {
+				time = event.getTime();
+			}
+
+			event.setId(addFrozenEvent(specimenId, userId, time));
+		}
+	}
+
+	private Long addFrozenEvent(Long specimenId, Long userId, Date time) {
+		Map<String, Object> values = new HashMap<>();
+		values.put("user", userId);
+		values.put("time", time != null ? time.getTime() : null);
+		return DeObject.saveFormData("SpecimenFrozenEvent", "SpecimenEvent", -1L, specimenId, values);
+	}
+
+	private boolean isErroneous(List<BarcodePart> parts) {
+		for (BarcodePart part : parts) {
+			if (part.getValue() == null) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private List<PrintItem<Specimen>> getSpecimenPrintItems(List<SpecimenPrintDetail> spmnsPrintDetail) {
+		List<PrintItem<Specimen>> result = new ArrayList<>();
+		for (SpecimenPrintDetail spmnPrintDetail : spmnsPrintDetail) {
+			result.addAll(getSpecimenPrintItems(spmnPrintDetail));
+		}
+
+		return result;
+	}
+
+	private List<PrintItem<Specimen>> getSpecimenPrintItems(SpecimenPrintDetail detail) {
+		List<PrintItem<Specimen>> printItems = new ArrayList<>();
+
+		Specimen specimen = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
+		if (specimen == null) {
+			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, detail.getLabel());
 		}
 
 		if (detail.getPrint() != null && detail.getPrint()) {
@@ -924,51 +878,86 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		}
 
 		for (SpecimenPrintDetail poolSpmnPrintDetail : detail.getSpecimensPool()) {
-			printItems.addAll(getSpecimenPrintItems(poolSpmnPrintDetail, null, specimen));
+			printItems.addAll(getSpecimenPrintItems(poolSpmnPrintDetail));
 		}
 
 		for (SpecimenPrintDetail childSpmnPrintDetail : detail.getChildren()) {
-			printItems.addAll(getSpecimenPrintItems(childSpmnPrintDetail, specimen, null));
+			printItems.addAll(getSpecimenPrintItems(childSpmnPrintDetail));
 		}
-		
+
 		return printItems;
 	}
 
-	private Specimen getSpecimenForPrint(SpecimenPrintDetail detail) {
-		Specimen specimen = null;
-
-		if (StringUtils.isNotBlank(detail.getLabel())) {
-			specimen = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
-			if (specimen != null) {
-				return specimen;
-			}
-		}
-
-		if (detail.getReqId() != null) {
-			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(detail.getReqId());
-			if (sr == null) {
-				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND, detail.getReqId());
-			}
-
-			specimen = sr.getSpecimen();
-			specimen.setLabel(detail.getLabel());
-		} else {
-			throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND); // TODO: change not found
-		}
-
-		return specimen;
-	}
+//	private List<PrintItem<Specimen>> getSpecimenPrintItems(SpecimenPrintDetail detail, Specimen parent, Specimen pooledSpecimen) {
+//		List<PrintItem<Specimen>> printItems = new ArrayList<>();
+//
+//		Specimen specimen = getSpecimenForPrint(detail);
+//		if (specimen.getId() == null) {
+//			if (parent != null) {
+//				specimen.setParentSpecimen(parent);
+//				specimen.setVisit(parent.getVisit());
+//			} else if (pooledSpecimen != null) {
+//				specimen.setPooledSpecimen(pooledSpecimen);
+//				specimen.setVisit(pooledSpecimen.getVisit());
+//			} else if (StringUtils.isNotBlank(detail.getVisitName())) {
+//				Visit visit = daoFactory.getVisitsDao().getByName(detail.getVisitName());
+//				if (visit == null) {
+//					throw OpenSpecimenException.userError(VisitErrorCode.NOT_FOUND, detail.getVisitName());
+//				}
+//
+//				specimen.setVisit(visit);
+//			} else {
+//				throw OpenSpecimenException.userError(VisitErrorCode.NAME_REQUIRED);
+//			}
+//		}
+//
+//		if (detail.getPrint() != null && detail.getPrint()) {
+//			printItems.add(PrintItem.make(specimen, specimen.getSpecimenRequirement().getLabelPrintCopiesToUse()));
+//		}
+//
+//		for (SpecimenPrintDetail poolSpmnPrintDetail : detail.getSpecimensPool()) {
+//			printItems.addAll(getSpecimenPrintItems(poolSpmnPrintDetail, null, specimen));
+//		}
+//
+//		for (SpecimenPrintDetail childSpmnPrintDetail : detail.getChildren()) {
+//			printItems.addAll(getSpecimenPrintItems(childSpmnPrintDetail, specimen, null));
+//		}
+//
+//		return printItems;
+//	}
+//
+//	private Specimen getSpecimenForPrint(SpecimenPrintDetail detail) {
+//		Specimen specimen = null;
+//
+//		if (StringUtils.isNotBlank(detail.getLabel())) {
+//			specimen = daoFactory.getSpecimenDao().getByLabel(detail.getLabel());
+//			if (specimen != null) {
+//				return specimen;
+//			}
+//		}
+//
+//		if (detail.getReqId() != null) {
+//			SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(detail.getReqId());
+//			if (sr == null) {
+//				throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND, detail.getReqId());
+//			}
+//
+//			specimen = sr.getSpecimen();
+//			specimen.setLabel(detail.getLabel());
+//		} else {
+//			throw OpenSpecimenException.userError(SrErrorCode.NOT_FOUND); // TODO: change not found
+//		}
+//
+//		return specimen;
+//	}
 	
-	private boolean hasCollectedSpecimens(Visit visit) {
-		boolean hasCollectedSpecimens = false;
-		for (Specimen specimen : visit.getTopLevelSpecimens()) {
-			if (specimen.isCollected() || specimen.isMissed()) {
-				hasCollectedSpecimens = true;
-				break;
-			}
-		}
-		
-		return hasCollectedSpecimens;
+	private <T> RequestEvent<T> request(T payload) {
+		return new RequestEvent<>(payload);
+	}
+
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	private static final String GET_VISIT_CP_SITES_SQL =
@@ -983,13 +972,13 @@ public class VisitRegistrationServiceImpl implements VisitRegistrationService {
 		"where " +
 		"  visit.identifier in (%s)";
 
-	private static final String GET_PV_ATTR_DISP_NAMES_SQL =
+	private static final String GET_PV_ATTR_CAPTIONS_SQL =
 		"select " +
 		"  cde.public_id as attr, cde.long_name as caption " +
 		"from "  +
-		" catissue_cde cde " +
+		"  catissue_cde cde " +
 		"where " +
-		" cde.public_id in (%s)";
+		"  cde.public_id in (%s)";
 
-	private static final String PRIMARY_SPMN_COLL_EMAIL_TMPL = "bde_primary_spmn_coll";
+	private static final String PRIMARY_SPMN_COLL_EMAIL_TMPL = "rde_primary_spmn_coll";
 }

@@ -27,8 +27,8 @@ public class ExtensionPvAttrBarcodeToken extends ExtensionPvAttrLabelToken imple
 		result.setCode(code);
 
 		PermissibleValue pv = getDaoFactory().getPermissibleValueDao().getByConceptCode(pvAttr, code);
-		result.setValue(pv);
 		if (pv != null) {
+			result.setValue(pv);
 			result.setDisplayValue(pv.getValue());
 		}
 

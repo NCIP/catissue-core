@@ -5,7 +5,7 @@
     
 <hibernate-mapping auto-import="false">
   <class
-    name="com.krishagni.openspecimen.rde.domain.SpecimenCollectionSession"
+    name="com.krishagni.openspecimen.rde.domain.Session"
     table="OS_BDE_SPMN_COLL_SESSIONS">
 
     <id name="id" column="IDENTIFIER">

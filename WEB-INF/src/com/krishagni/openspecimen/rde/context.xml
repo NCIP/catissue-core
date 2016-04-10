@@ -9,14 +9,13 @@
     <property name="changeLog" value="classpath:com/krishagni/openspecimen/rde/resources/db/db-changelog.xml" />
   </bean>	
   
-  <bean id="visitRegSvc" class="com.krishagni.openspecimen.rde.services.impl.VisitRegistrationServiceImpl">
-    <property name="msgSource" ref="messageSource"/>
+  <bean id="rdeSpmnCollSvc" class="com.krishagni.openspecimen.rde.services.impl.SpecimenCollectionServiceImpl">
+    <property name="cprSvc"     ref="cprSvc"/>
+    <property name="visitSvc"   ref="visitService"/>
+    <property name="spmnSvc"    ref="specimenSvc"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
-    <property name="cprSvc" ref="cprSvc"/>
-    <property name="visitSvc" ref="visitService"/>
-    <property name="spmnSvc" ref="specimenSvc"/>
-    <property name="jdbcTmpl" ref="jdbcTemplate"/>
-    <property name="emailSvc" ref="emailService"/>
+    <property name="jdbcTmpl"   ref="jdbcTemplate"/>
+    <property name="emailSvc"   ref="emailService"/>
   </bean>
 
   <bean id="ppidBarcodeToken" class="com.krishagni.openspecimen.rde.tokens.impl.PpidBarcodeToken">
@@ -48,14 +47,13 @@
 
   <bean id="pluginInitialize" class="com.krishagni.openspecimen.rde.services.impl.PluginInitializer">
     <property name="visitNameTokenRegistrar" ref="visitTokenRegistrar"/>
-    <property name="spmnLabelTokenRegistrar" ref="specimenTokenRegistrar"/>
   </bean>
   
-  <bean id="specimenCollSessionDao" class="com.krishagni.openspecimen.rde.repository.impl.SpecimenCollSessionDaoImpl">
+  <bean id="rdeSessionDao" class="com.krishagni.openspecimen.rde.repository.impl.SessionDaoImpl">
     <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
   
-  <bean id="specimenCollSessionSvc" class="com.krishagni.openspecimen.rde.services.impl.SpecimenCollSessionServiceImpl">
-    <property name="specimenCollSessionDao" ref="specimenCollSessionDao" />
+  <bean id="rdeSessionSvc" class="com.krishagni.openspecimen.rde.services.impl.SessionServiceImpl">
+    <property name="sessionDao" ref="rdeSessionDao" />
   </bean>
 </beans>

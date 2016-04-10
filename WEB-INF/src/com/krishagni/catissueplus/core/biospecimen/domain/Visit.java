@@ -222,6 +222,10 @@ public class Visit extends BaseExtensionEntity {
 		return result;
 	}
 
+	public Collection<Specimen> getOrderedTopLevelSpecimens() {
+		return Specimen.sort(getTopLevelSpecimens());
+	}
+
 	public CollectionProtocolRegistration getRegistration() {
 		return registration;
 	}

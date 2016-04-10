@@ -20,10 +20,6 @@ public class CohortBarcodeToken extends AbstractLabelTmplToken implements Barcod
 	@Autowired
 	private DaoFactory daoFactory;
 	
-	public void setDaoFactory(DaoFactory daoFactory) {
-		this.daoFactory = daoFactory;
-	}
-	
 	@Override
 	public String getName() {
 		return "COHORT";
@@ -62,10 +58,11 @@ public class CohortBarcodeToken extends AbstractLabelTmplToken implements Barcod
 		result.setCode(cohort);
 		
 		PermissibleValue pv = daoFactory.getPermissibleValueDao().getByConceptCode("cohort", cohort);
-		result.setValue(pv);
 		if (pv != null) {
+			result.setValue(pv);
 			result.setDisplayValue(pv.getValue());
 		}
+
 		return result;
 	}
 }

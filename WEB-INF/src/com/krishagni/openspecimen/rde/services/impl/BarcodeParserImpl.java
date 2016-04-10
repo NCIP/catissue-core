@@ -16,6 +16,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.openspecimen.rde.domain.RdeError;
 import com.krishagni.openspecimen.rde.services.BarcodeParser;
 import com.krishagni.openspecimen.rde.services.BarcodeTokenRegistrar;
 import com.krishagni.openspecimen.rde.tokens.BarcodePart;
@@ -56,16 +58,17 @@ public class BarcodeParserImpl implements BarcodeParser {
 		}
 		
 		CollectionProtocol cp = (CollectionProtocol)cpCode.getValue();		
-		String visitNameFmt = cp.getVisitNameFormat();
-		
-		Map<String, Object> ctxMap = Collections.<String, Object>singletonMap("cp", cp);		
-		Matcher matcher = bcPattern.matcher(visitNameFmt);
+
+		Map<String, Object> ctxMap = new HashMap<>();
+		ctxMap.put("cp", cp);
+
 		int startIdx = 0;
+		Matcher matcher = bcPattern.matcher(cp.getVisitNameFormat());
 		while (matcher.find()) {
 			Pair<String, String[]> tokenArgs = getTokenNameArgs(matcher.group(1));
 			BarcodeToken token = registrar.getToken(tokenArgs.first());
 			if (token == null) {
-				// TODO:
+				throw OpenSpecimenException.userError(RdeError.INVALID_TOKEN, tokenArgs.first());
 			}
 
 			BarcodePart tpResult = null;

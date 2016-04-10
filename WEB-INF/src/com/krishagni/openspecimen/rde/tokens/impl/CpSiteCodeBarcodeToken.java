@@ -2,6 +2,8 @@ package com.krishagni.openspecimen.rde.tokens.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
@@ -28,7 +30,7 @@ public class CpSiteCodeBarcodeToken extends AbstractLabelTmplToken implements	Ba
 		}
 		
 		if (visit == null) {
-			return "";
+			return StringUtils.EMPTY;
 		}
 		
 		Site site = visit.getSite();
