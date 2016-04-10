@@ -1,9 +1,9 @@
 <div>
   <os-tabs>
-    <os-tab title="Barcode Scan Settings">
+    <os-tab title="{{'rde.label_scan_settings' | translate}}">
       <div ng-include src="'modules/rde/barcode-scan-settings'"></div>
     </os-tab>
-    <os-tab title="Email Notifications">
+    <os-tab title="{{'rde.email_notifs' | translate}}">
       <div ng-include src="'modules/rde/email-notif-settings'"></div>
     </os-tab>
   </os-tabs>
@@ -14,7 +14,9 @@
     <div class="form-group clearfix">
       <div class="col-xs-10">
         <label>
-          Do you want to enable primary specimen barcode scanning?
+          <span translate="rde.scan_primary_spmn_label">
+            Do you want to enable primary specimen label scanning?
+          </span>
         </label>
         <div>
           <div class="btn-group btn-group-sm">
@@ -37,11 +39,13 @@
       <div class="col-xs-10" ng-if="bdeWf.data.primarySpmnScanning">
         <div class="list-group">
           <div class="list-group-item clearfix os-section-hdr">
-            <span>Primary specimen barcode scan settings</span>
+            <span translate="rde.primary_spmn_label_scan_settings">
+              Primary specimen barcode scan settings
+            </span>
           </div>
           <div class="list-group-item">
             <os-select os-md-input ng-model="ctx.selectedEvent" list="events" display-prop="displayLabel"
-              on-select="showEventReq()" placeholder="Select Event">
+              on-select="showEventReq()" placeholder="{{'rde.select_event' | translate}}">
             </os-select>
           </div>
           <div class="list-group-item" ng-if="ctx.selectedEvent">
@@ -49,16 +53,16 @@
               <thead class="os-table-head">
                 <tr class="row">
                   <th class="col os-col-40">
-                    <span>Name</span>
+                    <span translate="specimens.description">Description</span>
                   </th>
                   <th class="col os-col-20">
-                    <span>Type</span>
+                    <span translate="specimens.type">Type</span>
                   </th>
                   <th class="col os-col-20">
-                    <span>Quantity</span>
+                    <span translate="specimens.qty">Quantity</span>
                   </th>
                   <th class="col os-col-20">
-                    <span>Enable Scanning?</span>
+                    <span translate="rde.enable_scanning">Enable Scanning?</span>
                   </th>
                 </tr>
               </thead>
@@ -72,7 +76,7 @@
                   </td>
                   <td class="col os-col-20">
                     <span>{{sr.initialQty}}</span>
-                    <os-specimen-qty-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-qty-unit>
+                    <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
                   </td>
                   <td class="col os-col-20">
                     <div class="btn-group btn-group-xs">
@@ -102,17 +106,21 @@
   <div class="clearfix">
     <div class="col-xs-10">
       <div class="form-group">
-        <label>Please specify email IDs of site users to be notified on receipt of primary specimens</label>
+        <label>
+          <span translate="rde.specify_email_notif_rcpts">
+            Please specify email IDs of site users to be notified on receipt of primary specimens
+          </span>
+        </label>
       </div>
 
       <table class="os-table">
         <thead class="os-table-head">
           <tr class="row">
             <th class="col col-xs-3">
-              <span>Site</span>
+              <span translate="rde.site">Site</span>
             </th>
             <th class="col col-xs-8">
-              <span>Recipient Email IDs</span>
+              <span translate="rde.email_notif_rcpts">Recipient Email IDs</span>
             </th>
             <th class="col col-xs-1">
               <span>&nbsp;</span>

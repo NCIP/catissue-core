@@ -1,10 +1,12 @@
 <div>
   <div class="os-modal-header">
-    <span>Confirm Specimen Collection Session Delete</span>
+    <span translate="rde.confirm_session_delete">
+      Confirm Session Delete
+    </span>
     <div class="os-close" ng-click="cancel()">&times;</div>
   </div>
   <div class="os-modal-body">
-    <p>
+    <p translate="rde.confirm_session_delete_msg" translate-values="{entity: entity, global: global}">
       Session created on {{entity.createdOn | date: global.dateTimeFmt}} using workflow {{entity.data.workflow}} for collecting specimens will be deleted.
       <br/><br/>
       Are you sure you want to proceed with deleting session?

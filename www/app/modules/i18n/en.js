@@ -1921,6 +1921,21 @@
       "confirm_exit": "Confirm Exit",
       "continue_session": "Would you like to continue to add more specimens to new container(s)?",
 
+      "confirm_session_delete": "Confirm Session Delete",
+      "confirm_session_delete_msg": "Session created on <strong>{{entity.createdOn | date: global.dateTimeFmt}}</strong> using workflow <strong>{{'rde.workflows.' + entity.data.workflow | translate}}</strong> for collecting specimens will be deleted. <br><br> Are you sure you want to proceed with deleting session?",
+
+      "workflow_settings": "RDE Workflow Settings",
+
+      "label_scan_settings": "Label Scan Settings",
+      "scan_primary_spmn_label": "Do you want to enable primary specimen label scanning?",
+      "primary_spmn_label_scan_settings": "Primary specimen label scan settings",
+      "select_event": "Select Event",
+      "enable_scanning": "Enable Scanning?",
+
+      "email_notifs": "Email Notifications",
+      "specify_email_notif_rcpts": "Please specify email IDs of site users to be notified on receipt of primary specimens",
+      "email_notif_rcpts": "Recipient Email IDs",
+
       "errors": {
         "INVALID": "Invalid value",
         "SPECIMENS_ALREADY_COLLECTED": "Visit has one or more collected specimens"
