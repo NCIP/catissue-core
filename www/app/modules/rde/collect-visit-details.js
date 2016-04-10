@@ -55,7 +55,7 @@ angular.module('os.rde')
         visits: (visitsSpmns || []).map(function(v) { return {name: v.name, visitDate: v.visitDate}; })
       });
 
-      return session.$saveOrUpdate();
+      return session.saveOrUpdate();
     }
 
     $scope.registerVisits = function() {
@@ -67,7 +67,7 @@ angular.module('os.rde')
           var nextStep = 'rde-collect-primary-specimens';
           saveSession(visitsSpmns, nextStep).then(
             function() {
-              $state.go(nextStep, {sessionId: session.id});
+              $state.go(nextStep, {sessionId: session.uid});
             }
           );
         }

@@ -23,7 +23,7 @@ angular.module('os.rde')
     $scope.newSession = newSession;
 
     $scope.restoreSession = function(session) {
-      $state.go(session.data.step, {sessionId: session.id});
+      $state.go(session.data.step, {sessionId: session.uid});
     }
 
     $scope.deleteSession = function(session) {

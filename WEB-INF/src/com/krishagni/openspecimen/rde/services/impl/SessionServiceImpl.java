@@ -2,6 +2,7 @@ package com.krishagni.openspecimen.rde.services.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -32,9 +33,33 @@ public class SessionServiceImpl implements SessionService {
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<String> generateUid() {
+		return ResponseEvent.response(UUID.randomUUID().toString());
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<SessionDetail> getSession(RequestEvent<Long> req) {
 		try {
 			Session session = sessionDao.getById(req.getPayload());
+			if (session == null) {
+				return ResponseEvent.userError(SessionError.NOT_FOUND, req.getPayload());
+			}
+
+			ensureAccessAllowed(session);
+			return ResponseEvent.response(SessionDetail.from(session));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<SessionDetail> getSessionByUid(RequestEvent<String> req) {
+		try {
+			Session session = sessionDao.getByUid(req.getPayload());
 			if (session == null) {
 				return ResponseEvent.userError(SessionError.NOT_FOUND, req.getPayload());
 			}
@@ -55,6 +80,7 @@ public class SessionServiceImpl implements SessionService {
 			SessionDetail detail = req.getPayload();
 			Session session = new Session();
 			session.setId(detail.getId());
+			session.setUid(detail.getUid());
 			session.setUser(AuthUtil.getCurrentUser());
 			session.setCreatedOn(new Date());
 			session.setData(detail.getData());

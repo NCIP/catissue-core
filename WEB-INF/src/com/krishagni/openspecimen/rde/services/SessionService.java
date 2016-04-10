@@ -9,7 +9,11 @@ import com.krishagni.openspecimen.rde.events.SessionDetail;
 public interface SessionService {
 	public ResponseEvent<List<SessionDetail>> getSessions();
 
+	public ResponseEvent<String> generateUid();
+
 	public ResponseEvent<SessionDetail> getSession(RequestEvent<Long> req);
+
+	public ResponseEvent<SessionDetail> getSessionByUid(RequestEvent<String> req);
 	
 	public ResponseEvent<SessionDetail> createSession(RequestEvent<SessionDetail> req);
 	

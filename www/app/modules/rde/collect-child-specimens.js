@@ -192,9 +192,9 @@ angular.module('os.rde')
               selectedContainer: undefined,
               assignPositions: undefined
             });
-            session.$saveOrUpdate().then(
+            session.saveOrUpdate().then(
               function() {
-                $state.go(nextStep, {sessionId: session.id});
+                $state.go(nextStep, {sessionId: session.uid});
               }
             );
           } else {
@@ -219,7 +219,7 @@ angular.module('os.rde')
         collectChildSpecimens: sessionData
       });
 
-      session.$saveOrUpdate();
+      session.saveOrUpdate();
     }
 
     function getSpecimensToSave(specimens) {

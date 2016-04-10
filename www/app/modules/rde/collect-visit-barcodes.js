@@ -13,7 +13,7 @@ angular.module('os.rde')
       }
 
       angular.extend(session.data, sessionData);
-      return session.$saveOrUpdate()
+      return session.saveOrUpdate()
     }
 
     $scope.addVisit = function() {
@@ -30,7 +30,7 @@ angular.module('os.rde')
       saveSession(nextStep).then(
         function() {
           $scope.ctx.visits = $scope.input.visits;
-          $state.go(nextStep, {sessionId: session.id});
+          $state.go(nextStep, {sessionId: session.uid});
         }
       );
     }

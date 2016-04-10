@@ -80,4 +80,9 @@
     </createIndex>
   </changeSet>
 
+  <changeSet author="vpawar" id="Session UID">
+    <addColumn tableName="OS_BDE_SPMN_COLL_SESSIONS">
+      <column name="UID" type="${text.type}(48)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

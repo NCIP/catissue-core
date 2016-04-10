@@ -1,6 +1,5 @@
 package com.krishagni.openspecimen.rde.events;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,8 @@ import com.krishagni.openspecimen.rde.domain.Session;
 
 public class SessionDetail {
 	private Long id;
+
+	private String uid;
 	
 	private Map<String, Object> data;
 	
@@ -21,6 +22,14 @@ public class SessionDetail {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public Map<String, Object> getData() {
@@ -42,6 +51,7 @@ public class SessionDetail {
 	public static SessionDetail from(Session session) {
 		SessionDetail detail = new SessionDetail();
 		detail.setId(session.getId());
+		detail.setUid(session.getUid());
 		detail.setData(session.getData());
 		detail.setCreatedOn(session.getCreatedOn());
 		return detail;

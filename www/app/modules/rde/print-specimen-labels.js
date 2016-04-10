@@ -106,7 +106,7 @@ angular.module('os.rde')
         printLabels: printLabels
       });
 
-      return session.$saveOrUpdate()
+      return session.saveOrUpdate()
     }
 
     $scope.toggleAllSpmnsSelForPrint = function(visit) {
@@ -152,7 +152,7 @@ angular.module('os.rde')
             delete visit.specimensForPrint;
           });
 
-          $state.go(nextStep, {sessionId: session.id});
+          $state.go(nextStep, {sessionId: session.uid});
         }
       );
     }

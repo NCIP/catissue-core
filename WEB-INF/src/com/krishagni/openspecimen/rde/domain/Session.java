@@ -8,11 +8,21 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class Session extends BaseEntity {
+	private String uid;
+
 	private User user;
 	
 	private Map<String, Object> data;
 	
 	private Date createdOn;
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
 
 	public User getUser() {
 		return user;

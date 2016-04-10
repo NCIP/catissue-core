@@ -9,15 +9,26 @@
     table="OS_BDE_SPMN_COLL_SESSIONS">
 
     <id name="id" column="IDENTIFIER">
-      <!-- generator class="native">
+      <generator class="native">
         <param name="sequence">OS_BDE_SPMN_COLL_SESSIONS_SEQ</param>
-      </generator -->
+      </generator>
     </id>
+
+    <property name="uid" column="UID"/>
     
     <many-to-one name="user" column="USER_ID" />
     
     <property name="dataStr" column="SESSION_DATA" />
 
     <property name="createdOn" column="CREATED_ON" />
+
+    <query name="getByUid">
+      select
+        s
+      from
+        com.krishagni.openspecimen.rde.domain.Session s
+      where
+        s.uid = :uid
+    </query>
   </class>  
 </hibernate-mapping>    

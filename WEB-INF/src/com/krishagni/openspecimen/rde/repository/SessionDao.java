@@ -8,4 +8,6 @@ import com.krishagni.openspecimen.rde.domain.Session;
 
 public interface SessionDao extends Dao<Session> {
 	public List<Session> getSessions(User user);
+
+	public Session getByUid(String uid);
 }

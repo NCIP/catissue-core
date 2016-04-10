@@ -238,9 +238,9 @@ angular.module('os.rde')
       });
 
       ctx.visitSpmns = input.visits;
-      return session.$saveOrUpdate().then(
+      return session.saveOrUpdate().then(
         function() {
-          $state.go(nextStep, {sessionId: session.id});
+          $state.go(nextStep, {sessionId: session.uid});
         }
       );
     }
@@ -271,7 +271,7 @@ angular.module('os.rde')
         assignPositions: {labels: $scope.input.aliquotLabels},
       });
 
-      session.$saveOrUpdate();
+      session.saveOrUpdate();
     }
 
     init();

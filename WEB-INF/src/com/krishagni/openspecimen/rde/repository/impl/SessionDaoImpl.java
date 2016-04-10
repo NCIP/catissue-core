@@ -28,4 +28,16 @@ public class SessionDaoImpl extends AbstractDao<Session> implements SessionDao {
 		
 		return criteria.list();
 	}
+
+	@Override
+	public Session getByUid(String uid) {
+		List<Session> sessions = getCurrentSession().getNamedQuery(GET_BY_UID)
+			.setString("uid", uid)
+			.list();
+		return sessions.isEmpty() ? null : sessions.iterator().next();
+	}
+
+	private static final String FQN = Session.class.getName();
+
+	private static final String GET_BY_UID = FQN + ".getByUid";
 }

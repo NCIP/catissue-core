@@ -15,7 +15,7 @@ angular.module('os.rde')
         participants: participants
       });
 
-      return session.$saveOrUpdate();
+      return session.saveOrUpdate();
     }
 
     function getParticipantsToSave() {
@@ -56,7 +56,7 @@ angular.module('os.rde')
             saveSession(savedParticipants, nextStep).then(
               function() {
                 $scope.ctx.participants = savedParticipants;
-                $state.go(nextStep, {sessionId: session.id});
+                $state.go(nextStep, {sessionId: session.uid});
               }
             );
           }

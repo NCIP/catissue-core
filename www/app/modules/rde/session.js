@@ -1,6 +1,6 @@
 
 angular.module('os.rde')
-  .factory('RdeSession', function(osModel, RdeApis) {
+  .factory('RdeSession', function($http, osModel, RdeApis) {
     var RdeSession = new osModel('rde-sessions');
 
     RdeSession.prototype.getVisitBarcodes = function() {
@@ -42,6 +42,32 @@ angular.module('os.rde')
       return RdeApis.getVisits(visitNames).then(
         function(visitsSpmns) {
           return (input.visitsSpmns = angular.copy(visitsSpmns));
+        }
+      );
+    }
+
+    RdeSession.prototype.saveOrUpdate = function() {
+      var that = this;
+      return this.$saveOrUpdate().then(
+        function(s) {
+          that.id = s.id;
+          return s;
+        }
+      );
+    }
+
+    RdeSession.generateSessionId = function() {
+      return $http.post(RdeSession.url() + 'uid', {}).then(
+        function(resp) {
+          return resp.data.uid;
+        }
+      );
+    }
+
+    RdeSession.getByUid = function(uid) {
+      return $http.get(RdeSession.url() + 'byuid/' + uid).then(
+        function(resp) {
+          return new RdeSession(resp.data);
         }
       );
     }

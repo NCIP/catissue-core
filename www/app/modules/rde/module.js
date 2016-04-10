@@ -39,9 +39,12 @@ angular.module('os.rde', [])
       .state('rde-select-workflow', {
         url: '/select-workflow',
         templateUrl: 'modules/rde/select-workflow.html',
-        controller: function($scope) {
-          $scope.ctx = {
-            sessionId: Math.floor(Math.random() * 0x10000)
+        controller: function($scope, uid) {
+          $scope.ctx = { sessionId: uid }
+        },
+        resolve: {
+          uid: function(RdeSession) {
+            return RdeSession.generateSessionId();
           }
         },
         parent: 'rde'
@@ -55,10 +58,10 @@ angular.module('os.rde', [])
         },
         resolve: {
           session: function($stateParams, RdeSession) {
-            return RdeSession.getById($stateParams.sessionId).then(
+            return RdeSession.getByUid($stateParams.sessionId).then(
               function(session) {
-                if (session.id != $stateParams.sessionId) {
-                  session = new RdeSession({id: $stateParams.sessionId, data: {}});
+                if (session.uid != $stateParams.sessionId) {
+                  session = new RdeSession({uid: $stateParams.sessionId, data: {}});
                 }
                 return session;
               }
@@ -129,9 +132,9 @@ angular.module('os.rde', [])
             step: 'rde-select-container'
           });
 
-          session.$saveOrUpdate().then(
+          session.saveOrUpdate().then(
             function() {
-              $state.go('rde-select-container', {sessionId: session.id})
+              $state.go('rde-select-container', {sessionId: session.uid})
             }
           );
         },

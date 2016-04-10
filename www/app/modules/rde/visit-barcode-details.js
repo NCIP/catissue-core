@@ -34,7 +34,7 @@ angular.module('os.rde')
       }
 
       angular.extend(session.data, sessionData);
-      return session.$saveOrUpdate()
+      return session.saveOrUpdate()
     }
 
     $scope.validate = function(form) {
@@ -54,7 +54,7 @@ angular.module('os.rde')
           saveSession(nextState).then(
             function() {
               ctx.visitsSpmns = visitsSpmns;
-              $state.go(nextState, {sessionId: session.id});
+              $state.go(nextState, {sessionId: session.uid});
             }
           );
         }

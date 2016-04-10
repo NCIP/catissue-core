@@ -93,7 +93,7 @@ angular.module('os.rde')
         collectPrimarySpmns: sessionVisits
       });
 
-      return session.$saveOrUpdate()
+      return session.saveOrUpdate()
     }
 
     function getSpecimenToSave(visit, spmn) {
@@ -228,7 +228,7 @@ angular.module('os.rde')
             function() {
               //removeMissedSpmns($scope.input.visits, savedSpmns);
               $scope.ctx.visitsSpmns = $scope.input.visits;
-              $state.go(nextStep, {sessionId: session.id});
+              $state.go(nextStep, {sessionId: session.uid});
             }
           );
         }

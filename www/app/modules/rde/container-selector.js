@@ -30,7 +30,7 @@ angular.module('os.rde')
         selectedContainer: !!$scope.ctx.container ? $scope.ctx.container.id : -1
       });
 
-      return session.$saveOrUpdate();
+      return session.saveOrUpdate();
     }
 
     $scope.toggleContainerSel = function(container) {
@@ -39,7 +39,7 @@ angular.module('os.rde')
       var nextStep = 'rde-assign-positions';
       saveSession(nextStep).then(
         function() {
-          $state.go(nextStep, {sessionId: session.id});
+          $state.go(nextStep, {sessionId: session.uid});
         }
       );
     }
