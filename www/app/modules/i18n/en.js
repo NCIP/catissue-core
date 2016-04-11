@@ -1896,6 +1896,7 @@
       "missed_collection_reason": "Reason for missed specimen collection",
 
       "print_labels": "Print Specimen Labels",
+      "back_print_labels": "Back to Print Labels",
 
       "cp": "Collection Protocol",
       "ppid": "PPID",

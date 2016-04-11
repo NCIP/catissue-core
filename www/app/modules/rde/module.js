@@ -55,6 +55,7 @@ angular.module('os.rde', [])
         template: '<div ui-view></div>',
         controller: function($scope, session, Alerts) {
           $scope.ctx.workflow = session.data.workflow;
+          $scope.ctx.sessionId = session.uid;
 
           $scope.showSessionSaved = function(showMsg) {
             return function() {

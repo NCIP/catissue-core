@@ -9,6 +9,11 @@
 
   <div class="container">
     <div class="col-xs-offset-1 col-xs-9">
+      <div class="form-group" ng-if="ctx.workflow != 'process_aliquots'">
+        <a ui-sref="rde-print-labels({sessionId: ctx.sessionId})">
+          <span translate="rde.back_print_labels">Back to Print Labels</span>
+        </a>
+      </div>
       <div>
         <div class="os-text-checkbox">
           <div class="checkbox">
@@ -25,6 +30,11 @@
         <os-container-selector type="input.listOpts.type" criteria="input.listOpts.criteria"
           on-toggle-selection="toggleContainerSel(container)">
         </os-container-selector>
+      </div>
+      <div class="form-group" ng-if="ctx.workflow != 'process_aliquots'">
+        <a ui-sref="rde-print-labels({sessionId: ctx.sessionId})">
+          <span translate="rde.back_print_labels">Back to Print Labels</span>
+        </a>
       </div>
     </div>
   </div>
