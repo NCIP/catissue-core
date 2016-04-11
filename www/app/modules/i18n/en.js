@@ -1882,6 +1882,7 @@
       "visit_details": "Visit Details",
       "revalidate_visit_names": "Re-validate",
       "collect_specimens": "Proceed to Collect Specimens",
+      "no_visit_names": "There are no visit names to show. Add a new visit name by clicking Add Another ...",
 
       "register_participants": "Register Participants",
       "participants": "Participants",

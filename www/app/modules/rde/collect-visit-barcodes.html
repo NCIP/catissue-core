@@ -31,6 +31,16 @@
             </tr>
           </thead>
           <tbody class="os-table-body" os-unique-items>
+            <tr class="row" ng-if="input.visits.length == 0">
+              <td class="col" colspan="3">
+                <div class="alert alert-warning">
+                  <span translate="rde.no_visit_names">
+                    There are no visit names to show. Add a new visit name by clicking Add Another ...
+                  </span>
+                </div>
+              </td>
+            </tr>
+
             <tr class="row" ng-repeat="visit in input.visits" ng-form="vform">
               <td class="col os-col-45">
                 <input os-md-input class="form-control" type="text"
@@ -65,7 +75,8 @@
         <div class="os-divider"></div>
 
         <div>
-          <button class="btn btn-primary" os-form-submit="validate()" local-form="true">
+          <button class="btn btn-primary" os-form-submit="validate()" local-form="true"
+            ng-disabled="input.visits.length == 0">
             <span translate="rde.validate_visit_names">Validate</span>
           </button>
         </div>
