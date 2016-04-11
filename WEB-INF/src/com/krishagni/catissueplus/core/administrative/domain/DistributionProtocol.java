@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -15,7 +15,7 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 
-public class DistributionProtocol extends BaseEntity {
+public class DistributionProtocol extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "distribution_protocol";
 
 	private Institute institute;
@@ -170,6 +170,7 @@ public class DistributionProtocol extends BaseEntity {
 		setActivityStatus(distributionProtocol.getActivityStatus());
 		setReport(distributionProtocol.getReport());
 		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
+		setExtension(distributionProtocol.getExtension());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
@@ -209,5 +210,10 @@ public class DistributionProtocol extends BaseEntity {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public String getEntityType() {
+		return "DistributionProtocolExtension";
 	}
 }

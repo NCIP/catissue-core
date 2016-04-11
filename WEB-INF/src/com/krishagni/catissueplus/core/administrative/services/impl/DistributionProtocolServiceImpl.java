@@ -44,6 +44,9 @@ import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
+import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
+import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService, ObjectStateParamsResolver {
@@ -62,6 +65,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	private DpRequirementFactory dprFactory;
 
+	private FormDao formDao;
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -73,11 +78,15 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	public void setDprFactory(DpRequirementFactory dprFactory) {
 		this.dprFactory = dprFactory;
 	}
-	
+
+	public void setFormDao(FormDao formDao) {
+		this.formDao = formDao;
+	}
+
 	private DpRequirementDao getDprDao() {
 		return daoFactory.getDistributionProtocolRequirementDao();
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
@@ -136,6 +145,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			ensureUniqueConstraints(dp, null);
 			
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(dp);
+			dp.addOrUpdateExtension();
 			return ResponseEvent.response(DistributionProtocolDetail.from(dp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -169,6 +179,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			
 			existing.update(distributionProtocol);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
+			existing.addOrUpdateExtension();
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -311,7 +322,20 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			IOUtils.closeQuietly(csvWriter);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<FormCtxtSummary> getExtensionForm() {
+		try {
+			List<FormCtxtSummary> forms = formDao.getFormContexts(-1L, "DistributionProtocolExtension");
+			return ResponseEvent.response(CollectionUtils.isNotEmpty(forms) ? forms.get(0) : null);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<Long> req) {

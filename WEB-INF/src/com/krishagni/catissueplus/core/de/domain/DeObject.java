@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.de.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -20,10 +21,12 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
@@ -401,6 +404,18 @@ public abstract class DeObject {
 		return attrs;
 	}
 
+	public Map<String, String> getLabelValueMap() {
+		Map<String, String> labelValueMap = new HashMap<String, String>();
+		String notSpecified = MessageUtil.getInstance().getMessage("common_not_specified");
+
+		for (DeObject.Attr attr: getAttrs()) {
+			String strVal = attr.stringValue();
+			labelValueMap.put(attr.getCaption(), StringUtils.isBlank(strVal) ? notSpecified : strVal);
+		}
+
+		return labelValueMap;
+	}
+
 	public static class Attr {
 		private String name;
 		
@@ -485,6 +500,17 @@ public abstract class DeObject {
 			Attr attr = new Attr();
 			BeanUtils.copyProperties(this, attr);
 			return attr;
+		}
+
+		public String stringValue() {
+			if (getValue() instanceof Collection) {
+				return Utility.stringListToCsv((Collection<String>) getValue(), false).trim();
+				//trimmed string b'coz stringListToCsv adds trailing newline character
+			} else if (getType().equals("fileUpload")) {
+				return getValue() == null ? null : (String) ((Map) getValue()).get("filename");
+			}
+
+			return (String) getValue();
 		}
 	}
 }

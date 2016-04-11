@@ -1,13 +1,16 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.query.models'])
-  .controller('DpAddEditCtrl', function($scope, $state, $translate, $q, distributionProtocol,
-    DistributionProtocol, Institute, User, SavedQuery, Site) {
+  .controller('DpAddEditCtrl', function(
+    $scope, $state, $translate, $q, distributionProtocol, extensionCtxt,
+    DistributionProtocol, Institute, User, SavedQuery, Site, ExtensionsUtil) {
     
     var availableInstituteNames = [];
     var availableInstSites = {};
     
     function init() {
       $scope.distributionProtocol = distributionProtocol;
+      $scope.deFormCtrl = {};
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(distributionProtocol, extensionCtxt);
       $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.sites = [];
       $scope.queryList = [];
@@ -138,8 +141,17 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
     
     $scope.createDp = function() {
+      var formCtrl = $scope.deFormCtrl.ctrl;
+      if (formCtrl && !formCtrl.validate()) {
+        return;
+      }
+
       var dp = angular.copy($scope.distributionProtocol);
       updateDistSites(dp);
+      if (formCtrl) {
+        dp.extensionDetail = formCtrl.getFormData();
+      }
+
       dp.$saveOrUpdate().then(
         function(savedDp) {
           $state.go('dp-detail.overview', {dpId: savedDp.id});

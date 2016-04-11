@@ -434,6 +434,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="distributionProtocolFactory" ref="distributionProtocolFactory" />
     <property name="dprFactory" ref="dpRequirementFactory"/>
+    <property name="formDao" ref="formDao"/>
   </bean>
 	
   <bean id="distributionFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.DistributionOrderFactoryImpl">

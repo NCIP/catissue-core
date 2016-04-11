@@ -12,6 +12,7 @@ import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 public interface DistributionProtocolService {
 
@@ -42,4 +43,6 @@ public interface DistributionProtocolService {
 	public ResponseEvent<DpRequirementDetail> deleteRequirement(RequestEvent<Long> req);
 	
 	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
+
+	public ResponseEvent<FormCtxtSummary> getExtensionForm();
 }

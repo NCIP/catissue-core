@@ -10,6 +10,7 @@ import java.util.Set;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol;
 import com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
+import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public class DistributionProtocolDetail extends DistributionProtocolSummary {
@@ -25,6 +26,8 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 	private SavedQuerySummary report;
 	
 	private Map<String, List<String>> distributingSites = new HashMap<String, List<String>>();
+
+	private ExtensionDetail extensionDetail;
 
 	public String getInstituteName() {
 		return instituteName;
@@ -74,6 +77,14 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		this.distributingSites = distributingSites;
 	}
 
+	public ExtensionDetail getExtensionDetail() {
+		return extensionDetail;
+	}
+
+	public void setExtensionDetail(ExtensionDetail extensionDetail) {
+		this.extensionDetail = extensionDetail;
+	}
+
 	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
 		DistributionProtocolDetail detail = new DistributionProtocolDetail();
 		
@@ -92,7 +103,8 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		
 		Set<DpDistributionSite> distSites = distributionProtocol.getDistributingSites();
 		detail.setDistributingSites(DpDistributionSite.getInstituteSitesMap(distSites));
-		
+		detail.setExtensionDetail(ExtensionDetail.from(distributionProtocol.getExtension()));
+
 		return detail;
 	}
 

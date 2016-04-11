@@ -26,6 +26,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 import com.krishagni.catissueplus.core.de.services.SavedQueryErrorCode;
 
@@ -59,6 +60,8 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setActivityStatus(detail, distributionProtocol, ose);
 		setReport(detail, distributionProtocol, ose);
 		setDistributingSites(detail, distributionProtocol, ose);
+		setExtension(detail, distributionProtocol, ose);
+
 		ose.checkAndThrow();
 		return distributionProtocol;
 	}
@@ -228,5 +231,10 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distSite.setSite(site);
 		
 		return distSite;
+	}
+
+	private void setExtension(DistributionProtocolDetail detail, DistributionProtocol dp, OpenSpecimenException ose) {
+		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), dp);
+		dp.setExtension(extension);
 	}
 }

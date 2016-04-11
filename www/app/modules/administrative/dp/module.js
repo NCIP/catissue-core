@@ -25,6 +25,9 @@ angular.module('os.administrative.dp',
               return DistributionProtocol.getById($stateParams.dpId);
             }
             return new DistributionProtocol();
+          },
+          extensionCtxt: function(DistributionProtocol) {
+            return DistributionProtocol.getExtensionCtxt();
           }
         },
         controller: 'DpAddEditCtrl',
