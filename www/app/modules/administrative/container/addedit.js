@@ -206,6 +206,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function setContainerTypeProps(containerType) {
       if (!containerType) {
+        $scope.container.typeId = undefined;
         return;
       }
 
