@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
@@ -117,6 +119,7 @@ public class DistributionOrderDetail extends DistributionOrderSummary implements
 	}
 
 	@Override
+	@JsonIgnore
 	public String getMergeKey() {
 		return getName();
 	}
