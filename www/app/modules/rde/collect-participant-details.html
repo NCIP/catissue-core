@@ -13,101 +13,98 @@
   </div>
 
   <div class="container">
-    <div class="col-xs-offset-1 col-xs-10">
+    <div class="col-xs-12">
       <form name="participantsForm" os-form-validator="participantsForm" novalidate>
-        <div class="list-group">
-          <div class="list-group-item os-section-hdr">
-            <span translate="rde.participants">Participants</span>
-          </div>
+        <table class="os-table os-table-fixed bulk-edit">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col os-col-20">
+                <span translate="rde.cp">Collection Protocol</span>
+              </th>
+              <th class="col os-col-20">
+                <span translate="rde.site">Site</span>
+              </th>
+              <th class="col os-col-20">
+                <span translate="rde.mrn">MRN</span>
+              </th>
+              <th class="col os-col-20">
+                <span translate="rde.ppid">Protocol Participant ID</span>
+              </th>
+              <th class="col os-col-15">
+                <span translate="rde.visit_date">Date of Receipt</span>
+              </th>
+              <th class="col os-col-5">
+                <span>&nbsp;</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body" ng-if="input.participants.length == 0">
+            <tr class="row">
+              <td class="col" colspan="6">
+                <div class="alert alert-warning">
+                  <span translate="rde.no_participants">
+                    There are no participants to show. Add a new participant by clicking Add Another ...
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="os-table-body" ng-repeat="participant in input.participants" ng-form="pform">
+            <tr class="row">
+              <td class="col os-col-20" style="overflow: visible;">
+                <os-select os-md-input name="cp" ng-model="participant.cpShortTitle" list="input.cps"
+                  select-prop="shortTitle" display-prop="shortTitle" required on-select="cpSelected(participant)">
+                </os-select>
+                <div os-field-error field="pform.cp"></div>
+              </td>
+              <td class="col os-col-20" style="overflow: visible;">
+                <os-select os-md-input name="siteName" ng-model="participant.siteName"
+                  list="input.cpSites[participant.cpShortTitle]">
+                </os-select>
+              </td>
+              <td class="col os-col-20">
+                <input os-md-input class="form-control" type="text" name="mrn" ng-model="participant.mrn">
+              </td>
+              <td class="col os-col-20">
+                <input os-md-input class="form-control" type="text" name="ppid" ng-model="participant.ppid">
+              </td>
+              <td class="col os-col-15">
+                <os-date-picker md-type="true" name="regDate" date="participant.regDate" required>
+                </os-date-picker>
+                <div os-field-error field="pform.regDate"></div>
+              </td>
+              <td class="col os-col-5">
+                <button class="btn btn-xs btn-default" ng-click="removeParticipant(participant)">
+                  <span class="fa fa-remove"></span>
+                </button>
+              </td>
+            </tr>
+            <tr ng-if="participant.errorMessage">
+              <td colspan="6">
+                <div class="alert alert-danger">
+                  <span>{{participant.errorMessage}}</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+          <tbody class="os-table-body">
+            <tr class="row">
+              <td class="col" colspan="6">
+                <a ng-click="addParticipant()"> 
+                  <span translate="common.buttons.add_another">Add Participant</span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-          <div class="list-group-item" ng-if="input.participants.length == 0">
-            <div class="alert alert-warning">
-              <span translate="rde.no_participants">
-                There are no participants to show. Add a new participant by clicking Add Another ...
-              </span>
-            </div>
-          </div>
+        <div class="os-divider"></div>
 
-          <div class="list-group-item" ng-if="input.participants.length > 0">
-            <table class="os-table os-table-fixed bulk-edit">
-              <thead class="os-table-head">
-                <tr class="row">
-                  <th class="col os-col-20">
-                    <span translate="rde.cp">Collection Protocol</span>
-                  </th>
-                  <th class="col os-col-20">
-                    <span translate="rde.site">Site</span>
-                  </th>
-                  <th class="col os-col-20">
-                    <span translate="rde.mrn">MRN</span>
-                  </th>
-                  <th class="col os-col-20">
-                    <span translate="rde.ppid">Protocol Participant ID</span>
-                  </th>
-                  <th class="col os-col-15">
-                    <span translate="rde.visit_date">Date of Receipt</span>
-                  </th>
-                  <th class="col os-col-5">
-                    <span>&nbsp;</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="os-table-body" ng-repeat="participant in input.participants" ng-form="pform">
-                <tr class="row">
-                  <td class="col os-col-20" style="overflow: visible;">
-                    <os-select os-md-input name="cp" ng-model="participant.cpShortTitle" list="input.cps"
-                      select-prop="shortTitle" display-prop="shortTitle" required on-select="cpSelected(participant)">
-                    </os-select>
-                    <div os-field-error field="pform.cp"></div>
-                  </td>
-                  <td class="col os-col-20" style="overflow: visible;">
-                    <os-select os-md-input name="siteName" ng-model="participant.siteName"
-                      list="input.cpSites[participant.cpShortTitle]">
-                    </os-select>
-                  </td>
-                  <td class="col os-col-20">
-                    <input os-md-input class="form-control" type="text" name="mrn" ng-model="participant.mrn">
-                  </td>
-                  <td class="col os-col-20">
-                    <input os-md-input class="form-control" type="text" name="ppid" ng-model="participant.ppid">
-                  </td>
-                  <td class="col os-col-15">
-                    <os-date-picker md-type="true" name="regDate" date="participant.regDate" required>
-                    </os-date-picker>
-                    <div os-field-error field="pform.regDate"></div>
-                  </td>
-                  <td class="col os-col-5">
-                    <button class="btn btn-xs btn-default" ng-click="removeParticipant(participant)">
-                      <span class="fa fa-remove"></span>
-                    </button>
-                  </td>
-                </tr>
-                <tr ng-if="participant.errorMessage">
-                  <td colspan="6">
-                    <div class="alert alert-danger">
-                      <span>{{participant.errorMessage}}</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="list-group-item">
-            <a ng-click="addParticipant()"> 
-              <span translate="common.buttons.add_another">Add Participant</span>
-            </a>
-          </div>
-        </div>
-
-        <div ng-if="input.participants.length > 0">
-          <div class="os-divider"></div>
-
-          <div>
-            <button class="btn btn-primary" os-form-submit="registerParticipants()">
-              <span translate="rde.register">Register</span>
-            </button>
-          </div>
+        <div>
+          <button class="btn btn-primary" os-form-submit="registerParticipants()"
+            ng-disabled="input.participants.length == 0">
+            <span translate="rde.register">Register</span>
+          </button>
         </div>
       </form>
     </div>
