@@ -50,6 +50,8 @@ public class Specimen extends BaseExtensionEntity {
 	
 	public static final String ACCEPTABLE = "Acceptable";
 	
+	public static final String NOT_SPECIFIED = "Not Specified";
+	
 	private static final String ENTITY_NAME = "specimen";
 
 	private String tissueSite;

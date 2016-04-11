@@ -81,6 +81,8 @@ public class SpecimenCollectionEvent extends SpecimenEvent {
 	
 	public static SpecimenCollectionEvent createFromSr(Specimen specimen) {
 		SpecimenCollectionEvent event = new SpecimenCollectionEvent(specimen);
+		event.setContainer(Specimen.NOT_SPECIFIED);
+		event.setProcedure(Specimen.NOT_SPECIFIED);
 		
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();
 		if (sr != null) {
