@@ -59,7 +59,7 @@
                 <os-select name="eventLabel" os-md-input ng-model="participant.eventLabel" list="participant.events" 
                   select-prop="eventLabel" display-prop="eventLabel" ng-click="loadCpEvents(participant)" required>
                 </os-select>
-                <div os-field-error field-name="vform.eventLabel"></div>
+                <div os-field-error field="vform.eventLabel"></div>
               </td>
             </tr>
           </tbody>
@@ -68,7 +68,7 @@
         <div class="os-divider"></div>
 
         <div>
-          <button class="btn btn-primary" ng-click="registerVisits()">
+          <button class="btn btn-primary" os-form-submit="registerVisits()">
             <span translate="rde.collect_specimens">Proceed to Collect Specimens</span>
           </button>
           <button class="btn os-btn-text" ui-sref="rde-collect-participant-details({sessionId: ctx.sessionId})">
