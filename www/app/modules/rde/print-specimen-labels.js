@@ -106,7 +106,7 @@ angular.module('os.rde')
         printLabels: printLabels
       });
 
-      return session.saveOrUpdate()
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step))
     }
 
     $scope.toggleAllSpmnsSelForPrint = function(visit) {

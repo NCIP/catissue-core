@@ -34,7 +34,7 @@ angular.module('os.rde')
       }
 
       angular.extend(session.data, sessionData);
-      return session.saveOrUpdate()
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step))
     }
 
     $scope.validate = function(form) {

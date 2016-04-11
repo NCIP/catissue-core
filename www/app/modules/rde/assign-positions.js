@@ -271,7 +271,7 @@ angular.module('os.rde')
         assignPositions: {labels: $scope.input.aliquotLabels},
       });
 
-      session.saveOrUpdate();
+      session.saveOrUpdate().then($scope.showSessionSaved(true));
     }
 
     init();

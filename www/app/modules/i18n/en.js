@@ -1841,6 +1841,7 @@
       "sessions_list": "Specimen Collection Sessions",
       "new_session": "New Session",
       "save_session": "Save Session",
+      "session_saved": "Session saved successfully",
       "session_time": "Date and Time",
       "session_workflow": "Workflow",
       "session_step": "Step",

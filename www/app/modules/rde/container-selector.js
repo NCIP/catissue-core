@@ -30,7 +30,7 @@ angular.module('os.rde')
         selectedContainer: !!$scope.ctx.container ? $scope.ctx.container.id : -1
       });
 
-      return session.saveOrUpdate();
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step));
     }
 
     $scope.toggleContainerSel = function(container) {

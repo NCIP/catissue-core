@@ -219,7 +219,7 @@ angular.module('os.rde')
         collectChildSpecimens: sessionData
       });
 
-      session.saveOrUpdate();
+      session.saveOrUpdate().then($scope.showSessionSaved(true));
     }
 
     function getSpecimensToSave(specimens) {

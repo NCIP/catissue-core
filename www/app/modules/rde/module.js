@@ -53,8 +53,16 @@ angular.module('os.rde', [])
       .state('rde-session', {
         url: '/:sessionId',
         template: '<div ui-view></div>',
-        controller: function($scope, session) {
+        controller: function($scope, session, Alerts) {
           $scope.ctx.workflow = session.data.workflow;
+
+          $scope.showSessionSaved = function(showMsg) {
+            return function() {
+              if (showMsg) {
+                Alerts.success('rde.session_saved');
+              }
+            }
+          }
         },
         resolve: {
           session: function($stateParams, RdeSession) {

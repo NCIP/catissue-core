@@ -15,7 +15,7 @@ angular.module('os.rde')
         participants: participants
       });
 
-      return session.saveOrUpdate();
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step));
     }
 
     function getParticipantsToSave() {

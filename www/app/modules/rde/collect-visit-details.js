@@ -55,7 +55,7 @@ angular.module('os.rde')
         visits: (visitsSpmns || []).map(function(v) { return {name: v.name, visitDate: v.visitDate}; })
       });
 
-      return session.saveOrUpdate();
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step));
     }
 
     $scope.registerVisits = function() {

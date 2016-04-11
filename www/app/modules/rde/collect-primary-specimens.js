@@ -93,7 +93,7 @@ angular.module('os.rde')
         collectPrimarySpmns: sessionVisits
       });
 
-      return session.saveOrUpdate()
+      return session.saveOrUpdate().then($scope.showSessionSaved(!step))
     }
 
     function getSpecimenToSave(visit, spmn) {
