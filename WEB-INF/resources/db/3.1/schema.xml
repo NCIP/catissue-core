@@ -90,11 +90,11 @@
         create table tmp_specimen_stats (
           specimen_id bigint(19) not null,
           collector_id bigint(19) default null,
-          collection_procedure varchar(50) not null,
-          collection_container varchar(50) not null,
+          collection_procedure varchar(50) default null,
+          collection_container varchar(50) default null,
           collection_time timestamp null default null,
           receiver_id bigint(19) default null,
-          received_quality varchar(255) not null,
+          received_quality varchar(255) default null,
           received_time timestamp null default null,
           frozen_time timestamp null default null,
           processing_time bigint(19) default null,
@@ -129,8 +129,8 @@
           re.event_timestamp as received_time, 
           re.received_quality as received_quality, re.user_id as receiver_id, 
           fe.event_timestamp as frozen_time,
-          MINUTE(TIMEDIFF(fe.event_timestamp, re.event_timestamp)) as processing_time,
-          MINUTE(TIMEDIFF(fe.event_timestamp, ce.event_timestamp)) as ischemia_time,
+          TIMESTAMPDIFF(MINUTE, re.event_timestamp,fe.event_timestamp) as processing_time,
+          TIMESTAMPDIFF(MINUTE, ce.event_timestamp, fe.event_timestamp) as ischemia_time,
           0
         from
           catissue_specimen s
@@ -229,11 +229,11 @@
         execute immediate 'create table tmp_specimen_stats (
           specimen_id number(19) not null,
           collector_id number(19) default null,
-          collection_procedure varchar2(50) not null,
-          collection_container varchar2(50) not null,
+          collection_procedure varchar2(50) default null,
+          collection_container varchar2(50) default null,
           collection_time timestamp default null,
           receiver_id number(19) default null,
-          received_quality varchar2(255) not null,
+          received_quality varchar2(255) default null,
           received_time timestamp default null,
           frozen_time timestamp default null,
           processing_time number(19) default null,
