@@ -133,6 +133,10 @@ public class CollectionProtocolRegistration {
 		return sortedVisits.get(sortedVisits.size() - 1);
 	}
 
+	public Visit getVisitByName(String visitName) {
+		return getVisits().stream().filter(v -> v.getName().equals(visitName)).findFirst().orElse(null);
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}

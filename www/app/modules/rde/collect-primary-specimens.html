@@ -1,0 +1,154 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="rde.collect_primary_spmns">
+        Collect Primary Specimens
+      </span>
+    </h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="saveSession()">
+        <span translate="rde.save_session">Save Session</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-1 col-xs-9 os-compact-form">
+      <form name="pspecimens" class="form-horizontal" os-form-validator="pspecimens" novalidate>
+        <div class="panel panel-default" ng-repeat="visit in input.visits" ng-form="psform">
+          <div class="panel-heading">
+            <div class="panel-title">
+              <span translate="rde.participant">Participant: </span>
+              <span>{{visit.ppid}} ({{visit.name}})</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div ng-include src="'modules/rde/specimen-coll-info.html'"></div>
+            <div ng-include src="'modules/rde/primary-specimen-table.html'"></div>
+          </div>
+        </div>
+
+        <div class="os-divider"></div>
+
+        <div>
+          <button class="btn btn-primary" os-form-submit="collectPrimarySpmns()">
+            <span translate="common.buttons.submit">Submit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/rde/specimen-coll-info.html">
+  <div class="form-group os-compact-fg">
+    <div class="col-xs-6">
+      <div os-md-input ng-model="visit.collDetail.user" placeholder="{{'rde.collected_by' | translate}}">
+        <os-users name="collector" ng-model="visit.collDetail.user" default-list="users"
+          placeholder="{{'rde.collected_by' | translate}}" required append-to-body="false">
+        </os-users>
+        <div os-field-error field="psform.collector"></div>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <os-date-picker name="collectedOn" date="visit.collDetail.time"
+        md-type="true" placeholder="{{'rde.collected_on' | translate}}" required>
+      </os-date-picker>
+      <div os-field-error field="psform.collectedOn"></div>
+    </div>
+    <div class="col-xs-2">
+      <timepicker class="os-time-no-wheels" os-md-input 
+        ng-model="visit.collDetail.time" show-meridian="false">
+      </timepicker>
+    </div>
+  </div>
+  <div class="form-group os-compact-fg">
+    <div class="col-xs-6">
+      <div os-md-input ng-model="visit.recvDetail.user" placeholder="{{'rde.received_by' | translate}}">
+        <os-users name="receiver" ng-model="visit.recvDetail.user" default-list="users"
+          placeholder="{{'rde.received_by' | translate}}" required append-to-body="false">
+        </os-users>
+        <div os-field-error field="psform.receiver"></div>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <os-date-picker name="receivedOn" date="visit.recvDetail.time"
+        md-type="true" placeholder="{{'rde.received_on' | translate}}" required>
+      </os-date-picker>
+      <div os-field-error field="psform.receivedOn"></div>
+    </div>
+    <div class="col-xs-2">
+      <timepicker class="os-time-no-wheels" os-md-input 
+        ng-model="visit.recvDetail.time" show-meridian="false">
+      </timepicker>
+    </div>
+  </div>
+  <div class="form-group os-compact-fg">
+    <div class="col-xs-12">
+      <input ng-model="visit.comments" class="form-control" type="text"
+        os-md-input placeholder="{{'rde.comments' | translate}}" os-tabable="true">
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/rde/primary-specimen-table.html">
+  <div class="os-section">
+    <div style="margin-top: 20px;" ng-if="visit.scanEnabled">
+      <textarea class="form-control" rows="2" style="resize: none;" ng-model="visit.primarySpmnLabels"
+        placeholder="{{'rde.scan_spmn_labels' | translate}}"
+        ng-change="parsePrimarySpmnLabels(visit)" ng-model-options="{debounce: 500}" os-enable-tab>
+      </textarea>
+    </div>
+  </div>
+
+  <table class="os-table os-table-fixed bulk-edit">
+    <thead class="os-table-head">
+      <tr class="row">
+        <th class="col os-col-40">
+          <span translate="specimens.title">Specimen</span>
+        </th>
+        <th class="col os-col-40">
+          <span translate="specimens.label">Label</span>
+        </th>
+        <th class="col os-col-20">
+          <span translate="specimens.qty">Quantity</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="os-table-body" ng-form="sform" ng-repeat="specimen in visit.primarySpmns">
+      <tr class="row"> 
+        <td class="col os-col-40">
+          <span class="fa fa-circle" ng-class="{
+            'os-status-collected': specimen.status == 'Collected',
+            'os-status-pending': specimen.status == 'Pending',
+            'os-status-not-collected': specimen.status == 'Missed Collection'}">
+          </span>
+          <os-specimen-desc specimen="specimen"></os-specimen-desc>
+        </td>
+        <td class="col os-col-40">
+          <span>{{specimen.label}}</span>
+        </td>
+        <td class="col os-col-20">
+          <div class="os-input-addon-grp">
+            <input type="text" os-md-input name="qty" ng-model="specimen.initialQty" 
+              ng-pattern="/^([1-9][0-9]*|[0-9]*\.[0-9]+)$/" required ng-model-options="{allowInvalid: 'true'}">
+            <div class="os-input-addon-right os-md-input-addon">
+              <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+              </os-specimen-unit>
+            </div>
+          </div>
+          <div os-field-error field="sform.qty"></div>
+        </td>
+      </tr> 
+      <tr class="row" ng-if="specimen.status == 'Missed Collection'"> 
+        <td class="col os-col-100" colspan="3" style="border-top: 0px;">
+          <div style="margin-top: 10px;">
+            <input type="text" os-md-input name="missedReason" ng-model="specimen.comments" 
+              placeholder="{{'rde.missed_collection_reason' | translate}}" required>
+            <div os-field-error field="sform.missedReason"></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>

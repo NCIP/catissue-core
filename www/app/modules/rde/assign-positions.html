@@ -1,0 +1,92 @@
+<div>
+  <div os-page-header>
+    <h3 ng-switch on="!input.container">
+      <span ng-switch-when="true" translate="rde.scan_virtual_aliquots">
+        Scan Virtual Aliquot Labels
+      </span>
+      <span ng-switch-default translate="rde.assign_aliquot_locations">
+        Assign Aliquot Locations
+      </span>
+    </h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="saveSession()">
+        <span translate="rde.save_session">Save Session</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-offset-1 col-xs-9">
+      <div class="form-group">
+        <div class="input-group" os-textarea-input-group>
+          <textarea ng-model="input.aliquotLabels" class="form-control"
+            placeholder="{{'rde.scan_spmn_labels' | translate}}"
+            rows="2" style="resize: none;" 
+            ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
+          </textarea>
+          <span class="input-group-btn">
+            <button ng-click="processAliquots()" class="btn btn-primary">
+              <span translate="rde.process_aliquots">Process Aliquots</span>
+            </button>
+          </span>
+        </div>
+        <div>
+          <a ui-sref="rde-select-container" ng-switch on="!input.container">
+            <span ng-switch-when="true" translate="common.buttons.back">
+              Back
+            </span>
+            <span ng-switch-default translate="rde.choose_another_container">
+              Choose another container
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div ng-if="input.aliquotErrors.length > 0">
+        <table class="os-table os-table-muted-hdr os-border os-error-header">
+          <thead class="os-table-head">
+            <tr class="row">
+              <th class="col os-col-30">
+                <span translate="specimens.label">Label</span>
+              </th>
+              <th class="col os-col-70">
+                <span translate="rde.error">Error</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="error in input.aliquotErrors track by $index">
+              <td class="col os-col-30">
+                <span>{{error.label}}</span>
+              </td>
+              <td class="col os-col-70" ng-switch on="!!error.msg">
+                <span ng-switch-when="true">{{error.msg}}</span>
+                <span ng-switch-default>
+                  <span ng-switch on="error.status">
+                    <span ng-switch-when="no_visit_in_session" translate="rde.no_visit_in_session">
+                      Specimen does not belong to any visit collected in this session
+                    </span>
+                    <span ng-switch-when="spmn_already_collected" translate="rde.spmn_already_collected">
+                      Specimen already collected
+                    </span>
+                    <span ng-switch-when="primary_spmn_not_collected" translate="rde.primary_spmn_not_collected">
+                      Primary specimen not yet collected
+                    </span>
+                    <span ng-switch-default translate="rde.no_anticipated_spmn">
+                      No anticipated specimen with this label
+                    </span>
+                  </span>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div ng-if="!!input.container" style="overflow-x: auto;width: 100%;">
+        <os-container-map container="input.container" occupancy-map="input.occupancyMap">
+        </os-container-map>
+      </div>
+    </div>
+  </div>
+</div>

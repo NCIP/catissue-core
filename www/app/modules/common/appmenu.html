@@ -58,6 +58,9 @@
           <li show-if-allowed="cpReadOpts">
             <a ui-sref="cp-list" translate="menu.collection_protocols">Collection Protocols</a>
           </li>
+          <li ng-if="rdeAllowed">
+            <a ui-sref="rde-sessions" translate="menu.rde">Specimen Collection</a>
+          </li>
           <li show-if-admin>
             <a ui-sref="institute-list" translate="menu.institutes">Institutes</a>
           </li>
@@ -91,7 +94,6 @@
           <li show-if-allowed="shipmentReadOpts">
             <a ui-sref="shipment-list" translate="menu.shipping_and_tracking">Shipping and Tracking</a>
           </li>
-          
           <li show-if-allowed="scheduledJobReadOpts">
             <a ui-sref="job-list" translate="menu.jobs">Jobs</a>
           </li>

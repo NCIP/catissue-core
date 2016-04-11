@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+  <bean id="rdeLiquibase" class="liquibase.integration.spring.SpringLiquibase">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="changeLog" value="classpath:com/krishagni/openspecimen/rde/resources/db/db-changelog.xml" />
+  </bean>	
+  
+  <bean id="rdeSpmnCollSvc" class="com.krishagni.openspecimen.rde.services.impl.SpecimenCollectionServiceImpl">
+    <property name="cprSvc"     ref="cprSvc"/>
+    <property name="visitSvc"   ref="visitService"/>
+    <property name="spmnSvc"    ref="specimenSvc"/>
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="jdbcTmpl"   ref="jdbcTemplate"/>
+    <property name="emailSvc"   ref="emailService"/>
+  </bean>
+
+  <bean id="ppidBarcodeToken" class="com.krishagni.openspecimen.rde.tokens.impl.PpidBarcodeToken">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpCodeBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpUidBarcodeToken"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="barcodeTokenRegistrar" class="com.krishagni.openspecimen.rde.services.impl.BarcodeTokenRegistrarImpl">
+    <property name="tokens">
+      <list>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CohortBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpCodeBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.CpSiteCodeBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.EventCodeBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.VisitYearBarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.VisitYear2BarcodeToken"/>
+        <bean class="com.krishagni.openspecimen.rde.tokens.impl.ExtensionPvAttrBarcodeToken">
+          <property name="daoFactory" ref="biospecimenDaoFactory"/>
+        </bean>
+
+        <ref bean="ppidBarcodeToken"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="pluginInitialize" class="com.krishagni.openspecimen.rde.services.impl.PluginInitializer">
+    <property name="visitNameTokenRegistrar" ref="visitTokenRegistrar"/>
+  </bean>
+  
+  <bean id="rdeSessionDao" class="com.krishagni.openspecimen.rde.repository.impl.SessionDaoImpl">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  
+  <bean id="rdeSessionSvc" class="com.krishagni.openspecimen.rde.services.impl.SessionServiceImpl">
+    <property name="sessionDao" ref="rdeSessionDao" />
+  </bean>
+</beans>

@@ -5,6 +5,11 @@ angular.module('openspecimen')
        $rootScope.currentUser = currentUser;
        $scope.homeCtx = {};
        
+       var isAllowed = AuthorizationService.isAllowed;
+       var isParticipantRegAllowed  = isAllowed({resource: 'ParticipantPhi',   operations: ['Create']});
+       var isVisitSpmnUpdateAllowed = isAllowed({resource: 'VisitAndSpecimen', operations: ['Create', 'Update']});
+       $scope.rdeAllowed = isParticipantRegAllowed && isVisitSpmnUpdateAllowed;
+
        getTrainingUrl();
      }
      

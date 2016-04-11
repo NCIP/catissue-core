@@ -1,0 +1,21 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="rde.confirm_exit">Confirm Exit</span>
+    <div class="os-close" ng-click="close(true)">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <div>
+      <span translate="rde.continue_session">
+        Would you like to continue to add more specimens to new container(s)?
+      </span>
+    </div>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn btn-danger" ng-click="close(false)">
+      <span translate="common.no">No</span>
+    </button>
+    <button class="btn btn-primary" ng-click="close(true)">
+      <span translate="common.yes">Yes</span>
+    </button>
+  </div>
+</div>

@@ -5,6 +5,7 @@ var osApp = angular.module('openspecimen', [
   'os.biospecimen',
   'os.administrative',
   'os.query',
+  'os.rde',
 
   'ngMessages',
   'ngCookies',

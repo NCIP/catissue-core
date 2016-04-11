@@ -45,6 +45,8 @@ public interface VisitService {
 	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req);
 	
 	public LabelPrinter<Visit> getLabelPrinter();
-	
+
+	public List<Visit> getVisitsByName(List<String> visitNames);
+
 	public List<Visit> getSpecimenVisits(List<String> specimenLabels);
 }

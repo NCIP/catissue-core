@@ -16,14 +16,14 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.openspecimen.custom.demo.events.SpecimenCollectionDetail;
 import com.krishagni.openspecimen.custom.demo.services.SpecimenCollectionService;
 
-@Controller
-@RequestMapping("/demo/participant-specimens")
+//@Controller
+//@RequestMapping("/demo/participant-specimens")
 public class SpecimenCollectionController {
 	
-	@Autowired
+//	@Autowired
 	private SpecimenCollectionService specimenCollectionSvc;
 	
-	@Autowired
+//	@Autowired
 	private HttpServletRequest httpReq;
 	
 	@RequestMapping(method = RequestMethod.POST)

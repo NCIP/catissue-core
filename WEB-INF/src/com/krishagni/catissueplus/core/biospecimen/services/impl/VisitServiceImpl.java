@@ -408,6 +408,19 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 		return (LabelPrinter<Visit>)OpenSpecimenAppCtxProvider.getAppCtx().getBean(beanName);
 	}
 
+
+
+	@PlusTransactional
+	@Override
+	public List<Visit> getVisitsByName(List<String> visitNames) {
+		List<Visit> visits = daoFactory.getVisitsDao().getByName(visitNames);
+		for (Visit visit : visits) {
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(visit);
+		}
+
+		return visits;
+	}
+
 	@PlusTransactional
 	@Override
 	public List<Visit> getSpecimenVisits(List<String> specimenLabels) {
@@ -417,9 +430,9 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 		}
 
 		SpecimenListCriteria crit = new SpecimenListCriteria()
-				.labels(specimenLabels)
-				.siteCps(siteCps)
-				.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
+			.labels(specimenLabels)
+			.siteCps(siteCps)
+			.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
 		return daoFactory.getSpecimenDao().getSpecimenVisits(crit);
 	}
 

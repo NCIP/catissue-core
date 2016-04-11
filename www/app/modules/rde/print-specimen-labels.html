@@ -1,0 +1,95 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="rde.print_labels">
+        Print Specimen Labels
+      </span>
+    </h3>
+    <div class="os-btns right">
+      <button class="primary" ng-click="saveSession()">
+        <span translate="rde.save_session">Save Session</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="col-xs-12 os-compact-form">
+      <accordion close-others="true">
+        <accordion-group ng-repeat="visit in input.visits">
+          <accordion-heading>
+            <span translate="rde.participant">Participant:</span>
+            <span>{{visit.ppid}} ({{visit.name}})</span>
+          </accordion-heading>
+
+          <div>
+            <div ng-include src="'modules/rde/visit-info.html'"></div>
+            <div ng-include src="'modules/rde/specimen-labels.html'"></div>
+          </div>
+        </accordion-group>
+      </accordion>
+
+      <div class="os-divider"></div>
+
+      <div>
+        <button class="btn btn-primary" ng-click="printLabels()">
+          <span translate="common.buttons.print">Print</span>
+        </button>
+        <button class="btn os-btn-text" ng-click="skipPrintLabels()">
+          <span translate="common.buttons.skip">Skip</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/rde/specimen-labels.html">
+  <div class="os-section"></div>
+
+  <table class="os-table">
+    <thead class="os-table-head">
+      <tr class="row">
+        <th class="col os-col-40">
+          <div class="clearfix">
+            <div class="pull-left os-select-specimen-cb">
+              <os-checkbox ng-model="visit.selAllForPrint" ng-change="toggleAllSpmnsSelForPrint(visit)"></os-checkbox>
+            </div>
+            <div class="pull-left" style="padding-left: 20px;">
+              <span translate="specimens.description"> Description </span>
+            </div>
+          </div>
+        </th>
+        <th class="col os-col-40">
+          <span translate="specimens.label">Label</span>
+        </th>
+        <th class="col os-col-20">
+          <span translate="specimens.qty">Quantity</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="os-table-body">
+      <tr class="row" ng-repeat="spmn in visit.specimensForPrint track by $index"
+        ng-class="{'os-pooled-specimen': spmn.pooled}">
+        <td class="col os-col-40">
+          <div class="clearfix">
+            <div class="os-select-specimen-cb">
+              <os-checkbox ng-change="toggleSpmnSelForPrint(visit, spmn)" ng-model="spmn.selected"></os-checkbox>
+            </div>
+            <div style="padding-left: 20px;">
+              <div style="padding-left: {{spmn.depth * 20}}px">
+                <os-specimen-desc specimen="spmn"></os-specimen-desc>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td class="col os-col-40">
+          <span>{{spmn.label}}</span>
+        </td>
+        <td class="col os-col-20">
+          <span>{{spmn.initialQty}}</span>
+          <os-specimen-unit specimen-class="spmn.specimenClass" type="spmn.type">
+          </os-specimen-unit>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>
