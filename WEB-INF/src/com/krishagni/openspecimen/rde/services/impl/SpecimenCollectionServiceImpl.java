@@ -31,6 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig.Workflow;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
@@ -385,19 +386,27 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 				cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, detail.getPpid());
 			}
 
-			if (cpr == null && StringUtils.isNotBlank(detail.getEmpi())) {
-				cpr = daoFactory.getCprDao().getCprByCpShortTitleAndEmpi(cpShortTitle, detail.getEmpi());
+			if (cpr == null && detail.getPmi() != null) {
+				List<Participant> participants = daoFactory.getParticipantDao()
+					.getByPmis(Collections.singletonList(detail.getPmi()));
+
+				if (CollectionUtils.isNotEmpty(participants)) {
+					Participant p = participants.iterator().next();
+					cpr = p.getCprs().stream()
+						.filter(c -> c.getCollectionProtocol().getShortTitle().equals(cpShortTitle))
+						.findFirst().orElse(null);
+
+					if (cpr == null) {
+						detail.setParticipantId(p.getId());
+					}
+				}
 			}
 
 			if (cpr == null) {
 				cpr = registerParticipant(detail);
 			}
 
-			detail.setCprId(cpr.getId());
-			detail.setCpId(cpr.getCollectionProtocol().getId());
-			detail.setCpShortTitle(cpShortTitle);
-			detail.setEmpi(cpr.getParticipant().getEmpi());
-			detail.setPpid(cpr.getPpid());
+			detail = ParticipantRegDetail.from(cpr);
 			detail.setNextEventLabel(getNextVisitEvent(cpShortTitle, cpr, cpEventsMap));
 		} catch (OpenSpecimenException ose) {
 			detail.setErrorMessage(ose.getMessage());
@@ -413,7 +422,10 @@ public class SpecimenCollectionServiceImpl implements SpecimenCollectionService 
 		cprDetail.setRegistrationDate(detail.getRegDate());
 
 		ParticipantDetail participant = new ParticipantDetail();
-		participant.setEmpi(detail.getEmpi());
+		participant.setId(detail.getParticipantId());
+		if (detail.getPmi() != null && StringUtils.isNotBlank(detail.getPmi().getSiteName())) {
+			participant.setPmis(Collections.singletonList(detail.getPmi()));
+		}
 		cprDetail.setParticipant(participant);
 
 		cprDetail = response(cprSvc.createRegistration(request(cprDetail)));

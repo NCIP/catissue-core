@@ -1,9 +1,10 @@
 angular.module('os.rde')
-  .controller('RdeCollectParticipantDetailsCtrl', function($scope, $state, session, cps, RdeApis) {
+  .controller('RdeCollectParticipantDetailsCtrl', function($scope, $state, session, cps, CollectionProtocol, RdeApis) {
     function init() {
       $scope.ctx.workflow = 'process_visits_slow';
       $scope.input = {
         cps: cps,
+        cpSites: {},
         participants: session.getParticipants()
       }
     }
@@ -25,7 +26,41 @@ angular.module('os.rde')
             cpShortTitle: p.cpShortTitle,
             empi: p.empi,
             ppid: p.ppid,
-            regDate: p.regDate
+            regDate: p.regDate,
+            pmi: {siteName: p.siteName, mrn: p.mrn}
+          }
+        }
+      );
+    }
+
+    $scope.cpSelected = function(participant) {
+      var sites = $scope.input.cpSites[participant.cpShortTitle];
+      if (!!sites) {
+        if (sites.length == 1) {
+          participant.siteName = sites[0];
+        }
+
+        return;
+      }
+
+      var cpId = -1;
+      for (var i = 0; i < $scope.input.cps.length; ++i) {
+        if ($scope.input.cps[i].shortTitle == participant.cpShortTitle) {
+          cpId = $scope.input.cps[i].id;
+          break;
+        }
+      }
+
+      CollectionProtocol.getById(cpId).then(
+        function(cp) {
+          sites = $scope.input.cpSites[cp.shortTitle] = cp.cpSites.map(
+            function(cpSite) {
+              return cpSite.siteName;
+            }
+          );
+
+          if (sites.length == 1) {
+            participant.siteName = sites[0];
           }
         }
       );

@@ -1881,6 +1881,7 @@
       "register_participants": "Register Participants",
       "participants": "Participants",
       "pid": "Participant ID",
+      "mrn": "MRN",
       "register": "Register",
       "no_participants": "There are no participants to show. Add a new participant by clicking Add Another ...",
 

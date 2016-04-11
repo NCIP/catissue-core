@@ -21,13 +21,16 @@
               <th class="col os-col-20">
                 <span translate="rde.cp">Collection Protocol</span>
               </th>
-              <th class="col os-col-20">
-                <span translate="rde.pid">Participant ID</span>
+              <th class="col os-col-15">
+                <span translate="rde.site">Site</span>
               </th>
-              <th class="col os-col-20">
+              <th class="col os-col-15">
+                <span translate="rde.mrn">MRN</span>
+              </th>
+              <th class="col os-col-15">
                 <span translate="rde.ppid">Protocol Participant ID</span>
               </th>
-              <th class="col os-col-20">
+              <th class="col os-col-15">
                 <span translate="rde.visit_date">Date of Receipt</span>
               </th>
               <th class="col os-col-20">
@@ -40,13 +43,16 @@
               <td class="col os-col-20">
                 <span>{{participant.cpShortTitle}}</span>
               </td>
-              <td class="col os-col-20">
-                <span>{{participant.empi | osNoValue}}</span>
+              <td class="col os-col-15">
+                <span>{{participant.pmi.siteName | osNoValue}}</span>
               </td>
-              <td class="col os-col-20">
+              <td class="col os-col-15">
+                <span>{{participant.pmi.mrn | osNoValue}}</span>
+              </td>
+              <td class="col os-col-15">
                 <span>{{participant.ppid | osNoValue}}</span>
               </td>
-              <td class="col os-col-20">
+              <td class="col os-col-15">
                 <span>{{participant.regDate | date: global.dateFmt}}</span>
               </td>
               <td class="col os-col-20" style="overflow: visible;">

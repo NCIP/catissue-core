@@ -32,16 +32,19 @@
             <table class="os-table os-table-fixed bulk-edit">
               <thead class="os-table-head">
                 <tr class="row">
-                  <th class="col os-col-25">
+                  <th class="col os-col-20">
                     <span translate="rde.cp">Collection Protocol</span>
                   </th>
-                  <th class="col os-col-25">
-                    <span translate="rde.pid">Participant ID</span>
-                  </th>
-                  <th class="col os-col-25">
-                    <span translate="rde.ppid">Protocol Participant ID</span>
+                  <th class="col os-col-20">
+                    <span translate="rde.site">Site</span>
                   </th>
                   <th class="col os-col-20">
+                    <span translate="rde.mrn">MRN</span>
+                  </th>
+                  <th class="col os-col-20">
+                    <span translate="rde.ppid">Protocol Participant ID</span>
+                  </th>
+                  <th class="col os-col-15">
                     <span translate="rde.visit_date">Date of Receipt</span>
                   </th>
                   <th class="col os-col-5">
@@ -51,19 +54,24 @@
               </thead>
               <tbody class="os-table-body" ng-repeat="participant in input.participants" ng-form="pform">
                 <tr class="row">
-                  <td class="col os-col-25" style="overflow: visible;">
+                  <td class="col os-col-20" style="overflow: visible;">
                     <os-select os-md-input name="cp" ng-model="participant.cpShortTitle" list="input.cps"
-                      select-prop="shortTitle" display-prop="shortTitle" required>
+                      select-prop="shortTitle" display-prop="shortTitle" required on-select="cpSelected(participant)">
                     </os-select>
                     <div os-field-error field="pform.cp"></div>
                   </td>
-                  <td class="col os-col-25">
-                    <input os-md-input class="form-control" type="text" name="empi" ng-model="participant.empi">
-                  </td>
-                  <td class="col os-col-25">
-                    <input os-md-input class="form-control" type="text" name="ppid" ng-model="participant.ppid">
+                  <td class="col os-col-20" style="overflow: visible;">
+                    <os-select os-md-input name="siteName" ng-model="participant.siteName"
+                      list="input.cpSites[participant.cpShortTitle]">
+                    </os-select>
                   </td>
                   <td class="col os-col-20">
+                    <input os-md-input class="form-control" type="text" name="mrn" ng-model="participant.mrn">
+                  </td>
+                  <td class="col os-col-20">
+                    <input os-md-input class="form-control" type="text" name="ppid" ng-model="participant.ppid">
+                  </td>
+                  <td class="col os-col-15">
                     <os-date-picker md-type="true" name="regDate" date="participant.regDate" required>
                     </os-date-picker>
                     <div os-field-error field="pform.regDate"></div>

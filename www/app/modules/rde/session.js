@@ -22,6 +22,10 @@ angular.module('os.rde')
         angular.forEach(this.data.participants,
           function(p) {
             p.regDate = new Date(p.regDate);
+            if (!!p.pmi) {
+              p.siteName = p.pmi.siteName;
+              p.mrn = p.pmi.mrn;
+            }
           }
         );
 
