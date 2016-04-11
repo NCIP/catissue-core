@@ -12,7 +12,7 @@
       </generator>
     </id>
 
-    <property name="uid" column="UID"/>
+    <property name="uid" column="SUID"/>
     
     <many-to-one name="user" column="USER_ID" />
     

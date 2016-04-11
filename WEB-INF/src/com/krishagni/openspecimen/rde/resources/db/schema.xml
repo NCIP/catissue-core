@@ -15,7 +15,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
 
-      <column name="UID" type="${text.type}(48)"/>
+      <column name="SUID" type="${text.type}(48)"/>
 
       <column name="USER_ID" type="${int.type}">
         <constraints nullable="false" />
