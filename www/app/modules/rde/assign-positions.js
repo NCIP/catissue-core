@@ -162,7 +162,7 @@ angular.module('os.rde')
     }
 
     function cleanupAssignedPositions() {
-      angular.forEach($scope.visits, function(visit) {
+      angular.forEach($scope.input.visits, function(visit) {
         angular.forEach(visit.specimens, function(specimen) {
           cleanupSpmnPositions(specimen.children);
         });
