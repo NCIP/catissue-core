@@ -4,13 +4,11 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
     
 <hibernate-mapping auto-import="false">
-  <class
-    name="com.krishagni.openspecimen.rde.domain.Session"
-    table="OS_BDE_SPMN_COLL_SESSIONS">
+  <class name="com.krishagni.openspecimen.rde.domain.Session" table="OS_RDE_SESSIONS">
 
     <id name="id" column="IDENTIFIER">
       <generator class="native">
-        <param name="sequence">OS_BDE_SPMN_COLL_SESSIONS_SEQ</param>
+        <param name="sequence">OS_RDE_SESSIONS_SEQ</param>
       </generator>
     </id>
 
@@ -18,7 +16,7 @@
     
     <many-to-one name="user" column="USER_ID" />
     
-    <property name="dataStr" column="SESSION_DATA" />
+    <property name="dataStr" column="DATA" />
 
     <property name="createdOn" column="CREATED_ON" />
 
