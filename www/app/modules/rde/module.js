@@ -134,6 +134,7 @@ angular.module('os.rde', [])
       })
 
       .state('rde-process-aliquots', {
+        url: '/process-aliquots',
         controller: function($scope, $state, ctx, session) {
           ctx.workflow = 'process_aliquots';
           angular.extend(session.data, {
@@ -143,7 +144,7 @@ angular.module('os.rde', [])
 
           session.saveOrUpdate().then(
             function() {
-              $state.go('rde-select-container', {sessionId: session.uid})
+              $state.go('rde-select-container', {sessionId: session.uid}, {location: 'replace'})
             }
           );
         },
