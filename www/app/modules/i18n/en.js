@@ -3,6 +3,7 @@
     "navigate_to": "Navigate To",
     "home": "Home",
     "collection_protocols": "Collection Protocols",
+    "rde": "Specimen Collection",
     "settings": "Settings",
     "users": "Users",
     "institutes": "Institutes",
@@ -19,6 +20,7 @@
     "training": "Training",
 
     "cp_desc": "Create, update SOP of visits and specimens",
+    "rde_desc": "Rapidly capture patients, visits and specimens data",
     "dp_desc": "Create, update procedures for distributing specimens",
     "institutes_desc": "Update information about institutions",
     "users_desc": "Add, rename and manage users",
