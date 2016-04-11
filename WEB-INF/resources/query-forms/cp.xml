@@ -87,15 +87,17 @@
             <udn>investigatorName</udn>
             <caption>#getMessage("cp_pi_name")</caption>
             <column>IDENTIFIER</column>
-          </userField> 
-               
+          </userField>
+        </row>
+        <row> 
           <textField>
             <name>email</name>
             <udn>email</udn>
             <caption>#getMessage("cp_pi_email")</caption>
             <column>EMAIL_ADDRESS</column>
           </textField>
-
+        </row>
+        <row>
           <dropDown>
             <name>department</name>
             <udn>department</udn>
@@ -103,6 +105,17 @@
             <column>DEPARTMENT_NAME</column>
             <options>
               <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+            </options>
+          </dropDown>
+        </row>
+        <row>
+          <dropDown>
+            <name>institute</name>
+            <udn>institute</udn>
+            <caption>#getMessage("cp_pi_institute")</caption>
+            <column>INSTITUTE_NAME</column>
+            <options>
+              <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
             </options>
           </dropDown>
         </row>
@@ -122,15 +135,17 @@
             <udn>coordinatorName</udn>
             <caption>#getMessage("cp_coordinator_name")</caption>
             <column>IDENTIFIER</column>
-          </userField>   
-          
+          </userField>
+        </row>
+        <row>   
           <textField>
             <name>email</name>
             <udn>email</udn>
             <caption>#getMessage("cp_coordinator_email")</caption>
             <column>EMAIL_ADDRESS</column>
           </textField>
-                    
+        </row>
+        <row>
           <dropDown>
             <name>department</name>
             <udn>department</udn>
@@ -138,6 +153,17 @@
             <column>DEPARTMENT_NAME</column>
             <options>
               <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+            </options>
+          </dropDown>
+        </row>
+        <row>
+          <dropDown>
+            <name>institute</name>
+            <udn>institute</udn>
+            <caption>#getMessage("cp_coordinator_institute")</caption>
+            <column>INSTITUTE_NAME</column>
+            <options>
+              <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
             </options>
           </dropDown>
         </row>

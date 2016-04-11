@@ -361,12 +361,44 @@
         <parentKey>IDENTIFIER</parentKey>
         <primaryKey>SPECIMEN_ID</primaryKey>
         <row>
-          <userField>
+          <subForm>
             <name>collector</name>
             <udn>collector</udn>
             <caption>#getMessage("specimen_collector")</caption>
-            <column>COLLECTOR_ID</column>
-          </userField>    
+            <table>USER_VIEW</table>
+            <foreignKey>IDENTIFIER</foreignKey>
+            <parentKey>COLLECTOR_ID</parentKey>
+            <row>
+              <userField>
+                <name>collectorName</name>
+                <udn>collectorName</udn>
+                <caption>#getMessage("specimen_collector")</caption>
+                <column>IDENTIFIER</column>
+              </userField>    
+            </row>
+            <row>
+              <dropDown>
+                <name>department</name>
+                <udn>department</udn>
+                <caption>#getMessage("specimen_collector_department")</caption>
+                <column>DEPARTMENT_NAME</column>
+                <options>
+                  <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+                </options>
+              </dropDown>
+            </row>
+            <row>
+              <dropDown>
+                <name>institute</name>
+                <udn>institute</udn>
+                <caption>#getMessage("specimen_collector_institute")</caption>
+                <column>INSTITUTE_NAME</column>
+                <options>
+                  <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
+                </options>
+              </dropDown>
+            </row>
+          </subForm>
         </row>
         <row>
           <userField>

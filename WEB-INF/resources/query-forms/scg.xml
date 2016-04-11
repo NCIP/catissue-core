@@ -111,12 +111,44 @@
       </dropDown>
     </row>
     <row>
-      <userField>
+      <subForm>
         <name>missedBy</name>
         <udn>missedBy</udn>
         <caption>#getMessage("visit_missed_by")</caption>
-        <column>MISSED_BY</column>
-      </userField>
+        <table>USER_VIEW</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>MISSED_BY</parentKey>
+        <row>
+          <userField>
+            <name>missedByName</name>
+            <udn>missedByName</udn>
+            <caption>#getMessage("visit_missed_by")</caption>
+            <column>IDENTIFIER</column>
+          </userField>
+        </row>
+        <row>  
+          <dropDown>
+            <name>department</name>
+            <udn>department</udn>
+            <caption>#getMessage("visit_missed_by_department")</caption>
+            <column>DEPARTMENT_NAME</column>
+            <options>
+              <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+            </options>
+          </dropDown>
+        </row>
+        <row>        
+          <dropDown>
+            <name>institute</name>
+            <udn>institute</udn>
+            <caption>#getMessage("visit_missed_by_institute")</caption>
+            <column>INSTITUTE_NAME</column>
+            <options>
+              <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
+            </options>
+          </dropDown>  
+        </row>
+      </subForm>
     </row>
     <row>
       <dropDown>

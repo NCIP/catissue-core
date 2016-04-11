@@ -68,14 +68,37 @@
                 <udn>investigatorName</udn>
                 <caption>#getMessage("order_dp_pi_name")</caption>
                 <column>IDENTIFIER</column>
-              </userField>      
-
+              </userField>
+            </row>
+            <row>      
               <textField>
                 <name>email</name>
                 <udn>email</udn>
                 <caption>#getMessage("order_dp_pi_email")</caption>
                 <column>EMAIL_ADDRESS</column>
               </textField>
+            </row>
+            <row>
+              <dropDown>
+                <name>department</name>
+                <udn>department</udn>
+                <caption>#getMessage("order_dp_pi_department")</caption>
+                <column>DEPARTMENT_NAME</column>
+                <options>
+                  <sql>select distinct DEPARTMENT_NAME from USER_VIEW</sql>
+                </options>
+              </dropDown>
+            </row>
+            <row>
+              <dropDown>
+                <name>institute</name>
+                <udn>institute</udn>
+                <caption>#getMessage("order_dp_pi_institute")</caption>
+                <column>INSTITUTE_NAME</column>
+                <options>
+                  <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
+                </options>
+              </dropDown>
             </row>
           </subForm>
         </row>
