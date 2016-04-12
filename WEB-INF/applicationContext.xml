@@ -391,6 +391,7 @@
         <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerAlphabetSeqLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerNameLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.administrative.label.container.ParentContainerUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.administrative.label.container.SiteCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.administrative.label.container.SiteUniqueIdLabelToken"/>
       </list>
     </property>
