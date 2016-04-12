@@ -292,9 +292,7 @@
             <caption>#getMessage("participant_consent_tier_response")</caption>
             <column>RESPONSE</column>
             <options>
-              <option><value>Yes</value></option>
-              <option><value>No</value></option>
-              <option><value>Not Specified</value></option>
+              <sql>select value from catissue_permissible_value where public_id = 'consent_response' order by sortorder</sql>
             </options>
           </dropDown>
         </row>
