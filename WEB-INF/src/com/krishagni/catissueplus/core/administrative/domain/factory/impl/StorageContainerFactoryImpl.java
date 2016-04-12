@@ -50,8 +50,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		container.setId(detail.getId());
-		container.setStoreSpecimenEnabled(detail.isStoreSpecimensEnabled());
-		
+
 		setName(detail, container, ose);
 		setBarcode(detail, container, ose);
 		setType(detail, container, ose);
@@ -63,6 +62,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setCreatedBy(detail, container, ose);
 		setActivityStatus(detail, container, ose);
 		setComments(detail, container, ose);
+		setStoreSpecimenEnabled(detail, container, ose);
 		setAllowedSpecimenClasses(detail, container, ose);
 		setAllowedSpecimenTypes(detail, container, ose);
 		setAllowedCps(detail, container, ose);
@@ -78,12 +78,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		container.setId(existing.getId());
-		if (detail.isAttrModified("storeSpecimensEnabled")) {
-			container.setStoreSpecimenEnabled(detail.isStoreSpecimensEnabled());
-		} else {
-			container.setStoreSpecimenEnabled(existing.isStoreSpecimenEnabled());
-		}
-		
+
 		setName(detail, existing, container, ose);
 		setBarcode(detail, existing, container, ose);
 		setType(detail, existing, container, ose);
@@ -95,6 +90,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setCreatedBy(detail, existing, container, ose);
 		setActivityStatus(detail, existing, container, ose);
 		setComments(detail, existing, container, ose);
+		setStoreSpecimenEnabled(detail, existing, container, ose);
 		setAllowedSpecimenClasses(detail, existing, container, ose);
 		setAllowedSpecimenTypes(detail, existing, container, ose);
 		setAllowedCps(detail, existing, container, ose);
@@ -103,7 +99,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		ose.checkAndThrow();
 		return container;
 	}
-	
+
 	@Override
 	public StorageContainer createStorageContainer(String name, ContainerHierarchyDetail input) {
 		ContainerType type = getType(input.getTypeId(), input.getTypeName());
@@ -208,7 +204,23 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}	
 	
 	private void setTemperature(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		container.setTemperature(detail.getTemperature());
+		if (detail.getTemperature() != null || detail.isAttrModified("temperature")) {
+			//
+			// Either user has explicitly blanked out or specified temperature value
+			//
+			container.setTemperature(detail.getTemperature());
+		} else if (container.getType() != null) {
+			//
+			// User has not specified any value for temperature; therefore pick it from
+			// container type
+			//
+			container.setTemperature(container.getType().getTemperature());
+		} else {
+			//
+			// fall through case - when nothing above, just set it to null
+			//
+			container.setTemperature(null);
+		}
 	}
 	
 	private void setTemperature(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
@@ -239,9 +251,14 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setNoOfColumns(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		int noOfCols = detail.getNoOfColumns();		
+		int noOfCols = detail.getNoOfColumns();
+
+		if (noOfCols <= 0 && container.getType() != null) {
+			noOfCols = container.getType().getNoOfColumns();
+		}
+
 		if (noOfCols <= 0) {
-			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);			
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);
 		}
 		
 		container.setNoOfColumns(noOfCols);		
@@ -249,6 +266,11 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	
 	private void setNoOfRows(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		int noOfRows = detail.getNoOfRows();
+
+		if (noOfRows <= 0 && container.getType() != null) {
+			noOfRows = container.getType().getNoOfRows();
+		}
+
 		if (noOfRows <= 0) {
 			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);
 		}
@@ -277,8 +299,10 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	
 	private void setColumnLabelingScheme(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String columnLabelingScheme = detail.getColumnLabelingScheme();
+
 		if (StringUtils.isBlank(columnLabelingScheme)) {
-			columnLabelingScheme = StorageContainer.NUMBER_LABELING_SCHEME;
+			ContainerType type = container.getType();
+			columnLabelingScheme = type != null ? type.getColumnLabelingScheme() : StorageContainer.NUMBER_LABELING_SCHEME;
 		}
 		
 		if (!StorageContainer.isValidScheme(columnLabelingScheme)) {
@@ -291,7 +315,8 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	private void setRowLabelingScheme(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		String rowLabelingScheme = detail.getRowLabelingScheme();
 		if (StringUtils.isBlank(rowLabelingScheme)) {
-			rowLabelingScheme = container.getColumnLabelingScheme();
+			ContainerType type = container.getType();
+			rowLabelingScheme = type != null ? type.getRowLabelingScheme() : container.getColumnLabelingScheme();
 		}
 		
 		if (!StorageContainer.isValidScheme(rowLabelingScheme)) {
@@ -470,7 +495,24 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			container.setComments(existing.getComments());
 		}
 	}
-	
+
+	private void setStoreSpecimenEnabled(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		boolean storeSpecimensEnabled = detail.isStoreSpecimensEnabled();
+		if (detail.getStoreSpecimensEnabled() == null && container.getType() != null) {
+			storeSpecimensEnabled = container.getType().isStoreSpecimenEnabled();
+		}
+
+		container.setStoreSpecimenEnabled(storeSpecimensEnabled);
+	}
+
+	private void setStoreSpecimenEnabled(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
+		if (detail.isAttrModified("storeSpecimensEnabled")) {
+			setStoreSpecimenEnabled(detail, container, ose);
+		} else {
+			container.setStoreSpecimenEnabled(existing.isStoreSpecimenEnabled());
+		}
+	}
+
 	private void setAllowedSpecimenClasses(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		Set<String> allowedSpecimenClasses = detail.getAllowedSpecimenClasses();		
 		if (!areValid(SPECIMEN_CLASS, allowedSpecimenClasses)) {
