@@ -108,16 +108,17 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 	}
 
 	private void addSummaryFieldsProjection(Criteria query) {
-		query.setProjection(Projections.projectionList()
-			.add(Projections.property("id"))
-			.add(Projections.property("dateOfRequest"))
-			.add(Projections.property("cp.id"))
-			.add(Projections.property("cp.shortTitle"))
-			.add(Projections.property("cp.title"))
-			.add(Projections.property("requestor.firstName"))
-			.add(Projections.property("requestor.lastName"))
-			.add(Projections.property("requestor.emailAddress"))
-			.add(Projections.property("activityStatus")));
+		query.setProjection(Projections.distinct(
+			Projections.projectionList()
+				.add(Projections.property("id"))
+				.add(Projections.property("dateOfRequest"))
+				.add(Projections.property("cp.id"))
+				.add(Projections.property("cp.shortTitle"))
+				.add(Projections.property("cp.title"))
+				.add(Projections.property("requestor.firstName"))
+				.add(Projections.property("requestor.lastName"))
+				.add(Projections.property("requestor.emailAddress"))
+				.add(Projections.property("activityStatus"))));
 	}
 
 	private SpecimenRequestSummary getRequest(Object[] row) {
@@ -148,7 +149,7 @@ public class SpecimenRequestDaoImpl extends AbstractDao<SpecimenRequest> impleme
 
 		query.setProjection(Projections.projectionList()
 			.add(Projections.property("id"))
-			.add(Projections.count("item.id"))
+			.add(Projections.countDistinct("item.id"))
 			.add(Projections.groupProperty("id")))
 			.list();
 	}
