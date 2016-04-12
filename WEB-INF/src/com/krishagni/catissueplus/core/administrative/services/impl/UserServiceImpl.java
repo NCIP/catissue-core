@@ -384,6 +384,7 @@ public class UserServiceImpl implements UserService {
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueEmail(existingUser, user, ose);
+			ensureUniqueLoginName(existingUser, user, ose);
 			ose.checkAndThrow();
 
 			existingUser.update(user);
@@ -451,6 +452,12 @@ public class UserServiceImpl implements UserService {
 	private void ensureUniqueEmailAddress(String emailAddress, OpenSpecimenException ose) {
 		if (!daoFactory.getUserDao().isUniqueEmailAddress(emailAddress)) {
 			ose.addError(UserErrorCode.DUP_EMAIL);
+		}
+	}
+	
+	private void ensureUniqueLoginName(User existingUser, User newUser, OpenSpecimenException ose) {
+		if (!existingUser.getLoginName().equals(newUser.getLoginName())) {
+			ensureUniqueLoginNameInDomain(newUser.getLoginName(), newUser.getAuthDomain().getName(), ose);
 		}
 	}
 

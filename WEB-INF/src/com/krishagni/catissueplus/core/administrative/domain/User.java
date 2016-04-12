@@ -267,6 +267,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.setAddress(user.getAddress());
 		this.setDepartment(user.getDepartment());
 		this.setEmailAddress(user.getEmailAddress());
+		this.setLoginName(user.getLoginName());
 		this.setPhoneNumber(user.getPhoneNumber());
 		this.setComments(user.getComments());
 		this.setAdmin(user.isAdmin());		
