@@ -952,8 +952,8 @@
     "child_containers": "Child Containers",
     "free_locations": "Free Locations",
     "no_container_selected": "Please select a container",
-    "cannot_hold_specimen": "Selected container cannot hold specimen for which position is being selected",
-    "stores_specimens": "Stores Specimens",
+    "cannot_hold_specimen": "Selected container cannot hold specimen for which the position is selected",
+    "stores_specimens": "Will Store Specimens?",
     "confirm_delete": "{{entityType}} {{entityName}} and its child containers will be deleted forever. Are you sure you want to proceed?",
     "assign_positions": "Assign Positions",
     "vacate_positions": "Vacate existing specimens",
@@ -978,7 +978,7 @@
     "bulk_import": "Import Containers",
     "bulk_import_jobs": "Import Containers Jobs List",
 
-    "creating_hierarchy": "Creating Hierarchy",
+    "creating_hierarchy": "Create Hierarchy?",
     "num_of_containers": "Number of Containers",
 
     "tooltip": {
