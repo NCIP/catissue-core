@@ -94,7 +94,7 @@ public class DpRequirementFactoryImpl implements DpRequirementFactory {
 	
 	private void setAnatomicSite(DpRequirementDetail detail, DpRequirement dpr, OpenSpecimenException ose) {
 		String anatomicSite = detail.getAnatomicSite();
-		if (!isValid(SPECIMEN_ANATOMIC_SITE, anatomicSite)) {
+		if (!isValid(SPECIMEN_ANATOMIC_SITE, anatomicSite, true)) {
 			ose.addError(SpecimenErrorCode.INVALID_ANATOMIC_SITE);
 			return;
 		}
