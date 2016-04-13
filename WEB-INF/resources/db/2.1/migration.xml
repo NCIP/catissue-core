@@ -99,7 +99,7 @@
   </changeSet>
   
   <changeSet author="vratnaparkhi" id="Migrate specimen order data">
-    <validCheckSum>7:211247e8bb91547462ac27768416914e</validCheckSum>
+    <validCheckSum>7:8cbf21d8893ab1fb6d923047bc336e71</validCheckSum>
     <sql>
       insert into os_orders (
         identifier, 
@@ -154,20 +154,19 @@
         status)
       
       select 
-        distributed_item.identifier as identifier,
-        distributed_item.distribution_id as order_id,
-        distributed_item.quantity as quantity,
-        distributed_item.specimen_id as specimen_id,
-        case
-          when order_item.status like 'Distributed And Close' then 'DISTRIBUTED_AND_CLOSED'
-          when order_item.status like 'Distributed' then 'DISTRIBUTED'
-          when order_item.status in ('New', 'Pending - For Distribution', 'Pending - Protocol Review', 'Pending - Specimen Preparation') 
-          then 'PENDING'
-        end as status
+        dep.identifier as identifier,
+        dep.distribution_id as order_id,
+        dep.distributed_quantity as quantity,
+        fre.object_id as specimen_id,
+        'DISTRIBUTED' as status
       from 
-        catissue_distributed_item distributed_item
-        join catissue_order_item order_item on distributed_item.identifier = order_item.distributed_item_id
-        join catissue_distribution distribution on distribution.identifier = distributed_item.distribution_id
+        catissue_distri_event_param dep
+        inner join catissue_distribution distribution on distribution.identifier = dep.distribution_id
+        inner join catissue_order ordr on ordr.identifier = distribution.order_id
+        inner join catissue_form_record_entry fre on fre.record_id = dep.identifier
+        inner join catissue_form_context fctxt on fre.form_ctxt_id = fctxt.identifier
+        inner join dyextn_containers dc on fctxt.container_id = dc.identifier
+        where dc.name = 'SpecimenDistributedEvent'
     </sql>
   </changeSet>
 
