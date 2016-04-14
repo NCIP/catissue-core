@@ -1895,8 +1895,11 @@
       )
     </sql>
   </changeSet>
-
-  <changeSet author="vpawar" id="Create procedure to add config property" dbms="mysql">
+  
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="mysql" runOnChange="true">
+    <sql>
+      drop procedure if exists add_cfg_prop;
+    </sql>
     <sql endDelimiter="//">
       create procedure add_cfg_prop(
         in moduleName text, 
@@ -1915,17 +1918,18 @@
           (default, propName, propCode, propDesc, propType, @module_id);
 
         select last_insert_id() into @prop_id;
+        select identifier into @user_id from catissue_user where login_name = '$system';
 
         insert into os_cfg_settings
           (identifier, property_id, value, activated_by, activation_date, activity_status)
         values
-          (default, @prop_id, defValue, 1, current_timestamp(), 'Active');
+          (default, @prop_id, defValue, @user_id, current_timestamp(), 'Active');
       end
       //
     </sql>
   </changeSet>
 
-  <changeSet author="vpawar" id="Create procedure to add config property" dbms="oracle">
+  <changeSet author="vpawar" id="Create procedure to add config property" dbms="oracle" runOnChange="true">
     <sql endDelimiter="//">
       create or replace procedure add_cfg_prop(
         moduleName in varchar2, 
@@ -1936,8 +1940,10 @@
         defValue   in varchar2
       ) is
         module_id number(20);
+        user_id number(20);
       begin
         select identifier into module_id from os_modules where name = moduleName;
+        select identifier into user_id from catissue_user where login_name = '$system';
 
         insert into os_cfg_props
           (identifier, name, display_name_code, desc_code, data_type, module_id)
@@ -1947,7 +1953,7 @@
         insert into os_cfg_settings
           (identifier, property_id, value, activated_by, activation_date, activity_status)
         values
-          (os_cfg_settings_seq.nextval, os_cfg_props_seq.currval, defValue, 1, sysdate, 'Active');
+          (os_cfg_settings_seq.nextval, os_cfg_props_seq.currval, defValue, user_id, sysdate, 'Active');
       end;
       //
     </sql>

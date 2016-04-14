@@ -5,367 +5,204 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
   <changeSet author="vpawar" id="Default email config settings" dbms="mysql">
+    <validCheckSum>7:99a31d1bee2382405c91a16d17b1b6a0</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (default, 'email', 'Email service');
 
-      select last_insert_id() into @module_id;
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'account_id', 'email_account_id', 'email_account_id_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'account_password', 'email_account_password', 'email_account_password_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'server_host', 'email_server_host', 'email_server_host_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'server_port', 'email_server_port', 'email_server_port_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'starttls_enabled', 'email_starttls_enabled', 'email_starttls_enabled_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'auth_enabled', 'email_auth_enabled', 'email_auth_enabled_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'admin_email_id', 'email_admin_email_id', 'email_admin_email_id_desc', 
-         'STRING', @module_id);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, last_insert_id(), '', 1, current_timestamp(), 'Active');
+      call add_cfg_prop(
+        'email', 'account_id',
+        'email_account_id', 'email_account_id_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'account_password',
+        'email_account_password', 'email_account_password_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_host',
+        'email_server_host', 'email_server_host_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_port',
+        'email_server_port', 'email_server_port_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'starttls_enabled',
+        'email_starttls_enabled', 'email_starttls_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'auth_enabled',
+        'email_auth_enabled', 'email_auth_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'admin_email_id',
+        'email_admin_email_id', 'email_admin_email_id_desc',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
 
   <changeSet author="vpawar" id="Default email config settings" dbms="oracle">
+    <validCheckSum>7:9058aad8ec30b537ea00953bd0b2fa70</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (os_modules_seq.nextval, 'email', 'Email service');
 
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'account_id', 'email_account_id', 'email_account_id_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'account_password', 'email_account_password', 'email_account_password_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'server_host', 'email_server_host', 'email_server_host_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'server_port', 'email_server_port', 'email_server_port_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'starttls_enabled', 'email_starttls_enabled', 'email_starttls_enabled_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'auth_enabled', 'email_auth_enabled', 'email_auth_enabled_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'admin_email_id', 'email_admin_email_id', 'email_admin_email_id_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
+      call add_cfg_prop(
+        'email', 'account_id',
+        'email_account_id', 'email_account_id_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'account_password',
+        'email_account_password', 'email_account_password_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_host',
+        'email_server_host', 'email_server_host_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_port',
+        'email_server_port', 'email_server_port_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'starttls_enabled',
+        'email_starttls_enabled', 'email_starttls_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'auth_enabled',
+        'email_auth_enabled', 'email_auth_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'admin_email_id',
+        'email_admin_email_id', 'email_admin_email_id_desc',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
 
   <changeSet author="vpawar" id="Common application settings" dbms="mysql">
+    <validCheckSum>7:db2e1d754db0d380c8926b11950f9535</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (default, 'common', 'Base application');
-
-      select last_insert_id() into @module_id;
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'app_url', 'common_app_url', 'common_app_url_desc', 
-         'STRING', @module_id);
-
-      select last_insert_id() into @prop_id;
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, @prop_id, '', 1, current_timestamp(), 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values
-        (default, 'locale', 'common_locale', 'common_locale_desc',
-         'STRING', @module_id);
-
-      select last_insert_id() into @prop_id;
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, @prop_id, 'en_US', 1, current_timestamp(), 'Active');
+        
+      call add_cfg_prop(
+        'common', 'app_url',
+        'common_app_url', 'common_app_url_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'common', 'locale',
+        'common_locale', 'common_locale_desc',
+        'STRING', 'en_US'
+      );
     </sql>
   </changeSet>
 
   <changeSet author="vpawar" id="Common application settings" dbms="oracle">
+    <validCheckSum>7:f7e18dab8a3189a75d4559cab3aeaf2f</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (os_modules_seq.nextval, 'common', 'Base application');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'app_url', 'common_app_url', 'common_app_url_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'locale', 'common_locale', 'common_locale_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, 'en_US', 1, sysdate, 'Active');
+        
+      call add_cfg_prop(
+        'common', 'app_url',
+        'common_app_url', 'common_app_url_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'common', 'locale',
+        'common_locale', 'common_locale_desc',
+        'STRING', 'en_US'
+      );
     </sql>
   </changeSet>
 
   <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="mysql">
+    <validCheckSum>7:12e1a61d8b797d03c7b5d6e742ff189b</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (default, 'biospecimen', 'Biospecimen');
-
-      select last_insert_id() into @module_id;
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'participant_consent_dir', 'participant_consent_dir', 'participant_consent_dir_desc', 'STRING', @module_id);
-
-      select last_insert_id() into @prop_id;
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, @prop_id, '', 1, current_timestamp(), 'Active');
+        
+      call add_cfg_prop(
+        'biospecimen', 'participant_consent_dir',
+        'participant_consent_dir', 'participant_consent_dir_desc',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
 
   <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="oracle">
+    <validCheckSum>7:03b76b4b20372134f628ca5c9550677b</validCheckSum>
     <sql>
       insert into os_modules
         (identifier, name, description)
       values 
         (os_modules_seq.nextval, 'biospecimen', 'Biospecimen');
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (OS_CFG_PROPS_SEQ.nextval, 'participant_consent_dir', 'participant_consent_dir', 'participant_consent_dir_desc', 
-         'STRING', os_modules_seq.currval);
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-    </sql>
-  </changeSet>
-  
-  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property" dbms="mysql">
-    <sql>
-      select identifier into @module_id from os_modules where name = 'biospecimen'; 	
-     
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'spr_deidentifier', 'spr_deidentifier', 'spr_deidentifier', 'STRING', @module_id);
-
-      select last_insert_id() into @prop_id;
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, @prop_id, '', 1, current_timestamp(), 'Active'); 
-    </sql>
-  </changeSet>
-  
-  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property" dbms="oracle">
-    <sql endDelimiter="//">
-      declare 
-        module_id number;
-      begin 
-        select identifier into module_id from os_modules where name = 'biospecimen'; 	
-     
-        insert into os_cfg_props
-          (identifier, name, display_name_code, desc_code, data_type, module_id)
-        values 
-          (OS_CFG_PROPS_SEQ.nextval, 'spr_deidentifier', 'spr_deidentifier', 'spr_deidentifier', 'STRING', module_id);
         
-	    insert into os_cfg_settings
-          (identifier, property_id, value, activated_by, activation_date, activity_status)
-        values
-          (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');  
-      end; 
-      //
+      call add_cfg_prop(
+        'biospecimen', 'participant_consent_dir',
+        'participant_consent_dir', 'participant_consent_dir_desc',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Surgical pathalogy reports dir config setting" dbms="mysql">
+  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property">
+    <validCheckSum>7:7b8bb174300220c459cdd606e4c791eb</validCheckSum>
     <sql>
-	  select identifier into @module_id from os_modules where name = 'biospecimen';
-
-      insert into os_cfg_props
-        (identifier, name, display_name_code, desc_code, data_type, module_id)
-      values 
-        (default, 'spr_dir', 'spr_dir', 'spr_dir_desc', 'STRING', @module_id);
-
-      select last_insert_id() into @prop_id;
-
-      insert into os_cfg_settings
-        (identifier, property_id, value, activated_by, activation_date, activity_status)
-      values
-        (default, @prop_id, '', 1, current_timestamp(), 'Active'); 
+      call add_cfg_prop(
+        'biospecimen', 'spr_deidentifier',
+        'spr_deidentifier', 'spr_deidentifier',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
   
-  <changeSet author="vgaikwad" id="Surgical pathalogy reports dir config setting" dbms="oracle">
-    <sql endDelimiter="//">
-      declare 
-        module_id number;
-      begin 
-        select identifier into module_id from os_modules where name = 'biospecimen';
-        
-        insert into os_cfg_props
-          (identifier, name, display_name_code, desc_code, data_type, module_id)
-        values 
-          (OS_CFG_PROPS_SEQ.nextval, 'spr_dir', 'spr_dir', 'spr_dir_desc', 
-           'STRING', module_id);
-
-        insert into os_cfg_settings
-          (identifier, property_id, value, activated_by, activation_date, activity_status)
-        values
-          (OS_CFG_SETTINGS_SEQ.nextval, OS_CFG_PROPS_SEQ.currval, '', 1, sysdate, 'Active');
-      end;
-      //     
+  <changeSet author="vgaikwad" id="Surgical pathalogy reports dir config setting">
+    <validCheckSum>7:42cec972718e9c6f818596c4f53bf1c5</validCheckSum>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'spr_dir',
+        'spr_dir', 'spr_dir_desc',
+        'STRING', ''
+      );
     </sql>
   </changeSet>
 
