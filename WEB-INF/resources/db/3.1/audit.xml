@@ -93,4 +93,18 @@
       <column name="type_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="slakhani" id="Modifying comments field's datatype to support long values" dbms="mysql">
+    <modifyDataType 
+      tableName="catissue_specimen_aud" 
+      columnName="COMMENTS" 
+      newDataType="text" />
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Modifying comments field's datatype to support long values" dbms="oracle">
+    <modifyDataType 
+      tableName="catissue_specimen_aud" 
+      columnName="COMMENTS" 
+      newDataType="VARCHAR2(500 BYTE)" />
+  </changeSet>
 </databaseChangeLog>
