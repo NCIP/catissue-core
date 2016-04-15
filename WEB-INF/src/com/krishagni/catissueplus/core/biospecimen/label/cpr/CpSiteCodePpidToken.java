@@ -4,13 +4,15 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.biospecimen.domain.ParticipantMedicalIdentifier;
 
-public class SiteCodePpidToken extends AbstractPpidToken {
-	
-	public SiteCodePpidToken() {
-		this.name = "SITE_CODE";
+public class CpSiteCodePpidToken extends AbstractPpidToken {
+
+	public CpSiteCodePpidToken() {
+		this.name = "CP_SITE_CODE";
 	}
 
 	@Override
@@ -20,7 +22,15 @@ public class SiteCodePpidToken extends AbstractPpidToken {
 			return StringUtils.EMPTY;
 		}
 
-		String siteCode = pmis.iterator().next().getSite().getCode();
+		String siteCode = null;
+		Site mrnSite = pmis.iterator().next().getSite();
+		for (CollectionProtocolSite cpSite : cpr.getCollectionProtocol().getSites()) {
+			if (cpSite.getSite().equals(mrnSite)) {
+				siteCode = cpSite.getCode();
+				break;
+			}
+		}
+
 		if (StringUtils.isBlank(siteCode)) {
 			return StringUtils.EMPTY;
 		}

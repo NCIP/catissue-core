@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -265,6 +268,12 @@ public class Participant extends BaseExtensionEntity {
 	@Override
 	public String getEntityType() {
 		return "ParticipantExtension";
+	}
+
+	public List<ParticipantMedicalIdentifier> getPmisOrderedById() {
+		return getPmis().stream()
+			.sorted((p1, p2) -> ObjectUtils.compare(p1.getId(), p2.getId()))
+			.collect(Collectors.toList());
 	}
 	
 	private void updatePmis(Participant participant) {
