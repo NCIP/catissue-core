@@ -1,19 +1,28 @@
 
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import com.krishagni.catissueplus.core.administrative.events.Mergeable;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
-public class ConsentDetail {
+public class ConsentDetail implements Mergeable<String, ConsentDetail>, Serializable {
+	
+	private static final long serialVersionUID = -6534649433745006211L;
+
 	private Long cprId;
 	
 	private Long cpId;
+	
+	private String cpShortTitle;
 	
 	private String ppid;
 	
@@ -26,6 +35,13 @@ public class ConsentDetail {
 	private List<ConsentTierResponseDetail> consentTierResponses = new ArrayList<ConsentTierResponseDetail>();
 	
 	private String consentDocumentName;
+	
+	//For BO
+	@JsonIgnore
+	private String statement;
+	
+	@JsonIgnore
+	private String response;
 
 	public Long getCprId() {
 		return cprId;
@@ -41,6 +57,14 @@ public class ConsentDetail {
 
 	public void setCpId(Long cpId) {
 		this.cpId = cpId;
+	}
+	
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public String getPpid() {
@@ -91,6 +115,22 @@ public class ConsentDetail {
 		this.consentDocumentName = consentDocumentName;
 	}
 	
+	public String getStatement() {
+		return statement;
+	}
+
+	public void setStatement(String statement) {
+		this.statement = statement;
+	}
+	
+	public String getResponse() {
+		return response;
+	}
+
+	public void setResponse(String response) {
+		this.response = response;
+	}
+
 	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr) {
 		ConsentDetail consent = new ConsentDetail();
 		consent.setConsentSignatureDate(cpr.getConsentSignDate());
@@ -120,5 +160,19 @@ public class ConsentDetail {
 		}
 		return consent;
 	}
-	
+
+	@Override
+	@JsonIgnore
+	public String getMergeKey() {
+		return cpShortTitle + '_' + ppid;
+	}
+
+	@Override
+	public void merge(ConsentDetail other) {
+		ConsentTierResponseDetail response = new ConsentTierResponseDetail();
+		response.setStatement(other.getStatement());
+		response.setResponse(other.getResponse());
+		
+		getConsentTierResponses().add(response);
+	}
 }

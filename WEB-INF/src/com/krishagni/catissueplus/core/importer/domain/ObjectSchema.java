@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.Dom4JDriver;
@@ -34,14 +35,11 @@ public class ObjectSchema {
 		return getExtensionRecord(record);
 	}
 	
-	public String getKeyColumnName() {
-		for (Field field : record.getFields()) {
-			if (field.isKey()) {
-				return field.getCaption();
-			}
-		}
-		
-		return null;
+	public List<String> getKeyColumnNames() {
+		return record.getFields().stream()
+			.filter(field -> field.isKey())
+			.map(keyField -> keyField.getCaption())
+			.collect(Collectors.toList());
 	}
 	
 	public static ObjectSchema parseSchema(String filePath) {

@@ -79,7 +79,7 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 	private void setConsentResponses(ConsentDetail detail, ConsentResponses consentResponses, OpenSpecimenException ose) {
 		Set<ConsentTierResponse> consentTierResponses = new HashSet<ConsentTierResponse>();
 
-		CollectionProtocolRegistration cpr = getCpr(detail.getCprId(), detail.getCpId(), detail.getPpid());
+		CollectionProtocolRegistration cpr = getCpr(detail.getCprId(), detail.getCpId(), detail.getCpShortTitle(), detail.getPpid());
 		if (cpr == null) {
 			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
 		}
@@ -116,12 +116,14 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		consentResponses.setConsentResponses(consentTierResponses);		
 	}
 	
-	private CollectionProtocolRegistration getCpr(Long cprId, Long cpId, String ppid) {
+	private CollectionProtocolRegistration getCpr(Long cprId, Long cpId, String cpShortTitle, String ppid) {
 		CollectionProtocolRegistration cpr = null;
 		if (cprId != null) {
 			cpr = daoFactory.getCprDao().getById(cprId);
 		} else if (cpId != null && StringUtils.isNotBlank(ppid)) {
 			cpr = daoFactory.getCprDao().getCprByPpid(cpId, ppid);
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(ppid)) {
+			cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, ppid);
 		}
 		
 		if (cpr == null) {

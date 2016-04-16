@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
-import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -257,7 +257,7 @@ public class CollectionProtocolRegistration {
 		setConsentSignDate(consentResponses.getConsentSignDate());
 		setConsentWitness(consentResponses.getConsentWitness());
 		setConsentComments(consentResponses.getConsentComments());
-		setConsentTierResponses(consentResponses.getConsentResponses());
+		updateConsentResponses(consentResponses.getConsentResponses());
 	}
 	
 	public void setPpidIfEmpty() {
@@ -281,11 +281,20 @@ public class CollectionProtocolRegistration {
 		}
 	}
 
-	private void setConsentTierResponses(Collection<ConsentTierResponse> consentResponses) {
-		CollectionUpdater.update(getConsentResponses(), consentResponses);
-		for (ConsentTierResponse resp : getConsentResponses()) {
-			resp.setCpr(this);
+	private void updateConsentResponses(Collection<ConsentTierResponse> consentResponses) {
+		Map<String, ConsentTierResponse> existingResps = getConsentResponses().stream()
+			.collect(Collectors.toMap(resp -> resp.getConsentTier().getStatement(), resp -> resp));
+
+		for(ConsentTierResponse newResp : consentResponses) {
+			ConsentTierResponse existingResp = existingResps.remove(newResp.getConsentTier().getStatement());
+			if (existingResp == null) {
+				getConsentResponses().add(newResp);
+			} else {
+				existingResp.setResponse(newResp.getResponse());
+			}
 		}
+		
+		getConsentResponses().removeAll(existingResps.values());
 	}
 
 	private void ensureNoActiveChildObjects() {

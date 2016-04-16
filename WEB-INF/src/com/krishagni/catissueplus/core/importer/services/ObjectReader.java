@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -40,7 +41,7 @@ public class ObjectReader implements Closeable {
 	
 	private String timeFmt;
 	
-	private int keyColumnIdx = -1;
+	private List<Integer> keyColumnIndices = new ArrayList<Integer>();
 
 	public ObjectReader(String filePath, ObjectSchema schema, String dateFmt, String timeFmt) {
 		try {
@@ -52,11 +53,10 @@ public class ObjectReader implements Closeable {
 
 			this.dateFmt = dateFmt;
 			this.timeFmt = timeFmt;
-			
-			String columnName = schema.getKeyColumnName();
-			if (StringUtils.isNotBlank(columnName)) {
-				keyColumnIdx = getCsvColumnNames().indexOf(columnName);
-			}
+
+			keyColumnIndices = schema.getKeyColumnNames().stream()
+				.map(columnName -> getCsvColumnNames().indexOf(columnName))
+				.collect(Collectors.toList());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -81,7 +81,9 @@ public class ObjectReader implements Closeable {
 	}
 	
 	public String getRowKey() {
-		return keyColumnIdx == -1 ? null : currentRow[keyColumnIdx];
+		return keyColumnIndices.stream()
+			.map(index -> currentRow[index])
+			.collect(Collectors.joining("_"));
 	}
 	
 	@Override

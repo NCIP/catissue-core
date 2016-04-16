@@ -42,6 +42,12 @@
             </a>
           </li>
           <li show-if-allowed="participantResource.updateOpts">
+            <a ui-sref="import-biospecimen-objs({objectType: 'consent'})">
+              <i class="fa fa-pencil-square-o"></i>
+              <span translate="participant.consents">Consents</span>
+            </a>
+          </li>
+          <li show-if-allowed="participantResource.updateOpts">
             <a ui-sref="import-biospecimen-objs({objectType: 'extensions', entityType: 'Participant'})">
               <i class="fa fa-copy"></i>
               <span translate="participant.part_extensions">Participant Forms</span>

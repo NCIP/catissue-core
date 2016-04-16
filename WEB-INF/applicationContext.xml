@@ -669,6 +669,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/consent.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/visit.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-derivative.xml</value>
@@ -761,6 +762,12 @@
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantImporter">
             <property name="daoFactory" ref="biospecimenDaoFactory"/>
             <property name="participantSvc" ref="participantSvc"/>
+          </bean>
+        </entry>
+        
+        <entry key="consent">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.ConsentImporter">
+            <property name="cprSvc" ref="cprSvc"/>
           </bean>
         </entry>
 

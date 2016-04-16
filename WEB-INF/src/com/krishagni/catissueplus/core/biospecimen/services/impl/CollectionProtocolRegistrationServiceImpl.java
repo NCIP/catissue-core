@@ -308,10 +308,12 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<ConsentDetail> saveConsents(RequestEvent<ConsentDetail> req) {
 		try {
 			ConsentDetail consentDetail = req.getPayload();
-			CollectionProtocolRegistration existing = getCpr(consentDetail.getCprId(), consentDetail.getCpId(), consentDetail.getPpid());
+
+			CollectionProtocolRegistration existing = getCpr(consentDetail.getCprId(),
+				consentDetail.getCpId(), consentDetail.getCpShortTitle(), consentDetail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
-			ConsentResponses consentResponses = consentResponsesFactory.createConsentResponses(consentDetail); 
+			ConsentResponses consentResponses = consentResponsesFactory.createConsentResponses(consentDetail);
 			existing.updateConsents(consentResponses);
 			return ResponseEvent.response(ConsentDetail.fromCpr(existing));
 		} catch (OpenSpecimenException ose) {
@@ -621,11 +623,17 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	}
 	
 	private CollectionProtocolRegistration getCpr(Long cprId, Long cpId, String ppid) {
+		return getCpr(cprId, cpId, null, ppid);
+	}
+
+	private CollectionProtocolRegistration getCpr(Long cprId, Long cpId, String cpShortTitle, String ppid) {
 		CollectionProtocolRegistration cpr = null;
 		if (cprId != null) {
 			cpr = daoFactory.getCprDao().getById(cprId);
 		} else if (cpId != null && StringUtils.isNotBlank(ppid)) {
 			cpr = daoFactory.getCprDao().getCprByPpid(cpId, ppid);
+		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(ppid)) {
+			cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, ppid);
 		}
 		
 		if (cpr == null) {
