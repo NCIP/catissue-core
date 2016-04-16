@@ -387,13 +387,26 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			public void headers(OutputStream out) {
 				@SuppressWarnings("serial")
 				Map<String, String> headers = new LinkedHashMap<String, String>() {{
-					put(getMessage("dist_order_name"),     order.getName());
-					put(getMessage("dist_dp_title"),       order.getDistributionProtocol().getTitle());
-					put(getMessage("dist_requestor_name"), order.getRequester().formattedName());
-					put(getMessage("dist_requested_date"), Utility.getDateString(order.getExecutionDate()));
-					put(getMessage("dist_receiving_site"), order.getSite() == null ? getMessage("common_not_specified") : order.getSite().getName());
-					put(getMessage("dist_exported_by"),    AuthUtil.getCurrentUser().formattedName());
-					put(getMessage("dist_exported_on"),    Utility.getDateString(Calendar.getInstance().getTime()));
+					String notSpecified = msg("common_not_specified");
+					DistributionProtocol dp = order.getDistributionProtocol();
+
+					put(msg("dist_order_name"),     order.getName());
+					put(msg("dist_dp_title"),       dp.getTitle());
+					put(msg("dist_dp_short_title"), dp.getShortTitle());
+					put(msg("dist_requestor_name"), order.getRequester().formattedName());
+					put(msg("dist_requested_date"), Utility.getDateString(order.getExecutionDate()));
+					put(msg("dist_receiving_site"), order.getSite() == null ? notSpecified : order.getSite().getName());
+					put(msg("dist_tracking_url"),   StringUtils.isBlank(order.getTrackingUrl()) ? notSpecified : order.getTrackingUrl());
+					put(msg("dist_comments"),       StringUtils.isBlank(order.getComments()) ? notSpecified : order.getComments());
+					put(msg("dp_irb_id"),           StringUtils.isBlank(dp.getIrbId()) ? notSpecified : dp.getIrbId());
+					put(msg("dist_exported_by"),    AuthUtil.getCurrentUser().formattedName());
+					put(msg("dist_exported_on"),    Utility.getDateString(Calendar.getInstance().getTime()));
+
+					User pi = dp.getPrincipalInvestigator();
+					put(msg("dist_dp_pi_inst_depart"), pi.getInstitute().getName() + " / " + pi.getDepartment().getName());
+					put(msg("dist_dp_pi_email_addr"),  pi.getEmailAddress());
+					put(msg("dist_dp_pi_cont_num"),    StringUtils.isBlank(pi.getPhoneNumber()) ? notSpecified : pi.getPhoneNumber());
+					put(msg("dist_dp_pi_addr"),        StringUtils.isBlank(pi.getAddress()) ? notSpecified : pi.getAddress());
 
 					DeObject extension = order.getDistributionProtocol().getExtension();
 					if (extension != null) {
@@ -408,7 +421,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		});
 	}
 	
-	private String getMessage(String code) {
+	private String msg(String code) {
 		return MessageUtil.getInstance().getMessage(code);
 	}
 	
