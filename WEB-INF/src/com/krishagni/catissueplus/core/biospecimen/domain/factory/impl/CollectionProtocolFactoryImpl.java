@@ -191,6 +191,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private void setCode(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		if (StringUtils.isNotBlank(input.getCode())) {
 			result.setCode(input.getCode().trim());
+		} else {
+			result.setCode(null);
 		}
 	}
 
