@@ -50,7 +50,10 @@
       {{attr.value | date: global.dateFmt | osNoValue}}
     </span>
     <span ng-switch-default>
-      <span>{{attr.value | osArrayJoin | osNoValue}}</span>
+      <span ng-switch on="!!attr.displayValue">
+        <span ng-switch-when="true">{{attr.displayValue | osNoValue}}</span>
+        <span ng-switch-default>{{attr.value | osArrayJoin | osNoValue}}</span>
+      </span>
     </span>
   </span>
 </script>

@@ -9,7 +9,7 @@ import edu.common.dynamicextensions.domain.nui.AbstractLookupControl;
 public class StorageContainerControl extends AbstractLookupControl {
 	private static final long serialVersionUID = 1L;
 	
-	private static final String LU_TABLE = "CATISSUE_CONTAINER";
+	private static final String LU_TABLE = "OS_STORAGE_CONTAINERS";
 	
 	private static final Properties LU_PV_SOURCE_PROPS = initPvSourceProps();
 

@@ -3,8 +3,7 @@ package com.krishagni.catissueplus.core.de.events;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.BeanUtils;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.DeObject.Attr;
@@ -89,6 +88,8 @@ public class ExtensionDetail {
 		
 		private String type;
 
+		private String displayValue;
+
 		public String getName() {
 			return name;
 		}
@@ -129,23 +130,34 @@ public class ExtensionDetail {
 			this.type = type;
 		}
 
+		public String getDisplayValue() {
+			return displayValue;
+		}
+
+		public void setDisplayValue(String displayValue) {
+			this.displayValue = displayValue;
+		}
+
 		public static AttrDetail from(Attr attr, boolean excludePhi) {
 			AttrDetail detail = new AttrDetail();
-			BeanUtils.copyProperties(attr, detail);
+			detail.setName(attr.getName());
+			detail.setUdn(attr.getUdn());
+			detail.setCaption(attr.getCaption());
+			detail.setType(attr.getType());
+
 			if (excludePhi && attr.isPhi()) {
 				detail.setValue("###");
+				detail.setDisplayValue("###");
+			} else {
+				detail.setValue(attr.getValue());
+				detail.setDisplayValue(attr.getDisplayValue());
 			}
-			
+
 			return detail;
 		}
 		
 		public static List<AttrDetail> from(List<Attr> attrs, boolean excludePhi) {
-			List<AttrDetail> result = new ArrayList<AttrDetail>();
-			for (Attr attr: attrs) {
-				result.add(from(attr, excludePhi));
-			}
-			
-			return result;
+			return attrs.stream().map(attr -> from(attr, excludePhi)).collect(Collectors.toList());
 		}
 	}
 }
