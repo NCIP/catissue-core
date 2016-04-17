@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -68,6 +71,44 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	public Map<String, Object> getContainerIds(String key, Object value) {
 		return getObjectIds("containerId", key, value);
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<String> getRestrictedSpecimenClasses(Long containerId) {
+		List<String> specimenClasses = getCurrentSession()
+			.getNamedQuery(GET_RESTRICTED_SPMN_CLASSES)
+			.setParameter("containerId", containerId)
+			.list();
+		return new LinkedHashSet<>(specimenClasses);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<String> getRestrictedSpecimenTypes(Long containerId) {
+		List<String> specimenTypes = getCurrentSession()
+			.getNamedQuery(GET_RESTRICTED_SPMN_TYPES)
+			.setLong("containerId", containerId)
+			.list();
+		return new LinkedHashSet<>(specimenTypes);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Set<CollectionProtocol> getRestrictedCps(Long containerId) {
+		List<CollectionProtocol> cps = getCurrentSession()
+			.getNamedQuery(GET_RESTRICTED_CPS)
+			.setLong("containerId", containerId)
+			.list();
+		return new LinkedHashSet<>(cps);
+	}
+
+	private String FQN = StorageContainer.class.getName();
+
+	private String GET_RESTRICTED_SPMN_CLASSES = FQN + ".getRestrictedSpecimenClasses";
+
+	private String GET_RESTRICTED_SPMN_TYPES = FQN + ".getRestrictedSpecimenTypes";
+
+	private String GET_RESTRICTED_CPS = FQN + ".getRestrictedCps";
 
 	private class ListQueryBuilder {
 		private StorageContainerListCriteria crit;
