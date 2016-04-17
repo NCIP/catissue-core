@@ -120,38 +120,5 @@
       update="false" insert="false"/>
 
     <filter name="activeEntity"/>
-
-    <query name="getRestrictedSpecimenClasses">
-      select
-        distinct spmnClass
-      from
-        com.krishagni.catissueplus.core.administrative.domain.StorageContainer c
-        join c.descendentContainers d
-        join d.compAllowedSpecimenClasses spmnClass
-      where
-        c.id = :containerId
-    </query>
-
-    <query name="getRestrictedSpecimenTypes">
-      select
-        distinct spmnType
-      from
-        com.krishagni.catissueplus.core.administrative.domain.StorageContainer c
-        join c.descendentContainers d
-        join d.compAllowedSpecimenTypes spmnType
-      where
-        c.id = :containerId
-    </query>
-
-    <query name="getRestrictedCps">
-      select
-        distinct cp
-      from
-        com.krishagni.catissueplus.core.administrative.domain.StorageContainer c
-        join c.descendentContainers d
-        join d.compAllowedCps cp
-      where
-        c.id = :containerId
-    </query>
   </class>
 </hibernate-mapping>

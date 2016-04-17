@@ -3,11 +3,9 @@ package com.krishagni.catissueplus.core.administrative.repository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface StorageContainerDao extends Dao<StorageContainer> {
@@ -23,10 +21,8 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 
 	public int getStorageContainersCount(StorageContainerListCriteria listCrit);
 
-	public Set<String> getRestrictedSpecimenClasses(Long containerId);
+	public List<String> getNonCompliantContainers(ContainerRestrictionsCriteria crit);
 
-	public Set<String> getRestrictedSpecimenTypes(Long containerId);
-
-	public Set<CollectionProtocol> getRestrictedCps(Long containerId);
+	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit);
 }
 	

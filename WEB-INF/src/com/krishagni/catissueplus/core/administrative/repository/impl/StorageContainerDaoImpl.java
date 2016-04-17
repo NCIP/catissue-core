@@ -1,23 +1,31 @@
 
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.repository.ContainerRestrictionsCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
-import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -73,42 +81,92 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Set<String> getRestrictedSpecimenClasses(Long containerId) {
-		List<String> specimenClasses = getCurrentSession()
-			.getNamedQuery(GET_RESTRICTED_SPMN_CLASSES)
-			.setParameter("containerId", containerId)
-			.list();
-		return new LinkedHashSet<>(specimenClasses);
+	public List<String> getNonCompliantContainers(ContainerRestrictionsCriteria crit) {
+		Criteria query = getCurrentSession().createCriteria(StorageContainer.class)
+			.createAlias("descendentContainers", "d")
+			.add(Restrictions.eq("id", crit.containerId()))
+			.setProjection(Projections.distinct(Projections.property("d.name")));
+
+		Disjunction restriction = Restrictions.disjunction();
+		if (isNotEmpty(crit.specimenClasses())) {
+			query.createAlias("d.compAllowedSpecimenClasses", "spmnClass", JoinType.LEFT_OUTER_JOIN);
+			restriction.add(
+				Restrictions.conjunction()
+					.add(Restrictions.isNotNull("spmnClass.elements"))
+					.add(Restrictions.not(Restrictions.in("spmnClass.elements", crit.specimenClasses())))
+			);
+		}
+
+		if (isNotEmpty(crit.specimenTypes())) {
+			query.createAlias("d.compAllowedSpecimenTypes", "spmnType", JoinType.LEFT_OUTER_JOIN);
+			restriction.add(
+				Restrictions.conjunction()
+					.add(Restrictions.isNotNull("spmnType.elements"))
+					.add(Restrictions.not(Restrictions.in("spmnType.elements", crit.specimenTypes())))
+			);
+		}
+
+		if (isNotEmpty(crit.collectionProtocols())) {
+			query.createAlias("d.compAllowedCps", "cp", JoinType.LEFT_OUTER_JOIN);
+			restriction.add(
+				Restrictions.conjunction()
+					.add(Restrictions.isNotNull("cp.id"))
+					.add(Restrictions.not(Restrictions.in("cp.id", crit.collectionProtocolIds())))
+			);
+		} else {
+			DetachedCriteria siteCrit = DetachedCriteria.forClass(CollectionProtocolSite.class)
+				.createAlias("collectionProtocol", "cp1")
+				.createAlias("site", "site1")
+				.add(Restrictions.eqProperty("cp1.id", "cp.id"))
+				.setProjection(Property.forName("site1.id"));
+
+			query.createAlias("d.compAllowedCps", "cp", JoinType.LEFT_OUTER_JOIN);
+			restriction.add(
+				Restrictions.conjunction()
+					.add(Restrictions.isNotNull("cp.id"))
+					.add(Subqueries.notIn(crit.siteId(), siteCrit))
+			);
+		}
+
+		return query.add(restriction).list();
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public Set<String> getRestrictedSpecimenTypes(Long containerId) {
-		List<String> specimenTypes = getCurrentSession()
-			.getNamedQuery(GET_RESTRICTED_SPMN_TYPES)
-			.setLong("containerId", containerId)
-			.list();
-		return new LinkedHashSet<>(specimenTypes);
+	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit) {
+		Criteria query = getCurrentSession().createCriteria(StorageContainer.class)
+			.createAlias("descendentContainers", "d")
+			.createAlias("d.occupiedPositions", "pos")
+			.createAlias("pos.occupyingSpecimen", "spmn")
+			.createAlias("spmn.visit", "visit")
+			.createAlias("visit.registration", "cpr")
+			.createAlias("cpr.collectionProtocol", "cp")
+			.add(Restrictions.eq("id", crit.containerId()))
+			.setProjection(Projections.distinct(Projections.property("spmn.label")));
+
+		Disjunction restriction = Restrictions.disjunction();
+		if (isNotEmpty(crit.specimenClasses())) {
+			restriction.add(Restrictions.not(Restrictions.in("spmn.specimenClass", crit.specimenClasses())));
+		}
+
+		if (isNotEmpty(crit.specimenTypes())) {
+			restriction.add(Restrictions.not(Restrictions.in("spmn.specimenType", crit.specimenTypes())));
+		}
+
+		if (isNotEmpty(crit.collectionProtocols())) {
+			restriction.add(Restrictions.not(Restrictions.in("cp.id", crit.collectionProtocolIds())));
+		} else {
+			DetachedCriteria siteCrit = DetachedCriteria.forClass(CollectionProtocolSite.class)
+				.createAlias("collectionProtocol", "cp1")
+				.createAlias("site", "site1")
+				.add(Restrictions.eqProperty("cp1.id", "cp.id"))
+				.setProjection(Property.forName("site1.id"));
+
+			query.createAlias("cp.sites", "cpSite").createAlias("cpSite.site", "site");
+			restriction.add(Subqueries.propertyNotIn("site.id", siteCrit));
+		}
+
+		return query.add(restriction).list();
 	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public Set<CollectionProtocol> getRestrictedCps(Long containerId) {
-		List<CollectionProtocol> cps = getCurrentSession()
-			.getNamedQuery(GET_RESTRICTED_CPS)
-			.setLong("containerId", containerId)
-			.list();
-		return new LinkedHashSet<>(cps);
-	}
-
-	private String FQN = StorageContainer.class.getName();
-
-	private String GET_RESTRICTED_SPMN_CLASSES = FQN + ".getRestrictedSpecimenClasses";
-
-	private String GET_RESTRICTED_SPMN_TYPES = FQN + ".getRestrictedSpecimenTypes";
-
-	private String GET_RESTRICTED_CPS = FQN + ".getRestrictedCps";
 
 	private class ListQueryBuilder {
 		private StorageContainerListCriteria crit;
