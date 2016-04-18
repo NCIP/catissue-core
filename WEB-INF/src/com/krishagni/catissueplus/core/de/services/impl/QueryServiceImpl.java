@@ -84,6 +84,7 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
 import edu.common.dynamicextensions.nutility.DeConfiguration;
 import edu.common.dynamicextensions.query.Query;
+import edu.common.dynamicextensions.query.QueryException;
 import edu.common.dynamicextensions.query.QueryParserException;
 import edu.common.dynamicextensions.query.QueryResponse;
 import edu.common.dynamicextensions.query.QueryResultCsvExporter;
@@ -232,8 +233,10 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+		} catch (QueryException qe) {
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
 		} catch (IllegalArgumentException iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}	
@@ -267,6 +270,8 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+		} catch (QueryException qe) {
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
 		} catch (IllegalArgumentException iae) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (Exception e) {
@@ -330,6 +335,8 @@ public class QueryServiceImpl implements QueryService {
 			);
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+		} catch (QueryException qe) {
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
 		} catch (IllegalArgumentException iae) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
@@ -405,6 +412,8 @@ public class QueryServiceImpl implements QueryService {
 			return ResponseEvent.response(exportQueryData(req.getPayload(), null));
 		} catch (QueryParserException qpe) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
+		} catch (QueryException qe) {
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
 		} catch (IllegalArgumentException iae) {
 			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
 		} catch (IllegalAccessError iae) {
@@ -1268,5 +1277,13 @@ public class QueryServiceImpl implements QueryService {
 
 	private int decConcurrentQueriesCnt() {
 		return concurrentQueriesCnt.decrementAndGet();
+	}
+
+	private SavedQueryErrorCode getErrorCode(QueryException.Code error) {
+		if (error == QueryException.Code.CYCLES_IN_QUERY) {
+			return SavedQueryErrorCode.CYCLES_IN_QUERY;
+		}
+
+		return SavedQueryErrorCode.MALFORMED;
 	}
 }

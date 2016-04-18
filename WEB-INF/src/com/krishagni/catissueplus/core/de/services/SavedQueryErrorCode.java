@@ -37,6 +37,8 @@ public enum SavedQueryErrorCode implements ErrorCode {
 	
 	MALFORMED,
 
+	CYCLES_IN_QUERY,
+
 	EXPORT_DATA_FILE_NOT_FOUND,
 
 	TOO_BUSY,
