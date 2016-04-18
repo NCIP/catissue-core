@@ -24,5 +24,7 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public List<String> getNonCompliantContainers(ContainerRestrictionsCriteria crit);
 
 	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit);
+
+	public int getSpecimensCount(Long containerId);
 }
 	

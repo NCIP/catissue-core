@@ -637,12 +637,12 @@ public class StorageContainer extends BaseEntity {
 
 	public List<DependentEntityDetail> getDependentEntities() {
 		return DependentEntityDetail.singletonList(
-				Specimen.getEntityName(), getSpecimenCount());
+				Specimen.getEntityName(), getSpecimensCount());
 	}
 	
 	public void delete() {
-		int specimenCnt = getSpecimenCount();
-		if (specimenCnt > 0) {
+		int specimensCnt = getSpecimensCount();
+		if (specimensCnt > 0) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
 		}
 		
@@ -750,18 +750,9 @@ public class StorageContainer extends BaseEntity {
 			setPosition(null);
 		}
 	}
-	
-	private int getSpecimenCount() {
-		int specimenCnt = 0;
-		for (StorageContainer descendant: descendentContainers) {
-			specimenCnt += descendant.getSelfSpecimenCount();
-		}
-		
-		return specimenCnt;
-	}
-	
-	private int getSelfSpecimenCount() {
-		return getOccupiedPositions().size() - getChildContainers().size();
+
+	private int getSpecimensCount() {
+		return getDaoFactory().getStorageContainerDao().getSpecimensCount(getId());
 	}
 	
 	private Set<String> computeAllAllowedSpecimenTypes() {

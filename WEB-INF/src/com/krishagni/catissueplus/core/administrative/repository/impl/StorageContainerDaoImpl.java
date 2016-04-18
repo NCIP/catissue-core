@@ -168,6 +168,14 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		return query.add(restriction).list();
 	}
 
+	@Override
+	public int getSpecimensCount(Long containerId) {
+		return ((Number)sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_SPECIMENS_COUNT)
+			.setLong("containerId", containerId)
+			.uniqueResult()).intValue();
+	}
+
 	private class ListQueryBuilder {
 		private StorageContainerListCriteria crit;
 		
@@ -382,4 +390,10 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
 		}
 	}
+
+
+	private static final String FQN = StorageContainer.class.getName();
+
+	private static final String GET_SPECIMENS_COUNT = FQN + ".getSpecimensCount";
+
 }

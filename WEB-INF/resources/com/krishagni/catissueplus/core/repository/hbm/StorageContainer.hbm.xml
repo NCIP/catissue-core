@@ -120,5 +120,17 @@
       update="false" insert="false"/>
 
     <filter name="activeEntity"/>
+
+    <query name="getSpecimensCount">
+      select
+        count(pos)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.StorageContainer c
+        join c.descendentContainers d
+        join d.occupiedPositions pos
+      where
+        c.id = :containerId
+        and pos.occupyingSpecimen is not null
+    </query>
   </class>
 </hibernate-mapping>
