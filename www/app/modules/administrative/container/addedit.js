@@ -1,7 +1,7 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
   .controller('ContainerAddEditCtrl', function(
     $scope, $state, $stateParams, $q, container, containerType,
-    Site, Container, ContainerType, CollectionProtocol, PvManager, Util) {
+    Site, Container, ContainerType, CollectionProtocol, PvManager, Util, Alerts) {
 
     var allSpecimenTypes = undefined;
     var allowedCps = undefined;
@@ -188,7 +188,14 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     function createHierarchy() {
       Container.createHierarchy($scope.container).then(
         function(resp) {
-          if (resp[0].storageLocation && resp[0].storageLocation.id) {
+
+          if (resp.length == 1) {
+            //
+            // created only one container. go to that container detail
+            //
+            $state.go('container-detail.overview', {containerId: resp[0].id});
+            return;
+          } else if (resp[0].storageLocation && resp[0].storageLocation.id) {
             //
             // hierarchy created under an existing container
             // go to that container detail
@@ -196,8 +203,9 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
             $state.go('container-detail.overview', {containerId: resp[0].storageLocation.id});
           } else {
             //
-            // hierarchy created for top-level container. go to list view
+            // hierarchy created for top-level container. go to list view with success message
             //
+            Alerts.success('container.hierarchy_created_successfully', resp[0]);
             $state.go('container-list');
           }
         }
