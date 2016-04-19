@@ -213,12 +213,12 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     };
 
     function setContainerTypeProps(containerType) {
-      if (!!$scope.container.id) {
-        return;
-      }
-      
       if (!containerType) {
         $scope.container.typeId = undefined;
+        return;
+      }
+
+      if (!!$scope.container.id) {
         return;
       }
 
