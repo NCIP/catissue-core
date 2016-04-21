@@ -74,6 +74,7 @@ angular.module('os.fields')
       inputEl.removeAttr('os-md-input');
       if (opts.mdInput) {
         inputEl.attr('md-type', true);
+        inputEl.attr('os-md-input', 'os-md-input');
       }
 
       var listSource = opts.field.listSource;
@@ -148,6 +149,28 @@ angular.module('os.fields')
     }
 
     //
+    // User field renderer: opts.field.type = 'user'
+    //
+    function userFieldRenderer(opts) {
+      var inputEl = el('<os-users/>').attr({
+        'ng-model': fns.attrName(opts)
+      });
+
+      if (opts.field.multiple) {
+        inputEl.attr('multiple', 'multiple');
+      }
+
+      inputEl = fns.addInputElAttrs(inputEl, opts);
+      if (opts.mdInput) {
+        inputEl.removeAttr('os-md-input');
+        var div = fns.addInputElAttrs(fns.div(), opts).attr('ng-model', fns.attrName(opts));
+        return div.append(inputEl);
+      }
+
+      return inputEl;
+    }
+
+    //
     // Sub-form or collection field renderer: opts.field.type = 'collection'
     //
     function collectionFieldRenderer(opts) {
@@ -207,6 +230,7 @@ angular.module('os.fields')
       'dropdown': dropdownFieldRenderer,
       'radio': radioButtonFieldRenderer,
       'storage-position': storagePositionFieldRenderer,
+      'user': userFieldRenderer,
       'collection': collectionFieldRenderer
     };
 
@@ -231,11 +255,12 @@ angular.module('os.fields')
           'list': 'list'
         };
 
-        var el = angular.element('<os-select/>').attr(attrs);
+        var el = angular.element('<os-select>').attr(attrs);
         if (tAttrs.mdType == 'true') {
           el.attr('os-md-input', 'os-md-input');
         }
 
+        el.attr('placeholder', tAttrs.placeholder);
         return el;
       },
 

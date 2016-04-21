@@ -130,7 +130,7 @@ angular.module('os.fields', [])
         )
       }
 
-      return angular.extend(baseField, field);
+      return angular.extend(field, angular.extend(baseField, field));
     }
 
     return {
@@ -225,7 +225,6 @@ angular.module('os.fields', [])
 
     function th(widthPct, minWidth, caption) {
       var css = {width: widthPct + '%', 'min-width': minWidth};
-      console.log(fns);
       return el('<th class="col os-padding-lr-10"/>').css(css).append(fns.span(caption));
     }
  
@@ -287,22 +286,215 @@ angular.module('os.fields', [])
       );
     }
 
-    function render(scope, formName, baseFields, fields) {
-      var baseFieldsMap       = fns.objLookupMap(baseFields);
-      var overriddenFieldsMap = fns.objLookupMap(fields, 'baseField');
+    function copyFieldValue(src, field, dest) {
+      var parts = field.split(".", 2);
+      var fieldName = parts[0];
 
-      fields = fields.map(
+      if (!src[fieldName]) {
+        return;
+      }
+
+      if (parts.length == 1) {
+        dest[fieldName] = src[fieldName];
+        return;
+      }
+
+      if (!dest[fieldName]) {
+        dest[fieldName] = {};
+      }
+
+      copyFieldValue(src[fieldName], field.substring(fieldName.length + 1), dest[fieldName]);
+    }
+
+    function getFieldValues(record, fields) {
+      var result = {};
+
+      angular.forEach(fields,
+        function(field) {
+          copyFieldValue(record, field, result);
+        }
+      );
+
+      return result;
+    }
+
+
+    function merge(src, dst, deep) {
+      var h = dst.$$hashKey;
+
+      if (!angular.isObject(src) && !angular.isFunction(src)) {
+        return dst;
+      }
+
+      var keys = Object.keys(src);
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var value = src[key];
+
+        if (deep && angular.isObject(value)) {
+          if (angular.isDate(value)) {
+            dst[key] = new Date(value.valueOf());
+          } else {
+            if (!angular.isObject(dst[key])) {
+              dst[key] = angular.isArray(value) ? [] : {};
+            }
+
+            merge(value, dst[key], true);
+          }
+        } else {
+          dst[key] = value;
+        }
+      }
+
+      if (h) {
+        dst.$$hashKey = h;
+      } else {
+        delete dst.$$hashKey;
+      }
+
+      return dst;
+    }
+
+    function copyFieldValues(srcRec, fields, records) {
+      var toCopy = getFieldValues(srcRec, fields);
+
+      angular.forEach(records,
+        function(record, index) {
+          if (index == 0) {
+            return;
+          }
+
+          merge(toCopy, record, true);
+        }
+      );
+    }
+
+    function watchChangesInGrpFieldValues(scope, grpFields) {
+      if (grpFields.length == 0) {
+        return;
+      }
+
+      var fieldNames = grpFields.map(
+        function(field) {
+          return field.name;
+        }
+      );
+
+      scope.$watch('obj[0]',
+        function(newRec) {
+          copyFieldValues(newRec, fieldNames, scope.obj);
+        },
+        true
+      );
+
+      scope.$watch('obj.length',
+        function(newLen, oldLen) {
+          if (newLen > oldLen) {
+            var toCopy = getFieldValues(scope.obj[0], fieldNames);
+            merge(toCopy, scope.obj[newLen - 1], true);
+          }
+        }
+      );
+    }
+
+    function flatten(groups) {
+      var result = [];
+      angular.forEach(groups,
+        function(group) {
+          angular.forEach(group.fields,
+            function(rowFields) {
+              result = result.concat(rowFields);
+            }
+          );
+        }
+      );
+
+      return result;
+    }
+
+    function renderGroupRow(scope, formName, rowNo, rowFields, widthCls) {
+      var copts = {scope: scope, formName: formName, mdInput: true, objName: 'obj[0]'};
+
+      var fg = fns.div('form-group');
+      var row = fns.div('row').append(fns.div('col-xs-12').append(fg));
+
+      angular.forEach(rowFields,
+        function(field, idx) {
+          var opts = angular.extend({fieldName: 'grpFld-' + rowNo + '-' + idx, field: field, fieldNo: idx}, copts);
+          var fieldDiv = fns.div(widthCls).append(fns.createInputEl(opts));
+          if (field.width) {
+            fieldDiv.css('width', field.width);
+          }
+
+          fns.addShowIf(fieldDiv, opts);
+          fg.append(fieldDiv);
+        }
+      );
+
+      return row;
+    }
+
+    function renderGroup(scope, group, idx) {
+      var formName = 'grp' + idx;
+
+      var maxElsPerRow = 0;
+      angular.forEach(group.fields,
+        function(rowFields) {
+          if (rowFields.length > maxElsPerRow) {
+            maxElsPerRow = rowFields.length;
+          }
+        }
+      );
+
+      var widthCls = 'col-xs-' + Math.floor(12 / maxElsPerRow);
+      var rowEls = [];
+      angular.forEach(group.fields,
+        function(rowFields, rowNo) {
+          rowEls.push(renderGroupRow(scope, formName, rowNo, rowFields, widthCls));
+        }
+      );
+
+      return fns.div('os-section')
+        .attr('ng-form', 'grp' + idx)
+        .append(fns.label(group.title))
+        .append(rowEls);
+    }
+
+    function renderGroups(scope, groups) {
+      var groupEls = [];
+      angular.forEach(groups,
+        function(group, idx) {
+          groupEls.push(renderGroup(scope, group, idx));
+        }
+      );
+
+      return groupEls;
+    }
+
+    function render(scope, formName, baseFields, fields) {
+      var groups = fields.groups;
+      var tabFields = fields.table;
+
+      var flattenedGrpFields = flatten(groups);
+      watchChangesInGrpFieldValues(scope, flattenedGrpFields);
+
+      var allFields           = flattenedGrpFields.concat(tabFields);
+      var baseFieldsMap       = fns.objLookupMap(baseFields);
+      var overriddenFieldsMap = fns.objLookupMap(allFields, 'baseField');
+
+      allFields = allFields.map(
         function(field) {
           return fns.overrideField(field, baseFieldsMap, overriddenFieldsMap);
         }
       );
 
-      var theadEl = thead().append(renderHeaderRow(fields));
-      var tbodyEl = tbody().append(renderInputRow(formName, fields))
-        .append(renderAnotherRow(fields));
+      var groupEls = renderGroups(scope, groups);
+      var theadEl = thead().append(renderHeaderRow(tabFields));
+      var tbodyEl = tbody().append(renderInputRow(formName, tabFields))
+        .append(renderAnotherRow(tabFields));
 
       var tableEl = table().append(theadEl).append(tbodyEl);
-      return fns.div('os-x-scroll').append(tableEl);
+      return fns.div('os-x-scroll').append(groupEls).append(tableEl);
     }
 
     return {
