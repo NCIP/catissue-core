@@ -652,6 +652,9 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 				}
 
 				specimenDetail.setId(specimen.getId());
+				if (StringUtils.isBlank(specimenDetail.getLabel())) {
+					specimenDetail.setLabel(specimen.getLabel());
+				}
 			}
 
 			if (CollectionUtils.isNotEmpty(specimenDetail.getSpecimensPool())) {
