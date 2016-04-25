@@ -63,7 +63,9 @@ public enum CpErrorCode implements ErrorCode {
 	
 	INVALID_SPMN_LABEL_PRINT_MODE,
 	
-	DUP_PRINT_SETTING;
+	DUP_PRINT_SETTING,
+
+	CANNOT_MERGE_FMT_DIFFERS;
 	
 	@Override
 	public String code() {

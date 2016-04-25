@@ -11,21 +11,24 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig.Workflow;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
@@ -37,8 +40,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
-import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
+import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
@@ -61,6 +64,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
@@ -125,21 +129,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	public ResponseEvent<CollectionProtocolDetail> getCollectionProtocol(RequestEvent<CpQueryCriteria> req) {
 		try {
 			CpQueryCriteria crit = req.getPayload();
-			CollectionProtocol cp = null;
-			
-			if (crit.getId() != null) {
-				cp = daoFactory.getCollectionProtocolDao().getById(crit.getId()); 
-			} else if (crit.getTitle() != null) {
-				cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(crit.getTitle());
-			} else if (crit.getShortTitle() != null) {
-				cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(crit.getShortTitle());
-			}
-			
-			if (cp == null) {
-				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
-			}
-
+			CollectionProtocol cp = getCollectionProtocol(crit.getId(), crit.getTitle(), crit.getShortTitle());
 			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
+
 			return ResponseEvent.response(CollectionProtocolDetail.from(cp, crit.isFullObject()));
 		} catch (OpenSpecimenException oce) {
 			return ResponseEvent.error(oce);
@@ -147,7 +139,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req) {
@@ -257,7 +249,33 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<MergeCpDetail> mergeCollectionProtocols(RequestEvent<MergeCpDetail> req) {
+		AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+
+		CollectionProtocol srcCp = getCollectionProtocol(req.getPayload().getSrcCpShortTitle());
+		CollectionProtocol tgtCp = getCollectionProtocol(req.getPayload().getTgtCpShortTitle());
+
+		ensureMergeableCps(srcCp, tgtCp);
+
+		int maxRecords = 30;
+		boolean moreRecords = true;
+		while (moreRecords) {
+			List<CollectionProtocolRegistration> cprs = daoFactory.getCprDao().getCprsByCpId(srcCp.getId(), 0, maxRecords);
+			for (CollectionProtocolRegistration srcCpr: cprs) {
+				mergeCprIntoCp(srcCpr, tgtCp);
+			}
+
+			if (cprs.size() < maxRecords) {
+				moreRecords = false;
+			}
+		}
+
+		return ResponseEvent.response(req.getPayload());
+	}
+
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> updateConsentsWaived(RequestEvent<CollectionProtocolDetail> req) {
 		try {
@@ -846,7 +864,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 		return daoFactory.getCollectionProtocolDao().getCpIds(key, value);
 	}
-	
+
 	private CollectionProtocol createCollectionProtocol(CollectionProtocolDetail detail, CollectionProtocol existing, boolean createCopy) {
 		CollectionProtocol cp = null;
 		if (!createCopy) {
@@ -1136,4 +1154,103 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			sr.setCode(code + count++);
 		}
 	}
+
+	private CollectionProtocol getCollectionProtocol(String shortTitle) {
+		return getCollectionProtocol(null, null, shortTitle);
+	}
+
+	private CollectionProtocol getCollectionProtocol(Long id, String title, String shortTitle) {
+		CollectionProtocol cp = null;
+		if (id != null) {
+			cp = daoFactory.getCollectionProtocolDao().getById(id);
+		} else if (StringUtils.isNotBlank(title)) {
+			cp = daoFactory.getCollectionProtocolDao().getCollectionProtocol(title);
+		} else if (StringUtils.isNoneBlank(shortTitle)) {
+			cp = daoFactory.getCollectionProtocolDao().getCpByShortTitle(shortTitle);
+		}
+
+		if (cp == null) {
+			throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND);
+		}
+
+		return cp;
+	}
+
+	private void mergeCprIntoCp(CollectionProtocolRegistration srcCpr, CollectionProtocol tgtCp) {
+		//
+		// Step 1: Get a matching CPR either by PPID or participant ID
+		//
+		CollectionProtocolRegistration tgtCpr = daoFactory.getCprDao().getCprByPpid(tgtCp.getId(), srcCpr.getPpid());
+		if (tgtCpr == null) {
+			tgtCpr = srcCpr.getParticipant().getCpr(tgtCp);
+		}
+
+		//
+		// Step 2: Map all visits of source CP registrations to first event of target CP
+		// Further mark all created specimens as unplanned
+		//
+		CollectionProtocolEvent firstCpe = tgtCp.firstEvent();
+		for (Visit visit : srcCpr.getVisits()) {
+			visit.setCpEvent(firstCpe);
+			visit.getSpecimens().stream().forEach(s -> s.setSpecimenRequirement(null));
+		}
+
+		//
+		// Step 3: Attach registrations to target CP
+		//
+		if (tgtCpr == null) {
+			//
+			// case 1: No matching registration was found in target CP; therefore make source
+			// registration as part of target CP
+			//
+			srcCpr.setCollectionProtocol(tgtCp);
+		} else {
+			//
+			// case 2: Matching registration was found in target CP; therefore do following
+			// 2.1 Move all visits of source CP registration to target CP registration
+			// 2.2 Finally delete source CP registration
+			//
+			tgtCpr.addVisits(srcCpr.getVisits());
+			srcCpr.getVisits().clear();
+			srcCpr.delete();
+		}
+	}
+
+	private void ensureMergeableCps(CollectionProtocol srcCp, CollectionProtocol tgtCp) {
+		ArrayList<String> notSameLabels = new ArrayList<>();
+
+		ensureBlankOrSame(srcCp.getPpidFormat(), tgtCp.getPpidFormat(), PPID_MSG, notSameLabels);
+		ensureBlankOrSame(srcCp.getVisitNameFormat(), tgtCp.getVisitNameFormat(), VISIT_NAME_MSG, notSameLabels);
+		ensureBlankOrSame(srcCp.getSpecimenLabelFormat(), tgtCp.getSpecimenLabelFormat(), SPECIMEN_LABEL_MSG, notSameLabels);
+		ensureBlankOrSame(srcCp.getDerivativeLabelFormat(), tgtCp.getDerivativeLabelFormat(), DERIVATIVE_LABEL_MSG, notSameLabels);
+		ensureBlankOrSame(srcCp.getAliquotLabelFormat(), tgtCp.getAliquotLabelFormat(), ALIQUOT_LABEL_MSG, notSameLabels);
+
+		if (!notSameLabels.isEmpty()) {
+			throw OpenSpecimenException.userError(
+				CpErrorCode.CANNOT_MERGE_FMT_DIFFERS,
+				srcCp.getShortTitle(),
+				tgtCp.getShortTitle(),
+				notSameLabels);
+		}
+	}
+
+	private void ensureBlankOrSame(String srcLabelFmt, String tgtLabelFmt, String labelKey, List<String> notSameLabels) {
+		if (!StringUtils.isBlank(tgtLabelFmt) && !tgtLabelFmt.equals(srcLabelFmt)) {
+			notSameLabels.add(getMsg(labelKey));
+		}
+	}
+
+	private String getMsg(String code) {
+		return MessageUtil.getInstance().getMessage(code);
+	}
+
+	private static final String PPID_MSG             = "cp_ppid";
+
+	private static final String VISIT_NAME_MSG       = "cp_visit_name";
+
+	private static final String SPECIMEN_LABEL_MSG   = "cp_specimen_label";
+
+	private static final String DERIVATIVE_LABEL_MSG = "cp_derivative_label";
+
+	private static final String ALIQUOT_LABEL_MSG    = "cp_aliquot_label";
 }

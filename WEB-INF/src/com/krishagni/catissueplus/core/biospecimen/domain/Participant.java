@@ -276,6 +276,10 @@ public class Participant extends BaseExtensionEntity {
 			.collect(Collectors.toList());
 	}
 	
+	public CollectionProtocolRegistration getCpr(CollectionProtocol cp) {
+		return getCprs().stream().filter(cpr -> cpr.getCollectionProtocol().equals(cp)).findFirst().orElse(null);
+	}
+
 	private void updatePmis(Participant participant) {
 		for (ParticipantMedicalIdentifier pmi : participant.getPmis()) {
 			ParticipantMedicalIdentifier existing = getPmiBySite(getPmis(), pmi.getSite().getName());

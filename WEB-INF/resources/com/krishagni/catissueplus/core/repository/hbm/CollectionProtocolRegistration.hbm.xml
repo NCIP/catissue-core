@@ -106,5 +106,14 @@
         cpr.collectionProtocol.id = :cpId and
         cpr.participant.id = :participantId 
     </query>
+
+    <query name="getCprsByCpId">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.id = :cpId
+    </query>
   </class>
 </hibernate-mapping>

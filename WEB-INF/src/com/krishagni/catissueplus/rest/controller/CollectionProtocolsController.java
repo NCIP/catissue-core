@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
@@ -439,6 +440,16 @@ public class CollectionProtocolsController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value="/merge")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public MergeCpDetail mergeCollectionProtocol(@RequestBody MergeCpDetail mergeDetail) {
+		ResponseEvent<MergeCpDetail> resp = cpSvc.mergeCollectionProtocols(getRequest(mergeDetail));
+		resp.throwErrorIfUnsuccessful();
+
+		return resp.getPayload();
 	}
 	
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {

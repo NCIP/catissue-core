@@ -79,6 +79,17 @@ public class CollectionProtocolRegistrationDaoImpl
 
 	@Override
 	@SuppressWarnings("unchecked")
+	public List<CollectionProtocolRegistration> getCprsByCpId(Long cpId, int startAt, int maxResults) {
+		return sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_BY_CP_ID)
+			.setLong("cpId", cpId)
+			.setFirstResult(startAt < 0 ? 0 : startAt)
+			.setMaxResults(maxResults < 0 ? 100 : maxResults)
+			.list();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public CollectionProtocolRegistration getCprByBarcode(String barcode) {
 		List<CollectionProtocolRegistration> result = sessionFactory.getCurrentSession()
 				.createCriteria(CollectionProtocolRegistration.class)
@@ -364,4 +375,6 @@ public class CollectionProtocolRegistrationDaoImpl
 	private static final String GET_BY_CP_SHORT_TITLE_AND_EMPI = FQN + ".getCprByCpShortTitleAndEmpi";
 	
 	private static final String GET_BY_CP_ID_AND_PID = FQN + ".getCprByCpIdAndPid";
+
+	private static final String GET_BY_CP_ID = FQN + ".getCprsByCpId";
 }
