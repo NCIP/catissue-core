@@ -328,20 +328,19 @@ public class FormServiceImpl implements FormService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<FormDataDetail> getFormData(RequestEvent<FormRecordCriteria> req) {
-		FormDataManager formDataMgr = new FormDataManagerImpl(false);
-
-		FormRecordCriteria crit = req.getPayload();
-		Long formId = crit.getFormId(), recordId = crit.getRecordId();
-
-		FormData formData = formDataMgr.getFormData(formId, recordId);
-		if (formData == null) {
-			return ResponseEvent.userError(FormErrorCode.REC_NOT_FOUND);
-		} else {
-			if (formData.getContainer().hasPhiFields() && !isPhiAccessAllowed(formData)) {
-				formData.maskPhiFieldValues();
+		try {
+			FormRecordCriteria crit = req.getPayload();
+			Container form = Container.getContainer(crit.getFormId());
+			if (form == null) {
+				return ResponseEvent.userError(FormErrorCode.NOT_FOUND, crit.getFormId());
 			}
 
-			return ResponseEvent.response(FormDataDetail.ok(formId, recordId, formData));
+			FormData record = getRecord(form, crit.getRecordId());
+			return ResponseEvent.response(FormDataDetail.ok(crit.getFormId(), crit.getRecordId(), record));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
 		}
 	}
 
@@ -589,6 +588,23 @@ public class FormServiceImpl implements FormService {
 	public List<FormData> getSummaryRecords(Long formId, List<Long> recordIds) {
 		FormDataManager mgr = new FormDataManagerImpl(false);
 		return mgr.getSummaryData(formId, recordIds);
+	}
+
+	@Override
+	public FormData getRecord(Container form, Long recordId) {
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+
+		FormData formData = formDataMgr.getFormData(form, recordId);
+		if (formData == null) {
+			throw OpenSpecimenException.userError(FormErrorCode.REC_NOT_FOUND);
+		}
+
+
+		if (formData.getContainer().hasPhiFields() && !isPhiAccessAllowed(formData)) {
+			formData.maskPhiFieldValues();
+		}
+
+		return formData;
 	}
 
 	@Override
