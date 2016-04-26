@@ -6,7 +6,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +36,14 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Type;
 import com.krishagni.catissueplus.core.importer.domain.ImportJobErrorCode;
 import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
+import com.krishagni.catissueplus.core.importer.events.FileRecordsDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
@@ -209,8 +213,45 @@ public class ImportServiceImpl implements ImportService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
-	
+
+	@Override
+	public ResponseEvent<List<Map<String, Object>>> processFileRecords(RequestEvent<FileRecordsDetail> req) {
+		ObjectReader reader = null;
+		File file = null;
+
+		try {
+			FileRecordsDetail detail = req.getPayload();
+
+			ObjectSchema.Record schemaRec = new ObjectSchema.Record();
+			schemaRec.setFields(detail.getFields());
+
+			ObjectSchema schema = new ObjectSchema();
+			schema.setRecord(schemaRec);
+
+			file = new File(getFilePath(detail.getFileId()));
+			reader = new ObjectReader(
+				file.getAbsolutePath(),
+				schema,
+				ConfigUtil.getInstance().getDeDateFmt(),
+				ConfigUtil.getInstance().getTimeFmt());
+
+			List<Map<String, Object>> records = new ArrayList<>();
+			Map<String, Object> record = null;
+			while ((record = (Map<String, Object>)reader.next()) != null) {
+				records.add(record);
+			}
+
+			return ResponseEvent.response(records);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(reader);
+			if (file != null) {
+				file.delete();
+			}
+		}
+	}
+
 	private ImportJob getImportJob(Long jobId) {
 		User currentUser = AuthUtil.getCurrentUser();
 		

@@ -202,7 +202,7 @@ angular.module('os.fields', [])
     }
   })
 
-  .factory('TableFieldsLayout', function(FieldsSvc) {
+  .factory('TableFieldsLayout', function(FieldsSvc, Util, ImportJob) {
     var fns = FieldsSvc.commonFns();
 
     var el = angular.element;
@@ -228,7 +228,6 @@ angular.module('os.fields', [])
       return el('<th class="col os-padding-lr-10"/>').css(css).append(fns.span(caption));
     }
  
-
     function td(widthPct, minWidth, content) {
       var css = {width: widthPct + '%', 'min-width': minWidth, overflow: 'visible'};
       return el('<td class="col os-padding-lr-10"/>').css(css).append(content);
@@ -318,43 +317,6 @@ angular.module('os.fields', [])
       return result;
     }
 
-
-    function merge(src, dst, deep) {
-      var h = dst.$$hashKey;
-
-      if (!angular.isObject(src) && !angular.isFunction(src)) {
-        return dst;
-      }
-
-      var keys = Object.keys(src);
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        var value = src[key];
-
-        if (deep && angular.isObject(value)) {
-          if (angular.isDate(value)) {
-            dst[key] = new Date(value.valueOf());
-          } else {
-            if (!angular.isObject(dst[key])) {
-              dst[key] = angular.isArray(value) ? [] : {};
-            }
-
-            merge(value, dst[key], true);
-          }
-        } else {
-          dst[key] = value;
-        }
-      }
-
-      if (h) {
-        dst.$$hashKey = h;
-      } else {
-        delete dst.$$hashKey;
-      }
-
-      return dst;
-    }
-
     function copyFieldValues(srcRec, fields, records) {
       var toCopy = getFieldValues(srcRec, fields);
 
@@ -364,7 +326,7 @@ angular.module('os.fields', [])
             return;
           }
 
-          merge(toCopy, record, true);
+          Util.merge(toCopy, record, true);
         }
       );
     }
@@ -391,7 +353,7 @@ angular.module('os.fields', [])
         function(newLen, oldLen) {
           if (newLen > oldLen) {
             var toCopy = getFieldValues(scope.obj[0], fieldNames);
-            merge(toCopy, scope.obj[newLen - 1], true);
+            Util.merge(toCopy, scope.obj[newLen - 1], true);
           }
         }
       );
@@ -471,6 +433,80 @@ angular.module('os.fields', [])
       return groupEls;
     }
 
+    function renderFileInput() {
+      var fileUpload = fns.div().attr({'os-file-upload': '', 'ctrl': 'recsUploader'});
+      var loadRecsBtn = el('<button class="btn btn-success">')
+        .attr('ng-click', 'loadRecs()')
+        .append(fns.span('Load Records'));
+
+      var fileFg = fns.div('form-group')
+        .append(fns.div('col-xs-3').append(fileUpload))
+        .append(fns.div().append(loadRecsBtn));
+
+      var attrs = {action: ImportJob.url() + 'input-file'};
+      return el('<form name="recsFileForm">').attr(attrs).append(fileFg);
+    }
+
+    function createObj(fieldValueMap) {
+      var obj = {};
+      angular.forEach(fieldValueMap,
+        function(value, field) {
+          setField(obj, field, value);
+        }
+      );
+
+      return obj;
+    }
+
+    function setField(obj, field, value) {
+      var parts = field.split('.');
+      if (parts.length == 1) {
+        obj[field] = value;
+        return;
+      }
+
+      var subObj = {};
+      if (angular.isObject(obj[parts[0]])) {
+        subObj = obj[parts[0]];
+      } else {
+        obj[parts[0]] = subObj;
+      }
+
+      setField(subObj, field.substring(parts[0].length + 1), value);
+    }
+
+    function loadRecs(scope, fileId) {
+      var tabFields = [];
+      angular.forEach(scope.fields.table,
+        function(field) {
+          if (field.subFields instanceof Array) {
+            angular.forEach(field.subFields,
+              function(sf) {
+                tabFields.push({attribute: field.name + '.' + sf.name, caption: sf.caption, type: sf.type});
+              }
+            );
+          } else {
+            tabFields.push({attribute: field.name, caption: field.caption, type: field.type, multiple: field.multiple});
+          }
+        }
+      );
+
+      ImportJob.processFileRecs(fileId, tabFields).then(
+        function(recs) {
+          var firstObj = scope.obj[0];
+          scope.obj.length = 1;
+
+          angular.forEach(recs, function(rec, idx) {
+            if (idx != 0) {
+             scope.addRow();
+            }
+
+            Util.merge(createObj(rec), scope.obj[idx], true);
+          });
+        }
+      );
+    }
+
     function render(scope, formName, baseFields, fields) {
       var groups = fields.groups;
       var tabFields = fields.table;
@@ -493,16 +529,20 @@ angular.module('os.fields', [])
       var tbodyEl = tbody().append(renderInputRow(formName, tabFields))
         .append(renderAnotherRow(tabFields));
 
+      var fileEl = renderFileInput();
       var tableEl = table().append(theadEl).append(tbodyEl);
-      return fns.div('os-x-scroll').append(groupEls).append(tableEl);
+      return fns.div('os-x-scroll').append(groupEls).append(fileEl).append(tableEl);
     }
 
     return {
-      render: render
+      render: render,
+
+      loadRecs: loadRecs
     }
   })
 
   .directive('osFormFields', function($compile, SimpleFieldsLayout, TableFieldsLayout) {
+
     return {
       restrict: 'E',
 
@@ -523,6 +563,8 @@ angular.module('os.fields', [])
       replace: 'true',
 
       link: function(scope, element, attrs, formCtrl) {
+        scope.recsUploader = {};
+
         scope.addRow = function() {
           if (typeof scope.onAddRow == 'function') {
             scope.onAddRow();
@@ -536,6 +578,14 @@ angular.module('os.fields', [])
           if (scope.obj.length == 0) {
             scope.addRow();
           }
+        }
+
+        scope.loadRecs = function() {
+          scope.recsUploader.submit().then(
+            function(resp) {
+              TableFieldsLayout.loadRecs(scope, resp.fileId);
+            }
+          );
         }
 
         var fields = [];

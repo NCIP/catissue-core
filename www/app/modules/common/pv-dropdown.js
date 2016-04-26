@@ -13,14 +13,30 @@ angular.module('openspecimen')
 
     function loadPvs (scope, searchTerm, attrs) {
       var q = undefined;
-      PvManager.loadPvs(attrs.attribute, searchTerm, undefined, attrs.showOnlyLeafValues).then(
-        function(pvs) {
-          scope.pvs = pvs;
-          if (searchTerm == '' && pvs.length < 100) {
-            scope.reload = false;
+
+      if (attrs.parentVal) {
+        scope.$watch(attrs.parentVal, function(newVal) {
+          if (!newVal) {
+            return;
           }
-        }
-      );
+
+          PvManager.loadPvsByParent(attrs.attribute, newVal).then(
+            function(pvs) {
+              scope.pvs = pvs;
+              scope.reload = false;
+            }
+          );
+        });
+      } else {
+        PvManager.loadPvs(attrs.attribute, searchTerm, undefined, attrs.showOnlyLeafValues).then(
+          function(pvs) {
+            scope.pvs = pvs;
+            if (searchTerm == '' && pvs.length < 100) {
+              scope.reload = false;
+            }
+          }
+        );
+      }
     }
     
     return {
