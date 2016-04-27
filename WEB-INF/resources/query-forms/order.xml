@@ -17,13 +17,16 @@
     </row>
 
     <row>
-      <textField>
+      <dropDown>
         <name>orderName</name>
         <udn>orderName</udn>
         <caption>#getMessage("order_name")</caption>
         <column>NAME</column>
+        <options>
+          <sql>select name from os_orders</sql>
+        </options>
         <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value=:value</recordUrl>
-      </textField>
+      </dropDown>
     </row>
 
     <row>
@@ -36,16 +39,19 @@
         <parentKey>DISTRIBUTION_PROTOCOL_ID</parentKey>
 
         <row>          
-          <textField>
+          <dropDown>
             <name>distributionProtocolTitle</name>
             <udn>distributionProtocolTitle</udn>
             <caption>#getMessage("order_dp")</caption>
             <column>TITLE</column>
+            <options>
+              <sql>select title from catissue_distribution_protocol where activity_status = 'Active'</sql>
+            </options>
             <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value=:value</recordUrl>
-          </textField>
+          </dropDown>
         </row>
 
-	<row>
+        <row>
           <numberField>
             <name>irbId</name>
             <udn>irbId</udn>
