@@ -2,9 +2,11 @@ package com.krishagni.catissueplus.core.importer.services;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.importer.events.FileRecordsDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
@@ -22,4 +24,6 @@ public interface ImportService {
 	public ResponseEvent<ImportJobDetail> importObjects(RequestEvent<ImportDetail> req);
 	
 	public ResponseEvent<String> getInputFileTemplate(RequestEvent<ObjectSchemaCriteria> req);
+
+	public ResponseEvent<List<Map<String, Object>>> processFileRecords(RequestEvent<FileRecordsDetail> req);
 }

@@ -335,11 +335,45 @@ public class FormsController {
 			String searchStr,
 			
 			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
-			int maxResults
-			) {
+			int maxResults) {
 
 		GetFormFieldPvsOp op = new GetFormFieldPvsOp();
 		op.setFormId(formId);
+		op.setControlName(controlName);
+		op.setUseUdn(useUdn);
+		op.setSearchString(searchStr);
+		op.setMaxResults(maxResults);
+
+		ResponseEvent<List<PermissibleValue>> resp = formSvc.getPvs(getRequest(op));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/permissible-values")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<PermissibleValue> getFieldPvs(
+			@RequestParam(value = "formId", required = false)
+			Long formId,
+
+			@RequestParam(value = "formName", required = false)
+			String formName,
+
+			@RequestParam(value = "controlName", required = true)
+			String controlName,
+
+			@RequestParam(value = "useUdn", required = false, defaultValue = "false")
+			boolean useUdn,
+
+			@RequestParam(value = "searchString", required = false, defaultValue = "")
+			String searchStr,
+
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
+
+		GetFormFieldPvsOp op = new GetFormFieldPvsOp();
+		op.setFormId(formId);
+		op.setFormName(formName);
 		op.setControlName(controlName);
 		op.setUseUdn(useUdn);
 		op.setSearchString(searchStr);

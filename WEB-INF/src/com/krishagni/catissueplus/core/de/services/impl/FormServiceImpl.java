@@ -612,7 +612,13 @@ public class FormServiceImpl implements FormService {
 		try {
 			GetFormFieldPvsOp input = req.getPayload();
 
-			Container form = Container.getContainer(input.getFormId());
+			Container form = null;
+			if (input.getFormId() != null) {
+				form = Container.getContainer(input.getFormId());
+			} else if (StringUtils.isNotBlank(input.getFormName())) {
+				form = Container.getContainer(input.getFormName());
+			}
+
 			if (form == null) {
 				return ResponseEvent.userError(FormErrorCode.NOT_FOUND, input.getFormId());
 			}

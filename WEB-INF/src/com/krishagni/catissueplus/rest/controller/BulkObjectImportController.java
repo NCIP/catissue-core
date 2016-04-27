@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.importer.events.FileRecordsDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
@@ -82,7 +83,7 @@ public class BulkObjectImportController {
 		} 			
 	}
 		
-	@RequestMapping(method = RequestMethod.POST, value="/input-file")
+	@RequestMapping(method = RequestMethod.POST, value = "/input-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody		
 	public Map<String, String> uploadJobInputFile(@PathVariable("file") MultipartFile file) 
@@ -92,6 +93,16 @@ public class BulkObjectImportController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return Collections.singletonMap("fileId", resp.getPayload());
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/process-file-records")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<Map<String, Object>> processFileRecords(@RequestBody FileRecordsDetail detail) {
+		ResponseEvent<List<Map<String, Object>>> resp = importSvc.processFileRecords(new RequestEvent<>(detail));
+		resp.throwErrorIfUnsuccessful();
+
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

@@ -133,6 +133,23 @@
   border-left: 6px solid transparent;
 }
 
+.os-md-input .ui-select-multiple.form-control {
+  border: none;
+  padding-top: 2px;
+  box-shadow: none;
+}
+
+.os-md-input .ui-select-container.ui-select-multiple .ui-select-match {
+  display: inline;
+  border: none;
+}
+
+.os-md-input .ui-select-multiple .ui-select-search {
+  display: inline;
+  padding-bottom: 0px;
+  border-bottom: 2px solid #ddd!important;
+}
+
 .os-md-input-addon, 
 .os-md-input + .os-input-addon-right {
   border: none;

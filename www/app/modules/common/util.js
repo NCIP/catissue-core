@@ -198,6 +198,42 @@ angular.module('openspecimen')
       Array.prototype.push.apply(array, elements);
     }
 
+    function merge(src, dst, deep) {
+      var h = dst.$$hashKey;
+
+      if (!angular.isObject(src) && !angular.isFunction(src)) {
+        return dst;
+      }
+
+      var keys = Object.keys(src);
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var value = src[key];
+
+        if (deep && angular.isObject(value)) {
+          if (angular.isDate(value)) {
+            dst[key] = new Date(value.valueOf());
+          } else {
+            if (!angular.isObject(dst[key])) {
+              dst[key] = angular.isArray(value) ? [] : {};
+            }
+
+            merge(value, dst[key], true);
+          }
+        } else {
+          dst[key] = value;
+        }
+      }
+
+      if (h) {
+        dst.$$hashKey = h;
+      } else {
+        delete dst.$$hashKey;
+      }
+
+      return dst;
+    }
+
     return {
       clear: clear,
 
@@ -221,6 +257,8 @@ angular.module('openspecimen')
 
       booleanPromise: booleanPromise,
 
-      appendAll: appendAll
+      appendAll: appendAll,
+
+      merge: merge
     };
   });

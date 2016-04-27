@@ -2,6 +2,8 @@ package com.krishagni.catissueplus.core.de.events;
 
 public class GetFormFieldPvsOp {
 	private Long formId;
+
+	private String formName;
 	
 	private String controlName;
 	
@@ -17,6 +19,14 @@ public class GetFormFieldPvsOp {
 
 	public void setFormId(Long formId) {
 		this.formId = formId;
+	}
+
+	public String getFormName() {
+		return formName;
+	}
+
+	public void setFormName(String formName) {
+		this.formName = formName;
 	}
 
 	public String getControlName() {
