@@ -138,6 +138,7 @@ public class ExtensionDetail {
 			this.displayValue = displayValue;
 		}
 
+		@SuppressWarnings({"unchecked" })
 		public static AttrDetail from(Attr attr, boolean excludePhi) {
 			AttrDetail detail = new AttrDetail();
 			detail.setName(attr.getName());
@@ -145,7 +146,16 @@ public class ExtensionDetail {
 			detail.setCaption(attr.getCaption());
 			detail.setType(attr.getType());
 
-			if (excludePhi && attr.isPhi()) {
+			if (attr.isSubForm()) {
+				if (attr.isOneToOne()) {
+					detail.setValue(from((List)attr.getValue(), excludePhi));
+				} else {
+					List<List<Attr>> sfAttrs = (List<List<Attr>>) attr.getValue();
+					if (sfAttrs != null) {
+						detail.setValue(sfAttrs.stream().map(sfAttr -> from(sfAttr, excludePhi)).collect(Collectors.toList()));
+					}
+				}
+			} else if (excludePhi && attr.isPhi()) {
 				detail.setValue("###");
 				detail.setDisplayValue("###");
 			} else {

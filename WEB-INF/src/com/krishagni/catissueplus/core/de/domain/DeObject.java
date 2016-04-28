@@ -485,6 +485,18 @@ public abstract class DeObject {
 		public boolean isPhi() {
 			return ctrlValue.getControl().isPhi();
 		}
+		
+		public boolean isSubForm() {
+			return type.equals("subForm");
+		}
+		
+		public boolean isOneToOne() {
+			if (ctrlValue.getControl() instanceof SubFormControl) {
+				return ((SubFormControl)ctrlValue.getControl()).isOneToOne();
+			}
+
+			return false;
+		}
 
 		public Attr copy() {
 			Attr copy = new Attr();
