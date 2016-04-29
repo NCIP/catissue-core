@@ -13,7 +13,7 @@
         <label>
           <span translate="container.type">Type</span>
         </label>
-        <os-select name="type" ng-model="container.typeName" ng-required="!!container.name"
+        <os-select name="type" ng-model="container.typeName"
           placeholder="{{'container.type' | translate}}" list="types" select-prop="name" display-prop="name">
         </os-select>
       </div>
@@ -23,7 +23,7 @@
           <span translate="container.site">Site</span>
         </label>
         <os-select name="site" ng-model="container.siteName" 
-          placeholder="{{'container.site' | translate}}" list="sites" ng-required="!!container.name">
+          placeholder="{{'container.site' | translate}}" list="sites">
         </os-select>
       </div>
 
