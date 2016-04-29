@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="form-group">
+      <div class="col-xs-2">
+        <label>
+          <span translate="container.name">Name</span>
+        </label>
+        <input type="text" name="name" class="form-control" ng-model="container.name"
+          placeholder="{{'container.name' | translate}}">
+      </div>
+
+      <div class="col-xs-2">
+        <label>
+          <span translate="container.type">Type</span>
+        </label>
+        <os-select name="type" ng-model="container.typeName" ng-required="!!container.name"
+          placeholder="{{'container.type' | translate}}" list="types" select-prop="name" display-prop="name">
+        </os-select>
+      </div>
+
+      <div class="col-xs-2">
+        <label>
+          <span translate="container.site">Site</span>
+        </label>
+        <os-select name="site" ng-model="container.siteName" 
+          placeholder="{{'container.site' | translate}}" list="sites" ng-required="!!container.name">
+        </os-select>
+      </div>
+
+      <div class="col-xs-4">
+        <label>
+          <span translate="container.parent">Parent and Location</span>
+        </label>
+        <os-storage-position name="parent" entity="container">
+        </os-storage-position>
+      </div>
+
+      <div class="col-xs-2">
+        <label>
+          <span>&nbsp;</span>
+        </label>
+        <div>
+          <button class="btn btn-success" ng-click="createContainer()" ng-disable="!!container.id">
+            <span translate="common.buttons.create">Create</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

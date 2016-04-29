@@ -983,6 +983,7 @@
     "creating_hierarchy": "Create Hierarchy?",
     "num_of_containers": "Number of Containers",
     "hierarchy_created_successfully": "Container hierarchy of type {{typeName}} created successfully.",
+    "creation_success": "Container {{name}} successfully created.",
 
     "tooltip": {
       "view_details": "Click to view Container details",
