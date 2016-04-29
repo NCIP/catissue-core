@@ -104,7 +104,7 @@
                 <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
                   <span ng-switch-when="true">
                     <textarea os-md-input rows="1" name="label" 
-                      ng-model="specimen.aliquotLabels"
+                      ng-model="specimen.aliquotLabels" edit-when="!specimen.pLabel"
                       ng-blur="assignLabels(specimen, specimen.aliquotLabels)" required>
                     </textarea>
                   </span>

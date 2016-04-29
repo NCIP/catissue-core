@@ -119,12 +119,12 @@ angular.module('openspecimen')
         if (tAttrs.editWhen) {
           inputDiv.attr("ng-if", tAttrs.editWhen);
 
-          var valLabel = angular.element("<span></span>")
+          var valLabel = angular.element('<span class="os-value"/>')
             .attr("ng-if", "!(" + tAttrs.editWhen + ")")
+            .attr("title", "{{" + tAttrs.ngModel + "}}")
             .append("{{" + tAttrs.ngModel + "}}");
 
-         
-          div = angular.element("<div></div>")
+          div = angular.element('<div class="os-md-input"></div>')
             .append(inputDiv)
             .append(valLabel);
         } else {
