@@ -15,16 +15,20 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	INVALID_CREATION_DATE,
 	
-	INVALID_EXECUTION_DATE, 
-	
-	INVALID_QUANTITY,
+	INVALID_EXECUTION_DATE,
+
+	ITEM_QTY_REQ,
+
+	ITEM_INVALID_QTY,
+
+	ITEM_STATUS_REQ,
 	
 	RPT_TMPL_NOT_CONFIGURED,
 	
 	STATUS_CHANGE_NOT_ALLOWED, 
 	
 	ALREADY_EXECUTED,
-	
+
 	DUPLICATE_SPECIMENS,
 	
 	INVALID_SPECIMEN_STATUS,
@@ -41,6 +45,16 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	
 	INVALID_REQUESTER_RECV_SITE_INST,
 
+	CANT_UPDATE_EXEC_ORDER,
+
+	REQUESTER_REQ,
+
+	REQUESTER_NOT_FOUND,
+
+	DISTRIBUTOR_NOT_FOUND,
+
+	STATUS_REQ,
+
 	NOT_DISTRIBUTED,
 
 	RETURN_QTY_REQ,
@@ -56,7 +70,7 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 	RETURNED_BY_REQ,
 
 	SPMN_NOT_FOUND;
-	
+
 	@Override
 	public String code() {
 		return "DIST_ORDER_" + this.name();

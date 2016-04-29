@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrder;
 import com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem;
@@ -19,7 +20,6 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
-import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -122,16 +123,19 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 
 	private void setRequesterAndReceivingSite(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
 		SpecimenRequest request = order.getRequest();
-
 		User requestor = null;
 		if (request != null) {
 			requestor = request.getRequestor();
-		} else {
-			requestor = getUser(detail.getRequester(), null);
+		} else if (detail.getRequester() != null) {
+			requestor = getUser(detail.getRequester(), null, ose, DistributionOrderErrorCode.REQUESTER_NOT_FOUND);
 			if (requestor == null) {
-				ose.addError(UserErrorCode.NOT_FOUND);
 				return;
 			}
+		}
+
+		if (requestor == null) {
+			ose.addError(DistributionOrderErrorCode.REQUESTER_REQ);
+			return;
 		}
 
 		order.setRequester(requestor);
@@ -190,13 +194,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	}
 
 	private void setDistributor(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
-		User distributor = getUser(detail.getDistributor(), AuthUtil.getCurrentUser());
-		if (distributor == null) {
-			ose.addError(UserErrorCode.NOT_FOUND);
-			return;
-		}
-		
-		order.setDistributor(distributor);
+		order.setDistributor(getUser(detail.getDistributor(), AuthUtil.getCurrentUser(), ose, DistributionOrderErrorCode.DISTRIBUTOR_NOT_FOUND));
 	}
 		
 	private void setOrderItems(DistributionOrderDetail detail, DistributionOrder order, OpenSpecimenException ose) {
@@ -209,7 +207,12 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 
 		boolean error = false;
+		Set<String> duplicateSpecimens = new HashSet<>();
 		for (DistributionOrderItemDetail oid : detail.getOrderItems()) {
+			if (oid == null) {
+				continue;
+			}
+
 			DistributionOrderItem item = getOrderItem(oid, order, requestedSpmns, ose);
 			if (item == null) {
 				error = true;
@@ -218,25 +221,36 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			
 			items.add(item);
 			if (!specimens.add(item.getSpecimen().getId())) {
-				ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMENS);
-				error = true;
-				break;
+				duplicateSpecimens.add(item.getSpecimen().getLabel());
 			}
 		}
 
-		if (!error) {
-			order.setOrderItems(items);
+		if (CollectionUtils.isNotEmpty(duplicateSpecimens)) {
+			ose.addError(DistributionOrderErrorCode.DUPLICATE_SPECIMENS, duplicateSpecimens);
+			return;
 		}
+
+		if (error) {
+			return;
+		}
+
+		if (CollectionUtils.isEmpty(items)) {
+			ose.addError(DistributionOrderErrorCode.NO_SPECIMENS_TO_DIST);
+			return;
+		}
+
+		order.setOrderItems(items);
 	}
 		
-	private void setStatus(DistributionOrderDetail detail, DistributionOrder.Status initialStatus, DistributionOrder order, OpenSpecimenException ose) {		
+	private void setStatus(DistributionOrderDetail detail, DistributionOrder.Status initialStatus, DistributionOrder order, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(detail.getStatus())) {
+			ose.addError(DistributionOrderErrorCode.STATUS_REQ);
+			return;
+		}
+
 		if (initialStatus != null) {
 			order.setStatus(initialStatus);
 			return;
-		}
-		
-		if (detail.getStatus() == null) {
-			ose.addError(DistributionOrderErrorCode.INVALID_STATUS, detail.getStatus());
 		}
 		
 		DistributionOrder.Status status = null;
@@ -254,9 +268,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		String activityStatus = detail.getActivityStatus();
 		if (StringUtils.isBlank(activityStatus)) {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
-		}
-		
-		if (!Status.isValidActivityStatus(activityStatus)) {
+		} else if (!Status.isValidActivityStatus(activityStatus)) {
 			ose.addError(ActivityStatusErrorCode.INVALID);
 			return;
 		}
@@ -272,18 +284,26 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		order.setComments(detail.getComments());
 	}
 		
-	private User getUser(UserSummary userSummary, User defaultUser) {
+	private User getUser(UserSummary userSummary, User defaultUser, OpenSpecimenException ose, ErrorCode error) {
 		if (userSummary == null) {
 			return defaultUser;
 		}
 		
 		User user = defaultUser;
+		String key = null;
 		if (userSummary.getId() != null) {
 			user = daoFactory.getUserDao().getById(userSummary.getId());
+			key = userSummary.getId().toString();
 		} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
 			user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
+			key = userSummary.getEmailAddress();
 		} else if (StringUtils.isNotBlank(userSummary.getLoginName()) && StringUtils.isNotBlank(userSummary.getDomain())) {
 			user = daoFactory.getUserDao().getUser(userSummary.getLoginName(), userSummary.getDomain());
+			key = userSummary.getLoginName();
+		}
+
+		if (user == null) { //if default user is given then this will not be true in any way so it is optional
+			ose.addError(error, key);
 		}
 		
 		return user;
@@ -306,8 +326,11 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			return null;
 		}
 
-		if (detail.getQuantity() == null || NumUtil.lessThanEqualsZero(detail.getQuantity())) {
-			ose.addError(DistributionOrderErrorCode.INVALID_QUANTITY);
+		if (detail.getQuantity() == null) {
+			ose.addError(DistributionOrderErrorCode.ITEM_QTY_REQ, specimen.getLabel());
+			return null;
+		} else if (NumUtil.lessThanEqualsZero(detail.getQuantity())) {
+			ose.addError(DistributionOrderErrorCode.ITEM_INVALID_QTY, specimen.getLabel());
 			return null;
 		}
 				
@@ -315,20 +338,21 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		orderItem.setQuantity(detail.getQuantity());
 		orderItem.setSpecimen(specimen);
 		orderItem.setOrder(order);
-		
-		try {
-			orderItem.setStatus(DistributionOrderItem.Status.valueOf(detail.getStatus()));
-		} catch (IllegalArgumentException iae) {
-			ose.addError(DistributionOrderErrorCode.INVALID_SPECIMEN_STATUS, detail.getStatus());
-		}
-		
+
+		setOrderItemStatus(detail, orderItem, ose);
+
 		return orderItem;
 	}
 	
 	private Specimen getSpecimen(SpecimenInfo info, OpenSpecimenException ose) {
 		Specimen specimen = null;
 		Object key = null;
-		
+
+		if (info == null) {
+			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
+			return null;
+		}
+
 		if (info.getId() != null) {
 			key = info.getId();
 			specimen = daoFactory.getSpecimenDao().getById(info.getId());
@@ -342,5 +366,20 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 		}
 		
 		return specimen;
+	}
+
+	private void setOrderItemStatus(DistributionOrderItemDetail detail, DistributionOrderItem item, OpenSpecimenException ose) {
+		String status = detail.getStatus();
+		if (StringUtils.isBlank(status)) {
+			ose.addError(DistributionOrderErrorCode.ITEM_STATUS_REQ, item.getSpecimen().getLabel());
+			return;
+		}
+
+		if (!DistributionOrderItem.isValidDistributionStatus(status)) {
+			ose.addError(DistributionOrderErrorCode.INVALID_SPECIMEN_STATUS, status, item.getSpecimen().getLabel());
+			return;
+		}
+
+		item.setStatus(DistributionOrderItem.Status.valueOf(status));
 	}
 }

@@ -167,4 +167,9 @@ public class DistributionOrderItem extends BaseEntity {
 		specimen.returnSpecimen(this);
 		setStatus(Status.RETURNED);
 	}
+
+	public static boolean isValidDistributionStatus(String status) {
+		return status.equals(Status.DISTRIBUTED.name()) ||
+			status.equals(Status.DISTRIBUTED_AND_CLOSED.name());
+	}
 }
