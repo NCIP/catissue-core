@@ -5,8 +5,10 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
   <changeSet author="ckhilosiya" id="Freeze/thaw cycles field for specimen">
+    <validCheckSum>7:941984992ac02bf48223f9308ff837e3</validCheckSum>
+    <validCheckSum>7:bec6b643d108d9e18f545324988e2d24</validCheckSum>
     <addColumn tableName="CATISSUE_SPECIMEN">
-      <column name="FREEZE_THAW_CYCLES" type="${mediumint.type}" defaultValue="0"/>
+      <column name="FREEZE_THAW_CYCLES" type="${mediumint.type}"/>
     </addColumn>
   </changeSet>
 
@@ -800,5 +802,20 @@
         <constraints nullable="false"/>
       </column>
     </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Remove default value set for specimen freeze thaw cycles column">
+    <dropDefaultValue tableName="CATISSUE_SPECIMEN" columnName="freeze_thaw_cycles"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Set freeze thaw cycles null for specimen who got default zero value">
+    <sql>
+      update
+        catissue_specimen
+      set
+        freeze_thaw_cycles = NULL
+      where
+        freeze_thaw_cycles = 0
+    </sql>
   </changeSet>
 </databaseChangeLog>

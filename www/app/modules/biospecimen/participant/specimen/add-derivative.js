@@ -33,11 +33,6 @@ angular.module('os.biospecimen.specimen.addderivative', [])
     };
 
     $scope.createDerivative = function() {
-      if ($scope.parentSpecimen.freezeThawCycles > $scope.derivative.freezeThawCycles) {
-        Alerts.error('specimens.freeze_thaw_cycle_lt_parent');
-        return;
-      }
-
       SpecimenUtil.createDerivatives($scope);
     };
 

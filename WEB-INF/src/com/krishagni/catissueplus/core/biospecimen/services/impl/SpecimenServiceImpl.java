@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.ObjectUtils;
 
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
@@ -32,7 +31,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
@@ -48,6 +46,7 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
+import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
@@ -734,17 +733,6 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			return;
 		}
 
-		Specimen parentSpecimen = spec.getParentSpecimen();
-		if (detail.getIncrParentFreezeThaw() != null && detail.getIncrParentFreezeThaw() > 0) {
-			parentSpecimen.incrementFreezeThaw(detail.getIncrParentFreezeThaw());
-		}
-
-		if (spec.getId() != null) {
-			return;
-		}
-
-		if (ObjectUtils.compare(parentSpecimen.getFreezeThawCycles(), spec.getFreezeThawCycles()) == 1) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.FREEZE_THAW_CYCLE_LT_PARENT);
-		}
+		spec.getParentSpecimen().incrementFreezeThaw(detail.getIncrParentFreezeThaw());
 	}
 }

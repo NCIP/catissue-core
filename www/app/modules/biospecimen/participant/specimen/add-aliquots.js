@@ -44,11 +44,6 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
     }
 
     $scope.collectAliquots = function() {
-      if (specimen.freezeThawCycles > $scope.aliquotSpec.freezeThawCycles) {
-        Alerts.error('specimens.freeze_thaw_cycle_lt_parent');
-        return;
-      }
-
       var specimens = SpecimenUtil.collectAliquots($scope);
       if (specimens) {
         CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, parent);
