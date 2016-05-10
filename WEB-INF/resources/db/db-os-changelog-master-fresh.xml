@@ -55,4 +55,6 @@
   <include file="db/3.1/schema.xml"/>
   <include file="db/3.1/config.xml"/>
   <include file="db/3.1/audit.xml"/>
+
+  <include file="db/3.2/config.xml"/>
 </databaseChangeLog>

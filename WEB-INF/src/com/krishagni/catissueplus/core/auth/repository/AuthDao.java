@@ -16,6 +16,8 @@ public interface AuthDao extends Dao<AuthDomain> {
 	
 	public AuthDomain getAuthDomainByName(String domainName);
 	
+	public AuthDomain getAuthDomainByType(String authType);
+
 	public Boolean isUniqueAuthDomainName(String domainName);
 
 	public AuthProvider getAuthProviderByType(String authType);

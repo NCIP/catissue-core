@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.administrative.services;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
@@ -16,7 +17,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 
-public interface UserService extends UserDetailsService {
+public interface UserService extends UserDetailsService, SAMLUserDetailsService {
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req);
 	
 	public ResponseEvent<UserDetail> getUser(RequestEvent<Long> req);

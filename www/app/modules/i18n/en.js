@@ -1702,7 +1702,9 @@
         "token_inactive_interval": "Session Timeout Limit (minutes)",
         "token_inactive_interval_desc": "Minutes of inactiveness after which a user is automatically logged out.",
         "verify_token_ip_address": "IP Address Validation",
-        "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued."
+        "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued.",
+        "saml_enable": "Enable SAML authentication",
+        "saml_enable_desc": "Enable single sign on using SAML based identity provider"
       },
       
       "administrative": {

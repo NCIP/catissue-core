@@ -10,7 +10,9 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml</param-value>
+    <param-value>
+      /WEB-INF/applicationContext.xml
+    </param-value>
   </context-param>
 
   <context-param>
@@ -28,6 +30,16 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <url-pattern>/rest/ng/*</url-pattern>
   </filter-mapping>
 
+  <filter>
+    <filter-name>samlFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>samlFilter</filter-name>
+    <url-pattern>/saml/*</url-pattern>
+  </filter-mapping>
+  
   <listener>
     <listener-class>com.krishagni.catissueplus.core.init.AppServletContextListener</listener-class>
   </listener>

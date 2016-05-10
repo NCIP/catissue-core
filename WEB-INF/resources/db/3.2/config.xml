@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Enabling or disabling SAML athentication">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'saml_enable',
+        'saml_enable', 'saml_enable_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+  
+</databaseChangeLog>

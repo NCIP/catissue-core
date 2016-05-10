@@ -1,7 +1,10 @@
 package com.krishagni.catissueplus.core.common.util;
 
+import java.net.URLDecoder;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -67,5 +70,35 @@ public class AuthUtil {
 	
 	public static String decodeToken(String token) {
 		return new String(Base64.decode(token.getBytes()));
+	}
+	
+	public static String getTokenFromCookie(HttpServletRequest httpReq) {
+		String cookieHdr = httpReq.getHeader("Cookie");
+		if (StringUtils.isBlank(cookieHdr)) {
+			return null;
+		}
+
+		String[] cookies = cookieHdr.split(";");
+		String authToken = null;
+		for (String cookie : cookies) {
+			if (!cookie.trim().startsWith("osAuthToken")) {
+				continue;
+			}
+
+			String[] authTokenParts = cookie.trim().split("=");
+			if (authTokenParts.length == 2) {
+				try {
+					authToken = URLDecoder.decode(authTokenParts[1], "utf-8");
+					if (authToken.startsWith("%")) {
+						authToken = authToken.substring(1, authToken.length() - 1);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+
+		return authToken;
 	}
 }

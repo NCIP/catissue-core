@@ -21,6 +21,16 @@
     <query name="getDomainByName">
       from com.krishagni.catissueplus.core.auth.domain.AuthDomain where name = :domainName
     </query>
+    
+    <query name="getDomainByType">
+      select 
+        domain
+      from 
+        com.krishagni.catissueplus.core.auth.domain.AuthDomain domain
+        join domain.authProvider provider
+      where 
+        provider.authType = :authType
+    </query>
 	
     <query name="getAuthDomains">
       from com.krishagni.catissueplus.core.auth.domain.AuthDomain

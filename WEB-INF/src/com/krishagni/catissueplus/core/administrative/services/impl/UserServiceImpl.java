@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.saml.SAMLCredential;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
@@ -20,6 +21,7 @@ import com.krishagni.catissueplus.core.administrative.events.UserDetail;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
+import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -91,6 +93,35 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return daoFactory.getUserDao().getUser(username, DEFAULT_AUTH_DOMAIN);
+	}
+	
+	@Override
+	@PlusTransactional
+	public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
+		//
+		// TODO: The domain name "saml" is hardcoded. We need to figure out whether
+		// domain name can be obtained from SAML credential
+		//
+		AuthDomain domain = daoFactory.getAuthDao().getAuthDomainByType("saml");
+
+		Map<String, String> props = domain.getAuthProvider().getProps();
+		String loginNameAttr = props.get("loginNameAttr");
+		String emailAttr     = props.get("emailAddressAttr");
+		
+		User user = null;
+		if (StringUtils.isNotBlank(loginNameAttr)) {
+			String loginName = credential.getAttributeAsString(loginNameAttr);
+			user = daoFactory.getUserDao().getUser(loginName, domain.getName());
+		} else if (StringUtils.isNotBlank(emailAttr)) {
+			String email = credential.getAttributeAsString(emailAttr);
+			user = daoFactory.getUserDao().getUserByEmailAddress(email);
+		}
+		
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found");
+		}
+		
+		return user;
 	}
 
 	@Override

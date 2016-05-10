@@ -60,6 +60,12 @@ public class AuthDomain {
 		for (String name: oldNames) {
 			oldProps.remove(name);
 		}
+
+		//
+		// Removing updated domain's auth provider implementation instance from cached
+		// instances so that new instance with new properties can be created
+		//
+		authProviderMap.remove(domain.getAuthProvider().getAuthType());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -75,8 +81,8 @@ public class AuthDomain {
 			}
 			
 			return authService;
-		}
-		catch (final Exception e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);
 		}
 	}

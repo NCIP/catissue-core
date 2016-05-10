@@ -2,7 +2,6 @@ package com.krishagni.catissueplus.rest.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,11 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -119,7 +114,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		User userDetails = null;
 		String authToken = httpReq.getHeader(OS_AUTH_TOKEN_HDR);
 		if (authToken == null) {
-			authToken = getAuthTokenFromCookie(httpReq);
+			authToken = AuthUtil.getTokenFromCookie(httpReq);
 		}
 		
 		if (authToken != null) {
@@ -200,34 +195,6 @@ public class AuthTokenFilter extends GenericFilterBean {
 	private void setUnauthorizedResp(HttpServletResponse httpResp) throws IOException {
 		httpResp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
 				"You must supply valid credentials to access the OpenSpecimen REST API");
-	}
-	
-	private String getAuthTokenFromCookie(HttpServletRequest httpReq) {
-		String cookieHdr = httpReq.getHeader("Cookie");
-		if (StringUtils.isBlank(cookieHdr)) {
-			return null;
-		}
-		
-		String[] cookies = cookieHdr.split(";");
-		String authToken = null;
-		for (String cookie : cookies) {
-			if (!cookie.trim().startsWith("osAuthToken")) {
-				continue;
-			}
-			
-			String[] authTokenParts = cookie.trim().split("=");
-			if (authTokenParts.length == 2) {
-				try {
-					authToken = URLDecoder.decode(authTokenParts[1], "utf-8");
-					authToken = authToken.substring(1, authToken.length() - 1);
-				} catch (Exception e) {
-					
-				}				
-				break;
-			}
-		}
-		
-		return authToken;
 	}
 
 	private boolean matches(HttpServletRequest httpReq, String url) {
