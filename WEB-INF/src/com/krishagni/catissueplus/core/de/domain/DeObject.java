@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -405,7 +406,12 @@ public abstract class DeObject {
 	public Map<String, String> getLabelValueMap() {
 		String notSpecified = MessageUtil.getInstance().getMessage("common_not_specified");
 		return getAttrs().stream().collect(
-			Collectors.toMap(attr -> attr.getCaption(), attr -> attr.getDisplayValue(notSpecified)));
+			Collectors.toMap(
+				attr -> attr.getCaption(),
+				attr -> attr.getDisplayValue(notSpecified),
+				(v1, v2) -> {throw new IllegalStateException("Duplicate key");},
+				LinkedHashMap::new)
+		);
 	}
 
 	public static class Attr {
