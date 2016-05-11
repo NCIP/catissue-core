@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vpawar" id="Index on container site" dbms="oracle">
+    <createIndex tableName="OS_STORAGE_CONTAINERS" indexName="OS_ST_CONT_SITE_IDX">
+      <column name="SITE_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on container parent" dbms="oracle">
+    <createIndex tableName="OS_STORAGE_CONTAINERS" indexName="OS_ST_CONT_PARENT_IDX">
+      <column name="PARENT_CONTAINER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on container to which position belongs" dbms="oracle">
+    <createIndex tableName="OS_CONTAINER_POSITIONS" indexName="OS_POS_CONT_IDX">
+      <column name="STORAGE_CONTAINER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on container allowed protocols" dbms="oracle">
+    <createIndex tableName="OS_STOR_CONTAINER_COMP_CPS" indexName="OS_ST_CONT_CP_IDX">
+      <column name="STORAGE_CONTAINER_ID"/>
+      <column name="CP_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on container allowed specimen classes" dbms="oracle">
+    <createIndex tableName="OS_STOR_CONT_COMP_SPEC_CLASSES" indexName="OS_ST_CONT_SPMN_CLASS_IDX">
+      <column name="STORAGE_CONTAINER_ID"/>
+      <column name="SPECIMEN_CLASS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on container allowed specimen types" dbms="oracle">
+    <createIndex tableName="OS_STOR_CONT_COMP_SPEC_TYPES" indexName="OS_ST_CONT_SPMN_TYPE_IDX">
+      <column name="STORAGE_CONTAINER_ID"/>
+      <column name="SPECIMEN_TYPE"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>
