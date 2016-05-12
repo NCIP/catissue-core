@@ -107,4 +107,45 @@ angular.module('os.biospecimen.common.specimenunit', [])
         });
       }
     }
+  })
+  .directive('osSpecimenQty', function() {
+    return {
+      restrict: 'E',
+
+      scope: {
+        quantity: '=',
+        specimen: '=',
+        measure: '@',
+        placeholder: '@'
+      },
+
+      replace: true,
+
+      template:
+        '<div class="input-group"> ' +
+          '<input type="text" ng-model="quantity" class="form-control" ' +
+            'ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{placeholder}}"> ' +
+          '<div class="input-group-addon"> ' +
+            '<os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type" ' +
+              'measure="{{measure || \'quantity\'}}"> ' +
+            '</os-specimen-unit> ' +
+          '</div> ' +
+        '</div>',
+
+      compile: function(tElem, tAttrs) {
+        var inputEl = tElem.find('input');
+        if (tAttrs.required != undefined) {
+          inputEl.attr('required', '');
+        }
+
+        inputEl.attr('name', tAttrs.name);
+
+        if (tAttrs.mdInput) {
+          tElem.addClass('os-md-input');
+          inputEl.next().addClass('os-md-input-addon');
+        }
+
+        return function() { }
+      }
+    }
   });
