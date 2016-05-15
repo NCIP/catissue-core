@@ -5,9 +5,6 @@
       default-tmpl="'modules/biospecimen/participant/summary.html'">
     </os-plugin-hooks>
 
-    <div ng-if="!!cpr.participant.extensionDetail">
-      <div os-extension-overview ext-object="cpr.participant.extensionDetail" show-column="2"></div>
-    </div>
     <div class="os-section" ng-init="opCollapsed=false" ng-if="cpr.participant.registeredCps.length > 1">
       <button class="os-btn-section-collapse os-btn-transparent" ng-click="opCollapsed=!opCollapsed">
         <span ng-if="!opCollapsed" class="fa fa-chevron-circle-down"></span>

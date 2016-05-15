@@ -70,8 +70,14 @@ angular.module('os.biospecimen.visit', [
             }
           );
         },
-        controller: function() {
-          // 'ParticipantOverviewCtrl',
+        controller: function($scope, hasSde, sysDict, cpDict) {
+          $scope.ctx = {
+            hasDict: hasSde && (cpDict.length > 0 || sysDict.length > 0),
+            sysDict: sysDict,
+            cpDict: cpDict,
+            obj: {visit: $scope.visit},
+            inObjs: ['visit']
+          }
         },
         parent: 'visit-detail'
       })

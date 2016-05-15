@@ -1,80 +1,97 @@
-
 <div class="clearfix">
   <div class="col-xs-8">
-    <ul class="os-key-values os-two-cols">
-      <li class="item">
-        <strong class="key key-sm" translate="visits.name">Name</strong>
-        <span class="value value-md">{{visit.name | osNoValue}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="visits.visit_status">Status</strong>
-        <ng-switch on="visit.status">
-          <span class="value value-md os-status-collected" ng-switch-when="Complete">{{'visits.status.complete' | translate}}</span>
-          <span class="value value-md os-status-missed" ng-switch-when="Missed Collection">{{'visits.status.missed' | translate}}</span>
-          <span class="value value-md os-status-pending" ng-switch-default>{{'visits.status.pending' | translate}}</span>
-        </ng-switch>
-      </li>
-
-      <li class="item" ng-if="visit.id">
-        <strong class="key key-sm" translate="visits.visit_date">Visit Date</strong>
-        <span class="value value-md">{{visit.visitDate | date: global.dateFmt}}</span>
-      </li>
- 
-      <li class="item" ng-if="!visit.id">
-        <strong class="key key-sm" translate="visits.anticipated_visit_date">Anticipated Visit Date</strong>
-        <span class="value value-md" ng-switch on="visit.anticipatedVisitDate != null">
-          <span ng-switch-when="true">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
-          <span ng-switch-default translate="visits.end_of_study">End of Study</span>
-        </span>
-      </li>
- 
-      <li class="item">
-        <strong class="key key-sm" translate="visits.visit_site">Site</strong>
-        <span class="value value-md">{{visit.site | osNoValue}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="visits.clinical_diagnosis">Clinical Diagnosis</strong>
-        <span class="value value-md">{{visit.clinicalDiagnosis | osNoValue}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="visits.clinical_status">Clinical Status</strong>
-        <span class="value value-md">{{visit.clinicalStatus | osNoValue}}</span>
-      </li>
-
-      <li class="item" ng-if="visit.status != 'Missed Collection' && !!visit.cohort">
-        <strong class="key key-sm" translate="visits.cohort">Cohort</strong>
-        <span class="value value-md">{{visit.cohort | osNoValue}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="visits.surgical_path_no">Surg Path Number</strong>
-        <span class="value value-md">{{visit.surgicalPathologyNumber | osNoValue}}</span>
-      </li>
-
-      <li class="item" ng-if="visit.status == 'Missed Collection'">
-        <strong class="key key-sm" translate="visits.missed_by">Missed By</strong>
-        <span class="value value-md">{{visit.missedBy.firstName}} {{visit.missedBy.lastName}}</span>
-      </li>
-    </ul>
-
-    <div ng-if="!!visit.extensionDetail">
-      <div os-extension-overview ext-object="visit.extensionDetail" show-column="2"></div>
+    <div ng-switch on="ctx.hasDict">
+      <div ng-switch-when="true">
+        <sde-fields-overview base-fields="ctx.sysDict" fields="ctx.cpDict"
+          obj="ctx.obj" in-objs="ctx.inObjs">
+        </sde-fields-overview>
+      </div>
+      <div ng-switch-default>
+        <div ng-include="'modules/biospecimen/participant/visit/static-fields.html'"></div>
+      </div>
     </div>
 
-    <div class="os-section os-line-section" ng-if="!!visit.comments">
-      <strong class="key key-sm">
-        <span translate="visits.comments">Comments</span>
-        <span>&nbsp;</span>
-      </strong>
-      <span class="value value-md">{{visit.comments}}</span>
-    </div>
-
-    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="specimens" allowed-ops="specimenAllowedOps" reload="reload()"></div>
-  </div>
-
-  <div class="col-xs-4">
+    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="specimens"
+      allowed-ops="specimenAllowedOps" reload="reload()">
+    </os-specimen-tree>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/visit/static-fields.html">
+  <ul class="os-key-values os-two-cols">
+    <li class="item">
+      <strong class="key key-sm" translate="visits.name">Name</strong>
+      <span class="value value-md">{{visit.name | osNoValue}}</span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="visits.visit_status">Status</strong>
+      <ng-switch on="visit.status">
+        <span class="value value-md os-status-collected" ng-switch-when="Complete">
+          {{'visits.status.complete' | translate}}
+        </span>
+        <span class="value value-md os-status-missed" ng-switch-when="Missed Collection">
+          {{'visits.status.missed' | translate}}
+        </span>
+        <span class="value value-md os-status-pending" ng-switch-default>
+          {{'visits.status.pending' | translate}}
+        </span>
+      </ng-switch>
+    </li>
+
+    <li class="item" ng-if="visit.id">
+      <strong class="key key-sm" translate="visits.visit_date">Visit Date</strong>
+      <span class="value value-md">{{visit.visitDate | date: global.dateFmt}}</span>
+    </li>
+
+    <li class="item" ng-if="!visit.id">
+      <strong class="key key-sm" translate="visits.anticipated_visit_date">Anticipated Visit Date</strong>
+      <span class="value value-md" ng-switch on="visit.anticipatedVisitDate != null">
+        <span ng-switch-when="true">{{visit.anticipatedVisitDate | date: global.dateFmt}}</span>
+        <span ng-switch-default translate="visits.end_of_study">End of Study</span>
+      </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="visits.visit_site">Site</strong>
+      <span class="value value-md">{{visit.site | osNoValue}}</span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="visits.clinical_diagnosis">Clinical Diagnosis</strong>
+      <span class="value value-md">{{visit.clinicalDiagnosis | osNoValue}}</span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="visits.clinical_status">Clinical Status</strong>
+      <span class="value value-md">{{visit.clinicalStatus | osNoValue}}</span>
+    </li>
+
+    <li class="item" ng-if="visit.status != 'Missed Collection' && !!visit.cohort">
+      <strong class="key key-sm" translate="visits.cohort">Cohort</strong>
+      <span class="value value-md">{{visit.cohort | osNoValue}}</span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="visits.surgical_path_no">Surg Path Number</strong>
+      <span class="value value-md">{{visit.surgicalPathologyNumber | osNoValue}}</span>
+    </li>
+
+    <li class="item" ng-if="visit.status == 'Missed Collection'">
+      <strong class="key key-sm" translate="visits.missed_by">Missed By</strong>
+      <span class="value value-md">{{visit.missedBy.firstName}} {{visit.missedBy.lastName}}</span>
+    </li>
+  </ul>
+
+  <div ng-if="!!visit.extensionDetail">
+    <div os-extension-overview ext-object="visit.extensionDetail" show-column="2"></div>
+  </div>
+
+  <div class="os-section os-line-section" ng-if="!!visit.comments">
+    <strong class="key key-sm">
+      <span translate="visits.comments">Comments</span>
+      <span>&nbsp;</span>
+    </strong>
+    <span class="value value-md">{{visit.comments}}</span>
+  </div>
+</script>

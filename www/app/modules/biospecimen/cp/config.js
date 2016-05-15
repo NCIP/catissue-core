@@ -1,8 +1,4 @@
 
-/**
- * Interim implementation. This should make way for backend supported
- * CP config
- */
 angular.module('openspecimen')
   .factory('CpConfigSvc', function(CollectionProtocol, $q) {
     var cpWorkflowsMap = {};
@@ -56,6 +52,15 @@ angular.module('openspecimen')
       );
     }
 
+    function getWorkflowData(cpId, name) {
+      return loadWorkflows(cpId).then(
+        function(cfg) {
+          var workflow = cfg.workflows[name];
+          return workflow ? (workflow.data || {}) : {};
+        }
+      );
+    }
+
     return {
       getRegParticipantTmpl: function(cpId, cprId) {
         if (cprId != -1) { //edit case
@@ -79,14 +84,7 @@ angular.module('openspecimen')
         return getRegParticipantCtrl(cpId, cprId);
       },
 
-      getWorkflowData: function(cpId, name) {
-        return loadWorkflows(cpId).then(
-          function(cfg) {
-            var workflow = cfg.workflows[name];
-            return workflow ? (workflow.data || {}) : {};
-          }
-        );
-      },
+      getWorkflowData: getWorkflowData,
 
       getBulkRegParticipantTmpl: function(cpId, cprId) {
         return loadWorkflows(cpId).then(
@@ -100,6 +98,14 @@ angular.module('openspecimen')
         // we do not call loadWorkflows, as it would have been loaded by above 
         // template provider
         return getBulkRegParticipantCtrl(cpId, cprId);
+      },
+
+      getDictionary: function(cpId, defValue) {
+        return getWorkflowData(cpId, 'dictionary').then(
+          function(data) {
+            return data.fields || defValue || [];
+          }
+        );
       }
     }
   });

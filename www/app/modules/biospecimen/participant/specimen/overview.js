@@ -1,7 +1,16 @@
 
 angular.module('os.biospecimen.specimen.overview', ['os.biospecimen.models'])
-  .controller('SpecimenOverviewCtrl', function($scope, $rootScope, specimen) {
+  .controller('SpecimenOverviewCtrl', function($scope, $rootScope, hasSde, sysDict, cpDict, specimen) {
     function init() {
+      $scope.ctx = {
+        hasDict: hasSde && (cpDict.length > 0 || sysDict.length > 0),
+        sysDict: sysDict,
+        cpDict: cpDict,
+        obj: {specimen: $scope.specimen},
+        inObjs: ['specimen'],
+        exObjs: ['specimen.events', 'specimen.collectionEvent', 'specimen.receivedEvent']
+      }
+
       loadActivities();
 
       $scope.$watch('specimen.activityStatus', function(newVal, oldVal) {
