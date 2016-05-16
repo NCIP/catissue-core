@@ -1,11 +1,16 @@
 
 angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
-  .controller('ParticipantRootCtrl', function($scope, cpr, AuthorizationService) {
+  .controller('ParticipantRootCtrl', function($scope, cpr, hasSde, hasDict, sysDict, cpDict, AuthorizationService) {
 
     function init() {
       $scope.cpr = $scope.object = cpr;
       $scope.entityType = 'Participant';
       $scope.extnState = 'participant-detail.extensions.';
+
+      $scope.fieldsCtx = {
+        hasSde: hasSde, hasDict: hasDict,
+        sysDict: sysDict, cpDict: cpDict
+      };
 
       initAuthorizationOpts();
     }

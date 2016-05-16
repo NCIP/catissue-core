@@ -1,16 +1,14 @@
 
 angular.module('os.biospecimen.participant.overview', ['os.biospecimen.models'])
-  .controller('ParticipantOverviewCtrl', function($scope, hasSde, sysDict, cpDict, visits, Visit) {
+  .controller('ParticipantOverviewCtrl', function($scope, visits, Visit, ExtensionsUtil) {
 
     function init() {
       $scope.occurredVisits    = Visit.completedVisits(visits);
       $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
       $scope.missedVisits      = Visit.missedVisits(visits);
 
-      $scope.ctx = {
-        hasDict: hasSde && (cpDict.length > 0 || sysDict.length > 0),
-        sysDict: sysDict,
-        cpDict: cpDict,
+      ExtensionsUtil.createExtensionFieldMap($scope.cpr);
+      $scope.partCtx = {
         obj: {cpr: $scope.cpr},
         inObjs: ['cpr']
       }

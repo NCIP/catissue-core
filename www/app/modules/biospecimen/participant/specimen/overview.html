@@ -1,9 +1,9 @@
 <div class="clearfix">
   <div class="col-xs-8">
-    <div ng-switch on="ctx.hasDict">
+    <div ng-switch on="fieldsCtx.hasDict">
       <div ng-switch-when="true">
-        <sde-fields-overview base-fields="ctx.sysDict" fields="ctx.cpDict"
-          obj="ctx.obj" in-objs="ctx.inObjs" ex-objs="ctx.exObjs">
+        <sde-fields-overview base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+          obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
         </sde-fields-overview>
       </div>
       <div ng-switch-default>

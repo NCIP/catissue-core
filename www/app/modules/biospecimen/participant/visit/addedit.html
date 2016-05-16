@@ -33,110 +33,16 @@
 
   <div class="container os-margin-top">
     <form name="vform" class="form-horizontal" os-form-validator="vform" validator="vformValidator" novalidate>
-      <div class="form-group" ng-if="(currVisit.id || !cp.visitNameFmt || cp.manualVisitNameEnabled) && currVisit.status != 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.name">Name</label>
-        <div class="col-xs-6">
-          <input type="text" name="name" ng-model="currVisit.name" class="form-control" 
-            placeholder="Name" ng-required="!!cp.manualVisitNameEnabled"
-            ng-disabled="cp.visitNameFmt && !cp.manualVisitNameEnabled"/>
-          <div os-field-error field="vform.name"></div>
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="visitCtx.obj" in-objs="visitCtx.inObjs">
+          </sde-form-fields>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="visits.visit_status">Status</label>
-        <div class="col-xs-6">
-          <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
-            required placeholder="{{'visits.visit_status' | translate}}"/>
-          <div os-field-error field="sform.status"></div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/visit/static-addedit.html'">
+          </div>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="visits.visit_date">Date of Visit</label>
-        <div class="col-xs-6">
-          <os-date-picker name="date" date="currVisit.visitDate" required
-            placeholder="{{'visits.visit_date' | translate}}">
-          </os-date-picker>
-          <div os-field-error field="vform.date"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.visit_site">Site of Visit</label>
-        <div class="col-xs-6">
-          <os-select name="site" ng-model="currVisit.site" list="sites" 
-            ng-required="currVisit.status != 'Missed Collection'" placeholder="{{'visits.visit_site' | translate}}"> 
-          </os-select>
-          <div os-field-error field="vform.site"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.clinical_diagnosis">Clinical Diagnosis</label>
-        <div class="col-xs-6">
-          <os-pvs name="diagnosis" ng-model="currVisit.clinicalDiagnosis" attribute="clinical-diagnosis"
-            placeholder="{{'visits.clinical_diagnosis' | translate}}">
-          </os-pvs>
-          <div os-field-error field="vform.diagnosis"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.clinical_status">Clinical Status</label>
-        <div class="col-xs-6">
-          <os-select name="clinicalStatus" ng-model="currVisit.clinicalStatus" list="clinicalStatuses" 
-            placeholder="{{'visits.clinical_status' | translate}}"> </os-select>
-          <div os-field-error field="vform.clinicalStatus"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status != 'Missed Collection' && !!cohorts && cohorts.length > 0">
-        <label class="col-xs-3 control-label" translate="visits.cohort">Cohort</label>
-        <div class="col-xs-6">
-          <os-select name="cohort" ng-model="currVisit.cohort" list="cohorts" 
-            placeholder="{{'visits.cohort' | translate}}"> </os-select>
-          <div os-field-error field="vform.cohort"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.surgical_path_no">Surgical Pathology No.</label>
-        <div class="col-xs-6">
-          <input type="text" name="spn" ng-model="currVisit.surgicalPathologyNumber" class="form-control" 
-            placeholder="{{'visits.surgical_path_no' | translate}}"/>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.missed_by">Missed By</label>
-        <div class="col-xs-6">
-          <os-users name="missedBy" ng-model="currVisit.missedBy" placeholder="{{'visits.missed_by' | translate}}"></os-users>
-          <div os-field-error field="vform.missedBy"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
-        <label class="col-xs-3 control-label" translate="visits.reason_for_missed_visit">Reason for Missed Visit</label>
-        <div class="col-xs-6">
-          <os-select name="missedReason" ng-model="currVisit.missedReason" list="missedReasons"
-            placeholder="{{'visits.reason_for_missed_visit' | translate}}">
-          </os-select>
-          <div os-field-error field="vform.missedReason"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="visits.comments">Comments</label>
-        <div class="col-xs-6">
-          <textarea type="text" name="comments" ng-model="currVisit.comments" class="form-control" 
-            placeholder="{{'visits.comments' | translate}}"></textarea>
-        </div>
-      </div>
-
-      <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
-        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" 
-          extended-obj="currVisit" ng-hide="currVisit.status == 'Missed Collection'"></div>
       </div>
 
       <div class="os-divider"></div>
@@ -155,3 +61,117 @@
     </form>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/visit/static-addedit.html">
+  <div>
+    <div class="form-group"
+      ng-if="(currVisit.id || !cp.visitNameFmt || cp.manualVisitNameEnabled) && currVisit.status != 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.name">Name</label>
+      <div class="col-xs-6">
+        <input type="text" name="name" ng-model="currVisit.name" class="form-control" 
+          placeholder="Name" ng-required="!!cp.manualVisitNameEnabled"
+          ng-disabled="cp.visitNameFmt && !cp.manualVisitNameEnabled"/>
+        <div os-field-error field="vform.name"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="visits.visit_status">Status</label>
+      <div class="col-xs-6">
+        <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
+          required placeholder="{{'visits.visit_status' | translate}}"/>
+        <div os-field-error field="sform.status"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="visits.visit_date">Date of Visit</label>
+      <div class="col-xs-6">
+        <os-date-picker name="date" date="currVisit.visitDate" required
+          placeholder="{{'visits.visit_date' | translate}}">
+        </os-date-picker>
+        <div os-field-error field="vform.date"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.visit_site">Site of Visit</label>
+      <div class="col-xs-6">
+        <os-select name="site" ng-model="currVisit.site" list="sites" 
+          ng-required="currVisit.status != 'Missed Collection'" placeholder="{{'visits.visit_site' | translate}}"> 
+        </os-select>
+        <div os-field-error field="vform.site"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.clinical_diagnosis">Clinical Diagnosis</label>
+      <div class="col-xs-6">
+        <os-pvs name="diagnosis" ng-model="currVisit.clinicalDiagnosis" attribute="clinical-diagnosis"
+          placeholder="{{'visits.clinical_diagnosis' | translate}}">
+        </os-pvs>
+        <div os-field-error field="vform.diagnosis"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.clinical_status">Clinical Status</label>
+      <div class="col-xs-6">
+        <os-select name="clinicalStatus" ng-model="currVisit.clinicalStatus" list="clinicalStatuses" 
+          placeholder="{{'visits.clinical_status' | translate}}"> </os-select>
+        <div os-field-error field="vform.clinicalStatus"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status != 'Missed Collection' && !!cohorts && cohorts.length > 0">
+      <label class="col-xs-3 control-label" translate="visits.cohort">Cohort</label>
+      <div class="col-xs-6">
+        <os-select name="cohort" ng-model="currVisit.cohort" list="cohorts" 
+          placeholder="{{'visits.cohort' | translate}}"> </os-select>
+        <div os-field-error field="vform.cohort"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.surgical_path_no">Surgical Pathology No.</label>
+      <div class="col-xs-6">
+        <input type="text" name="spn" ng-model="currVisit.surgicalPathologyNumber" class="form-control" 
+          placeholder="{{'visits.surgical_path_no' | translate}}"/>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.missed_by">Missed By</label>
+      <div class="col-xs-6">
+        <os-users name="missedBy" ng-model="currVisit.missedBy" placeholder="{{'visits.missed_by' | translate}}">
+        </os-users>
+        <div os-field-error field="vform.missedBy"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
+      <label class="col-xs-3 control-label" translate="visits.reason_for_missed_visit">Reason for Missed Visit</label>
+      <div class="col-xs-6">
+        <os-select name="missedReason" ng-model="currVisit.missedReason" list="missedReasons"
+          placeholder="{{'visits.reason_for_missed_visit' | translate}}">
+        </os-select>
+        <div os-field-error field="vform.missedReason"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="visits.comments">Comments</label>
+      <div class="col-xs-6">
+        <textarea type="text" name="comments" ng-model="currVisit.comments" class="form-control" 
+          placeholder="{{'visits.comments' | translate}}">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" 
+        extended-obj="currVisit" ng-hide="currVisit.status == 'Missed Collection'">
+      </div>
+    </div>
+  </div>
+</script>

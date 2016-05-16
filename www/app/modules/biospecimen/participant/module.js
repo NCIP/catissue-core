@@ -84,6 +84,10 @@ angular.module('os.biospecimen.participant',
             }
 
             return CpConfigSvc.getDictionary($stateParams.cpId, []);
+          },
+
+          hasDict: function(hasSde, sysDict, cpDict) {
+            return hasSde && (cpDict.length > 0 || sysDict.length > 0);
           }
         },
         controller: 'ParticipantRootCtrl',

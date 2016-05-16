@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, $translate, $modal, cp, cpr, extensionCtxt,
+    $scope, $state, $stateParams, $translate, $modal, cp, cpr, extensionCtxt, hasDict,
     CollectionProtocolRegistration, Participant,
     Site, PvManager, ExtensionsUtil) {
 
@@ -11,14 +11,21 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpId = $stateParams.cpId;
       $scope.pid = undefined;
       $scope.allowIgnoreMatches = true;
-      $scope.deFormCtrl = {};
 
       $scope.cp = cp;
       $scope.cpr = angular.copy(cpr);
-      $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
+
+      $scope.partCtx = {
+        obj: {cpr: $scope.cpr}, inObjs: ['cpr']
+      }
+
+      $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.cpr.participant, extensionCtxt); 
 
-      loadPvs();
+      if (!hasDict) {
+        $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
+        loadPvs();
+      }
     };
 
     function loadPvs() {

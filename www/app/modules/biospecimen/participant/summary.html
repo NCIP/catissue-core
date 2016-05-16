@@ -1,8 +1,8 @@
 
-<div ng-switch on="ctx.hasDict">
+<div ng-switch on="fieldsCtx.hasDict">
   <div ng-switch-when="true">
-    <sde-fields-overview base-fields="ctx.sysDict" fields="ctx.cpDict"
-      obj="ctx.obj" in-objs="ctx.inObjs">
+    <sde-fields-overview base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+      obj="partCtx.obj" in-objs="partCtx.inObjs">
     </sde-fields-overview>
   </div>
   <div ng-switch-default>

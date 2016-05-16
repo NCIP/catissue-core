@@ -70,11 +70,9 @@ angular.module('os.biospecimen.visit', [
             }
           );
         },
-        controller: function($scope, hasSde, sysDict, cpDict) {
-          $scope.ctx = {
-            hasDict: hasSde && (cpDict.length > 0 || sysDict.length > 0),
-            sysDict: sysDict,
-            cpDict: cpDict,
+        controller: function($scope, ExtensionsUtil) {
+          ExtensionsUtil.createExtensionFieldMap($scope.visit);
+          $scope.visitCtx = {
             obj: {visit: $scope.visit},
             inObjs: ['visit']
           }

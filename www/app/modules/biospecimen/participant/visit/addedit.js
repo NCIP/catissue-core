@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.visit.addedit', [])
   .controller('AddEditVisitCtrl', function(
-    $scope, $state, $stateParams, cpr, visit, extensionCtxt,
+    $scope, $state, $stateParams, cpr, visit, extensionCtxt, hasDict,
     PvManager, ExtensionsUtil) {
 
     function loadPvs() {
@@ -13,14 +13,13 @@ angular.module('os.biospecimen.visit.addedit', [])
     };
 
     function init() {
-      loadPvs();
-
       var currVisit = $scope.currVisit = angular.copy(visit);
       angular.extend(currVisit, {cprId: cpr.id, cpTitle: cpr.cpTitle});
 
-      $scope.deFormCtrl = {};
-      $scope.extnOpts = ExtensionsUtil.getExtnOpts(currVisit, extensionCtxt);
-      
+      $scope.visitCtx = {
+        obj: {visit: $scope.currVisit}, inObjs: ['visit']
+      }
+
       if (!currVisit.id) {
         angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate || new Date(), status: 'Complete'});
         delete currVisit.anticipatedVisitDate;
@@ -30,6 +29,13 @@ angular.module('os.biospecimen.visit.addedit', [])
         angular.extend(currVisit, {status: 'Missed Collection'});
       } else if ($stateParams.newVisit == 'true') {
         angular.extend(currVisit, {id: undefined, name: undefined, status: 'Complete'});
+      }
+
+      $scope.deFormCtrl = {};
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(currVisit, extensionCtxt);
+
+      if (!hasDict) {
+        loadPvs();
       }
     }
 
@@ -47,10 +53,10 @@ angular.module('os.biospecimen.visit.addedit', [])
         function(result) {
           angular.extend($scope.visit, result);
 
-          var params = {visitId: result.id, eventId: result.eventId};
           //
           // For now, redirectTo works to participant child states
           //
+          var params = {visitId: result.id, eventId: result.eventId};
           if (!!$stateParams.redirectTo) {
             $state.go($stateParams.redirectTo, params);
           } else {
