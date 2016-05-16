@@ -5,6 +5,9 @@ angular.module('os.biospecimen.specimen')
       var spec = scope.aliquotSpec;
       var parent = scope.parentSpecimen;
       var extensionDetail = getExtensionDetail(scope);
+      if (!extensionDetail) {
+        extensionDetail = scope.aliquotSpec.extensionDetail;
+      }
 
       if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
         var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;

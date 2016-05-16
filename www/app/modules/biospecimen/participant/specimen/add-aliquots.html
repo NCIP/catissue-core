@@ -86,48 +86,15 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="col-xs-6">
-          <div class="os-date-time clearfix">
-            <div class="col-xs-6 input os-no-padding">
-              <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
-                placeholder="{{'specimens.created_on' | translate}}" required>
-              </os-date-picker>
-            </div>
-            <div class="col-xs-6">
-              <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
-              </timepicker>
-            </div>
-          </div>
-          <div os-field-error field="aliquotForm.createdOn"></div>
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
+          </sde-form-fields>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
-        <div class="col-xs-6">
-          <input name="freezeThawCycles" ng-model="aliquotSpec.freezeThawCycles"
-            class="form-control" type="text" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
-            ng-pattern="/^[0-9]*$/">
-          <div os-field-error field="aliquotForm.freezeThawCycles"></div>
-          <div class="os-text-checkbox">
-            <div class="checkbox">
-              <os-checkbox ng-model="aliquotSpec.incrParentFreezeThaw"
-                ng-true-value="1" ng-false-value="0" ng-change="toggleIncrParentFreezeThaw()">
-              </os-checkbox>
-            </div>
-            <div class="message os-ctrl-padding-top">
-              <span translate="specimens.increment_parent_freeze_thaw">
-                Increment parent specimen's Freeze/Thaw cycles?
-              </span>
-            </div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/specimen/static-add-aliquots.html'">
           </div>
-        </div>
-      </div>
-
-      <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
-        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="parentSpecimen">
         </div>
       </div>
 
@@ -157,3 +124,52 @@
     </form>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimen/static-add-aliquots.html">
+  <div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
+      <div class="col-xs-6">
+        <div class="os-date-time clearfix">
+          <div class="col-xs-6 input os-no-padding">
+            <os-date-picker name="createdOn" date="aliquotSpec.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="col-xs-6">
+            <timepicker ng-model="aliquotSpec.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
+          </div>
+        </div>
+        <div os-field-error field="aliquotForm.createdOn"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
+      <div class="col-xs-6">
+        <input name="freezeThawCycles" ng-model="aliquotSpec.freezeThawCycles"
+          class="form-control" type="text" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
+          ng-pattern="/^[0-9]*$/">
+        <div os-field-error field="aliquotForm.freezeThawCycles"></div>
+        <div class="os-text-checkbox">
+          <div class="checkbox">
+            <os-checkbox ng-model="aliquotSpec.incrParentFreezeThaw"
+              ng-true-value="1" ng-false-value="0" ng-change="toggleIncrParentFreezeThaw()">
+            </os-checkbox>
+          </div>
+          <div class="message os-ctrl-padding-top">
+            <span translate="specimens.increment_parent_freeze_thaw">
+              Increment parent specimen's Freeze/Thaw cycles?
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="parentSpecimen">
+      </div>
+    </div>
+  </div>
+</script>

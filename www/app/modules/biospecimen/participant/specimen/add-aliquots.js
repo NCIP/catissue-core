@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.specimen.addaliquots', [])
   .controller('AddAliquotsCtrl', function(
-    $scope, $rootScope, $state, $stateParams, specimen, cpr, visit, extensionCtxt,
+    $scope, $rootScope, $state, $stateParams, specimen, cpr, visit, extensionCtxt, hasDict,
     CollectSpecimensSvc, SpecimenUtil, ExtensionsUtil, Alerts) {
 
     function init() {
@@ -9,6 +9,8 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
       $scope.cpr = cpr;
       $scope.visit = visit;
       $scope.aliquotSpec = {
+        cpId: visit.cpId,
+        lineage: 'Aliquot',
         createdOn : new Date(),
         freezeThawCycles: specimen.freezeThawCycles + 1,
         incrParentFreezeThaw: 1
@@ -23,8 +25,21 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
         $state.go('specimen-detail.overview', params);
       }
 
+      var exObjs = [
+        'specimen.lineage', 'specimen.parentLabel', 'specimen.initialQty',
+        'specimen.availableQty', 'specimen.storageLocation',
+        'specimen.events', 'specimen.collectionEvent', 'specimen.receivedEvent'
+      ];
+
+      if (hasDict) {
+        $scope.spmnCtx = {
+          obj: {specimen: $scope.aliquotSpec}, inObjs: ['specimen'], exObjs: exObjs
+        }
+      } else {
+        $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.aliquotSpec, extensionCtxt);
+      }
+
       $scope.deFormCtrl = {};
-      $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.aliquotSpec, extensionCtxt);
     }
 
     function getState() {
