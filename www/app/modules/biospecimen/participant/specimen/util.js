@@ -67,8 +67,12 @@ angular.module('os.biospecimen.specimen')
     }
 
     function createDerivatives(scope) {
+      var extensionDetail = getExtensionDetail(scope);
+      if (extensionDetail) {
+        scope.derivative.extensionDetail = extensionDetail;
+      }
+
       var closeParent = scope.derivative.closeParent;
-      scope.derivative.extensionDetail = getExtensionDetail(scope);
       delete scope.derivative.closeParent;
 
       if (scope.derivative.createdOn.getTime() < scope.parentSpecimen.createdOn) {
@@ -117,6 +121,7 @@ angular.module('os.biospecimen.specimen')
         storageLocation: {},
         status: 'Collected',
         visitId: scope.visit.id,
+        cpId: scope.visit.cpId,
         pathology: scope.parentSpecimen.pathology,
         closeParent: false,
         createdOn : new Date(),

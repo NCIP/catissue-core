@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.specimen.addderivative', [])
   .controller('AddDerivativeCtrl', function(
-    $scope, specimen, cpr, visit, extensionCtxt, 
+    $scope, specimen, cpr, visit, extensionCtxt, hasDict,
     SpecimenUtil, ExtensionsUtil, Alerts) {
 
     function init() {
@@ -9,11 +9,23 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       $scope.cpr = cpr;
       $scope.visit = visit;
       $scope.derivative = SpecimenUtil.getNewDerivative($scope);
-      SpecimenUtil.loadSpecimenClasses($scope);
-      SpecimenUtil.loadPathologyStatuses($scope);
+
+      var exObjs = [
+        'specimen.lineage', 'specimen.parentLabel', 'specimen.events',
+        'specimen.collectionEvent', 'specimen.receivedEvent'
+      ];
+
+      if (hasDict) {
+        $scope.spmnCtx = {
+          obj: {specimen: $scope.derivative}, inObjs: ['specimen'], exObjs: exObjs
+        }
+      } else {
+        SpecimenUtil.loadSpecimenClasses($scope);
+        SpecimenUtil.loadPathologyStatuses($scope);
+        $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.derivative, extensionCtxt);
+      }
 
       $scope.deFormCtrl = {};
-      $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.derivative, extensionCtxt);
     }
 
     $scope.toggleIncrParentFreezeThaw = function() {

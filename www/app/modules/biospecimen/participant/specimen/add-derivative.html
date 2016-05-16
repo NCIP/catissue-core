@@ -60,116 +60,15 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.class">Class</label>
-        <div class="col-xs-6">
-          <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)"
-            ng-model="derivative.specimenClass" list="specimenClasses"
-            placeholder="{{'specimens.class' | translate}}" required>
-          </os-select>
-          <div os-field-error field="derivativeForm.specimenClass"></div>
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
+          </sde-form-fields>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
-        <div class="col-xs-6">
-          <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
-            placeholder="{{'specimens.type' | translate}}" required>
-          </os-select>
-          <div os-field-error field="derivativeForm.specimenType"></div>
-        </div>
-      </div>
-
-      <div class="form-group" ng-if="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
-        <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
-        <div class="col-xs-6">
-          <input name="label" ng-model="derivative.label" class="form-control"
-            type="text" placeholder="{{'specimens.label' | translate}}"
-            ng-required="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
-          <div os-field-error field="derivativeForm.label"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.qty">Initial Quantity</label>
-        <div class="col-xs-6">
-          <input name="quantity" ng-model="derivative.initialQty" class="form-control"
-            type="text" placeholder="{{'specimens.qty' | translate}}" required
-            ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
-          <div os-field-error field="derivativeForm.quantity"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
-        <div class="col-xs-6">
-          <input name="concentration" ng-model="derivative.concentration"  class="form-control"
-            type="text" placeholder="{{'specimens.concentration' | translate}}"
-            ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
-          <div os-field-error field="derivativeForm.concentration"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
-        <div class="col-xs-6">
-          <os-storage-position entity="derivative" cp-id="cpr.cpId"></os-storage-position>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
-        <div class="col-xs-6">
-          <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
-            required placeholder="{{'specimens.pathology_status' | translate}}">
-          </os-select>
-          <div os-field-error field="derivativeForm.pathology"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
-        <div class="col-xs-6">
-          <div class="os-date-time clearfix">
-            <div class="os-col-65 os-no-padding input">
-              <os-date-picker name="createdOn" date="derivative.createdOn"
-                placeholder="{{'specimens.created_on' | translate}}" required>
-              </os-date-picker>
-            </div>
-            <div class="os-col-35">
-              <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
-              </timepicker>
-            </div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/specimen/static-add-derivative.html'">
           </div>
-          <div os-field-error field="derivativeForm.createdOn"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
-        <div class="col-xs-6">
-          <input name="freezeThawCycles" ng-model="derivative.freezeThawCycles"
-            class="form-control" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
-            ng-pattern="/^[0-9]*$/">
-          <div os-field-error field="derivativeForm.freezeThawCycles"></div>
-          <div class="os-text-checkbox">
-            <div class="checkbox">
-              <os-checkbox ng-model="derivative.incrParentFreezeThaw" ng-true-value="1" ng-false-value="0"
-                ng-change="toggleIncrParentFreezeThaw()">
-              </os-checkbox>
-            </div>
-            <div class="message os-ctrl-padding-top">
-              <span translate="specimens.increment_parent_freeze_thaw">
-                Increment parent specimen's Freeze/Thaw cycle count
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
-        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="derivative">
         </div>
       </div>
 
@@ -199,3 +98,120 @@
     </form>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimen/static-add-derivative.html">
+  <div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.class">Class</label>
+      <div class="col-xs-6">
+        <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)"
+          ng-model="derivative.specimenClass" list="specimenClasses"
+          placeholder="{{'specimens.class' | translate}}" required>
+        </os-select>
+        <div os-field-error field="derivativeForm.specimenClass"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
+      <div class="col-xs-6">
+        <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
+          placeholder="{{'specimens.type' | translate}}" required>
+        </os-select>
+        <div os-field-error field="derivativeForm.specimenType"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
+      <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
+      <div class="col-xs-6">
+        <input name="label" ng-model="derivative.label" class="form-control"
+          type="text" placeholder="{{'specimens.label' | translate}}"
+          ng-required="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
+        <div os-field-error field="derivativeForm.label"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.qty">Initial Quantity</label>
+      <div class="col-xs-6">
+        <input name="quantity" ng-model="derivative.initialQty" class="form-control"
+          type="text" placeholder="{{'specimens.qty' | translate}}" required
+          ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+        <div os-field-error field="derivativeForm.quantity"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
+      <div class="col-xs-6">
+        <input name="concentration" ng-model="derivative.concentration"  class="form-control"
+          type="text" placeholder="{{'specimens.concentration' | translate}}"
+          ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" ng-model-options="{allowInvalid: 'true'}">
+        <div os-field-error field="derivativeForm.concentration"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
+      <div class="col-xs-6">
+        <os-storage-position entity="derivative" cp-id="cpr.cpId"></os-storage-position>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
+      <div class="col-xs-6">
+        <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
+          required placeholder="{{'specimens.pathology_status' | translate}}">
+        </os-select>
+        <div os-field-error field="derivativeForm.pathology"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
+      <div class="col-xs-6">
+        <div class="os-date-time clearfix">
+          <div class="os-col-65 os-no-padding input">
+            <os-date-picker name="createdOn" date="derivative.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="os-col-35">
+            <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
+          </div>
+        </div>
+        <div os-field-error field="derivativeForm.createdOn"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
+      <div class="col-xs-6">
+        <input name="freezeThawCycles" ng-model="derivative.freezeThawCycles"
+          class="form-control" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
+          ng-pattern="/^[0-9]*$/">
+        <div os-field-error field="derivativeForm.freezeThawCycles"></div>
+        <div class="os-text-checkbox">
+          <div class="checkbox">
+            <os-checkbox ng-model="derivative.incrParentFreezeThaw" ng-true-value="1" ng-false-value="0"
+              ng-change="toggleIncrParentFreezeThaw()">
+            </os-checkbox>
+          </div>
+          <div class="message os-ctrl-padding-top">
+            <span translate="specimens.increment_parent_freeze_thaw">
+              Increment parent specimen's Freeze/Thaw cycle count
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="derivative">
+      </div>
+    </div>
+  </div>
+</script>
