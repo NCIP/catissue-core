@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.Date;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
@@ -12,6 +14,8 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 	private String name;
 
 	private String description;
+
+	private Date createdOn;
 
 	private UserSummary owner;
 
@@ -41,6 +45,14 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 		this.description = description;
 	}
 
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
 	public UserSummary getOwner() {
 		return owner;
 	}
@@ -62,6 +74,7 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 		listSummary.setId(list.getId());
 		listSummary.setName(list.getName());
 		listSummary.setDescription(list.getDescription());
+		listSummary.setCreatedOn(list.getCreatedOn());
 		listSummary.setOwner(UserSummary.from(list.getOwner()));
 		listSummary.setDefaultList(list.isDefaultList());
 		return listSummary;

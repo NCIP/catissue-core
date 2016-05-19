@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 
@@ -74,6 +75,8 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		setDescription(details, specimenList, partial, ose);
 		setSpecimens(details, specimenList, partial, ose);
 		setSharedUsers(details, specimenList, partial, ose);
+
+		specimenList.setCreatedOn(Calendar.getInstance().getTime());
 	}
     
 	private void setOwner(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
@@ -115,7 +118,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 
 		specimenList.setDescription(details.getDescription());
 	}
-    
+
 	private void setSpecimens(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {
 		if (partial && !details.isAttrModified("specimens")) {
 			return;

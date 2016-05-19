@@ -43,4 +43,12 @@
       <column name="SPECIMEN_TYPE"/>
     </createIndex>
   </changeSet>
+
+  <changeSet author="vpawar" id="Track when specimen list was created">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="CREATED_ON" type="${timestamp.type}" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
