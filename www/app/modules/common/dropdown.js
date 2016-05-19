@@ -28,7 +28,7 @@ angular.module('openspecimen')
           .attr('ng-model', tAttrs.ngModel)
           .attr('ng-disabled', tAttrs.ngDisabled)
           .attr('reset-search-input', true)
-          .attr('append-to-body', !!tAttrs.appendToBody)
+          .attr('append-to-body', tAttrs.appendToBody == true)
           .attr('os-tabable', !!tAttrs.osTabable);
     
         if (tAttrs.onSelect) {
