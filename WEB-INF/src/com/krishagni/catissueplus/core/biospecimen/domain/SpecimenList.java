@@ -18,6 +18,8 @@ public class SpecimenList {
 	private User owner;
 
 	private String description;
+
+	private Date createdOn;
 	
 	private Set<User> sharedWith = new HashSet<User>();
 	
@@ -55,6 +57,14 @@ public class SpecimenList {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
 	}
 
 	public Set<User> getSharedWith() {

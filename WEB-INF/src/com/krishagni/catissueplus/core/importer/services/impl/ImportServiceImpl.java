@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
-import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
@@ -50,6 +48,7 @@ import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
 import com.krishagni.catissueplus.core.importer.repository.ImportJobDao;
 import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
+import com.krishagni.catissueplus.core.importer.services.ImportListener;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporterFactory;
@@ -60,7 +59,7 @@ import edu.common.dynamicextensions.query.cachestore.LinkedEhCacheMap;
 
 public class ImportServiceImpl implements ImportService {
 	private ConfigurationService cfgSvc;
-	
+
 	private ImportJobDao importJobDao;
 	
 	private ThreadPoolTaskExecutor taskExecutor;
@@ -70,13 +69,13 @@ public class ImportServiceImpl implements ImportService {
 	private ObjectImporterFactory importerFactory;
 	
 	private PlatformTransactionManager transactionManager;
-	
+
 	private TransactionTemplate txTmpl;
 	
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
-	
+
 	public void setImportJobDao(ImportJobDao importJobDao) {
 		this.importJobDao = importJobDao;
 	}
@@ -92,7 +91,7 @@ public class ImportServiceImpl implements ImportService {
 	public void setImporterFactory(ObjectImporterFactory importerFactory) {
 		this.importerFactory = importerFactory;
 	}
-	
+
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 		this.txTmpl = new TransactionTemplate(this.transactionManager);
@@ -192,7 +191,7 @@ public class ImportServiceImpl implements ImportService {
 			createJobDir(job.getId());
 			moveToJobDir(inputFile, job.getId());
 			
-			taskExecutor.submit(new ImporterTask(AuthUtil.getAuth(), job));
+			taskExecutor.submit(new ImporterTask(AuthUtil.getAuth(), job, detail.getListener()));
 			return ResponseEvent.response(ImportJobDetail.from(job));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
@@ -321,10 +320,13 @@ public class ImportServiceImpl implements ImportService {
 		private Authentication auth;
 		
 		private ImportJob job;
+
+		private ImportListener callback;
 		
-		public ImporterTask(Authentication auth, ImportJob job) {
+		public ImporterTask(Authentication auth, ImportJob job, ImportListener callback) {
 			this.auth = auth;
-			this.job = job;			
+			this.job = job;
+			this.callback = callback;
 		}
 
 		@Override
@@ -355,12 +357,15 @@ public class ImportServiceImpl implements ImportService {
 				} else {
 					processSingleRowPerObj(objReader, csvWriter, importer);
 				}
+
+				success();
 			} catch (Exception e) {
 				e.printStackTrace();
 				saveJob(totalRecords, failedRecords, Status.FAILED);
+				failed(e);
 			} finally {
 				IOUtils.closeQuietly(objReader);
-				closeQueitly(csvWriter);
+				closeQuietly(csvWriter);
 			}
 		}
 		
@@ -528,13 +533,25 @@ public class ImportServiceImpl implements ImportService {
 			return CsvFileWriter.createCsvFileWriter(new FileWriter(getJobOutputFilePath(job.getId())));
 		}
 				
-		private void closeQueitly(CsvWriter writer) {
+		private void closeQuietly(CsvWriter writer) {
 			if (writer != null) {
 				try {
 					writer.close();
 				} catch (Exception e) {
 											
 				}
+			}
+		}
+
+		private void success() {
+			if (callback != null) {
+				callback.success();
+			}
+		}
+
+		private void failed(Throwable t) {
+			if (callback != null) {
+				callback.fail(t);
 			}
 		}
 	}
