@@ -450,12 +450,16 @@ public class AccessCtrlMgr {
 	}
 
 	public List<Pair<Long, Long>> getReadAccessSpecimenSiteCps() {
+		return getReadAccessSpecimenSiteCps(null);
+	}
+
+	public List<Pair<Long, Long>> getReadAccessSpecimenSiteCps(Long cpId) {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 
 		String[] ops = {Operation.READ.getName()};
-		Set<Pair<Long, Long>> siteCpPairs = getVisitAndSpecimenSiteCps(ops);
+		Set<Pair<Long, Long>> siteCpPairs = getVisitAndSpecimenSiteCps(cpId, ops);
 		siteCpPairs.addAll(getDistributionOrderSiteCps(ops));
 
 		Set<Long> sitesOfAllCps = new HashSet<Long>();
@@ -516,11 +520,18 @@ public class AccessCtrlMgr {
 		return checkPhiAccess ? ensurePhiRights(cpr, op) : false;
 	}
 
-	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(String[] ops) {
+	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(Long cpId, String[] ops) {
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.VISIT_N_SPECIMEN.getName();
 
-		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		List<SubjectAccess> accessList = null;
+
+		if (cpId != null) {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
+		} else {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		}
+
 		Set<Pair<Long, Long>> siteCpPairs = new HashSet<Pair<Long, Long>>();
 		for (SubjectAccess access : accessList) {
 			Set<Site> sites = null;
@@ -530,13 +541,9 @@ public class AccessCtrlMgr {
 				sites = getUserInstituteSites(userId);
 			}
 
-			Long cpId = null;
-			if (access.getCollectionProtocol() != null) {
-				cpId = access.getCollectionProtocol().getId();
-			}
-
+			CollectionProtocol cp = access.getCollectionProtocol();
 			for (Site site : sites) {
-				siteCpPairs.add(Pair.make(site.getId(), cpId));
+				siteCpPairs.add(Pair.make(site.getId(), (cp != null) ? cp.getId() : null));
 			}
 		}
 

@@ -121,7 +121,30 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenInfo>> getPrimarySpecimensByCp(RequestEvent<Long> req) {
+		try {
+			Long cpId = req.getPayload();
+			if (cpId == null) {
+				return ResponseEvent.response(Collections.emptyList());
+			}
+
+			SpecimenListCriteria crit = new SpecimenListCriteria()
+				.cpId(cpId)
+				.lineages(new String[] {Specimen.NEW})
+				.collectionStatuses(new String[] {Specimen.COLLECTED});
+
+			List<Specimen> specimens = getSpecimens(crit);
+			return ResponseEvent.response(SpecimenInfo.from(specimens));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req) {
@@ -436,12 +459,13 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	}
 
 	private List<Specimen> getSpecimens(SpecimenListCriteria crit) {
-		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps(crit.cpId());
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
 			return Collections.<Specimen>emptyList();
 		}
 
 		crit.siteCps(siteCpPairs);
+		crit.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
 		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
 

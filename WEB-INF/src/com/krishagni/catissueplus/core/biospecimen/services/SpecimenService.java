@@ -22,6 +22,8 @@ public interface SpecimenService {
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<EntityQueryCriteria> req);
 	
 	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<String>> req);
+
+	public ResponseEvent<List<SpecimenInfo>> getPrimarySpecimensByCp(RequestEvent<Long> req);
 	
 	public ResponseEvent<SpecimenDetail> createSpecimen(RequestEvent<SpecimenDetail> req);
 	
