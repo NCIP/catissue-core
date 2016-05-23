@@ -91,6 +91,16 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, Initializin
 		schemaMap.put(schema.getName(), schema);
 	}
 
+	@Override
+	public ObjectSchemaBuilder getSchemaBuilder(String name) {
+		return schemaBuilders.get(name);
+	}
+
+	@Override
+	public void registerSchemaBuilder(String name, ObjectSchemaBuilder builder) {
+		schemaBuilders.put(name, builder);
+	}
+
 	private ObjectSchema parseSchema(String schemaResource) {
 		InputStream in = null;
 		try {

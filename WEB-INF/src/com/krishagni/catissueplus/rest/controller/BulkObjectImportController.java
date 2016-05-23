@@ -48,20 +48,20 @@ public class BulkObjectImportController {
 	public void getInputFileTemplate(
 			@RequestParam(value = "schema", required = true)
 			String schemaName,
-			
-			@RequestParam(value = "formName", required = false)
-			String formName,
-			
-			@RequestParam(value = "entityType", required = false)
-			String entityType,
+
+			@RequestParam
+			Map<String, String> reqParams,
 
 			HttpServletResponse httpResp) {
-		
-		Map<String, Object> params = new HashMap<String, Object>();
+
 		String filename = schemaName + ".csv";
+
+		Map<String, Object> params = new HashMap<>();
+		params.putAll(reqParams);
+
+		String formName = (String)params.get("formName");
+		String entityType = (String)params.get("entityType");
 		if (StringUtils.isNotBlank(formName) && StringUtils.isNotBlank(entityType)) {
-			params.put("formName", formName);
-			params.put("entityType", entityType);			
 			filename = formName + "_" + entityType + ".csv";
 		}
 		
@@ -69,7 +69,7 @@ public class BulkObjectImportController {
 		detail.setObjectType(schemaName);		
 		detail.setParams(params);
 		
-		RequestEvent<ObjectSchemaCriteria> req = new RequestEvent<ObjectSchemaCriteria>(detail);
+		RequestEvent<ObjectSchemaCriteria> req = new RequestEvent<>(detail);
 		ResponseEvent<String> resp = importSvc.getInputFileTemplate(req);
 		resp.throwErrorIfUnsuccessful();
 		

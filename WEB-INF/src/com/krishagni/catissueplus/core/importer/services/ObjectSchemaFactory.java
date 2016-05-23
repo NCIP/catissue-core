@@ -12,4 +12,8 @@ public interface ObjectSchemaFactory {
 	public void registerSchema(String schemaResource);
 	
 	public void registerSchema(String name, ObjectSchema schema);
+
+	public ObjectSchemaBuilder getSchemaBuilder(String name);
+
+	public void registerSchemaBuilder(String name, ObjectSchemaBuilder builder);
 }
