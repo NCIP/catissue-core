@@ -12,6 +12,8 @@ import com.thoughtworks.xstream.io.xml.Dom4JDriver;
 
 public class ObjectSchema {	
 	private String name;
+
+	private boolean flattened;
 	
 	private Record record;
 	
@@ -21,6 +23,14 @@ public class ObjectSchema {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isFlattened() {
+		return flattened;
+	}
+
+	public void setFlattened(boolean flattened) {
+		this.flattened = flattened;
 	}
 
 	public Record getRecord() {

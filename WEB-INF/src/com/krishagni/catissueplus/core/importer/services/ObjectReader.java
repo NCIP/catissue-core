@@ -102,6 +102,10 @@ public class ObjectReader implements Closeable {
 			if (objectClass == null) {
 				return objectProps;
 			} else {
+				if (schema.isFlattened()) {
+					objectProps = inflateObjProps(objectProps);
+				}
+
 				return new ObjectMapper().convertValue(objectProps, objectClass);
 			}			
 		} catch (Exception e) {
@@ -110,7 +114,7 @@ public class ObjectReader implements Closeable {
 		}
 	}
 	
-	private Map<String, Object> parseObject(Record record, String prefix) 
+	private Map<String, Object> parseObject(Record record, String prefix)
 	throws Exception {
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.putAll(parseFields(record, prefix));
@@ -137,7 +141,7 @@ public class ObjectReader implements Closeable {
 		return props;
 	}
 	
-	private Map<String, Object> parseFields(Record record, String prefix) 
+	private Map<String, Object> parseFields(Record record, String prefix)
 	throws Exception {
 		Map<String, Object> props = new HashMap<String, Object>();
 		
@@ -244,6 +248,32 @@ public class ObjectReader implements Closeable {
 		}
 		
 		return null;
+	}
+
+	private Map<String, Object> inflateObjProps(Map<String, Object> input) {
+		Map<String, Map<String, Object>> inflatedFields = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
+
+		for (Map.Entry<String, Object> entry : input.entrySet()) {
+			String[] fieldParts = entry.getKey().split("\\.", 2);
+			if (fieldParts.length == 1) {
+				result.put(fieldParts[0], entry.getValue());
+			} else {
+				Map<String, Object> fields = inflatedFields.get(fieldParts[0]);
+				if (fields == null) {
+					fields = new HashMap<>();
+					inflatedFields.put(fieldParts[0], fields);
+				}
+
+				fields.put(fieldParts[1], entry.getValue());
+			}
+		}
+
+		for (Map.Entry<String, Map<String, Object>> inflatedField : inflatedFields.entrySet()) {
+			result.put(inflatedField.getKey(), inflateObjProps(inflatedField.getValue()));
+		}
+
+		return result;
 	}
 		
 	private static List<String> getSchemaFields(Record record, String prefix) {
