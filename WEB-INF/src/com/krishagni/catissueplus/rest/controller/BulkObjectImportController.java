@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,12 +59,6 @@ public class BulkObjectImportController {
 		String entityType = params.get("entityType");
 
 		String filename = schemaName + ".csv";
-
-		Map<String, Object> params = new HashMap<>();
-		params.putAll(reqParams);
-
-		String formName = (String)params.get("formName");
-		String entityType = (String)params.get("entityType");
 		if (StringUtils.isNotBlank(formName) && StringUtils.isNotBlank(entityType)) {
 			filename = formName + "_" + entityType + ".csv";
 		}
