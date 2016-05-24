@@ -1355,6 +1355,8 @@
   },
 
   "bulk_imports": {
+    "no_jobs": "No bulk imports jobs to show.",
+
     "job_submitted": "Bulk Import Job {{id}} Submitted",
     "select_extn": "Select Form",
     "input_file": "Input Records File",

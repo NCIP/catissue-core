@@ -20,7 +20,9 @@ angular.module('os.common.import.list', ['os.common.import.importjob'])
     function loadJobs(pagingOpts) {
       var startAt = (pagingOpts.currPage - 1) * pagingOpts.jobsPerPage;
       var maxResults = pagingOpts.jobsPerPage + 1;
-      ImportJob.query({objectType: importDetail.objectTypes, startAt: startAt, maxResults: maxResults}).then(
+
+      var queryParams = {objectType: importDetail.objectTypes, startAt: startAt, maxResults: maxResults};
+      ImportJob.query(angular.extend(queryParams, importDetail.objectParams)).then(
         function(importJobs) {
           pagingOpts.totalJobs = (pagingOpts.currPage - 1) * pagingOpts.jobsPerPage + importJobs.length;
  
