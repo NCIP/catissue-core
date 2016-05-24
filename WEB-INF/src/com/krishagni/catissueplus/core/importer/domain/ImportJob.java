@@ -45,7 +45,7 @@ public class ImportJob extends BaseEntity {
 	
 	private Date endTime;
 	
-	private Map<String, Object> params = new HashMap<String, Object>();
+	private Map<String, String> params = new HashMap<>();
 	
 	public String getName() {
 		return name;
@@ -119,30 +119,11 @@ public class ImportJob extends BaseEntity {
 		this.endTime = endTime;
 	}
 
-	public Map<String, Object> getParams() {
+	public Map<String, String> getParams() {
 		return params;
 	}
 
-	public void setParams(Map<String, Object> params) {
+	public void setParams(Map<String, String> params) {
 		this.params = params;
-	}
-	
-	public String getParamsStr() {
-		try {
-			return new ObjectMapper().writeValueAsString(params);
-		} catch (Exception e) {
-			throw new RuntimeException("Error converting params map to string", e);
-		}		
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void setParamsStr(String paramsStr) {
-		try {
-			if (StringUtils.isNotBlank(paramsStr)) {
-				this.params = (Map<String, Object>)new ObjectMapper().readValue(paramsStr, HashMap.class);
-			}			
-		} catch (Exception e) {
-			throw new RuntimeException("Error converting params str to map", e);
-		}
 	}
 }

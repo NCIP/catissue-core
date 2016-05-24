@@ -48,20 +48,19 @@ public class BulkObjectImportController {
 	public void getInputFileTemplate(
 			@RequestParam(value = "schema", required = true)
 			String schemaName,
-			
-			@RequestParam(value = "formName", required = false)
-			String formName,
-			
-			@RequestParam(value = "entityType", required = false)
-			String entityType,
+
+			@RequestParam
+			Map<String, String> params,
 
 			HttpServletResponse httpResp) {
-		
-		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.remove("schema");
+
+		String formName   = params.get("formName");
+		String entityType = params.get("entityType");
+
 		String filename = schemaName + ".csv";
 		if (StringUtils.isNotBlank(formName) && StringUtils.isNotBlank(entityType)) {
-			params.put("formName", formName);
-			params.put("entityType", entityType);			
 			filename = formName + "_" + entityType + ".csv";
 		}
 		
@@ -116,13 +115,22 @@ public class BulkObjectImportController {
 			int maxResults,
 			
 			@RequestParam(value = "objectType", required = false) 
-			String[] objectTypes) {
-		
+			String[] objectTypes,
+
+			@RequestParam
+			Map<String, String> params) {
+
+		String[] nonParams = {"startAt", "maxResults", "objectType"};
+		for (String nonParam : nonParams) {
+			params.remove(nonParam);
+		}
+
 		ListImportJobsCriteria crit = new ListImportJobsCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
-			.objectTypes(objectTypes != null ? Arrays.asList(objectTypes) : null);
-		
+			.objectTypes(objectTypes != null ? Arrays.asList(objectTypes) : null)
+			.params(params);
+
 		RequestEvent<ListImportJobsCriteria> req = new RequestEvent<ListImportJobsCriteria>(crit);
 		ResponseEvent<List<ImportJobDetail>> resp = importSvc.getImportJobs(req);
 		resp.throwErrorIfUnsuccessful();

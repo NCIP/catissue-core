@@ -31,13 +31,13 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 
 	@Override
 	@PlusTransactional	
-	public ObjectSchema getObjectSchema(Map<String, Object> params) {
-		String formName = (String)params.get("formName");
+	public ObjectSchema getObjectSchema(Map<String, String> params) {
+		String formName = params.get("formName");
 		if (StringUtils.isBlank(formName)) {
 			throw OpenSpecimenException.userError(FormErrorCode.NAME_REQUIRED);
 		}
 		
-		String entityType = (String)params.get("entityType");
+		String entityType = params.get("entityType");
 		if (StringUtils.isBlank(entityType)) {
 			throw OpenSpecimenException.userError(FormErrorCode.ENTITY_TYPE_REQUIRED);
 		}

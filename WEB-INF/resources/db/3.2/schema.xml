@@ -51,4 +51,29 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Bulk import job parameters table">
+    <createTable tableName="OS_BULK_IMPORT_JOB_PARAMS">
+      <column name="JOB_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="PARAM" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on job ID of params table">
+    <addForeignKeyConstraint
+      constraintName="FK_JOB_PARAMS_JOB_ID"
+      baseTableName="OS_BULK_IMPORT_JOB_PARAMS"
+      baseColumnNames="JOB_ID"
+      referencedTableName="OS_BULK_IMPORT_JOBS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>

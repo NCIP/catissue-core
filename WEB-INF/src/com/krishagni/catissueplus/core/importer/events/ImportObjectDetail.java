@@ -8,7 +8,7 @@ public class ImportObjectDetail<T> {
 	
 	private boolean create;
 	
-	private Map<String, Object> params = new HashMap<String, Object>();
+	private Map<String, String> params = new HashMap<>();
 
 	public T getObject() {
 		return object;
@@ -26,11 +26,11 @@ public class ImportObjectDetail<T> {
 		this.create = create;
 	}
 	
-	public Map<String, Object> getParams() {
+	public Map<String, String> getParams() {
 		return params;
 	}
 	
-	public void setParams(Map<String, Object> params) {
+	public void setParams(Map<String, String> params) {
 		this.params = params;
 	}
 }

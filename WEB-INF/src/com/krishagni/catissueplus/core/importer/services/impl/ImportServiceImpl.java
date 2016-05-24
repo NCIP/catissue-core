@@ -475,7 +475,7 @@ public class ImportServiceImpl implements ImportService {
 			saveJob(totalRecords, failedRecords, Status.COMPLETED);
 		}
 		
-		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, Object> params) {
+		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, String> params) {
 			try {
 				ImportObjectDetail<Object> detail = new ImportObjectDetail<Object>();
 				detail.setCreate(job.getType() == Type.CREATE);

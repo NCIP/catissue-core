@@ -16,7 +16,7 @@ public class ImportDetail {
 
 	private ImportListener listener;
 	
-	private Map<String, Object> objectParams = new HashMap<String, Object>();
+	private Map<String, String> objectParams = new HashMap<>();
 
 	public String getObjectType() {
 		return objectType;
@@ -50,11 +50,11 @@ public class ImportDetail {
 		this.inputFileId = inputFileId;
 	}
 
-	public Map<String, Object> getObjectParams() {
+	public Map<String, String> getObjectParams() {
 		return objectParams;
 	}
 
-	public void setObjectParams(Map<String, Object> objectParams) {
+	public void setObjectParams(Map<String, String> objectParams) {
 		this.objectParams = objectParams;
 	}
 
