@@ -153,7 +153,7 @@ public class ImportRecordsTask implements ScheduledTask {
 		// For DE forms set entity type and form name
 		//
 		if (tokens.length == 5) {
-			Map<String, Object> objParams = new HashMap<>();
+			Map<String, String> objParams = new HashMap<>();
 			objParams.put("entityType", tokens[i++]);
 			objParams.put("formName", tokens[i++]);
 			detail.setObjectParams(objParams);

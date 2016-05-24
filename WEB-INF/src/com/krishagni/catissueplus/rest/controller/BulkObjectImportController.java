@@ -50,9 +50,14 @@ public class BulkObjectImportController {
 			String schemaName,
 
 			@RequestParam
-			Map<String, String> reqParams,
+			Map<String, String> params,
 
 			HttpServletResponse httpResp) {
+
+		params.remove("schema");
+
+		String formName   = params.get("formName");
+		String entityType = params.get("entityType");
 
 		String filename = schemaName + ".csv";
 
@@ -116,13 +121,22 @@ public class BulkObjectImportController {
 			int maxResults,
 			
 			@RequestParam(value = "objectType", required = false) 
-			String[] objectTypes) {
-		
+			String[] objectTypes,
+
+			@RequestParam
+			Map<String, String> params) {
+
+		String[] nonParams = {"startAt", "maxResults", "objectType"};
+		for (String nonParam : nonParams) {
+			params.remove(nonParam);
+		}
+
 		ListImportJobsCriteria crit = new ListImportJobsCriteria()
 			.startAt(startAt)
 			.maxResults(maxResults)
-			.objectTypes(objectTypes != null ? Arrays.asList(objectTypes) : null);
-		
+			.objectTypes(objectTypes != null ? Arrays.asList(objectTypes) : null)
+			.params(params);
+
 		RequestEvent<ListImportJobsCriteria> req = new RequestEvent<ListImportJobsCriteria>(crit);
 		ResponseEvent<List<ImportJobDetail>> resp = importSvc.getImportJobs(req);
 		resp.throwErrorIfUnsuccessful();

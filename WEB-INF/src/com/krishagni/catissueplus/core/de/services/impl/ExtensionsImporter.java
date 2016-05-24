@@ -54,7 +54,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 	public ResponseEvent<Map<String, Object>> importObject(RequestEvent<ImportObjectDetail<Map<String, Object>>> req) {
 		try {
 			ImportObjectDetail<Map<String, Object>> importDetail = req.getPayload();
-			Map<String, Object> params = importDetail.getParams();
+			Map<String, String> params = importDetail.getParams();
 			
 			Map<String, Object> extnObj = importDetail.getObject();
 			String recordId = (String)extnObj.get("recordId");
@@ -76,8 +76,8 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		}
 	}
 	
-	private ResponseEvent<Map<String, Object>> createOrUpdateRecord(Map<String, Object> params, Map<String, Object> extnObj) {
-		String entityType = (String)params.get("entityType");
+	private ResponseEvent<Map<String, Object>> createOrUpdateRecord(Map<String, String> params, Map<String, Object> extnObj) {
+		String entityType = params.get("entityType");
 		Long objectId = null;
 		CollectionProtocol cp = null;
 
@@ -111,7 +111,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 			cp = specimen.getCollectionProtocol();
 		}
 
-		String formName = (String)params.get("formName");
+		String formName = params.get("formName");
 		Container form = Container.getContainer(formName);
 		if (form == null) {
 			return ResponseEvent.userError(FormErrorCode.NOT_FOUND);
@@ -147,9 +147,9 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		return ResponseEvent.response(resp.getPayload().getFormData().getFieldNameValueMap(true));
 	}
 	
-	private ResponseEvent<Map<String, Object>> deleteRecord(Map<String, Object> params, Map<String, Object> extnObj) {
+	private ResponseEvent<Map<String, Object>> deleteRecord(Map<String, String> params, Map<String, Object> extnObj) {
 		String recordId = (String)extnObj.get("recordId");
-		String formName = (String)params.get("formName");
+		String formName = params.get("formName");
 		
 		Container form = Container.getContainer(formName);
 		if (form == null) {

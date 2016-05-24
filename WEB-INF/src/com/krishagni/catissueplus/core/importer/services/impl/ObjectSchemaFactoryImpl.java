@@ -57,11 +57,11 @@ public class ObjectSchemaFactoryImpl implements ObjectSchemaFactory, Initializin
 	
 	@Override
 	public ObjectSchema getSchema(String name) {
-		return getSchema(name, Collections.<String, Object>emptyMap());
+		return getSchema(name, Collections.<String, String>emptyMap());
 	}
 	
 	@Override
-	public ObjectSchema getSchema(String name, Map<String, Object> params) {
+	public ObjectSchema getSchema(String name, Map<String, String> params) {
 		ObjectSchema schema = schemaMap.get(name);
 		if (schema != null) {
 			return schema;

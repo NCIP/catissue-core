@@ -329,4 +329,13 @@ public class Utility {
 			throw new RuntimeException(e);
 		}
 	}
+
+	public static boolean isQuoted(String input) {
+		if (StringUtils.isBlank(input) || input.length() < 2) {
+			return false;
+		}
+
+		return (input.charAt(0) == '"' && input.charAt(input.length() - 1) == '"') ||
+				(input.charAt(0) == '\'' && input.charAt(input.length() - 1) == '\'');
+	}
 }

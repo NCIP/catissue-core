@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.importer.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
@@ -9,6 +10,8 @@ public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsC
 	private Long userId;
 	
 	private List<String> objectTypes;
+
+	private Map<String, String> params;
 
 	@Override
 	public ListImportJobsCriteria self() {
@@ -30,6 +33,15 @@ public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsC
 	
 	public ListImportJobsCriteria objectTypes(List<String> objectTypes) {
 		this.objectTypes = objectTypes;
+		return self();
+	}
+
+	public Map<String, String> params() {
+		return params;
+	}
+
+	public ListImportJobsCriteria params(Map<String, String> params) {
+		this.params = params;
 		return self();
 	}
 }

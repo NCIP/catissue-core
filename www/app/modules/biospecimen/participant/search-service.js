@@ -6,18 +6,18 @@ angular.module('os.biospecimen.participant.search', ['os.biospecimen.models'])
     function search(searchData) {
       var filterOpts = {
         ppid: searchData.ppid,
-        uid:searchData.uid,
+        participantId:searchData.participantId,
         exactMatch: true
       };
 
       CollectionProtocolRegistration.listForCp(-1, false, filterOpts).then(
         function(participants) {
           if (participants == undefined || participants.length == 0) {
-            Alerts.error('search.error', {entity: 'Participant', key: searchData.ppid || searchData.uid});
+            Alerts.error('search.error', {entity: 'Participant', key: searchData.ppid || searchData.participantId});
             return;
           } else if (participants.length > 1) {
             matchingParticipants = participants;
-            searchKey = searchData.ppid || searchData.uid;
+            searchKey = searchData.ppid || searchData.participantId;
             $state.go('participant-search', {}, {reload: true});
           } else {
             $state.go('participant-detail.overview', {cpId: participants[0].cpId, cprId: participants[0].cprId});
