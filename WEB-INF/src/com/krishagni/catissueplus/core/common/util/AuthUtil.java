@@ -89,7 +89,7 @@ public class AuthUtil {
 			if (authTokenParts.length == 2) {
 				try {
 					authToken = URLDecoder.decode(authTokenParts[1], "utf-8");
-					if (authToken.startsWith("%")) {
+					if (authToken.startsWith("%") || Utility.isQuoted(authToken)) {
 						authToken = authToken.substring(1, authToken.length() - 1);
 					}
 				} catch (Exception e) {
