@@ -8,18 +8,18 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.importDetail = importDetail;
       $scope.importJobsFileUrl = $sce.trustAsResourceUrl(ImportJob.url() + 'input-file');
       $scope.inputFileTmplUrl  = $sce.trustAsResourceUrl(
-        ImportJob.url() + 'input-file-template?schema=' + importDetail.objectType);
+        ImportJob.url() + 'input-file-template?' + getQueryParams(importDetail));
       $scope.fileImporter = {};
  
+      var objParams = importDetail.objectParams || {};
+      angular.extend(objParams, {entityType: importDetail.entityType, formName: undefined});
+
       $scope.importJob = new ImportJob({
         objectType: importDetail.objectType,
         importType: importDetail.importType || 'CREATE',
         csvType: importDetail.csvType || 'SINGLE_ROW_PER_OBJ',
         inputFileId: undefined,
-        objectParams: {
-          entityType: importDetail.entityType,
-          formName: undefined
-        }
+        objectParams: objParams
       });
 
       $scope.extn = {
@@ -39,6 +39,17 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
           }
         );
       }
+    }
+
+    function getQueryParams(importDetail) {
+      var params = 'schema=' + importDetail.objectType;
+      angular.forEach(importDetail.objectParams,
+        function(value, key) {
+          params += '&' + key + '=' + value;
+        }
+      );
+
+      return params;
     }
 
     function submitJob(fileId) {
