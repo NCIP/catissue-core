@@ -206,8 +206,10 @@ public class ImportServiceImpl implements ImportService {
 			if (schema == null) {
 				return ResponseEvent.userError(ImportJobErrorCode.OBJ_SCHEMA_NOT_FOUND, detail.getObjectType());
 			}
-			
+
 			return ResponseEvent.response(ObjectReader.getSchemaFields(schema));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
