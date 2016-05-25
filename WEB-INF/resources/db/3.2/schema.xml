@@ -76,4 +76,12 @@
       referencedTableName="OS_BULK_IMPORT_JOBS"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="slakhani" id="User allowed to manage custom form">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="MANAGE_FORMS" type="${boolean.type}" defaultValueBoolean="0">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

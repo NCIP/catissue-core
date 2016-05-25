@@ -48,7 +48,7 @@
       <div ng-show="cpFormCtxt.selectedEntity.allCps" translate="form.spe_attached_to_all_cps">
         {{cpFormCtxt.selectedEntity.caption}} forms always attached to all collection protocols. 
       </div>
-      <div class="checkbox" ng-show="!cpFormCtxt.selectedEntity.allCps">
+      <div class="checkbox" ng-show="!cpFormCtxt.selectedEntity.allCps && currentUser.admin">
         <label>
           <input type="checkbox" ng-checked="cpFormCtxt.allProtocols" ng-model="cpFormCtxt.allProtocols"/> 
           <span translate="form.all_cps">All Present and Future Collection Protocols</span>

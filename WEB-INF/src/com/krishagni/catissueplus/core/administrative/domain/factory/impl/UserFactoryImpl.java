@@ -16,6 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserFactoryImpl implements UserFactory {
@@ -41,11 +42,12 @@ public class UserFactoryImpl implements UserFactory {
 		setDepartment(detail, user, ose);
 		setAddress(detail, user, ose);
 		setAuthDomain(detail, user, ose);
+		setManageForms(detail, user, ose);
 		user.setCreationDate(Calendar.getInstance().getTime());
 		ose.checkAndThrow();
 		return user;
 	}
-	
+
 	@Override
 	public User createUser(User existing, UserDetail detail) {
 		User user = new User();
@@ -62,6 +64,7 @@ public class UserFactoryImpl implements UserFactory {
 		setDepartment(detail, existing, user, ose);
 		setAddress(detail, existing, user, ose);
 		setAuthDomain(detail, existing, user, ose);
+		setManageForms(detail, existing, user, ose);
 		ose.checkAndThrow();
 		return user;		
 	}
@@ -245,5 +248,17 @@ public class UserFactoryImpl implements UserFactory {
 		} else {
 			user.setAuthDomain(existing.getAuthDomain());
 		}
-	}	
+	}
+
+	private void setManageForms(UserDetail detail, User user, OpenSpecimenException ose) {
+		user.setManageForms(detail.getAdmin() ? true : detail.getManageForms());
+	}
+
+	private void setManageForms(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("manageForms")) {
+			setManageForms(detail, user, ose);
+		} else {
+			user.setManageForms(existing.getManageForms());
+		}
+	}
 }

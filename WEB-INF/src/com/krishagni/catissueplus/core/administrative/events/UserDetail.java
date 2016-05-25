@@ -41,6 +41,8 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	private boolean admin;
 
+	private boolean manageForms;
+
 	private String address;
 
 	public Long getId() {
@@ -139,6 +141,14 @@ public class UserDetail extends AttributeModifiedSupport {
 		this.admin = admin;
 	}
 
+	public Boolean getManageForms() {
+		return manageForms;
+	}
+
+	public void setManageForms(Boolean manageForms) {
+		this.manageForms = manageForms;
+	}
+
 	public String getAddress() {
 		return address;
 	}
@@ -170,6 +180,7 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setInstituteName(user.getInstitute().getName());
 		detail.setAdmin(user.isAdmin());
 		detail.setAddress(user.getAddress());
+		detail.setManageForms(user.getManageForms());
 		setUserSiteNames(detail, user.getSites());	
 
 		return detail;

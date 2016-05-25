@@ -24,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
@@ -167,6 +168,15 @@ public class AccessCtrlMgr {
 
 	public void ensureReadCpRights(CollectionProtocol cp) {
 		ensureCpObjectRights(cp, Operation.READ);
+	}
+
+	public void ensureUpdateCpRights(Long cpId) {
+		CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+		if (cp == null) {
+			throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND, cpId);
+		}
+
+		ensureUpdateCpRights(cp);
 	}
 
 	public void ensureUpdateCpRights(CollectionProtocol cp) {
@@ -1039,6 +1049,19 @@ public class AccessCtrlMgr {
 		
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
+
+	///////////////////////////////////////////////////////////////////////
+	//                                                                   //
+	//	Custom form access control helper methods                        //
+	//                                                                   //
+	///////////////////////////////////////////////////////////////////////
+	public void ensureFormUpdateRights() {
+		User user = AuthUtil.getCurrentUser();
+		if (!user.isAdmin() && !user.canManageForms()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+	}
+
 
 	//
 	// Utility method

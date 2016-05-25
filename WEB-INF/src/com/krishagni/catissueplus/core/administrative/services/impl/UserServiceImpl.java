@@ -146,7 +146,9 @@ public class UserServiceImpl implements UserService {
 				detail.setActivityStatus(Status.ACTIVITY_STATUS_PENDING.getStatus());
 			}
 			
-			User user = userFactory.createUser(detail);			
+			User user = userFactory.createUser(detail);
+			resetAttrs(user);
+
 			if (!isSignupReq) {
 				AccessCtrlMgr.getInstance().ensureCreateUserRights(user);
 			}
@@ -155,7 +157,7 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueLoginNameInDomain(user.getLoginName(), user.getAuthDomain().getName(), ose);
 			ensureUniqueEmailAddress(user.getEmailAddress(), ose);
 			ose.checkAndThrow();
-		
+
 			daoFactory.getUserDao().saveOrUpdate(user);
 			if (isSignupReq) {
 				sendUserSignupEmail(user);
@@ -410,10 +412,12 @@ public class UserServiceImpl implements UserService {
 			} else {
 				user = userFactory.createUser(detail);
 			}
-			
+			resetAttrs(existingUser, user);
+
 			AccessCtrlMgr.getInstance().ensureUpdateUserRights(user);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
 			ensureUniqueEmail(existingUser, user, ose);
 			ensureUniqueLoginName(existingUser, user, ose);
 			ose.checkAndThrow();
@@ -472,6 +476,23 @@ public class UserServiceImpl implements UserService {
 		props.put("user", user);
 		
 		emailService.sendEmail(USER_REQUEST_REJECTED_TMPL, new String[]{user.getEmailAddress()}, props);
+	}
+	
+	private void resetAttrs(User newUser) {
+		resetAttrs(null, newUser);
+	}
+	
+	private void resetAttrs(User existingUser, User newUser) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+
+		//
+		// Only super admin can update these attributes; therefore reset to
+		// their earlier value or default value
+		//
+		newUser.setAdmin(existingUser != null ? existingUser.isAdmin() : false);
+		newUser.setManageForms(existingUser != null ? existingUser.canManageForms() : false);
 	}
 	
 	private void ensureUniqueEmail(User existingUser, User newUser, OpenSpecimenException ose) {

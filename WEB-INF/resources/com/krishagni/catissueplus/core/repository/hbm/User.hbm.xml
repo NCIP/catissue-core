@@ -50,6 +50,8 @@
  
     <property name="admin" column="IS_ADMIN"/>
     
+    <property name="manageForms" column="MANAGE_FORMS"/>
+
     <filter name="activeEntity"/>
     
     <sql-query name="getDependentEntities">

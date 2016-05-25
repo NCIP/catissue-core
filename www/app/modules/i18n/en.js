@@ -824,6 +824,7 @@
     "department": "Department",
     "address": "Address",
     "super_admin": "Super Administrator",
+    "manage_forms": "Manage Forms?",
     "login_details": "Login Details",
     "permissions": "Permissions",
     "login_name": "Login Name",

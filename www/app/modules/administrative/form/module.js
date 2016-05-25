@@ -9,11 +9,21 @@ angular.module('os.administrative.form',
 
   .config(function($stateProvider) {
     $stateProvider
+      .state('form-root', {
+        abstract: true,
+        template: '<div ui-view></div>',
+        resolve: {
+          manageForms: function(currentUser, Util) {
+            return Util.booleanPromise(currentUser.admin || currentUser.manageForms);
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('form-list', {
         url: '/forms',
         templateUrl: 'modules/administrative/form/list.html',
         controller: 'FormListCtrl',
-        parent: 'admin-view'
+        parent: 'form-root'
       })
       .state('form-addedit', {
         url: '/form-addedit/:formId',
@@ -28,7 +38,7 @@ angular.module('os.administrative.form',
             return new Form();
           }
         },
-        parent: 'admin-view'
+        parent: 'form-root'
       })
   });
 
