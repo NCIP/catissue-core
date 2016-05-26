@@ -459,6 +459,7 @@
     "no_specimens_to_show": "No Specimens to Show",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
+    "aliquots_created": "Successfully created aliquots",
     "close_parent_q": "Do you want to close parent specimen?",
     "concentration": "Concentration",
     "freeze_thaw_cycles": "Freeze/Thaw Cycles",
@@ -485,6 +486,8 @@
     "activity_info": "{{name}} created",
     "activity_status": "Activity Status",
     "location" : "Location",
+    "print": "Print",
+    "close_parent": "Close Parent",
 
     "reason_for_closing": "Reason for closing",
 
@@ -573,8 +576,11 @@
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
       "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
+      "insufficient_parent_qty": "Insufficient parent specimen {{label}} quantity to create child specimens",
       "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
+      "children_created_on_lt_parent": "Created on time of children less than that of parent specimen {{parentLabel}}",
+      "children_created_on_gt_curr_time": "Created on time of {{parentLabel}}'s children greater than current time",
       "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
     },
 
@@ -1447,7 +1453,9 @@
     "checkout": "Checkout",
     "add_event": "Add Event",
     "location": "Storage Location",
-    "no_specimens_to_add_event": "Please select at least one specimen to add event"
+    "no_specimens_to_add_event": "Please select at least one specimen to add event",
+    "create_aliquots": "Create Aliquots",
+    "no_specimens_to_create_aliquots": "Please select at least one parent specimen to create aliquots"
   },
 
   "orders": {

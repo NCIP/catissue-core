@@ -151,6 +151,16 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       $state.go('shipment-addedit', {orderId: ''});
     }
     
+    $scope.createAliquots = function() {
+      if (!$scope.selection.any) {
+        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_create_aliquots');
+        return;
+      }
+
+      SpecimensHolder.setSpecimens($scope.selection.specimens);
+      $state.go('specimen-bulk-create-aliquots');
+    }
+
     $scope.addEvent = function() {
       if (!$scope.selection.any) {
         showSelectSpecimensErrMsg('specimen_list.no_specimens_to_add_event');

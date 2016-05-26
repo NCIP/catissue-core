@@ -1,0 +1,102 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="specimens.create_aliquots">
+        Create Aliquots
+      </span>
+    </h3>
+  </div>
+  
+  <div class="container">
+    <form name="aliquotsForm" os-form-validator="aliquotsForm" novalidate>
+      <table class="os-table bulk-edit">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col os-col-20">
+              <span translate="specimens.parent_specimen">Parent Specimen</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.available_qty">Available Quantity</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.aliquot_cnt">Aliquots Count</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.qty">Aliquot Quantity</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="specimens.created_on">Created On</span>
+            </th>
+            <th class="col os-col-25">
+              <span translate="specimens.location">Location</span>
+            </th>
+            <th class="col os-col-5">
+              <span translate="specimens.print">Print?</span>
+            </th>
+            <th class="col os-col-5">
+              <span translate="specimens.close_parent">Close Parent?</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="aliquotSpec in ctx.aliquotsSpec" ng-form="aform">
+            <td class="col">
+              <a ui-sref="specimen({specimenId: aliquotSpec.parentId})">
+                <span>{{aliquotSpec.parentLabel}}</span>
+              </a>
+            </td>
+            <td class="col">
+              <span>{{aliquotSpec.parentAvailableQty}}</span>
+              <os-specimen-unit specimen-class="aliquotSpec.specimenClass" type="aliquotSpec.type">
+              </os-specimen-unit>
+            </td>
+            <td class="col">
+              <input name="cnt" type="text" os-md-input ng-model="aliquotSpec.count" ng-required="!aliquotSpec.quantity">
+              <div os-field-error field="aform.cnt"></div>
+            </td>
+            <td class="col">
+              <div class="os-input-addon-grp">
+                <input name="qty" os-md-input ng-model="aliquotSpec.quantity"
+                  ng-model-options="{allowInvalid: 'true'}" ng-required="!aliquotSpec.count">
+                <div class="os-input-addon-right os-md-input-addon">
+                  <os-specimen-unit specimen-class="aliquotSpec.specimenClass" type="aliquotSpec.type">
+                  </os-specimen-unit>
+                </div>
+              </div>
+              <div os-field-error field="aform.qty"></div>
+            </td>
+            <td class="col">
+              <os-date-picker name="createdOn" date="aliquotSpec.createdOn" md-type="true" required>
+              </os-date-picker>
+              <div os-field-error field="aform.createdOn"></div>
+            </td>
+            <td class="col">
+              <os-storage-position os-md-input entity="aliquotSpec" cp-id="aliquotSpec.cpId"
+                container-list-cache="containerListCache" hide-placeholder>
+              </os-storage-position>
+            </td>
+            <td class="col">
+              <os-checkbox ng-model="aliquotSpec.printLabel"></os-checkbox>
+            </td>
+            <td class="col">
+              <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-12">
+          <button class="btn btn-primary" os-form-submit="createAliquots()">
+            <span translate="specimens.create_aliquots">Submit</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
