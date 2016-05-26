@@ -1,17 +1,20 @@
-<div class="os-modal-header">
-  <span ng-if="!dependentEntities || dependentEntities.length == 0">
+<div class="os-modal-header"  ng-switch on="!showDependents">
+  <span ng-switch-when="true">
     {{'delete_entity.title' | translate: entityProps }}
   </span>
-  <span class="text-danger" ng-if="dependentEntities.length > 0">
+  <span class="text-danger" ng-switch-default>
     {{'delete_entity.dependents_title' | translate: entityProps }}
   </span>
 </div>
 <div class="os-modal-body">
-  <div ng-if="!dependentEntities || dependentEntities.length == 0">
-      {{ entityProps.confirmDelete | translate: entityProps }}
+  <div ng-if="!showDependents">
+    {{ entityProps.confirmDelete | translate: entityProps }}
   </div>
+  
   <div ng-if="dependentEntities.length > 0">
-    <h5>{{'delete_entity.dependents_details' | translate: entityProps }}</h5>
+    <h5 ng-if="!entityProps.forceDelete">
+      {{'delete_entity.dependents_details' | translate: entityProps }}
+    </h5>
     <div class="os-section">
       <div class="os-table os-table-muted-hdr os-border">
         <div class="os-table-head">
@@ -28,17 +31,30 @@
         </div>
       </div>
     </div>
+    
+    <div ng-if="entityProps.forceDelete && dependentEntities.length > 0">
+      <span translate='delete_entity.force_delete'>
+        Type 'DELETE ANYWAY' in below textbox to delete CP including its dependent entities.
+      </span>
+      <input type="textbox" class="form-control" name="deleteAnyway" ng-model="entityProps.deleteAnyway">
+    </div>
   </div>
 </div>
 <div class="os-modal-footer">
-  <div ng-switch on="!dependentEntities || dependentEntities.length == 0">
+  <div ng-switch on="!showDependents">
     <div ng-switch-when="true">
-      <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">Cancel</button>
-      <button class="btn btn-danger" ng-click="delete()" translate="common.yes">Yes</button>
+      <button class="btn os-btn-text" ng-click="cancel()">
+        <span translate="common.buttons.cancel">Cancel</span>
+      </button>
+      <button class="btn btn-danger" ng-click="delete()"
+        ng-disabled="dependentEntities.length > 0 && entityProps.deleteAnyway != ('delete_entity.delete_anyway' | translate)">
+        <span translate="common.yes">Yes</span>
+      </button>
     </div>
     <div ng-switch-default>
-      <button class="btn btn-primary" ng-click="cancel()" translate="common.buttons.ok">Ok</button>
+      <button class="btn btn-primary" ng-click="cancel()">
+        <span translate="common.buttons.ok">Ok</span>
+      </button>
     </div>
   </div>
 </div>
-

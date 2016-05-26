@@ -65,7 +65,9 @@ public enum CpErrorCode implements ErrorCode {
 	
 	DUP_PRINT_SETTING,
 
-	CANNOT_MERGE_FMT_DIFFERS;
+	CANNOT_MERGE_FMT_DIFFERS,
+	
+	REF_ENTITY_FOUND;
 	
 	@Override
 	public String code() {

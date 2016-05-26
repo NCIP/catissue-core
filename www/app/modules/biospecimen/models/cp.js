@@ -120,5 +120,13 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return $http['delete'](CollectionProtocol.url() + this.$id() + '/catalog-settings');
     }
 
+    CollectionProtocol.prototype.$remove = function() {
+      return $http['delete'](CollectionProtocol.url() + this.$id() + '?forceDelete=true').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return CollectionProtocol;
   });

@@ -2,15 +2,23 @@ angular.module('os.common.delete', [])
   .controller('EntityDeleteCtrl', function($scope, $modalInstance, entityProps, dependentEntities, Alerts) {
 
     function init() {
-      $scope.entity = entityProps.entity;
-      $scope.entityProps = entityProps;
+      dependentEntities = dependentEntities || [];
+
+      $scope.entity            = entityProps.entity;
+      $scope.entityProps       = entityProps;
       $scope.dependentEntities = dependentEntities;
+      $scope.showDependents    = !entityProps.forceDelete && dependentEntities.length > 0;
     }
 
     function onDeletion(entity) {
       if (!!entity) {
-        Alerts.success("delete_entity.entity_deleted", entityProps);
-        $modalInstance.close(entity);
+        if (entity.completed != false) {
+          Alerts.success("delete_entity.entity_deleted", entityProps);
+          $modalInstance.close(entity);
+        } else {
+          Alerts.info("delete_entity.delete_pending", entityProps);
+          $modalInstance.close(entity);
+        }
       }
     }
 

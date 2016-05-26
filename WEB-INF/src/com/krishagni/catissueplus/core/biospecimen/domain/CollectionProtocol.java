@@ -559,7 +559,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	public void delete() {
 		List<DependentEntityDetail> dependentEntities = getDependentEntities();
 		if (!dependentEntities.isEmpty()) {
-			throw OpenSpecimenException.userError(CpeErrorCode.REF_ENTITY_FOUND);
+			throw OpenSpecimenException.userError(CpErrorCode.REF_ENTITY_FOUND);
 		}
 
 		setTitle(Utility.getDisabledValue(getTitle(), 255));

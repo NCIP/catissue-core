@@ -301,10 +301,16 @@ public class Visit extends BaseExtensionEntity {
 	}
 	
 	public void delete() {
-		ensureNoActiveChildObjects();
+		delete(true);
+	}
+
+	public void delete(boolean checkDependency) {
+		if (checkDependency) {
+			ensureNoActiveChildObjects();
+		}
 		
 		for (Specimen specimen : getSpecimens()) {
-			specimen.disable(false);
+			specimen.disable(checkDependency);
 		}
 		
 		setName(Utility.getDisabledValue(getName(), 255));

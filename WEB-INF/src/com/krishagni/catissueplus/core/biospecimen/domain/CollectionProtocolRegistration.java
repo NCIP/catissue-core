@@ -220,9 +220,16 @@ public class CollectionProtocolRegistration {
 	}
 	
 	public void delete() {
-		ensureNoActiveChildObjects();
+		delete(true);
+	}
+
+	public void delete(boolean checkDependency) {
+		if (checkDependency) {
+			ensureNoActiveChildObjects();
+		}
+		
 		for (Visit visit : getVisits()) {
-			visit.delete();
+			visit.delete(checkDependency);
 		}
 		
 		setBarcode(Utility.getDisabledValue(getBarcode(), 255));

@@ -30,7 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
@@ -40,9 +39,12 @@ import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.EntityDeleteResp;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -231,10 +233,18 @@ public class CollectionProtocolsController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CollectionProtocolDetail deleteCollectionProtocol(@PathVariable Long id) {
-		ResponseEvent<CollectionProtocolDetail> resp = cpSvc.deleteCollectionProtocol(getRequest(id));
-		resp.throwErrorIfUnsuccessful();
+	public EntityDeleteResp<CollectionProtocolDetail> deleteCollectionProtocol(
+			@PathVariable Long id,
+			
+			@RequestParam(value = "forceDelete", required = false, defaultValue = "false") 
+			boolean forceDelete) {
 		
+		DeleteEntityOp crit = new DeleteEntityOp();
+		crit.setId(id);
+		crit.setForceDelete(forceDelete);
+		
+		ResponseEvent<EntityDeleteResp<CollectionProtocolDetail>> resp = cpSvc.deleteCollectionProtocol(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	
