@@ -234,6 +234,22 @@ angular.module('openspecimen')
       return dst;
     }
 
+    function copyAttrs(src, attrs, array) {
+      angular.forEach(array,
+        function(dst) {
+          if (dst == src) {
+            return;
+          }
+
+          angular.forEach(attrs,
+            function(attr) {
+              dst[attr] = src[attr];
+            }
+          );
+        }
+      );
+    }
+
     return {
       clear: clear,
 
@@ -259,6 +275,8 @@ angular.module('openspecimen')
 
       appendAll: appendAll,
 
-      merge: merge
+      merge: merge,
+
+      copyAttrs: copyAttrs
     };
   });

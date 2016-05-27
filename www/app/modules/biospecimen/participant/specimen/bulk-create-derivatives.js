@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimen')
-  .controller('BulkCreateDerivativesCtrl', function($scope, parentSpmns, Specimen, Alerts) {
+  .controller('BulkCreateDerivativesCtrl', function($scope, parentSpmns, Specimen, Alerts, Util, SpecimenUtil) {
     function init() {
       var createdOn = new Date().getTime();
 
@@ -30,6 +30,13 @@ angular.module('os.biospecimen.specimen')
       } else {
         return true;
       }
+    }
+
+    $scope.copyFirstToAll = function() {
+      var spmnToCopy = $scope.ctx.derivedSpmns[0];
+      var attrsToCopy = ['specimenClass', 'type', 'initialQty', 'createdOn', 'printLabel', 'closeParent'];
+      Util.copyAttrs(spmnToCopy, attrsToCopy, $scope.ctx.derivedSpmns);
+      SpecimenUtil.copyContainerName(spmnToCopy, $scope.ctx.derivedSpmns);
     }
 
     $scope.removeSpecimen = function(index) {

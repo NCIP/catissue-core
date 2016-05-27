@@ -177,6 +177,25 @@ angular.module('os.biospecimen.specimen')
       return formCtrl.getFormData();
     }
 
+    function copyContainerName(src, array) {
+      if (!angular.isDefined(src.storageLocation) || !src.storageLocation.name) {
+        return;
+      }
+
+      var containerName = src.storageLocation.name;
+      angular.forEach(array,
+        function(dst) {
+          if (src == dst || src.specimenClass != dst.specimenClass || src.type != dst.type) {
+            return;
+          }
+
+          if (!angular.isDefined(dst.storageLocation) || containerName != dst.storageLocation.name) {
+            dst.storageLocation = {name: containerName};
+          }
+        }
+      );
+    }
+
     return {
       collectAliquots: collectAliquots,
 
@@ -188,6 +207,8 @@ angular.module('os.biospecimen.specimen')
 
       loadSpecimenTypes: loadSpecimenTypes,
 
-      loadPathologyStatuses: loadPathologyStatuses
+      loadPathologyStatuses: loadPathologyStatuses,
+
+      copyContainerName: copyContainerName
     }
   });

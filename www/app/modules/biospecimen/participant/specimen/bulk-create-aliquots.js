@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimen')
-  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts) {
+  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts, Util, SpecimenUtil) {
     function init() {
       var createdOn = new Date().getTime();
 
@@ -62,6 +62,13 @@ angular.module('os.biospecimen.specimen')
         createdOn: spec.createdOn,
         printLabel: spec.printLabel
       });
+    }
+
+    $scope.copyFirstToAll = function() {
+      var specToCopy = $scope.ctx.aliquotsSpec[0];
+      var attrsToCopy = ['count', 'quantity', 'createdOn', 'printLabel', 'closeParent'];
+      Util.copyAttrs(specToCopy, attrsToCopy, $scope.ctx.aliquotsSpec);
+      SpecimenUtil.copyContainerName(specToCopy, $scope.ctx.aliquotsSpec);
     }
 
     $scope.removeSpec = function(index) {

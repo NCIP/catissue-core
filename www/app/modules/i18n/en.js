@@ -478,7 +478,7 @@
     "biohazards": "Biohazards",
     "created_on": "Created On",
     "concentration_unit": "&#181;g/&#181;l",
-    "copy_first_to_all": "Copy First To All",
+    "copy_first_to_all": "Copy first to all",
     "row": "Row",
     "column": "Column",
     "activity_full_info": "{{user}} created {{name}} on {{time | date: global.dateTimeFmt}}",

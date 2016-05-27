@@ -1162,3 +1162,8 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   padding-top: 5px!important;
   padding-bottom: 5px!important;
 }
+
+.os-bottom-border {
+  padding-bottom: 5px;
+  border-bottom: 2px solid #ddd;
+}
