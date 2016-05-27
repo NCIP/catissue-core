@@ -32,6 +32,13 @@ angular.module('os.biospecimen.specimen')
       }
     }
 
+    $scope.removeSpecimen = function(index) {
+      $scope.ctx.derivedSpmns.splice(index, 1);
+      if ($scope.ctx.derivedSpmns.length == 0) {
+        $scope.back();
+      }
+    }
+
     $scope.createDerivatives = function() {
       var result = [];
 

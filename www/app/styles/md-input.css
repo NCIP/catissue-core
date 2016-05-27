@@ -104,6 +104,11 @@
   /*background: transparent;*/
 }
 
+.os-table.bulk-edit button.right {
+  float: right;
+  padding: 6px 0px 0px 0px;
+}
+
 .os-md-input .ui-select-bootstrap > .ui-select-match > .ui-select-toggle {
   border: 0px;
   box-shadow: none;

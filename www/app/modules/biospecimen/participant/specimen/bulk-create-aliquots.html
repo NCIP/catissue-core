@@ -79,7 +79,12 @@
               <os-checkbox ng-model="aliquotSpec.printLabel"></os-checkbox>
             </td>
             <td class="col">
-              <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+              <div class="clearfix">
+                <os-checkbox ng-model="aliquotSpec.closeParent"></os-checkbox>
+                <button class="btn os-btn-text right" ng-click="removeSpec($index)">
+                  <span class="fa fa-remove"></span>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>

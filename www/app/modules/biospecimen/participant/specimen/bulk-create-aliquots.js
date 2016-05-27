@@ -64,6 +64,13 @@ angular.module('os.biospecimen.specimen')
       });
     }
 
+    $scope.removeSpec = function(index) {
+      $scope.ctx.aliquotsSpec.splice(index, 1);
+      if ($scope.ctx.aliquotsSpec.length == 0) {
+        $scope.back();
+      }
+    }
+
     $scope.createAliquots = function() {
       var result = [];
 
