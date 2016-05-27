@@ -203,6 +203,19 @@ angular.module('os.biospecimen.specimen',
         },
         parent: 'signed-in'
       })
+      .state('specimen-bulk-create-derivatives', {
+        url: '/bulk-create-derivatives',
+        templateUrl: 'modules/biospecimen/participant/specimen/bulk-create-derivatives.html',
+        controller: 'BulkCreateDerivativesCtrl',
+        resolve: {
+          parentSpmns: function(SpecimensHolder) {
+            var specimens = SpecimensHolder.getSpecimens();
+            SpecimensHolder.setSpecimens([]);
+            return specimens || [];
+          }
+        },
+        parent: 'signed-in'
+      })
       .state('bulk-add-event', {
         url: '/bulk-add-event',
         templateUrl: 'modules/biospecimen/participant/specimen/bulk-add-event.html',

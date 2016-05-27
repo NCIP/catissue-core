@@ -460,6 +460,7 @@
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
     "aliquots_created": "Successfully created aliquots",
+    "derivatives_created": "Successfully created derived specimens",
     "close_parent_q": "Do you want to close parent specimen?",
     "concentration": "Concentration",
     "freeze_thaw_cycles": "Freeze/Thaw Cycles",
@@ -527,8 +528,9 @@
     "delete_specimens":  "Are you sure you want to delete selected specimens ?",
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
-    "create_derivative": "Create Derivative",
+    "create_derivative": "Create Derived Specimen",
     "create_aliquots": "Create Aliquots",
+    "create_derivatives": "Create Derived Specimens",
     "specimen_type": "Specimen Type",
     "anatomic_site": "Anatomic Site",
 
@@ -1455,7 +1457,9 @@
     "location": "Storage Location",
     "no_specimens_to_add_event": "Please select at least one specimen to add event",
     "create_aliquots": "Create Aliquots",
-    "no_specimens_to_create_aliquots": "Please select at least one parent specimen to create aliquots"
+    "no_specimens_to_create_aliquots": "Please select at least one parent specimen to create aliquots",
+    "create_derivatives": "Create Derivatives",
+    "no_specimens_to_create_derivatives": "Please select at least one parent specimen to create derived specimens"
   },
 
   "orders": {

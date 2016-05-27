@@ -161,6 +161,16 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       $state.go('specimen-bulk-create-aliquots');
     }
 
+    $scope.createDerivatives = function() {
+      if (!$scope.selection.any) {
+        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_create_derivatives');
+        return;
+      }
+
+      SpecimensHolder.setSpecimens($scope.selection.specimens);
+      $state.go('specimen-bulk-create-derivatives');
+    }
+
     $scope.addEvent = function() {
       if (!$scope.selection.any) {
         showSelectSpecimensErrMsg('specimen_list.no_specimens_to_add_event');

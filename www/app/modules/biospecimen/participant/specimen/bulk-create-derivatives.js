@@ -1,0 +1,67 @@
+angular.module('os.biospecimen.specimen')
+  .controller('BulkCreateDerivativesCtrl', function($scope, parentSpmns, Specimen, Alerts) {
+    function init() {
+      var createdOn = new Date().getTime();
+
+      var derivedSpmns = parentSpmns.map(
+        function(ps) {
+          return new Specimen({
+            lineage: 'Derived',
+            cpId: ps.cpId,
+            parentId: ps.id,
+            parentLabel: ps.label,
+            parentCreatedOn: ps.createdOn,
+            createdOn: createdOn,
+            status: 'Collected'
+          });
+        }
+      );
+
+      $scope.ctx = {derivedSpmns: derivedSpmns}
+    }
+
+    function isValidCreatedOn(spmn) {
+      if (spmn.createdOn < spmn.parentCreatedOn) {
+        Alerts.error("specimens.errors.children_created_on_lt_parent", {parentLabel: spmn.parentLabel});
+        return false;
+      } else if (spmn.createdOn > new Date().getTime()) {
+        Alerts.error("specimens.errors.children_created_on_gt_curr_time", {parentLabel: spmn.parentLabel});
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    $scope.createDerivatives = function() {
+      var result = [];
+
+      for (var i = 0; i < $scope.ctx.derivedSpmns.length; ++i) {
+        var spmn = angular.copy($scope.ctx.derivedSpmns[i]);
+        if (!isValidCreatedOn(spmn)) {
+          return;
+        }
+
+        delete spmn.parentCreatedOn;
+
+        if (spmn.closeParent) {
+          result.push(new Specimen({
+            id: spmn.parentId,
+            status: 'Collected',
+            children: [spmn],
+            closeAfterChildrenCreation: true
+          }));
+        } else {
+          result.push(spmn);
+        }
+      }
+
+      Specimen.save(result).then(
+        function() {
+          Alerts.success('specimens.derivatives_created');
+          $scope.back();
+        }
+      );
+    }
+
+    init();
+  });
