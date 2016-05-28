@@ -70,9 +70,15 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       );
     }
 
-    function showSelectSpecimensErrMsg(msgCode) {
-      Alerts.error(msgCode);
-    };
+    function gotoView(state, params, msgCode) {
+      if (!$scope.selection.any) {
+        Alerts.error('specimen_list.' + msgCode);
+        return;
+      }
+
+      SpecimensHolder.setSpecimens($scope.selection.specimens);
+      $state.go(state, params);
+    }
 
     $scope.selectList = function (specimenList) {
       $scope.selection = resetSelection();
@@ -117,7 +123,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
 
     $scope.confirmRemoveSpecimens = function () {
       if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_deletion");
+        Alerts.error("specimen_list.no_specimens_for_deletion");
         return;
       }
 
@@ -132,53 +138,23 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     }
 
     $scope.distributeSpecimens = function() {
-      if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_distribution");
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('order-addedit', {orderId: ''});
+      gotoView('order-addedit', {orderId: ''}, 'no_specimens_for_distribution');
     }
 
     $scope.shipSpecimens = function() {
-      if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg("specimen_list.no_specimens_for_shipment");
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('shipment-addedit', {orderId: ''});
+      gotoView('shipment-addedit', {shipmentId: ''}, 'no_specimens_for_shipment');
     }
     
     $scope.createAliquots = function() {
-      if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_create_aliquots');
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('specimen-bulk-create-aliquots');
+      gotoView('specimen-bulk-create-aliquots', {}, 'no_specimens_to_create_aliquots');
     }
 
     $scope.createDerivatives = function() {
-      if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_create_derivatives');
-        return;
-      }
-
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('specimen-bulk-create-derivatives');
+      gotoView('specimen-bulk-create-derivatives', {}, 'no_specimens_to_create_derivatives');
     }
 
     $scope.addEvent = function() {
-      if (!$scope.selection.any) {
-        showSelectSpecimensErrMsg('specimen_list.no_specimens_to_add_event');
-        return;
-      }
-      
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
-      $state.go('bulk-add-event');
+      gotoView('bulk-add-event', {}, 'no_specimens_to_add_event');
     }
 
     init();
