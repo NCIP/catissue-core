@@ -14,6 +14,10 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	private Long specimenListId;
 	
 	private boolean useMrnSites;
+
+	public SpecimenListCriteria() {
+		exactMatch(true);
+	}
 	
 	@Override
 	public SpecimenListCriteria self() {		

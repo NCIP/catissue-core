@@ -3,12 +3,14 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -106,6 +108,9 @@ public class SpecimenListsController {
 			@PathVariable("listId")
 			Long listId,
 
+			@RequestParam(value = "label", required = false)
+			String label,
+
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 
@@ -117,6 +122,8 @@ public class SpecimenListsController {
 
 		SpecimenListCriteria criteria = new SpecimenListCriteria()
 			.specimenListId(listId)
+			.labels(StringUtils.isNotBlank(label) ? Collections.singletonList(label) : null)
+			.exactMatch(false)
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.includeStat(includeListCount);
