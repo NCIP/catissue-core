@@ -75,7 +75,7 @@
         sa.resource = :resource and
         sa.operation in (:operations)
     </query>
-    
+
     <sql-query name="canUserPerformOpOnCp" >
       <return-scalar column="subjectId" type="long"/>
       
@@ -117,6 +117,36 @@
         resource_name = :resource 
         and operation = :operation
         and subject_id = :userId
+    </sql-query>
+
+    <sql-query name="getSubjectIds">
+      <return-scalar column="subjectId" type="long"/>
+
+      select
+        distinct s.identifier as subjectId
+      from
+        catissue_user s
+        inner join rbac_subject_access_view sa on sa.subject_id = s.identifier
+        inner join os_departments dept on dept.identifier = s.department_id
+        inner join catissue_institution userInst on userInst.identifier = dept.institute_id
+        inner join (
+          select
+            site.identifier as siteId, site.institute_id as instituteId
+          from
+            catissue_collection_protocol cp
+            inner join catissue_site_cp cpSite on cpSite.collection_protocol_id = cp.identifier
+            inner join catissue_site site on site.identifier = cpSite.site_id
+          where
+            cp.identifier = :cpId and
+            cp.activity_status != 'Disabled' and
+            site.activity_status != 'Disabled'
+        ) cpSiteInst on cpSiteInst.instituteId = userInst.identifier
+      where
+        sa.resource_name = :resource and
+        sa.operation in (:operations) and
+        (sa.cp_id is null or sa.cp_id = :cpId) and
+        (sa.site_id is null or sa.site_id = cpSiteInst.siteId) and
+        s.activity_status != 'Disabled'
     </sql-query>
   </class>  
 </hibernate-mapping>

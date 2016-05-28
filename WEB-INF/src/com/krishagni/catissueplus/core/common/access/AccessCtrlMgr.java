@@ -161,6 +161,19 @@ public class AccessCtrlMgr {
 		return getEligibleCpIds(Resource.PARTICIPANT.getName(), new String[] {Operation.CREATE.getName()}, siteNames);
 	}
 
+	//
+	// Returns list of IDs of users who can perform "ops" on "resource" belonging
+	// to collection protocol identified by "cpId"
+	//
+	public List<Long> getUserIds(Long cpId, Resource resource, Operation[] ops) {
+		String[] opsStr = new String[ops.length];
+		for (int i = 0; i < ops.length; ++i) {
+			opsStr[i] = ops[i].getName();
+		}
+
+		return daoFactory.getSubjectDao().getSubjectIds(cpId, resource.getName(), opsStr);
+	}
+
 	public void ensureCreateCpRights(CollectionProtocol cp) {
 		ensureCpObjectRights(cp, Operation.CREATE);
 	}
