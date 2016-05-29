@@ -1453,7 +1453,8 @@
     "checkout": "Checkout",
     "add_event": "Add Event",
     "location": "Storage Location",
-    "no_specimens_to_add_event": "Please select at least one specimen to add event"
+    "no_specimens_to_add_event": "Please select at least one specimen to add event",
+    "filter_specimens": "Specimen Filters"
   },
 
   "orders": {
