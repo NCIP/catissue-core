@@ -175,7 +175,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 			SpecimenList specimenList = getSpecimenList(listId, null);
 
-			Long specimensCount = null;
+			Integer specimensCount = null;
 			if (crit.includeStat()) {
 				specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(listId);
 				crit.includeStat(false);
@@ -207,7 +207,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 			
 			if (labels == null || labels.isEmpty()) {
-				specimens = new ArrayList<Specimen>();
+				specimens = new ArrayList<>();
 			} else {
 				ensureValidSpecimens(labels, siteCpPairs);
 				specimens = daoFactory.getSpecimenDao().getSpecimens(new SpecimenListCriteria().labels(labels));
@@ -228,10 +228,9 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			}
 			
 			daoFactory.getSpecimenListDao().saveOrUpdate(specimenList, true);
-			
-			Long specimensCount = daoFactory.getSpecimenListDao().getListSpecimensCount(specimenList.getId());
+
 			List<Specimen> readAccessSpecimens = getReadAccessSpecimens(specimenList.getId(), siteCpPairs);
-			return ResponseEvent.response(ListSpecimensDetail.from(readAccessSpecimens, specimensCount));
+			return ResponseEvent.response(ListSpecimensDetail.from(readAccessSpecimens, specimenList.size()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

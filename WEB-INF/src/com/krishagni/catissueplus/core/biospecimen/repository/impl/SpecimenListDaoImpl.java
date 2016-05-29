@@ -83,11 +83,12 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 	}
 
 	@Override
-	public Long getListSpecimensCount(Long listId) {
+	public int getListSpecimensCount(Long listId) {
 		return ((Number) sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_LIST_SPECIMENS_COUNT)
 				.setLong("listId", listId)
-				.uniqueResult()).longValue();
+				.uniqueResult())
+				.intValue();
 	}
 
 	@Override
