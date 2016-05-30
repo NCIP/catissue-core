@@ -41,7 +41,7 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
     }
 
     $scope.deleteCp = function() {
-      DeleteUtil.delete($scope.cp, {onDeleteState: 'cp-list'});
+      DeleteUtil.delete($scope.cp, {onDeleteState: 'cp-list', forceDelete: true});
     }
 
     init();

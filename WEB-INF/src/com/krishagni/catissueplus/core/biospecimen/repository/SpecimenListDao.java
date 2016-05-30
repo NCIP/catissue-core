@@ -22,7 +22,7 @@ public interface SpecimenListDao extends Dao<SpecimenList> {
 
 	public SpecimenList getDefaultSpecimenList(Long userId);
 	
-	public Long getListSpecimensCount(Long listId);
+	public int getListSpecimensCount(Long listId);
 	
 	public void deleteSpecimenList(SpecimenList listId);
 }

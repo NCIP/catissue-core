@@ -832,6 +832,7 @@
     "department": "Department",
     "address": "Address",
     "super_admin": "Super Administrator",
+    "manage_forms": "Manage Forms?",
     "login_details": "Login Details",
     "permissions": "Permissions",
     "login_name": "Login Name",
@@ -1154,7 +1155,10 @@
     "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
     "entity_deleted": "{{entityType}} {{entityName}} deleted successfully.",
     "dependents_title": "Error: Cannot delete {{entityName}}",
-    "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects"
+    "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects",
+    "force_delete": "Type 'DELETE ANYWAY' in below textbox to delete CP including its dependent entities.",
+    "delete_anyway": "DELETE ANYWAY",
+    "delete_pending": "{{entityType}} {{entityName}} deletion taking longer time than anticipated. You'll receive an email when it gets completed"
   },
 
   "queries": {
@@ -1363,6 +1367,8 @@
   },
 
   "bulk_imports": {
+    "no_jobs": "No bulk imports jobs to show.",
+
     "job_submitted": "Bulk Import Job {{id}} Submitted",
     "select_extn": "Select Form",
     "input_file": "Input Records File",
@@ -1459,7 +1465,8 @@
     "create_aliquots": "Create Aliquots",
     "no_specimens_to_create_aliquots": "Please select at least one parent specimen to create aliquots",
     "create_derivatives": "Create Derivatives",
-    "no_specimens_to_create_derivatives": "Please select at least one parent specimen to create derived specimens"
+    "no_specimens_to_create_derivatives": "Please select at least one parent specimen to create derived specimens",
+    "filter_specimens": "Specimen Filters"
   },
 
   "orders": {

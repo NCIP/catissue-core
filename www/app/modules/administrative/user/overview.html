@@ -76,7 +76,6 @@
             <span ng-switch-when="false" translate="common.no"></span>
             <span ng-switch-when="true" translate="common.yes"></span>
             <span ng-switch-default translate="common.no"></span>
-
           </div>
           <div ng-if="adminEditor.isEditMode()" class="form-control">
             <label class="radio-inline">
@@ -89,6 +88,13 @@
             </label>
           </div>
         </os-inline-edit>
+      </li>
+      <li show-if-admin class="item">
+        <strong class="key key-sm" translate="user.manage_forms">Manage Forms?</strong>
+        <span class="value value-md" ng-switch on="user.manageForms">
+          <span ng-switch-when="true" translate="common.yes">Yes</span>
+          <span ng-switch-when="false" translate="common.no">No</span>
+        </span>
       </li>
     </ul>
 

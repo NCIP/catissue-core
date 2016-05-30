@@ -159,6 +159,10 @@ public class SpecimenList {
 		setDeletedOn(Calendar.getInstance().getTime());
 	}
 
+	public int size() {
+		return specimens.size();
+	}
+
 	public boolean isDefaultList(User user) {
 		return getDefaultListName(user).equals(getName());
 	}

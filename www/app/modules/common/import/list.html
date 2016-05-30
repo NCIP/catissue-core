@@ -10,8 +10,11 @@
     </h3> 
   </div>
 
-  <div class="container">
-    <table class="os-table" ng-if="importJobs.length > 0">
+  <div class="container" ng-switch on="importJobs.length > 0">
+    <span ng-switch-when="false" translate="bulk_imports.no_jobs">
+      No jobs to show
+    </span>
+    <table class="os-table" ng-switch-when="true">
       <thead class="os-table-head">
         <tr class="row">
           <th class="col os-col-25">
@@ -74,7 +77,8 @@
         </tr>
       </tbody>
     </table>
-    <pager total-items="pagingOpts.totalJobs" items-per-page="pagingOpts.jobsPerPage" ng-model="pagingOpts.currPage">
+    <pager total-items="pagingOpts.totalJobs" items-per-page="pagingOpts.jobsPerPage"
+      ng-model="pagingOpts.currPage" ng-switch-when="true">
     </pager>
   </div>
 </div>

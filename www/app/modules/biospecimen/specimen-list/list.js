@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
   .controller('SpecimenListsCtrl', function(
-    $scope, $modal, $state, $stateParams, currentUser, reqBasedDistOrShip,
+    $scope, $modal, $state, $stateParams, $timeout, currentUser, reqBasedDistOrShip,
     SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
 
     function init() { 
@@ -14,15 +14,25 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
       }
 
       $scope.selection = resetSelection();
+      $scope.filterOpts = {};
       $scope.lists = {
         selectedList: undefined,
         myLists: [],
         sharedLists: [],
         reqBasedDistOrShip: (reqBasedDistOrShip.value == 'true'),
-        url: SpecimenList.url()
+        url: SpecimenList.url(),
+        filtersOpen: false
       }
 
+      $scope.$on('osRightDrawerOpen', toggleFiltersOpen);
+      $scope.$on('osRightDrawerClose', toggleFiltersOpen);
       loadAllSpecimenLists();
+    }
+
+    function toggleFiltersOpen() {
+      $timeout(function() {
+        $scope.lists.filtersOpen = !$scope.lists.filtersOpen;
+      });
     }
 
     function resetSelection() {
@@ -81,6 +91,7 @@ angular.module('os.biospecimen.specimenlist.list', ['os.biospecimen.models'])
     }
 
     $scope.selectList = function (specimenList) {
+      $scope.filterOpts = {};
       $scope.selection = resetSelection();
       $scope.lists.selectedList = specimenList;
       specimenList.getSpecimens().then(

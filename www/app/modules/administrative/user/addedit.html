@@ -87,7 +87,16 @@
         <label class="col-xs-3 control-label" translate="user.super_admin">Super Administrator</label>
         <div class="col-xs-6">
           <label class="checkbox-inline">
-            <input type="checkbox" ng-model="user.admin" /> <span translate="common.yes"></span>
+            <input type="checkbox" ng-model="user.admin"/> <span translate="common.yes"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div show-if-admin class="form-group">
+        <label class="col-xs-3 control-label">Manage Forms?</label>
+        <div class="col-xs-6">
+          <label class="checkbox-inline">
+            <input type="checkbox" ng-model="user.manageForms"/> <span translate="common.yes"></span>
           </label>
         </div>
       </div>

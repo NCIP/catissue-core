@@ -6,6 +6,10 @@ public class DeleteEntityOp {
 	
 	private boolean close;
 	
+	private boolean forceDelete;
+	
+	public DeleteEntityOp() {}
+	
 	public DeleteEntityOp(Long id, boolean close) {
 		this.id = id;
 		this.close = close;
@@ -27,4 +31,11 @@ public class DeleteEntityOp {
 		this.close = close;
 	}
 
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
 }

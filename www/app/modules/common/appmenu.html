@@ -82,7 +82,7 @@
           <li>
             <a ui-sref="specimen-list"  translate="menu.specimen_lists">Specimen Lists</a>
           </li>
-          <li show-if-admin>
+          <li ng-if="currentUser.admin || currentUser.manageForms">
             <a ui-sref="form-list" translate="menu.forms">Forms</a>
           </li>
           <li show-if-admin>

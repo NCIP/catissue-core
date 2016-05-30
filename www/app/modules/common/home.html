@@ -92,7 +92,7 @@
         </span>
       </a>
     </li>
-    <li show-if-admin class="os-home-item"> 
+    <li ng-if="currentUser.admin || currentUser.manageForms" class="os-home-item">
       <a ui-sref="form-list">
         <span class="os-home-item-icon">
           <span class="fa fa-copy"></span>

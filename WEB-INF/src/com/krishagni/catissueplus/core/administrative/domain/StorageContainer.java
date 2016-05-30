@@ -749,6 +749,11 @@ public class StorageContainer extends BaseEntity {
 		return copy;
 	}
 	
+	public void removeCpRestriction(CollectionProtocol cp) {
+		getAllowedCps().remove(cp);
+		updateComputedCps();
+	}
+	
 	private void deleteWithoutCheck() {
 		for (StorageContainer child: getChildContainers()) {
 			child.deleteWithoutCheck();

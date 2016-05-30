@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
@@ -44,7 +45,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		if (CollectionUtils.isNotEmpty(crit.ids())) {
 			addIdsCond(query, crit.ids());
 		} else if (CollectionUtils.isNotEmpty(crit.labels())) {
-			addLabelsCond(query, crit.labels());
+			if (crit.labels().size() == 1) {
+				addLabelCond(query, crit.labels().iterator().next(), crit.matchMode());
+			} else {
+				addLabelsCond(query, crit.labels());
+			}
 		}
 
 
@@ -224,6 +229,14 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 
 	private void addIdsCond(Criteria query, List<Long> ids) {
 		addInCond(query, "specimen.id", ids);
+	}
+
+	private void addLabelCond(Criteria query, String label, MatchMode matchMode) {
+		if (matchMode == MatchMode.EXACT) {
+			query.add(Restrictions.eq("specimen.label", label));
+		} else {
+			query.add(Restrictions.ilike("specimen.label", label, matchMode));
+		}
 	}
 
 	private void addLabelsCond(Criteria query, List<String> labels) {

@@ -46,6 +46,7 @@ import com.krishagni.catissueplus.core.de.events.RemoveFormContextOp;
 import com.krishagni.catissueplus.core.de.repository.FormDao;
 import com.krishagni.catissueplus.core.de.services.FormContextProcessor;
 import com.krishagni.catissueplus.core.de.services.FormService;
+import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
@@ -101,7 +102,7 @@ public class FormServiceImpl implements FormService {
 	}
 	
 	private FormDao formDao;
-
+	
 	private Map<String, List<FormContextProcessor>> ctxtProcs = new HashMap<String, List<FormContextProcessor>>();
 
 	public void setFormDao(FormDao formDao) {
@@ -117,6 +118,13 @@ public class FormServiceImpl implements FormService {
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req) {
 		FormListCriteria crit = req.getPayload();
 		String entityType = crit.getFormType();
+		User currUser = AuthUtil.getCurrentUser();
+
+		if (!currUser.isAdmin() && currUser.getManageForms()) {
+			crit.userId(currUser.getId());
+			crit.cpIds(AccessCtrlMgr.getInstance().getReadableCpIds());
+		}
+
 		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
 			return ResponseEvent.response(formDao.getAllFormsSummary(crit));
 		} else if (entityType.equalsIgnoreCase("Query")) {
@@ -142,7 +150,7 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<Boolean> deleteForm(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			AccessCtrlMgr.getInstance().ensureFormUpdateRights();
 			
 			Long formId = req.getPayload();
 			if (Container.softDeleteContainer(formId)) {
@@ -205,19 +213,33 @@ public class FormServiceImpl implements FormService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<FormContextDetail>> getFormContexts(RequestEvent<Long> req) {
-		return ResponseEvent.response(formDao.getFormContexts(req.getPayload()));		
+		return ResponseEvent.response(formDao.getFormContexts(req.getPayload()));
 	}
 	
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<FormContextDetail>> addFormContexts(RequestEvent<List<FormContextDetail>> req) { // TODO: check form is deleted
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
+			AccessCtrlMgr.getInstance().ensureFormUpdateRights();
+
+			Set<Long> allowedCpIds = new HashSet<Long>();
 			List<FormContextDetail> formCtxts = req.getPayload();
 			for (FormContextDetail formCtxtDetail : formCtxts) {
 				Long formId = formCtxtDetail.getFormId();
 				Long cpId = formCtxtDetail.getCollectionProtocol().getId();
+
+				if (cpId == -1 && !AuthUtil.isAdmin()) {
+					throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+				}
+				
+				if (!allowedCpIds.contains(cpId)) {
+					if (cpId != -1) {
+						AccessCtrlMgr.getInstance().ensureUpdateCpRights(cpId);
+					}
+					
+					allowedCpIds.add(cpId);
+				}
+
 				String entity = formCtxtDetail.getLevel();
 
 				FormContextBean formCtxt = formDao.getFormContext(formId, cpId, entity);
@@ -241,7 +263,7 @@ public class FormServiceImpl implements FormService {
 				formCtxtDetail.setFormCtxtId(formCtxt.getIdentifier());
 			}
 			
-			return ResponseEvent.response(formCtxts);			
+			return ResponseEvent.response(formCtxts);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -458,8 +480,8 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public ResponseEvent<Boolean> removeFormContext(RequestEvent<RemoveFormContextOp> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
+			AccessCtrlMgr.getInstance().ensureFormUpdateRights();
+
 			RemoveFormContextOp opDetail = req.getPayload();
 			FormContextBean formCtx = formDao.getFormContext(
 					opDetail.getFormId(), 
@@ -472,6 +494,14 @@ public class FormServiceImpl implements FormService {
 			
 			if (formCtx.isSysForm()) {
 				return ResponseEvent.userError(FormErrorCode.SYS_FORM_DEL_NOT_ALLOWED);
+			}
+			
+			if (formCtx.getCpId() == -1 && !AuthUtil.isAdmin()) {
+				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+			
+			if (formCtx.getCpId() != -1) {
+				AccessCtrlMgr.getInstance().ensureUpdateCpRights(formCtx.getCpId());
 			}
 
 			List<FormContextProcessor> procs = ctxtProcs.get(formCtx.getEntityType());

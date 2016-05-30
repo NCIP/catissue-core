@@ -13,7 +13,8 @@ angular.module('os.common.delete')
               entity: object,
               entityName: object.getDisplayName(),
               entityType: $translate.instant("entities." + object.getType()),
-              confirmDelete: confirmDelete
+              confirmDelete: confirmDelete,
+              forceDelete: !!props.forceDelete
             }
           },
           dependentEntities: function() {

@@ -24,8 +24,6 @@ public enum RbacErrorCode implements ErrorCode {
 	
 	SUBJECT_ID_REQUIRED, 
 	
-	INSUFFICIENT_USER_DETAILS, 
-	
 	GROUP_ID_REQUIRED, 
 	
 	SUBJECT_NOT_FOUND,

@@ -5,19 +5,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -47,6 +55,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
@@ -59,9 +68,12 @@ import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr.ParticipantReadAccess;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.events.EntityDeleteResp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
@@ -71,6 +83,8 @@ import com.krishagni.rbac.service.RbacService;
 
 
 public class CollectionProtocolServiceImpl implements CollectionProtocolService, ObjectStateParamsResolver {
+
+	private ThreadPoolTaskExecutor taskExecutor;
 
 	private CollectionProtocolFactory cpFactory;
 	
@@ -82,6 +96,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	
 	private RbacService rbacSvc;
 	
+	private EmailService emailService;
+	
+	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
+		this.taskExecutor = taskExecutor;
+	}
+
 	public void setCpFactory(CollectionProtocolFactory cpFactory) {
 		this.cpFactory = cpFactory;
 	}
@@ -97,9 +117,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-	
+
 	public void setRbacSvc(RbacService rbacSvc) {
 		this.rbacSvc = rbacSvc;
+	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -316,18 +340,22 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<CollectionProtocolDetail> deleteCollectionProtocol(RequestEvent<Long> req) {
+	public ResponseEvent<EntityDeleteResp<CollectionProtocolDetail>> deleteCollectionProtocol(RequestEvent<DeleteEntityOp> req) {
 		try {
-			CollectionProtocol existingCp = daoFactory.getCollectionProtocolDao().getById(req.getPayload());
-			if (existingCp == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
+			DeleteEntityOp crit = req.getPayload();
+
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(crit.getId());
+			if (cp == null) {
+				return ResponseEvent.userError(CpErrorCode.NOT_FOUND, crit.getId());
 			}
-			
-			AccessCtrlMgr.getInstance().ensureDeleteCpRights(existingCp);
-			removeDefaultPiRoles(existingCp, existingCp.getPrincipalInvestigator());
-			removeDefaultCoordinatorRoles(existingCp, existingCp.getCoordinators());
-			existingCp.delete();
-			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
+
+			AccessCtrlMgr.getInstance().ensureDeleteCpRights(cp);
+			boolean completed = crit.isForceDelete() ? forceDeleteCp(cp) : deleteCp(cp);
+
+			EntityDeleteResp<CollectionProtocolDetail> resp = new EntityDeleteResp<>();
+			resp.setCompleted(completed);
+			resp.setEntity(CollectionProtocolDetail.from(cp));
+			return ResponseEvent.response(resp);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -1239,18 +1267,104 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			notSameLabels.add(getMsg(labelKey));
 		}
 	}
+	
+	private boolean forceDeleteCp(final CollectionProtocol cp)
+	throws Exception {
+		final Authentication auth = AuthUtil.getAuth();
+
+		Future<Boolean> result = taskExecutor.submit(new Callable<Boolean>() {
+			@Override
+			public Boolean call() throws Exception {
+				SecurityContextHolder.getContext().setAuthentication(auth);
+
+				boolean success = false;
+				String stackTrace = null;
+				try {
+					while (deleteRegistrations(cp));
+					deleteCp(cp);
+					success = true;
+				} catch (Exception ex) {
+					success = false;
+					stackTrace = ExceptionUtils.getStackTrace(ex);
+					throw OpenSpecimenException.serverError(ex);
+				} finally {
+					sendEmail(cp, success, stackTrace);
+				}
+
+				return true;
+			}
+		});
+			
+		boolean completed = false;
+		try {
+			completed = result.get(30, TimeUnit.SECONDS);
+		} catch (TimeoutException ex) {
+			completed = false;
+		}
+
+		return completed;
+	}
+	
+	@PlusTransactional
+	private boolean deleteCp(CollectionProtocol cp) {
+		//
+		// refresh cp, as it could have been fetched in another transaction
+		// if in same transaction, then it will be obtained from session
+		//
+		cp = daoFactory.getCollectionProtocolDao().getById(cp.getId());
+
+		removeContainerRestrictions(cp);
+		removeDefaultPiRoles(cp, cp.getPrincipalInvestigator());
+		removeDefaultCoordinatorRoles(cp, cp.getCoordinators());
+		cp.delete();
+		return true;
+	}
+	
+	@PlusTransactional
+	private boolean deleteRegistrations(CollectionProtocol cp) {
+		List<CollectionProtocolRegistration> cprs = daoFactory.getCprDao().getCprsByCpId(cp.getId(), 0, 10);
+		cprs.forEach(cpr -> cpr.delete(false));
+		return cprs.size() == 10;
+	}
+
+	private void removeContainerRestrictions(CollectionProtocol cp) {
+		Set<StorageContainer> containers = cp.getStorageContainers();
+		for (StorageContainer container : containers) {
+			container.removeCpRestriction(cp);
+		}
+		
+		cp.setStorageContainers(Collections.EMPTY_SET);
+	}
+	
+	private void sendEmail(CollectionProtocol cp, boolean success, String stackTrace) {
+		User currentUser = AuthUtil.getCurrentUser();
+		String[] rcpts = {currentUser.getEmailAddress(), cp.getPrincipalInvestigator().getEmailAddress()};
+
+		Map<String, Object> props = new HashMap<>();
+		props.put("cp", cp);
+		props.put("$subject", new String[] {cp.getShortTitle()});
+		props.put("user", currentUser);
+		props.put("error", stackTrace);
+
+		String tmpl = success ? CP_DELETE_SUCCESS_EMAIL_TMPL : CP_DELETE_FAILED_EMAIL_TMPL;
+		emailService.sendEmail(tmpl, rcpts, props);
+	}
 
 	private String getMsg(String code) {
 		return MessageUtil.getInstance().getMessage(code);
 	}
 
-	private static final String PPID_MSG             = "cp_ppid";
+	private static final String PPID_MSG                     = "cp_ppid";
 
-	private static final String VISIT_NAME_MSG       = "cp_visit_name";
+	private static final String VISIT_NAME_MSG               = "cp_visit_name";
 
-	private static final String SPECIMEN_LABEL_MSG   = "cp_specimen_label";
+	private static final String SPECIMEN_LABEL_MSG           = "cp_specimen_label";
 
-	private static final String DERIVATIVE_LABEL_MSG = "cp_derivative_label";
+	private static final String DERIVATIVE_LABEL_MSG         = "cp_derivative_label";
 
-	private static final String ALIQUOT_LABEL_MSG    = "cp_aliquot_label";
+	private static final String ALIQUOT_LABEL_MSG            = "cp_aliquot_label";
+	
+	private static final String CP_DELETE_SUCCESS_EMAIL_TMPL = "cp_delete_success";
+	
+	private static final String CP_DELETE_FAILED_EMAIL_TMPL  = "cp_delete_failed";
 }
