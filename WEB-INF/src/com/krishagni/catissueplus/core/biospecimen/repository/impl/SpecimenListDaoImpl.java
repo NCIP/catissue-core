@@ -45,7 +45,7 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 			}
 		}
 
-		if (!crit.includeStat()) {
+		if (listMap.isEmpty()) {
 			return results;
 		}
 

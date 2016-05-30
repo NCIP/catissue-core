@@ -51,7 +51,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
 
     $scope.deleteList = function() {
       DeleteUtil.delete($scope.list, {
-        onDeleteState: 'specimen-list',
+        onDeleteState: 'specimen-lists',
         deleteWithoutCheck: true
       });
     }
