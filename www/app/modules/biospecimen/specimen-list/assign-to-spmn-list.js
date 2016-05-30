@@ -1,9 +1,13 @@
 
 angular.module('os.biospecimen.specimenlist.assignto',[])
-  .directive('osAssignToSpmnList', function(SpecimenList, $rootScope) {
+  .directive('osAssignToSpmnList', function(SpecimenList, $rootScope, Util) {
 
-    function loadAllSpecimenList(scope) {
-      SpecimenList.query().then(
+    function filterLists(scope) {
+      return function(filterOpts) { loadSpecimenLists(scope, filterOpts); };
+    }
+
+    function loadSpecimenLists(scope, filterOpts) {
+      SpecimenList.query(filterOpts).then(
         function(lists) {
           scope.specimenLists = lists;
         }
@@ -19,7 +23,8 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
       templateUrl: 'modules/biospecimen/specimen-list/assign-to-spmn-list.html',
 
       link: function(scope, element, attrs) {
-        loadAllSpecimenList(scope);
+        scope.filterOpts = {};
+        loadSpecimenLists(scope);
 
         scope.addToList = function(list) {
           scope.onAddToList({list: list});
@@ -34,6 +39,8 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
 
           scope.onAddToList({list: defList});
         }
+
+        Util.filter(scope, 'filterOpts', filterLists(scope));
       }
     }
   });

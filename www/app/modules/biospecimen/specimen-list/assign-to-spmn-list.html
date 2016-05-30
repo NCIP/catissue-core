@@ -9,12 +9,12 @@
   
   <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
     <li>
-      <input ng-model="searchList" type="text" class="form-control"
+      <input ng-model="filterOpts.name" type="text" class="form-control"
         placeholder="{{'specimen_list.search_list' | translate}}" ng-click="$event.stopPropagation()">
     </li>
     <li>
       <ul class="dropdown-menu-subgroup">
-        <li ng-repeat="list in specimenLists | filter: searchList" ng-click="addToList(list)">
+        <li ng-repeat="list in specimenLists" ng-click="addToList(list)">
           <a>
             <os-spmn-list-name list="list"></os-spmn-list-name>
           </a>
@@ -28,7 +28,7 @@
       </a>
     </li>
     <li ng-if="specimenLists.length > 0">
-      <a ui-sref="specimen-list">
+      <a ui-sref="specimen-lists">
         <span translate="specimen_list.manage_lists">Manage Carts</span>
       </a>
     </li>

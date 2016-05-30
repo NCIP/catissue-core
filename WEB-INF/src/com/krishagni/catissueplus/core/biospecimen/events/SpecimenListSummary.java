@@ -21,6 +21,8 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 
 	private boolean defaultList;
 
+	private int specimenCount;
+
 	public Long getId() {
 		return id;
 	}
@@ -67,6 +69,14 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 
 	public void setDefaultList(boolean defaultList) {
 		this.defaultList = defaultList;
+	}
+
+	public int getSpecimenCount() {
+		return specimenCount;
+	}
+
+	public void setSpecimenCount(int specimenCount) {
+		this.specimenCount = specimenCount;
 	}
 
 	public static SpecimenListSummary fromSpecimenList(SpecimenList list){
