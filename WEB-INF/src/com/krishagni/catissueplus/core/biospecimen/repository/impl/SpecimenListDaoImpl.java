@@ -154,7 +154,7 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 			hql.append(" and upper(l.name) like :name");
 		}
 
-		hql.append(" order by l.id desc");
+		hql.append(" order by l.lastUpdatedOn desc");
 		return hql.toString();
 	}
 

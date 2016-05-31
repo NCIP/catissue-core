@@ -1456,6 +1456,7 @@
     "no_specimens_to_add_event": "Please select at least one specimen to add event",
     "filter_specimens": "Specimen Filters",
     "creation_time": "Creation Time",
+    "last_updated": "Last Updated",
     "specimens": "Specimens",
     "filter_lists": "Filters",
     "search_def_list_tip": "Use $$ to search users' default carts"

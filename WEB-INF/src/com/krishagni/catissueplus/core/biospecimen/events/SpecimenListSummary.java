@@ -17,6 +17,8 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 
 	private Date createdOn;
 
+	private Date lastUpdatedOn;
+
 	private UserSummary owner;
 
 	private boolean defaultList;
@@ -55,6 +57,14 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 		this.createdOn = createdOn;
 	}
 
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
 	public UserSummary getOwner() {
 		return owner;
 	}
@@ -85,6 +95,7 @@ public class SpecimenListSummary extends AttributeModifiedSupport {
 		listSummary.setName(list.getName());
 		listSummary.setDescription(list.getDescription());
 		listSummary.setCreatedOn(list.getCreatedOn());
+		listSummary.setLastUpdatedOn(list.getLastUpdatedOn());
 		listSummary.setOwner(UserSummary.from(list.getOwner()));
 		listSummary.setDefaultList(list.isDefaultList());
 		return listSummary;

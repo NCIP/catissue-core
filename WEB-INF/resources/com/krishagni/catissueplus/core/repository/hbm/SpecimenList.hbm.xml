@@ -18,6 +18,8 @@
 
     <property name="createdOn" column="CREATED_ON"/>
 
+    <property name="lastUpdatedOn" column="LAST_UPDATED_ON"/>
+
     <many-to-one name="owner" column="USER_ID"/>
      
     <set name="sharedWith" table="SHARED_SPECIMENLIST_TAGS">

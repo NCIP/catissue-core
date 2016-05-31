@@ -20,6 +20,8 @@ public class SpecimenList {
 	private String description;
 
 	private Date createdOn;
+
+	private Date lastUpdatedOn;
 	
 	private Set<User> sharedWith = new HashSet<User>();
 	
@@ -67,6 +69,14 @@ public class SpecimenList {
 		this.createdOn = createdOn;
 	}
 
+	public Date getLastUpdatedOn() {
+		return lastUpdatedOn;
+	}
+
+	public void setLastUpdatedOn(Date lastUpdatedOn) {
+		this.lastUpdatedOn = lastUpdatedOn;
+	}
+
 	public Set<User> getSharedWith() {
 		return sharedWith;
 	}
@@ -93,6 +103,7 @@ public class SpecimenList {
 
 	public void addSpecimens(List<Specimen> specimens) {
 		this.specimens.addAll(specimens);
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 	
 	public void updateSpecimens(List<Specimen> specimens) {
@@ -103,22 +114,28 @@ public class SpecimenList {
 				this.specimens.add(specimen);
 			}
 		}
+
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 	
 	public void removeSpecimens(List<Specimen> specimens) {
 		this.specimens.removeAll(specimens);
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 
 	public void clear() {
 		specimens.clear();
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 
 	public void addSharedUsers(List<User> users) {
 		sharedWith.addAll(users);
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 	
 	public void removeSharedUsers(List<User> users) {
 		sharedWith.removeAll(users);
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 	
 	public void updateSharedUsers(Collection<User> users) {
@@ -129,6 +146,8 @@ public class SpecimenList {
 				sharedWith.add(user);
 			}
 		}
+
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 		
 	public boolean canUserAccess(Long userId) {
@@ -152,10 +171,12 @@ public class SpecimenList {
 		setDescription(specimenList.getDescription());
 		setSpecimens(specimenList.getSpecimens());
 		updateSharedUsers(specimenList.getSharedWith());
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 	}
 
 	public void delete() {
 		setName(Utility.getDisabledValue(getName(), 255));
+		setLastUpdatedOn(Calendar.getInstance().getTime());
 		setDeletedOn(Calendar.getInstance().getTime());
 	}
 

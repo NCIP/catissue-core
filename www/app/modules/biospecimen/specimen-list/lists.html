@@ -28,6 +28,9 @@
             <span translate="specimen_list.creation_time">Creation Time</span>
           </th>
           <th class="col">
+            <span translate="specimen_list.last_updated">Last Updated</span>
+          </th>
+          <th class="col">
             <span translate="specimen_list.specimens">Specimens</span>
           </th>
         </tr>
@@ -46,6 +49,9 @@
           </td>
           <td class="col">
             <span>{{list.createdOn | date: global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{list.lastUpdatedOn | date: global.dateFmt}}</span>
           </td>
           <td class="col">
             <span>{{list.specimenCount | number}}</span>
