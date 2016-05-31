@@ -61,7 +61,15 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 				.setParameterList("operations", ops)
 				.list();		
 	}
-	
+
+	@Override
+	public Integer removeRolesByCp(Long cpId) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(REMOVE_ROLES_BY_CP)
+				.setLong("cpId", cpId)
+				.executeUpdate();
+	}
+
 	private static final String FQN = Subject.class.getName();
 
 	private static final String GET_ACCESS_LIST = FQN + ".getAccessList";
@@ -71,4 +79,6 @@ public class SubjectDaoImpl extends AbstractDao<Subject> implements SubjectDao {
 	private static final String GET_ACCESS_LIST_BY_CP = FQN + ".getAccessListByCp";
 
 	private static final String GET_ACCESS_LIST_COUNT = FQN + ".getAccessListCount";
+	
+	private static final String REMOVE_ROLES_BY_CP = FQN + ".removeRolesByCp";
 }

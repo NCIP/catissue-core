@@ -1316,6 +1316,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		removeContainerRestrictions(cp);
 		removeDefaultPiRoles(cp, cp.getPrincipalInvestigator());
 		removeDefaultCoordinatorRoles(cp, cp.getCoordinators());
+		removeCpRoles(cp);
 		cp.delete();
 		return true;
 	}
@@ -1335,7 +1336,11 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		
 		cp.setStorageContainers(Collections.EMPTY_SET);
 	}
-	
+
+	private void removeCpRoles(CollectionProtocol cp) {
+		rbacSvc.removeCpRoles(cp.getId());
+	}
+
 	private void sendEmail(CollectionProtocol cp, boolean success, String stackTrace) {
 		User currentUser = AuthUtil.getCurrentUser();
 		String[] rcpts = {currentUser.getEmailAddress(), cp.getPrincipalInvestigator().getEmailAddress()};

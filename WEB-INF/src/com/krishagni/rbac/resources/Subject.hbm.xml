@@ -118,5 +118,13 @@
         and operation = :operation
         and subject_id = :userId
     </sql-query>
+
+    <query name="removeRolesByCp">
+      delete
+      from
+        com.krishagni.rbac.domain.SubjectRole role
+      where
+        role.collectionProtocol.id = :cpId
+    </query>
   </class>  
 </hibernate-mapping>
