@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist')
   .controller('SpecimenListSpecimensCtrl', function(
-    $scope, $state, currentUser, reqBasedDistOrShip, list,
+    $scope, $state, $timeout, currentUser, reqBasedDistOrShip, list,
     SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
 
     function init() { 
@@ -11,12 +11,51 @@ angular.module('os.biospecimen.specimenlist')
       $scope.ctx = {
         list: list,
         filterOpts: {},
+        filterPvs: {init: false},
         selection: {},
         reqBasedDistOrShip: (reqBasedDistOrShip.value == 'true'),
         url: SpecimenList.url()
       }
 
+      $scope.$on('osRightDrawerOpen', initFilterPvs);
       resetSelection();
+    }
+
+    function initFilterPvs() {
+      if ($scope.ctx.filterPvs.init) {
+        return;
+      }
+
+      var types = [], sites = [], cps = [], lineages = [];
+      angular.forEach(list.specimens,
+        function(specimen) {
+          if (types.indexOf(specimen.type) == -1) {
+            types.push(specimen.type);
+          }
+
+          if (sites.indexOf(specimen.anatomicSite) == -1) {
+            sites.push(specimen.anatomicSite);
+          }
+
+          if (cps.indexOf(specimen.cpShortTitle) == -1) {
+            cps.push(specimen.cpShortTitle);
+          }
+
+          if (lineages.indexOf(specimen.lineage) == -1) {
+            lineages.push(specimen.lineage);
+          }
+        }
+      );
+
+      var filterPvs = {
+        init: true,
+        types: types.sort(),
+        sites: sites.sort(),
+        cps: cps.sort(),
+        lineages: lineages.sort()
+      }
+
+      $timeout(function() {$scope.ctx.filterPvs = filterPvs});
     }
 
     function resetSelection() {
@@ -116,6 +155,10 @@ angular.module('os.biospecimen.specimenlist')
       
       SpecimensHolder.setSpecimens($scope.ctx.selection.specimens);
       $state.go('bulk-add-event');
+    }
+
+    $scope.clearFilters = function() {
+      $scope.ctx.filterOpts = {};
     }
 
     init();

@@ -113,7 +113,7 @@
         </tr>
       </thead>
       <tbody class="os-table-body">
-        <tr class="row" ng-repeat="specimen in ctx.list.specimens | filter: {label: ctx.filterOpts.label}"
+        <tr class="row" ng-repeat="specimen in ctx.list.specimens | filter: ctx.filterOpts"
           ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
           <td class="col">
             <div class="clearfix">
@@ -194,6 +194,36 @@
       <div class="form-group">
         <input os-md-input type="text" ng-model="ctx.filterOpts.label" class="form-control"
           placeholder="{{'specimen_list.label' | translate}}">
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.type" list="ctx.filterPvs.types"
+          placeholder="{{'specimen_list.type' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.anatomicSite" list="ctx.filterPvs.sites"
+          placeholder="{{'specimen_list.anatomic_site' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.cpShortTitle" list="ctx.filterPvs.cps"
+          placeholder="{{'specimen_list.cp' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.lineage" list="ctx.filterPvs.lineages"
+          placeholder="{{'specimen_list.lineage' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group os-btns">
+        <button class="default full-width" ng-click="clearFilters()">
+          <span translate="common.buttons.clear_filters">Clear Filters</span>
+        </button>
       </div>
     </div>
   </div>
