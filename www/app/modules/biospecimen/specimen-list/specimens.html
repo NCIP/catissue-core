@@ -92,8 +92,11 @@
               </div>
             </div>
           </th>
-          <th class="col os-col-25">
-            <span translate="specimen_list.description">Description</span>
+          <th class="col">
+            <span translate="specimen_list.type">Type</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.anatomic_site">Anatomic Site</span>
           </th>
           <th class="col">
             <span translate="specimen_list.cp">Collection Protocol</span>
@@ -127,10 +130,11 @@
               </div>
             </div>
           </td>
-          <td class="col os-col-25">
-            <a ui-sref="specimen({specimenId: specimen.id})">
-              <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
-            </a>
+          <td class="col">
+            <span>{{specimen.type}}</span>
+          </td>
+          <td class="col">
+            <span>{{specimen.anatomicSite | osNoValue}}</span>
           </td>
           <td class="col">
             <span>{{specimen.cpShortTitle}}</span>

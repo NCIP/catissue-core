@@ -1431,6 +1431,8 @@
     "description": "Description",
     "cp": "Collection Protocol",
     "label": "Label",
+    "type": "Type",
+    "anatomic_site": "Anatomic Site",
     "location": "Location",
     "quantity": "Quantity",
     "lineage": "Lineage",
