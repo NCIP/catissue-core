@@ -178,7 +178,7 @@ angular.module('os.biospecimen.specimen')
     }
 
     function copyContainerName(src, array) {
-      if (!angular.isDefined(src.storageLocation) || !src.storageLocation.name) {
+      if (!src.storageLocation || !src.storageLocation.name) {
         return;
       }
 
@@ -189,7 +189,7 @@ angular.module('os.biospecimen.specimen')
             return;
           }
 
-          if (!angular.isDefined(dst.storageLocation) || containerName != dst.storageLocation.name) {
+          if (!dst.storageLocation || containerName != dst.storageLocation.name) {
             dst.storageLocation = {name: containerName};
           }
         }

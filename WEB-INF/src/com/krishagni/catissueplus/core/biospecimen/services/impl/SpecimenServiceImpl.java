@@ -135,9 +135,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 				.cpId(cpId)
 				.lineages(new String[] {Specimen.NEW})
 				.collectionStatuses(new String[] {Specimen.COLLECTED});
-
-			List<Specimen> specimens = getSpecimens(crit);
-			return ResponseEvent.response(SpecimenInfo.from(specimens));
+			return ResponseEvent.response(SpecimenInfo.from(getSpecimens(crit)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
