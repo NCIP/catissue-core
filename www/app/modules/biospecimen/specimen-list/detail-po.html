@@ -5,7 +5,7 @@
         <span translate="specimen_list.created_by">Created By</span>
       </div>
       <div class="os-value">
-        <span>{{lists.selectedList.owner | osUserDisplayName}}</span>
+        <span>{{ctx.list.owner | osUserDisplayName}}</span>
       </div>
     </div>
     <div class="os-label-value-pair">
@@ -13,7 +13,7 @@
         <span translate="specimen_list.description">Description</span>
       </div>
       <div class="os-value">
-        <span>{{lists.selectedList.description | osNoValue}}</span>
+        <span>{{ctx.list.description | osNoValue}}</span>
       </div>
     </div>
   </div>

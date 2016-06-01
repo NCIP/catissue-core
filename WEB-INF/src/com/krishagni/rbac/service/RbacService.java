@@ -91,4 +91,6 @@ public interface RbacService {
 	public void addSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
 	
 	public void removeSubjectRole(Site site, CollectionProtocol cp, User user, String[] roleNames);
+
+	public void removeCpRoles(Long cpId);
 }

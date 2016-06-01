@@ -1,0 +1,242 @@
+<div>
+  <div os-page-header>
+    <ul os-breadcrumbs>
+      <li> 
+        <a ui-sref="specimen-lists">
+          <span translate="specimen_list.lists">Specimen Lists</span>
+        </a>
+      </li>
+    </ul>
+
+    <h3>
+      <os-spmn-list-name list="ctx.list"></os-spmn-list-name>
+      <button class="btn btn-default btn-xs"
+        title="{{'specimen_list.cart_info' | translate}}"
+        data-placement="bottom" data-container="body" data-trigger="focus"
+        content-template="modules/biospecimen/specimen-list/detail-po.html" bs-popover>
+        <span class="fa fa-info-circle"></span>
+      </button>
+    </h3>
+
+    <div class="os-btns right">
+      <!-- Below dummy button is present to make Safari add right margin to buttons
+           added by plugins. This can be safely removed once a real button occupies
+           this space -->
+      <button class="default" ng-show="false">
+        <span></span>
+      </button>
+      <os-plugin-hooks view-name="'specimen-list'" sec-name="'page-header'"></os-plugin-hooks>
+      <div dropdown os-show-if-menu-items-present class="inline">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.more">More</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li> 
+            <a ui-sref="specimen-list-addedit({listId: ctx.list.id})">
+              <span class="fa fa-pencil"></span>
+              <span translate="common.buttons.edit">Edit</span>
+            </a>
+          </li>
+          <li> 
+            <a target="_blank" href="{{ctx.url + '/' + ctx.list.id + '/csv-file'}}">
+              <span class="fa fa-download"></span>
+              <span translate="common.buttons.export">Export</span>
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a ng-click="confirmRemoveSpecimens()">
+              <span class="fa fa-trash"></span>
+              <span translate="common.buttons.delete">Delete</span>
+            </a>
+          </li>
+          <li show-if-allowed="orderCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
+            <a ng-click="distributeSpecimens()">
+              <span class="fa fa-share"></span>
+              <span translate="specimen_list.distribute">Distribute</span>
+            </a>
+          </li>
+          <li show-if-allowed="shipmentCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
+            <a ng-click="shipSpecimens()">
+              <span class="fa fa-paper-plane-o"></span>
+              <span translate="specimen_list.ship">Ship</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenUpdateOpts">
+            <a ng-click="createAliquots()">
+              <span class="fa fa-share-alt"></span>
+              <span translate="specimen_list.create_aliquots">Create Aliquots</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenUpdateOpts">
+            <a ng-click="createDerivatives()">
+              <span class="fa fa-flask"></span>
+              <span translate="specimen_list.create_derivatives">Create Derivatives</span>
+            </a>
+          </li>
+          <li show-if-allowed="specimenUpdateOpts">
+            <a ng-click="addEvent()">
+              <span class="fa fa-calendar-o"></span>
+              <span translate="specimen_list.add_event">Add Event</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <button class="default" os-right-drawer-toggle>
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container os-list-container">
+    <table class="os-table os-table-hover" overflow="auto" ng-if="ctx.list.specimens.length > 0">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <div class="clearfix">
+              <div class="pull-left os-select-specimen-cb">
+                <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="ctx.selection.all" ></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <span translate="specimen_list.label">Label</span>
+              </div>
+            </div>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.type">Type</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.anatomic_site">Anatomic Site</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.cp">Collection Protocol</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.location">Location</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.quantity">Quantity</span>
+          </th>
+          <th class="col">
+            <span translate="specimen_list.lineage">Lineage</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="specimen in ctx.list.specimens | filter: ctx.filterOpts"
+          ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
+          <td class="col">
+            <div class="clearfix">
+              <div class="pull-left os-select-specimen-cb os-click-esc">
+                <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
+              </div>
+              <div class="pull-left" style="padding-left: 12px;">
+                <a ui-sref="specimen({specimenId: specimen.id})">
+                  <span>{{specimen.label}}</span>
+                  <span ng-if="!!specimen.barcode">
+                    ({{specimen.barcode}})
+                  </span>
+                </a>
+              </div>
+            </div>
+          </td>
+          <td class="col">
+            <span>{{specimen.type}}</span>
+          </td>
+          <td class="col">
+            <span>{{specimen.anatomicSite | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{specimen.cpShortTitle}}</span>
+          </td>
+          <td class="col" ng-switch on="!!specimen.storageLocation.name">
+            <span ng-switch-when="true">
+              {{specimen.storageLocation.name}}:
+              ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
+            </span>
+            <span ng-switch-when="false">
+              <span translate="specimens.virtually_located">Virtual</span>
+            </span>
+          </td>
+          <td class="col">
+            <span>{{specimen.availableQty}}</span>
+            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
+          </td>
+          <td class="col">
+            <span>{{specimen.lineage}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table class="os-table" ng-if="ctx.list.specimens.length == 0">
+      <thead class="os-table-head">
+        <tr class="row">
+          <td class="col os-col-100">
+            <span translate="specimen_list.info">Information</span>
+          </td>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row">
+          <td class="col os-col-100">
+            <span translate="specimen_list.no_specimens">
+              There are no specimens to show in selected specimen list.
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/biospecimen/specimen-list/search-specimens.html'"></div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/specimen-list/search-specimens.html">
+  <div class="os-search">
+    <div class="os-head">
+      <h3 class="os-title" translate="specimen_list.filter_specimens">
+        Specimens Filter
+      </h3>
+    </div>
+
+    <div class="os-body">
+      <div class="form-group">
+        <input os-md-input type="text" ng-model="ctx.filterOpts.label" class="form-control"
+          placeholder="{{'specimen_list.label' | translate}}">
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.type" list="ctx.filterPvs.types"
+          placeholder="{{'specimen_list.type' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.anatomicSite" list="ctx.filterPvs.sites"
+          placeholder="{{'specimen_list.anatomic_site' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.cpShortTitle" list="ctx.filterPvs.cps"
+          placeholder="{{'specimen_list.cp' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <os-select os-md-input ng-model="ctx.filterOpts.lineage" list="ctx.filterPvs.lineages"
+          placeholder="{{'specimen_list.lineage' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group os-btns">
+        <button class="default full-width" ng-click="clearFilters()">
+          <span translate="common.buttons.clear_filters">Clear Filters</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</script>

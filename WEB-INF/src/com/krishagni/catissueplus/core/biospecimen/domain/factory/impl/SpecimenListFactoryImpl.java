@@ -62,6 +62,8 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		specimenList.setOwner(user);
 		specimenList.setName(SpecimenList.getDefaultListName(user));
 		specimenList.setDescription(MessageUtil.getInstance().getMessage("specimen_list_default_user_list"));
+		specimenList.setCreatedOn(Calendar.getInstance().getTime());
+		specimenList.setLastUpdatedOn(specimenList.getCreatedOn());
 		return specimenList;
 	}
 
@@ -77,6 +79,7 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 		setSharedUsers(details, specimenList, partial, ose);
 
 		specimenList.setCreatedOn(Calendar.getInstance().getTime());
+		specimenList.setLastUpdatedOn(specimenList.getCreatedOn());
 	}
     
 	private void setOwner(SpecimenListDetails details, SpecimenList specimenList, boolean partial, OpenSpecimenException ose) {

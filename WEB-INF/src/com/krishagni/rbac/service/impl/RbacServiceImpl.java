@@ -503,6 +503,12 @@ public class RbacServiceImpl implements RbacService {
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public void removeCpRoles(Long cpId) {
+		daoFactory.getSubjectDao().removeRolesByCp(cpId);
+	}
+
 	private SubjectRole createSubjectRole(Site site, CollectionProtocol cp, String roleName, boolean systemRole) {
 		Role role = daoFactory.getRoleDao().getRoleByName(roleName);
 		if (role == null) {

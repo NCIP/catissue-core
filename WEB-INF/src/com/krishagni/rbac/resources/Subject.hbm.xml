@@ -76,6 +76,13 @@
         sa.operation in (:operations)
     </query>
 
+    <query name="removeRolesByCp">
+      delete from
+        com.krishagni.rbac.domain.SubjectRole role
+      where
+        role.collectionProtocol.id = :cpId
+    </query>
+
     <sql-query name="canUserPerformOpOnCp" >
       <return-scalar column="subjectId" type="long"/>
       

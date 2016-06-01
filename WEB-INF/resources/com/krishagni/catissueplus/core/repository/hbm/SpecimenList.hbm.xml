@@ -18,6 +18,8 @@
 
     <property name="createdOn" column="CREATED_ON"/>
 
+    <property name="lastUpdatedOn" column="LAST_UPDATED_ON"/>
+
     <many-to-one name="owner" column="USER_ID"/>
      
     <set name="sharedWith" table="SHARED_SPECIMENLIST_TAGS">
@@ -34,33 +36,19 @@
     
     <property name="deletedOn" column="DELETED_ON"/>
     
-    <query name="getSpecimenLists">
-      from SpecimenList l where l.deletedOn is null order by l.name
-    </query>
-	
-    <query name="getSpecimenListsByUser">
-      select 
-        distinct l 
-      from 
-        SpecimenList l inner join l.owner owner left join l.sharedWith sharedWith 
-      where 
-        (owner.id = :userId or sharedWith.id = :userId)
-        and l.deletedOn is null
-      order by
-        l.name
-    </query>
-    
     <query name="getSpecimenListByName">
       from SpecimenList l where l.name = :name
     </query>
     
     <query name="getListSpecimensCount">
       select 
-        count(s.id)
+        l.id, count(s.id)
       from
         SpecimenList l inner join l.specimens s
       where 
-        l.id = :listId 
+        l.id in (:listIds)
+      group by
+        l.id
     </query>
 
     <query name="getListCpSpecimens">

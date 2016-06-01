@@ -78,7 +78,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			query.setParameter("userId", crit.userId());
 			
 			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
-				query.setParameter("cpList", crit.cpIds());
+				query.setParameterList("cpList", crit.cpIds());
 			}
 		}
 		
