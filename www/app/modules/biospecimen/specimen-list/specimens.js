@@ -76,12 +76,12 @@ angular.module('os.biospecimen.specimenlist')
     }
 
     function gotoView(state, params, msgCode) {
-      if (!$scope.selection.any) {
+      if (!$scope.ctx.selection.any) {
         Alerts.error('specimen_list.' + msgCode);
         return;
       }
 
-      SpecimensHolder.setSpecimens($scope.selection.specimens);
+      SpecimensHolder.setSpecimens($scope.ctx.selection.specimens);
       $state.go(state, params);
     }
 
