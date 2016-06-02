@@ -229,6 +229,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.CpUniqueIdPpidToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.CpCodePpidToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.CpSiteCodePpidToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.UniqueIdPpidToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.cpr.SiteCodePpidToken"/>
       </list>
     </property>
