@@ -1,21 +1,21 @@
 angular.module('openspecimen')
-  .controller('SignedInCtrl', function($scope, $rootScope, currentUser, Alerts, AuthorizationService, Setting) {
+  .controller('SignedInCtrl', function($scope, $rootScope, currentUser, Alerts, AuthorizationService, SettingUtil) {
      function init() {
        $scope.alerts = Alerts.messages;
        $rootScope.currentUser = currentUser;
-       $scope.homeCtx = {};
+       $scope.userCtx = {
+         hasPhiAccess: AuthorizationService.hasPhiAccess()
+       }
        
        getTrainingUrl();
      }
      
      function getTrainingUrl() {
-       Setting.query({module: 'common'}).then(function(props) {
-         angular.forEach(props, function(property) {
-           if (property.name == 'training_url') {
-             $scope.homeCtx.trainingUrl = property.value;
-           }
-         });
-       });
+       SettingUtil.getSetting("common", "training_url").then(
+         function(setting) {
+           $scope.userCtx.trainingUrl = setting.value;
+         }
+       );
      }
 
      $scope.userCreateUpdateOpts = {resource: 'User', operations: ['Create', 'Update']};

@@ -63,6 +63,16 @@ angular.module('openspecimen')
         }
 
         return allowed;
+      },
+
+      hasPhiAccess: function() {
+        for (var i = 0; i < userRights.length; i++) {
+          if (userRights[i].resource == 'ParticipantPhi') {
+            return true;
+          }
+        }
+
+        return false;
       }
     }
   });

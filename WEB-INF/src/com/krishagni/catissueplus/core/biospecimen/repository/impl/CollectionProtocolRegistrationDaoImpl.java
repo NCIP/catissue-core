@@ -218,6 +218,10 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 	
 	private void addMrnSiteAndEmpiAndSsnCondition(Criteria query, CprListCriteria crit) {
+		if (!crit.includePhi()) {
+			return;
+		}
+		
 		boolean participantIdSpecified   = StringUtils.isNotBlank(crit.participantId());
 		boolean sitesSpecified = CollectionUtils.isNotEmpty(crit.siteIds());
 		
@@ -263,16 +267,19 @@ public class CollectionProtocolRegistrationDaoImpl
 			return;
 		}
 
-
 		if (StringUtils.isNotBlank(crit.ppid())) {
 			query.add(Restrictions.ilike("ppid", crit.ppid(), crit.matchMode()));
 		}
 
+		if (!crit.includePhi()) {
+			return;
+		}
+		
 		if (StringUtils.isNotBlank(crit.uid())) {
 			query.add(Restrictions.ilike("participant.uid", crit.uid(), crit.matchMode()));
 		}
 		
-		if (crit.includePhi() && StringUtils.isNotBlank(crit.name())) {
+		if (StringUtils.isNotBlank(crit.name())) {
 			query.add(
 				Restrictions.disjunction()
 					.add(Restrictions.ilike("participant.firstName", crit.name(), MatchMode.ANYWHERE))
@@ -282,7 +289,7 @@ public class CollectionProtocolRegistrationDaoImpl
 	}
 	
 	private void addDobCondition(Criteria query, CprListCriteria crit) {
-		if (crit.dob() == null) {
+		if (!crit.includePhi() || crit.dob() == null) {
 			return;
 		}
 

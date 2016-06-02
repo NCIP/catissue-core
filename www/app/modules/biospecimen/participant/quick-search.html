@@ -7,7 +7,7 @@
   </div>
 </div>
 
-<div class="form-group">
+<div class="form-group" ng-if="userCtx.hasPhiAccess">
   <div>
     <input type="text" os-md-input name="participantId" ng-model="searchData.participantId"
       class="form-control" placeholder="{{'participant.id' | translate}}" ng-disabled = "searchData.ppid">
