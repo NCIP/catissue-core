@@ -1,7 +1,7 @@
 package com.krishagni.catissueplus.rest.filter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +14,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -30,6 +31,8 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class SamlFilter extends FilterChainProxy {
+	private static final String SHOW_ERROR = "/#/alert";
+
 	private DaoFactory daoFactory;
 	
 	private UserAuthenticationServiceImpl authService;
@@ -44,27 +47,30 @@ public class SamlFilter extends FilterChainProxy {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
 	throws IOException, ServletException {
+		String appUrl = ConfigUtil.getInstance().getAppUrl();
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 		HttpServletResponse httpResp = (HttpServletResponse) response;
-		
+
 		try {
 			boolean samlEnabled = enableSaml();
 			if (samlEnabled && !isAuthenticated(httpReq)) {
-				super.doFilter(request, response, chain); 
+				super.doFilter(request, response, chain);
 			} else {
-				httpResp.sendRedirect(httpReq.getContextPath());
+				httpResp.sendRedirect(appUrl + "/");
 			}
+		} catch (UsernameNotFoundException use) {
+			httpResp.sendRedirect(appUrl + SHOW_ERROR + "?redirectTo=login&type=danger&msg=" + use.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			httpResp.sendRedirect(httpReq.getContextPath());
+			httpResp.sendRedirect(appUrl + SHOW_ERROR + "?redirectTo=login&type=danger&msg=" + e.getMessage());
 		}
 	}
 	
 	@SuppressWarnings({"deprecation" })
-	public void setFilterChain(Map<String, Filter> filters) {
+	public void setFilterChain(Filter generatorFilter, Map<String, Filter> filters) {
 		Map<RequestMatcher, List<Filter>> filterChainMap = new HashMap<>();
 		for (Map.Entry<String, Filter> entry : filters.entrySet()) {
-			filterChainMap.put(new AntPathRequestMatcher(entry.getKey()), Collections.singletonList(entry.getValue()));
+			filterChainMap.put(new AntPathRequestMatcher(entry.getKey()), Arrays.asList(generatorFilter, entry.getValue()));
 		}
 		
 		setFilterChainMap(filterChainMap);

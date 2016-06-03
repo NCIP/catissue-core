@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.opensaml.saml2.core.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.saml.SAMLCredential;
@@ -35,11 +38,14 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.events.SubjectRoleDetail;
 import com.krishagni.rbac.service.RbacService;
 
 public class UserServiceImpl implements UserService {
+	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	private static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
 	
 	private static final String FORGOT_PASSWORD_EMAIL_TMPL = "users_forgot_password_link"; 
@@ -91,16 +97,26 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String username)
+	throws UsernameNotFoundException {
 		return daoFactory.getUserDao().getUser(username, DEFAULT_AUTH_DOMAIN);
 	}
 	
 	@Override
 	@PlusTransactional
-	public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
+	public Object loadUserBySAML(SAMLCredential credential)
+	throws UsernameNotFoundException {
+		if (logger.isDebugEnabled()) {
+			for (Attribute attr : credential.getAttributes()) {
+				logger.debug(String.format(
+					"Credential attr: %s (%s) = %s",
+					attr.getName(), attr.getFriendlyName(), credential.getAttributeAsString(attr.getName())));
+			}
+		}
+
 		//
-		// TODO: The domain name "saml" is hardcoded. We need to figure out whether
-		// domain name can be obtained from SAML credential
+		// The assumption is - there can be only one SAML auth provider
+		// We should perhaps use SAML local entity ID
 		//
 		AuthDomain domain = daoFactory.getAuthDao().getAuthDomainByType("saml");
 
@@ -110,15 +126,15 @@ public class UserServiceImpl implements UserService {
 		
 		User user = null;
 		if (StringUtils.isNotBlank(loginNameAttr)) {
-			String loginName = credential.getAttributeAsString(loginNameAttr);
+			String loginName = getCredentialAttrValue(credential, loginNameAttr);
 			user = daoFactory.getUserDao().getUser(loginName, domain.getName());
 		} else if (StringUtils.isNotBlank(emailAttr)) {
-			String email = credential.getAttributeAsString(emailAttr);
+			String email = getCredentialAttrValue(credential, emailAttr);
 			user = daoFactory.getUserDao().getUserByEmailAddress(email);
 		}
 		
 		if (user == null) {
-			throw new UsernameNotFoundException("User not found");
+			throw new UsernameNotFoundException(MessageUtil.getInstance().getMessage("user_not_found"));
 		}
 		
 		return user;
@@ -557,4 +573,15 @@ public class UserServiceImpl implements UserService {
 		return token;
 	}
 
+	private String getCredentialAttrValue(SAMLCredential credential, String attrName) {
+		Attribute attr = credential.getAttributes().stream()
+			.filter(a -> attrName.equals(a.getName()) || attrName.equals(a.getFriendlyName()))
+			.findFirst().orElse(null);
+
+		if (attr == null) {
+			return null;
+		}
+
+		return credential.getAttributeAsString(attr.getName());
+	}
 }

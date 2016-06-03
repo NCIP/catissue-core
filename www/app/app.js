@@ -52,6 +52,14 @@ osApp.config(function(
           $scope.alerts = Alerts.messages;
         }
       })
+      .state('alert-msg', {
+        url: '/alert?redirectTo&type&msg',
+        controller: function($state, $stateParams, Alerts) {
+          Alerts.add($stateParams.msg, $stateParams.type);
+          $state.go($stateParams.redirectTo || 'home');
+        },
+        parent: 'default'
+      })
       .state('signed-in', {
         abstract: true,
         templateUrl: 'modules/common/appmenu.html',

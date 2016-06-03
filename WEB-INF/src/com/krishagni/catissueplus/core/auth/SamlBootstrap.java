@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.auth;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
 import org.opensaml.Configuration;
 import org.opensaml.PaosBootstrap;
+import org.opensaml.saml2.metadata.provider.AbstractMetadataProvider;
 import org.opensaml.saml2.metadata.provider.HTTPMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
@@ -41,6 +43,7 @@ import org.springframework.security.saml.SAMLDiscovery;
 import org.springframework.security.saml.SAMLEntryPoint;
 import org.springframework.security.saml.SAMLProcessingFilter;
 import org.springframework.security.saml.context.SAMLContextProviderImpl;
+import org.springframework.security.saml.context.SAMLContextProviderLB;
 import org.springframework.security.saml.key.JKSKeyManager;
 import org.springframework.security.saml.key.KeyManager;
 import org.springframework.security.saml.log.SAMLDefaultLogger;
@@ -71,16 +74,14 @@ import org.springframework.security.saml.websso.WebSSOProfileOptions;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.rest.filter.SamlFilter;
 
 @Configurable
 public class SamlBootstrap {
-
-	private static final String METADATA_GEN_URL = "/saml/";
-
 	private static final String LOGIN_URL = "/saml/login/**";
 
-	private static final String SSO_URL = "/saml/sso/**";
+	private static final String SSO_URL = "/saml/SSO/**";
 
 	private static final String METADATA_URL = "/saml/metadata/**";
 
@@ -145,13 +146,12 @@ public class SamlBootstrap {
 		MetadataGenerator metadataGenerator = getMetadataGenerator(keyManager, samlEntryPoint, samlWebSSOProcessingFilter);
 		MetadataGeneratorFilter metadataGenFilter = getMetadataGenFilter(metadataGenerator, metadata, metadataDisplayFilter);
 
-		Map<String, Filter> filters = new HashMap<String, Filter>();
-		filters.put(METADATA_GEN_URL, metadataGenFilter);
+		Map<String, Filter> filters = new HashMap<>();
 		filters.put(LOGIN_URL, samlEntryPoint);
 		filters.put(SSO_URL, samlWebSSOProcessingFilter);
 		filters.put(METADATA_URL, metadataDisplayFilter);
 
-		samlFilter.setFilterChain(filters);
+		samlFilter.setFilterChain(metadataGenFilter, filters);
 	}
 	
 	/*
@@ -170,6 +170,7 @@ public class SamlBootstrap {
 	private MetadataGenerator getMetadataGenerator(KeyManager keyManager, SAMLEntryPoint samlEntryPoint, SAMLProcessingFilter samlWebSSOProcessingFilter) throws Exception {
 		MetadataGenerator metadataGenerator = new MetadataGenerator();
 		metadataGenerator.setEntityId(samlProps.get("entityId"));
+		metadataGenerator.setEntityBaseURL(getAppUrl());
 		metadataGenerator.setKeyManager(keyManager);
 		metadataGenerator.setSamlEntryPoint(samlEntryPoint);
 		metadataGenerator.setSamlWebSSOFilter(samlWebSSOProcessingFilter);
@@ -263,13 +264,25 @@ public class SamlBootstrap {
 		return new SAMLProcessorImpl(bindings);
 	}
 
-	private SAMLContextProviderImpl getContextProvider(CachingMetadataManager metadata, KeyManager keyManager) throws Exception {
-		SAMLContextProviderImpl contextProvider = new SAMLContextProviderImpl();
-		contextProvider.setKeyManager(keyManager);
-		contextProvider.setMetadata(metadata);
+	private SAMLContextProviderImpl getContextProvider(CachingMetadataManager metadata, KeyManager keyManager)
+	throws Exception {
+		URL url = new URL(getAppUrl());
 
-		contextProvider.afterPropertiesSet();
-		return contextProvider;
+		SAMLContextProviderLB ctxProvider = new SAMLContextProviderLB();
+		ctxProvider.setKeyManager(keyManager);
+		ctxProvider.setMetadata(metadata);
+		ctxProvider.setScheme(url.getProtocol());
+		ctxProvider.setServerName(url.getHost());
+		ctxProvider.setServerPort(url.getPort());
+		ctxProvider.setContextPath(url.getPath());
+
+		String value = samlProps.get("includeServerPortInReqUrl");
+		if (StringUtils.isNotBlank(value)) {
+			ctxProvider.setIncludeServerPortInRequestURL(Boolean.parseBoolean(value));
+		}
+
+		ctxProvider.afterPropertiesSet();
+		return ctxProvider;
 	}
 
 	/*
@@ -394,7 +407,7 @@ public class SamlBootstrap {
 	 * Handler deciding where to redirect user after successful login
 	 */
 	private SimpleUrlAuthenticationSuccessHandler getSuccessRedirectHandler() {
-		successRedirectHandler.setDefaultTargetUrl(DEFAULT_TARGET_URL);
+		successRedirectHandler.setDefaultTargetUrl(getAppUrl() + DEFAULT_TARGET_URL);
 		return successRedirectHandler;
 	}
 
@@ -403,17 +416,27 @@ public class SamlBootstrap {
 	 */
 	private SimpleUrlAuthenticationFailureHandler getAuthenticationFailureHandler() {
 		SimpleUrlAuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
-		failureHandler.setUseForward(true);
-		failureHandler.setDefaultFailureUrl("/");
+		failureHandler.setDefaultFailureUrl(getAppUrl());
 		return failureHandler;
 	}
 
 	@SuppressWarnings("deprecation")
-	private HTTPMetadataProvider getIdpExtendedMetadataProvider(ParserPool parserPool) throws MetadataProviderException {
-		HTTPMetadataProvider httpMetadataProvider = new HTTPMetadataProvider(samlProps.get("idpMetadataURL"), 15000);
-		httpMetadataProvider.setParserPool(parserPool);
+	private MetadataProvider getIdpExtendedMetadataProvider(ParserPool parserPool)
+	throws Exception {
+		String metadataPath = samlProps.get("idpMetadataPath");
+		String metadataUrl = samlProps.get("idpMetadataURL");
 
-		return httpMetadataProvider;
+		AbstractMetadataProvider metadataProvider;
+		if (StringUtils.isNotBlank(metadataPath)) {
+			metadataProvider = new ResourceBackedMetadataProvider(new Timer(), new FilesystemResource(metadataPath));
+		} else if (StringUtils.isNotBlank(metadataUrl)) {
+			metadataProvider = new HTTPMetadataProvider(metadataUrl, 15000);
+		} else {
+			throw new RuntimeException("Either IdP metadata URL or file system path should be configured");
+		}
+
+		metadataProvider.setParserPool(parserPool);
+		return metadataProvider;
 	}
 
 	private ExtendedMetadataDelegate getSpExtendedMetadataProvider(ParserPool parserPool) throws MetadataProviderException, ResourceException {
@@ -445,4 +468,16 @@ public class SamlBootstrap {
 		return extendedMetadata;
 	}
 
+	private String getAppUrl() {
+		String appUrl = ConfigUtil.getInstance().getAppUrl();
+		if (StringUtils.isBlank(appUrl)) {
+			return StringUtils.EMPTY;
+		}
+
+		while (appUrl.endsWith("/")) {
+			appUrl = appUrl.substring(0, appUrl.length() - 1);
+		}
+
+		return appUrl;
+	}
 }
