@@ -10,6 +10,10 @@ public interface ListCriteria<T extends ListCriteria<T>> {
 	public int maxResults();
 	
 	public T maxResults(int maxResults);
+
+	public boolean limitItems();
+
+	public T limitItems(boolean limitItems);
 	
 	public boolean includePhi();
 	

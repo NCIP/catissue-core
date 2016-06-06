@@ -134,7 +134,8 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			SpecimenListCriteria crit = new SpecimenListCriteria()
 				.cpId(cpId)
 				.lineages(new String[] {Specimen.NEW})
-				.collectionStatuses(new String[] {Specimen.COLLECTED});
+				.collectionStatuses(new String[] {Specimen.COLLECTED})
+				.limitItems(true);
 			return ResponseEvent.response(SpecimenInfo.from(getSpecimens(crit)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);

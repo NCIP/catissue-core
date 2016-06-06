@@ -37,8 +37,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	public List<Specimen> getSpecimens(SpecimenListCriteria crit) {
 		Criteria query = getSessionFactory().getCurrentSession()
 			.createCriteria(Specimen.class, "specimen")
-			.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
-			.setMaxResults(crit.maxResults() <= 0 ? 100 : crit.maxResults())
 			.addOrder(Order.asc("specimen.id"))
 			.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -58,6 +56,11 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		addSiteCpsCond(query, crit);
 		addCpCond(query, crit);
 		addSpecimenListCond(query, crit);
+
+		if (crit.limitItems()) {
+			query.setFirstResult(crit.startAt()).setMaxResults(crit.maxResults());
+		}
+
 		return query.list();
 	}
 	

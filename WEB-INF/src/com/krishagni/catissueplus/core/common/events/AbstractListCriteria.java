@@ -10,6 +10,8 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	private int startAt;
 	
 	private int maxResults;
+
+	private boolean limitItems;
 	
 	private boolean includePhi;
 	
@@ -19,7 +21,7 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	
 	private boolean includeStat;
 	
-	private List<Long> ids = new ArrayList<Long>();
+	private List<Long> ids = new ArrayList<>();
 	
 	@Override
 	public int startAt() {
@@ -40,6 +42,17 @@ public abstract class AbstractListCriteria<T extends ListCriteria<T>> implements
 	@Override
 	public T maxResults(int maxResults) {
 		this.maxResults = maxResults;
+		return self();
+	}
+
+	@Override
+	public boolean limitItems() {
+		return limitItems;
+	}
+
+	@Override
+	public T limitItems(boolean limitItems) {
+		this.limitItems = limitItems;
 		return self();
 	}
 
