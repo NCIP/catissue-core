@@ -125,7 +125,7 @@
         </tr>
       </thead>
       <tbody class="os-table-body">
-        <tr class="row" ng-repeat="specimen in ctx.list.specimens | filter: ctx.filterOpts"
+        <tr class="row" ng-repeat="specimen in ctx.spmnsInView"
           ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
           <td class="col">
             <div class="clearfix">

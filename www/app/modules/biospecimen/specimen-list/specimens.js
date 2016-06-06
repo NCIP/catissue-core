@@ -1,7 +1,7 @@
 angular.module('os.biospecimen.specimenlist')
   .controller('SpecimenListSpecimensCtrl', function(
-    $scope, $state, $timeout, currentUser, reqBasedDistOrShip, list,
-    SpecimensHolder, SpecimenList, DeleteUtil, Alerts) {
+    $scope, $state, $timeout, $filter, currentUser, reqBasedDistOrShip, list,
+    SpecimensHolder, SpecimenList, DeleteUtil, Alerts, Util) {
 
     function init() { 
       $scope.orderCreateOpts =    {resource: 'Order', operations: ['Create']};
@@ -10,6 +10,7 @@ angular.module('os.biospecimen.specimenlist')
 
       $scope.ctx = {
         list: list,
+        spmnsInView: list.specimens,
         filterOpts: {},
         filterPvs: {init: false},
         selection: {},
@@ -19,6 +20,7 @@ angular.module('os.biospecimen.specimenlist')
 
       $scope.$on('osRightDrawerOpen', initFilterPvs);
       resetSelection();
+      Util.filter($scope, 'ctx.filterOpts', filterSpecimens);
     }
 
     function initFilterPvs() {
@@ -62,6 +64,16 @@ angular.module('os.biospecimen.specimenlist')
       return $scope.ctx.selection = {all: false, any: false, specimens: []};
     }
 
+    function filterSpecimens(filterOpts) {
+      var spmnsInView = $filter('filter')(list.specimens, filterOpts);
+      var selectedSpmns = spmnsInView.filter(function(spmn) { return !!spmn.selected });
+
+      $scope.ctx.spmnsInView = spmnsInView;
+      $scope.ctx.selection.specimens = selectedSpmns;
+      $scope.ctx.selection.all = (selectedSpmns.length > 0 && selectedSpmns.length == spmnsInView.length);
+      $scope.ctx.selection.any = (selectedSpmns.length > 0);
+    }
+
     function removeSpecimensFromList() {
       var list = $scope.ctx.list;
       list.removeSpecimens($scope.ctx.selection.specimens).then(
@@ -94,12 +106,14 @@ angular.module('os.biospecimen.specimenlist')
       if (!$scope.ctx.selection.all) {
         $scope.ctx.selection.specimens = [];
       } else {
-        $scope.ctx.selection.specimens = [].concat($scope.ctx.list.specimens);
+        $scope.ctx.selection.specimens = [].concat($scope.ctx.spmnsInView);
       }
 
-      angular.forEach($scope.ctx.list.specimens, function(specimen) {
-        specimen.selected = $scope.ctx.selection.all;
-      });
+      angular.forEach($scope.ctx.spmnsInView,
+        function(specimen) {
+          specimen.selected = $scope.ctx.selection.all;
+        }
+      );
     }
 
     $scope.toggleSpecimenSelect = function (specimen) {
@@ -114,7 +128,7 @@ angular.module('os.biospecimen.specimenlist')
         }
       }
 
-      $scope.ctx.selection.all = (specimens.length == list.specimens.length);
+      $scope.ctx.selection.all = (specimens.length == $scope.ctx.spmnsInView.length);
       $scope.ctx.selection.any = (specimens.length > 0);
     };
 
