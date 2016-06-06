@@ -9,7 +9,7 @@
   
   <div class="container">
     <form name="aliquotsForm" os-form-validator="aliquotsForm" novalidate>
-      <div class="os-bottom-border">
+      <div class="os-bottom-border" ng-if="ctx.aliquotsSpec.length > 1">
         <a ng-click="copyFirstToAll()">
           <span translate="specimens.copy_first_to_all">Copy first to all</span>
         </a>

@@ -9,7 +9,7 @@
   
   <div class="container">
     <form name="derivativesForm" os-form-validator="derivativesForm" novalidate>
-      <div class="os-bottom-border">
+      <div class="os-bottom-border" ng-if="ctx.derivedSpmns.length > 1">
         <a ng-click="copyFirstToAll()">
           <span translate="specimens.copy_first_to_all">Copy first to all</span>
         </a>
