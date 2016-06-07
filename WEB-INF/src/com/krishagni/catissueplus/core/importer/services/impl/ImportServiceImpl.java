@@ -243,6 +243,8 @@ public class ImportServiceImpl implements ImportService {
 			}
 
 			return ResponseEvent.response(records);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		} finally {
