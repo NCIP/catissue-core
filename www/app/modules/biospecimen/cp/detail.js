@@ -1,6 +1,6 @@
 
 angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
-  .controller('CpDetailCtrl', function($scope, $q, $translate, cp, CollectionProtocol, PvManager, DeleteUtil) {
+  .controller('CpDetailCtrl', function($scope, $q, $translate, cp, CollectionProtocol, PvManager, DeleteUtil, CpSettingsReg) {
 
     function init() {
       $scope.cp = cp;
@@ -12,24 +12,9 @@ angular.module('os.biospecimen.cp.detail', ['os.biospecimen.models'])
       angular.extend($scope.cpResource.updateOpts, opts);
       angular.extend($scope.cpResource.deleteOpts, opts);
 
-      $scope.userInputLabels = '';
-      $translate('cp.label_format.ppid').then(
-        function() {
-          var result = [];
-
-          if (cp.manualPpidEnabled) {
-            result.push($translate.instant('cp.label_format.ppid'));
-          }
-
-          if (cp.manualVisitNameEnabled) {
-            result.push($translate.instant('cp.label_format.visit'));
-          }
-
-          if (cp.manualSpecLabelEnabled) {
-            result.push($translate.instant('cp.label_format.specimen'));
-          }
-
-          $scope.userInputLabels = result.join(", ");
+      CpSettingsReg.getSettings().then(
+        function(settings) {
+          $scope.settings = settings;
         }
       );
     }

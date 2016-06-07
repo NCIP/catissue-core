@@ -205,7 +205,7 @@
       "consents": "Consents",
       "events": "Events",
       "users": "Users",
-      "catalog_settings": "Catalog Settings"
+      "settings": "Settings"
     },
 
     "menu_options": {
@@ -232,10 +232,10 @@
       "select_repository": "Select Repository"
     },
 
-    "label_formats" : "Label Formats",
     "anticipated_participant_count": "Expected Registrations",
 
     "label_format": {
+      "title": "Label Format and Print Settings",
       "specimen": "Specimen",
       "visit": "Visit",
       "aliquot": "Aliquot",

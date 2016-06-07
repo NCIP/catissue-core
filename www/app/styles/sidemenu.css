@@ -182,3 +182,25 @@ ul.os-side-menu li.active a {
 .os-side-menu-wrapper.opened .open-close .btn.open {
   display: none;
 }
+
+/** Sub-menus **/
+.os-side-submenu.popover {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding-left: 0px;
+  margin-left: 0px!important;
+}
+
+.os-side-submenu.popover .popover-content {
+  padding-left: 0px;
+}
+
+.os-side-submenu.popover .popover-content > div {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+  border-radius: 4px;
+}
+
+.os-side-submenu .list-group {
+  form-group: 0px;
+}

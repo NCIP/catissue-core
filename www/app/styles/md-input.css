@@ -165,3 +165,22 @@
   margin-top: 0px!important;
 }
 
+.os-md-form label {
+  color: #666;
+}
+
+.os-md-form .input {
+  margin-top: -17px;
+}
+
+.os-md-form .form-group {
+  margin-bottom: 30px;
+}
+
+.os-md-form .os-md-input.read {
+  margin-top: 7px;
+}
+
+.os-md-form .input, .os-md-form .read {
+  padding-left: 0px;
+}

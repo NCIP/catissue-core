@@ -229,26 +229,6 @@
   padding-top: 10px;
 }
 
-.os-spmn-coll-detail label {
-  color: #666;
-}
-
-.os-spmn-coll-detail .input {
-  margin-top: -17px;
-}
-
-.os-spmn-coll-detail .form-group {
-  margin-bottom: 30px;
-}
-
-.os-spmn-coll-detail .os-md-input.read {
-  margin-top: 7px;
-}
-
-.os-spmn-coll-detail .input, .os-spmn-coll-detail .read {
-  padding-left: 0px;
-}
-
 .os-text-checkbox:after {
   display: block;
   content: ' ';

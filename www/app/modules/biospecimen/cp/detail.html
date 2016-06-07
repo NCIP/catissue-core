@@ -4,7 +4,8 @@
       <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
     </ul>
     <h3>
-      {{cp.shortTitle}} <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
+      <span>{{cp.shortTitle}}</span>
+      <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
     </h3>
 
     <div class="os-btns right">
@@ -46,29 +47,30 @@
     <ul>
      <li ui-sref-active="active">
        <a ui-sref=".overview">
-         <i class="fa fa-eye"></i>
+         <span class="fa fa-eye"></span>
          <span class="os-title" translate="cp.tab.overview">Overview</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".consents">
-         <i class="fa fa-pencil-square-o"></i>
+         <span class="fa fa-pencil-square-o"></span>
          <span class="os-title" translate="cp.tab.consents">Consents</span>
        </a>
      </li>
      <li ui-sref-active="active">
        <a ui-sref=".specimen-requirements">
-         <i class="fa fa-list-alt"></i>
+         <span class="fa fa-list-alt"></span>
          <span class="os-title" translate="cp.tab.events">Events</span>
        </a>
      </li>
-     <li ui-sref-active="active">
-       <a ui-sref=".catalog-settings">
-         <i class="fa fa-search"></i>
-         <span class="os-title" translate="cp.tab.catalog_settings">Catalog Settings</span>
+     <li ng-class="{'active': includesState('cp-detail.settings')}">
+       <a bs-popover auto-close="1" append-to-body="true" container="body"
+         custom-class="os-side-submenu" placement="right"
+         content-template="modules/biospecimen/cp/settings.html">
+         <span class="fa fa-wrench"></span>
+         <span class="os-title" translate="cp.tab.settings">Settings</span>
        </a>
      </li>
-
      <os-plugin-hooks view-name="'cp-detail'" sec-name="'side-menu'"></os-plugin-hooks>
    </ul>
   </div>
@@ -76,3 +78,13 @@
   <div ng-class="{'os-side-menu-page-content': state.name.indexOf('cp-detail') != -1}" ui-view>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/cp/settings.html">
+  <div>
+    <div class="list-group">
+      <a class="list-group-item" ui-sref="{{setting.state}}" ng-repeat="setting in settings" ng-click="$hide()">
+        <span>{{setting.caption}}</span>
+      </a>
+    </div>
+  </div>
+</script>

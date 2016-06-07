@@ -237,10 +237,26 @@ angular.module('os.biospecimen.cp',
         },
         controller: 'CpSpecimensCtrl'
       })
-      .state('cp-detail.catalog-settings', {
-        url: '/catalog-settings',
+      .state('cp-detail.settings', {
+        url: '/settings',
+        abstract: true,
+        template: '<div class="clearfix">' +
+                  '  <div class="col-xs-12">' +
+                  '    <div ui-view></div>' +
+                  '  </div>' +
+                  '</div>',
+        parent: 'cp-detail'
+      })
+      .state('cp-detail.settings.labels', {
+        url: '/label',
+        templateUrl: 'modules/biospecimen/cp/label-settings.html',
+        parent: 'cp-detail.settings',
+        controller: 'CpLabelSettingsCtrl'
+      })
+      .state('cp-detail.settings.catalog', {
+        url: '/catalog',
         templateUrl: 'modules/biospecimen/cp/catalog-settings.html',
-        parent: 'cp-detail',
+        parent: 'cp-detail.settings',
         resolve: {
           catalogSetting: function(cp) {
             if (cp.catalogSetting) {
