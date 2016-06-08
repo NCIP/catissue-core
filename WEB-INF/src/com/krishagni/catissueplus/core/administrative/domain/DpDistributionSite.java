@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 import org.hibernate.proxy.HibernateProxyHelper;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
+@Audited
+@AuditTable(value = "OS_DIST_PROTOCOL_SITES_AUD")
 public class DpDistributionSite extends BaseEntity {
 	private DistributionProtocol distributionProtocol;
 	

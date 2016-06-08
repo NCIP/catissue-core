@@ -3,9 +3,12 @@ package com.krishagni.catissueplus.core.administrative.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
+@Audited
 public class DistributionOrderItem extends BaseEntity {
 	public enum Status {
 		DISTRIBUTED,

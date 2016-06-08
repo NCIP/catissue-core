@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
+import org.hibernate.envers.Audited;
+
 import com.krishagni.catissueplus.core.administrative.domain.factory.StorageContainerErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -7,6 +9,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenShipmentReceiv
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenShipmentShippedEvent;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
+@Audited
 public class ShipmentItem extends BaseEntity {
 	public enum ReceivedQuality {
 		ACCEPTABLE, 

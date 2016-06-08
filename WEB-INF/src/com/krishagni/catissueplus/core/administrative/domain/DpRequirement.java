@@ -6,11 +6,13 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.envers.Audited;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.util.Status;
 
+@Audited
 public class DpRequirement extends BaseEntity {
 	private DistributionProtocol distributionProtocol;
 	
