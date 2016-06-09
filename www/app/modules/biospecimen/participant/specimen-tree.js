@@ -214,7 +214,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           }
 
           var specimenIds = getSpecimenIdsForDeletion(specimensToDelete); 
-          DeleteUtil.bulkDelete(Specimen, specimenIds, getBulkDeleteOpts(specimensToDelete));
+          DeleteUtil.bulkDelete({bulkDelete: Specimen.bulkDelete}, specimenIds, getBulkDeleteOpts(specimensToDelete));
           scope.selection.all = false;
         }
 
