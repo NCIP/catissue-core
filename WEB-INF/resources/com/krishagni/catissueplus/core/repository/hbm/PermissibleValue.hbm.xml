@@ -27,7 +27,7 @@
       class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"
       column="PARENT_IDENTIFIER"/>
 
-    <set name="children" inverse="false" cascade="none">
+    <set name="children" inverse="true" cascade="all-delete-orphan">
       <key column="PARENT_IDENTIFIER"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"/>
     </set>
