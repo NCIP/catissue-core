@@ -3,10 +3,12 @@ node_js: stable
 jdk:
  - oraclejdk8
 
+before_install:
+  - rm -rf /home/travis/.npm/*
+
 before_script:
   - cd www
   - npm install -g bower
-  - rm -rf /home/travis/.npm/*
   - npm install
   - bower install -f
   - cd ..
