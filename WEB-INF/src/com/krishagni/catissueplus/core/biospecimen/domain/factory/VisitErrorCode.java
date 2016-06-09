@@ -38,7 +38,13 @@ public enum VisitErrorCode implements ErrorCode {
 	
 	NON_TEXT_SPR,
 	
-	INVALID_COHORT;
+	INVALID_COHORT,
+
+	NO_PRINTER_CONFIGURED,
+
+	NO_VISITS_TO_PRINT,
+
+	PRINT_ERROR;
 	
 	public String code() {
 		return "VISIT_" + this.name();

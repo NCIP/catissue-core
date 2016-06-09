@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorC
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.biospecimen.services.VisitService;
 import com.krishagni.catissueplus.core.common.domain.PrintItem;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -90,6 +92,9 @@ public class Visit extends BaseExtensionEntity {
 	
 	@Autowired
 	private SpecimenService specimenSvc;
+
+	@Autowired
+	private VisitService visitSvc;
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -444,25 +449,39 @@ public class Visit extends BaseExtensionEntity {
 	public static boolean isMissed(String status) {
 		return Visit.VISIT_STATUS_MISSED.equals(status);
 	}
-	
-	public boolean isPrePrintEnabled() {
+
+	public void printLabels(String prevStatus) {
+		printVisitName(prevStatus);
+		prePrintSpecimenLabels(prevStatus);
+	}
+
+	public void printVisitName(String prevStatus) {
+		if (!shouldPrintVisitName(prevStatus)) {
+			return;
+		}
+
+		Integer copies = getCpEvent().getVisitNamePrintCopiesToUse();
+		visitSvc.getLabelPrinter().print(Collections.singletonList(PrintItem.make(this, copies)));
+	}
+
+	public boolean isPrePrintSpecimenLabelEnabled() {
 		return getCollectionProtocol().getSpmnLabelPrePrintMode() == SpecimenLabelPrePrintMode.ON_VISIT;
 	}
-	
-	public boolean shouldPrePrintLabels(String prevStatus) {
-		if (!isPrePrintEnabled()) {
+
+	public boolean shouldPrePrintSpecimenLabels(String prevStatus) {
+		if (!isPrePrintSpecimenLabelEnabled()) {
 			return false;
 		}
-		
+
 		if (StringUtils.isBlank(prevStatus)) {
-			return !getStatus().equals(VISIT_STATUS_MISSED);
+			return !isMissed();
 		} else {
-			return prevStatus.equals(VISIT_STATUS_MISSED) && !getStatus().equals(VISIT_STATUS_MISSED);
+			return isMissed(prevStatus) && !isMissed();
 		}
 	}
 	
-	public void prePrintLabels(String prevStatus) {
-		if (!shouldPrePrintLabels(prevStatus)) {
+	public void prePrintSpecimenLabels(String prevStatus) {
+		if (!shouldPrePrintSpecimenLabels(prevStatus)) {
 			return;
 		}
 
@@ -482,7 +501,7 @@ public class Visit extends BaseExtensionEntity {
 	public String getEntityType() {
 		return "VisitExtension";
 	}
-	
+
 	private void ensureNoActiveChildObjects() {
 		for (Specimen specimen : getSpecimens()) {
 			if (specimen.isActiveOrClosed() && specimen.isCollected()) {
@@ -558,5 +577,22 @@ public class Visit extends BaseExtensionEntity {
 		}
 		
 		return spmnPrintItems;
+	}
+
+	private boolean shouldPrintVisitName(String prevStatus) {
+		if (isMissed()) {
+			return false;
+		}
+
+		switch (getCpEvent().getVisitNamePrintModeToUse()) {
+			case PRE_PRINT:
+				return StringUtils.isBlank(prevStatus) || isMissed(prevStatus);
+
+			case ON_COMPLETION:
+				return isCompleted() && !isCompleted(prevStatus);
+
+			default:
+				return false;
+		}
 	}
 }

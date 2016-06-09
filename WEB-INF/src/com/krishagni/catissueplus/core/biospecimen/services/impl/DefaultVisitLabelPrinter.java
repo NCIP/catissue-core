@@ -86,6 +86,7 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 					item.setJob(job);
 					item.setPrinterName(rule.getPrinterName());
 					item.setItemLabel(visit.getName());
+					item.setCopies(printItem.getCopies());
 					item.setStatus(Status.QUEUED);
 					item.setLabelType(rule.getLabelType());
 					item.setData(new ObjectMapper().writeValueAsString(labelDataItems));

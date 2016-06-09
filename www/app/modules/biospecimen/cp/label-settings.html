@@ -4,7 +4,7 @@
       <span translate="cp.label_format.title">
         Label Format and Print Settings
       </span>
-      <span class="os-btns" ng-switch-when = 'view_setting'" show-if-allowed="cpResource.updateOpts">
+      <span class="os-btns" ng-switch-when = 'view_setting' show-if-allowed="cpResource.updateOpts">
         <button class="default" ng-click="showEditForm()">
           <span class="fa fa-pencil"></span>
           <span translate="common.buttons.edit">Edit</span>
@@ -12,7 +12,7 @@
       </span>
     </div>
     <div class="panel-body">
-      <div ng-switch-when = 'view_setting'">
+      <div ng-switch-when = 'view_setting'>
         <div ng-include="'modules/biospecimen/cp/label-settings-overview.html'"></div>
       </div>
 
@@ -55,22 +55,37 @@
         <strong class="key key-sm" translate="cp.label_format.manual">User Inputs Allowed for</strong>
         <span class="value value-md">{{settingCtx.userInputLabels | osNoValue}}</span>
       </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="cp.pre_print_spmn_labels">Pre Print Specimen Labels</strong>
-        <span class="value value-md">
-          {{'cp.spmn_label_pre_print_modes.' + settingCtx.cp.spmnLabelPrePrintMode | translate}}
-        </span>
-      </li>
     </ul>
 
     <div class="os-section os-line-section">
-      <strong class="key key-sm" translate="cp.print_settings">Print Settings</strong>
-      <span ng-switch on="settingCtx.cp.spmnLabelPrintSettings.length > 0">
-        <span ng-switch-when="false" translate="common.none">
-          None
-        </span>
-        <table class="os-table os-table-muted-hdr os-border" ng-switch-when="true">
+      <strong class="key key-sm" translate="cp.visit_print_settings">Visit Print Settings</strong>
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.when_to_print">When to Print</strong>
+          <span class="value value-md">
+            {{'cp.visit_name_print_modes.' + settingCtx.cp.visitNamePrintMode | translate}}
+          </span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.copies">Copies</strong>
+          <span class="value value-md">{{settingCtx.cp.visitNamePrintCopies | osNoValue}}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="os-section os-line-section">
+      <strong class="key key-sm" translate="cp.spmn_print_settings">Specimen Print Settings</strong>
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.pre_print_spmn_labels">Pre-print Labels</strong>
+          <span class="value value-md">
+            {{'cp.spmn_label_pre_print_modes.' + settingCtx.cp.spmnLabelPrePrintMode | translate}}
+          </span>
+        </li>
+      </ul>
+      <span ng-if="settingCtx.cp.spmnLabelPrintSettings.length > 0">
+        <table class="os-table os-table-muted-hdr os-border">
           <thead class="os-table-head">
             <tr class="row">
               <td class="col os-col-40">
@@ -180,9 +195,39 @@
       </div>
     </div>
 
+    <div class="os-section-divider">
+      <span translate="cp.visit_print_settings">Visit Print Settings</span>
+    </div>
+
     <div class="form-group">
       <label class="control-label col-xs-3">
-        <span translate="cp.pre_print_spmn_labels">Pre Print Specimen Labels</span>
+        <span translate="cp.when_to_print">When to Print</span>
+      </label>
+      <div class="col-xs-6">
+        <os-select name="visitNameprintMode" ng-model="settingCtx.cp.visitNamePrintMode" list="settingCtx.visitNamePrintModes"
+          display-prop="displayName" select-prop="name" placeholder="{{'cp.when_to_print' | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.copies">Copies</span>
+      </label>
+      <div class="col-xs-6">
+        <input name="visitNamePrintCopies" type="text" ng-model="settingCtx.cp.visitNamePrintCopies" class="form-control"
+          placeholder="{{'cp.copies' | translate}}" ng-pattern="/^[0-9]+$/">
+        <div os-field-error field="lsForm.visitNamePrintCopies"></div>
+      </div>
+    </div>
+
+    <div class="os-section-divider">
+      <span translate="cp.spmn_print_settings">Specimen Print Settings</span>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.pre_print_spmn_labels">Pre-print Labels</span>
       </label>
       <div class="col-xs-6">
         <label class="radio-inline" ng-repeat="prePrintMode in settingCtx.spmnLabelPrePrintModes">
@@ -196,7 +241,7 @@
 
     <div class="form-group">
       <label class="control-label col-xs-3">
-        <span translate="cp.print_settings">Print Settings</span>
+        <span translate="cp.lineage">Lineage</span>
       </label>
       <div class="col-xs-3">
         <label class="control-label">
@@ -224,6 +269,8 @@
         <div os-field-error field="psForm.copies"></div>
       </div>
     </div>
+
+    <div class="os-divider"></div>
 
     <div class="form-group">
       <div class="col-xs-offset-3 col-xs-6">

@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.PrintVisitNameDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
@@ -34,6 +36,11 @@ public interface VisitService {
 			
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 
+	public ResponseEvent<LabelPrintJobSummary> printVisitNames(RequestEvent<PrintVisitNameDetail> req);
+
+	//
+	// SPR APIs
+	//
 	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprFileDownloadDetail> req);
 	
 	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req);
@@ -43,7 +50,10 @@ public interface VisitService {
 	public ResponseEvent<Boolean> deleteSprFile(RequestEvent<EntityQueryCriteria> req);
 
 	public ResponseEvent<SprLockDetail> updateSprLockStatus(RequestEvent<SprLockDetail> req);
-	
+
+	//
+	// Internal APIs
+	//
 	public LabelPrinter<Visit> getLabelPrinter();
 
 	public List<Visit> getVisitsByName(List<String> visitNames);

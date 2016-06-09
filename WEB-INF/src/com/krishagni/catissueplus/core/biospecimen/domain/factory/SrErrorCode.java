@@ -65,8 +65,6 @@ public enum SrErrorCode implements ErrorCode {
 	
 	INVALID_POOLED_SPMN,
 	
-	INVALID_LABEL_AUTO_PRINT_MODE,
-	
 	INVALID_LINEAGE;
 	
 	@Override

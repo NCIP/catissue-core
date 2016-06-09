@@ -54,6 +54,8 @@ public enum CpErrorCode implements ErrorCode {
 	CONSENTS_WAIVED,
 	
 	DUP_CP_SITE_CODES,
+
+	INVALID_VISIT_NAME_PRINT_MODE,
 	
 	INVALID_SPMN_LABEL_PRE_PRINT_MODE,
 	

@@ -14,6 +14,7 @@ import org.hibernate.envers.NotAudited;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.VisitNamePrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.Status;
@@ -38,9 +39,13 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 	private String clinicalDiagnosis;
 	
 	private String clinicalStatus;
+
+	private VisitNamePrintMode visitNamePrintMode;
+
+	private Integer visitNamePrintCopies;
 	
 	private String activityStatus;
-	
+
 	private Set<SpecimenRequirement> specimenRequirements = new LinkedHashSet<SpecimenRequirement>();
 
 	private Set<Visit> specimenCollectionGroups = new HashSet<Visit>();
@@ -115,7 +120,31 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 	public void setClinicalStatus(String clinicalStatus) {
 		this.clinicalStatus = clinicalStatus;
 	}
-	
+
+	public VisitNamePrintMode getVisitNamePrintMode() {
+		return visitNamePrintMode;
+	}
+
+	public VisitNamePrintMode getVisitNamePrintModeToUse() {
+		return visitNamePrintMode != null ? visitNamePrintMode : getCollectionProtocol().getVisitNamePrintMode();
+	}
+
+	public void setVisitNamePrintMode(VisitNamePrintMode visitNamePrintMode) {
+		this.visitNamePrintMode = visitNamePrintMode;
+	}
+
+	public Integer getVisitNamePrintCopies() {
+		return visitNamePrintCopies;
+	}
+
+	public Integer getVisitNamePrintCopiesToUse() {
+		return visitNamePrintCopies != null ? visitNamePrintCopies : getCollectionProtocol().getVisitNamePrintCopies();
+	}
+
+	public void setVisitNamePrintCopies(Integer visitNamePrintCopies) {
+		this.visitNamePrintCopies = visitNamePrintCopies;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -174,6 +203,8 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 		setDefaultSite(other.getDefaultSite());
 		setClinicalDiagnosis(other.getClinicalDiagnosis());
 		setClinicalStatus(other.getClinicalStatus());
+		setVisitNamePrintMode(other.getVisitNamePrintMode());
+		setVisitNamePrintCopies(other.getVisitNamePrintCopies());
 		setActivityStatus(other.getActivityStatus());
 	}
 	

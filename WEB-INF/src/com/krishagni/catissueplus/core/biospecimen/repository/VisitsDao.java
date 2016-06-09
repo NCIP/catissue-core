@@ -17,6 +17,8 @@ public interface VisitsDao extends Dao<Visit> {
 	
 	public List<Visit> getByName(Collection<String> names);
 
+	public List<Visit> getByIds(Collection<Long> ids);
+
 	public List<Visit> getBySpr(String sprNumber);
 
 	public Map<String, Object> getCprVisitIds(String key, Object value);

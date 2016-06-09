@@ -14,6 +14,7 @@ import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelPrePrintMode;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.VisitNamePrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpSpecimenLabelPrintSetting;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -86,7 +87,9 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setConsentsWaived(input.getConsentsWaived());
 
 		setVisitNameFmt(input, cp, ose);
-		setLabelFormats(input, cp, ose);		
+		setLabelFormats(input, cp, ose);
+		setVisitNamePrintMode(input, cp, ose);
+		cp.setVisitNamePrintCopies(input.getVisitNamePrintCopies());
 		setSpecimenLabelPrePrintMode(input, cp, ose);
 		setSpecimenLabelPrintSettings(input, cp, ose);
 		setActivityStatus(input, cp, ose);
@@ -278,21 +281,37 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		
 		return nameFmt;
 	}
-	
+
+	private void setVisitNamePrintMode(CollectionProtocolDetail input, CollectionProtocol cp, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(input.getVisitNamePrintMode())) {
+			return;
+		}
+
+		VisitNamePrintMode printMode = null;
+		try {
+			printMode = VisitNamePrintMode.valueOf(input.getVisitNamePrintMode());
+		} catch (IllegalArgumentException iae) {
+			ose.addError(CpErrorCode.INVALID_VISIT_NAME_PRINT_MODE, input.getVisitNamePrintMode());
+			return;
+		}
+
+		cp.setVisitNamePrintMode(printMode);
+	}
+
 	private void setSpecimenLabelPrePrintMode(CollectionProtocolDetail input, CollectionProtocol cp, OpenSpecimenException ose) {
 		if (StringUtils.isBlank(input.getSpmnLabelPrePrintMode())) {
 			return;
 		}
 		
-		SpecimenLabelPrePrintMode spmnLabelPrePrintMode = null; 
+		SpecimenLabelPrePrintMode printMode = null;
 		try {
-			spmnLabelPrePrintMode = SpecimenLabelPrePrintMode.valueOf(input.getSpmnLabelPrePrintMode());
+			printMode = SpecimenLabelPrePrintMode.valueOf(input.getSpmnLabelPrePrintMode());
 		} catch(IllegalArgumentException iae) {
 			ose.addError(CpErrorCode.INVALID_SPMN_LABEL_PRE_PRINT_MODE, input.getSpmnLabelPrePrintMode());
 			return;
 		}
 
-		cp.setSpmnLabelPrePrintMode(spmnLabelPrePrintMode);
+		cp.setSpmnLabelPrePrintMode(printMode);
 	}
 	
 	private void setSpecimenLabelPrintSettings(CollectionProtocolDetail input, CollectionProtocol cp, OpenSpecimenException ose) {

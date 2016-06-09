@@ -40,6 +40,12 @@
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
+          <li show-if-allowed="specimenResource.updateOpts" ng-if="!!visit.id">
+            <a ng-click="printVisitName()">
+              <span class="fa fa-print"></span>
+              <span translate="common.buttons.print">Print</span>
+            </a>
+          </li>
           <li show-if-allowed="specimenResource.deleteOpts" ng-if="!!visit.id">
             <a ng-click="deleteVisit()">
               <span class="fa fa-trash"></span>

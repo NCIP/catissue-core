@@ -33,7 +33,9 @@ angular.module('os.biospecimen.models.visit', ['os.common.models', 'os.biospecim
           delete event.defaultSite;
           delete event.collectionProtocol;
           delete event.specimenRequirements;
-          
+          delete event.visitNamePrintMode;
+          delete event.visitNamePrintCopies;
+
           if (typeof regDate == 'string') {
             regDate = Date.parse(regDate);
           } else if (regDate instanceof Date) {

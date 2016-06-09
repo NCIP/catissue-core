@@ -106,6 +106,14 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 				.list();
 	}
 
+	@Override
+	public List<Visit> getByIds(Collection<Long> ids) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_VISITS_BY_IDS)
+				.setParameterList("ids", ids)
+				.list();
+	}
+
 	public List<Visit> getBySpr(String sprNumber) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_VISIT_BY_SPR)
@@ -202,6 +210,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	private static final String GET_VISITS_COLLECTION_STATUS = FQN + ".getVisitsCollectionStatus";
 	
 	private static final String GET_VISITS_UNPLANNED_SPECIMENS_STAT = FQN + ".getVisitsUnplannedSpecimenCount";
+
+	private static final String GET_VISITS_BY_IDS = FQN + ".getVisitsByIds";
 
 	private static final String GET_VISIT_BY_NAME = FQN + ".getVisitByName";
 

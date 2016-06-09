@@ -42,6 +42,13 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		NONE;
 	}
 
+
+	public enum VisitNamePrintMode {
+		PRE_PRINT,
+		ON_COMPLETION,
+		NONE;
+	}
+
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private String title;
@@ -81,6 +88,10 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	private Boolean manualVisitNameEnabled;
 	
 	private Boolean manualSpecLabelEnabled;
+
+	private VisitNamePrintMode visitNamePrintMode = VisitNamePrintMode.NONE;
+
+	private Integer visitNamePrintCopies;
 	
 	private SpecimenLabelPrePrintMode spmnLabelPrePrintMode = SpecimenLabelPrePrintMode.NONE;
 	
@@ -256,6 +267,22 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		return manualSpecLabelEnabled != null ? manualSpecLabelEnabled : false;
 	}
 
+	public VisitNamePrintMode getVisitNamePrintMode() {
+		return visitNamePrintMode != null ? visitNamePrintMode : VisitNamePrintMode.NONE;
+	}
+
+	public void setVisitNamePrintMode(VisitNamePrintMode visitNamePrintMode) {
+		this.visitNamePrintMode = visitNamePrintMode;
+	}
+
+	public Integer getVisitNamePrintCopies() {
+		return visitNamePrintCopies;
+	}
+
+	public void setVisitNamePrintCopies(Integer visitNamePrintCopies) {
+		this.visitNamePrintCopies = visitNamePrintCopies;
+	}
+
 	public SpecimenLabelPrePrintMode getSpmnLabelPrePrintMode() {
 		return spmnLabelPrePrintMode != null ? spmnLabelPrePrintMode : SpecimenLabelPrePrintMode.NONE;
 	}
@@ -383,6 +410,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setDerivativeLabelFormat(cp.getDerivativeLabelFormat());
 		setAliquotLabelFormat(cp.getAliquotLabelFormat());
 		setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
+		setVisitNamePrintMode(cp.getVisitNamePrintMode());
+		setVisitNamePrintCopies(cp.getVisitNamePrintCopies());
 		setUnsignedConsentDocumentURL(cp.getUnsignedConsentDocumentURL());
 		setExtension(cp.getExtension());
 		
@@ -415,6 +444,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		cp.setAliquotLabelFormat(getAliquotLabelFormat());
 		cp.setDerivativeLabelFormat(getDerivativeLabelFormat());
 		cp.setManualSpecLabelEnabled(isManualSpecLabelEnabled());
+		cp.setVisitNamePrintMode(getVisitNamePrintMode());
+		cp.setVisitNamePrintCopies(getVisitNamePrintCopies());
 		cp.setSpmnLabelPrePrintMode(getSpmnLabelPrePrintMode());
 
 		copyLabelPrintSettingsTo(cp);

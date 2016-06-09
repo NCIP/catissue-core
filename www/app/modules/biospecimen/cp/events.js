@@ -16,6 +16,7 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
 
       $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
       $scope.sites = PvManager.getSites();
+      $scope.visitNamePrintModes = PvManager.getPvs('visit-name-print-modes');
 
       pvsLoaded = true;
     };

@@ -98,4 +98,18 @@
       update catissue_specimenlist_tags set last_updated_on = created_on;
     </sql>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="CP level fields to specify visit name print mode and copies to print">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="VISIT_NAME_PRINT_MODE" type="${text.type}(32)"/>
+      <column name="VISIT_NAME_PRINT_COPIES" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Event level fields to specify visit name print mode and copies to print">
+    <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+      <column name="VISIT_NAME_PRINT_MODE" type="${text.type}(32)"/>
+      <column name="VISIT_NAME_PRINT_COPIES" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

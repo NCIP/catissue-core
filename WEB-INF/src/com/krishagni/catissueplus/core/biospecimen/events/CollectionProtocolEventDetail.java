@@ -16,6 +16,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 @JsonInclude(Include.NON_NULL)
 public class CollectionProtocolEventDetail {
 	private Long id;
+
+	private String code;
 	
 	private String eventLabel;
 	
@@ -30,10 +32,14 @@ public class CollectionProtocolEventDetail {
 	private String clinicalDiagnosis;
 	
 	private String clinicalStatus;
+
+	private String visitNamePrintMode;
+
+	private Integer visitNamePrintCopies;
 	
 	private String activityStatus;
 	
-	private String code;
+
 	
 	//
 	// mostly used for export
@@ -48,6 +54,14 @@ public class CollectionProtocolEventDetail {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getEventLabel() {
@@ -106,6 +120,22 @@ public class CollectionProtocolEventDetail {
 		this.clinicalStatus = clinicalStatus;
 	}
 
+	public String getVisitNamePrintMode() {
+		return visitNamePrintMode;
+	}
+
+	public void setVisitNamePrintMode(String visitNamePrintMode) {
+		this.visitNamePrintMode = visitNamePrintMode;
+	}
+
+	public Integer getVisitNamePrintCopies() {
+		return visitNamePrintCopies;
+	}
+
+	public void setVisitNamePrintCopies(Integer visitNamePrintCopies) {
+		this.visitNamePrintCopies = visitNamePrintCopies;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -114,14 +144,6 @@ public class CollectionProtocolEventDetail {
 		this.activityStatus = activityStatus;
 	}
 	
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
 	public List<SpecimenRequirementDetail> getSpecimenRequirements() {
 		return specimenRequirements;
 	}
@@ -146,18 +168,24 @@ public class CollectionProtocolEventDetail {
 		CollectionProtocolEventDetail detail = new CollectionProtocolEventDetail();
 		
 		detail.setId(event.getId());
+		detail.setCode(event.getCode());
 		detail.setEventLabel(event.getEventLabel());
 		detail.setEventPoint(event.getEventPoint());
 		detail.setClinicalDiagnosis(event.getClinicalDiagnosis());
 		detail.setClinicalStatus(event.getClinicalStatus());
 		detail.setCollectionProtocol(event.getCollectionProtocol().getTitle());
 		detail.setCpShortTitle(event.getCollectionProtocol().getShortTitle());
+		detail.setVisitNamePrintCopies(event.getVisitNamePrintCopies());
 		detail.setActivityStatus(event.getActivityStatus());
-		detail.setCode(event.getCode());
+
 		detail.setOffset(event.getOffset());
 		
 		if (event.getDefaultSite() != null) {
 			detail.setDefaultSite(event.getDefaultSite().getName());
+		}
+
+		if (event.getVisitNamePrintMode() != null) {
+			detail.setVisitNamePrintMode(event.getVisitNamePrintMode().name());
 		}
 		
 		if (fullObject) {

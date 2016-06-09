@@ -18,6 +18,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEven
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
@@ -300,7 +301,7 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		try {
 			labelAutoPrintMode = SpecimenLabelAutoPrintMode.valueOf(input);
 		} catch (IllegalArgumentException iae) {
-			ose.addError(INVALID_LABEL_AUTO_PRINT_MODE, input);
+			ose.addError(CpErrorCode.INVALID_SPMN_LABEL_PRINT_MODE, input);
 			return;
 		}
 		

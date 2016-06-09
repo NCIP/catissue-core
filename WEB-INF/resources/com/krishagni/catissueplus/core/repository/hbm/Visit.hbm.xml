@@ -64,6 +64,13 @@
 
     <filter name="activeEntity"/>
 
+    <query name="getVisitsByIds">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit
+      where
+        id in (:ids)
+    </query>
+
     <query name="getVisitByName">
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.Visit 

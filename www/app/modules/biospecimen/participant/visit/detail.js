@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.visit.detail', ['os.biospecimen.models'])
   .controller('VisitDetailCtrl', function(
     $scope, $state,
-    cpr, visit, specimens, DeleteUtil, Specimen, ExtensionsUtil) {
+    cpr, visit, specimens, Specimen, VisitNamePrinter, DeleteUtil, ExtensionsUtil) {
 
     function init() {
       $scope.cpr = cpr;
@@ -30,6 +30,10 @@ angular.module('os.biospecimen.visit.detail', ['os.biospecimen.models'])
           $scope.specimens = specimens;
         }
       );
+    }
+
+    $scope.printVisitName = function() {
+      VisitNamePrinter.printNames({visitIds: [$scope.visit.id]});
     }
 
     init();

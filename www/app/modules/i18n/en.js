@@ -99,7 +99,6 @@
       "add_another": "Add Another",
       "download": "Download",
       "reset_password": "Reset Password",
-      "print": "Print",
       "skip": "Skip",
       "back": "Back"
     }
@@ -166,8 +165,9 @@
     "view_participants": "View Participants",
     "view_catalog": "View Catalog",
     "disable_pre_print_warning": "Turning off pre-printing at collection protocol level will turn it off for all specimen requirements too",
-    "print_settings": "Print Settings",
     "lineage": "Lineage",
+    "visit_print_settings": "Visit Print Settings",
+    "spmn_print_settings": "Specimen Print Settings",
     "when_to_print": "When to Print",
     "copies": "Copies",
 
@@ -245,9 +245,15 @@
     },
 
     "catalog": {
-      "title": "Catalog Settings",
+      "title": "Catalog settings",
       "query": "Query",
       "query_desc": "Select saved query to use for Specimen Catalog"
+    },
+
+    "visit_name_print_modes": {
+      "PRE_PRINT": "Pre-print",
+      "ON_COMPLETION": "On Completion",
+      "NONE": "None"
     },
 
     "spmn_label_pre_print_modes": {
@@ -255,7 +261,7 @@
       "NONE": "None"
     },
 
-     "spmn_lineages": {
+    "spmn_lineages": {
       "New": "Primary",
       "Derived": "Derivative",
       "Aliquot": "Aliquot"
@@ -389,6 +395,7 @@
 
     "bulk_import": "Bulk Import Visits",
     "visit_extensions": "Visit Forms",
+    "names_print_job_created": "Visit names print job {{jobId}} created successfully",
 
     "spr": "Surgical Pathology Report",
     "upload_spr": "Upload Surgical Pathology Report",

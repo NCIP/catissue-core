@@ -41,7 +41,7 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 		for (Map<String, Object> labelData : labelDataList) {
 			generateCmdFile(
 				(LabelPrintJobItem)labelData.get("jobItem"),
-				(SpecimenLabelPrintRule)labelData.get("rule"),
+				(LabelPrintRule)labelData.get("rule"),
 				(Map<String, String>)labelData.get("dataItems"));
 		}
 	}

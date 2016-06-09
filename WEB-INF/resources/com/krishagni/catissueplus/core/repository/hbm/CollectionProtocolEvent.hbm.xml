@@ -1,36 +1,24 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
 
-  <class
-    name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"
-    table="CATISSUE_COLL_PROT_EVENT"
-    lazy="true" >
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"
+    table="CATISSUE_COLL_PROT_EVENT">
 
-    <id
-      name="id"
-      column="IDENTIFIER"
-      type="long"
-      length="30">
+    <id name="id" column="IDENTIFIER">
       <generator class="native">
-      <param name="sequence">CATISSUE_COLL_PROT_EV_SEQ</param>
+        <param name="sequence">CATISSUE_COLL_PROT_EV_SEQ</param>
       </generator>
     </id>
 
-    <property
-      name="eventLabel"
-      type="string"
-      column="COLLECTION_POINT_LABEL"
-      length="255"/>
+    <property name="code" column="CODE"/>
 
-    <property
-      name="eventPoint"
-      type="double"
-      column="STUDY_CALENDAR_EVENT_POINT"
-      length="50"/>
+    <property name="eventLabel" column="COLLECTION_POINT_LABEL"/>
+
+    <property name="eventPoint" column="STUDY_CALENDAR_EVENT_POINT"/>
 
     <many-to-one
       name="collectionProtocol"
@@ -42,32 +30,33 @@
     <many-to-one
       name="defaultSite"
       class="com.krishagni.catissueplus.core.administrative.domain.Site"
-      cascade="none"      
+      cascade="none"
       lazy="false"
-      column="DEFAULT_SITE_ID"/> 
-      
-    <property
-      name="activityStatus"
-      type="string"
-      column="ACTIVITY_STATUS"
-      length="50"/>
-      
-    <property
-      name="clinicalDiagnosis"
-      type="string"
-      column="CLINICAL_DIAGNOSIS"
-      length="150"/>
-      
-    <property
-      name="clinicalStatus"
-      type="string"
-      column="CLINICAL_STATUS"
-      length="50"/>
+      column="DEFAULT_SITE_ID"/>
 
-    <property name="code" column="CODE"/>
-      
-    <set name="specimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN"
-      inverse="true" cascade="all-delete-orphan" order-by="id asc">
+    <property name="clinicalDiagnosis" column="CLINICAL_DIAGNOSIS"/>
+
+    <property name="clinicalStatus" column="CLINICAL_STATUS"/>
+
+    <property name="visitNamePrintMode" column="VISIT_NAME_PRINT_MODE">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol$VisitNamePrintMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="visitNamePrintCopies" column="VISIT_NAME_PRINT_COPIES"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <set
+      name="specimenRequirements"
+      table="CATISSUE_CP_REQ_SPECIMEN"
+      inverse="true"
+      cascade="all-delete-orphan"
+      order-by="id asc">
       <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
       <filter name="activeEntity"/>
@@ -81,14 +70,13 @@
       cascade="save-update"
       sort="unsorted">
       <key column="COLLECTION_PROTOCOL_EVENT_ID"/>
-
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"/>
     </set>
 
     <filter name="activeEntity"/>
 
     <query name="getCpeByIds">
-      from 
+      from
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent cpe
       where
         cpe.id in (:cpeIds)

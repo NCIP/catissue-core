@@ -37,11 +37,15 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	private Boolean manualVisitNameEnabled;
 	
 	private Boolean manualSpecLabelEnabled;
+
+	private String visitNamePrintMode;
+
+	private Integer visitNamePrintCopies;
 	
 	private String spmnLabelPrePrintMode;
 	
 	private List<CpSpecimenLabelPrintSettingDetail> spmnLabelPrintSettings;
-	
+
 	private Boolean aliquotsInSameContainer;
 
 	private String activityStatus;
@@ -158,7 +162,23 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 	public void setManualSpecLabelEnabled(Boolean manualSpecLabelEnabled) {
 		this.manualSpecLabelEnabled = manualSpecLabelEnabled;
 	}
-	
+
+	public String getVisitNamePrintMode() {
+		return visitNamePrintMode;
+	}
+
+	public void setVisitNamePrintMode(String visitNamePrintMode) {
+		this.visitNamePrintMode = visitNamePrintMode;
+	}
+
+	public Integer getVisitNamePrintCopies() {
+		return visitNamePrintCopies;
+	}
+
+	public void setVisitNamePrintCopies(Integer visitNamePrintCopies) {
+		this.visitNamePrintCopies = visitNamePrintCopies;
+	}
+
 	public String getSpmnLabelPrePrintMode() {
 		return spmnLabelPrePrintMode;
 	}
@@ -235,6 +255,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setManualPpidEnabled(cp.isManualPpidEnabled());
 		result.setManualVisitNameEnabled(cp.isManualVisitNameEnabled());
 		result.setManualSpecLabelEnabled(cp.isManualSpecLabelEnabled());
+		result.setVisitNamePrintMode(cp.getVisitNamePrintMode().name());
+		result.setVisitNamePrintCopies(cp.getVisitNamePrintCopies());
 		result.setSpmnLabelPrePrintMode(cp.getSpmnLabelPrePrintMode().name());
 		result.setSpmnLabelPrintSettings(CpSpecimenLabelPrintSettingDetail.from(cp.getSpmnLabelPrintSettings()));
 		result.setActivityStatus(cp.getActivityStatus());
