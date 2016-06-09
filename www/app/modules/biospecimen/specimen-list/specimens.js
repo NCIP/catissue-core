@@ -78,6 +78,13 @@ angular.module('os.biospecimen.specimenlist')
       var list = $scope.ctx.list;
       list.removeSpecimens($scope.ctx.selection.specimens).then(
         function(listSpecimens) {
+          var spmnsInView = $scope.ctx.spmnsInView;
+          for (var i = spmnsInView.length - 1; i >= 0; --i) {
+            if (spmnsInView[i].selected) {
+              spmnsInView.splice(i, 1);
+            }
+          }
+
           list.specimens = listSpecimens.specimens;
           $scope.ctx.selection = resetSelection();
 
