@@ -1,8 +1,13 @@
 <div class="os-home">
   <div class="os-navbar os-navbar-default os-navbar-docked">
-    <a class="logo" href="http://www.openspecimen.org">
-      <img src="images/os_logo.png"></img>
-    </a>
+    <div class="logo">
+      <a href="http://www.openspecimen.org">
+        <img src="images/os_logo.png"></img>
+      </a>
+      <div class="deploy-env" ng-if="!!global.appProps.deploy_env">
+        <span>{{global.appProps.deploy_env | uppercase | limitTo: 10}}</span>
+      </div>
+    </div>
     <ul class="menu">
       <li class="form-input">
         <a ui-sref="welcome" class="btn btn-primary">Sign Up</a>

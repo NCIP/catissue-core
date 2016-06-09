@@ -1,6 +1,13 @@
 <div>
   <div class="os-navbar os-navbar-default os-navbar-docked">
-    <a class="logo" ui-sref="home"><img src="images/os_logo.png"></img></a>
+    <div class="logo">
+      <a ui-sref="home">
+        <img src="images/os_logo.png"></img>
+      </a>
+      <div class="deploy-env" ng-if="!!global.appProps.deploy_env">
+        <span>{{global.appProps.deploy_env | uppercase | limitTo: 10}}</span>
+      </div>
+    </div>
     <div class="search">
       <div ng-include src="'modules/common/search/search.html'"></div>
     </div>

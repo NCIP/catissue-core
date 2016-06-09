@@ -46,4 +46,14 @@
       //
     </sql>
   </changeSet>
+  
+  <changeSet author="slakhani" id="Config setting to specify OS deploy environment">
+    <sql>
+      call add_cfg_prop(
+        'common', 'deploy_env',
+        'deploy_env', 'deploy_env_desc',
+        'STRING', 'TEST'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

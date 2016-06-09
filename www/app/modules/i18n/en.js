@@ -1813,7 +1813,9 @@
         "field_separator": "Field Separator",
         "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator",
         "training_url": "Training URL ",
-        "training_url_desc": "Training documentation URL"
+        "training_url_desc": "Training documentation URL",
+        "deploy_env": "Deployment Environment",
+        "deploy_env_desc": "Any meaningful text that helps users distinguish between various OpenSpecimen deployment environments like test, dev, prod, demo etc"
       },
 
       "email": {
