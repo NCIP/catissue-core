@@ -550,8 +550,6 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			}
 
 			sqlBuilder.append(")");
-		} else {
-			sqlBuilder = new StringBuilder(String.format(sqlBuilder.toString(), "", ""));
 		}
 		
 		sqlBuilder.append(" order by modificationTime desc ");
