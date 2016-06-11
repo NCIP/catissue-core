@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -117,15 +118,17 @@ public class FormServiceImpl implements FormService {
     @PlusTransactional
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req) {
 		FormListCriteria crit = req.getPayload();
+
 		String entityType = crit.getFormType();
-		User currUser = AuthUtil.getCurrentUser();
-
-		if (!currUser.isAdmin() && currUser.getManageForms()) {
-			crit.userId(currUser.getId());
-			crit.cpIds(AccessCtrlMgr.getInstance().getReadableCpIds());
-		}
-
 		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
+			User currUser = AuthUtil.getCurrentUser();
+			if (!currUser.isAdmin() && !currUser.getManageForms()) {
+				return ResponseEvent.response(Collections.emptyList());
+			} else if (!currUser.isAdmin() && currUser.getManageForms()) {
+				crit.userId(currUser.getId());
+				crit.cpIds(AccessCtrlMgr.getInstance().getReadableCpIds());
+			}
+
 			return ResponseEvent.response(formDao.getAllFormsSummary(crit));
 		} else if (entityType.equalsIgnoreCase("Query")) {
 			return ResponseEvent.response(formDao.getQueryForms());
