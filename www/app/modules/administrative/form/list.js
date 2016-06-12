@@ -4,6 +4,8 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     $scope, $state, $modal, $translate, Form, FormEntityReg,
     CollectionProtocol, Util, DeleteUtil, Alerts) {
 
+    var cpListQ = undefined;
+
     function init() {
       $scope.formFilterOpts = {};
       $scope.entityMap = {
@@ -12,10 +14,8 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
         SpecimenCollectionGroup: 'visit', 
         SpecimenEvent: 'specimen_event'
       };
-      $scope.cpList = [];
       $scope.formsList = [];
       loadForms($scope.formFilterOpts);
-      loadCollectionProtocols();
       Util.filter($scope, 'formFilterOpts', loadForms);
     }
 
@@ -29,13 +29,13 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
       loadForms($scope.formFilterOpts);
     }
 
-    function loadCollectionProtocols() {
-      CollectionProtocol.list().then(
-        function(cpList) {
-          $scope.cpList = cpList;
-        }
-      );
-    };
+    function getCpList() {
+      if (!cpListQ) {
+        cpListQ = CollectionProtocol.list({detailedList: false});
+      }
+
+      return cpListQ;
+    }
 
     function deleteForm(form) {
       form.$remove().then(
@@ -51,33 +51,39 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     }
 
     $scope.showFormContexts = function(form) {
-      form.getFormContexts().then(function(formCtxts) {
-        var formCtxtsModal = $modal.open({
-          templateUrl: 'modules/administrative/form/association.html',
-          controller: 'FormCtxtsCtrl',
+      form.getFormContexts().then(
+        function(formCtxts) {
+          var formCtxtsModal = $modal.open({
+            templateUrl: 'modules/administrative/form/association.html',
+            controller: 'FormCtxtsCtrl',
 
-          resolve: {
-            args: function() {
-              return {
-                formCtxts: formCtxts,
-                form: form,
-                cpList: $scope.cpList
+            resolve: {
+              args: function() {
+                return {
+                  formCtxts: formCtxts,
+                  form: form
+                }
+              },
+
+              cpList: function() {
+                return getCpList();
+              },
+
+              entities: function(FormEntityReg) {
+                return FormEntityReg.getEntities();
               }
-            },
-
-            entities: function(FormEntityReg) {
-              return FormEntityReg.getEntities();
-            }
-          }
-        });
-
-        formCtxtsModal.result.then(
-          function(reload) {
-            if (reload) {
-              reloadForms();
             }
           });
-      });
+
+          formCtxtsModal.result.then(
+            function(reload) {
+              if (reload) {
+                reloadForms();
+              }
+            }
+          );
+        }
+      );
     };
 
 
