@@ -1,5 +1,5 @@
 angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
-  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, entities, Alerts) {
+  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, cpList, entities, Alerts) {
 
     var reload = false;
 
@@ -7,7 +7,7 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
       $scope.showFormCtxts = true;
       $scope.extnEntities = entities;
       $scope.form = args.form;
-      $scope.cpList = args.cpList;
+      $scope.cpList = cpList;
 
       $scope.cpFormCtxts = args.formCtxts;
       angular.forEach(args.formCtxts, function(formCtx) {
