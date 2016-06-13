@@ -694,7 +694,8 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-btn-transparent {
   background: none;
   border: none;
-  padding: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .os-btn-transparent:focus {
