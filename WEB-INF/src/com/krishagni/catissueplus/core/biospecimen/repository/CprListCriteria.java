@@ -1,8 +1,14 @@
 package com.krishagni.catissueplus.core.biospecimen.repository;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
@@ -18,12 +24,19 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	private String name;
 	
 	private Date dob;
-	
-	private String specimen;
-	
-	private Set<Long> siteIds;
 
 	private String uid;
+	
+	private String specimen;
+
+	//
+	// [{[site ids], cp id}, ...]
+	//
+	private Set<Pair<Set<Long>, Long>> phiSiteCps;
+
+	private Set<Pair<Set<Long>, Long>> siteCps;
+
+	private boolean useMrnSites;
 
 	@Override
 	public CprListCriteria self() {
@@ -83,11 +96,6 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 	public Date dob() {
 		return dob;
 	}
-	
-	public CprListCriteria specimen(String specimen) {
-		this.specimen = specimen;
-		return self();
-	}
 
 	public String uid() {
 		return uid;
@@ -98,16 +106,54 @@ public class CprListCriteria extends AbstractListCriteria<CprListCriteria> {
 		return self();
 	}
 
+	public CprListCriteria specimen(String specimen) {
+		this.specimen = specimen;
+		return self();
+	}
 
 	public String specimen() {
 		return specimen;
 	}
-	
-	public Set<Long> siteIds() {
-		return siteIds;
+
+	public Set<Pair<Set<Long>, Long>> phiSiteCps() {
+		return phiSiteCps;
 	}
-	
-	public void siteIds(Set<Long> siteIds) {
-		this.siteIds = siteIds;
+
+	public CprListCriteria phiSiteCps(Set<Pair<Set<Long>, Long>> phiSiteCps) {
+		this.phiSiteCps = phiSiteCps;
+		return self();
+	}
+
+	public Set<Pair<Set<Long>, Long>> siteCps() {
+		return siteCps;
+	}
+
+	public CprListCriteria siteCps(Set<Pair<Set<Long>, Long>> siteCps) {
+		this.siteCps = siteCps;
+		return self();
+	}
+
+	public boolean useMrnSites() {
+		return useMrnSites;
+	}
+
+	public CprListCriteria useMrnSites(boolean useMrnSites) {
+		this.useMrnSites = useMrnSites;
+		return self();
+	}
+
+	public boolean hasPhiFields() {
+		return StringUtils.isNotBlank(name()) ||
+			StringUtils.isNotBlank(participantId()) ||
+			StringUtils.isNotBlank(uid()) ||
+			dob() != null;
+	}
+
+	public Set<Long> phiCps() {
+		if (CollectionUtils.isEmpty(phiSiteCps())) {
+			return Collections.emptySet();
+		}
+
+		return phiSiteCps().stream().map(siteCp -> siteCp.second()).collect(Collectors.toSet());
 	}
 }
