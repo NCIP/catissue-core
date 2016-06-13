@@ -169,17 +169,18 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req) {
 		try { 
 			CprListCriteria listCrit = req.getPayload();
+
 			ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(listCrit.cpId());
-			//When siteIds is null, access restriction is not enforced based on MRN sites
-			if (!access.admin && access.siteIds != null && access.siteIds.isEmpty()) {
-				return ResponseEvent.response(Collections.<CprSummary>emptyList());
-			} 
-			
-			listCrit.includePhi(access.phiAccess);
 			if (!access.admin) {
-				listCrit.siteIds(access.siteIds);
+				if (access.noAccessibleSites() || (!access.phiAccess && listCrit.hasPhiFields())) {
+					return ResponseEvent.response(Collections.emptyList());
+				}
 			}
-			
+
+			listCrit.includePhi(access.phiAccess)
+				.phiSiteCps(access.phiSiteCps)
+				.siteCps(access.siteCps)
+				.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
 			return ResponseEvent.response(daoFactory.getCprDao().getCprList(listCrit));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

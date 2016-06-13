@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -255,12 +256,68 @@ public class AccessCtrlMgr {
 	public static class ParticipantReadAccess {
 		public boolean admin;
 
-		public Set<Long> siteIds;
+		//
+		// phiSiteCps and siteCps is used for all accessible CPs
+		// [{[site ids], cp id}]
+		//
+		public Set<Pair<Set<Long>, Long>> phiSiteCps;
+
+		public Set<Pair<Set<Long>, Long>> siteCps;
 
 		public boolean phiAccess;
+
+		public boolean noAccessibleSites() {
+			return CollectionUtils.isEmpty(siteCps);
+		}
+	}
+
+	public ParticipantReadAccess getParticipantReadAccess() {
+		ParticipantReadAccess result = new ParticipantReadAccess();
+		result.phiAccess = true;
+
+		if (AuthUtil.isAdmin()) {
+			result.admin = true;
+			return result;
+		}
+
+		Long userId = AuthUtil.getCurrentUser().getId();
+		String[] ops = {Operation.READ.getName()};
+		String resource = Resource.PARTICIPANT.getName();
+		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+
+		resource = Resource.PARTICIPANT_DEID.getName();
+		accessList.addAll(daoFactory.getSubjectDao().getAccessList(userId, resource, ops));
+
+		Set<Pair<Set<Long>, Long>> phiSiteCps = new HashSet<>();
+		Set<Pair<Set<Long>, Long>> siteCps = new HashSet<>();
+		for (SubjectAccess access : accessList) {
+			Set<Site> sites;
+			if (access.getSite() != null) {
+				sites = Collections.singleton(access.getSite());
+			} else {
+				sites = getUserInstituteSites(userId);
+			}
+
+			Set<Long> siteIds = sites.stream().map(s -> s.getId()).collect(Collectors.toSet());
+			Long cpId = access.getCollectionProtocol() != null ? access.getCollectionProtocol().getId() : null;
+			if (Resource.PARTICIPANT.getName().equals(access.getResource())) {
+				phiSiteCps.add(Pair.make(siteIds, cpId));
+			}
+
+			siteCps.add(Pair.make(siteIds, cpId));
+		}
+
+		result.phiSiteCps = phiSiteCps;
+		result.siteCps = siteCps;
+		result.phiAccess = CollectionUtils.isNotEmpty(phiSiteCps);
+		return result;
 	}
 
 	public ParticipantReadAccess getParticipantReadAccess(Long cpId) {
+		if (cpId == null || cpId == -1L) {
+			return getParticipantReadAccess();
+		}
+
 		ParticipantReadAccess result = new ParticipantReadAccess();
 		result.phiAccess = true;
 
@@ -278,25 +335,24 @@ public class AccessCtrlMgr {
 			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
 			result.phiAccess = false;
 		}
-		
-		if (!isAccessRestrictedBasedOnMrn()) {
-			return result;
-		}
 
-		Set<Long> siteIds = new HashSet<Long>();
+		Set<Pair<Set<Long>, Long>> siteCps = new HashSet<>();
 		for (SubjectAccess access : accessList) {
 			Site accessSite = access.getSite();
+
 			if (accessSite != null) {
-				siteIds.add(accessSite.getId());
+				siteCps.add(Pair.make(Collections.singleton(accessSite.getId()), cpId));
 			} else if (accessSite == null) {
 				Set<Site> sites = getUserInstituteSites(userId);
-				for (Site site : sites) {
-					siteIds.add(site.getId());
-				}
+				siteCps.add(Pair.make(sites.stream().map(s -> s.getId()).collect(Collectors.toSet()), cpId));
 			}
 		}
 
-		result.siteIds = siteIds;
+		result.siteCps = siteCps;
+		if (result.phiAccess) {
+			result.phiSiteCps = result.siteCps;
+		}
+
 		return result;
 	}
 	
