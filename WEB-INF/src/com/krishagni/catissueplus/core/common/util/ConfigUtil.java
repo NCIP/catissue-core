@@ -13,7 +13,11 @@ public class ConfigUtil {
 	private ConfigurationService cfgSvc;
 		
 	public static ConfigUtil getInstance() {
-		if (instance == null) {
+		if (instance == null || instance.cfgSvc == null) {
+			//
+			// instance.cfgSvc == null is defensive check added, which is useful
+			// when app is incorrectly wired
+			//
 			instance = new ConfigUtil();
 		}
 		
