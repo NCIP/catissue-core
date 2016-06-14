@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Drop index on login name to add index on (login name, domain)" dbms="mysql">
+    <dropIndex tableName="CATISSUE_USER" indexName="LOGIN_NAME"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop unique constraint on login name to add same on (login name, domain)" dbms="oracle">
+    <dropUniqueConstraint
+      tableName="CATISSUE_USER"
+      constraintName="SYS_C00108351"
+      uniqueColumns="LOGIN_NAME"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique login name per auth domain">
+    <addUniqueConstraint
+      constraintName="CAT_USER_LNAME_DOMAIN_UQ"
+      tableName="CATISSUE_USER"
+      columnNames="LOGIN_NAME, DOMAIN_NAME"/>
+  </changeSet>
+
+</databaseChangeLog>

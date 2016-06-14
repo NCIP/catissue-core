@@ -136,14 +136,6 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public void setAuthDomain(AuthDomain authDomain) {
-		if (authDomain == null || StringUtils.isBlank(authDomain.getName())) {
-			throw OpenSpecimenException.userError(DOMAIN_NAME_REQUIRED);
-		}
-		
-		if (this.getAuthDomain() != null && !this.getAuthDomain().getId().equals(authDomain.getId())) {
-			throw OpenSpecimenException.userError(DOMAIN_CHANGE_NOT_ALLOWED);
-		}
-		
 		this.authDomain = authDomain;
 	}
 
@@ -277,6 +269,7 @@ public class User extends BaseEntity implements UserDetails {
 	public void update(User user) {
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());
+		this.setAuthDomain(user.getAuthDomain());
 		this.setActivityStatus(user.getActivityStatus());
 		this.setAddress(user.getAddress());
 		this.setDepartment(user.getDepartment());
