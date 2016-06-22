@@ -68,8 +68,8 @@ osApp.config(function(
           currentUser: function(User) {
             return User.getCurrentUser();
           },
-          authInit: function(AuthorizationService) {
-            return AuthorizationService.initializeUserRights();
+          authInit: function(currentUser, AuthorizationService) {
+            return AuthorizationService.initializeUserRights(currentUser);
           }
         },
         controller: 'SignedInCtrl'

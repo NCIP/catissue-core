@@ -190,7 +190,7 @@
       </field>
     </record>
 
-    <record type="extensions" entityType="SpecimenExtension">
+    <record type="customFields" entityType="SpecimenExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

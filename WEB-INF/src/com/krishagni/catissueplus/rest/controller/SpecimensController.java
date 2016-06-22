@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
@@ -322,22 +323,17 @@ public class SpecimensController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public FormCtxtSummary getForm(
-			@RequestParam(value = "lineage", required = false, defaultValue="New")
-			String lineage) {
+	public Map<String, Object> getForm(
+			@RequestParam(value = "cpId", required = false, defaultValue = "-1")
+			Long cpId) {
 
-		ListEntityFormsOp op = new ListEntityFormsOp();
-		op.setEntityType(EntityType.SPECIMEN_EXTN);
-
-		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(getRequest(op));
-		resp.throwErrorIfUnsuccessful();
-		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+		return formSvc.getExtensionInfo(cpId, Specimen.EXTN);
 	}
-	
+
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
 	}

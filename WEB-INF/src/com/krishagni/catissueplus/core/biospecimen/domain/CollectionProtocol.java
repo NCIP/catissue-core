@@ -49,6 +49,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		NONE;
 	}
 
+	public static final String EXTN = "CollectionProtocolExtension";
+
 	private static final String ENTITY_NAME = "collection_protocol";
 	
 	private String title;
@@ -601,7 +603,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 	
 	@Override
 	public String getEntityType() {
-		return "CollectionProtocolExtension";
+		return EXTN;
 	}
 	
 	public CollectionProtocolEvent firstEvent() {

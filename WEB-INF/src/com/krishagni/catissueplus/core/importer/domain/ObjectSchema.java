@@ -40,11 +40,7 @@ public class ObjectSchema {
 	public void setRecord(Record record) {
 		this.record = record;
 	}
-	
-	public List<Record> getExtensionRecord() {
-		return getExtensionRecord(record);
-	}
-	
+
 	public List<String> getKeyColumnNames() {
 		return record.getFields().stream()
 			.filter(field -> field.isKey())
@@ -76,19 +72,6 @@ public class ObjectSchema {
 		xstream.addImplicitCollection(Record.class, "fields", "field", Field.class);
 		
 		return xstream;
-	}
-	
-	private List<Record> getExtensionRecord(Record record) {
-		List<Record> extnRecords = new ArrayList<Record>();
-		for (Record subRecord : record.getSubRecords()) {
-			if (subRecord.getType() != null && subRecord.getType().equals("extensions")) {
-				extnRecords.add(subRecord);
-			}
-			
-			extnRecords.addAll(getExtensionRecord(subRecord));
-		}
-		
-		return extnRecords;
 	}
 
 	public static class Record {

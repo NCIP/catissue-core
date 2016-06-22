@@ -22,6 +22,8 @@ import com.krishagni.catissueplus.core.de.domain.SavedQuery;
 @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @AuditTable(value = "CAT_DISTRIBUTION_PROTOCOL_AUD")
 public class DistributionProtocol extends BaseExtensionEntity {
+	public static final String EXTN = "DistributionProtocolExtension";
+
 	private static final String ENTITY_NAME = "distribution_protocol";
 
 	private Institute institute;
@@ -220,6 +222,6 @@ public class DistributionProtocol extends BaseExtensionEntity {
 
 	@Override
 	public String getEntityType() {
-		return "DistributionProtocolExtension";
+		return EXTN;
 	}
 }

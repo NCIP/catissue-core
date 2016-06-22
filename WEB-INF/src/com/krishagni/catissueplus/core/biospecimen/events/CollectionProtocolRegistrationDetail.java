@@ -9,6 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
 public class CollectionProtocolRegistrationDetail {
@@ -148,9 +149,11 @@ public class CollectionProtocolRegistrationDetail {
 	}
 
 	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi, List<CollectionProtocolRegistration> otherCprs) {
+		Participant participant = cpr.getParticipant();
+		participant.setCpId(cpr.getCollectionProtocol().getId());
+
 		CollectionProtocolRegistrationDetail detail = new CollectionProtocolRegistrationDetail();
-		
-		detail.setParticipant(ParticipantDetail.from(cpr.getParticipant(), excludePhi, otherCprs));
+		detail.setParticipant(ParticipantDetail.from(participant, excludePhi, otherCprs));
 		detail.setId(cpr.getId());		
 		detail.setActivityStatus(cpr.getActivityStatus());
 		detail.setBarcode(cpr.getBarcode());

@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -30,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierDetail;
@@ -50,9 +50,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.Resource;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.CpCatalogSettingDetail;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
-import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp.EntityType;
+import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.services.CatalogService;
 import com.krishagni.catissueplus.core.de.services.FormService;
@@ -437,21 +435,25 @@ public class CollectionProtocolsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public FormCtxtSummary getForm() {
-		ListEntityFormsOp op = new ListEntityFormsOp();
-		op.setEntityType(EntityType.CP_EXTN); 
-        
-		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+	public Map<String, Object> getForm() {
+		return formSvc.getExtensionInfo(-1L, CollectionProtocol.EXTN);
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/forms")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<FormSummary> getForms(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestParam(value = "entityType", required = true)
+			String[] entityTypes) {
+		return formSvc.getEntityForms(cpId, entityTypes);
+	}
 	@RequestMapping(method = RequestMethod.POST, value="/merge")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

@@ -33,7 +33,6 @@ import com.krishagni.catissueplus.core.de.events.FormFieldSummary;
 import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
 import com.krishagni.catissueplus.core.de.events.FormRecordsList;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
-import com.krishagni.catissueplus.core.de.events.FormType;
 import com.krishagni.catissueplus.core.de.events.GetFormFieldPvsOp;
 import com.krishagni.catissueplus.core.de.events.GetFormRecordsListOp;
 import com.krishagni.catissueplus.core.de.events.ListFormFields;
@@ -231,7 +230,7 @@ public class FormsController {
 		RemoveFormContextOp op = new RemoveFormContextOp();
 		op.setCpId(cpId);
 		op.setFormId(formId);
-		op.setFormType(FormType.fromType(entityType));
+		op.setEntityType(entityType);
 		op.setRemoveType(RemoveType.SOFT_REMOVE);
 
 		ResponseEvent<Boolean> resp = formSvc.removeFormContext(getRequest(op));

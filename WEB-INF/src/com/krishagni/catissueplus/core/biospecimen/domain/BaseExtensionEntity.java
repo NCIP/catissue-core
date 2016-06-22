@@ -57,7 +57,7 @@ public abstract class BaseExtensionEntity extends BaseEntity {
 			
 			@Override
 			public String getFormName() {
-				return getFormNameByEntityType();
+				return getFormNameByEntityType(getCpId());
 			}
 			
 			@Override
@@ -67,7 +67,7 @@ public abstract class BaseExtensionEntity extends BaseEntity {
 			
 			@Override
 			public Long getCpId() {
-				return -1L;
+				return BaseExtensionEntity.this.getCpId();
 			} 
 		};
 		
@@ -85,6 +85,10 @@ public abstract class BaseExtensionEntity extends BaseEntity {
 	}
 	
 	public abstract String getEntityType();
+
+	protected Long getCpId() {
+		return -1L;
+	}
 	
 	private Long getRecordId(DeObject extnObj) {
 		List<Long> recIds = extnObj.getRecordIds();

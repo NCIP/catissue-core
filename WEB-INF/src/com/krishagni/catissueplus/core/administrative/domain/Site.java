@@ -23,6 +23,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class Site extends BaseExtensionEntity {
+	public static final String EXTN = "SiteExtension";
+
 	private static final String ENTITY_NAME = "site";
 
 	private String name;
@@ -207,7 +209,7 @@ public class Site extends BaseExtensionEntity {
 	
 	@Override
 	public String getEntityType() {
-		return "SiteExtension";
+		return EXTN;
 	}
 	
 	private void updateActivityStatus(String newActivityStatus) {

@@ -51,6 +51,8 @@ public class Specimen extends BaseExtensionEntity {
 	public static final String ACCEPTABLE = "Acceptable";
 	
 	public static final String NOT_SPECIFIED = "Not Specified";
+
+	public static final String EXTN = "SpecimenExtension";
 	
 	private static final String ENTITY_NAME = "specimen";
 
@@ -1062,7 +1064,12 @@ public class Specimen extends BaseExtensionEntity {
 	
 	@Override
 	public String getEntityType() {
-		return "SpecimenExtension";
+		return EXTN;
+	}
+
+	@Override
+	public Long getCpId() {
+		return getCollectionProtocol().getId();
 	}
 
 	//

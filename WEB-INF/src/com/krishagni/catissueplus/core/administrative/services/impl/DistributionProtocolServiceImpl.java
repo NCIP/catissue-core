@@ -44,9 +44,7 @@ import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
-import com.krishagni.catissueplus.core.de.events.ListEntityFormsOp;
-import com.krishagni.catissueplus.core.de.repository.FormDao;
+import com.krishagni.catissueplus.core.de.services.FormService;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class DistributionProtocolServiceImpl implements DistributionProtocolService, ObjectStateParamsResolver {
@@ -65,7 +63,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	
 	private DpRequirementFactory dprFactory;
 
-	private FormDao formDao;
+	private FormService formSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -79,8 +77,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		this.dprFactory = dprFactory;
 	}
 
-	public void setFormDao(FormDao formDao) {
-		this.formDao = formDao;
+	public void setFormSvc(FormService formSvc) {
+		this.formSvc = formSvc;
 	}
 
 	private DpRequirementDao getDprDao() {
@@ -325,15 +323,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FormCtxtSummary> getExtensionForm() {
-		try {
-			List<FormCtxtSummary> forms = formDao.getFormContexts(-1L, "DistributionProtocolExtension");
-			return ResponseEvent.response(CollectionUtils.isNotEmpty(forms) ? forms.get(0) : null);
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+	public ResponseEvent<Map<String, Object>> getExtensionForm() {
+		return ResponseEvent.response(formSvc.getExtensionInfo(-1L, DistributionProtocol.EXTN));
 	}
 
 	@Override

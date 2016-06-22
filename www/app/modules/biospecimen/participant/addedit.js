@@ -67,7 +67,9 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       cprToSave.$saveOrUpdate().then(
         function(savedCpr) {
           if (savedCpr.activityStatus == 'Active') {
+            var registeredCps = cpr.participant.registeredCps;
             angular.extend(cpr, savedCpr);
+            cpr.participant.registeredCps = registeredCps;
             $state.go('participant-detail.overview', {cprId: savedCpr.id});
           } else {
             $state.go('participant-list', {cpId: $scope.cp.id});

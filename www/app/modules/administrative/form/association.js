@@ -54,11 +54,16 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
         }
       }
 
+      var multipleRecs = formCtxt.selectedEntity.multipleRecs;
+      if (multipleRecs != false) {
+        multipleRecs = formCtxt.isMultiRecord;
+      }
+
       var formContext = {
         form: $scope.form,
         cpIds: cpIds,
         entity: formCtxt.selectedEntity.name,
-        isMultiRecord: formCtxt.isMultiRecord
+        isMultiRecord: multipleRecs
       }
 
       formContext = $scope.form.newFormContext(formContext); 

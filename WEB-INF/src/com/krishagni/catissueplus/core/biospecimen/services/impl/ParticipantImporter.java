@@ -58,5 +58,6 @@ public class ParticipantImporter implements ObjectImporter<ParticipantDetail, Pa
 		}
 		
 		detail.setId(cpr.getParticipant().getId());
+		detail.setCpId(cpr.getCollectionProtocol().getId());
 	}
 }

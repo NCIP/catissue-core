@@ -16,7 +16,7 @@ angular.module('openspecimen')
       template:
         '<canvas class="chart-base" chart-type="options.type" chart-data="data.values" ' +
         '  chart-labels="data.categories" chart-series="data.series" chart-options="options" ' +
-        '  chart-legend="false">' +
+        '  chart-legend="true">' +
         '</canvas>'
     }
   });

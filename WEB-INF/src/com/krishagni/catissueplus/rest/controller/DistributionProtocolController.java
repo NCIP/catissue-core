@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -192,8 +193,8 @@ public class DistributionProtocolController {
 	@RequestMapping(method = RequestMethod.GET, value = "/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public FormCtxtSummary getForm() {
-		ResponseEvent<FormCtxtSummary> resp = dpSvc.getExtensionForm();
+	public Map<String, Object> getForm() {
+		ResponseEvent<Map<String, Object>> resp = dpSvc.getExtensionForm();
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

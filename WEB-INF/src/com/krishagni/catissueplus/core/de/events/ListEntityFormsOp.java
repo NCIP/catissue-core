@@ -22,9 +22,19 @@ public class ListEntityFormsOp  {
 		SPECIMEN_EXTN
 	};
 
+	private Long cpId = -1L;
+
 	private Long entityId;
 	
 	private EntityType entityType;
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
 
 	public Long getEntityId() {
 		return entityId;

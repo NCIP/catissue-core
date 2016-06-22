@@ -24,12 +24,29 @@ angular.module('os.biospecimen.participant',
       .state('cp-view', {
         url: '/cp-view/:cpId',
         template: '<div ui-view></div>',
-        controller: function($scope, cp) {
+        controller: function($scope, cp, cpViewCtx) {
           $scope.cp = cp;
+          $scope.cpViewCtx = cpViewCtx;
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
             return CollectionProtocol.getById($stateParams.cpId);
+          },
+
+          cpViewCtx: function(cp, AuthorizationService) {
+            return {
+              participantUpdateAllowed: AuthorizationService.isAllowed({
+                resource: 'ParticipantPhi',
+                operations: ['Create', 'Update'],
+                cp: cp.shortTitle
+              }),
+
+              visitSpecimenUpdateAllowed: AuthorizationService.isAllowed({
+                resource: 'VisitAndSpecimen',
+                operations: ['Create', 'Update'],
+                cp: cp.shortTitle
+              })
+            }
           }
         },
         parent: 'signed-in',
@@ -50,6 +67,57 @@ angular.module('os.biospecimen.participant',
                 cp.catalogQuery = query;
               }
             );
+          }
+        },
+        parent: 'cp-view'
+      })
+      .state('import-cp-objs', {
+        url: '/import-cp-objs',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          allowedEntityTypes: function(cpViewCtx) {
+            var entityTypes = [];
+            if (cpViewCtx.participantUpdateAllowed) {
+              entityTypes.push('Participant');
+            }
+
+            if (cpViewCtx.visitSpecimenUpdateAllowed) {
+              entityTypes = entityTypes.concat(['SpecimenCollectionGroup', 'Specimen', 'SpecimenEvent']);
+            }
+
+            return entityTypes;
+          },
+
+          forms: function(cp, allowedEntityTypes) {
+            return allowedEntityTypes.length > 0 ? cp.getForms(allowedEntityTypes) : [];
+          },
+
+          importDetail: function(cp, allowedEntityTypes, forms, ImportUtil) {
+            return ImportUtil.getImportDetail(cp, allowedEntityTypes, forms);
+          }
+        },
+        parent: 'cp-view'
+      })
+      .state('import-cp-jobs', {
+        url: '/import-cp-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function(cp) {
+            return {
+              breadcrumbs: [
+                {state: 'cp-detail.overview', title:  cp.shortTitle,     params: '{cpId:' + cp.id + '}'},
+                {state: 'participant-list',   title: 'participant.list', params: '{cpId:' + cp.id + '}'}
+              ],
+              title: 'bulk_imports.jobs_list',
+              objectTypes: [
+                'cpr', 'participant', 'consent', 'visit',
+                'specimen', 'specimenDerivative', 'specimenAliquot',
+                'masterSpecimen', 'extensions'
+              ],
+              objectParams: {cpId: cp.id}
+            }
           }
         },
         parent: 'cp-view'
@@ -108,8 +176,8 @@ angular.module('os.biospecimen.participant',
           return CpConfigSvc.getRegParticipantCtrl($stateParams.cpId, $stateParams.cprId);
         },
         resolve: {
-          extensionCtxt: function(Participant) {
-            return Participant.getExtensionCtxt();
+          extensionCtxt: function(cp, Participant) {
+            return Participant.getExtensionCtxt({cpId: cp.id});
           }
         },
         parent: 'participant-root'

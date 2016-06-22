@@ -61,8 +61,8 @@ angular.module('os.biospecimen.specimen',
           );
         },
         resolve: {
-          extensionCtxt: function(specimen) {
-            return specimen.getExtensionCtxt();
+          extensionCtxt: function(cp, specimen) {
+            return specimen.getExtensionCtxt({cpId: cp.id});
           }
         },
         controller: 'AddEditSpecimenCtrl',
@@ -165,8 +165,8 @@ angular.module('os.biospecimen.specimen',
           );
         },
         resolve: {
-          extensionCtxt: function(Specimen) {
-            return Specimen.getExtensionCtxt({"lineage": "Derived"});
+          extensionCtxt: function(cp, Specimen) {
+            return Specimen.getExtensionCtxt({cpId: cp.id});
           }
         },
         controller: 'AddDerivativeCtrl',
@@ -183,8 +183,8 @@ angular.module('os.biospecimen.specimen',
           );
         },
         resolve: {
-          extensionCtxt: function(Specimen) {
-            return Specimen.getExtensionCtxt();
+          extensionCtxt: function(cp, Specimen) {
+            return Specimen.getExtensionCtxt({cpId: cp.id});
           }
         },
         controller: 'AddAliquotsCtrl',

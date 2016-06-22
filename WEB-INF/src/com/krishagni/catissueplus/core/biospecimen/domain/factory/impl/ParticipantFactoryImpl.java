@@ -342,6 +342,8 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setExtension(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		participant.setCpId(detail.getCpId());
+
 		DeObject extension = DeObject.createExtension(detail.getExtensionDetail(), participant);
 		participant.setExtension(extension);
 	}

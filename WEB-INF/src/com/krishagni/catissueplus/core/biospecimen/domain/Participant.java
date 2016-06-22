@@ -26,6 +26,8 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Audited
 public class Participant extends BaseExtensionEntity {
 	private static final String ENTITY_NAME = "participant";
+
+	public static final String EXTN = "ParticipantExtension";
 	
 	private String lastName;
 
@@ -41,25 +43,23 @@ public class Participant extends BaseExtensionEntity {
 
 	private Set<String> races = new HashSet<String>();
 
-	protected String ethnicity;
+	private String ethnicity;
 
-	protected String uid;
+	private String uid;
 
-	protected String activityStatus;
+	private String activityStatus;
 
-	protected Date deathDate;
+	private Date deathDate;
 
-	protected String vitalStatus;
+	private String vitalStatus;
 	
-	protected String empi;
+	private String empi;
 	
-	protected Set<ParticipantMedicalIdentifier> pmis = new HashSet<ParticipantMedicalIdentifier>();
+	private Set<ParticipantMedicalIdentifier> pmis = new HashSet<>();
 
-	protected Set<CollectionProtocolRegistration> cprs = new HashSet<CollectionProtocolRegistration>();
-	
-	public static String getEntityName() {
-		return ENTITY_NAME;
-	}
+	private Set<CollectionProtocolRegistration> cprs = new HashSet<>();
+
+	private transient Long cpId = -1L;
 
 	public String getLastName() {
 		return lastName;
@@ -267,7 +267,16 @@ public class Participant extends BaseExtensionEntity {
 
 	@Override
 	public String getEntityType() {
-		return "ParticipantExtension";
+		return EXTN;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
+	@Override
+	public Long getCpId() {
+		return cpId;
 	}
 
 	public List<ParticipantMedicalIdentifier> getPmisOrderedById() {
@@ -278,6 +287,10 @@ public class Participant extends BaseExtensionEntity {
 	
 	public CollectionProtocolRegistration getCpr(CollectionProtocol cp) {
 		return getCprs().stream().filter(cpr -> cpr.getCollectionProtocol().equals(cp)).findFirst().orElse(null);
+	}
+
+	public static String getEntityName() {
+		return ENTITY_NAME;
 	}
 
 	private void updatePmis(Participant participant) {

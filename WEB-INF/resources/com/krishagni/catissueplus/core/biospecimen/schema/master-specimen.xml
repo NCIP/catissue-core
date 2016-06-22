@@ -134,7 +134,7 @@
       <attribute>receiver</attribute>
     </field>
 
-    <record type="extensions" entityType="SpecimenExtension">
+    <record type="customFields" entityType="SpecimenExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

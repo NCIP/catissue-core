@@ -1,6 +1,6 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
+    <ul os-breadcrumbs ng-show="importDetail.breadcrumbs.length > 0">
       <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
         <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
       </li>

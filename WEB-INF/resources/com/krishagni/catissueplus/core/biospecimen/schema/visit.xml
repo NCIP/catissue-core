@@ -87,7 +87,7 @@
       <attribute>activityStatus</attribute>
     </field>  
 
-    <record type="extensions" entityType="VisitExtension">
+    <record type="customFields" entityType="VisitExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

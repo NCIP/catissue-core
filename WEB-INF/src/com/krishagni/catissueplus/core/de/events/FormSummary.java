@@ -21,6 +21,8 @@ public class FormSummary {
 	
 	private boolean sysForm;
 
+	private String entityType;
+
 	public Long getFormId() {
 		return formId;
 	}
@@ -83,5 +85,13 @@ public class FormSummary {
 
 	public void setSysForm(boolean sysForm) {
 		this.sysForm = sysForm;
+	}
+
+	public String getEntityType() {
+		return entityType;
+	}
+
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
 	}
 }

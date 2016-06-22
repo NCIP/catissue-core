@@ -51,8 +51,6 @@
     "server_connect_error": "Unable to connect server",
     "recent_activity": "Recent Activity",
     "no_file_selected": "No File Selected",
-    "view_jobs": "View Jobs",
-    "view_import_jobs": "View Import Jobs",
     "digits": "digits",
     "not_specified": "Not Specified",
     "enabled": "Enabled",
@@ -269,6 +267,7 @@
   },
 
   "participant": {
+    "title": "Participant",
     "list": "Participants",
    
     "id": "MPI / MRN / NIN",
@@ -328,13 +327,7 @@
       "lnameAndDob": "Last Name and DOB"
     },
 
-    "bulk_reg_participants": "Bulk Register Participants",
-    "bulk_update_participants": "Bulk Update Participants",
-    "bulk_import_master_specimens": "Bulk Import Master Specimens",
-    "part_updates": "Participant Updates",
-    "part_extensions": "Participant Forms",
     "consents": "Consents",
-    "bulk_import_consents": "Bulk Import Consents",
     "registrations": "Participant Registrations",
     "master_specimens": "Master Specimens",
     "registered_cps": "Registered Protocols",
@@ -348,7 +341,8 @@
       "ignore_matches": "Ignore Matches and Proceed",
       "lookup_again": "Lookup Again",
       "bulk_register": "Bulk Register",
-      "specimen_catalog": "Specimen Catalog"
+      "specimen_catalog": "Specimen Catalog",
+      "import": "Import"
     },
 
     "menu": {
@@ -393,8 +387,6 @@
     "eos": "EOS",
     "end_of_study": "End of Study",
 
-    "bulk_import": "Bulk Import Visits",
-    "visit_extensions": "Visit Forms",
     "names_print_job_created": "Visit names print job {{jobId}} created successfully",
 
     "spr": "Surgical Pathology Report",
@@ -520,13 +512,8 @@
     "visit_site": "Visit Site",
 
     "labels_print_job_created": "Specimen labels print job {{jobId}} created successfully",
-    "bulk_import": "Bulk Import Specimens",
-    "spmn_extensions": "Specimen Forms",
-    "spmn_events": "Specimen Events",
     "spmn_aliquots": "Specimen Aliquots",
-    "bulk_import_aliquots": "Bulk Import Aliquots",
     "spmn_derivatives": "Specimen Derivatives",
-    "bulk_import_derivatives": "Bulk Import Derivatives",
     "new_aliquot_count": "Number of aliquots",
 
     "specimens_hierarchy_deleted": "Selected specimens and their children are deleted successfully",
@@ -1370,7 +1357,13 @@
     "consent_response": "Consent Response",
     "consent": "Consent",
     "container": "Container",
-    "container_type": "Container Type"
+    "container_type": "Container Type",
+    "participant_extension": "Participant Custom Fields",
+    "visit_extension": "Visit Custom Fields",
+    "specimen_extension": "Specimen Custom Fields",
+    "site_extension": "Site Custom Fields",
+    "cp_extension": "Collection Protocol Custom Fields",
+    "dp_extension": "Distribution Protocol Custom Fields"
   },
 
   "bulk_imports": {
@@ -1396,6 +1389,12 @@
     "failed_records": "Failed",
     "status": "Status",
     "file": "Report File",
+
+    "select_record_type": "Select Records Type",
+    "jobs_list": "Bulk Import Jobs",
+    "view_jobs": "View Jobs",
+    "view_import_jobs": "View Import Jobs",
+    "import": "Import",
  
     "object_types": {
       "user": "Users",

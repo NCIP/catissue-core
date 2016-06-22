@@ -130,7 +130,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		try {
 			CollectionProtocolRegistrationDetail detail = req.getPayload();
 			
-			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getPpid());
+			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getCpShortTitle(), detail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 
 			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);			

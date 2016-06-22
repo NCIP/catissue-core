@@ -2,7 +2,9 @@
   <div os-page-header>
     <ul os-breadcrumbs>
       <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
-        <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
+        <a ui-sref="{{breadcrumb.state}}({{breadcrumb.params}})">
+          <span translate="{{breadcrumb.title}}"></span>
+        </a>
       </li>
     </ul>
     <h3>
@@ -11,15 +13,21 @@
   </div>
 
   <div class="container">
-    <form class="form-horizontal" ng-if="importDetail.objectType == 'extensions'">
+    <form class="form-horizontal" ng-if="importDetail.types.length > 0">
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="bulk_imports.select_extn">
-          Select Form
+        <label class="col-xs-3 control-label" translate="bulk_imports.select_record_type">
+          Select Record Type
         </label>
-        <div class="col-xs-4">
-          <os-select ng-model="extn.selectedForm" list="extn.formsList" display-prop="caption" 
-            required on-select="onFormSelect()">
-          </os-select>
+        <div class="col-xs-6">
+          <ui-select name="objectType" ng-model="importDetail.objectType" on-select="onTypeSelect($select.selected)">
+            <ui-select-match placeholder="{{'bulk_imports.select_record_type' | translate}}">
+              {{$select.selected.title | translate}}
+            </ui-select-match>
+            <ui-select-choices group-by="'group'"
+              repeat="type.type as type in importDetail.types | filter: $select.search">
+              <span ng-bind-html="type.title | translate | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
         </div>
       </div>
     </form>
@@ -29,7 +37,7 @@
         <label class="col-xs-3 control-label" translate="bulk_imports.input_file">
           Input File
         </label>
-        <div class="col-xs-4">
+        <div class="col-xs-6">
           <div os-file-upload ctrl="fileImporter"></div>
         </div>
         <div class="clearfix">
@@ -49,7 +57,7 @@
         <label class="col-xs-3 control-label" translate="bulk_imports.import_type">
           Import Type
         </label>
-        <div class="col-xs-4 clearfix">
+        <div class="col-xs-6 clearfix">
           <label class="radio-inline col-xs-3">
             <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'CREATE'"> 
             <span translate="bulk_imports.create"></span>

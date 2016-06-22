@@ -50,26 +50,6 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		return getObjectSchema(form, entityType);
 	}
 	
-	@PlusTransactional
-	public ObjectSchema getObjectSchema(String entityType) {
-		List<Long> ids = formDao.getFormIds(-1L, entityType);
-		if (ids.isEmpty()) {
-			return null;
-		}
-		
-		Container form = Container.getContainer(ids.get(0));
-		Record attrs = getFormRecord(form, false);
-		attrs.setAttribute("attrsMap");
-		
-		Record record = new Record();
-		record.setCaption(form.getCaption());
-		record.setSubRecords(Collections.singletonList(attrs));
-		
-		ObjectSchema objectSchema = new ObjectSchema();
-		objectSchema.setRecord(record);
-		return objectSchema;
-	}
-	
 	private  ObjectSchema getObjectSchema(Container form, String entityType) {
 		Record record = new Record();  
 		
@@ -97,11 +77,11 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		return objectSchema;
 	}
 	
-	private Record getFormRecord(Container form) {
+	protected Record getFormRecord(Container form) {
 		return getFormRecord(form, true);
 	}
 	
-	private Record getFormRecord(Container form, boolean useUdn) {
+	protected Record getFormRecord(Container form, boolean useUdn) {
 		List<Field> fields = new ArrayList<Field>();
 		List<Record> subRecords = new ArrayList<Record>();
 		

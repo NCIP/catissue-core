@@ -1,13 +1,13 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
-import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
+import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 
-public class CprImporter implements ObjectImporter<ParticipantRegistrationsList, ParticipantRegistrationsList> {
+public class CprImporter implements ObjectImporter<CollectionProtocolRegistrationDetail, CollectionProtocolRegistrationDetail> {
 	
 	private CollectionProtocolRegistrationService cprSvc;
 	
@@ -16,16 +16,16 @@ public class CprImporter implements ObjectImporter<ParticipantRegistrationsList,
 	}
 
 	@Override
-	public ResponseEvent<ParticipantRegistrationsList> importObject(RequestEvent<ImportObjectDetail<ParticipantRegistrationsList>> req) {
+	public ResponseEvent<CollectionProtocolRegistrationDetail> importObject(RequestEvent<ImportObjectDetail<CollectionProtocolRegistrationDetail>> req) {
 		try {
-			ImportObjectDetail<ParticipantRegistrationsList> detail = req.getPayload();
-			RequestEvent<ParticipantRegistrationsList> bulkRegReq = new RequestEvent<ParticipantRegistrationsList>(detail.getObject());
+			ImportObjectDetail<CollectionProtocolRegistrationDetail> detail = req.getPayload();
+			RequestEvent<CollectionProtocolRegistrationDetail> cprReq = new RequestEvent<>(detail.getObject());
 			
 			if (detail.isCreate()) {
-				return cprSvc.createRegistrations(bulkRegReq); 
+				return cprSvc.createRegistration(cprReq);
+			} else {
+				return cprSvc.updateRegistration(cprReq);
 			}
-			
-			return null;
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

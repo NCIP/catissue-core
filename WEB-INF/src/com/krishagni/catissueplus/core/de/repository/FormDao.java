@@ -8,6 +8,7 @@ import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 
 import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 import com.krishagni.catissueplus.core.de.events.FormContextDetail;
@@ -25,7 +26,9 @@ public interface FormDao extends Dao<FormContextBean>{
 	public List<FormSummary> getQueryForms();
 			
 	public List<FormSummary> getFormsByEntityType(String entityType);
-	
+
+	public List<FormSummary> getFormsByCpAndEntityType(Long cpId, String[] entityTypes);
+
 	public List<FormContextDetail> getFormContexts(Long formId);
 	
 	public List<FormCtxtSummary> getCprForms(Long cprId);
@@ -47,6 +50,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public FormContextBean getQueryFormContext(Long formId);
 
 	public List<FormContextBean> getFormContexts(Collection<Long> cpIds, String entityType);
+
+	public Pair<String, Long> getFormNameContext(Long cpId, String entityType);
 	
 	public void saveOrUpdateRecordEntry(FormRecordEntryBean recordEntry);
 	

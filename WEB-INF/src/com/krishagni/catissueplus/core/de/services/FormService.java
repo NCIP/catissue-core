@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,4 +79,8 @@ public interface FormService {
 	public ResponseEvent<List<PermissibleValue>> getPvs(RequestEvent<GetFormFieldPvsOp> req);
 
 	public void addFormContextProc(String entity, FormContextProcessor proc);
+
+	public Map<String, Object> getExtensionInfo(Long cpId, String entityType);
+
+	public List<FormSummary> getEntityForms(Long cpId, String[] entityTypes);
 }

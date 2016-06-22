@@ -121,16 +121,19 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);
 			return;
 		}
-		
-		Long participantId = participantDetail.getId();
+
+		if (cpr.getCollectionProtocol() != null) {
+			participantDetail.setCpId(cpr.getCollectionProtocol().getId());
+		}
+
 		Participant participant;
-		if (participantId == null) {
+		if (participantDetail.getId() == null) {
 			participant = participantFactory.createParticipant(participantDetail);			
 			if (participant == null) {
 				ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);
 			}
 		} else {
-			participant = daoFactory.getParticipantDao().getById(participantId);
+			participant = daoFactory.getParticipantDao().getById(participantDetail.getId());
 			if (participant == null) {
 				ose.addError(ParticipantErrorCode.NOT_FOUND);
 			} else {

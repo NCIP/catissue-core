@@ -14,7 +14,7 @@
         </div>
         <div class="os-table-body">
           <div class="row" ng-repeat="dependentEntity in entity.dependentEntities">
-            <div class="col col-xs-6">{{'entities.' + entity.entityMap[dependentEntity.name] | translate }}</div>
+            <div class="col col-xs-6">{{entity.entityMap[dependentEntity.name]}}</div>
             <div class="col col-xs-6">{{dependentEntity.count}}</div>
           </div>
         </div>

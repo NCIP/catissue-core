@@ -60,6 +60,9 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	private String cpShortTitle;
 	
 	private String ppid;
+
+	// Used for CP based custom fields
+	private Long cpId = -1L;
 	
 	public Long getId() {
 		return id;
@@ -222,7 +225,15 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	public void setPpid(String ppid) {
 		this.ppid = ppid;
 	}
-	
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
+	}
+
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {
 		return from(participant, excludePhi, null);
 	}

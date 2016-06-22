@@ -8,12 +8,6 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
 
     function init() {
       $scope.formFilterOpts = {};
-      $scope.entityMap = {
-        Participant: 'participant', 
-        Specimen: 'specimen', 
-        SpecimenCollectionGroup: 'visit', 
-        SpecimenEvent: 'specimen_event'
-      };
       $scope.formsList = [];
       loadForms($scope.formFilterOpts);
       Util.filter($scope, 'formFilterOpts', loadForms);
@@ -88,7 +82,16 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
 
 
     $scope.confirmFormDeletion = function(form) {
-      form.entityMap = $scope.entityMap;
+      FormEntityReg.getEntities().then(
+        function(entities) {
+          form.entityMap = {};
+          angular.forEach(entities,
+            function(entity) {
+              form.entityMap[entity.name] = entity.caption;
+            }
+          );
+        }
+      );
       form.dependentEntities = [];
       form.getDependentEntities().then(
         function(result) {

@@ -61,7 +61,7 @@
       <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="caption"
         placeholder="{{'form.select_level' | translate }}" append-to-body="true">
       </os-select>
-      <div class="checkbox">
+      <div class="checkbox" ng-show="cpFormCtxt.selectedEntity.multipleRecs != false">
         <label>
           <input type="checkbox" ng-checked="cpFormCtxt.isMultiRecord" ng-model="cpFormCtxt.isMultiRecord"/>
           <span translate="form.multiple_records_allowed">Multiple records allowed</span>

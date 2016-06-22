@@ -17,6 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.FormListCriteria;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -24,6 +28,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.de.domain.DeObject;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.AddRecordEntryOp;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -71,6 +76,8 @@ import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
 public class FormServiceImpl implements FormService {
+	private static final String CP_FORM = "CollectionProtocol";
+
 	private static final String PARTICIPANT_FORM = "Participant";
 	
 	private static final String SCG_FORM = "SpecimenCollectionGroup";
@@ -79,32 +86,24 @@ public class FormServiceImpl implements FormService {
 	
 	private static final String SPECIMEN_EVENT_FORM = "SpecimenEvent";
 	
-	private static final List<String> COLLECTION_PROTOCOL_EXTNS = Arrays.asList("CollectionProtocolExtension");
+	private static Set<String> staticExtendedForms = new HashSet<>();
 	
-	private static final List<String> PARTICIPANT_EXTNS = Arrays.asList("ParticipantExtension");
-	
-	private static final List<String> VISIT_EXTNS = Arrays.asList("VisitExtension");
-	
-	private static final List<String> SPECIMEN_EXTNS =  Arrays.asList("SpecimenExtension", "DerivativeExtension", "AliquotExtension");
-	
-	private static Set<String> staticExtendedForms = new HashSet<String>();
-	
-	private static Map<String, List<String>> customFieldForms = new HashMap<String, List<String>>();
+	private static Map<String, String> customFieldEntities = new HashMap<>();
 
 	static {
 		staticExtendedForms.add(PARTICIPANT_FORM);
 		staticExtendedForms.add(SCG_FORM);
 		staticExtendedForms.add(SPECIMEN_FORM);
-		
-		customFieldForms.put("CollectionProtocol", COLLECTION_PROTOCOL_EXTNS);
-		customFieldForms.put("Participant", PARTICIPANT_EXTNS);
-		customFieldForms.put("SpecimenCollectionGroup", VISIT_EXTNS);
-		customFieldForms.put("Specimen", SPECIMEN_EXTNS);
+
+		customFieldEntities.put(CP_FORM, CollectionProtocol.EXTN);
+		customFieldEntities.put(PARTICIPANT_FORM, Participant.EXTN);
+		customFieldEntities.put(SCG_FORM, Visit.EXTN);
+		customFieldEntities.put(SPECIMEN_FORM, Specimen.EXTN);
 	}
 	
 	private FormDao formDao;
 	
-	private Map<String, List<FormContextProcessor>> ctxtProcs = new HashMap<String, List<FormContextProcessor>>();
+	private Map<String, List<FormContextProcessor>> ctxtProcs = new HashMap<>();
 
 	public void setFormDao(FormDao formDao) {
 		this.formDao = formDao;
@@ -191,11 +190,17 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		String formName = form.getName();
-		List<String> extensionNames = customFieldForms.get(formName);
-		if (CollectionUtils.isNotEmpty(extensionNames)) {
-			List<Long> extendedFormIds = formDao.getFormIds(-1L, extensionNames);
-			FormFieldSummary field = getExtensionField("customFields", "Custom Fields", extendedFormIds);
-			fields.add(field);
+		String entityType = customFieldEntities.get(formName);
+		if (StringUtils.isNotBlank(entityType)) {
+			Map<String, Object> extnInfo = getExtensionInfo(cpId, entityType);
+			if (extnInfo == null && cpId != -1L) {
+				extnInfo = getExtensionInfo(-1L, entityType);
+			}
+
+			if (extnInfo != null) {
+				Long extnFormId = (Long)extnInfo.get("formId");
+				fields.add(getExtensionField("customFields", "Custom Fields", Arrays.asList(extnFormId)));
+			}
 		}
 		
 		if (!staticExtendedForms.contains(formName)) {
@@ -209,7 +214,6 @@ public class FormServiceImpl implements FormService {
 		
 		FormFieldSummary field = getExtensionField("extensions", "Extensions", extendedFormIds);
 		fields.add(field);
-
 		return ResponseEvent.response(fields);
 	}
     
@@ -255,12 +259,7 @@ public class FormServiceImpl implements FormService {
 				}
 				formCtxt.setSortOrder(formCtxtDetail.getSortOrder());
 
-				List<FormContextProcessor> procs = ctxtProcs.get(entity);
-				if (procs != null) {
-					for (FormContextProcessor proc : procs) {
-						proc.onSaveOrUpdate(formCtxt);
-					}
-				}
+				notifyContextSaved(formCtxt);
 
 				formDao.saveOrUpdate(formCtxt);
 				formCtxtDetail.setFormCtxtId(formCtxt.getIdentifier());
@@ -298,30 +297,10 @@ public class FormServiceImpl implements FormService {
 			    	AccessCtrlMgr.getInstance().ensureReadVisitRights(entityId);
 			    	forms = formDao.getScgForms(opDetail.getEntityId());
 			    	break;
-			    	
+
 			    case SPECIMEN_EVENT :
 			    	AccessCtrlMgr.getInstance().ensureReadSpecimenRights(entityId);
 			    	forms = formDao.getSpecimenEventForms(opDetail.getEntityId());
-			    	break;	
-			    	
-			    case SITE_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "SiteExtension");
-			    	break;
-			    	
-			    case CP_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "CollectionProtocolExtension");
-			    	break;
-			    	
-			    case PARTICIPANT_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "ParticipantExtension");
-			    	break;
-			    	
-			    case VISIT_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "VisitExtension");
-			    	break;
-			    	 
-			    case SPECIMEN_EXTN:
-			    	forms = formDao.getFormContexts(-1L, "SpecimenExtension");
 			    	break;
 			}
 			
@@ -489,7 +468,7 @@ public class FormServiceImpl implements FormService {
 			FormContextBean formCtx = formDao.getFormContext(
 					opDetail.getFormId(), 
 					opDetail.getCpId(), 
-					opDetail.getFormType().getType());
+					opDetail.getEntityType());
 			
 			if (formCtx == null) {
 				return ResponseEvent.userError(FormErrorCode.NO_ASSOCIATION);
@@ -507,13 +486,7 @@ public class FormServiceImpl implements FormService {
 				AccessCtrlMgr.getInstance().ensureUpdateCpRights(formCtx.getCpId());
 			}
 
-			List<FormContextProcessor> procs = ctxtProcs.get(formCtx.getEntityType());
-			if (procs != null) {
-				for (FormContextProcessor proc : procs) {
-					proc.onRemove(formCtx);
-				}
-			}
-			
+			notifyContextRemoved(formCtx);
 			switch (opDetail.getRemoveType()) {
 				case SOFT_REMOVE:
 					formCtx.setDeletedOn(Calendar.getInstance().getTime());
@@ -712,6 +685,18 @@ public class FormServiceImpl implements FormService {
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public Map<String, Object> getExtensionInfo(Long cpId, String entityType) {
+		return DeObject.getFormInfo(cpId, entityType);
+	}
+
+	@Override
+	@PlusTransactional
+	public List<FormSummary> getEntityForms(Long cpId, String[] entityTypes) {
+		return formDao.getFormsByCpAndEntityType(cpId, entityTypes);
+	}
+
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {
 		FormFieldSummary field = new FormFieldSummary();
 		field.setName(name);
@@ -851,11 +836,11 @@ public class FormServiceImpl implements FormService {
 		String entityType = record.getEntityType();
 		
 		boolean allowPhiAccess = false;
-		if (entityType.equals(PARTICIPANT_FORM) || PARTICIPANT_EXTNS.contains(entityType)) {
+		if (entityType.equals(PARTICIPANT_FORM) || Participant.EXTN.equals(entityType)) {
 			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadCprRights(objectId);
-		} else if (entityType.equals(SCG_FORM) || VISIT_EXTNS.contains(entityType)) {
+		} else if (entityType.equals(SCG_FORM) || Visit.EXTN.equals(entityType)) {
 			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadVisitRights(objectId, true);
-		} else if (entityType.equals(SPECIMEN_FORM) || entityType.equals(SPECIMEN_EVENT_FORM) || SPECIMEN_EXTNS.contains(entityType)) {
+		} else if (entityType.equals(SPECIMEN_FORM) || entityType.equals(SPECIMEN_EVENT_FORM) || Specimen.EXTN.equals(entityType)) {
 			allowPhiAccess = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(objectId, true);
 		}
 
@@ -889,5 +874,29 @@ public class FormServiceImpl implements FormService {
 		}
 		
 		return existing;
+	}
+
+	private void notifyContextSaved(FormContextBean formCtxt) {
+		notifyContextSaved(formCtxt.getEntityType(), formCtxt);
+		notifyContextSaved("*", formCtxt);
+	}
+
+	private void notifyContextSaved(String entityType, FormContextBean formCtxt) {
+		List<FormContextProcessor> procs = ctxtProcs.get(entityType);
+		if (procs != null) {
+			procs.forEach(proc -> proc.onSaveOrUpdate(formCtxt));
+		}
+	}
+
+	private void notifyContextRemoved(FormContextBean formCtxt) {
+		notifyContextRemoved(formCtxt.getEntityType(), formCtxt);
+		notifyContextRemoved("*", formCtxt);
+	}
+
+	private void notifyContextRemoved(String entityType, FormContextBean formCtxt) {
+		List<FormContextProcessor> procs = ctxtProcs.get(entityType);
+		if (procs != null) {
+			procs.forEach(proc -> proc.onRemove(formCtxt));
+		}
 	}
 }

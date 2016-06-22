@@ -85,7 +85,38 @@
         c.deleted_on is null		
       order by
         c.caption
-    </sql-query>        
+    </sql-query>
+
+    <sql-query name="getFormsByCpAndEntityType">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="entityType" type="string"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        c.identifier as formId, c.name as formName, c.caption as formCaption,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        ctxt.entity_type as entityType, ctxt.is_sys_form as sysForm,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        dyextn_containers c
+        inner join catissue_user u on u.identifier = c.created_by
+        inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
+      where
+        ctxt.entity_type in (:entityTypes) and
+        (ctxt.cp_id = -1 or ctxt.cp_id = :cpId) and
+        ctxt.deleted_on is null and
+        c.deleted_on is null
+      order by
+        c.caption
+    </sql-query>
 
     <sql-query name="getQueryForms">
       <return-scalar column="formId" type="long"/>
@@ -420,6 +451,22 @@
         (cp_id = :cpId or cp_id = -1) and
         c.deleted_on is null and
         fc.deleted_on is null
+    </sql-query>
+
+    <sql-query name="getFormNameContextId">
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="ctxtId" type="long"/>
+
+      select
+        c.name as formName, fc.identifier as ctxtId
+      from
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+      where
+        c.deleted_on is null and
+        fc.deleted_on is null and
+        fc.entity_type = :entityType and
+        fc.cp_id = :cpId
     </sql-query>
                          
     <sql-query name="getFormIds">

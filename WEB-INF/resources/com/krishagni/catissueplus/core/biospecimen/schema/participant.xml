@@ -95,7 +95,7 @@
       </field>
     </record>
 
-    <record type="extensions" entityType="ParticipantExtension">
+    <record type="customFields" entityType="ParticipantExtension">
       <attribute>extensionDetail</attribute>
     </record>
   </record>

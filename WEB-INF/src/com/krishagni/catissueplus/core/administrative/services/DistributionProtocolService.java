@@ -3,16 +3,16 @@ package com.krishagni.catissueplus.core.administrative.services;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
-import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStat;
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderStatListCriteria;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
+import com.krishagni.catissueplus.core.administrative.events.DpRequirementDetail;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 public interface DistributionProtocolService {
 
@@ -44,5 +44,5 @@ public interface DistributionProtocolService {
 	
 	public ResponseEvent<File> exportOrderStats(RequestEvent<DistributionOrderStatListCriteria> req);
 
-	public ResponseEvent<FormCtxtSummary> getExtensionForm();
+	public ResponseEvent<Map<String, Object>> getExtensionForm();
 }

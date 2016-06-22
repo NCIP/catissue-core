@@ -149,8 +149,8 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return curr;
     };
 
-    Specimen.prototype.getExtensionCtxt = function() {
-      return Specimen.getExtensionCtxt();
+    Specimen.prototype.getExtensionCtxt = function(params) {
+      return Specimen.getExtensionCtxt(params);
     }
 
     Specimen.prototype.getForms = function(params) {

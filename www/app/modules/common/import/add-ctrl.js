@@ -6,50 +6,37 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
 
     function init() {
       $scope.importDetail = importDetail;
-      $scope.importJobsFileUrl = $sce.trustAsResourceUrl(ImportJob.url() + 'input-file');
-      $scope.inputFileTmplUrl  = $sce.trustAsResourceUrl(
-        ImportJob.url() + 'input-file-template?' + getQueryParams(importDetail));
-      $scope.fileImporter = {};
- 
-      var objParams = importDetail.objectParams || {};
-      angular.extend(objParams, {entityType: importDetail.entityType, formName: undefined});
-
       $scope.importJob = new ImportJob({
         objectType: importDetail.objectType,
         importType: importDetail.importType || 'CREATE',
         csvType: importDetail.csvType || 'SINGLE_ROW_PER_OBJ',
         inputFileId: undefined,
-        objectParams: objParams
+        objectParams: importDetail.objectParams || {}
       });
 
-      $scope.extn = {
-        selectedForm: [],
-        formsList: []
-      }
+      $scope.importJobsFileUrl = $sce.trustAsResourceUrl(ImportJob.url() + 'input-file');
+      $scope.inputFileTmplUrl  = getInputTmplUrl($scope.importJob);
+      $scope.fileImporter = {};
 
-      if (importDetail.objectType == 'extensions') {
-        Form.listForms(importDetail.entityType).then(
-          function(forms) {
-            forms = forms.filter(function(form) { return !form.sysForm; });
-            $scope.extn.formsList = forms;
-            if (forms.length > 0) {
-              $scope.extn.selectedForm = forms[0];
-              $scope.onFormSelect();
-            }
-          }
-        );
+      if (importDetail.types && importDetail.types.length > 0) {
+        $scope.onTypeSelect(importDetail.types[0]);
       }
     }
 
-    function getQueryParams(importDetail) {
-      var params = 'schema=' + importDetail.objectType;
-      angular.forEach(importDetail.objectParams,
+    function getInputTmplUrl(importJob) {
+      var url = ImportJob.url() + 'input-file-template?' + getQueryParams(importJob);
+      return $sce.trustAsResourceUrl(url);
+    }
+
+    function getQueryParams(importJob) {
+      var qs = 'schema=' + importJob.objectType;
+      angular.forEach(importJob.objectParams,
         function(value, key) {
-          params += '&' + key + '=' + value;
+          qs += '&' + key + '=' + value;
         }
       );
 
-      return params;
+      return qs;
     }
 
     function submitJob(fileId) {
@@ -70,15 +57,18 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       );
     };
 
-    $scope.onFormSelect = function() {
-      var formName = $scope.extn.selectedForm.name;
-      $scope.inputFileTmplUrl  = $sce.trustAsResourceUrl(
-        ImportJob.url() + 'input-file-template?' +
-        'schema=' + importDetail.objectType +
-        '&formName=' + formName +
-        '&entityType=' + importDetail.entityType
-      );
-      $scope.importJob.objectParams.formName = formName;
+    $scope.onTypeSelect = function(objectType) {
+      $scope.importDetail.objectType = objectType.type;
+      $scope.importDetail.showImportType = objectType.showImportType;
+      $scope.importDetail.importType = objectType.importType;
+
+      var importJob          = $scope.importJob;
+      importJob.objectType   = objectType.type;
+      importJob.importType   = objectType.importType || 'CREATE',
+      importJob.csvType      = objectType.csvType || 'SINGLE_ROW_PER_OBJ',
+      importJob.objectParams = objectType.params;
+
+      $scope.inputFileTmplUrl  = getInputTmplUrl(importJob);
     };
 
     init();

@@ -4,11 +4,11 @@ package com.krishagni.catissueplus.rest.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
@@ -313,15 +314,11 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.GET, value="/extension-form")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public FormCtxtSummary getForm() {
-		ListEntityFormsOp op = new ListEntityFormsOp();
-		op.setEntityType(EntityType.VISIT_EXTN); 
-        
-		RequestEvent<ListEntityFormsOp> req = new RequestEvent<ListEntityFormsOp>(op);
-		ResponseEvent<List<FormCtxtSummary>> resp = formSvc.getEntityForms(req);
-		resp.throwErrorIfUnsuccessful();
-		
-		return CollectionUtils.isNotEmpty(resp.getPayload()) ? resp.getPayload().get(0) : null;
+	public Map<String, Object> getForm(
+		@RequestParam(value = "cpId", required = false, defaultValue = "-1")
+		Long cpId) {
+
+		return formSvc.getExtensionInfo(cpId, Visit.EXTN);
 	}
 	
 	private RequestEvent<EntityQueryCriteria> getVisitQueryReq(Long visitId) {

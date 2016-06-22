@@ -6,7 +6,7 @@ public class RemoveFormContextOp {
 	
 	private Long formId;
 	
-	private FormType formType;
+	private String entityType;
 	
 	private Long cpId;
 	
@@ -20,12 +20,12 @@ public class RemoveFormContextOp {
 		this.formId = formId;
 	}
 	
-	public FormType getFormType() {
-		return formType;
+	public String getEntityType() {
+		return entityType;
 	}
 
-	public void setFormType(FormType formType) {
-		this.formType = formType;
+	public void setEntityType(String entityType) {
+		this.entityType = entityType;
 	}
 
 	public Long getCpId() {

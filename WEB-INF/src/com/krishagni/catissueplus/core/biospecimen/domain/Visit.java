@@ -46,6 +46,8 @@ public class Visit extends BaseExtensionEntity {
 
 	public static final String VISIT_STATUS_MISSED = "Missed Collection";
 
+	public static final String EXTN = "VisitExtension";
+
 	private String name;
 	
 	private Date visitDate;
@@ -499,7 +501,12 @@ public class Visit extends BaseExtensionEntity {
 		
 	@Override
 	public String getEntityType() {
-		return "VisitExtension";
+		return EXTN;
+	}
+
+	@Override
+	public Long getCpId() {
+		return getCollectionProtocol().getId();
 	}
 
 	private void ensureNoActiveChildObjects() {
