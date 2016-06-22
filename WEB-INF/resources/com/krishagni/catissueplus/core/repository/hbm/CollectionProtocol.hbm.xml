@@ -4,9 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
-    table="CATISSUE_COLLECTION_PROTOCOL">
-
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" table="CATISSUE_COLLECTION_PROTOCOL" batch-size="25">
     <id name="id" column="IDENTIFIER">
       <generator class="native">
         <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
