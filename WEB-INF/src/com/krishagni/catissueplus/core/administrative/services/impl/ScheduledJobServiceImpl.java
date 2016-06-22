@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
@@ -25,7 +26,7 @@ import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
-public class ScheduledJobServiceImpl implements ScheduledJobService, InitializingBean {
+public class ScheduledJobServiceImpl implements ScheduledJobService, ApplicationListener<ContextRefreshedEvent> {
 	private DaoFactory daoFactory;
 	
 	private ScheduledJobFactory jobFactory;
@@ -236,7 +237,7 @@ public class ScheduledJobServiceImpl implements ScheduledJobService, Initializin
 	}
 	
 	@Override
-	public void afterPropertiesSet() { 
+	public void onApplicationEvent(ContextRefreshedEvent event) {
 		try {
 			loadAllJobs();
 		} catch (Exception e) {
