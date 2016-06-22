@@ -11,7 +11,7 @@ public class EventCodeLabelToken extends AbstractVisitLabelToken {
 	}
 
 	@Override
-	public String getLabel(Visit visit) {
+	public String getLabel(Visit visit, String... args) {
 		String code = visit.getCpEvent().getCode();
 		if (StringUtils.isBlank(code)) {
 			code = StringUtils.EMPTY;

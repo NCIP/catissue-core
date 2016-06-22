@@ -17,7 +17,7 @@ public class VisitYearLabelToken extends AbstractVisitLabelToken {
 	}
 
 	@Override
-	public String getLabel(Visit visit) {
+	public String getLabel(Visit visit, String... args) {
 		return String.valueOf(getYearOfVisit(visit));
 	}
 }

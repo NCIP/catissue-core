@@ -15,12 +15,17 @@ public abstract class AbstractVisitLabelToken extends AbstractLabelTmplToken imp
 
 	@Override
 	public String getReplacement(Object object) {
+		return getReplacement(object, null);
+	}
+
+	@Override
+	public String getReplacement(Object object, String... args) {
 		if (!(object instanceof Visit)) {
-			throw OpenSpecimenException.userError(null); // TODO:
+			throw new RuntimeException("Invalid input object type");
 		}
-		
-		return getLabel((Visit)object);
+
+		return getLabel((Visit)object, args);
 	}
 	
-	public abstract String getLabel(Visit specimen);
+	public abstract String getLabel(Visit visit, String... args);
 }

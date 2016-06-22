@@ -23,7 +23,7 @@ public class VisitUniqueIdLabelToken extends AbstractVisitLabelToken {
 	}
 
 	@Override
-	public String getLabel(Visit visit) {
+	public String getLabel(Visit visit, String... args) {
 		Long uniqueId = daoFactory.getUniqueIdGenerator().getUniqueId("Visit", getName());
 		return "" + uniqueId.toString();
 	}
