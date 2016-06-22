@@ -3,7 +3,7 @@ angular.module('os.biospecimen.participant.visits', ['os.biospecimen.models'])
   .controller('ParticipantVisitsTreeCtrl', function(
     $scope, $state, $stateParams, $timeout,
     cpr, visits, specimens, 
-    Specimen, PvManager) {
+    Specimen) {
 
     if (!$stateParams.visitId && !$stateParams.eventId && visits && visits.length > 0) {
       $state.go(

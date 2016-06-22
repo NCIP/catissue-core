@@ -1,5 +1,5 @@
 angular.module('os.administrative.site.detail', ['os.administrative.models'])
-  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, PvManager, DeleteUtil) {
+  .controller('SiteDetailCtrl', function($scope, $q, site, Institute, DeleteUtil) {
 
     function init() {
       $scope.site = site;
@@ -8,8 +8,6 @@ angular.module('os.administrative.site.detail', ['os.administrative.models'])
     }
 
     function loadPvs() {
-      $scope.siteTypes = PvManager.getPvs('site-type');
-
       Institute.query().then(
         function(instituteList) {
           angular.forEach(instituteList, function(institute) {

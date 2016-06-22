@@ -11,21 +11,20 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <os-select name="specimenClass" on-select="loadSpecimenTypes(childReq.specimenClass)" 
-            ng-model="childReq.specimenClass" list="specimenClasses"
+          <os-pvs name="specimenClass" ng-model="childReq.specimenClass" attribute="specimen-class"
             os-md-input placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="specimensCount > 0"
             title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-select>
+          </os-pvs>
           <div os-field-error field="derivativeForm.specimenClass"></div>
         </div>
       </div>
 
       <div class="col-xs-3">
         <div class="form-group">
-          <os-select name="specimenType" ng-model="childReq.type" list="specimenTypes"
+          <os-pvs name="specimenType" ng-model="childReq.type" attribute="specimen-class" parent-val="childReq.specimenClass"
             os-md-input placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="specimensCount > 0"  
             title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-select>
+          </os-pvs>
           <div os-field-error field="derivativeForm.specimenType"></div>
         </div>
       </div>
@@ -80,9 +79,9 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <os-select name="pathology" ng-model="childReq.pathology" list="pathologyStatuses"
+          <os-pvs name="pathology" ng-model="childReq.pathology" attribute="pathology-status"
             os-md-input placeholder="{{'srs.pathology' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="derivativeForm.pathology"></div>
         </div>
       </div>

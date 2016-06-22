@@ -79,7 +79,8 @@
       <label class="col-xs-3 control-label" translate="visits.visit_status">Status</label>
       <div class="col-xs-6">
         <os-select name="status" ng-model="currVisit.status" list="visitStatuses"
-          required placeholder="{{'visits.visit_status' | translate}}"/>
+          required placeholder="{{'visits.visit_status' | translate}}">
+        </os-select>
         <div os-field-error field="sform.status"></div>
       </div>
     </div>
@@ -117,8 +118,9 @@
     <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
       <label class="col-xs-3 control-label" translate="visits.clinical_status">Clinical Status</label>
       <div class="col-xs-6">
-        <os-select name="clinicalStatus" ng-model="currVisit.clinicalStatus" list="clinicalStatuses" 
-          placeholder="{{'visits.clinical_status' | translate}}"> </os-select>
+        <os-pvs name="clinicalStatus" ng-model="currVisit.clinicalStatus" attribute="clinical-status" 
+          placeholder="{{'visits.clinical_status' | translate}}">
+        </os-pvs>
         <div os-field-error field="vform.clinicalStatus"></div>
       </div>
     </div>
@@ -126,8 +128,9 @@
     <div class="form-group" ng-if="currVisit.status != 'Missed Collection' && !!cohorts && cohorts.length > 0">
       <label class="col-xs-3 control-label" translate="visits.cohort">Cohort</label>
       <div class="col-xs-6">
-        <os-select name="cohort" ng-model="currVisit.cohort" list="cohorts" 
-          placeholder="{{'visits.cohort' | translate}}"> </os-select>
+        <os-pvs name="cohort" ng-model="currVisit.cohort" attribute="cohort" 
+          placeholder="{{'visits.cohort' | translate}}"> 
+        </os-pvs>
         <div os-field-error field="vform.cohort"></div>
       </div>
     </div>
@@ -152,9 +155,9 @@
     <div class="form-group" ng-if="currVisit.status == 'Missed Collection'">
       <label class="col-xs-3 control-label" translate="visits.reason_for_missed_visit">Reason for Missed Visit</label>
       <div class="col-xs-6">
-        <os-select name="missedReason" ng-model="currVisit.missedReason" list="missedReasons"
+        <os-pvs name="missedReason" ng-model="currVisit.missedReason" attribute="missed-visit-reason"
           placeholder="{{'visits.reason_for_missed_visit' | translate}}">
-        </os-select>
+        </os-pvs>
         <div os-field-error field="vform.missedReason"></div>
       </div>
     </div>

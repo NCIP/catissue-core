@@ -2,15 +2,10 @@
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
     $scope, $q, cpr, visits, 
-    CollectionProtocol, SpecimenLabelPrinter, PvManager, 
+    CollectionProtocol, SpecimenLabelPrinter, 
     RegisterToNewCpsHolder, DeleteUtil) {
 
     function loadPvs() {
-      $scope.genders = PvManager.getPvs('gender');
-      $scope.ethnicities = PvManager.getPvs('ethnicity');
-      $scope.vitalStatuses = PvManager.getPvs('vital-status');
-      $scope.races = PvManager.getPvs('race');
-
       var registeredCps = [];
       angular.forEach(cpr.participant.registeredCps, function(cp) {
         registeredCps.push(cp.cpShortTitle);

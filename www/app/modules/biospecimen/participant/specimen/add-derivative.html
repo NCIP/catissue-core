@@ -104,10 +104,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.class">Class</label>
       <div class="col-xs-6">
-        <os-select name="specimenClass" on-change="loadSpecimenTypes(derivative.specimenClass)"
-          ng-model="derivative.specimenClass" list="specimenClasses"
+        <os-pvs name="specimenClass" ng-model="derivative.specimenClass" attribute="specimen-class"
           placeholder="{{'specimens.class' | translate}}" required>
-        </os-select>
+        </os-pvs>
         <div os-field-error field="derivativeForm.specimenClass"></div>
       </div>
     </div>
@@ -115,9 +114,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
       <div class="col-xs-6">
-        <os-select name="specimenType" ng-model="derivative.type" list="specimenTypes"
-          placeholder="{{'specimens.type' | translate}}" required>
-        </os-select>
+        <os-pvs name="specimenType" ng-model="derivative.type" attribute="specimen-class" 
+          parent-val="derivative.specimenClass" placeholder="{{'specimens.type' | translate}}" required>
+        </os-pvs>
         <div os-field-error field="derivativeForm.specimenType"></div>
       </div>
     </div>

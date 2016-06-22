@@ -40,10 +40,6 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       }
     };
 
-    $scope.loadSpecimenTypes = function(specimenClass, notClear) {
-      SpecimenUtil.loadSpecimenTypes($scope, specimenClass, notClear);
-    };
-
     $scope.createDerivative = function() {
       SpecimenUtil.createDerivatives($scope);
     };

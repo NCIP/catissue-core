@@ -3,7 +3,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
   .controller('UserRolesCtrl', function(
     $scope, $translate, $filter,
     user, userRoles, currentUser, currentUserInstitute,
-    PvManager, CollectionProtocol, Site, Role, AuthorizationService) {
+    CollectionProtocol, Site, Role, AuthorizationService) {
     
     function init() {
       $scope.currentRole = {};

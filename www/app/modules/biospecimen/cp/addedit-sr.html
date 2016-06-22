@@ -25,21 +25,20 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.specimen_class">Specimen Class</label>
         <div class="col-xs-8">
-          <os-select name="specimenClass" ng-model="sr.specimenClass"
-            on-select="loadSpecimenTypes(sr.specimenClass)" list="specimenClasses"
+          <os-pvs name="specimenClass" ng-model="sr.specimenClass" attribute="specimen-class"
             placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="specimensCount > 0"
             title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.specimenClass"></div>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.specimen_type">Specimen Type</label>
         <div class="col-xs-8">
-          <os-select name="specimenType" ng-model="sr.type" list="specimenTypes"
+          <os-pvs name="specimenType" ng-model="sr.type" attribute="specimen-class" parent-val="sr.specimenClass"
             placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="specimensCount > 0"
             title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.specimenType"></div>
         </div>
       </div>
@@ -55,18 +54,18 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.laterality">Laterality</label>
         <div class="col-xs-8">
-          <os-select name="laterality" ng-model="sr.laterality" list="lateralities"
+          <os-pvs name="laterality" ng-model="sr.laterality" attribute="laterality"
             placeholder="{{'srs.laterality' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.laterality"></div>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.pathology">Pathology Status</label>
         <div class="col-xs-8">
-          <os-select name="pathology" ng-model="sr.pathology" list="pathologyStatuses"
+          <os-pvs name="pathology" ng-model="sr.pathology" attribute="pathology-status"
             placeholder="{{'srs.pathology' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.pathology"></div>
         </div>
       </div>
@@ -115,18 +114,18 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.collection_container">Collection Container</label>
         <div class="col-xs-8">
-          <os-select name="collectionContainer" ng-model="sr.collectionContainer" list="collectionContainers"
+          <os-pvs name="collectionContainer" ng-model="sr.collectionContainer" attribute="collection-container"
             placeholder="{{'srs.collection_container' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.collectionContainer"></div>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.collection_proc">Collection Procedure</label>
         <div class="col-xs-8">
-          <os-select name="collectionProcedure" ng-model="sr.collectionProcedure" list="collectionProcs"
+          <os-pvs name="collectionProcedure" ng-model="sr.collectionProcedure" attribute="collection-procedure"
             placeholder="{{'srs.collection_proc' | translate}}" required>
-          </os-select>
+          </os-pvs>
           <div os-field-error field="srForm.collectionProcedure"></div>
         </div>
       </div>

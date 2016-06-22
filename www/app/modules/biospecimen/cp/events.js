@@ -9,27 +9,24 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
 
     var copyFrom = undefined;
 
-    function loadPvs() {
-      if (pvsLoaded) {
-        return;
-      }
-
-      $scope.clinicalStatuses = PvManager.getPvs('clinical-status');
-      $scope.sites = PvManager.getSites();
-      $scope.visitNamePrintModes = PvManager.getPvs('visit-name-print-modes');
-
-      pvsLoaded = true;
-    };
-
     function init() {
       $scope.cp = cp;
       $scope.events = events;
       $scope.mode = undefined;
          
-      $scope.clinicalStatuses = [];
       $scope.sites = [];
       $scope.event = {};
       $scope.selected = {};
+    };
+
+    function loadPvs() {
+      if (pvsLoaded) {
+        return;
+      }
+
+      $scope.visitNamePrintModes = PvManager.getPvs('visit-name-print-modes');
+      $scope.sites = PvManager.getSites();
+      pvsLoaded = true;
     };
 
     function loadSpecimenRequirements(event) {

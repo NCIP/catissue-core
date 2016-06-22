@@ -5,27 +5,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
     PvManager, Util, ExtensionsUtil) {
 
     function loadPvs() {
-      $scope.loadSpecimenTypes = function(specimenClass, notclear) {
-        $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
-        if (!notclear) {
-          $scope.currSpecimen.type = '';
-        }
-      };
-
-      $scope.collectionStatuses = PvManager.getPvs('specimen-status');
-      $scope.specimenClasses = PvManager.getPvs('specimen-class');
-      if (!!specimen.specimenClass) {
-        $scope.loadSpecimenTypes(specimen.specimenClass, true);
-      }
-      $scope.lateralities = PvManager.getPvs('laterality');
-      $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
-
-      if (!specimen.id && !specimen.reqId) {
-        $scope.collectionProcedures = PvManager.getPvs('collection-procedure');
-        $scope.collectionContainers = PvManager.getPvs('collection-container');
-        $scope.receivedQualities =  PvManager.getPvs('received-quality');
-      }      
     };
 
     function init() {
@@ -95,6 +75,13 @@ angular.module('os.biospecimen.specimen.addedit', [])
       if (!hasDict) {
         loadPvs();
       }
+
+      $scope.$watch('currSpecimen.specimenClass', function(newVal, oldVal) {
+        if (!newVal || newVal == oldVal || !oldVal) {
+          return;
+        }
+        $scope.currSpecimen.type = '';
+      });
     }
 
     $scope.saveSpecimen = function() {

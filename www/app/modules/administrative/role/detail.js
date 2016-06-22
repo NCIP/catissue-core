@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.role.detail', ['os.administrative.models'])
-  .controller('RoleDetailCtrl', function($scope, $q, $translate, role, PvManager) {
+  .controller('RoleDetailCtrl', function($scope, $q, $translate, role) {
     $scope.role = role;
 
     angular.forEach($scope.role.acl, function(ac) {

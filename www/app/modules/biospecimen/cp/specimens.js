@@ -83,12 +83,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         return;
       }
 
-      $scope.specimenClasses = PvManager.getPvs('specimen-class');
-      $scope.specimenTypes = [];
-      if (!!$scope.sr.specimenClass) {
-        $scope.loadSpecimenTypes($scope.sr.specimenClass);
-      }
-
       $scope.$watch('sr.specimenClass', function(newVal, oldVal) {
         if (!newVal || newVal == oldVal || !oldVal) {
           return;
@@ -96,11 +90,8 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         $scope.sr.type = '';
       });
 
-      $scope.lateralities = PvManager.getPvs('laterality');
-      $scope.pathologyStatuses = PvManager.getPvs('pathology-status');
       $scope.storageTypes = PvManager.getPvs('storage-type');
-      $scope.collectionProcs = PvManager.getPvs('collection-procedure');
-      $scope.collectionContainers = PvManager.getPvs('collection-container');
+
       loadLabelAutoPrintModes();
       pvsLoaded = true;
     };
@@ -132,10 +123,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
 
       return sr;
     }
-
-    $scope.loadSpecimenTypes = function(specimenClass) {
-      $scope.specimenTypes = PvManager.getPvsByParent('specimen-class', specimenClass);
-    };
 
     $scope.openSpecimenNode = function(sr) {
       sr.isOpened = true;

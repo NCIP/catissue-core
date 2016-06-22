@@ -1,7 +1,7 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
   .controller('ContainerDetailCtrl', function(
       $scope, $q, container, Container,
-      Site, CollectionProtocol, PvManager, DeleteUtil) {
+      Site, CollectionProtocol, DeleteUtil) {
 
     function init() {
       $scope.container = container;
@@ -14,9 +14,6 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
     }
 
     function loadPvs () {
-      $scope.dimensionLabelSchemes = PvManager.getPvs('dimension-label-scheme');
-      $scope.sites = PvManager.getSites();
-
       CollectionProtocol.query().then(
         function(cps) {
           $scope.cps = [];

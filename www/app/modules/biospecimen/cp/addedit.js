@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('CpAddEditCtrl', function(
-    $scope, $state, $stateParams, cp, extensionCtxt, User, Site, ExtensionsUtil, PvManager) {
+    $scope, $state, $stateParams, cp, extensionCtxt, User, Site, ExtensionsUtil) {
 
     function init() {
       $scope.cp = cp;

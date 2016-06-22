@@ -76,9 +76,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.collection_status">Collection Status</label>
       <div class="col-xs-6">
-        <os-select name="collectionStatus" ng-model="currSpecimen.status" list="collectionStatuses"
+        <os-pvs name="collectionStatus" ng-model="currSpecimen.status" attribute="specimen-status"
           required placeholder="{{'specimens.collection_status' | translate}}">
-        </os-select>
+        </os-pvs>
         <div os-field-error field="sform.collectionStatus"></div>
       </div>
     </div>
@@ -87,9 +87,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.class">Specimen Class</label>
         <div class="col-xs-6">
-          <os-select name="class" ng-model="currSpecimen.specimenClass" list="specimenClasses"
-            on-change="loadSpecimenTypes" required placeholder="{{'specimens.class' | translate}}">
-          </os-select>
+          <os-pvs name="class" ng-model="currSpecimen.specimenClass" attribute="specimen-class"
+            required placeholder="{{'specimens.class' | translate}}">
+          </os-pvs>
           <div os-field-error field="sform.class"></div>
         </div>
       </div>
@@ -97,9 +97,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
         <div class="col-xs-6">
-          <os-select name="type" ng-model="currSpecimen.type" list="specimenTypes"
-            required placeholder="{{'specimens.type' | translate}}">
-          </os-select>
+          <os-pvs name="type" ng-model="currSpecimen.type" attribute="specimen-class"
+            parent-val="currSpecimen.specimenClass" required placeholder="{{'specimens.type' | translate}}">
+          </os-pvs>
           <div os-field-error field="sform.type"></div>
         </div>
       </div>
@@ -180,9 +180,9 @@
       ng-if="(currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen) && biohazards.length > 0">
       <label class="col-xs-3 control-label" translate="specimens.biohazards">Biohazards</label>
       <div class="col-xs-6">
-        <os-select name="biohazards" ng-model="currSpecimen.biohazards" list="biohazards"
+        <os-pvs name="biohazards" ng-model="currSpecimen.biohazards" attribute="specimen-biohazard"
           multiple placeholder="{{'specimens.biohazards' | translate}}">
-        </os-select>
+        </os-pvs>
       </div>
     </div>
 
@@ -199,9 +199,9 @@
     <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen">
       <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
       <div class="col-xs-6">
-        <os-select name="pathology" ng-model="currSpecimen.pathology" list="pathologyStatuses"
+        <os-pvs name="pathology" ng-model="currSpecimen.pathology" attribute="pathology-status"
           required placeholder="{{'specimens.pathology_status' | translate}}">
-        </os-select>
+        </os-pvs>
         <div os-field-error field="sform.pathology"></div>
       </div>
     </div>
@@ -220,9 +220,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.laterality">Laterality</label>
         <div class="col-xs-6">
-          <os-select name="laterality" ng-model="currSpecimen.laterality" list="lateralities"
+          <os-pvs name="laterality" ng-model="currSpecimen.laterality" attribute="laterality"
             required placeholder="{{'specimens.laterality' | translate}}">
-          </os-select>
+          </os-pvs>
           <div os-field-error field="sform.laterality"></div>
         </div>
       </div>
@@ -270,9 +270,9 @@
             Collection Container
           </label>
           <div class="col-xs-6">
-            <os-select name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" list="collectionContainers"
+            <os-pvs name="collectionContainer" ng-model="currSpecimen.collectionEvent.container" attribute="collection-container"
               placeholder="{{'specimens.col_event.collection_container' | translate}}" required>
-            </os-select>
+            </os-pvs>
             <div os-field-error field="sform.collectionContainer"></div>
           </div>
         </div>
@@ -280,9 +280,9 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="specimens.col_event.collection_proc">Collection Procedure</label>
           <div class="col-xs-6">
-            <os-select name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" list="collectionProcedures"
+            <os-pvs name="collectionProcedure" ng-model="currSpecimen.collectionEvent.procedure" attribute="collection-procedure"
               placeholder="{{'specimens.col_event.collection_proc' | translate}}" required>
-            </os-select>
+            </os-pvs>
             <div os-field-error field="sform.collectionProcedure"></div>
           </div>
         </div>
@@ -317,9 +317,9 @@
         <div class="form-group">
           <label class="col-xs-3 control-label" translate="specimens.recv_event.received_quality">Received Quality</label>
           <div class="col-xs-6">
-            <os-select name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" list="receivedQualities"
+            <os-pvs name="receivedQuality" ng-model="currSpecimen.receivedEvent.receivedQuality" attribute="received-quality"
               placeholder="{{'specimens.recv_event.received_quality' | translate}}" required>
-            </os-select>
+            </os-pvs>
             <div os-field-error field="sform.receivedQuality"></div>
           </div>
         </div>

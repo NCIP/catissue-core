@@ -1,6 +1,6 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
   .controller('SiteAddEditCtrl', function(
-    $scope, $state, site, extensionCtxt, Institute, PvManager, ExtensionsUtil) {
+    $scope, $state, site, extensionCtxt, Institute, ExtensionsUtil) {
 
     function init() {
       $scope.site = site;
@@ -10,8 +10,6 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
     }
 
     function loadPvs() {
-      $scope.siteTypes = PvManager.getPvs('site-type');
-
       $scope.institutes = [];
       Institute.query().then(
         function(instituteList) {
