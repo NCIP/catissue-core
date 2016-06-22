@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -75,14 +76,15 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setShortTitle(input, cp, ose);
 		setCode(input, cp, ose);
 		setPrincipalInvestigator(input, cp, ose);
-		cp.setStartDate(input.getStartDate());
-		cp.setEndDate(input.getEndDate());
 		setCoordinators(input, cp, ose);
+		setDate(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
 		cp.setPpidFormat(input.getPpidFmt());
 		cp.setManualPpidEnabled(input.getManualPpidEnabled());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
+		cp.setSopDocumentUrl(input.getSopDocumentUrl());
+		cp.setSopDocumentName(input.getSopDocumentName());
 		cp.setDescriptionURL(input.getDescriptionUrl());
 		cp.setConsentsWaived(input.getConsentsWaived());
 
@@ -108,6 +110,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setShortTitle(input, cp, ose);
 		setCode(input, cp, ose);
 
+
 		if (CollectionUtils.isNotEmpty(input.getCpSites())) {
 			setSites(input, cp, ose);
 		}
@@ -119,19 +122,22 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		if (CollectionUtils.isNotEmpty(input.getCoordinators())) {
 			setCoordinators(input, cp, ose);
 		}
-
-		if (input.getStartDate() != null) {
-			cp.setStartDate(input.getStartDate());
-		}
-		
-		if (input.getEndDate() != null) {
-			cp.setEndDate(input.getEndDate());
-		}
 		
 		if (StringUtils.isNotBlank(input.getIrbId())) {
 			cp.setIrbIdentifier(input.getIrbId());
 		}
-		
+
+		if (input.getStartDate() == null) {
+			input.setStartDate(cp.getStartDate());
+		}
+
+		if (input.getEndDate() == null) {
+			input.setEndDate(cp.getEndDate());
+		}
+
+		setDate(input, cp, ose);
+		cp.setSopDocumentUrl(input.getSopDocumentUrl());
+		cp.setSopDocumentName(input.getSopDocumentName());
 		ose.checkAndThrow();
 		return cp;
 	}
@@ -235,6 +241,18 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		result.setCoordinators(coordinators);
 	}
 	
+	private void setDate(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		Date startDt = input.getStartDate();
+		result.setStartDate(startDt);
+
+		Date endDt = input.getEndDate();
+		result.setEndDate(endDt);
+
+		if (startDt != null && endDt != null && startDt.after(endDt)) {
+			ose.addError(CpErrorCode.START_DT_GT_END_DT, startDt, endDt);
+		}
+	}
+
 	private void setActivityStatus(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		String status = input.getActivityStatus();
 		

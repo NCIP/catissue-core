@@ -14,6 +14,10 @@
   background: #fff;
 }
 
+.os-file-upload .form-control[disabled] + span {
+  background-color: #eee;
+}
+
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   .os-file-upload .name {
     position: absolute;

@@ -23,4 +23,11 @@
       columnNames="LOGIN_NAME, DOMAIN_NAME"/>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Collection protocol SOP document and URL">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="SOP_DOCUMENT_URL" type="${text.type}(255)"/>
+      <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

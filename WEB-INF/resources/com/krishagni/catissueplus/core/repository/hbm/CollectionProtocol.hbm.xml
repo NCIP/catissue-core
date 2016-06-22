@@ -35,6 +35,10 @@
 
     <property name="enrollment" column="ENROLLMENT"/>
 
+    <property name="sopDocumentUrl" column="SOP_DOCUMENT_URL"/>
+
+    <property name="sopDocumentName" column="SOP_DOCUMENT_NAME"/>
+
     <property name="descriptionURL" column="DESCRIPTION_URL"/>
 
     <property name="specimenLabelFormat" column="LABEL_FORMAT"/>

@@ -24,7 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintVisitNameDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
@@ -269,10 +269,10 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprFileDownloadDetail> req) {
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<FileDownloadDetail> req) {
 		try {
-			SprFileDownloadDetail detail = req.getPayload();
-			Visit visit = getVisit(detail.getVisitId(), detail.getVisitName());
+			FileDownloadDetail detail = req.getPayload();
+			Visit visit = getVisit(detail.getId(), detail.getName());
 			
 			AccessCtrlMgr.getInstance().ensureReadSprRights(visit);
 			
@@ -293,8 +293,8 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 			}
 
 			FileDetail fileDetail = new FileDetail();
-			fileDetail.setFile(file);
-			fileDetail.setFileName(visit.getName() + fileExtension);
+			fileDetail.setFileOut(file);
+			fileDetail.setFilename(visit.getName() + fileExtension);
 			return ResponseEvent.response(fileDetail);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -308,27 +308,27 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req) {
 		try {
 			SprDetail detail = req.getPayload();
-			Visit visit = getVisit(detail.getVisitId(), null);
+			Visit visit = getVisit(detail.getId(), null);
 			
 			ensureUpdateSprRights(visit);
 			
-			String sprName = detail.getName();
+			String filename = detail.getFilename();
 			if (detail.isTextContent() || detail.isPdfContent()) {
 				String sprText = getTextFromReq(detail);
 
 				File sprFile = new File(getSprDirPath(visit.getId()) + File.separator + "spr.txt");
 				FileUtils.writeStringToFile(sprFile, sprText, (String) null, false);
 				
-				sprName = sprName.substring(0, sprName.lastIndexOf(".")) + ".txt";
-				visit.updateSprName(sprName);
+				filename = filename.substring(0, filename.lastIndexOf(".")) + ".txt";
+				visit.updateSprName(filename);
 			} else {
-				String extension = sprName.substring(sprName.lastIndexOf('.'));
+				String extension = filename.substring(filename.lastIndexOf('.'));
 				File sprFile = new File(getSprDirPath(visit.getId()) + File.separator + "spr" + extension);
-				FileUtils.copyInputStreamToFile(detail.getInputStream(), sprFile);
-				visit.updateSprName(sprName);
+				FileUtils.copyInputStreamToFile(detail.getFileIn(), sprFile);
+				visit.updateSprName(filename);
 			}
 			
-			return new ResponseEvent<String>(sprName);
+			return new ResponseEvent<>(filename);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -341,11 +341,11 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 	public ResponseEvent<String> updateSprText(RequestEvent<SprDetail> req) {
 		try {
 			SprDetail detail = req.getPayload();
-			Visit visit = getVisit(detail.getVisitId(), null);
+			Visit visit = getVisit(detail.getId(), null);
 			
 			ensureUpdateSprRights(visit);
 			
-			File file = getSprFile(detail.getVisitId());
+			File file = getSprFile(detail.getId());
 			if (file == null) {
 				return ResponseEvent.serverError(VisitErrorCode.UNABLE_TO_LOCATE_SPR);
 			}
@@ -603,22 +603,16 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 	}
 	
 	private String getSprDirPath(Long visitId) {
-		String path = cfgSvc.getStrSetting(
-				ConfigParams.MODULE,
-				ConfigParams.SPR_DIR,
-				getDefaultVisitSprDir());
-
+		String path = cfgSvc.getStrSetting(ConfigParams.MODULE, ConfigParams.SPR_DIR, getDefaultVisitSprDir());
 		return path + File.separator + visitId;
 	}
 	
 	private String getTextFromReq(SprDetail detail) {
-		String text = Utility.getString(detail.getInputStream(), detail.getContentType());
+		String text = Utility.getString(detail.getFileIn(), detail.getContentType());
 		
 		DocumentDeIdentifier deIdentifier = getSprDeIdentifier();
 		if (deIdentifier != null) {
-			Map<String, Object> props = Collections.<String, Object>singletonMap("visitId",
-					detail.getVisitId());
-			
+			Map<String, Object> props = Collections.singletonMap("visitId", detail.getId());
 			text = deIdentifier.deIdentify(text, props);
 		}
 		

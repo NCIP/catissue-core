@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,12 +13,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -41,6 +47,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProt
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenRequirementFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SrErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
@@ -55,6 +62,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.MergeCpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenPoolRequirements;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenRequirementDetail;
@@ -76,6 +84,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
@@ -226,8 +235,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		
 			ose.checkAndThrow();
 			
-			User oldPI = existingCp.getPrincipalInvestigator();
-			boolean piChanged = !oldPI.equals(cp.getPrincipalInvestigator());
+			User oldPi = existingCp.getPrincipalInvestigator();
+			boolean piChanged = !oldPi.equals(cp.getPrincipalInvestigator());
 			
 			Collection<User> addedCoord = CollectionUtils.subtract(cp.getCoordinators(), existingCp.getCoordinators());
 			Collection<User> removedCoord = CollectionUtils.subtract(existingCp.getCoordinators(), cp.getCoordinators());
@@ -237,14 +246,15 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			
 			// PI role handling
 			if (piChanged) {
-				removeDefaultPiRoles(cp, oldPI);
+				removeDefaultPiRoles(cp, oldPi);
 				addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
 			} 
 
 			// Coordinator Role Handling
 			removeDefaultCoordinatorRoles(cp, removedCoord);
 			addDefaultCoordinatorRoles(cp, addedCoord);
-			
+
+			fixSopDocumentName(existingCp);
 			return ResponseEvent.response(CollectionProtocolDetail.from(existingCp));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -363,7 +373,58 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<File> getSopDocument(RequestEvent<Long> req) {
+		try {
+			Long cpId = req.getPayload();
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+			if (cp == null) {
+				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+			}
+
+			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
+
+			String filename = cp.getSopDocumentName();
+			if (StringUtils.isBlank(filename)) {
+				return ResponseEvent.userError(CpErrorCode.SOP_DOC_NOT_FOUND, cp.getShortTitle());
+			}
+
+			File file = new File(getSopDocDir() + filename);
+			if (!file.exists()) {
+				filename = filename.split("_", 2)[1];
+				return ResponseEvent.userError(CpErrorCode.SOP_DOC_MOVED_OR_DELETED, cp.getShortTitle(), filename);
+			}
+
+			return ResponseEvent.response(file);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	public ResponseEvent<String> uploadSopDocument(RequestEvent<FileDetail> req) {
+		OutputStream out = null;
+
+		try {
+			FileDetail detail = req.getPayload();
+			String filename = UUID.randomUUID() + "_" + detail.getFilename();
+
+			File file = new File(getSopDocDir() + filename);
+			out = new FileOutputStream(file);
+			IOUtils.copy(detail.getFileIn(), out);
+
+			return ResponseEvent.response(filename);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> importCollectionProtocol(RequestEvent<CollectionProtocolDetail> req) {
@@ -918,7 +979,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		//Assign default roles to PI and Coordinators
 		addDefaultPiRoles(cp, cp.getPrincipalInvestigator());
 		addDefaultCoordinatorRoles(cp, cp.getCoordinators());
-		
+		fixSopDocumentName(cp);
 		return cp;
 	}
 
@@ -994,7 +1055,38 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			ose.addError(CpErrorCode.DUP_CP_SITE_CODES, codes);
 		}
 	}
-	
+
+	private void fixSopDocumentName(CollectionProtocol cp) {
+		if (StringUtils.isBlank(cp.getSopDocumentName())) {
+			return;
+		}
+
+		String[] nameParts = cp.getSopDocumentName().split("_", 2);
+		if (nameParts[0].equals(cp.getId().toString())) {
+			return;
+		}
+
+		try {
+			UUID uuid = UUID.fromString(nameParts[0]);
+		} catch (Exception e) {
+			throw OpenSpecimenException.userError(CpErrorCode.INVALID_SOP_DOC, cp.getSopDocumentName());
+		}
+
+		if (StringUtils.isBlank(nameParts[1])) {
+			throw OpenSpecimenException.userError(CpErrorCode.INVALID_SOP_DOC, cp.getSopDocumentName());
+		}
+
+		File src = new File(getSopDocDir() + File.separator + cp.getSopDocumentName());
+		if (!src.exists()) {
+			throw OpenSpecimenException.userError(CpErrorCode.SOP_DOC_MOVED_OR_DELETED, cp.getSopDocumentName(), cp.getShortTitle());
+		}
+
+		cp.setSopDocumentName(cp.getId() + "_" + nameParts[1]);
+
+		File dest = new File(getSopDocDir() + File.separator + cp.getSopDocumentName());
+		src.renameTo(dest);
+	}
+
 	private void ensureConsentTierIsEmpty(CollectionProtocol existingCp, OpenSpecimenException ose) {
 		if (CollectionUtils.isNotEmpty(existingCp.getConsentTier())) {
 			ose.addError(CpErrorCode.CONSENT_TIER_FOUND, existingCp.getShortTitle());
@@ -1358,6 +1450,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	private String getMsg(String code) {
 		return MessageUtil.getInstance().getMessage(code);
+	}
+
+	private String getSopDocDir() {
+		String defDir = ConfigUtil.getInstance().getDataDir() + File.separator + "cp-sop-documents";
+		String dir = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.CP_SOP_DOCS_DIR, defDir);
+		new File(dir).mkdirs();
+		return dir + File.separator;
 	}
 
 	private static final String PPID_MSG                     = "cp_ppid";

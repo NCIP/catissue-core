@@ -45,6 +45,14 @@ angular.module('openspecimen')
         }
       },
       link: function(scope, element, attrs, ctrl) {
+        attrs.$observe('disabled', function() {
+          if (attrs.disabled == true) {
+            element.find('input').attr('disabled', 'disabled');
+          } else {
+            element.find('input').removeAttr('disabled');
+          }
+        });
+
         $timeout(function() {
           scope.ctrl = ctrl;
 
@@ -63,7 +71,9 @@ angular.module('openspecimen')
             fail: function(e, data) {
               ctrl.fail(data);
             }
-          })
+          });
+
+          element.find('input').bind('change', function() { $timeout(angular.noop); });
         });
       },
       template: 

@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.events;
 
 public enum FileType {
 	TEXT("text"),
+
 	PDF("pdf");
 	
 	private String type;

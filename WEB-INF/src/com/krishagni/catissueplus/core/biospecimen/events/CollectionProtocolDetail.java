@@ -22,6 +22,10 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	private Long anticipatedParticipantsCount;
 
+	private String sopDocumentUrl;
+
+	private String sopDocumentName;
+
 	private String descriptionUrl;
 
 	private String specimenLabelFmt;
@@ -97,6 +101,22 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	public void setAnticipatedParticipantsCount(Long anticipatedParticipantsCount) {
 		this.anticipatedParticipantsCount = anticipatedParticipantsCount;
+	}
+
+	public String getSopDocumentUrl() {
+		return sopDocumentUrl;
+	}
+
+	public void setSopDocumentUrl(String sopDocumentUrl) {
+		this.sopDocumentUrl = sopDocumentUrl;
+	}
+
+	public String getSopDocumentName() {
+		return sopDocumentName;
+	}
+
+	public void setSopDocumentName(String sopDocumentName) {
+		this.sopDocumentName = sopDocumentName;
 	}
 
 	public String getDescriptionUrl() {
@@ -247,6 +267,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setConsentsWaived(cp.isConsentsWaived());
 		result.setIrbId(cp.getIrbIdentifier());
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
+		result.setSopDocumentUrl(cp.getSopDocumentUrl());
+		result.setSopDocumentName(cp.getSopDocumentName());
 		result.setDescriptionUrl(cp.getDescriptionURL());
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());
@@ -262,7 +284,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setActivityStatus(cp.getActivityStatus());
 		result.setCpSites(CollectionProtocolSiteDetail.from(cp.getSites()));
 		result.setExtensionDetail(ExtensionDetail.from(cp.getExtension()));
-		
+
 		if (fullObject) {
 			result.setConsents(ConsentTierDetail.from(cp.getConsentTier()));
 			result.setEvents(CollectionProtocolEventDetail.from(cp.getOrderedCpeList(), true));

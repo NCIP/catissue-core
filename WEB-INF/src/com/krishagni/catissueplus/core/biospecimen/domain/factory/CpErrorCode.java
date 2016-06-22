@@ -22,6 +22,8 @@ public enum CpErrorCode implements ErrorCode {
 	PI_NOT_FOUND,
 	
 	INVALID_COORDINATORS,
+
+	START_DT_GT_END_DT,
 	
 	CONSENTS_WAIVED_REQUIRED,
 	
@@ -54,6 +56,12 @@ public enum CpErrorCode implements ErrorCode {
 	CONSENTS_WAIVED,
 	
 	DUP_CP_SITE_CODES,
+
+	SOP_DOC_NOT_FOUND,
+
+	SOP_DOC_MOVED_OR_DELETED,
+
+	INVALID_SOP_DOC,
 
 	INVALID_VISIT_NAME_PRINT_MODE,
 	

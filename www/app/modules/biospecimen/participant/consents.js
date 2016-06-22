@@ -38,8 +38,8 @@ angular.module('os.biospecimen.participant.consents', [])
 
     $scope.uploadConsentForm = function() {
       $scope.consentFormUploader.ctrl.submit().then(
-        function(fileName) {
-          $scope.consent.consentDocumentName = fileName;
+        function(filename) {
+          $scope.consent.consentDocumentName = filename;
           $scope.uploadMode = false;
         }
       );

@@ -24,8 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
@@ -203,14 +203,13 @@ public class CollectionProtocolRegistrationsController {
 	@ResponseBody
 	public String uploadConsentForm(@PathVariable("id") Long cprId, @PathVariable("file") MultipartFile file) 
 	throws IOException {
-		ConsentFormDetail detail = new ConsentFormDetail();
-		detail.setCprId(cprId);
-		detail.setFileName(file.getOriginalFilename());
-		detail.setInputStream(file.getInputStream());
+		FileDetail detail = new FileDetail();
+		detail.setId(cprId);
+		detail.setFilename(file.getOriginalFilename());
+		detail.setFileIn(file.getInputStream());
 		
 		ResponseEvent<String> resp = cprSvc.uploadConsentForm(getRequest(detail));
 		resp.throwErrorIfUnsuccessful();
-
 		return resp.getPayload();
 	}
 
@@ -223,7 +222,6 @@ public class CollectionProtocolRegistrationsController {
 		
 		ResponseEvent<Boolean> resp = cprSvc.deleteConsentForm(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
-
 		return resp.getPayload();
 	}
 	

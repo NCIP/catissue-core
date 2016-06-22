@@ -31,6 +31,10 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       );
     }
 
+    CollectionProtocol.getSopDocUploadUrl = function() {
+      return CollectionProtocol.url() + "sop-documents";
+    }
+
     CollectionProtocol.getWorkflows = function(cpId) {
       return $http.get(CollectionProtocol.url() + cpId + '/workflows').then(
         function(result) {
@@ -53,6 +57,10 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
 
     CollectionProtocol.prototype.getDisplayName = function() {
       return this.title;
+    }
+    
+    CollectionProtocol.prototype.getSopDocDownloadUrl = function() {
+      return CollectionProtocol.url() + this.$id() + "/sop-document";
     }
 
     CollectionProtocol.prototype.copy = function(copyFrom) {

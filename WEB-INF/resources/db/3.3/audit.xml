@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Audit CP SOP document and URL values">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="SOP_DOCUMENT_URL" type="${text.type}(255)"/>
+      <column name="sopDocumentUrl_MOD" type="${bit.type}"/>
+      <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
+      <column name="sopDocumentName_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

@@ -14,7 +14,7 @@
   </div>
 
   <div class="container">
-    <form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
+    <ng-form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.repositories">Repositories</label>
         <div class="col-xs-6">
@@ -135,6 +135,37 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.sop_document_url">
+          SOP Document URL
+        </label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.sopDocumentUrl" class="form-control" 
+            placeholder="{{'cp.sop_document_url' | translate}}"
+            ng-disabled="!!sopDocUploader.ctrl.data || !!cp.sopDocumentName">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.sop_document_file">
+          SOP Document File
+        </label>
+        <div class="col-xs-6"> 
+          <form action="{{sopDocUploadUrl}}">
+            <div os-file-upload ctrl="sopDocUploader.ctrl" ng-disabled="!!cp.sopDocumentUrl">
+            </div>
+            <div ng-if="!!cp.sopDocumentName && !sopDocUploader.ctrl.data">
+              <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
+                <span>{{cp.sopDocumentName}}</span>
+              </a>
+              <a ng-click="removeSopDocument()">
+                <span class="fa fa-times-circle"></span>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div ng-if="!mode || mode != 'copy'">
         <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
           <div id="de-form" class="os-extn-form" os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="cp"></div>
@@ -149,10 +180,12 @@
             <span ng-if="!cp.id" translate="common.buttons.create"> Create </span>
             <span ng-if="!!cp.id" translate="common.buttons.update"> Update </span>
           </button>
-          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
         </div>
       </div>
-    </form>
+    </ng-form>
   </div>
 </div>
 

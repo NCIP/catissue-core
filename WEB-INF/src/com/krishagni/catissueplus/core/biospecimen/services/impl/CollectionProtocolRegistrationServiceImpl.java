@@ -33,7 +33,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.ConsentFormDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -214,11 +214,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<String> uploadConsentForm(RequestEvent<ConsentFormDetail> req) {
+	public ResponseEvent<String> uploadConsentForm(RequestEvent<FileDetail> req) {
 		OutputStream outputStream = null;
 		try {
-			ConsentFormDetail detail = req.getPayload();
-			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(detail.getCprId());
+			FileDetail detail = req.getPayload();
+			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(detail.getId());
 			if (existing == null) {
 				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
 			}
@@ -229,11 +229,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return ResponseEvent.userError(CpErrorCode.CONSENTS_WAIVED, existing.getCollectionProtocol().getShortTitle());
 			}
 			
-			String newFileName = UUID.randomUUID() + "_" + detail.getFileName(); 
+			String newFileName = UUID.randomUUID() + "_" + detail.getFilename();
 			File newFile = new File(getConsentDirPath() + newFileName);
 			
 			outputStream = new FileOutputStream(newFile);
-			IOUtils.copy(detail.getInputStream(), outputStream);
+			IOUtils.copy(detail.getFileIn(), outputStream);
 			
 			String oldFileName = existing.getSignedConsentDocumentName();
 			if (StringUtils.isNotBlank(oldFileName)) {
@@ -243,7 +243,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				}
  			}
 			existing.setSignedConsentDocumentName(newFileName);
-			return ResponseEvent.response(detail.getFileName());
+			return ResponseEvent.response(detail.getFilename());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

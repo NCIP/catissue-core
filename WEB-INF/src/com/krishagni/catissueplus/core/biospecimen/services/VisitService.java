@@ -8,7 +8,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintVisitNameDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
@@ -41,7 +41,7 @@ public interface VisitService {
 	//
 	// SPR APIs
 	//
-	public ResponseEvent<FileDetail> getSpr(RequestEvent<SprFileDownloadDetail> req);
+	public ResponseEvent<FileDetail> getSpr(RequestEvent<FileDownloadDetail> req);
 	
 	public ResponseEvent<String> uploadSprFile(RequestEvent<SprDetail> req);
 

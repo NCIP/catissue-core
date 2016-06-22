@@ -146,6 +146,10 @@
     "ppid_fmt": "PPID Format",
     "clinical_diagnoses": "Clinical Diagnoses",
     "anticipated_participants_cnt": "Anticipated Participants Count",
+    "sop_document": "SOP Document",
+    "sop_document_url": "SOP Document URL",
+    "sop_document_file": "SOP Document File",
+    "download_sop": "Download SOP",
     "desc_url": "Description URL",
     "specimen_label_fmt": "Specimen Label Format",
     "derivative_label_fmt": "Derivative Label Format",
@@ -1788,7 +1792,9 @@
         "cp_expiry_rem_notif": "CP Expiry Reminder",
         "cp_expiry_rem_notif_desc": "Number of days prior to collection protocol expiry when email notification should be sent to the PI.",
         "cp_expiry_rem_rept_inter": "Repeat CP Expiry Reminder",
-        "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry."
+        "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry.",
+        "cp_sop_docs_dir": "SOP Documents Directory",
+        "cp_sop_doc_dir_desc": "Folder on server to store collection protocol SOP documents"
       },
 
       "common": {

@@ -33,10 +33,10 @@ angular.module('os.biospecimen.visit.spr', ['os.biospecimen.models'])
 
     $scope.upload = function() {
       $scope.sprUploader.ctrl.submit().then(
-        function(fileName) {
-          Alerts.success("visits.spr_uploaded", {file:fileName});
+        function(filename) {
+          Alerts.success("visits.spr_uploaded", {file: filename});
           $scope.uploadMode = false;
-          $scope.spr.name = fileName;
+          $scope.spr.name = filename;
           loadSpr();
         }
       )

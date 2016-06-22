@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
-import com.krishagni.catissueplus.core.biospecimen.events.SprFileDownloadDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDownloadDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprLockDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimenDetail;
@@ -151,19 +151,20 @@ public class VisitsController {
 		ResponseEvent<String> resp = null;
 		InputStream inputStream = null;
 		try {
-			SprDetail sprDetail = new SprDetail();
 			inputStream = file.getInputStream();
-			sprDetail.setInputStream(inputStream);
-			sprDetail.setName(file.getOriginalFilename());
+
+			SprDetail sprDetail = new SprDetail();
+			sprDetail.setId(visitId);
+			sprDetail.setFileIn(inputStream);
+			sprDetail.setFilename(file.getOriginalFilename());
 			sprDetail.setContentType(file.getContentType());
-			sprDetail.setVisitId(visitId);
-			
+
 			resp = visitService.uploadSprFile(getRequest(sprDetail));
+			resp.throwErrorIfUnsuccessful();
+			return resp.getPayload();
 		} finally {
 			IOUtils.closeQuietly(inputStream);
 		}
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr-file")
@@ -182,37 +183,42 @@ public class VisitsController {
 		if (fileType == null) {
 			fileType = FileType.TEXT;
 		}
-		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
-		sprReqDetail.setVisitId(visitId);
+
+		FileDownloadDetail sprReqDetail = new FileDownloadDetail();
+		sprReqDetail.setId(visitId);
 		sprReqDetail.setType(fileType);
+
 		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();
+
 		FileDetail detail = resp.getPayload();
-		Utility.sendToClient(httpResp, detail.getFileName(), detail.getFile());
+		Utility.sendToClient(httpResp, detail.getFilename(), detail.getFileOut());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/spr-text") 
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String getSprText(@PathVariable("id") Long visitId) {
-		SprFileDownloadDetail sprReqDetail = new SprFileDownloadDetail();
-		sprReqDetail.setVisitId(visitId);
+		FileDownloadDetail sprReqDetail = new FileDownloadDetail();
+		sprReqDetail.setId(visitId);
+
 		ResponseEvent<FileDetail> resp = visitService.getSpr(getRequest(sprReqDetail));
 		resp.throwErrorIfUnsuccessful();
+
 		FileDetail detail = resp.getPayload();
-		String contentType = Utility.getContentType(detail.getFile());
+		String contentType = Utility.getContentType(detail.getFileOut());
 		if (!contentType.startsWith("text/")) {
 			return null;
 		}
 		
-		return Utility.getFileText(detail.getFile());
+		return Utility.getFileText(detail.getFileOut());
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}/spr-text")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public String updateSprText(@PathVariable("id") Long visitId, @RequestBody SprDetail sprDetail) {
-		sprDetail.setVisitId(visitId);
+		sprDetail.setId(visitId);
 		ResponseEvent<String>resp = visitService.updateSprText(getRequest(sprDetail));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
