@@ -169,7 +169,8 @@ angular.module('openspecimen')
       var params = {
         parentAttribute: pvId, 
         parentValue: parentVal,  
-        includeParentValue: incParentVal
+        includeParentValue: incParentVal,
+        maxResults: 100
       };
 
       return $http.get(url, {params: params}).then(

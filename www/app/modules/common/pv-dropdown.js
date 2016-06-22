@@ -4,6 +4,20 @@ angular.module('openspecimen')
     function linker(scope, element, attrs) {
       scope.pvs = [];
       scope.reload = true;
+
+      if (attrs.parentVal) {
+        scope.$watch(attrs.parentVal,
+          function(newVal) {
+            if (newVal == undefined) {
+              return;
+            }
+
+            scope.reload = true;
+            loadPvs(scope, null, attrs, newVal);
+          }
+        );
+      }
+
       scope.searchPvs = function(searchTerm) {
         if (scope.reload) {
           loadPvs(scope, searchTerm, attrs);
@@ -11,31 +25,32 @@ angular.module('openspecimen')
       };
     }
 
-    function loadPvs (scope, searchTerm, attrs) {
+    function loadPvs (scope, searchTerm, attrs, parentVal) {
       var q = undefined;
 
       if (attrs.parentVal) {
-        scope.$watch(attrs.parentVal, function(newVal) {
-          if (!newVal) {
-            return;
+        PvManager.loadPvsByParent(attrs.attribute, parentVal).then(
+          function(pvs) {
+            setPvs(scope, searchTerm, attrs, pvs);
           }
-
-          PvManager.loadPvsByParent(attrs.attribute, newVal).then(
-            function(pvs) {
-              scope.pvs = pvs;
-              scope.reload = false;
-            }
-          );
-        });
+        );
       } else {
         PvManager.loadPvs(attrs.attribute, searchTerm, undefined, attrs.showOnlyLeafValues).then(
           function(pvs) {
-            scope.pvs = pvs;
-            if (searchTerm == '' && pvs.length < 100) {
-              scope.reload = false;
-            }
+            setPvs(scope, searchTerm, attrs, pvs);
           }
         );
+      }
+    }
+
+    function setPvs(scope, searchTerm, attrs, pvs) {
+      scope.pvs = pvs;
+      if (attrs.unique == 'true') {
+        scope.pvs = pvs.filter(function(el, pos) { return pvs.indexOf(el) == pos; });
+      }
+
+      if (!searchTerm && pvs.length < 100) {
+        scope.reload = false;
       }
     }
     
@@ -44,6 +59,6 @@ angular.module('openspecimen')
       scope: true,
       replace: true,
       link : linker,
-      template: '<os-select refresh="searchPvs($select.search)" list="pvs"></os-select>'      
+      template: '<os-select refresh="searchPvs($select.search)" list="pvs"></os-select>'
     };
   });
