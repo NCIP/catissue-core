@@ -1,5 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 public class SpecimenListDetails extends SpecimenListSummary {
 	private List<UserSummary> sharedWith;
 	
-	private List<SpecimenDetail> specimens;
+	private List<SpecimenInfo> specimens;
 
 	public List<UserSummary> getSharedWith() {
 		return sharedWith;
@@ -22,11 +23,11 @@ public class SpecimenListDetails extends SpecimenListSummary {
 		this.sharedWith = sharedWith;
 	}
 
-	public List<SpecimenDetail> getSpecimens() {
+	public List<SpecimenInfo> getSpecimens() {
 		return specimens;
 	}
 
-	public void setSpecimens(List<SpecimenDetail> specimens) {
+	public void setSpecimens(List<SpecimenInfo> specimens) {
 		this.specimens = specimens;
 	}
 	
@@ -42,7 +43,7 @@ public class SpecimenListDetails extends SpecimenListSummary {
 		details.setCreatedOn(list.getCreatedOn());
 		details.setOwner(UserSummary.from(list.getOwner()));
 		details.setSharedWith(UserSummary.from(list.getSharedWith()));
-		details.setSpecimens(SpecimenDetail.from(specimens));
+		details.setSpecimens(SpecimenInfo.from(new ArrayList<>(specimens)));
 		details.setDefaultList(list.isDefaultList());
 		return details;
 		

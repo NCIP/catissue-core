@@ -9,15 +9,15 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 
 
 public class ListSpecimensDetail {
-	private List<SpecimenDetail> specimens = new ArrayList<>();
+	private List<SpecimenInfo> specimens = new ArrayList<>();
 	
 	private Integer actualCount;
 
-	public List<SpecimenDetail> getSpecimens() {
+	public List<SpecimenInfo> getSpecimens() {
 		return specimens;
 	}
 
-	public void setSpecimens(List<SpecimenDetail> specimens) {
+	public void setSpecimens(List<SpecimenInfo> specimens) {
 		this.specimens = specimens;
 	}
 
@@ -35,9 +35,8 @@ public class ListSpecimensDetail {
 	
 	public static ListSpecimensDetail from(Collection<Specimen> specimens, Integer actualCount) {
 		ListSpecimensDetail detail = new ListSpecimensDetail();
-		detail.setSpecimens(SpecimenDetail.from(specimens));
-		detail.setActualCount(actualCount); 
-		
+		detail.setSpecimens(SpecimenInfo.from(new ArrayList<>(specimens)));
+		detail.setActualCount(actualCount);
 		return detail;
 	}
 }

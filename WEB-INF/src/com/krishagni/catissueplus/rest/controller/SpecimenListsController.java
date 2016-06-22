@@ -192,7 +192,7 @@ public class SpecimenListsController {
 	@RequestMapping(method = RequestMethod.GET, value="{id}/csv-file")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public void exportCoresMap(@PathVariable("id") Long listId, HttpServletResponse httpResp) {
+	public void exportList(@PathVariable("id") Long listId, HttpServletResponse httpResp) {
 		EntityQueryCriteria crit = new EntityQueryCriteria(listId);
 		ResponseEvent<ExportedFileDetail> resp = specimenListSvc.exportSpecimenList(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
