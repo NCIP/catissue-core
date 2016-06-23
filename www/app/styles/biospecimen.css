@@ -226,7 +226,9 @@
 }
 
 .os-md-time .os-time-no-wheels tr:nth-child(2) td:nth-child(2) {
-  padding-top: 10px;
+  padding-top: 15px;
+  border: 0px;
+  box-shadow: none;
 }
 
 .os-text-checkbox:after {
