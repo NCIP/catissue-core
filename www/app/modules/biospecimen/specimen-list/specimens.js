@@ -28,7 +28,7 @@ angular.module('os.biospecimen.specimenlist')
         return;
       }
 
-      var types = [], sites = [], cps = [], lineages = [];
+      var types = [], sites = [], cps = [], lineages = [], containers = [];
       angular.forEach(list.specimens,
         function(specimen) {
           if (types.indexOf(specimen.type) == -1) {
@@ -46,6 +46,11 @@ angular.module('os.biospecimen.specimenlist')
           if (lineages.indexOf(specimen.lineage) == -1) {
             lineages.push(specimen.lineage);
           }
+
+          var location = specimen.storageLocation;
+          if (location && location.name && containers.indexOf(location.name) == -1) {
+            containers.push(location.name);
+          }
         }
       );
 
@@ -54,7 +59,8 @@ angular.module('os.biospecimen.specimenlist')
         types: types.sort(),
         sites: sites.sort(),
         cps: cps.sort(),
-        lineages: lineages.sort()
+        lineages: lineages.sort(),
+        containers: containers.sort()
       }
 
       $timeout(function() {$scope.ctx.filterPvs = filterPvs});

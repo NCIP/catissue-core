@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
@@ -24,6 +25,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	private Long cpId;
 
 	private Long cprId;
+
+	private String ppid;
 	
 	private Long eventId;
 	
@@ -107,6 +110,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 
 	public void setCprId(Long cprId) {
 		this.cprId = cprId;
+	}
+
+	public String getPpid() {
+		return ppid;
+	}
+
+	public void setPpid(String ppid) {
+		this.ppid = ppid;
 	}
 
 	public Long getEventId() {
@@ -350,21 +361,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	}
 
 	public static SpecimenInfo from(Specimen specimen) {
-		SpecimenInfo info = new SpecimenInfo();
-		fromTo(specimen,info);
-		return info;
+		return fromTo(specimen, new SpecimenInfo());
 	}
 	
 	public static List<SpecimenInfo> from(List<Specimen> specimens) {
-		List<SpecimenInfo> result = new ArrayList<SpecimenInfo>();
-		for (Specimen specimen : specimens) {
-			result.add(SpecimenInfo.from(specimen));
-		}
-		
-		return result;
+		return specimens.stream().map(SpecimenInfo::from).collect(Collectors.toList());
 	}
 
-	public static void fromTo(Specimen specimen, SpecimenInfo result) {
+	public static SpecimenInfo fromTo(Specimen specimen, SpecimenInfo result) {
 		result.setId(specimen.getId());
 		
 		SpecimenRequirement sr= specimen.getSpecimenRequirement();
@@ -390,6 +394,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		}
 	
 		StorageLocationSummary location = new StorageLocationSummary();
+		result.setStorageLocation(location);
 		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
 			location.setId(-1L);
@@ -399,19 +404,21 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 			location.setPositionX(position.getPosOne());
 			location.setPositionY(position.getPosTwo());
 		}
-		result.setStorageLocation(location);		
+
 		result.setActivityStatus(specimen.getActivityStatus());
 		result.setCreatedOn(specimen.getCreatedOn());
 		result.setStorageType(sr != null ? sr.getStorageType() : null);
 		result.setVisitId(specimen.getVisit().getId());
 		result.setVisitName(specimen.getVisit().getName());
-		result.setCprId(specimen.getVisit().getRegistration().getId());
+		result.setCprId(specimen.getRegistration().getId());
+		result.setPpid(specimen.getRegistration().getPpid());
 		result.setCpId(specimen.getCollectionProtocol().getId());
 		result.setCpShortTitle(specimen.getCollectionProtocol().getShortTitle());
 		result.setFreezeThawCycles(specimen.getFreezeThawCycles());
+		return result;
 	}	
 	
-	public static void fromTo(SpecimenRequirement anticipated, SpecimenInfo result) {
+	public static SpecimenInfo fromTo(SpecimenRequirement anticipated, SpecimenInfo result) {
 		result.setId(null);	
 		result.setReqId(anticipated.getId());
 		result.setReqLabel(anticipated.getName());
@@ -431,6 +438,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		StorageLocationSummary location = new StorageLocationSummary();
 		result.setStorageLocation(location);
 		result.setStorageType(anticipated.getStorageType());
+		return result;
 	}	
 	
 	@Override

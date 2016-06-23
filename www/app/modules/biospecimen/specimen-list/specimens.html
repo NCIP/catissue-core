@@ -83,7 +83,7 @@
           </li>
         </ul>
       </div>
-      <button class="default" os-right-drawer-toggle>
+      <button class="default" os-right-drawer-toggle ng-if="ctx.list.specimens.length > 1">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
       </button>
@@ -203,32 +203,43 @@
     </div>
 
     <div class="os-body">
-      <div class="form-group">
-        <input os-md-input type="text" ng-model="ctx.filterOpts.label" class="form-control"
-          placeholder="{{'specimen_list.label' | translate}}">
-      </div>
-
-      <div class="form-group">
-        <os-select os-md-input ng-model="ctx.filterOpts.type" list="ctx.filterPvs.types"
-          placeholder="{{'specimen_list.type' | translate}}">
-        </os-select>
-      </div>
-
-      <div class="form-group">
-        <os-select os-md-input ng-model="ctx.filterOpts.anatomicSite" list="ctx.filterPvs.sites"
-          placeholder="{{'specimen_list.anatomic_site' | translate}}">
-        </os-select>
-      </div>
-
-      <div class="form-group">
+      <div class="form-group" ng-if="ctx.filterPvs.cps.length > 1">
         <os-select os-md-input ng-model="ctx.filterOpts.cpShortTitle" list="ctx.filterPvs.cps"
           placeholder="{{'specimen_list.cp' | translate}}">
         </os-select>
       </div>
 
       <div class="form-group">
+        <input os-md-input type="text" ng-model="ctx.filterOpts.ppid" class="form-control"
+          placeholder="{{'specimen_list.ppid' | translate}}">
+      </div>
+
+      <div class="form-group" ng-if="ctx.filterPvs.lineages.length > 1">
         <os-select os-md-input ng-model="ctx.filterOpts.lineage" list="ctx.filterPvs.lineages"
           placeholder="{{'specimen_list.lineage' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group">
+        <input os-md-input type="text" ng-model="ctx.filterOpts.label" class="form-control"
+          placeholder="{{'specimen_list.label' | translate}}">
+      </div>
+
+      <div class="form-group" ng-if="ctx.filterPvs.types.length > 1">
+        <os-select os-md-input ng-model="ctx.filterOpts.type" list="ctx.filterPvs.types"
+          placeholder="{{'specimen_list.type' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group" ng-if="ctx.filterPvs.sites.length > 1">
+        <os-select os-md-input ng-model="ctx.filterOpts.anatomicSite" list="ctx.filterPvs.sites"
+          placeholder="{{'specimen_list.anatomic_site' | translate}}">
+        </os-select>
+      </div>
+
+      <div class="form-group" ng-if="ctx.filterPvs.containers.length > 1">
+        <os-select os-md-input ng-model="ctx.filterOpts.storageLocation.name" list="ctx.filterPvs.containers"
+          placeholder="{{'specimen_list.container' | translate}}">
         </os-select>
       </div>
 
