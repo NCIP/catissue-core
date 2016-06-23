@@ -20,7 +20,6 @@ angular.module('os.biospecimen.specimen.addderivative', [])
           obj: {specimen: $scope.derivative}, inObjs: ['specimen'], exObjs: exObjs
         }
       } else {
-        SpecimenUtil.loadSpecimenClasses($scope);
         SpecimenUtil.loadPathologyStatuses($scope);
         $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.derivative, extensionCtxt);
       }

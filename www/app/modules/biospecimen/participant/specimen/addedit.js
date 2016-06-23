@@ -75,13 +75,6 @@ angular.module('os.biospecimen.specimen.addedit', [])
       if (!hasDict) {
         loadPvs();
       }
-
-      $scope.$watch('currSpecimen.specimenClass', function(newVal, oldVal) {
-        if (!newVal || newVal == oldVal || !oldVal) {
-          return;
-        }
-        $scope.currSpecimen.type = '';
-      });
     }
 
     $scope.saveSpecimen = function() {

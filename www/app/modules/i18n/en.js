@@ -457,6 +457,7 @@
     "initial_qty": "Initial Quantity",
     "available_qty": "Available Quantity",
     "parent_specimen": "Parent Specimen",
+    "parent_type": "Parent Type",
     "storage_location": "Storage Location",
     "virtually_located": "Virtual",
     "no_specimens_to_show": "No Specimens to Show",

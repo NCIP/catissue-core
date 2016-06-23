@@ -102,21 +102,10 @@
 <script type="text/ng-template" id="modules/biospecimen/participant/specimen/static-add-derivative.html">
   <div>
     <div class="form-group">
-      <label class="col-xs-3 control-label" translate="specimens.class">Class</label>
-      <div class="col-xs-6">
-        <os-pvs name="specimenClass" ng-model="derivative.specimenClass" attribute="specimen-class"
-          placeholder="{{'specimens.class' | translate}}" required>
-        </os-pvs>
-        <div os-field-error field="derivativeForm.specimenClass"></div>
-      </div>
-    </div>
-
-    <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
       <div class="col-xs-6">
-        <os-pvs name="specimenType" ng-model="derivative.type" attribute="specimen-class" 
-          parent-val="derivative.specimenClass" placeholder="{{'specimens.type' | translate}}" required>
-        </os-pvs>
+        <os-specimen-types name="specimenType" specimen="derivative" placeholder="{{'specimens.type' | translate}}" required>
+        </os-specimen-types>
         <div os-field-error field="derivativeForm.specimenType"></div>
       </div>
     </div>

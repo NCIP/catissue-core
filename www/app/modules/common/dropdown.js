@@ -55,6 +55,11 @@ angular.module('openspecimen')
         } else {
           uiSelectChoices.attr('repeat', "item in " + tAttrs.list + " | filter: $select.search");
         }
+
+        if (tAttrs.groupBy) {
+          uiSelectChoices.attr('group-by', tAttrs.groupBy);
+        }
+
         uiSelectChoices.append('<span ng-bind-html="' + searchItem + ' | highlight: $select.search"></span>');
 
         if (multiple) {

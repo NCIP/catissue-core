@@ -10,6 +10,7 @@ angular.module('os.biospecimen.specimen')
             cpId: ps.cpId,
             parentId: ps.id,
             parentLabel: ps.label,
+            parentType: ps.type,
             parentCreatedOn: ps.createdOn,
             createdOn: createdOn,
             status: 'Collected'
@@ -56,6 +57,7 @@ angular.module('os.biospecimen.specimen')
         }
 
         delete spmn.parentCreatedOn;
+        delete spmn.parentType;
 
         if (spmn.closeParent) {
           result.push(new Specimen({

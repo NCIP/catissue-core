@@ -21,10 +21,10 @@
               <span translate="specimens.parent_specimen">Parent Specimen</span>
             </th>
             <th class="col os-col-10">
-              <span translate="specimens.label">Label</span>
+              <span translate="specimens.parent_type">Parent Type</span>
             </th>
             <th class="col os-col-10">
-              <span translate="specimens.class">Class</span>
+              <span translate="specimens.label">Label</span>
             </th>
             <th class="col os-col-10">
               <span translate="specimens.type">Type</span>
@@ -54,17 +54,14 @@
               </a>
             </td>
             <td class="col">
+              <span>{{derived.parentType}}</span>
+            </td>
+            <td class="col">
               <input name="label" type="text" os-md-input ng-model="derived.label">
             </td>
             <td class="col">
-              <os-pvs name="spmnClass" os-md-input attribute="specimen-class" ng-model="derived.specimenClass" required>
-              </os-pvs>
-              <div os-field-error field="dform.spmnClass"></div>
-            </td>
-            <td class="col">
-              <os-pvs name="type" os-md-input attribute="specimen-class" parent-val="derived.specimenClass"
-                ng-model="derived.type" required>
-              </os-pvs>
+              <os-specimen-types name="type" md-input specimen="derived" required>
+              </os-specimen-types>
               <div os-field-error field="dform.type"></div>
             </td>
             <td class="col">

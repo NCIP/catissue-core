@@ -17,8 +17,11 @@
       <table class="os-table bulk-edit">
         <thead class="os-table-head">
           <tr class="row">
-            <th class="col os-col-20">
+            <th class="col os-col-15">
               <span translate="specimens.parent_specimen">Parent Specimen</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.type">Type</span>
             </th>
             <th class="col os-col-10">
               <span translate="specimens.available_qty">Available Quantity</span>
@@ -32,7 +35,7 @@
             <th class="col os-col-15">
               <span translate="specimens.created_on">Created On</span>
             </th>
-            <th class="col os-col-25">
+            <th class="col os-col-20">
               <span translate="specimens.location">Location</span>
             </th>
             <th class="col os-col-5">
@@ -49,6 +52,9 @@
               <a ui-sref="specimen({specimenId: aliquotSpec.parentId})">
                 <span>{{aliquotSpec.parentLabel}}</span>
               </a>
+            </td>
+            <td class="col">
+              <span>{{aliquotSpec.type}}</span>
             </td>
             <td class="col">
               <span>{{aliquotSpec.parentAvailableQty}}</span>

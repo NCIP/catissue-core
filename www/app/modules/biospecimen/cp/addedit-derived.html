@@ -11,20 +11,10 @@
 
       <div class="col-xs-3">
         <div class="form-group">
-          <os-pvs name="specimenClass" ng-model="childReq.specimenClass" attribute="specimen-class"
-            os-md-input placeholder="{{'srs.specimen_class' | translate}}" required ng-disabled="specimensCount > 0"
+          <os-specimen-types name="specimenType" specimen="childReq" md-input placeholder="{{'srs.specimen_type' | translate}}"
+            required ng-disabled="specimensCount > 0"
             title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-pvs>
-          <div os-field-error field="derivativeForm.specimenClass"></div>
-        </div>
-      </div>
-
-      <div class="col-xs-3">
-        <div class="form-group">
-          <os-pvs name="specimenType" ng-model="childReq.type" attribute="specimen-class" parent-val="childReq.specimenClass"
-            os-md-input placeholder="{{'srs.specimen_type' | translate}}" required ng-disabled="specimensCount > 0"  
-            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
-          </os-pvs>
+          </os-specimen-types>
           <div os-field-error field="derivativeForm.specimenType"></div>
         </div>
       </div>

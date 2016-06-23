@@ -25,6 +25,8 @@ angular.module('os.common.form', [])
       restrict: 'A',
 
       controller: function($scope) {
+        this._cachedValues = {};
+
         this._formSubmitted = false;
 
         this._parentValidator = undefined;
@@ -62,6 +64,15 @@ angular.module('os.common.form', [])
         this.setParentValidator = function(parentValidator) {
           this._parentValidator = parentValidator;
         };
+
+        this.getCachedValues = function(group, prop, getter) {
+          var key = group + "_" + prop;
+          if (!this._cachedValues[key]) {
+            this._cachedValues[key] = getter();
+          }
+
+          return this._cachedValues[key];
+        }
       },
 
       link: function(scope, element, attrs, controller) {
