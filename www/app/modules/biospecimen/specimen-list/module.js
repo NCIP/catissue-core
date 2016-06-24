@@ -36,6 +36,11 @@ angular.module('os.biospecimen.specimenlist',
       })
       .state('specimen-list', {
         url: '/',
+        params: {
+          breadcrumbs: [
+            {state: 'specimen-lists', params: {}, captionKey: 'specimen_list.lists'}
+          ]
+        },
         templateUrl: 'modules/biospecimen/specimen-list/specimens.html',
         controller: 'SpecimenListSpecimensCtrl',
         resolve: {

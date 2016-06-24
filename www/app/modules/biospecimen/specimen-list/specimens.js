@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist')
   .controller('SpecimenListSpecimensCtrl', function(
-    $scope, $state, $timeout, $filter, currentUser, reqBasedDistOrShip, list,
+    $scope, $state, $stateParams, $timeout, $filter, currentUser, reqBasedDistOrShip, list,
     SpecimensHolder, SpecimenList, DeleteUtil, Alerts, Util) {
 
     function init() { 
@@ -15,7 +15,8 @@ angular.module('os.biospecimen.specimenlist')
         filterPvs: {init: false},
         selection: {},
         reqBasedDistOrShip: (reqBasedDistOrShip.value == 'true'),
-        url: SpecimenList.url()
+        url: SpecimenList.url(),
+        breadcrumbs: $stateParams.breadcrumbs
       }
 
       $scope.$on('osRightDrawerOpen', initFilterPvs);

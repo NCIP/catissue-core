@@ -1,9 +1,10 @@
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li> 
-        <a ui-sref="specimen-lists">
-          <span translate="specimen_list.lists">Specimen Lists</span>
+      <li ng-repeat="breadcrumb in ctx.breadcrumbs">
+        <a ui-sref="{{breadcrumb.state}}({{breadcrumb.params}})">
+          <span ng-if="!!breadcrumb.captionKey" translate="{{breadcrumb.captionKey}}"></span>
+          <span ng-if="!!breadcrumb.caption">{{breadcrumb.caption}}</span>
         </a>
       </li>
     </ul>
