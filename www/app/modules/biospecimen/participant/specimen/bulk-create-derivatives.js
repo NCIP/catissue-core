@@ -8,6 +8,7 @@ angular.module('os.biospecimen.specimen')
           return new Specimen({
             lineage: 'Derived',
             cpId: ps.cpId,
+            ppid: ps.ppid,
             parentId: ps.id,
             parentLabel: ps.label,
             parentType: ps.type,
@@ -56,6 +57,7 @@ angular.module('os.biospecimen.specimen')
           return;
         }
 
+        delete spmn.ppid;
         delete spmn.parentCreatedOn;
         delete spmn.parentType;
 

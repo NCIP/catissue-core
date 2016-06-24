@@ -7,6 +7,7 @@ angular.module('os.biospecimen.specimen')
         function(ps) {
           return new Specimen({
             cpId: ps.cpId,
+            ppid: ps.ppid,
             parentId: ps.id,
             parentLabel: ps.label,
             parentAvailableQty: ps.availableQty,
