@@ -12,6 +12,14 @@ angular.module('os.common.import.importjob', ['os.common.models'])
       );
     }
 
+    ImportJob.getRecFieldsCsv = function(fields) {
+      return $http.post(ImportJob.url() + 'record-fields-csv', fields).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return ImportJob;
   });
 

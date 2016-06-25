@@ -27,12 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.importer.domain.ObjectSchema;
 import com.krishagni.catissueplus.core.importer.events.FileRecordsDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportDetail;
 import com.krishagni.catissueplus.core.importer.events.ImportJobDetail;
 import com.krishagni.catissueplus.core.importer.events.ObjectSchemaCriteria;
 import com.krishagni.catissueplus.core.importer.repository.ListImportJobsCriteria;
 import com.krishagni.catissueplus.core.importer.services.ImportService;
+import com.krishagni.catissueplus.core.importer.services.ObjectReader;
 
 @Controller
 @RequestMapping("/import-jobs")
@@ -101,6 +103,18 @@ public class BulkObjectImportController {
 		resp.throwErrorIfUnsuccessful();
 
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/record-fields-csv")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public String getRecordFieldsCsv(@RequestBody List<ObjectSchema.Field> fields) {
+		ObjectSchema.Record schemaRec = new ObjectSchema.Record();
+		schemaRec.setFields(fields);
+
+		ObjectSchema schema = new ObjectSchema();
+		schema.setRecord(schemaRec);
+		return ObjectReader.getSchemaFields(schema);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
