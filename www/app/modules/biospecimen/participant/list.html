@@ -73,50 +73,7 @@
 
       <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
 
-      <div os-show-if-menu-items-present dropdown class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li ng-if="cp.sopDocumentName">
-            <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
-              <span class="fa fa-download"></span>
-              <span translate="cp.download_sop">Download SOP</span>
-            </a>
-          </li>
-          <li ng-if="cp.sopDocumentUrl">
-            <a ng-href="{{cp.sopDocumentUrl}}" target="_blank">
-              <span class="fa fa-external-link"></span>
-              <span translate="cp.sop_document">SOP Document</span>
-            </a>
-          </li>
-
-          <li ng-if="!!cp.catalogQuery">
-            <a ui-sref="query-results({queryId: cp.catalogQuery.id, cpId: cp.id})">
-              <span class="fa fa-table"></span>
-              <span translate="participant.buttons.specimen_catalog">Specimen Catalog</span>
-            </a>
-          </li>
-
-          <li ng-if="cpViewCtx.participantUpdatedAllowed || cpViewCtx.visitSpecimenUpdateAllowed">
-            <a ui-sref="import-cp-objs">
-              <span class="fa fa-upload"></span>
-              <span translate="bulk_imports.import">Import</span>
-            </a>
-          </li>
-
-          <li ng-if="cpViewCtx.participantUpdatedAllowed || cpViewCtx.visitSpecimenUpdateAllowed">
-            <a ui-sref="import-cp-jobs">
-              <span class="fa fa-list-alt"></span>
-              <span translate="bulk_imports.view_import_jobs">View Import Jobs</span>
-            </a>
-          </li>
-
-          <os-plugin-hooks view-name="'participant-list'" sec-name="'more-menu'"></os-plugin-hooks>
-        </ul>
-      </div>
+      <ng-include src="'modules/biospecimen/participant/more-menu.html'"></ng-include>
 
       <button class="default" os-right-drawer-toggle title="{{'participant.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>

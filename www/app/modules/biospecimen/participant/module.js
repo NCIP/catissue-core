@@ -47,15 +47,43 @@ angular.module('os.biospecimen.participant',
                 cp: cp.shortTitle
               })
             }
+          },
+
+          listView: function(cp, CpConfigSvc) {
+            return CpConfigSvc.getListView(cp.id, 'participant-list');
           }
         },
         parent: 'signed-in',
         abstract: true
       })
-      .state('participant-list', {
-        url: '/participants',
-        templateUrl: 'modules/biospecimen/participant/list.html',
-        controller: 'ParticipantListCtrl',
+      .state('cp-summary-view', {
+        url: '/summary-view',
+        controller: function($state, cp, summaryView) {
+          $state.go(summaryView, {cpId: cp.id}, {location: 'replace'});
+        },
+        resolve: {
+          summaryView: function(listView, CpConfigSvc) {
+            var summaryView = listView;
+
+            var summarySt = CpConfigSvc.getSummaryState();
+            if (summarySt) {
+              summaryView = summarySt;
+            }
+
+            return summaryView;
+          }
+        },
+        parent: 'cp-view'
+      })
+      .state('cp-list-view', {
+        url: '/list-view',
+        controller: function($state, cp, listView) {
+          $state.go(listView, {cpId: cp.id}, {location: 'replace'});
+        },
+        parent: 'cp-view'
+      })
+      .state('cp-list-view-root', {
+        template: '<div ui-view></div>',
         resolve: {
           catalogQuery: function(cp) {
             if (cp.catalogQuery) {
@@ -69,7 +97,14 @@ angular.module('os.biospecimen.participant',
             );
           }
         },
-        parent: 'cp-view'
+        parent: 'cp-view',
+        abstract: true
+      })
+      .state('participant-list', {
+        url: '/participants',
+        templateUrl: 'modules/biospecimen/participant/list.html',
+        controller: 'ParticipantListCtrl',
+        parent: 'cp-list-view-root'
       })
       .state('import-cp-objs', {
         url: '/import-cp-objs',
@@ -107,8 +142,7 @@ angular.module('os.biospecimen.participant',
           importDetail: function(cp) {
             return {
               breadcrumbs: [
-                {state: 'cp-detail.overview', title:  cp.shortTitle,     params: '{cpId:' + cp.id + '}'},
-                {state: 'participant-list',   title: 'participant.list', params: '{cpId:' + cp.id + '}'}
+                {state: 'cp-list-view', title:  cp.shortTitle,     params: '{cpId:' + cp.id + '}'}
               ],
               title: 'bulk_imports.jobs_list',
               objectTypes: [

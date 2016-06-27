@@ -98,7 +98,8 @@
       "download": "Download",
       "reset_password": "Reset Password",
       "skip": "Skip",
-      "back": "Back"
+      "back": "Back",
+      "list_view": "List View"
     }
   },
 

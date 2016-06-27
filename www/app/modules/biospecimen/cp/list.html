@@ -61,14 +61,14 @@
         </tr>
       </thead>
       <tbody class="os-table-body">
-        <tr class="row" ng-repeat="cp in cpList" os-row-click="showParticipants(cp)">
+        <tr class="row" ng-repeat="cp in cpList" os-row-click="showCpSummary(cp)">
           <td class="col">
-            <a ui-sref="participant-list({cpId: cp.id})">
+            <a ui-sref="cp-summary-view({cpId: cp.id})">
               <span>{{cp.shortTitle}}</span>
             </a>
           </td>
           <td class="col os-desc-column">
-            <a ui-sref="participant-list({cpId: cp.id})">
+            <a ui-sref="cp-summary-view({cpId: cp.id})">
               <span>{{cp.title}}</span>
             </a>
           </td>

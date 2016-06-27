@@ -1,7 +1,11 @@
 <div>
   <div os-page-header>
     <ul os-breadcrumbs>
-      <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.shortTitle}}</a> </li>
+      <li>
+        <a ui-sref="cp-list-view({cpId: cp.id})">
+          <span>{{cp.shortTitle}}</span>
+        </a>
+      </li>
     </ul>
     <h3 ng-switch on="!!cpr.id"> 
       <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>

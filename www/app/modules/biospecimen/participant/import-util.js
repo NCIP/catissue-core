@@ -100,12 +100,11 @@ angular.module('os.biospecimen.participant')
 
       return {
         breadcrumbs: [
-          {state: 'cp-detail.overview', title:  cp.shortTitle,     params: '{cpId:' + cp.id + '}'},
-          {state: 'participant-list',   title: 'participant.list', params: '{cpId:' + cp.id + '}'}
+          {state: 'cp-list-view', title: cp.shortTitle, params: '{cpId:' + cp.id + '}'}
         ],
         title: 'Bulk Import Records',
         objectType: undefined,
-        onSuccess: {state: 'participant-list', params: {cpId: cp.id}},
+        onSuccess: {state: 'cp-list-view', params: {cpId: cp.id}},
         types: importTypes,
         objectParams: {
           cpId: cp.id

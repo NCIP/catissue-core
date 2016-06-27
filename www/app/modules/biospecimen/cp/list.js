@@ -32,8 +32,8 @@ angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
       loadCollectionProtocols(cpFilterOpts);
     }
 
-    $scope.showParticipants = function(cp) {
-      $state.go('participant-list', {cpId: cp.id});
+    $scope.showCpSummary = function(cp) {
+      $state.go('cp-summary-view', {cpId: cp.id});
     };
 
     $scope.viewCatalog = function(cp) {

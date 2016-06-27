@@ -2,6 +2,8 @@
 angular.module('openspecimen')
   .factory('CpConfigSvc', function(CollectionProtocol, $q) {
     var cpWorkflowsMap = {};
+
+    var summarySt = undefined;
     
     function getRegParticipantTmpl(cpId, cprId) {
       return getTmpl(cpId, cprId, 'registerParticipant', 'modules/biospecimen/participant/addedit.html');
@@ -104,6 +106,22 @@ angular.module('openspecimen')
         return getWorkflowData(cpId, 'dictionary').then(
           function(data) {
             return data.fields || defValue || [];
+          }
+        );
+      },
+
+      setSummaryState: function(summaryState) {
+        summarySt = summaryState;
+      },
+
+      getSummaryState: function() {
+        return summarySt;
+      },
+
+      getListView: function(cpId, defValue) {
+        return getWorkflowData(cpId, 'common').then(
+          function(data) {
+            return data.listView || defValue;
           }
         );
       }
