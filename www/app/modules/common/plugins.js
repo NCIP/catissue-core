@@ -98,7 +98,32 @@ angular.module('openspecimen')
       link: function(scope, element, attrs) {
         scope.hookTmpls = [];
         scope.$watchGroup(['viewName', 'secName', 'defaultTmpl'], function(newVals) {
-          scope.hookTmpls =  PluginReg.getTmpls(scope.viewName, scope.secName, scope.defaultTmpl)
+          var tmpls = PluginReg.getTmpls(scope.viewName, scope.secName, scope.defaultTmpl);
+          if (!!tmpls) {
+            tmpls = tmpls.sort(
+              function(tmpl1, tmpl2) {
+                if (typeof tmpl1 == "object" && typeof tmpl2 == "object") {
+                  return tmpl1.order - tmpl2.order;
+                } else if (typeof tmpl1 == "object") {
+                  return -1;
+                } else if (typeof tmpl2 == "object") {
+                  return 1;
+                } else {
+                  return 0;
+                }
+              }
+            ).map(
+              function(tmpl) {
+                if (typeof tmpl == "object") {
+                  return tmpl.partial;
+                } else {
+                  return tmpl;
+                }
+              }
+            );
+          }
+
+          scope.hookTmpls =  tmpls;
         });
 
         PluginReg.subscribe(
