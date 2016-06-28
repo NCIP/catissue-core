@@ -1,9 +1,4 @@
 <div>
-  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
-  <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header-panel'" 
-    default-tmpl="'modules/biospecimen/participant/list-header.html'">
-  </os-plugin-hooks>
-
   <div class="container">
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
@@ -55,30 +50,5 @@
     </table>
   </div>
 
-  <div os-right-drawer ng-include="'modules/biospecimen/participant/search.html'"></div>
+  <div os-right-drawer ng-include src="'modules/biospecimen/participant/search.html'"></div>
 </div>
-
-<script type="text/ng-template" id="modules/biospecimen/participant/list-header.html">
-  <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> <a ui-sref="cp-detail.overview({cpId: cp.id})">{{cp.shortTitle}}</a> </li>
-    </ul>
-    <h3 translate="participant.list"></h3>
-    <div class="os-btns right">
-      <button show-if-allowed="participantResource.registerOpts" class="primary"
-        title="{{'participant.tooltip.register' | translate}}" ui-sref="participant-addedit({cprId: -1, cpId: cp.id})">
-        <span class="fa fa-plus"></span>
-        <span translate="participant.buttons.register">Register</span>
-      </button>
-
-      <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
-
-      <ng-include src="'modules/biospecimen/participant/more-menu.html'"></ng-include>
-
-      <button class="default" os-right-drawer-toggle title="{{'participant.tooltip.search' | translate}}">
-        <span class="fa fa-search"></span>
-        <span translate="common.buttons.search">Search</span>
-      </button>
-    </div>
-  </div>
-</script>

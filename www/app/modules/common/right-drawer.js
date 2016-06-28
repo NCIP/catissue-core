@@ -37,7 +37,7 @@ angular.module('openspecimen')
     }
 
     function open() {
-      if (drawerEl.hasClass('active')) {
+      if (!drawerEl || drawerEl.hasClass('active')) {
         return;
       }
 

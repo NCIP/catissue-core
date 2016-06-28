@@ -313,6 +313,7 @@ h4 + .btn-group {
   left: inherit;
 }
 
+.os-page-hdr + .os-container-wrapper .container,
 .os-page-hdr + .container {
   padding-top: 20px;
   position: absolute;

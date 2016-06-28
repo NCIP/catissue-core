@@ -83,7 +83,10 @@ angular.module('os.biospecimen.participant',
         parent: 'cp-view'
       })
       .state('cp-list-view-root', {
-        template: '<div ui-view></div>',
+        templateUrl: 'modules/biospecimen/participant/list-view.html',
+        controller: function($scope) {
+          $scope.listViewCtx = {};
+        },
         resolve: {
           catalogQuery: function(cp) {
             if (cp.catalogQuery) {

@@ -13,6 +13,12 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
         registerOpts: {resource: 'ParticipantPhi', operations: ['Create'], cp: $scope.cp.shortTitle},
       }
 
+      angular.extend($scope.listViewCtx, {
+        listName: 'participant.list',
+        headerButtonsTmpl: 'modules/biospecimen/participant/register-button.html',
+        showSearch: true
+      });
+
       loadParticipants();
       Util.filter($scope, 'filterOpts', loadParticipants);
     }
