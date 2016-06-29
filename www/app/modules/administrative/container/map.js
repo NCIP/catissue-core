@@ -41,10 +41,11 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
   })
 
   .directive('osContainerPositionSelector', function($timeout, ContainerUtil) {
-    function renderGrid(element, container, selectedPos) {
+    function renderGrid(element, container, assignedPos, selectedPos) {
       return new openspecimen.ui.container.ContainerPositionSelector({
         parentEl: element,
         container: container,
+        assignedPos: assignedPos,
         inputPos: selectedPos,
         containerUtil: ContainerUtil,
         onSelect: function(position) {
@@ -61,7 +62,8 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
 
       scope: {
         container: '=',
-        selectedPos: '='
+        selectedPos: '=',
+        assignedPos: '='
       },
 
       link: function(scope, element, attrs) {
@@ -80,7 +82,7 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
             return;
           }
 
-          grid = renderGrid(element, scope.container, scope.selectedPos);
+          grid = renderGrid(element, scope.container, scope.assignedPos, scope.selectedPos);
         });
       }
     };

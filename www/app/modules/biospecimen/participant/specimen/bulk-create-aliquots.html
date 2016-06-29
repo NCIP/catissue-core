@@ -46,7 +46,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="os-table-body">
+        <tbody class="os-table-body" os-storage-positions>
           <tr class="row" ng-repeat="aliquotSpec in ctx.aliquotsSpec" ng-form="aform">
             <td class="col">
               <a ui-sref="specimen({specimenId: aliquotSpec.parentId})">

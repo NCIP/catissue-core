@@ -53,7 +53,7 @@
             <th class="col os-col-5">&nbsp;</th>
           </tr>
         </thead>
-        <tbody class="os-table-body">
+        <tbody class="os-table-body" os-storage-positions>
           <tr class="row" ng-class="{'os-pool-specimen': !!specimen.pooledSpecimen}"
             ng-repeat="specimen in specimens | openedTreeNodes" ng-form="sform" ng-if="specimen.showInTree">
             <td class="col os-col-30">

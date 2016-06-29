@@ -206,7 +206,13 @@ td.os-container-pos.occupied > .os-circle {
   background: #5cb85c!important;
 }
 
-td.os-container-pos.occupied {
+td.os-container-pos.assigned > .os-circle {
+  background: #f0ad4e!important;
+}
+
+
+td.os-container-pos.occupied,
+td.os-container-pos.assigned {
   cursor: auto!important;
 }
 

@@ -248,7 +248,7 @@
           <th class="col os-col-10" ng-if="shipment.status == 'Shipped'" translate="shipments.spec.quality">Quality</th>
         </tr>
       </thead>
-      <tbody class="os-table-body">
+      <tbody class="os-table-body" os-storage-positions>
         <tr class="row" ng-repeat="item in shipment.shipmentItems"
           ng-form="sform" ng-init="specimen = item.specimen; item.receivedQuality = qualityStatuses[0]">
           <td class="col">

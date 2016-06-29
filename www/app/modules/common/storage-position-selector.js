@@ -1,7 +1,7 @@
 
 angular.module('openspecimen')
   .controller('StoragePositionSelectorCtrl',
-    function($scope, $modalInstance, $timeout, $q, entity, cpId, Container) {
+    function($scope, $modalInstance, $timeout, $q, entity, cpId, assignedPositions, Container) {
       function init() {
         $scope.listOpts = { 
           type: entity.getType(),
@@ -24,6 +24,7 @@ angular.module('openspecimen')
         $scope.showGrid = false;       // when to draw and show occupancy grid
         $scope.entity = entity;        // occupying entity for which slot is being selected
         $scope.cpId = cpId;
+        $scope.assignedPositions = assignedPositions; // positions are selected in current form/session
       };
 
       $scope.toggleContainerSelection = function(wizard, container) {

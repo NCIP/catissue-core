@@ -46,7 +46,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="os-table-body">
+        <tbody class="os-table-body" os-storage-positions>
           <tr class="row" ng-repeat="derived in ctx.derivedSpmns" ng-form="dform">
             <td class="col">
               <a ui-sref="specimen({specimenId: derived.parentId})">

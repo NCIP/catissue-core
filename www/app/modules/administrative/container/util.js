@@ -50,6 +50,8 @@ angular.module('os.administrative.container.util', ['os.common.box'])
     return {
       fromOrdinal: NumberConverterUtil.fromNumber,
 
+      toNumber: NumberConverterUtil.toNumber,
+
       getOpts: getOpts,
 
       assignPositions: function(container, occupancyMap, inputLabels, vacateOccupants) {

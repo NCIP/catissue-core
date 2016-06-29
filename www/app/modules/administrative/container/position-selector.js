@@ -34,8 +34,29 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
     return occupiedPosMap;
   }
 
+  function getAssignedPositionsMap(container, assigned) {
+    var assignedMap = {};
+    var positions = assigned[container.name];
+    if (!positions) {
+      return assignedMap;
+    }
+
+    for (var i = 0; i < positions.length; ++i) {
+      if (!positions[i].positionX || !positions[i].positionY) {
+        continue;
+      }
+
+      var row = Utility.toNumber(container.rowLabelingScheme, positions[i].positionY);
+      var column = Utility.toNumber(container.columnLabelingScheme, positions[i].positionX);
+      assignedMap[(row - 1) * container.noOfColumns + column] = true;
+    }
+
+    return assignedMap;
+  }
+
   function getGridBody() {
     var occupiedPosMap = getOccupiedPositionsMap(container.occupiedPositions);
+    var assignedPosMap = getAssignedPositionsMap(container, opts.assignedPos || {});
 
     var tbody = $("<tbody/>");
     for (var i = 0; i < +container.noOfRows; ++i) {
@@ -51,7 +72,9 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
 
         var pos = i * container.noOfColumns + j + 1;
         if (occupiedPosMap[pos]) {
-          td.addClass("occupied");
+          td.addClass("occupied no-click");
+        } else if (assignedPosMap[pos]) {
+          td.addClass("assigned no-click");
         }
 
         td.append($("<span/>").addClass("os-circle"));
@@ -70,7 +93,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
   }
     
   function listenForSelections(table, selectedPos) {
-    table.find("td.os-container-pos:not(.occupied)").on("click", function(event) {
+    table.find("td.os-container-pos:not(.no-click)").on("click", function(event) {
       var posEl = $(event.currentTarget);
       
       if (posEl.hasClass("selected")) {
