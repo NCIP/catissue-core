@@ -59,5 +59,13 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
       }
     }
 
+    SpecimenList.prototype.addChildSpecimens = function() {
+      return $http.post(SpecimenList.url() + this.$id() + '/add-child-specimens').then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
     return SpecimenList;
   });

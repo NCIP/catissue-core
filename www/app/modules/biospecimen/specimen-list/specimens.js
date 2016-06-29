@@ -67,14 +67,31 @@ angular.module('os.biospecimen.specimenlist')
       $timeout(function() {$scope.ctx.filterPvs = filterPvs});
     }
 
+    function reinitFilterPvs() {
+      $scope.ctx.filterPvs.init = false;
+      initFilterPvs();
+    }
+
     function resetSelection() {
       return $scope.ctx.selection = {all: false, any: false, specimens: []};
     }
 
-    function filterSpecimens(filterOpts) {
-      var spmnsInView = $filter('filter')(list.specimens, filterOpts);
-      var selectedSpmns = spmnsInView.filter(function(spmn) { return !!spmn.selected });
+    function isSpecimenAvailable(spmn) {
+      return spmn.availableQty > 0 && (spmn.available == true);
+    }
 
+    function filterSpecimens(filterOpts) {
+      var showAvailable = filterOpts.showAvailable;
+      filterOpts.showAvailable = undefined;
+
+      var spmnsInView = $filter('filter')(list.specimens, filterOpts);
+      if (showAvailable) {
+        spmnsInView = spmnsInView.filter(isSpecimenAvailable);
+      }
+
+      filterOpts.showAvailable = showAvailable;
+
+      var selectedSpmns = spmnsInView.filter(function(spmn) { return !!spmn.selected });
       $scope.ctx.spmnsInView = spmnsInView;
       $scope.ctx.selection.specimens = selectedSpmns;
       $scope.ctx.selection.all = (selectedSpmns.length > 0 && selectedSpmns.length == spmnsInView.length);
@@ -97,6 +114,7 @@ angular.module('os.biospecimen.specimenlist')
 
           var type = list.getListType(currentUser);
           Alerts.success('specimen_list.specimens_removed_from_' + type, list);
+          reinitFilterPvs();
         }
       );
     }
@@ -109,6 +127,24 @@ angular.module('os.biospecimen.specimenlist')
 
       SpecimensHolder.setSpecimens($scope.ctx.selection.specimens);
       $state.go(state, params);
+    }
+
+    $scope.addChildSpecimens = function() {
+      var list = $scope.ctx.list;
+      var oldLen = list.specimens.length;
+
+      list.addChildSpecimens().then(
+        function(listSpecimens) {
+          list.specimens = listSpecimens.specimens;
+          filterSpecimens($scope.ctx.filterOpts);
+
+          var newLen = list.specimens.length;
+          if (newLen > oldLen) {
+            Alerts.success('specimen_list.child_specimens_added', {count: (newLen - oldLen)});
+            reinitFilterPvs();
+          }
+        }
+      );
     }
 
     $scope.viewSpecimen = function(specimen) {

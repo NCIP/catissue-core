@@ -1487,7 +1487,10 @@
     "last_updated": "Last Updated",
     "specimens": "Specimens",
     "filter_lists": "Filters",
-    "search_def_list_tip": "Use $$ to search users' default carts"
+    "search_def_list_tip": "Use $$ to search users' default carts",
+    "add_child_specimens": "Add Child Specimens",
+    "child_specimens_added": "Successfully added {{count}} child specimens",
+    "available_spmns": "Available Specimens"
   },
 
   "orders": {

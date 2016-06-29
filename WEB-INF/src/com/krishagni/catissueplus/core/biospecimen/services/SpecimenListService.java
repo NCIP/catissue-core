@@ -35,5 +35,7 @@ public interface SpecimenListService {
 	
 	public ResponseEvent<SpecimenListDetails> deleteSpecimenList(RequestEvent<Long> req);
 
+	public ResponseEvent<ListSpecimensDetail> addChildSpecimens(RequestEvent<Long> req);
+
 	public ResponseEvent<ExportedFileDetail> exportSpecimenList(RequestEvent<EntityQueryCriteria> req);
 }

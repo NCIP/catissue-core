@@ -45,6 +45,12 @@
               <span translate="common.buttons.export">Export</span>
             </a>
           </li>
+          <li>
+            <a ng-click="addChildSpecimens()">
+              <span class="fa fa-plus"></span>
+              <span translate="specimen_list.add_child_specimens">Add Child Specimens</span>
+            </a>
+          </li>
           <li class="divider"></li>
           <li>
             <a ng-click="confirmRemoveSpecimens()">
@@ -242,6 +248,17 @@
         <os-select os-md-input ng-model="ctx.filterOpts.storageLocation.name" list="ctx.filterPvs.containers"
           placeholder="{{'specimen_list.container' | translate}}">
         </os-select>
+      </div>
+
+      <div class="form-group">
+        <div class="os-text-checkbox">
+          <div class="checkbox">
+            <os-checkbox ng-model="ctx.filterOpts.showAvailable"></os-checkbox>
+          </div>
+          <div class="message">
+            <span translate="specimen_list.available_spmns">Available Specimens?</span>
+          </div>
+        </div>
       </div>
 
       <div class="form-group os-btns">

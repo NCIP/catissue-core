@@ -170,6 +170,18 @@ public class SpecimenListsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.POST, value="/{listId}/add-child-specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ListSpecimensDetail addChildSpecimens(
+		@PathVariable("listId")
+		Long listId) {
+
+		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.addChildSpecimens(getRequest(listId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value="/{listId}/users")
 	@ResponseStatus(HttpStatus.OK)

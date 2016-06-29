@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -140,7 +141,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			SpecimenList existing = getSpecimenList(req.getPayload(), null);
 			existing.delete();
 			daoFactory.getSpecimenListDao().saveOrUpdate(existing);
-			return ResponseEvent.response(SpecimenListDetails.from(existing));
+			return ResponseEvent.response(SpecimenListDetails.from(existing, null));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -222,6 +223,27 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<ListSpecimensDetail> addChildSpecimens(RequestEvent<Long> req) {
+		try {
+			SpecimenList list = getSpecimenList(req.getPayload(), null);
+			int listSize = list.size();
+
+			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
+			List<Specimen> accessibleSpmns = getReadAccessSpecimens(list.getId(), siteCpPairs);
+
+			List<Specimen> addedSpmns = new ArrayList<>();
+			addChildSpecimens(list, accessibleSpmns, addedSpmns);
+			accessibleSpmns.addAll(addedSpmns);
+			return ResponseEvent.response(ListSpecimensDetail.from(accessibleSpmns, addedSpmns.size() + listSize));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> shareSpecimenList(RequestEvent<ShareSpecimenListOp> req) {
 		try {
 			ShareSpecimenListOp opDetail = req.getPayload();
@@ -271,7 +293,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			EntityQueryCriteria crit = req.getPayload();
 			SpecimenList list = getSpecimenList(crit.getId(), crit.getName());
 			List<Specimen> specimens = getReadAccessSpecimens(list.getId(), null);
-			return ResponseEvent.response(exportSpecimenList(list, specimens));
+			return ResponseEvent.response(exportSpecimenList(list, SpecimenList.groupByAncestors(specimens)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -455,6 +477,18 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		}
 
 		return specimenList;
+	}
+
+	private void addChildSpecimens(SpecimenList list, List<Specimen> specimens, List<Specimen> added) {
+		for (Specimen specimen : specimens) {
+			List<Specimen> childSpmns = specimen.getChildCollection()
+				.stream().filter(childSpmn -> childSpmn.isCollected() && !list.contains(childSpmn))
+				.collect(Collectors.toList());
+			list.addSpecimens(childSpmns);
+			added.addAll(childSpmns);
+
+			addChildSpecimens(list, childSpmns, added);
+		}
 	}
 
 	private ExportedFileDetail exportSpecimenList(SpecimenList list, Collection<Specimen> specimens) {

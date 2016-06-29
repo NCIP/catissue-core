@@ -1,11 +1,11 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList;
 
 
 public class ListSpecimensDetail {
@@ -33,9 +33,9 @@ public class ListSpecimensDetail {
 		return from(Collections.emptyList(), actualCount);
 	}
 	
-	public static ListSpecimensDetail from(Collection<Specimen> specimens, Integer actualCount) {
+	public static ListSpecimensDetail from(List<Specimen> specimens, Integer actualCount) {
 		ListSpecimensDetail detail = new ListSpecimensDetail();
-		detail.setSpecimens(SpecimenInfo.from(new ArrayList<>(specimens)));
+		detail.setSpecimens(SpecimenInfo.from(SpecimenList.groupByAncestors(specimens)));
 		detail.setActualCount(actualCount);
 		return detail;
 	}
