@@ -230,17 +230,17 @@ public class SpecimenDetail extends SpecimenInfo {
 		SpecimenInfo.fromTo(specimen, result);
 		
 		SpecimenRequirement sr = specimen.getSpecimenRequirement();
-		Collection<Specimen> children = specimen.getChildCollection();
 		if (sr == null) {
-			result.setChildren(from(children));
+			List<SpecimenDetail> children = from(specimen.getChildCollection());
+			sort(children);
+			result.setChildren(children);
 		} else {
 			if (sr.isPooledSpecimenReq()) {
 				result.setSpecimensPool(getSpecimens(sr.getSpecimenPoolReqs(), specimen.getSpecimensPool()));
 			}
 			result.setPoolSpecimen(sr.isSpecimenPoolReq());
-			
-			Collection<SpecimenRequirement> anticipated = sr.getChildSpecimenRequirements();
-			result.setChildren(getSpecimens(anticipated, children));
+
+			result.setChildren(getSpecimens(sr.getChildSpecimenRequirements(), specimen.getChildCollection()));
 		}
 		
 		if (specimen.getPooledSpecimen() != null) {
