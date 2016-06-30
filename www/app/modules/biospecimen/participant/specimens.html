@@ -91,7 +91,8 @@
                         'os-status-pending': specimen.status == 'Pending' || !specimen.status,
                         'os-status-not-collected': specimen.status == 'Missed Collection',
                         'os-status-closed': specimen.activityStatus == 'Closed' && !specimen.distributionStatus,
-                        'os-status-distributed': specimen.distributionStatus == 'Distributed',
+                        'os-status-distributed': specimen.distributionStatus == 'Distributed' && specimen.availableQty == 0,
+                        'os-status-part-distributed': specimen.distributionStatus == 'Distributed' && specimen.availableQty > 0,
                         'os-status-returned': specimen.distributionStatus == 'Returned'}">
                     </span>
 

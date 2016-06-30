@@ -37,7 +37,11 @@
             <span ng-switch-default class="value value-md os-status-pending">Pending</span>
           </ng-switch>
           <ng-switch ng-switch-when="false" on="specimen.distributionStatus">
-            <span ng-switch-when="Distributed" class="value value-md os-status-distributed">Distributed</span>
+            <span ng-switch-when="Distributed">
+              <span class="value value-md" ng-class="specimen.availableQty > 0 ? 'os-status-part-distributed' : 'os-status-distributed'">
+                Distributed
+              </span>
+            </span>
             <span ng-switch-when="Returned" class="value value-md os-status-returned">Returned</span>
           </ng-switch>
         </ng-switch>
