@@ -29,5 +29,4 @@
       <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
-
 </databaseChangeLog>

@@ -4,9 +4,7 @@
     "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping auto-import="false">
-  <class name="com.krishagni.catissueplus.core.audit.Revision"
-    table="OS_REVISIONS">
-
+  <class name="com.krishagni.catissueplus.core.audit.domain.EntityRevision" table="OS_REVISIONS">
     <id name="id" column="REV">
       <generator class="native">
         <param name="sequence">OS_REVISIONS_SEQ</param>
@@ -19,12 +17,9 @@
     
     <property name="ipAddress" column="IP_ADDRESS" />
     
-    <set name="entityNames" table="OS_REVISION_ENTITIES">
+    <set name="details" table="OS_ENTITY_REVISION_DETAILS" inverse="true" cascade="all-delete-orphan">
       <key column="REV"/>
-      <element column="ENTITYNAME" type="string"></element>
+      <one-to-many class="com.krishagni.catissueplus.core.audit.domain.EntityRevisionDetail"/>
     </set>
   </class>
-
 </hibernate-mapping>
-        
-        
