@@ -17,9 +17,9 @@
     
     <property name="ipAddress" column="IP_ADDRESS" />
     
-    <set name="details" table="OS_ENTITY_REVISION_DETAILS" inverse="true" cascade="all-delete-orphan">
+    <set name="entityNames" table="OS_REVISION_ENTITIES">
       <key column="REV"/>
-      <one-to-many class="com.krishagni.catissueplus.core.audit.domain.EntityRevisionDetail"/>
+      <element column="ENTITYNAME" type="string"></element>
     </set>
   </class>
 </hibernate-mapping>
