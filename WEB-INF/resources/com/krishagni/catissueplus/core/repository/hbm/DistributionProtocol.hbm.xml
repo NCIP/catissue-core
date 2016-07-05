@@ -106,7 +106,8 @@
         com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol dp
       where
         dp.endDate is not null and
-        dp.endDate between :fromDate and :toDate
+        dp.endDate between :fromDate and :toDate and
+        dp.activityStatus = 'Active'
     </query>
   </class>
 </hibernate-mapping>
