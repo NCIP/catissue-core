@@ -163,9 +163,9 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			User user = userFactory.createUser(detail);
-			resetAttrs(user);
 
 			if (!isSignupReq) {
+				resetAttrs(user);
 				AccessCtrlMgr.getInstance().ensureCreateUserRights(user);
 			}
 		
