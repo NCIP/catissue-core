@@ -1,13 +1,16 @@
 angular.module('os.biospecimen.common')
-  .directive('osSpecimenTypes', function(PvManager, $timeout) {
-    var valuesQ = undefined;
+  .factory('SpecimenTypeUtil', function(PvManager) {
 
     function transformer(pv) {
       return {specimenClass: pv.parentValue, type: pv.value};
     }
 
-    function getSpecimenTypes() {
+    function loadSpecimenTypes() {
       return PvManager.loadPvsByParent('specimen-class', '', true, transformer);
+    }
+
+    function getSpecimenTypes(formCtrl) {
+      return formCtrl.getCachedValues('pvs', 'specimen-type', loadSpecimenTypes);
     }
 
     function setType(specimen, types, type) {
@@ -19,23 +22,40 @@ angular.module('os.biospecimen.common')
       }
     }
 
+    function init(specimen, types) {
+      var type = specimen.type;
+      if (!type) {
+        return;
+      }
+
+      setType(specimen, types, type);
+    }
+
+    return {
+      setClass: function(formCtrl, specimens) {
+        getSpecimenTypes(formCtrl).then(
+          function(types) {
+            angular.forEach(specimens, function(specimen) { init(specimen, types); });
+          }
+        );
+      },
+
+      getSpecimenTypes: getSpecimenTypes
+    }
+  })
+  .directive('osSpecimenTypes', function($timeout, SpecimenTypeUtil, PvManager) {
+    var valuesQ = undefined;
+
     function linker(scope, element, attrs, formCtrl) {
       scope.types = [];
-      valuesQ = formCtrl.getCachedValues('pvs', 'specimen-type', getSpecimenTypes);
+      valuesQ = SpecimenTypeUtil.getSpecimenTypes(formCtrl);
       valuesQ.then(function(types) { scope.types = types; });
 
       scope.onTypeSelect = function(type) {
         angular.extend(scope.specimen, type);
       }
 
-      scope.$on('osRecsLoaded', function() {
-        var type = scope.specimen.type;
-        if (!type) {
-          return;
-        }
-
-        valuesQ.then(function(types) { setType(scope.specimen, types, type); });
-      });
+      SpecimenTypeUtil.setClass(formCtrl, [scope.specimen]);
     }
 
     return {

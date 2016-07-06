@@ -88,7 +88,7 @@ angular.module('openspecimen')
         }
             
         uiSelect.append(uiSelectMatch).append(uiSelectChoices);
-        
+
         var selectContainer = angular.element("<div/>")
           .addClass("os-select-container")
           .append(uiSelect);

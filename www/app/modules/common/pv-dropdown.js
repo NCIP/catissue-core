@@ -1,7 +1,7 @@
 
 angular.module('openspecimen')
   .directive('osPvs', function(PvManager) {
-    function linker(scope, element, attrs) {
+    function linker(scope, element, attrs, formCtrl) {
       scope.pvs = [];
       scope.reload = true;
 
@@ -13,34 +13,53 @@ angular.module('openspecimen')
             }
 
             scope.reload = true;
-            loadPvs(scope, null, attrs, newVal);
+            loadPvs(formCtrl, scope, null, attrs, newVal);
           }
         );
       }
 
       scope.searchPvs = function(searchTerm) {
         if (scope.reload) {
-          loadPvs(scope, searchTerm, attrs);
+          loadPvs(formCtrl, scope, searchTerm, attrs);
         }
       };
     }
 
-    function loadPvs (scope, searchTerm, attrs, parentVal) {
+    function loadPvs(formCtrl, scope, searchTerm, attrs, parentVal) {
       var q = undefined;
-
       if (attrs.parentVal) {
-        PvManager.loadPvsByParent(attrs.attribute, parentVal).then(
-          function(pvs) {
-            setPvs(scope, searchTerm, attrs, pvs);
-          }
-        );
+        var prop = 'P:' + attrs.attribute + ':' + parentVal;
+        q = getCachedValues(formCtrl, 'pvs', prop, function() { return _loadPvsByParent(attrs, parentVal); });
       } else {
-        PvManager.loadPvs(attrs.attribute, searchTerm, undefined, attrs.showOnlyLeafValues).then(
-          function(pvs) {
-            setPvs(scope, searchTerm, attrs, pvs);
-          }
-        );
+        if (!searchTerm) {
+          var prop = attrs.attribute + ":" + attrs.showOnlyLeafValues;
+          q = getCachedValues(formCtrl, 'pvs', prop, function() { return _loadPvs(scope, attrs, searchTerm); });
+        } else {
+          q = _loadPvs(scope, attrs, searchTerm);
+        }
       }
+
+      q.then(
+        function(pvs) {
+          setPvs(scope, searchTerm, attrs, pvs);
+        }
+      );
+    }
+
+    function getCachedValues(formCtrl, group, prop, getter) {
+      if (!formCtrl) {
+        return getter();
+      }
+
+      return formCtrl.getCachedValues(group, prop, getter);
+    }
+
+    function _loadPvs(scope, attrs, searchTerm) {
+      return PvManager.loadPvs(attrs.attribute, searchTerm, undefined, attrs.showOnlyLeafValues);
+    }
+
+    function _loadPvsByParent(attrs, parentVal) {
+      return PvManager.loadPvsByParent(attrs.attribute, parentVal);
     }
 
     function setPvs(scope, searchTerm, attrs, pvs) {
@@ -56,6 +75,7 @@ angular.module('openspecimen')
     
     return {
       restrict: 'E',
+      require: '?^osFormValidator',
       scope: true,
       replace: true,
       link : linker,
