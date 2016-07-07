@@ -33,26 +33,4 @@ public class SpecimenUnitsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();		
 	}
-	
-	@RequestMapping(method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public SpecimenUnitDetail saveUnit(@RequestBody SpecimenUnitDetail detail) {
-		RequestEvent<SpecimenUnitDetail> req = new RequestEvent<SpecimenUnitDetail>(detail);
-		ResponseEvent<SpecimenUnitDetail> resp = specUnitsSvc.saveOrUpdate(req);
-		resp.throwErrorIfUnsuccessful();		
-		return resp.getPayload();
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	@ResponseBody
-	public SpecimenUnitDetail updateUnit(@PathVariable("id") Long id, @RequestBody SpecimenUnitDetail detail) {
-		detail.setId(id);
-		
-		RequestEvent<SpecimenUnitDetail> req = new RequestEvent<SpecimenUnitDetail>(detail);
-		ResponseEvent<SpecimenUnitDetail> resp = specUnitsSvc.saveOrUpdate(req);
-		resp.throwErrorIfUnsuccessful();		
-		return resp.getPayload();
-	}
 }

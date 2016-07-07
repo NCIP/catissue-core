@@ -112,4 +112,5 @@
       <column name="VISIT_NAME_PRINT_COPIES" type="${int.type}"/>
     </addColumn>
   </changeSet>
+
 </databaseChangeLog>

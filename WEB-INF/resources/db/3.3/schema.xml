@@ -29,4 +29,192 @@
       <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
     </addColumn>
   </changeSet>
-</databaseChangeLog>
+
+  <changeSet author="mdnasim" id="PV properties">
+    <createTable tableName="OS_PV_PROPS">
+      <column name="PV_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on PV ID of PV properties">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PROPS_PV_ID"
+      baseTableName="OS_PV_PROPS"
+      baseColumnNames="PV_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Function to obtain PV ID given attribute name and value" dbms="mysql">
+    <sql endDelimiter="//">
+      drop function if exists getPvId
+      //
+
+      create function getPvId (publicId varchar(255), pvValue varchar(255))
+        returns bigint(20)
+      begin
+        return getPvParentId(publicId, pvValue);
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Function to obtain PV ID given attribute name and value" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace function getPvId(
+        publicId IN varchar2,
+        pvValue IN varchar2
+      )
+      return number as
+      begin
+        return getPvParentId(publicId, pvValue);
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to rename PV attribute" dbms="mysql">
+    <sql endDelimiter="//">
+      drop procedure if exists rename_pv_attribute;
+      //
+
+      create procedure rename_pv_attribute(
+        in oldAttrName text,
+        in newAttrName text,
+        in newCaption text,
+        in newDef text,
+        in version text
+      )
+      begin
+        insert into catissue_cde
+          (public_id, long_name, definition, version, last_updated)
+        values
+          (newAttrName, newCaption, newDef, version, ${now});
+
+        update
+          catissue_permissible_value
+        set
+          public_id = newAttrName
+        where
+          public_id = oldAttrName;
+
+        delete from catissue_cde where public_id = oldAttrName;
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to rename PV attribute" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure rename_pv_attribute(
+        oldAttrName   in varchar2,
+        newAttrName   in varchar2,
+        newCaption    in varchar2,
+        newDef        in varchar2,
+        version       in varchar2
+      ) as
+      begin
+        insert into catissue_cde
+          (public_id, long_name, definition, version, last_updated)
+        values
+          (newAttrName, newCaption, newDef, version, ${now});
+
+        update
+          catissue_permissible_value
+        set
+          public_id = newAttrName
+        where
+          public_id = oldAttrName;
+
+        delete from catissue_cde where public_id = oldAttrName;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Create procedure to remove config property" dbms="mysql">
+    <sql endDelimiter="//">
+      drop procedure if exists remove_cfg_prop;
+      //
+
+      create procedure remove_cfg_prop(
+        in moduleName text,
+        in propName text
+      )
+      begin
+        delete s
+        from
+          os_cfg_settings s
+          join os_cfg_props p on p.identifier = s.property_id
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name= moduleName and p.name = propName;
+
+        delete p
+        from
+          os_cfg_props p
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name= moduleName and p.name = propName;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to remove config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure remove_cfg_prop(
+        moduleName in varchar2,
+        propName   in varchar2
+      ) as
+      begin
+        delete
+        from
+          os_cfg_settings s
+        where
+          s.property_id in (
+           select
+             p.identifier
+           from
+             os_cfg_props p
+             join os_modules m on m.identifier = p.module_id
+           where
+             m.name = moduleName and p.name = propName
+          );
+
+        delete
+        from
+          os_cfg_props p
+        where
+          p.identifier in (
+            select
+              p.identifier
+            from
+              os_cfg_props p
+              join os_modules m on m.identifier = p.module_id
+            where
+              m.name = moduleName and p.name = propName
+          );
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Move specimen units from tables of its own to PV properties">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.MoveSpecimenUnitsToPvProps"></customChange>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop specimen units as units are stored as PV properties">
+    <dropTable tableName="OS_SPECIMEN_UNITS"/>
+  </changeSet>
+</databaseChangeLog>	

@@ -8,6 +8,4 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface SpecimenUnitService {
 	public ResponseEvent<List<SpecimenUnitDetail>> getUnits();
-	
-	public ResponseEvent<SpecimenUnitDetail> saveOrUpdate(RequestEvent<SpecimenUnitDetail> req);
 }

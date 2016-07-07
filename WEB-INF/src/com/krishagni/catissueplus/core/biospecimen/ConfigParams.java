@@ -29,10 +29,6 @@ public class ConfigParams {
 	
 	public static final String SPR_DIR                   = "spr_dir";
 
-	public static final String SP_TYPE_ABBR_MAP          = "specimen_type_abbr_map";
-
-	public static final String SP_PATH_STATUS_ABBR_MAP   = "spmn_path_status_abbr_map";
-	
 	public static final String CP_EXPIRY_REM_NOTIF       = "cp_expiry_rem_notif";
 	
 	public static final String CP_EXPIRY_REM_REPT_INTER  = "cp_expiry_rem_rept_inter";

@@ -114,10 +114,6 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	NOT_COLLECTED,
 	
-	NO_PATH_STATUS_ABBR,
-	
-	NO_TYPE_ABBR,
-
 	NO_POOL_SPMN_COLLECTED,
 	
 	NO_POOLED_SPMN,

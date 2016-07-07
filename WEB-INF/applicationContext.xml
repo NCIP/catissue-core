@@ -298,14 +298,8 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitNameToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidSpecTypeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.VisitSpecTypeLabelToken"/>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken">
-          <property name="cfgSvc" ref="cfgSvc"/>
-          <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-type-abbr.csv"/>
-        </bean>
-        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken">
-          <property name="cfgSvc" ref="cfgSvc"/>
-          <property name="defaultAbbrFile" value="classpath:/com/krishagni/catissueplus/core/biospecimen/specimen-path-status-abbr.csv"/>
-        </bean>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenTypeLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidUniqueIdLabelToken"/>
         <ref bean="extnPvLabelToken"/>

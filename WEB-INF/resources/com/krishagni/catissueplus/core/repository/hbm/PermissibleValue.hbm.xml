@@ -31,6 +31,12 @@
       <key column="PARENT_IDENTIFIER"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"/>
     </set>
+    
+    <map name="props" table="OS_PV_PROPS" lazy="false">
+      <key column="PV_ID"/>
+      <map-key column="NAME" type="string"/>
+      <element column="VALUE" type="string" not-null="true"/>
+    </map>
 
     <query name="getSpecimenTypes">
       select

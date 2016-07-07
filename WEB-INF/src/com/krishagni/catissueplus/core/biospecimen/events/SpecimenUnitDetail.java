@@ -1,13 +1,5 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-
-import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenUnit;
-
 public class SpecimenUnitDetail {
 	private Long id;
 	
@@ -89,18 +81,4 @@ public class SpecimenUnitDetail {
 		this.activityStatus = activityStatus;
 	}
 
-	public static SpecimenUnitDetail from(SpecimenUnit specimenUnit) {
-		SpecimenUnitDetail detail = new SpecimenUnitDetail();
-		BeanUtils.copyProperties(specimenUnit, detail);
-		return detail;
-	}
-	
-	public static List<SpecimenUnitDetail> from(Collection<SpecimenUnit> specimenUnits) {
-		List<SpecimenUnitDetail> result = new ArrayList<SpecimenUnitDetail>();
-		for (SpecimenUnit specimenUnit : specimenUnits) {
-			result.add(SpecimenUnitDetail.from(specimenUnit));
-		}
-		
-		return result;
-	}
 }

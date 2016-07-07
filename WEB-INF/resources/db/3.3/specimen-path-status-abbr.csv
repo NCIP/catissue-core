@@ -1,0 +1,8 @@
+PV_ID,NAME,VALUE
+"getPvId('pathology_status', 'Malignant')",abbreviation,T
+"getPvId('pathology_status', 'Malignant, Invasive')",abbreviation,T
+"getPvId('pathology_status', 'Malignant, Pre-Invasive')",abbreviation,T
+"getPvId('pathology_status', 'Non-Malignant, Diseased')",abbreviation,T
+"getPvId('pathology_status', 'Metastatic')",abbreviation,T
+"getPvId('pathology_status', 'Pre-Malignant')",abbreviation,T
+"getPvId('pathology_status', 'Non-Malignant')",abbreviation,N

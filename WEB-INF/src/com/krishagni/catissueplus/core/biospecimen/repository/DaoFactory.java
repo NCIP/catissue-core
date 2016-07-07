@@ -60,8 +60,6 @@ public interface DaoFactory {
 	
 	public LabelPrintJobDao getLabelPrintJobDao();
 	
-	public SpecimenUnitDao getSpecimenUnitDao();
-	
 	public AuditDao getAuditDao();
 
 	public DpRequirementDao getDistributionProtocolRequirementDao();

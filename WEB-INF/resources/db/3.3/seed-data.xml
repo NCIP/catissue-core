@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="mdnasim" id="Delete unused PVs">
+    <sql>
+      delete from catissue_permissible_value where public_id in ('2004100', '2003990','4284', '4285', '2004200',
+        '2004000', '2004300', 'Specimen_Type_PID', 'order_status', 'shipping_activity_status');
+
+      delete from catissue_cde where public_id in ('2004100', '2003990','4284', '4285', '2004200', '2004000',
+        '2004300', 'Specimen_Type_PID', 'order_status', 'shipping_activity_status');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Rename attributes with meaningful name and public id">
+    <sql>
+      call rename_pv_attribute('2003988', 'clinical_status', 'Clinical Status', 'Clinical Status', '1.0');
+
+      call rename_pv_attribute('2003989', 'gender', 'Gender', 'Gender', '1.0');
+
+      call rename_pv_attribute('2003991', 'specimen_type', 'Specimen Type', 'Specimen Type', '1.0');
+
+      call rename_pv_attribute('2003992', 'laterality', 'Laterality', 'Laterality', '1.0');
+
+      call rename_pv_attribute('2003993', 'pathology_status', 'Pathology Status', 'Pathology Status', '1.0');
+
+      call rename_pv_attribute('2003994', 'receive_quality', 'Received Quality', 'Received Quality', '1.0');
+
+      call rename_pv_attribute('2003995', 'fixation_type', 'Fixation Type', 'Fixation Type', '1.0');
+
+      call rename_pv_attribute('2003996', 'collection_procedure', 'Collection Procedure', 'Collection Procedure', '1.0');
+
+      call rename_pv_attribute('2003997', 'collection_container', 'Collection Container', 'Collection Container', '1.0');
+
+      call rename_pv_attribute('2003998', 'frozen_method', 'Frozen Method', 'Frozen Method', '1.0');
+
+      call rename_pv_attribute('2003999', 'embedding_medium', 'Embedding Medium', 'Embedding Medium', '1.0');
+
+      call rename_pv_attribute('2004001', 'vital_status', 'Vital Status', 'Vital Status', '1.0');
+
+      call rename_pv_attribute('Clinical_Diagnosis_PID', 'clinical_diagnosis', 'Clinical Diagnosis', 'Clinical Diagnosis', '1.0');
+
+      call rename_pv_attribute('Ethnicity_PID', 'ethnicity', 'Ethnicity', 'Ethnicity', '1.0');
+
+      call rename_pv_attribute('Hist_Quality', 'histological_quality', 'Histological Quality', 'Histological Quality', '1.0');
+
+      call rename_pv_attribute('Morphological_Abnormalitiy_PID', 'morphological_abnormality', 'Morphological Abnormality', 'Morphological Abnormality', '1.1');
+
+      call rename_pv_attribute('Race_PID', 'race', 'Race', 'Race', '1.0');
+
+      call rename_pv_attribute('scg_collection_status', 'visit_status', 'Visit Collection Status', 'Visit Collection Status', '1.0');
+
+      call rename_pv_attribute('Site_Type_PID', 'site_type', 'Site Type', 'Site Type', '1.0');
+
+      call rename_pv_attribute('Tissue_Site_PID', 'anatomic_site', 'Anatomic Site', 'Anatomic Site', '1.0');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Set public id of all specimen types">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        public_id = 'specimen_type'
+      where
+        public_id is null and
+        parent_identifier in (
+          select
+            identifier
+          from
+            catissue_permissible_value
+          where
+            public_id = 'specimen_type' and
+            parent_identifier is null
+        );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Loading pathological status abbreviations">
+    <loadData file="db/3.3/specimen-path-status-abbr.csv" tableName="os_pv_props">
+      <column name="pv_id" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Loading specimen type abbreviations">
+    <loadData file="db/3.3/specimen-type-abbr.csv" tableName="os_pv_props">
+      <column name="pv_id" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+</databaseChangeLog>

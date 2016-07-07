@@ -158,6 +158,9 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
 		if (StringUtils.isNotBlank(crit.parentAttribute()) || StringUtils.isNotBlank(crit.parentValue())) {
 			query.createAlias("parent", "p");
+		} else {
+			query.createAlias("parent", "p", JoinType.LEFT_OUTER_JOIN)
+				.add(Restrictions.isNull("p.id"));
 		}
 				
 		if (StringUtils.isNotBlank(crit.attribute())) {
@@ -178,7 +181,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		return query;
 	}
 	
-	private static final String SPECIMEN_CLASS = "2003991";
+	private static final String SPECIMEN_CLASS = "specimen_type";
 	
 	private static final String FQN = PermissibleValue.class.getName();
 	

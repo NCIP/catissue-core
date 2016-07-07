@@ -63,5 +63,6 @@
 
   <include file="db/3.3/schema.xml"/>
   <include file="db/3.3/config.xml"/>
+  <include file="db/3.3/seed-data.xml"/>
   <include file="db/3.3/audit.xml"/>
 </databaseChangeLog>

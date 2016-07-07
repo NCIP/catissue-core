@@ -42,4 +42,7 @@
 
   <property name="decimal.type" value="decimal" dbms="mysql"/>
   <property name="decimal.type" value="number" dbms="oracle"/>
+  
+  <property name="now" value="now()"   dbms="mysql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
 </databaseChangeLog>

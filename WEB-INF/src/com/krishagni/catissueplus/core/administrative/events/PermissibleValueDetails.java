@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
 
 public class PermissibleValueDetails {
@@ -15,6 +18,8 @@ public class PermissibleValueDetails {
 
 	private String conceptCode;
 
+	private Map<String, String> props = new HashMap<String, String>();
+	
 	public Long getId() {
 		return id;
 	}
@@ -55,6 +60,14 @@ public class PermissibleValueDetails {
 		this.conceptCode = conceptCode;
 	}
 
+	public Map<String, String> getProps() {
+		return props;
+	}
+
+	public void setProps(Map<String, String> props) {
+		this.props = props;
+	}
+
 	public static PermissibleValueDetails fromDomain(PermissibleValue permissibleValue) {
 		PermissibleValueDetails details = new PermissibleValueDetails();
 		details.setConceptCode(permissibleValue.getConceptCode());
@@ -64,6 +77,11 @@ public class PermissibleValueDetails {
 		if (permissibleValue.getParent() != null) {
 			details.setParentId(permissibleValue.getParent().getId());
 		}
+		
+		if (permissibleValue.getProps() != null) {
+			details.setProps(permissibleValue.getProps());;
+		}
+		
 		return details;
 	}
 }

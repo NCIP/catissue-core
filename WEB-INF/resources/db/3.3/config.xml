@@ -23,5 +23,13 @@
         'INT', '90'
       );
     </sql>
-  </changeSet>	
+  </changeSet>
+	
+  <changeSet author="vgaikwad" id="Remove specimen type and pathology status abbreviation file path configuration properties">
+    <sql>
+      call remove_cfg_prop('biospecimen', 'specimen_type_abbr_map');
+
+      call remove_cfg_prop('biospecimen', 'spmn_path_status_abbr_map');
+    </sql>
+  </changeSet>
 </databaseChangeLog>

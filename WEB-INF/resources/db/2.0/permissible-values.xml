@@ -40,10 +40,10 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="oracle">
+  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="oracle" runOnChange="true">
     <sql endDelimiter="//">
       create or replace function getPvParentId( 
-        public_id IN varchar2, pvValue IN varchar2
+        publicId IN varchar2, pvValue IN varchar2
         )return number as
 
         pvId catissue_permissible_value.identifier%TYPE; 
@@ -54,7 +54,7 @@
           from 
             catissue_permissible_value 
           where 
-            public_id = public_id and value = pvValue; 
+            public_id = publicId and value = pvValue; 
   
           return pvId;
         end getPvParentId;
@@ -62,12 +62,12 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="mysql">
+  <changeSet author="nmarwaha" id="Creating function for getting parent Id" dbms="mysql" runOnChange="true">
     <sql endDelimiter="//">
       drop function if exists getPvParentId
       //
 
-      create function getPvParentId (public_id varchar(255), pvValue varchar(255))
+      create function getPvParentId (publicId varchar(255), pvValue varchar(255))
         returns bigint(20)
       begin
         declare pvId bigint(20);
@@ -77,7 +77,7 @@
         from 
           catissue_permissible_value 
         where 
-          public_id = public_id and value = pvValue;
+          public_id = publicId and value = pvValue;
         
         return (pvId);
       end

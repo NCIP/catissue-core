@@ -1,8 +1,7 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
-import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
+import com.krishagni.catissueplus.core.common.PvAttributes;
 
 public class SpecimenTypeLabelToken extends AbstractSpmnAbbrLabelToken {
 
@@ -11,12 +10,7 @@ public class SpecimenTypeLabelToken extends AbstractSpmnAbbrLabelToken {
 	}
 
 	@Override
-	protected String getAbbrFileConfigParam() {		
-		return ConfigParams.SP_TYPE_ABBR_MAP;
-	}
-
-	@Override
 	public String getLabel(Specimen specimen) {
-		return super.getLabel(specimen.getSpecimenType(), SpecimenErrorCode.NO_TYPE_ABBR);
+		return getLabel(PvAttributes.SPECIMEN_CLASS, specimen.getSpecimenType());
 	}
 }
