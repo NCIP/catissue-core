@@ -59,7 +59,18 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vgaikwad" id="Set public id of all specimen types">
+  <changeSet author="vgaikwad" id="Set public id of all specimen types" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value c
+        inner join catissue_permissible_value p on p.identifier = c.parent_identifier and
+        p.public_id = 'specimen_type'
+      set
+        c.public_id = p.public_id;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Set public id of all specimen types" dbms="oracle">
     <sql>
       update
         catissue_permissible_value
