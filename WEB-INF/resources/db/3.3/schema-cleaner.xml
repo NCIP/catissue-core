@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  
+  <changeSet author="nmarwaha" id="Disable foreign key checks before deleting unused tables" dbms="mysql">
+    <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+  </changeSet>  
+  
+  <changeSet author="nmarwaha" id="Drop older DE generated tables" dbms="mysql">
+    <sql endDelimiter="//">
+      drop procedure if exists delete_de_tables//
+
+      create procedure delete_de_tables()
+      begin
+        declare tableName varchar(200);
+        declare v_finished integer default 0;
+
+        declare curs cursor for 
+          select 
+            distinct name 
+          from 
+            dyextn_database_properties 
+          where 
+            name regexp '^DE_E_[0-9]+$';
+
+        declare continue handler 
+          for not found set v_finished = 1;
+        
+        open curs;
+        
+        del_de_table: loop
+          fetch curs into tableName;
+
+          if v_finished = 1 then 
+            leave del_de_table;
+          end if;
+
+          set @drop_table_sql = concat('drop table if exists ', tableName);
+          prepare stmt from @drop_table_sql;
+          execute stmt;
+          deallocate prepare stmt;
+        end loop del_de_table;
+
+        close curs;
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Drop older DE generated tables" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace  procedure delete_de_tables is
+        tableName varchar2(200);
+        ctr int;
+
+        cursor curs is
+          select
+            distinct name
+          from
+            dyextn_database_properties
+          where
+            regexp_like (name, '^DE_E_[0-9]+$');
+      begin
+        open curs;
+
+        loop
+          fetch curs into tableName;
+          exit when curs%notfound;
+
+          begin
+            execute immediate('drop table ' || tableName || ' cascade constraints');
+          exception
+            when others then
+              if sqlcode != -942 then
+                raise;
+              end if
+          end;
+        end loop;
+
+        close curs;
+      end
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Deleting dynamically created older DE tables">   
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="dyextn_database_properties"/>
+    </preConditions>
+
+    <sql>call delete_de_tables()</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop procedure delete_de_tables()">
+    <dropProcedure procedureName="delete_de_tables"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Custom task to delete unused tables">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.DeleteDbObjectsUtil">
+      <param name="file" value="db/3.3/unused-tables.csv" />
+    </customChange>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Enable foreign key check after deleting unused tables" dbms="mysql">
+    <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+  </changeSet>
+</databaseChangeLog>

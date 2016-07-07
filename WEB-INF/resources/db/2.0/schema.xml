@@ -2072,6 +2072,10 @@
   </changeSet>
 
   <changeSet author="vpawar" id="Drop older order site view">
+    <preConditions onFail="MARK_RAN">
+      <viewExists viewName="order_site_view" />
+    </preConditions>
+    
     <dropView viewName="order_site_view"/>
   </changeSet>
 

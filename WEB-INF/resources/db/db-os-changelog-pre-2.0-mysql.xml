@@ -43,30 +43,6 @@
             <column name="FAX_NUMBER" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-9">
-        <createTable tableName="catissue_auth_domains">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DOMAIN_NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="AUTH_TYPE" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-10">
-        <createTable tableName="catissue_auth_providers">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="AUTH_TYPE" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="IMPL_CLASS" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-11">
         <createTable tableName="catissue_base_shipment">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -117,15 +93,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="DROPDOWN_NAME" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-16">
-        <createTable tableName="catissue_capacity">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="ONE_DIMENSION_CAPACITY" type="INT"/>
-            <column name="TWO_DIMENSION_CAPACITY" type="INT"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-17">
@@ -268,28 +235,6 @@
             <column name="SEMANTIC_TYPE_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-29">
-        <createTable tableName="catissue_concept_classificatn">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="TEXT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-30">
-        <createTable tableName="catissue_concept_referent">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CONCEPT_ID" type="BIGINT"/>
-            <column name="CONCEPT_CLASSIFICATION_ID" type="BIGINT"/>
-            <column name="DEIDENTIFIED_REPORT_ID" type="BIGINT"/>
-            <column name="END_OFFSET" type="BIGINT"/>
-            <column name="IS_MODIFIER" type="BIT"/>
-            <column name="IS_NEGATED" type="BIT"/>
-            <column name="START_OFFSET" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-31">
         <createTable tableName="catissue_consent_tier">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -320,16 +265,6 @@
             <column name="SPECIMEN_COLL_GROUP_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-34">
-        <createTable tableName="catissue_cont_holds_sparrtype">
-            <column name="STORAGE_CONTAINER_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_ARRAY_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-35">
         <createTable tableName="catissue_container">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -358,37 +293,6 @@
             </column>
             <column name="PARENT_CONTAINER_ID" type="BIGINT"/>
             <column name="CONTAINER_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-38">
-        <createTable tableName="catissue_container_type">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CAPACITY_ID" type="BIGINT"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="ONE_DIMENSION_LABEL" type="VARCHAR(255)"/>
-            <column name="TWO_DIMENSION_LABEL" type="VARCHAR(255)"/>
-            <column name="COMMENTS" type="TEXT"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(50)"/>
-            <column defaultValue="Numbers" name="ONE_DIMENSION_LABELLING_SCHEME" type="VARCHAR(50)"/>
-            <column defaultValue="Numbers" name="TWO_DIMENSION_LABELLING_SCHEME" type="VARCHAR(50)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-39">
-        <createTable tableName="catissue_cp_extapp_study_rel">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CP_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="APP_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STUDY_ID" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-40">
@@ -433,16 +337,6 @@
             <column name="ROLE_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-42">
-        <createTable tableName="catissue_cp_user_roles">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CP_ID" type="BIGINT"/>
-            <column name="USER_ID" type="BIGINT"/>
-            <column name="ROLE_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-44">
         <createTable tableName="catissue_deidentified_report">
             <column name="IDENTIFIER" type="BIGINT">
@@ -450,24 +344,6 @@
             </column>
             <column name="STATUS" type="VARCHAR(100)"/>
             <column name="SCG_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-45">
-        <createTable tableName="catissue_department">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-46">
-        <createTable tableName="catissue_derieved_sp_ord_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-47">
@@ -498,32 +374,6 @@
             <column defaultValueNumeric="0" name="SPE_ID" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-49">
-        <createTable tableName="catissue_distributed_item">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="QUANTITY" type="DOUBLE"/>
-            <column name="SPECIMEN_ID" type="BIGINT"/>
-            <column name="DISTRIBUTION_ID" type="BIGINT"/>
-            <column name="SPECIMEN_ARRAY_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-50">
-        <createTable tableName="catissue_distribution">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="TO_SITE_ID" type="BIGINT"/>
-            <column name="DISTRIBUTION_PROTOCOL_ID" type="BIGINT"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(50)"/>
-            <column name="SPECIMEN_ID" type="BIGINT"/>
-            <column name="EVENT_TIMESTAMP" type="DATETIME"/>
-            <column name="USER_ID" type="BIGINT"/>
-            <column name="COMMENTS" type="TEXT"/>
-            <column name="ORDER_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-51" runOnChange="false">
@@ -567,56 +417,6 @@
             <column name="COMMENTS" type="VARCHAR(500)"/>
             <column defaultValueNumeric="0" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-54">
-        <createTable tableName="catissue_equipment">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DEVICE_NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DEVICE_SER_NUMBER" type="VARCHAR(50)"/>
-            <column name="MANUFACTURER_NAME" type="VARCHAR(255)"/>
-            <column name="SOFTWARE_VERSION" type="VARCHAR(50)"/>
-            <column name="SITE_ID" type="BIGINT"/>
-            <column name="EQUIPMENT_ID" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DISPLAY_NAME" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(20)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-55">
-        <createTable tableName="catissue_exist_sp_ar_ord_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_ARRAY_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-56">
-        <createTable tableName="catissue_existing_sp_ord_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-57">
-        <createTable tableName="catissue_external_application">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="APP_NAME" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SERVICE_CLASS" type="VARCHAR(200)">
-                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
@@ -723,35 +523,6 @@
             <column name="SCG_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-67">
-        <createTable tableName="catissue_image">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DESCRIPTION" type="VARCHAR(1000)"/>
-            <column name="EQP_IMAGE_ID" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="HEIGHT" type="BIGINT"/>
-            <column name="LAST_UPDATE_DATE" type="DATE"/>
-            <column name="QUALITY" type="BIGINT"/>
-            <column name="RESOLUTION" type="VARCHAR(50)"/>
-            <column name="SCAN_DATE" type="DATE"/>
-            <column name="STAIN_NAME" type="VARCHAR(500)"/>
-            <column name="STATUS" type="VARCHAR(55)"/>
-            <column name="THUMBNAIL" type="BLOB"/>
-            <column name="WIDTH" type="BIGINT"/>
-            <column name="IMAGE_TYPE" type="VARCHAR(100)"/>
-            <column name="EQUIPMENT_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="FULL_LOC_URL" type="VARCHAR(200)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(20)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-68">
         <createTable tableName="catissue_import_queries_log">
             <column name="FILENAME" type="VARCHAR(255)">
@@ -796,38 +567,6 @@
             <column defaultValue="Active" name="ACTIVITY_STATUS" type="VARCHAR(64)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-72">
-        <createTable tableName="catissue_ldap_details">
-            <column name="DOMAIN_ID" type="BIGINT"/>
-            <column name="HOST" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PORT" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="BIND_USER" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="BIND_PASSWORD" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="ID_FIELD" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SEARCH_BASE_DIR" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DIRECTORY_CONTEXT" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="FILTER_STRING" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SURNAME_FIELD" type="VARCHAR(100)"/>
-            <column name="GIVEN_NAME_FIELD" type="VARCHAR(100)"/>
-            <column name="EMAIL_FIELD" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-75">
         <createTable tableName="catissue_mol_spe_review_param">
             <column name="GEL_IMAGE_URL" type="VARCHAR(255)"/>
@@ -844,97 +583,6 @@
             <column defaultValueNumeric="0" name="IDENTIFIER" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-77">
-        <createTable tableName="catissue_new_sp_ar_order_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="ARRAY_TYPE_ID" type="BIGINT"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="SPECIMEN_ARRAY_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-78">
-        <createTable tableName="catissue_new_spec_ord_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_CLASS" type="VARCHAR(255)"/>
-            <column name="SPECIMEN_TYPE" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-79">
-        <createTable tableName="catissue_nextgen_audit_details">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="OBJECT_TYPE" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="OBJECT_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CP_ID" type="BIGINT"/>
-            <column name="OPERATION" type="VARCHAR(15)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="UPDATED_DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REASON_FOR_CHANGE" type="VARCHAR(500)"/>
-            <column name="IP_ADDRESS" type="VARCHAR(15)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-80">
-        <createTable tableName="catissue_notification_status">
-            <column name="AUDIT_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="APP_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STATUS" type="VARCHAR(15)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="COMMENTS" type="VARCHAR(500)"/>
-            <column name="NO_OF_ATTEMPTS" type="BIGINT"/>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="UPDATED_DATE" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-81">
-        <createTable tableName="catissue_order">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="COMMENTS" type="TEXT"/>
-            <column name="DISTRIBUTION_PROTOCOL_ID" type="BIGINT"/>
-            <column name="NAME" type="TEXT"/>
-            <column name="REQUESTED_DATE" type="DATETIME"/>
-            <column name="STATUS" type="VARCHAR(50)"/>
-            <column name="REQUESTER_ID" type="BIGINT"/>
-            <column name="DISTRIBUTORS_COMMENT" type="VARCHAR(1000)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-82">
-        <createTable tableName="catissue_order_item">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DESCRIPTION" type="TEXT"/>
-            <column name="DISTRIBUTED_ITEM_ID" type="BIGINT"/>
-            <column name="STATUS" type="VARCHAR(50)"/>
-            <column name="REQUESTED_QUANTITY" type="DOUBLE"/>
-            <column name="ORDER_ID" type="BIGINT"/>
-            <column name="DISTRIBUTED_QUANTITY" type="DOUBLE"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-83">
@@ -978,16 +626,6 @@
             <column name="USER_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-86">
-        <createTable tableName="catissue_path_case_order_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="PATHOLOGICAL_STATUS" type="VARCHAR(255)"/>
-            <column name="TISSUE_SITE" type="VARCHAR(255)"/>
-            <column name="SPECIMEN_COLL_GROUP_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-87">
         <createTable tableName="catissue_pathology_report">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -1011,16 +649,6 @@
             <column name="VALUE" type="VARCHAR(225)"/>
             <column name="PUBLIC_ID" type="VARCHAR(30)"/>
             <column name="SORTORDER" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-89">
-        <createTable tableName="catissue_privileges">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="PRIVILEGE" type="VARCHAR(64)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-90">
@@ -1133,14 +761,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-101">
-        <createTable tableName="catissue_report_bicontent">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="REPORT_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-102">
         <createTable tableName="catissue_report_content">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -1208,29 +828,6 @@
             <column name="REPORT_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-109">
-        <createTable tableName="catissue_reported_problem">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="AFFILIATION" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="NAME_OF_REPORTER" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REPORTERS_EMAIL_ID" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="MESSAGE_BODY" type="VARCHAR(500)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SUBJECT" type="VARCHAR(255)"/>
-            <column name="REPORTED_DATE" type="DATE"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(100)"/>
-            <column name="COMMENTS" type="TEXT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-110">
         <createTable tableName="catissue_review_params">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -1242,27 +839,6 @@
             <column name="USER_ID" type="BIGINT"/>
             <column name="COMMENTS" type="TEXT"/>
             <column name="STATUS" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-111">
-        <createTable tableName="catissue_role_privileges">
-            <column defaultValueNumeric="0" name="PRIVILEGE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValueNumeric="0" name="ROLE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-112">
-        <createTable tableName="catissue_roles">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(64)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-113" runOnChange="false">
@@ -1288,40 +864,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="DELETED_ON" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-115">
-        <createTable tableName="catissue_semantic_type">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="LABEL" type="TEXT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-116">
-        <createTable tableName="catissue_shipment">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SHIPMENT_REQUEST_ID" type="BIGINT"/>
-            <column name="BARCODE" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-117">
-        <createTable tableName="catissue_shipment_containr_rel">
-            <column name="BASE_SHIPMENT_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CONTAINER_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-118">
-        <createTable tableName="catissue_shipment_request">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-119">
@@ -1366,42 +908,12 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-123">
-        <createTable tableName="catissue_sp_array_order_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-124">
         <createTable tableName="catissue_spec_tag_items">
             <column name="TAG_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="OBJ_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-125">
-        <createTable tableName="catissue_speci_array_content">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CONC_IN_MICROGM_PER_MICROLTR" type="DOUBLE"/>
-            <column name="INITIAL_QUANTITY" type="DOUBLE"/>
-            <column name="POSITION_DIMENSION_ONE" type="INT"/>
-            <column name="POSITION_DIMENSION_TWO" type="INT"/>
-            <column name="SPECIMEN_ID" type="BIGINT"/>
-            <column name="SPECIMEN_ARRAY_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-126">
-        <createTable tableName="catissue_speci_shipmnt_req_rel">
-            <column name="SHIPMENT_REQ_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_ID" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -1432,25 +944,6 @@
             <column name="TISSUE_SIDE" type="VARCHAR(50)"/>
             <column name="MORPHOLOGICAL_ABNORMALITY" type="VARCHAR(255)"/>
             <column name="RF_ID" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-128">
-        <createTable tableName="catissue_specimen_array">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CREATED_BY_ID" type="BIGINT"/>
-            <column name="SPECIMEN_ARRAY_TYPE_ID" type="BIGINT"/>
-            <column name="DISTRIBUTION_ID" type="BIGINT"/>
-            <column name="AVAILABLE" type="BIT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-129">
-        <createTable tableName="catissue_specimen_array_type">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_CLASS" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-130">
@@ -1512,21 +1005,6 @@
             <column name="DESCENDENT_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-134">
-        <createTable tableName="catissue_specimen_label_count">
-            <column name="LABEL_COUNT" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-135">
-        <createTable tableName="catissue_specimen_order_item">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="ARRAY_ORDER_ITEM_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-136">
         <createTable tableName="catissue_specimen_position">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -1534,34 +1012,6 @@
             </column>
             <column name="SPECIMEN_ID" type="BIGINT"/>
             <column name="CONTAINER_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-137">
-        <createTable tableName="catissue_specimen_print_data">
-            <column name="PRINT_RULE_ID" type="BIGINT"/>
-            <column name="DATA_ON_LABEL" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-138">
-        <createTable tableName="catissue_specimen_requirement">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="SPECIMEN_CLASS" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_TYPE" type="VARCHAR(50)"/>
-            <column name="TISSUE_SITE" type="VARCHAR(150)"/>
-            <column name="PATHOLOGY_STATUS" type="VARCHAR(50)"/>
-            <column name="QUANTITY_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-139">
-        <createTable tableName="catissue_specimen_type">
-            <column name="SPECIMEN_ARRAY_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_TYPE" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-140">
@@ -1626,54 +1076,6 @@
             <column name="SPECIMEN_TYPE" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-146">
-        <createTable tableName="catissue_stor_cont_utilization">
-            <column name="STORAGE_CONTAINER_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="STORED_SPECIMEN_COUNT" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CONT_DATE" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="UTILIZATION_PERCENTAGE" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="TOTAL_CAPACITY" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SITE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-147">
-        <createTable tableName="catissue_stor_type_holds_type">
-            <column name="STORAGE_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="HOLDS_STORAGE_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-148">
-        <createTable tableName="catissue_stor_type_spec_class">
-            <column name="STORAGE_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_CLASS" type="VARCHAR(50)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-149">
-        <createTable tableName="catissue_stor_type_spec_type">
-            <column name="STORAGE_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_TYPE" type="VARCHAR(50)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-150">
         <createTable tableName="catissue_storage_container">
             <column name="IDENTIFIER" type="BIGINT">
@@ -1686,69 +1088,6 @@
             <column defaultValue="Numbers" name="TWO_DIMENSION_LABELLING_SCHEME" type="VARCHAR(50)"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-151">
-        <createTable tableName="catissue_storage_containers">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(64)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="BARCODE" type="VARCHAR(64)"/>
-            <column name="TEMPERATURE" type="DOUBLE"/>
-            <column name="ONE_DIMENSION_CAPACITY" type="BIGINT"/>
-            <column name="TWO_DIMENSION_CAPACITY" type="BIGINT"/>
-            <column name="PARENT_CONTAINER_ID" type="BIGINT"/>
-            <column name="CREATED_BY" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SITE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValue="Numbers" name="ONE_DIMENSION_LABELLING_SCHEME" type="VARCHAR(64)"/>
-            <column defaultValue="Numbers" name="TWO_DIMENSION_LABELLING_SCHEME" type="VARCHAR(64)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(16)"/>
-            <column name="COMMENTS" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-152">
-        <createTable tableName="catissue_storage_type">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DEFAULT_TEMPERATURE" type="DOUBLE"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-153">
-        <createTable tableName="catissue_storty_holds_sparrty">
-            <column name="STORAGE_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="SPECIMEN_ARRAY_TYPE_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-154">
-        <createTable tableName="catissue_synch_cp_audit">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CP_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PROCESS_STATUS" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PROCESSED_CPR_COUNT" type="BIGINT"/>
-            <column name="START_DATE" type="DATE"/>
-            <column name="END_DATE" type="DATE"/>
-            <column name="USER_ID" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-156">
         <createTable tableName="catissue_thaw_event_parameters">
             <column name="EVENT_TIMESTAMP" type="DATETIME"/>
@@ -1842,23 +1181,6 @@
             <column name="SITE_ID" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-180">
-        <createTable tableName="job_details">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="JOB_NAME" type="VARCHAR(255)"/>
-            <column name="JOB_STATUS" type="VARCHAR(50)"/>
-            <column name="TOTAL_RECORDS_COUNT" type="BIGINT"/>
-            <column name="FAILED_RECORDS_COUNT" type="BIGINT"/>
-            <column name="TIME_TAKEN" type="BIGINT"/>
-            <column name="LOG_FILE" type="LONGBLOB"/>
-            <column name="JOB_STARTED_BY" type="BIGINT"/>
-            <column name="START_TIME" type="DATETIME"/>
-            <column name="CURRENT_RECORDS_PROCESSED" type="BIGINT"/>
-            <column name="LOG_FILE_NAME" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-181">
         <createTable tableName="key_seq_generator">
             <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
@@ -1871,43 +1193,6 @@
             <column name="KEY_TYPE" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-185" runOnChange="false">
-        <validCheckSum>7:cf3bf408ae09c8483b7a5e88fb108151</validCheckSum>
-        <createTable tableName="os_distribution_protocol">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
-            <column name="TITLE" type="VARCHAR(255)"/>
-            <column name="SHORT_TITLE" type="VARCHAR(50)"/>
-            <column name="ACTIVITY_STATUS" type="VARCHAR(30)"/>
-            <column name="IRB_IDENTIFIER" type="VARCHAR(255)"/>
-            <column name="START_DATE" type="DATE"/>
-            <column name="ANTICIPATED_SPECIMEN_COUNT" type="BIGINT"/>
-            <column name="DESCRIPTION_URL" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-186">
-        <createTable tableName="os_specimen_print_rule">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValue="Any" name="SPECIMEN_CLASS" type="VARCHAR(255)"/>
-            <column defaultValue="Any" name="SPECIMEN_TYPE" type="VARCHAR(255)"/>
-            <column name="LABEL_TYPE" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="PRINTER_NAME" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column defaultValue="Any" name="WORKSTATION_IP" type="VARCHAR(64)"/>
-            <column defaultValue="Any" name="LOGIN_NAME" type="VARCHAR(255)"/>
-            <column defaultValue="Any" name="CP_SHORT_TITLE" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-189">
@@ -1936,50 +1221,6 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-192">
-        <createTable tableName="report_details">
-            <column autoIncrement="true" name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="CS_ID" type="BIGINT"/>
-            <column name="REPORT_GENERATOR" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REPORT_TYPE" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="REPORT_NAME" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="USER_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-194">
-        <createTable tableName="report_schedule">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="DURATION" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-195">
-        <createTable tableName="schedule">
-            <column name="IDENTIFIER" type="BIGINT">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="START_DATE" type="DATE"/>
-            <column name="END_DATE" type="DATE"/>
-            <column name="INTERV" type="VARCHAR(25)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="STATUS" type="VARCHAR(8)"/>
-        </createTable>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-196">
-        <createTable tableName="scheduled_items">
-            <column name="BASE_SCHEDULE_ID" type="BIGINT"/>
-            <column name="ITEM_ID" type="BIGINT"/>
-        </createTable>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-197">
         <createTable tableName="shared_query_tags">
             <column name="TAG_ID" type="BIGINT">
@@ -2006,29 +1247,17 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-200">
         <addPrimaryKey columnNames="COLLECTION_PROTOCOL_ID, DISTRIBUTION_PROTOCOL_ID" tableName="catissue_coll_distribution_rel"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-201">
-        <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID" tableName="catissue_cont_holds_sparrtype"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-202">
         <addPrimaryKey columnNames="FOLDER_ID, USER_ID" tableName="catissue_qfolder_share_setting"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-203">
         <addPrimaryKey columnNames="FOLDER_ID, QUERY_ID" tableName="catissue_query_folder_queries"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-204">
-        <addPrimaryKey columnNames="PRIVILEGE_ID, ROLE_ID" tableName="catissue_role_privileges"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-205">
-        <addPrimaryKey columnNames="BASE_SHIPMENT_ID, CONTAINER_ID" tableName="catissue_shipment_containr_rel"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-206">
         <addPrimaryKey columnNames="SITE_ID, COLLECTION_PROTOCOL_ID" tableName="catissue_site_cp"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-207">
         <addPrimaryKey columnNames="SITE_ID, USER_ID" tableName="catissue_site_users"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-208">
-        <addPrimaryKey columnNames="SHIPMENT_REQ_ID, SPECIMEN_ID" tableName="catissue_speci_shipmnt_req_rel"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-209">
         <addPrimaryKey columnNames="SPECIMEN_ID, BIOHAZARD_ID" tableName="catissue_specimen_biohz_rel"/>
@@ -2039,24 +1268,8 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-211">
         <addPrimaryKey columnNames="STORAGE_CONTAINER_ID, STORAGE_TYPE_ID" tableName="catissue_st_cont_st_type_rel"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-212">
-        <addPrimaryKey columnNames="STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID" tableName="catissue_stor_type_holds_type"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-213">
-        <addPrimaryKey columnNames="STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID" tableName="catissue_storty_holds_sparrty"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-214">
         <addPrimaryKey columnNames="USER_ID, COLLECTION_PROTOCOL_ID" tableName="catissue_user_cp"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-216">
-        <createIndex indexName="DOMAIN_NAME" tableName="catissue_auth_domains" unique="true">
-            <column name="DOMAIN_NAME"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-217">
-        <createIndex indexName="AUTH_TYPE" tableName="catissue_auth_providers" unique="true">
-            <column name="AUTH_TYPE"/>
-        </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-218">
         <createIndex indexName="INDX_CATISSUE_BIOHAZARD_TYPE" tableName="catissue_biohazard" unique="false">
@@ -2176,11 +1389,6 @@
             <column name="NAME"/>
         </createIndex>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-242">
-        <createIndex indexName="NAME" tableName="catissue_container_type" unique="true">
-            <column name="NAME"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-243">
         <createIndex indexName="idx_spec_req_pathology_stat" tableName="catissue_cp_req_specimen" unique="false">
             <column name="PATHOLOGICAL_STATUS"/>
@@ -2194,11 +1402,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-245">
         <createIndex indexName="idx_specimen_req_type" tableName="catissue_cp_req_specimen" unique="false">
             <column name="SPECIMEN_TYPE"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-246">
-        <createIndex indexName="NAME" tableName="catissue_department" unique="true">
-            <column name="NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-247">
@@ -2231,11 +1434,6 @@
             <column name="EMBEDDING_MEDIUM"/>
         </createIndex>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-253">
-        <createIndex indexName="EQPT_ID_UNIQUE_KEY" tableName="catissue_equipment" unique="true">
-            <column name="EQUIPMENT_ID"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-254">
         <createIndex indexName="INDX_CATISSUE_FIXEVT_MIN" tableName="catissue_fixed_event_param" unique="false">
             <column name="DURATION_IN_MINUTES"/>
@@ -2259,12 +1457,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-258">
         <createIndex indexName="INDX_CATISSUE_FROZEVT_METH" tableName="catissue_frozen_event_param" unique="false">
             <column name="METHOD"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-259">
-        <createIndex indexName="EQPT_IMGE_ID_UNIQUE_KEY" tableName="catissue_image" unique="true">
-            <column name="EQUIPMENT_ID"/>
-            <column name="EQP_IMAGE_ID"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-260">
@@ -2305,22 +1497,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-268">
         <createIndex indexName="INDX_CATISSUE_MOLEVT_RAT" tableName="catissue_mol_spe_review_param" unique="false">
             <column name="RATIO_28S_TO_18S"/>
-        </createIndex>
-    </changeSet>
-    
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-270">
-        <createIndex indexName="idx_audit_object_id" tableName="catissue_nextgen_audit_details" unique="false">
-            <column name="OBJECT_ID"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-271">
-        <createIndex indexName="idx_audit_object_type" tableName="catissue_nextgen_audit_details" unique="false">
-            <column name="OBJECT_TYPE"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-272">
-        <createIndex indexName="CATISSUE_ORDER_STATUS" tableName="catissue_order" unique="false">
-            <column name="STATUS"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-273">
@@ -2389,11 +1565,6 @@
             <column name="SOCIAL_SECURITY_NUMBER"/>
         </createIndex>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-286">
-        <createIndex indexName="PRIVILEGE" tableName="catissue_privileges" unique="true">
-            <column name="PRIVILEGE"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-287">
         <createIndex indexName="INDX_CATISSUE_PROCEVT_NAME" tableName="catissue_procedure_event_param" unique="false">
             <column name="NAME"/>
@@ -2422,11 +1593,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-292">
         <createIndex indexName="catissue_received_even_id_idx" tableName="catissue_received_event_param" unique="false">
             <column name="IDENTIFIER"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-293">
-        <createIndex indexName="NAME" tableName="catissue_roles" unique="true">
-            <column name="NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-294">
@@ -2500,11 +1666,6 @@
             <column name="SPECIMEN_TYPE"/>
         </createIndex>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-308">
-        <createIndex indexName="INDX_CAT_SPEC_ARRAY_AVA" tableName="catissue_specimen_array" unique="false">
-            <column name="AVAILABLE"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-309">
         <createIndex indexName="BARCODE" tableName="catissue_specimen_coll_group" unique="true">
             <column name="BARCODE"/>
@@ -2540,16 +1701,6 @@
         <createIndex indexName="SPECLIST_TAGLABEL_UNIQUE_KEY" tableName="catissue_specimenlist_tags" unique="true">
             <column name="TAG_LABEL"/>
             <column name="USER_ID"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-316">
-        <createIndex indexName="BARCODE" tableName="catissue_storage_containers" unique="true">
-            <column name="BARCODE"/>
-        </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-317">
-        <createIndex indexName="NAME" tableName="catissue_storage_containers" unique="true">
-            <column name="NAME"/>
         </createIndex>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-318">
@@ -2617,11 +1768,6 @@
             <column name="LOGIN_NAME"/>
         </createIndex>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-345">
-        <createIndex indexName="NAME" tableName="os_specimen_print_rule" unique="true">
-            <column name="NAME"/>
-        </createIndex>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-346">
         <createIndex indexName="S_TAGID_UNIQUE_KEY" tableName="query_tag_items" unique="true">
             <column name="TAG_ID"/>
@@ -2650,12 +1796,6 @@
             <column name="TAG_ID"/>
             <column name="USER_ID"/>
         </createIndex>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-351">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="cat_stor_cont_spec_types"  constraintName="FK_CAT_SCST_SCID_CONTAINER_IDs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_containers"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-356">
-        <addForeignKeyConstraint baseColumnNames="AUTH_TYPE" baseTableName="catissue_auth_domains"  constraintName="FK_provider_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="AUTH_TYPE" referencedTableName="catissue_auth_providers"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-357">
         <addForeignKeyConstraint baseColumnNames="RECEIVER_SITE_ID" baseTableName="catissue_base_shipment"  constraintName="FK84DE7ECCCAF26781" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
@@ -2714,18 +1854,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-377">
         <addForeignKeyConstraint baseColumnNames="PARENT_CP_ID" baseTableName="catissue_collection_protocol"  constraintName="FK32DC439DBC7298B9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-378">
-        <addForeignKeyConstraint baseColumnNames="SEMANTIC_TYPE_ID" baseTableName="catissue_concept"  constraintName="FKC1A3C8CC7F0C2C7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_semantic_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-379">
-        <addForeignKeyConstraint baseColumnNames="CONCEPT_CLASSIFICATION_ID" baseTableName="catissue_concept_referent"  constraintName="FK799CCA7E72C371DD" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_concept_classificatn"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-380">
-        <addForeignKeyConstraint baseColumnNames="CONCEPT_ID" baseTableName="catissue_concept_referent"  constraintName="FK799CCA7EA9816272" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_concept"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-381">
-        <addForeignKeyConstraint baseColumnNames="DEIDENTIFIED_REPORT_ID" baseTableName="catissue_concept_referent"  constraintName="FK799CCA7E9F96B363" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_deidentified_report"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-382">
         <addForeignKeyConstraint baseColumnNames="COLL_PROTOCOL_ID" baseTableName="catissue_consent_tier"  constraintName="FK51725303E36A4B4F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -2738,18 +1866,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-385">
         <addForeignKeyConstraint baseColumnNames="CONSENT_TIER_ID" baseTableName="catissue_consent_tier_status"  constraintName="FKF74E94AE17B9953" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_consent_tier"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-386">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_TYPE_ID" baseTableName="catissue_cont_holds_sparrtype"  constraintName="FKDC7E31E2ECE89343" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-387">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="catissue_cont_holds_sparrtype"  constraintName="FKDC7E31E2B3DFB11D" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-388">
-        <addForeignKeyConstraint baseColumnNames="CAPACITY_ID" baseTableName="catissue_container"  constraintName="FK49B8DE5DAC76C0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_capacity"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-389">
-        <addForeignKeyConstraint baseColumnNames="CONTAINER_ID" baseTableName="catissue_container_cps"  constraintName="FK_CAT_CC_CID_CAT_SC_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_containers"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-390">
         <addForeignKeyConstraint baseColumnNames="CP_ID" baseTableName="catissue_container_cps"  constraintName="FK_CAT_CC_CPID_CAT_CP_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -2761,15 +1877,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-393">
         <addForeignKeyConstraint baseColumnNames="PARENT_CONTAINER_ID" baseTableName="catissue_container_position"  constraintName="FK_OCCUPIED_CONTAINER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_container"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-394">
-        <addForeignKeyConstraint baseColumnNames="CAPACITY_ID" baseTableName="catissue_container_type"  constraintName="FKCBBC9954DAC76C0" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_capacity"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-395">
-        <addForeignKeyConstraint baseColumnNames="APP_ID" baseTableName="catissue_cp_extapp_study_rel"  constraintName="FK_RE_APP_ID_FC_IDENTIFIER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_external_application"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-396">
-        <addForeignKeyConstraint baseColumnNames="CP_ID" baseTableName="catissue_cp_extapp_study_rel"  constraintName="FK_EXTAPP_CP_ID_FC_IDENTIFIER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-397">
         <addForeignKeyConstraint baseColumnNames="COLLECTION_PROTOCOL_EVENT_ID" baseTableName="catissue_cp_req_specimen"  constraintName="FK111110456906F39" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_coll_prot_event"  referencesUniqueColumn="false"/>
@@ -2786,34 +1893,14 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-401">
         <addForeignKeyConstraint baseColumnNames="CP_ID" baseTableName="catissue_cp_site_roles"  constraintName="FK_CAT_CSR_CPID_CAT_CP_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-402">
-        <addForeignKeyConstraint baseColumnNames="ROLE_ID" baseTableName="catissue_cp_site_roles"  constraintName="FK_CAT_CSR_ROLEID_CAT_ROLE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_roles"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-403">
         <addForeignKeyConstraint baseColumnNames="SITE_ID" baseTableName="catissue_cp_site_roles"  constraintName="FK_CAT_CSR_SITEID_CAT_SITE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-404">
-        <addForeignKeyConstraint baseColumnNames="CP_ID" baseTableName="catissue_cp_user_roles"  constraintName="FK_CAT_CUR_CPID_CAT_CP_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-405">
-        <addForeignKeyConstraint baseColumnNames="ROLE_ID" baseTableName="catissue_cp_user_roles"  constraintName="FK_CAT_CUR_ROLEID_CAT_ROLES_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_roles"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-406">
-        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_cp_user_roles"  constraintName="FK_CAT_CUR_USERID_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    
-    
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-409">
         <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_deidentified_report"  constraintName="FKCDD0DF7BBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_pathology_report"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-410">
         <addForeignKeyConstraint baseColumnNames="SCG_ID" baseTableName="catissue_deidentified_report"  constraintName="FKCDD0DF7B91741663" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_coll_group"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-411">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_derieved_sp_ord_item"  constraintName="FK3742152BBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_new_spec_ord_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-412">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_derieved_sp_ord_item"  constraintName="FK3742152B60773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-413">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_disposal_event_param"  constraintName="FK_SPEC_DISPOSAL_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
@@ -2821,38 +1908,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-414">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_disposal_event_param"  constraintName="FK_USER_DISP_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-415">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_ID" baseTableName="catissue_distri_event_param"  constraintName="FK_DISTRI_DISTRI_SP_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-416">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_distri_event_param"  constraintName="FK_SPEC_DISTRI_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-417">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_distri_event_param"  constraintName="FK_USER_DISTRI_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-418">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_ID" baseTableName="catissue_distributed_item"  constraintName="FKA7C3ED4BF8278B6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-419">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_ID" baseTableName="catissue_distributed_item"  constraintName="FKA7C3ED4BC4A3C438" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-420">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_distributed_item"  constraintName="FKA7C3ED4B60773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-421">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_PROTOCOL_ID" baseTableName="catissue_distribution"  constraintName="FK542766806B1F36E7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution_protocol"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-422">
-        <addForeignKeyConstraint baseColumnNames="ORDER_ID" baseTableName="catissue_distribution"  constraintName="FK54276680783867CC" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_order"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-423">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_distribution"  constraintName="FK5427668060773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-424">
-        <addForeignKeyConstraint baseColumnNames="TO_SITE_ID" baseTableName="catissue_distribution"  constraintName="FK542766801DBE834F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-425">
-        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_distribution"  constraintName="FK542766802206F20F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-426">
         <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_PROTOCOL_ID" baseTableName="catissue_distribution_spec_req"  constraintName="fk_distribution_protocol" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution_protocol"  referencesUniqueColumn="false"/>
@@ -2862,21 +1922,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-428">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_embedded_event_param"  constraintName="FK_USER_EMB_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-429">
-        <addForeignKeyConstraint baseColumnNames="SITE_ID" baseTableName="catissue_equipment"  constraintName="FK_EQUPT_SITE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-430">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_exist_sp_ar_ord_item"  constraintName="FKE3823170BC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_sp_array_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-431">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_ID" baseTableName="catissue_exist_sp_ar_ord_item"  constraintName="FKE3823170C4A3C438" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-432">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_existing_sp_ord_item"  constraintName="FKF8B855EEBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-433">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_existing_sp_ord_item"  constraintName="FKF8B855EE60773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-434">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_external_identifier"  constraintName="FK5CF2FA2160773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
@@ -2919,57 +1964,17 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-448">
         <addForeignKeyConstraint baseColumnNames="SCG_ID" baseTableName="catissue_identified_report"  constraintName="FK6A2246DC91741663" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_coll_group"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-449">
-        <addForeignKeyConstraint baseColumnNames="EQUIPMENT_ID" baseTableName="catissue_image"  constraintName="FK_CAT_IMGE_EQUIPMENT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_equipment"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-450">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_image"  constraintName="FK_CAT_IMGE_SPECIMEN_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-451">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_in_out_event_param"  constraintName="FK_SPEC_IN_OUT_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-452">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_in_out_event_param"  constraintName="FK_USER_INOUT_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-453">
-        <addForeignKeyConstraint baseColumnNames="DOMAIN_ID" baseTableName="catissue_ldap_details"  constraintName="FK_domain_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_auth_domains"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-455">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_mol_spe_review_param"  constraintName="FK_SPEC_MOL_REV_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-456">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_mol_spe_review_param"  constraintName="FK_USER_MOL_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-458">
-        <addForeignKeyConstraint baseColumnNames="ARRAY_TYPE_ID" baseTableName="catissue_new_sp_ar_order_item"  constraintName="FKC5C92CCBCE5FBC3A" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-459">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_new_sp_ar_order_item"  constraintName="FKC5C92CCBBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_sp_array_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-460">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_ID" baseTableName="catissue_new_sp_ar_order_item"  constraintName="FKC5C92CCBC4A3C438" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-461">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_new_spec_ord_item"  constraintName="FK_NEW_SPECIMEN_ORDER_ITEM" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-462">
-        <addForeignKeyConstraint baseColumnNames="CP_ID" baseTableName="catissue_nextgen_audit_details"  constraintName="FK_AUDIT_CP_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-463">
-        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_nextgen_audit_details"  constraintName="FK_RE_USER_ID_USERS_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-464">
-        <addForeignKeyConstraint baseColumnNames="AUDIT_ID" baseTableName="catissue_notification_status"  constraintName="FK_AUDIT_ID_FC_IDENTIFIER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_nextgen_audit_details"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-465">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_PROTOCOL_ID" baseTableName="catissue_order"  constraintName="FK543F22B26B1F36E7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution_protocol"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-466">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTED_ITEM_ID" baseTableName="catissue_order_item"  constraintName="FKB501E88060975C0B" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distributed_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-467">
-        <addForeignKeyConstraint baseColumnNames="ORDER_ID" baseTableName="catissue_order_item"  constraintName="FKB501E880783867CC" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_order"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-468">
         <addForeignKeyConstraint baseColumnNames="PARTICIPANT_ID" baseTableName="catissue_part_medical_id"  constraintName="FK349E77F987E5ADC7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_participant"  referencesUniqueColumn="false"/>
@@ -2979,12 +1984,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-470">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_password"  constraintName="FKDE1F38972206F20F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-471">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_path_case_order_item"  constraintName="FKBD5029D5BC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_new_spec_ord_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-472">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_COLL_GROUP_ID" baseTableName="catissue_path_case_order_item"  constraintName="FKBD5029D5F69249F7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_coll_group"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-473">
         <addForeignKeyConstraint baseColumnNames="SOURCE_ID" baseTableName="catissue_pathology_report"  constraintName="FK904EC9F040DCD7BF" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
@@ -3037,12 +2036,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-489">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_received_event_param"  constraintName="FK_USER_REC_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-490">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_report_bicontent"  constraintName="FK8A9A4EE3BC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_report_content"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-491">
-        <addForeignKeyConstraint baseColumnNames="REPORT_ID" baseTableName="catissue_report_bicontent"  constraintName="FK8A9A4EE391092806" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_pathology_report"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-492">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_COLL_GRP_ID" baseTableName="catissue_report_queue"  constraintName="FK214246228CA560D1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_coll_group"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -3064,32 +2057,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-498">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_review_params"  constraintName="FK5311FFF62206F20F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-499">
-        <addForeignKeyConstraint baseColumnNames="PRIVILEGE_ID" baseTableName="catissue_role_privileges"  constraintName="FK_CAT_RP_PRIVID_CAT_PRIV_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_privileges"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-500">
-        <addForeignKeyConstraint baseColumnNames="ROLE_ID" baseTableName="catissue_role_privileges"  constraintName="FK_CAT_RP_ROLEID_CAT_ROLES_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_roles"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-501">
         <addForeignKeyConstraint baseColumnNames="CREATED_BY" baseTableName="catissue_saved_queries"  constraintName="FK_SAVED_QUERIES_CREATED_BY" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-502">
         <addForeignKeyConstraint baseColumnNames="LAST_UPDATED_BY" baseTableName="catissue_saved_queries"  constraintName="FK_SAVED_QUERIES_UPDATED_BY" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-503">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_shipment"  constraintName="FK76CEEF96C30B7BC6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_base_shipment"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-504">
-        <addForeignKeyConstraint baseColumnNames="SHIPMENT_REQUEST_ID" baseTableName="catissue_shipment"  constraintName="FKF56D72B2D72D70IJ" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_shipment_request"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-505">
-        <addForeignKeyConstraint baseColumnNames="BASE_SHIPMENT_ID" baseTableName="catissue_shipment_containr_rel"  constraintName="FKF56D72B29088E48F" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_base_shipment"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-506">
-        <addForeignKeyConstraint baseColumnNames="CONTAINER_ID" baseTableName="catissue_shipment_containr_rel"  constraintName="FKF56D72B2D72D70D6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-507">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_shipment_request"  constraintName="FK85331EC6C30B7BC6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_base_shipment"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-508">
         <addForeignKeyConstraint baseColumnNames="ADDRESS_ID" baseTableName="catissue_site"  constraintName="FKB024C3436CD94566" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_address"  referencesUniqueColumn="false"/>
@@ -3115,26 +2087,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-515">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_site_users"  constraintName="FK1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-516">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_sp_array_order_item"  constraintName="FK_SP_ARRAY_ORDER_ITEM" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-517">
         <addForeignKeyConstraint baseColumnNames="OBJ_ID" baseTableName="catissue_spec_tag_items"  constraintName="FK_SPECLIST_OBJ_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-518">
         <addForeignKeyConstraint baseColumnNames="TAG_ID" baseTableName="catissue_spec_tag_items"  constraintName="FK_SPECLIST_TAGITEM_TAG_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimenlist_tags"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-519">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_ID" baseTableName="catissue_speci_array_content"  constraintName="FKBEA9D458C4A3C438" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-520">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_speci_array_content"  constraintName="FKBEA9D45860773DB2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-521">
-        <addForeignKeyConstraint baseColumnNames="SHIPMENT_REQ_ID" baseTableName="catissue_speci_shipmnt_req_rel"  constraintName="FKF56D72B29088E48G" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_base_shipment"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-522">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_speci_shipmnt_req_rel"  constraintName="FKF56D72B2D72D70DH" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-523">
         <addForeignKeyConstraint baseColumnNames="PARENT_SPECIMEN_ID" baseTableName="catissue_specimen"  constraintName="FK_PARENT_SPECIMEN" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
@@ -3144,21 +2101,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-525">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_COLLECTION_GROUP_ID" baseTableName="catissue_specimen"  constraintName="FK1674810433BF33C5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_coll_group"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-526">
-        <addForeignKeyConstraint baseColumnNames="CREATED_BY_ID" baseTableName="catissue_specimen_array"  constraintName="FKECBF8B3E64B129CC" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-527">
-        <addForeignKeyConstraint baseColumnNames="DISTRIBUTION_ID" baseTableName="catissue_specimen_array"  constraintName="FKECBF8B3EF8278B6" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_distribution"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-528">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_specimen_array"  constraintName="FKECBF8B3EBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_container"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-529">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_TYPE_ID" baseTableName="catissue_specimen_array"  constraintName="FKECBF8B3EECE89343" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-530">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_specimen_array_type"  constraintName="FKD36E0B9BBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_container_type"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-531">
         <addForeignKeyConstraint baseColumnNames="BIOHAZARD_ID" baseTableName="catissue_specimen_biohz_rel"  constraintName="FK7A3F5539F398D480" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_biohazard"  referencesUniqueColumn="false"/>
@@ -3193,12 +2135,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-541">
         <addForeignKeyConstraint baseColumnNames="DESCENDENT_ID" baseTableName="catissue_specimen_hierarchy"  constraintName="catissue_specimen_hierarchy_ibfk_1" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-542">
-        <addForeignKeyConstraint baseColumnNames="ARRAY_ORDER_ITEM_ID" baseTableName="catissue_specimen_order_item"  constraintName="FK48C3B39F83505A30" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_new_sp_ar_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-543">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_specimen_order_item"  constraintName="FK48C3B39FBC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_order_item"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-544">
         <addForeignKeyConstraint baseColumnNames="CONTAINER_ID" baseTableName="catissue_specimen_position"  constraintName="FK_STORAGE_CONTAINER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -3207,12 +2143,6 @@
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-546">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_specimen_position"  constraintName="FK_SPECIMEN" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-547">
-        <addForeignKeyConstraint baseColumnNames="PRINT_RULE_ID" baseTableName="catissue_specimen_print_data"  constraintName="FK_SPEC_PRINT_ID_BY_PRINT_RULE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="os_specimen_print_rule"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-548">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_TYPE_ID" baseTableName="catissue_specimen_type"  constraintName="FKFF69C195ECE89343" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array_type"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-549">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_specimenlist_tags"  constraintName="FK_SPECLIST_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
@@ -3232,53 +2162,17 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-554">
         <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="catissue_st_cont_st_type_rel"  constraintName="FK703B9021B3DFB11D" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-555">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_st_cont_st_type_rel"  constraintName="FK703B902159A3CE5C" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-556">
         <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="catissue_stor_cont_spec_class"  constraintName="FKE7F5E8C2B3DFB11D" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-557">
         <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="catissue_stor_cont_spec_type"  constraintName="SPECIMEN_TYPE_ST_ID_FK" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-558">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_CONTAINER_ID" baseTableName="catissue_stor_cont_utilization"  constraintName="FK_STORAGE_CONTAINER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_container"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-559">
-        <addForeignKeyConstraint baseColumnNames="HOLDS_STORAGE_TYPE_ID" baseTableName="catissue_stor_type_holds_type"  constraintName="FK185C50B81236791" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-560">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_stor_type_holds_type"  constraintName="FK185C50B59A3CE5C" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-561">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_stor_type_spec_class"  constraintName="FK1BCF33BA59A3CE5C" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-562">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_stor_type_spec_type"  constraintName="STORAGE_TYPE_ID_FK" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-563">
         <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_storage_container"  constraintName="FK28429D01BC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_container"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-564">
         <addForeignKeyConstraint baseColumnNames="SITE_ID" baseTableName="catissue_storage_container"  constraintName="FK28429D01A7F77D13" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-565">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_storage_container"  constraintName="FK28429D0159A3CE5C" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-566">
-        <addForeignKeyConstraint baseColumnNames="CREATED_BY" baseTableName="catissue_storage_containers"  constraintName="FK_CAT_STOCON_USERID_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-567">
-        <addForeignKeyConstraint baseColumnNames="SITE_ID" baseTableName="catissue_storage_containers"  constraintName="FK_CAT_STOCON_SITEID_SITE_IDs" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_site"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-568">
-        <addForeignKeyConstraint baseColumnNames="IDENTIFIER" baseTableName="catissue_storage_type"  constraintName="FKE9A0629ABC7298A9" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_container_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-569">
-        <addForeignKeyConstraint baseColumnNames="SPECIMEN_ARRAY_TYPE_ID" baseTableName="catissue_storty_holds_sparrty"  constraintName="FK70F57E44ECE89343" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen_array_type"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-570">
-        <addForeignKeyConstraint baseColumnNames="STORAGE_TYPE_ID" baseTableName="catissue_storty_holds_sparrty"  constraintName="FK70F57E4459A3CE5C" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_storage_type"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-571">
         <addForeignKeyConstraint baseColumnNames="SPECIMEN_ID" baseTableName="catissue_thaw_event_parameters"  constraintName="FK_SPEC_THAW_EVENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_specimen"  referencesUniqueColumn="false"/>
@@ -3311,9 +2205,6 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-581">
         <addForeignKeyConstraint baseColumnNames="ADDRESS_ID" baseTableName="catissue_user"  constraintName="FKB025CFC76CD94566" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_address"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-584">
-        <addForeignKeyConstraint baseColumnNames="DEPARTMENT_ID" baseTableName="catissue_user"  constraintName="FKB025CFC7F30C2528" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_department"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-585">
         <addForeignKeyConstraint baseColumnNames="INSTITUTION_ID" baseTableName="catissue_user"  constraintName="FKB025CFC71792AD22" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_institution"  referencesUniqueColumn="false"/>
     </changeSet>
@@ -3329,17 +2220,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-589">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="catissue_user_sites"  constraintName="FK_CAT_US_USERID_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-610">
-        <addForeignKeyConstraint baseColumnNames="PRINCIPAL_INVESTIGATOR_ID" baseTableName="os_distribution_protocol"  constraintName="FK_PI_ID_BY_CAT_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-613">
         <addForeignKeyConstraint baseColumnNames="TAG_ID" baseTableName="query_tag_items"  constraintName="FK_TAGITEM_TAG_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="query_tags"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-614">
         <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="query_tags"  constraintName="FK_QUERYTAG_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_user"  referencesUniqueColumn="false"/>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-615">
-        <addForeignKeyConstraint baseColumnNames="CS_ID" baseTableName="report_details"  constraintName="FK_REPTDETAILS_CS" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="catissue_collection_protocol"  referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-616">
         <addForeignKeyConstraint baseColumnNames="TAG_ID" baseTableName="shared_query_tags"  constraintName="FK_SHAREQUERY_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="IDENTIFIER" referencedTableName="query_tags"  referencesUniqueColumn="false"/>
@@ -3351,17 +2236,11 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-620">
         <createView viewName="consent_tier_view">(select `cnsstmt`.`IDENTIFIER` AS `IDENTIFIER`,`cnsrsp`.`COLL_PROT_REG_ID` AS `CPR_ID`,`cnsstmt`.`STATEMENT` AS `STATEMENT`,`cnsrsp`.`RESPONSE` AS `RESPONSE` from (`catissue_consent_tier` `cnsstmt` join `catissue_consent_tier_response` `cnsrsp` on((`cnsstmt`.`IDENTIFIER` = `cnsrsp`.`CONSENT_TIER_ID`))) where (`cnsrsp`.`COLL_PROT_REG_ID` is not null))</createView>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-621">
-        <createView viewName="cp_coord_view">(select `u`.`IDENTIFIER` AS `IDENTIFIER`,`u`.`FIRST_NAME` AS `FIRST_NAME`,`u`.`LAST_NAME` AS `LAST_NAME`,`u`.`EMAIL_ADDRESS` AS `EMAIL_ADDRESS`,`cpcrd`.`COLLECTION_PROTOCOL_ID` AS `CP_ID`,`d`.`NAME` AS `DEPARTMENT_NAME` from ((`catissue_coll_coordinators` `cpcrd` join `catissue_user` `u` on((`cpcrd`.`USER_ID` = `u`.`IDENTIFIER`))) join `catissue_department` `d` on((`u`.`DEPARTMENT_ID` = `d`.`IDENTIFIER`))))</createView>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-622">
         <createView viewName="cpr_extension_records_view">(select `re`.`OBJECT_ID` AS `cpr_id`,`re`.`RECORD_ID` AS `record_id` from (`catissue_form_record_entry` `re` join `catissue_form_context` `fc` on((`re`.`FORM_CTXT_ID` = `fc`.`IDENTIFIER`))) where ((`fc`.`ENTITY_TYPE` = 'Participant') and isnull(`fc`.`deleted_on`) and (`re`.`ACTIVITY_STATUS` = 'ACTIVE')))</createView>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-623">
         <createView viewName="cpr_view">(select `cpr`.`IDENTIFIER` AS `CPR_ID`,`cpr`.`COLLECTION_PROTOCOL_ID` AS `CP_ID`,`cpr`.`PARTICIPANT_ID` AS `PARTICIPANT_ID`,`p`.`FIRST_NAME` AS `FIRST_NAME`,`p`.`MIDDLE_NAME` AS `MIDDLE_NAME`,`p`.`LAST_NAME` AS `LAST_NAME`,`p`.`BIRTH_DATE` AS `DOB`,`p`.`SOCIAL_SECURITY_NUMBER` AS `SSN`,`cpr`.`ACTIVITY_STATUS` AS `ACTIVITY_STATUS`,`p`.`GENDER` AS `GENDER`,`p`.`GENOTYPE` AS `GENOTYPE`,`cpr`.`REGISTRATION_DATE` AS `REGISTRATION_DATE`,`cpr`.`PROTOCOL_PARTICIPANT_ID` AS `PPID`,`p`.`VITAL_STATUS` AS `VITAL_STATUS`,`p`.`DEATH_DATE` AS `DEATH_DATE`,`p`.`ETHNICITY` AS `ETHNICITY`,`cpr`.`BARCODE` AS `BARCODE`,`cpr`.`CONSENT_SIGN_DATE` AS `CONSENT_SIGN_DATE`,`cpr`.`CONSENT_WITNESS` AS `CONSENT_WITNESS`,`cpr`.`CONSENT_DOC_URL` AS `CONSENT_DOC_URL` from (`catissue_coll_prot_reg` `cpr` join `catissue_participant` `p` on((`cpr`.`PARTICIPANT_ID` = `p`.`IDENTIFIER`))))</createView>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-624">
-        <createView viewName="order_site_view">(select `distb`.`IDENTIFIER` AS `IDENTIFIER`,`site`.`NAME` AS `SITE_NAME`,`distb`.`ORDER_ID` AS `ORDER_ID` from (`catissue_distribution` `distb` join `catissue_site` `site` on((`distb`.`TO_SITE_ID` = `site`.`IDENTIFIER`))) where (`distb`.`ORDER_ID` is not null))</createView>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-625">
         <createView viewName="part_med_rec_view">(select `partmedid`.`IDENTIFIER` AS `IDENTIFIER`,`site`.`NAME` AS `SITE_NAME`,`partmedid`.`PARTICIPANT_ID` AS `PARTICIPANT_ID`,`partmedid`.`MEDICAL_RECORD_NUMBER` AS `MEDICAL_RECORD_NUMBER` from (`catissue_part_medical_id` `partmedid` join `catissue_site` `site` on((`partmedid`.`SITE_ID` = `site`.`IDENTIFIER`))))</createView>
@@ -3369,28 +2248,15 @@
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-626">
         <createView viewName="scg_extn_records_view">(select `re`.`OBJECT_ID` AS `scg_id`,`re`.`RECORD_ID` AS `record_id` from (`catissue_form_record_entry` `re` join `catissue_form_context` `fc` on((`fc`.`IDENTIFIER` = `re`.`FORM_CTXT_ID`))) where ((`fc`.`ENTITY_TYPE` = 'SpecimenCollectionGroup') and isnull(`fc`.`deleted_on`) and (`re`.`ACTIVITY_STATUS` = 'ACTIVE')))</createView>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-627">
-        <createView viewName="shipment_base_view">(select `bshp`.`IDENTIFIER` AS `IDENTIFIER`,`bshp`.`LABEL` AS `LABEL`,`bshp`.`SENDER_SITE_ID` AS `SENDER_SITE_ID`,`bshp`.`SENDER_USER_ID` AS `SENDER_USER_ID`,`bshp`.`SEND_DATE` AS `SEND_DATE`,`bshp`.`SENDER_COMMENTS` AS `SENDER_COMMENTS`,`bshp`.`RECEIVER_COMMENTS` AS `RECEIVER_COMMENTS`,`bshp`.`ACTIVITY_STATUS` AS `ACTIVITY_STATUS`,`shp`.`BARCODE` AS `BARCODE`,`bshp`.`RECEIVER_SITE_ID` AS `RECEIVER_SITE_ID` from (`catissue_base_shipment` `bshp` left join `catissue_shipment` `shp` on((`bshp`.`IDENTIFIER` = `shp`.`IDENTIFIER`))))</createView>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-628">
         <createView viewName="specimen_biohazard_view">(select `bhz`.`IDENTIFIER` AS `IDENTIFIER`,`bhzrel`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`bhz`.`NAME` AS `BIOHAZARD_NAME`,`bhz`.`TYPE` AS `BIOHAZARD_TYPE` from (`catissue_specimen_biohz_rel` `bhzrel` join `catissue_biohazard` `bhz` on((`bhzrel`.`BIOHAZARD_ID` = `bhz`.`IDENTIFIER`))))</createView>
     </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-629">
         <createView viewName="specimen_extn_records_view">(select `re`.`OBJECT_ID` AS `SPECIMEN_ID`,`re`.`RECORD_ID` AS `RECORD_ID` from (`catissue_form_record_entry` `re` join `catissue_form_context` `fc` on((`fc`.`IDENTIFIER` = `re`.`FORM_CTXT_ID`))) where (((`fc`.`ENTITY_TYPE` = 'Specimen') or (`fc`.`ENTITY_TYPE` = 'SpecimenEvent')) and isnull(`fc`.`deleted_on`) and (`re`.`ACTIVITY_STATUS` = 'ACTIVE')))</createView>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-630">
-        <createView viewName="specimen_order_view">(select `sporditm`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`orditm`.`ORDER_ID` AS `ORDER_ID` from (`catissue_existing_sp_ord_item` `sporditm` join `catissue_order_item` `orditm` on((`sporditm`.`IDENTIFIER` = `orditm`.`IDENTIFIER`)))) union (select `sparrycnt`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`orditm`.`ORDER_ID` AS `ORDER_ID` from (((`catissue_exist_sp_ar_ord_item` `sparorditm` join `catissue_specimen_array` `sparray` on((`sparorditm`.`SPECIMEN_ARRAY_ID` = `sparray`.`IDENTIFIER`))) join `catissue_speci_array_content` `sparrycnt` on((`sparray`.`IDENTIFIER` = `sparrycnt`.`SPECIMEN_ARRAY_ID`))) join `catissue_order_item` `orditm` on((`sparorditm`.`IDENTIFIER` = `orditm`.`IDENTIFIER`))))</createView>
-    </changeSet>
     <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-631">
         <createView viewName="specimen_pos_view">(select `sppos`.`IDENTIFIER` AS `IDENTIFIER`,`sppos`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`container`.`IDENTIFIER` AS `CONTAINER_ID`,`container`.`NAME` AS `CONTAINER_NAME`,`abp`.`POSITION_DIMENSION_ONE_STRING` AS `POSITION_DIMENSION_ONE_STRING`,`abp`.`POSITION_DIMENSION_TWO_STRING` AS `POSITION_DIMENSION_TWO_STRING` from ((`catissue_specimen_position` `sppos` join `catissue_container` `container` on((`sppos`.`CONTAINER_ID` = `container`.`IDENTIFIER`))) join `catissue_abstract_position` `abp` on((`sppos`.`IDENTIFIER` = `abp`.`IDENTIFIER`))))</createView>
     </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-632">
-        <createView viewName="specimen_shipment_view">(select `csrr`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`csrr`.`SHIPMENT_REQ_ID` AS `SHIPMENT_ID` from `catissue_speci_shipmnt_req_rel` `csrr`) union (select `csp`.`SPECIMEN_ID` AS `SPECIMEN_ID`,`cscr`.`BASE_SHIPMENT_ID` AS `SHIPMENT_ID` from ((`catissue_container` `ctr` join `catissue_specimen_position` `csp` on((`ctr`.`IDENTIFIER` = `csp`.`CONTAINER_ID`))) join `catissue_shipment_containr_rel` `cscr` on((`ctr`.`IDENTIFIER` = `cscr`.`CONTAINER_ID`))))</createView>
-    </changeSet>
-    <changeSet dbms="mysql" author="OpenSpecimen" id="1427110515738-633">
-        <createView viewName="user_view">(select `u`.`IDENTIFIER` AS `IDENTIFIER`,`u`.`FIRST_NAME` AS `FIRST_NAME`,`u`.`LAST_NAME` AS `LAST_NAME`,`u`.`EMAIL_ADDRESS` AS `EMAIL_ADDRESS`,concat(`u`.`LAST_NAME`,', ',`u`.`FIRST_NAME`) AS `NAME`,`d`.`NAME` AS `DEPARTMENT_NAME` from (`catissue_user` `u` join `catissue_department` `d` on((`u`.`DEPARTMENT_ID` = `d`.`IDENTIFIER`))))</createView>
-    </changeSet>
-    
     <changeSet dbms="mysql" author="nmarwaha" id="Create trigger to manage specimen hierarchy">
       <sql endDelimiter="//" >
         drop trigger if exists trg_specimen_replication //
