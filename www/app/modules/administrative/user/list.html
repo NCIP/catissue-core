@@ -10,6 +10,10 @@
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+      <button show-if-admin class="default" title="{{'user.announcement.tooltip' | translate}}"
+        ng-click="broadcastAnnouncement()">
+        <span translate="user.announcement.new">New Announcement</span>
+      </button>
       <div show-if-allowed="userResource.createOpts" dropdown class="inline">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.import">Import</span>

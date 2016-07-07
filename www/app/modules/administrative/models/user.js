@@ -86,6 +86,14 @@ angular.module('os.administrative.models.user', ['os.common.models'])
       );
     }
 
+    User.broadcastAnnouncement = function(announcement) {
+      return $http.post(User.url() + 'announcements', announcement).then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
     return User;
   });
 

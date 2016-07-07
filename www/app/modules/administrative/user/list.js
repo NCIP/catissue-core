@@ -1,8 +1,8 @@
 
 angular.module('os.administrative.user.list', ['os.administrative.models'])
   .controller('UserListCtrl', function(
-    $scope, $state, $rootScope, 
-    osRightDrawerSvc, Institute, User, PvManager, Util) {
+    $scope, $state, $rootScope, $modal,
+    osRightDrawerSvc, Institute, User, PvManager, Util, Alerts) {
 
     var pvInit = false;
 
@@ -74,7 +74,6 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
           //
           osRightDrawerSvc.open();
         }
-
         $scope.users = result; 
       });
     };
@@ -82,6 +81,21 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
     $scope.showUserOverview = function(user) {
       $state.go('user-detail.overview', {userId:user.id});
     };
+
+    $scope.broadcastAnnouncement = function() {
+      $modal.open({
+        templateUrl: 'modules/administrative/user/announcement.html',
+        controller: 'AnnouncementCtrl'
+      }).result.then(
+        function(announcement) {
+          User.broadcastAnnouncement(announcement).then(
+            function(resp) {
+              Alerts.success('user.announcement.success');
+            }
+          );
+        }
+      );
+    }
 
     init();
   });

@@ -873,6 +873,17 @@
        "all": "All Current and Future"
     },
 
+    "announcement": {
+      "tooltip": "Click to broadcast announcement to all active users",
+      "new": "New Announcement",
+      "title": "Broadcast announcement to active users",
+      "info": "Announcement will be sent to all active users since {{activeFromDt | date: global.dateFmt}}",
+      "subject": "Subject",
+      "message": "Message",
+      "message_input": "Type your announcement message here",
+      "success": "Announcement successfully broadcast to all active users"
+    },
+
     "create_account": "Create your OpenSpecimen Account",
     "signup": "Sign up",
     "already_have_an_openspecimen_id": "Already have an OpenSpecimen ID?",
@@ -1755,7 +1766,9 @@
         "dp_expiry_rem_notif": "DP Expiry Reminder",
         "dp_expiry_rem_notif_desc": "Number of days prior to distribution protocol expiry when email notification should be sent to the PI.",
         "dp_expiry_rem_rept_inter": "Repeat DP Expiry Reminder",
-        "dp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for distribution protocol expiry."
+        "dp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for distribution protocol expiry.",
+        "active_users_login_days": "Active User Login Days Criteria",
+        "active_users_login_days_desc": "Number of days elapsed since last login before user is considered as inactive"
       },
 
       "biospecimen": {

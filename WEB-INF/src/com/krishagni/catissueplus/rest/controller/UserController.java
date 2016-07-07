@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.krishagni.catissueplus.core.administrative.events.AnnouncementDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.PasswordDetails;
 import com.krishagni.catissueplus.core.administrative.events.UserDetail;
@@ -249,4 +250,12 @@ public class UserController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/announcements")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Boolean sendAnnouncementMail(@RequestBody AnnouncementDetail detail) {
+		ResponseEvent<Boolean> resp = userService.broadcastAnnouncement(new RequestEvent<>(detail));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 }

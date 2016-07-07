@@ -105,9 +105,14 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	public boolean sendEmail(String emailTmplKey, String[] to, Map<String, Object> props) {
 		return sendEmail(emailTmplKey, to, null, props);
 	}
-	
+
 	@Override
-	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {	
+	public boolean sendEmail(String emailTmplKey, String[] to, File[] attachments, Map<String, Object> props) {
+		return sendEmail(emailTmplKey, to, null, attachments, props);
+	}
+
+	@Override
+	public boolean sendEmail(String emailTmplKey, String[] to, String[] bcc, File[] attachments, Map<String, Object> props) {
 		boolean emailEnabled = cfgSvc.getBoolSetting("notifications", "email_" + emailTmplKey, true);
 		if(!emailEnabled) {
 			return false;
@@ -129,6 +134,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		email.setBody(content);
 		email.setToAddress(to);
 		email.setCcAddress(new String[] {adminEmailId});
+		email.setBccAddress(bcc);
 		email.setAttachments(attachments);
 
 		return sendEmail(email);

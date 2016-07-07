@@ -115,5 +115,17 @@
       group by 
         u.identifier
     </sql-query>
+
+    <query name="getActiveUsers">
+      select
+        distinct user
+      from
+        com.krishagni.catissueplus.core.auth.domain.LoginAuditLog log
+        join log.user user
+      where
+        log.loginTime between :startDate and :endDate and
+        log.loginSuccessful is true and
+        user.activityStatus != 'Disabled'
+    </query>
   </class>
 </hibernate-mapping>

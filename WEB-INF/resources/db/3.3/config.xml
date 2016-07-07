@@ -14,4 +14,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="pjoshi" id="Number of days of last login before user is considered as inactive">
+    <sql>
+      call add_cfg_prop(
+        'administrative', 'active_users_login_days',
+        'active_users_login_days', 'active_users_login_days_desc',
+        'INT', '90'
+      );
+    </sql>
+  </changeSet>	
 </databaseChangeLog>

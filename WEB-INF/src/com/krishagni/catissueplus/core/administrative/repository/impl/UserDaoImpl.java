@@ -14,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -25,7 +24,6 @@ import com.krishagni.catissueplus.core.administrative.repository.UserListCriteri
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
-import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
@@ -53,7 +51,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		addProjectionFields(criteria);
 		return getUsers(criteria.list(), listCrit);
 	}
-	
+
 	public List<User> getUsersByIds(List<Long> userIds) {
 		return getUsersByIdsAndInstitute(userIds, null);
 	}
@@ -142,7 +140,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	public void deleteFpToken(ForgotPasswordToken token) {
 		sessionFactory.getCurrentSession().delete(token);
 	}
-	
+
+	@Override
+	public List<User> getActiveUsers(Date startDate, Date endDate) {
+		return sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_ACTIVE_USERS)
+			.setTimestamp("startDate", startDate)
+			.setTimestamp("endDate", endDate)
+			.list();
+	}
+
 	private List<UserSummary> getUsers(List<Object[]> rows, UserListCriteria listCrit) {		
 		Map<Long, UserSummary> userSummaryMap = new HashMap<Long, UserSummary>();
 
@@ -307,5 +314,5 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 
+	private static final String GET_ACTIVE_USERS = FQN + ".getActiveUsers";
 }
-

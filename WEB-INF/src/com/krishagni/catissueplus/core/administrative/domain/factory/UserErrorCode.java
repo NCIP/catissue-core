@@ -45,7 +45,11 @@ public enum UserErrorCode implements ErrorCode {
 	
 	STATUS_CHANGE_NOT_ALLOWED,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+
+	ANN_SUBJECT_REQ,
+
+	ANN_MESSAGE_REQ;
 	
 	public String code() {
 		return "USER_" + this.name();
