@@ -12,7 +12,7 @@
   <changeSet author="vlonushte" id="Drop unique constraint on login name to add same on (login name, domain)" dbms="oracle">
     <dropUniqueConstraint
       tableName="CATISSUE_USER"
-      constraintName="SYS_C00108351"
+      constraintName="SYS_C00107630"
       uniqueColumns="LOGIN_NAME"/>
   </changeSet>
 
