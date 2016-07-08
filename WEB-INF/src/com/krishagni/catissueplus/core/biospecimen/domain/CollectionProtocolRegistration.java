@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -252,12 +252,20 @@ public class CollectionProtocolRegistration {
 		if (!isActive()) {
 			return;
 		}
-		
-		setRegistrationDate(cpr.getRegistrationDate());
-		setPpid(cpr.getPpid());
+
+		if (StringUtils.isNotBlank(cpr.getPpid())) {
+			setPpid(cpr.getPpid());
+		}
+
+		if (cpr.getRegistrationDate() != null) {
+			setRegistrationDate(cpr.getRegistrationDate());
+		}
+
+		if (cpr.getParticipant() != null) {
+			setParticipant(cpr.getParticipant());
+		}
+
 		setBarcode(cpr.getBarcode());
-		setParticipant(cpr.getParticipant());
-		setPpidIfEmpty();
 	}
 	
 	public void updateConsents(ConsentResponses consentResponses) {
