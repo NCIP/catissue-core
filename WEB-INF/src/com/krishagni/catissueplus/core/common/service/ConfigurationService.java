@@ -1,8 +1,10 @@
 package com.krishagni.catissueplus.core.common.service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -15,6 +17,10 @@ public interface ConfigurationService {
 	public ResponseEvent<ConfigSettingDetail> getSetting(RequestEvent<Pair<String, String>> req);
 	
 	public ResponseEvent<ConfigSettingDetail> saveSetting(RequestEvent<ConfigSettingDetail> req);
+
+	public ResponseEvent<File> getSettingFile(RequestEvent<Pair<String, String>> req);
+
+	public ResponseEvent<String> uploadSettingFile(RequestEvent<FileDetail> req);
 		
 	//
 	// Internal to app APIs
@@ -29,6 +35,8 @@ public interface ConfigurationService {
 	
 	public Boolean getBoolSetting(String module, String name, Boolean ... defValue);
 	
+	public File getSettingFile(String module, String name, File ... defValue);
+
 	public void reload();
 	
 	public void registerChangeListener(String module, ConfigChangeListener callback);

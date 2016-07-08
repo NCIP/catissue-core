@@ -84,8 +84,21 @@ angular.module('os.biospecimen.participant',
       })
       .state('cp-list-view-root', {
         templateUrl: 'modules/biospecimen/participant/list-view.html',
-        controller: function($scope) {
-          $scope.listViewCtx = {};
+        controller: function($scope, cp, defSopDoc, defSopUrl) {
+          var ctx = $scope.listViewCtx = {
+            sopDocDownloadUrl: cp.getSopDocDownloadUrl()
+          };
+
+          ctx.sopDoc = cp.sopDocumentName;
+          if (!ctx.sopDoc) {
+            ctx.sopUrl = cp.sopDocumentUrl;
+            if (!ctx.sopUrl) {
+              ctx.sopDoc = defSopDoc.value;
+              if (!ctx.sopDoc) {
+                ctx.sopUrl = defSopUrl.value;
+              }
+            }
+          }
         },
         resolve: {
           catalogQuery: function(cp) {
@@ -98,6 +111,22 @@ angular.module('os.biospecimen.participant',
                 cp.catalogQuery = query;
               }
             );
+          },
+
+          defSopDoc: function(cp, SettingUtil) {
+            if (!!cp.sopDocumentName || !!cp.sopDocumentUrl) {
+              return null;
+            }
+
+            return SettingUtil.getSetting('biospecimen', 'cp_sop_doc');
+          },
+
+          defSopUrl: function(cp, defSopDoc, SettingUtil) {
+            if (!!cp.sopDocumentName || !!cp.sopDocumentUrl || !!defSopDoc.value) {
+              return null;
+            }
+
+            return SettingUtil.getSetting('biospecimen', 'cp_sop_doc_url');
           }
         },
         parent: 'cp-view',

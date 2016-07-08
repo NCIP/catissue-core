@@ -1,6 +1,12 @@
 angular.module('os.administrative.models.setting', ['os.common.models'])
   .factory('Setting', function(osModel, $http) {
-    var Setting = new osModel('config-settings');
+    function init(props) {
+      if (props.type == 'FILE' && !!props.value) {
+        props.value = props.value.substring(props.value.indexOf('_') + 1);
+      }
+    }
+
+    var Setting = new osModel('config-settings', init);
 
     Setting.getByProp = function(moduleName, propertyName) {
       var params = {module: moduleName, property: propertyName};
@@ -41,6 +47,14 @@ angular.module('os.administrative.models.setting', ['os.common.models'])
           return new Setting(resp.data);
         }
       );
+    }
+
+    Setting.getFileUploadUrl = function() {
+      return Setting.url() + "files";
+    }
+
+    Setting.prototype.getFileDownloadUrl = function() {
+      return Setting.url() + "files?module=" + this.module + "&property=" + this.name;
     }
 
     return Setting;

@@ -33,5 +33,7 @@ public class ConfigParams {
 	
 	public static final String CP_EXPIRY_REM_REPT_INTER  = "cp_expiry_rem_rept_inter";
 
-	public static final String CP_SOP_DOCS_DIR           = "cp_sop_docs_dir";
+	public static final String CP_SOP_DOCS_DIR           = "cp_sop_doc_dir";
+
+	public static final String CP_SOP_DOC                = "cp_sop_doc";
 }

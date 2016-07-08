@@ -5,14 +5,15 @@
   </button>
 
   <ul class="dropdown-menu dropdown-menu-right">
-    <li ng-if="cp.sopDocumentName">
-      <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
+    <li ng-if="!!listViewCtx.sopDoc">
+      <a ng-href="{{listViewCtx.sopDocDownloadUrl}}" target="_blank">
         <span class="fa fa-download"></span>
         <span translate="cp.download_sop">Download SOP</span>
       </a>
     </li>
-    <li ng-if="cp.sopDocumentUrl">
-      <a ng-href="{{cp.sopDocumentUrl}}" target="_blank">
+
+    <li ng-if="!!listViewCtx.sopUrl">
+      <a ng-href="{{listViewCtx.sopUrl}}" target="_blank">
         <span class="fa fa-external-link"></span>
         <span translate="cp.sop_document">SOP Document</span>
       </a>

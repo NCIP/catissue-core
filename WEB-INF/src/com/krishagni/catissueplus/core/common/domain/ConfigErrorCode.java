@@ -7,7 +7,9 @@ public enum ConfigErrorCode implements ErrorCode {
 	
 	SETTING_NOT_FOUND,
 	
-	INVALID_SETTING_VALUE;
+	INVALID_SETTING_VALUE,
+	
+	FILE_MOVED_OR_DELETED;
 
 	@Override
 	public String code() {

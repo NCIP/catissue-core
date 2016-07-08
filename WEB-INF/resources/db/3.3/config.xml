@@ -32,4 +32,24 @@
       call remove_cfg_prop('biospecimen', 'spmn_path_status_abbr_map');
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="System level CP SOP document URL">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'cp_sop_doc_url',
+        'cp_sop_doc_url', 'cp_sop_doc_url_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="System level CP SOP document">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'cp_sop_doc',
+        'cp_sop_doc', 'cp_sop_doc_desc',
+        'FILE', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

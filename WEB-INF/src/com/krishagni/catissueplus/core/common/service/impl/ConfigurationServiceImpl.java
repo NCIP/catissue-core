@@ -1,5 +1,9 @@
 package com.krishagni.catissueplus.core.common.service.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -9,15 +13,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PluginManager;
@@ -154,6 +161,48 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	
 	@Override
 	@PlusTransactional
+	public ResponseEvent<File> getSettingFile(RequestEvent<Pair<String, String>> req) {
+		Pair<String, String> payload = req.getPayload();
+		try {
+			Map<String, ConfigSetting> moduleSettings = configSettings.get(payload.first());
+			if (moduleSettings == null) {
+				return ResponseEvent.userError(ConfigErrorCode.MODULE_NOT_FOUND);
+			}
+
+			ConfigSetting setting = moduleSettings.get(payload.second());
+			if (setting == null) {
+				return ResponseEvent.userError(ConfigErrorCode.SETTING_NOT_FOUND);
+			}
+
+			return ResponseEvent.response(getSettingFile(payload.first(), payload.second()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	public ResponseEvent<String> uploadSettingFile(RequestEvent<FileDetail> req) {
+		OutputStream out = null;
+
+		try {
+			FileDetail detail = req.getPayload();
+			String filename = UUID.randomUUID() + "_" + detail.getFilename();
+
+			out = new FileOutputStream(new File(getSettingFilesDir() + filename));
+			IOUtils.copy(detail.getFileIn(), out);
+
+			return ResponseEvent.response(filename);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public Integer getIntSetting(String module, String name, Integer... defValue) {
 		String value = getStrSetting(module, name, (String)null);
 		if (StringUtils.isBlank(value)) {
@@ -219,7 +268,23 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		return Boolean.parseBoolean(value);		
 	}
-	
+
+	@Override
+	public File getSettingFile(String module, String name, File... defValue) {
+		String value = getStrSetting(module, name, (String)null);
+		if (StringUtils.isBlank(value)) {
+			return defValue != null && defValue.length > 0 ? defValue[0] : null;
+		}
+
+		File file = new File(getSettingFilesDir() + value);
+		if (!file.exists()) {
+			value = value.split("_", 2)[1];
+			throw OpenSpecimenException.userError(ConfigErrorCode.FILE_MOVED_OR_DELETED, value);
+		}
+
+		return file;
+	}
+
 	@Override
 	@PlusTransactional
 	public void reload() {
@@ -383,6 +448,13 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 					Integer.parseInt(setting);
 					break;
 					
+				case FILE:
+					String path = getSettingFilesDir() + setting;
+					if (!new File(path).exists()) {
+						throw new FileNotFoundException("File at path " + path + " does not exists");
+					}
+					break;
+
 				default:
 					break;
 			}
@@ -432,5 +504,11 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	private boolean isAutoEmpiEnabled() {
 		return StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_format", "")) || 
 				StringUtils.isNotBlank(getStrSetting("biospecimen", "mpi_generator", ""));
+	}
+
+	private String getSettingFilesDir() {
+		String dir = getDataDir() + File.separator + "config-setting-files";
+		new File(dir).mkdirs();
+		return dir + File.separator;
 	}
 }

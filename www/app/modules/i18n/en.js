@@ -1813,8 +1813,12 @@
         "cp_expiry_rem_notif_desc": "Number of days prior to collection protocol expiry when email notification should be sent to the PI.",
         "cp_expiry_rem_rept_inter": "Repeat CP Expiry Reminder",
         "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry.",
-        "cp_sop_docs_dir": "SOP Documents Directory",
-        "cp_sop_doc_dir_desc": "Folder on server to store collection protocol SOP documents"
+        "cp_sop_doc_dir": "CP SOP Documents Directory",
+        "cp_sop_doc_dir_desc": "Folder on server to store collection protocol SOP documents",
+        "cp_sop_doc_url": "CP SOP Link",
+        "cp_sop_doc_url_desc": "System level collection protocol SOP document link",
+        "cp_sop_doc": "CP SOP Document",
+        "cp_sop_doc_desc": "System level collection protocol SOP document"
       },
 
       "common": {

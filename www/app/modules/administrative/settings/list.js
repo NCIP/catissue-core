@@ -1,10 +1,15 @@
 
 angular.module('os.administrative.setting.list', ['os.administrative.models'])
   .controller('SettingsListCtrl', function(
-    $scope, $state, $stateParams, Setting, SettingUtil, Alerts) {
+    $scope, $state, $stateParams, $sce, Setting, SettingUtil, Alerts) {
 
     function init() {
       $scope.isEdit = false;
+      $scope.fileCtx = {
+        ctrl: {},
+        uploadUrl: $sce.trustAsResourceUrl(Setting.getFileUploadUrl())
+      };
+
       var moduleName = $stateParams.moduleName;
       if (!moduleName) {
         $state.go('settings-list', {moduleName: $scope.modules[0].name});
@@ -12,6 +17,17 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
       } 
 
       $scope.selectedModule = $scope.modulesMap[moduleName];
+    }
+
+    function saveSetting() {
+      Setting.updateSetting($scope.setting).then(
+        function(resp) {
+          Alerts.success('settings.success_message');
+          angular.extend($scope.existingSetting, resp);
+          $scope.isEdit = false;
+          SettingUtil.clearSetting(resp.module, resp.name);
+        }
+      );
     }
     
     $scope.updateSetting = function(setting) {
@@ -26,19 +42,22 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
     }
     
     $scope.submit = function() {
-      if($scope.existingSetting.value == $scope.setting.value) {
+      var type = $scope.setting.type;
+      if (type != 'FILE' && $scope.existingSetting.value == $scope.setting.value) {
         Alerts.error('settings.invalid_value');
         return;
       } 
 
-      Setting.updateSetting($scope.setting).then(
-        function(resp) {
-          Alerts.success('settings.success_message');
-          angular.extend($scope.existingSetting, resp);
-          $scope.isEdit = false;
-          SettingUtil.clearSetting(resp.module, resp.name);
-        }
-      );
+      if (type == 'FILE') {
+        $scope.fileCtx.ctrl.submit().then(
+          function(filename) {
+            $scope.setting.value = filename;
+            saveSetting(); 
+          }
+        );
+      } else {
+        saveSetting();
+      }
     }
 
     init();

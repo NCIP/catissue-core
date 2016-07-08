@@ -1,5 +1,7 @@
 package com.krishagni.catissueplus.core.common.util;
 
+import java.io.File;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -66,5 +68,9 @@ public class ConfigUtil {
 	
 	public Integer getIntSetting(String module, String name, Integer defValue) {
 		return cfgSvc.getIntSetting(module, name, defValue);
+	}
+
+	public File getFileSetting(String module, String name, File defValue) {
+		return cfgSvc.getSettingFile(module, name, defValue);
 	}
 }

@@ -1,6 +1,6 @@
 
 <div>
-  <form class="form-horizontal" name="settingForm" os-form-validator="settingForm" novalidate>
+  <ng-form class="form-horizontal" name="settingForm" os-form-validator="settingForm" novalidate>
     <div class="form-group">
       <label class="col-xs-2 control-label" translate="settings.property">Property</label>
       <div class="form-value col-xs-10">
@@ -53,6 +53,11 @@
               btn-radio="'false'" required translate="common.disabled">Disabled</button>
           </div>
         </div>
+        <div ng-if="setting.type == 'FILE'">
+          <form action="{{fileCtx.uploadUrl}}">
+            <div os-file-upload ctrl="fileCtx.ctrl"></div>
+          </form>
+        </div>
         <div os-field-error field="settingForm.value"></div>
       </div>
     </div>
@@ -69,6 +74,6 @@
         </button>
       </div>
     </div>
-  </form>
+  </ng-form>
 </div>
 

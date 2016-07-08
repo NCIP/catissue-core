@@ -387,14 +387,19 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
 
 			String filename = cp.getSopDocumentName();
+			File file = null;
 			if (StringUtils.isBlank(filename)) {
-				return ResponseEvent.userError(CpErrorCode.SOP_DOC_NOT_FOUND, cp.getShortTitle());
+				file = ConfigUtil.getInstance().getFileSetting(ConfigParams.MODULE, ConfigParams.CP_SOP_DOC, null);
+			} else {
+				file = new File(getSopDocDir() + filename);
+				if (!file.exists()) {
+					filename = filename.split("_", 2)[1];
+					return ResponseEvent.userError(CpErrorCode.SOP_DOC_MOVED_OR_DELETED, cp.getShortTitle(), filename);
+				}
 			}
 
-			File file = new File(getSopDocDir() + filename);
-			if (!file.exists()) {
-				filename = filename.split("_", 2)[1];
-				return ResponseEvent.userError(CpErrorCode.SOP_DOC_MOVED_OR_DELETED, cp.getShortTitle(), filename);
+			if (file == null) {
+				return ResponseEvent.userError(CpErrorCode.SOP_DOC_NOT_FOUND, cp.getShortTitle());
 			}
 
 			return ResponseEvent.response(file);
