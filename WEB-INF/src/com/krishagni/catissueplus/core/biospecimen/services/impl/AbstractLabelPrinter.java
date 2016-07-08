@@ -19,8 +19,8 @@ import com.krishagni.catissueplus.core.common.service.LabelPrinter;
 
 public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 	//
-	// format: <item_label>_<yyyyMMddHHmm>_<unique_os_run_num>_<copy>.txt
-	// E.g. TCP-0003-S-01-P1_201604040807_1_1.txt, TCP-0003-S-01-P1_201604040807_1_2.txt etc
+	// format: <entity_type>_<yyyyMMddHHmm>_<unique_os_run_num>_<copy>.txt
+	// E.g. specimen_201604040807_1_1.txt, specimen_201604040807_1_2.txt, visit_201604040807_1_1.txt etc
 	//
 	private static final String LABEL_FILENAME_FMT = "%s_%s_%d_%d.txt";
 
@@ -102,7 +102,7 @@ public abstract class AbstractLabelPrinter<T> implements LabelPrinter<T> {
 		int labelCount = uniqueNum.incrementAndGet();
 
 		for (int i = 0; i < item.getCopies(); ++i) {
-			String filename = String.format(LABEL_FILENAME_FMT, item.getItemLabel(), tstamp, labelCount, (i + 1));
+			String filename = String.format(LABEL_FILENAME_FMT, item.getJob().getItemType(), tstamp, labelCount, (i + 1));
 			FileUtils.write(new File(rule.getCmdFilesDir(), filename), content);
 		}
 	}
