@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -213,6 +214,10 @@ public class SpecimenList {
 	}
 
 	public static List<Specimen> groupByAncestors(Collection<Specimen> spmns) {
+		if (spmns == null) {
+			return Collections.emptyList();
+		}
+
 		Map<String, Set<Specimen>> spmnsMap = new LinkedHashMap<>();
 		for (Specimen spmn : spmns) {
 			while (spmn != null) {
