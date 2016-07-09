@@ -702,15 +702,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			//
 			return;
 		}
-		
+
+		Object key = null;
 		if (location.getId() != null && location.getId() != -1) {
+			key = location.getId();
 			container = daoFactory.getStorageContainerDao().getById(location.getId());			
 		} else {
+			key = location.getName();
 			container = daoFactory.getStorageContainerDao().getByName(location.getName());
 		} 
 		
 		if (container == null) {
-			ose.addError(StorageContainerErrorCode.NOT_FOUND);
+			ose.addError(StorageContainerErrorCode.NOT_FOUND, key);
 			return;
 		}
 		

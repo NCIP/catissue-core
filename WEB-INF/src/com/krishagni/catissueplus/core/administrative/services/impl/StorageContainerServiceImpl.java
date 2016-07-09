@@ -134,15 +134,9 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	@PlusTransactional
 	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req) {
 		try {
-			Long containerId = req.getPayload();			
-			StorageContainer container = daoFactory.getStorageContainerDao().getById(containerId);
-			if (container == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			
+			StorageContainer container = getContainer(req.getPayload(), null);
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
-			Set<StorageContainerPosition> positions = container.getOccupiedPositions();
-			return ResponseEvent.response(StorageContainerPositionDetail.from(positions));
+			return ResponseEvent.response(StorageContainerPositionDetail.from(container.getOccupiedPositions()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -186,18 +180,8 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req) {
 		try {
 			PositionTenantDetail detail = req.getPayload();
-			StorageContainer container = null;
-			
-			if (detail.getContainerId() != null) {
-				container = daoFactory.getStorageContainerDao().getById(detail.getContainerId());
-			} else if (StringUtils.isNotBlank(detail.getContainerName())) {
-				container = daoFactory.getStorageContainerDao().getByName(detail.getContainerName());
-			}
-			
-			if (container == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			
+
+			StorageContainer container = getContainer(detail.getContainerId(), detail.getContainerName());
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
 			
 			CollectionProtocol cp = new CollectionProtocol();
@@ -258,11 +242,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
-			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
-			if (existing == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			
+			StorageContainer existing = getContainer(req.getPayload(), null);
 			return ResponseEvent.response(existing.getDependentEntities());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -273,11 +253,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	@PlusTransactional
 	public ResponseEvent<StorageContainerDetail> deleteStorageContainer(RequestEvent<Long> req) {
 		try {
-			StorageContainer existing = daoFactory.getStorageContainerDao().getById(req.getPayload());
-			if (existing == null) {
-				return ResponseEvent.userError(StorageContainerErrorCode.NOT_FOUND);
-			}
-			
+			StorageContainer existing = getContainer(req.getPayload(), null);
 			AccessCtrlMgr.getInstance().ensureDeleteContainerRights(existing);
 			existing.delete();
 			return ResponseEvent.response(StorageContainerDetail.from(existing));
