@@ -985,7 +985,7 @@ edu.common.de.DatePicker = function(id, field, args) {
 
   this.setValue = function(recId, value) {
     this.recId = recId;
-    if (!value || value.trim().length == 0) {
+    if (!value || (typeof value == 'string' && value.trim().length == 0)) {
       return;
     }
 

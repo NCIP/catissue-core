@@ -4,6 +4,8 @@ angular.module('openspecimen')
       function parseDate(viewValue) {
         if (angular.isNumber(viewValue)) {
           viewValue = new Date(viewValue);
+        } else if (angular.isString(viewValue) && !isNaN(parseInt(viewValue))) {
+          viewValue = new Date(parseInt(viewValue));
         }
 
         if (!viewValue) {

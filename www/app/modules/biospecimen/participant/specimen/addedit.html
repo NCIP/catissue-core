@@ -33,7 +33,7 @@
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
       <div ng-switch on="fieldsCtx.hasDict">
         <div ng-switch-when="true">
-          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+          <sde-form-fields name="spmn" base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
             obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
           </sde-form-fields>
         </div>
