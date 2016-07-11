@@ -162,7 +162,12 @@ angular.module('os.biospecimen.participant.specimen-tree',
 
         scope.collectSpecimens = function() {
           if (!scope.selection.any) {
-            showSelectSpecimens('specimens.no_specimens_for_collection');
+            if (!scope.visit || !scope.visit.id) {
+              Alerts.error('specimens.errors.visit_not_completed');
+            } else {
+              $state.go('specimen-addedit', {specimenId: '', visitId: scope.visit.id});
+            }
+
             return;
           }
 

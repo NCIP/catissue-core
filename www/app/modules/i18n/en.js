@@ -583,7 +583,8 @@
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
       "children_created_on_lt_parent": "Created on time of children less than that of parent specimen {{parentLabel}}",
       "children_created_on_gt_curr_time": "Created on time of {{parentLabel}}'s children greater than current time",
-      "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots"
+      "aliquot_label_mismatch": "There is a mismatch in number of specified labels and aliquots",
+      "visit_not_completed": "Please complete the visit before collecting unplanned specimen"
     },
 
     "bulk_events": {

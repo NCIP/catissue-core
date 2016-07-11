@@ -356,7 +356,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (StringUtils.isBlank(anatomicSite)) {
 			if (specimen.getSpecimenRequirement() == null) {
-				ose.addError(SpecimenErrorCode.ANATOMIC_SITE_REQUIRED);
+				specimen.setTissueSite(Specimen.NOT_SPECIFIED);
 			}
 			
 			return;				
@@ -398,7 +398,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (StringUtils.isBlank(laterality)) {
 			if (specimen.getSpecimenRequirement() == null) {
-				ose.addError(SpecimenErrorCode.LATERALITY_REQUIRED);
+				specimen.setTissueSide(Specimen.NOT_SPECIFIED);
 			}
 			
 			return;
@@ -444,7 +444,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		if (StringUtils.isBlank(pathology)) {
 			if (specimen.getSpecimenRequirement() == null) {
-				ose.addError(SpecimenErrorCode.PATHOLOGY_STATUS_REQUIRED);
+				specimen.setPathologicalStatus(Specimen.NOT_SPECIFIED);
 			}
 			
 			return;
