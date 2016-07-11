@@ -1,16 +1,4 @@
 angular.module('openspecimen')
-  .directive('osCloseSelectOnBlur', function() {
-    return {
-      require: 'uiSelect',
-      link: function(scope, element, attrs, ctrl) {
-        ctrl.searchInput.on('blur', function() {
-          if (!!ctrl.search) {
-            ctrl.select(ctrl.search, true);
-          }
-        });
-      }
-    }
-  })
   .directive('osSelect', function() {
     function linker(scope, element, attrs) {
       var changeFn = undefined
@@ -36,7 +24,7 @@ angular.module('openspecimen')
       restrict: 'E',
       compile: function(tElem, tAttrs) {
         var multiple = angular.isDefined(tAttrs.multiple);
-        var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select os-close-select-on-blur/>')
+        var uiSelect = angular.element(multiple ? '<ui-select multiple/>' : '<ui-select/>')
           .attr('ng-model', tAttrs.ngModel)
           .attr('ng-disabled', tAttrs.ngDisabled)
           .attr('reset-search-input', true)
