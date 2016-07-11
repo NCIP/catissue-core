@@ -461,7 +461,7 @@
     "parent_type": "Parent Type",
     "storage_location": "Storage Location",
     "virtually_located": "Virtual",
-    "no_specimens_to_show": "No Specimens to Show",
+    "no_specimens_to_show": "No Child Specimens to Show",
     "aliquot_cnt": "Count of Aliquots",
     "qty_per_aliquot": "Quantity per Aliquot",
     "aliquots_created": "Successfully created aliquots",
