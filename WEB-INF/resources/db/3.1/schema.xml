@@ -146,7 +146,7 @@
           inner join catissue_received_event_param re on re.identifier = rre.record_id
           left join (
             select
-              fre.object_id as specimen_id, min(fep.event_timestamp) as event_timestamp
+              fre.object_id as specimen_id, max(fep.event_timestamp) as event_timestamp
             from
               catissue_frozen_event_param fep
               inner join catissue_form_record_entry fre on fre.record_id = fep.identifier
@@ -160,7 +160,8 @@
         where
           s.parent_specimen_id is null and s.collection_status != 'Pending' and
           s.activity_status != 'Disabled' and c.activity_status != 'Disabled' and
-          c.collection_status = 'Collected';
+          c.collection_status = 'Collected' and cre.activity_status = 'ACTIVE' and
+          rre.activity_status = 'ACTIVE';
 
         set @num := 0, @parent := 0;
 
@@ -281,7 +282,7 @@
           inner join catissue_received_event_param re on re.identifier = rre.record_id
           left join (
             select
-              fre.object_id as specimen_id, min(fep.event_timestamp) as event_timestamp
+              fre.object_id as specimen_id, max(fep.event_timestamp) as event_timestamp
             from
               catissue_frozen_event_param fep
               inner join catissue_form_record_entry fre on fre.record_id = fep.identifier
@@ -295,7 +296,8 @@
         where
           s.parent_specimen_id is null and s.collection_status = ''Collected'' and
           s.activity_status != ''Disabled'' and c.activity_status != ''Disabled'' and
-          c.collection_status = ''Collected''';
+          c.collection_status = ''Collected'' and cre.activity_status = ''ACTIVE'' and 
+          rre.activity_status = ''ACTIVE'';
        
         execute immediate 'merge into tmp_specimen_stats us using (
           select 
