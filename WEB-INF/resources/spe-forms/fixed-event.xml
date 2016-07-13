@@ -15,7 +15,7 @@
         <column>FIXATION_TYPE</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003995' order by value
+            select value from catissue_permissible_value where public_id = 'fixation_type' order by value
           </sql>
         </options>
         <mandatory>true</mandatory>

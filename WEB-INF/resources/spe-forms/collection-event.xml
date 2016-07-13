@@ -15,7 +15,7 @@
         <column>COLLECTION_PROCEDURE</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003996' order by value
+            select value from catissue_permissible_value where public_id = 'collection_procedure' order by value
           </sql>
         </options>
         <mandatory>true</mandatory>
@@ -30,7 +30,7 @@
         <column>CONTAINER</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003997' order by value
+            select value from catissue_permissible_value where public_id = 'collection_container' order by value
           </sql>
         </options>
         <mandatory>true</mandatory>

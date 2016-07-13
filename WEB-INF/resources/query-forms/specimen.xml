@@ -81,7 +81,14 @@
         <column>SPECIMEN_CLASS</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003991' order by value
+            select
+              value
+            from
+              catissue_permissible_value
+            where
+              public_id = 'specimen_type' and
+              parent_identifier is null
+            order by value
           </sql>
         </options>
       </dropDown>
@@ -95,15 +102,14 @@
         <column>SPECIMEN_TYPE</column>
         <options>
           <sql>
-            select 
-              distinct subpv.value 
-            from 
-              catissue_permissible_value subpv 
-              inner join catissue_permissible_value mainpv on subpv.parent_identifier = mainpv.identifier 
-            where 
-              mainpv.public_id = '2003991' 
-            order by 
-              subpv.value
+            select
+              distinct value
+            from
+              catissue_permissible_value
+            where
+              public_id = 'specimen_type' and
+              parent_identifier is not null
+            order by value
           </sql>
         </options>
       </dropDown>
@@ -122,30 +128,8 @@
             from 
               catissue_permissible_value pv 
             where 
-              pv.public_id = 'Tissue_Site_PID'
-
-            union 
-
-            select 
-              subpv.value 
-            from 
-              catissue_permissible_value pv 
-              inner join catissue_permissible_value subpv on subpv.parent_identifier = pv.identifier 
-            where 
-              pv.public_id = 'Tissue_Site_PID' 
-
-            union 
-
-            select 
-              subpv1.value 
-            from 
-              catissue_permissible_value pv 
-              inner join catissue_permissible_value subpv on subpv.parent_identifier = pv.identifier 
-              inner join catissue_permissible_value subpv1 on subpv1.parent_identifier = subpv.identifier 
-            where 
-              pv.public_id = 'Tissue_Site_PID'
-
-            order by 
+              pv.public_id = 'anatomic_site'
+            order by
               value
           </sql>
         </options>
@@ -159,7 +143,7 @@
         <caption>#getMessage("specimen_laterality")</caption>
         <column>TISSUE_SIDE</column>
         <options>
-          <sql>select value from catissue_permissible_value where public_id = '2003992' order by value</sql>
+          <sql>select value from catissue_permissible_value where public_id = 'laterality' order by value</sql>
         </options>
       </dropDown>
     </row>
@@ -171,7 +155,7 @@
         <caption>#getMessage("specimen_pathological_status")</caption>
         <column>PATHOLOGICAL_STATUS</column>
         <options>
-          <sql>select value from catissue_permissible_value where public_id = '2003993' order by value</sql>
+          <sql>select value from catissue_permissible_value where public_id = 'pathology_status' order by value</sql>
         </options>
       </dropDown>
     </row>

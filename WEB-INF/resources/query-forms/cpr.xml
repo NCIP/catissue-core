@@ -109,20 +109,9 @@
         <caption>#getMessage("participant_gender")</caption>
         <column>GENDER</column>
         <options>
-          <sql>select value from catissue_permissible_value where public_id = '2003989' order by value</sql>
+          <sql>select value from catissue_permissible_value where public_id = 'gender' order by value</sql>
         </options>
       </radioButton>
-    </row>
-    <row>
-      <dropDown>
-        <name>genotype</name>
-        <udn>genotype</udn>
-        <caption>#getMessage("participant_genotype")</caption>
-        <column>GENOTYPE</column>
-        <options>
-          <sql>select value from catissue_permissible_value where public_id = '2003990' order by value</sql>
-        </options>
-      </dropDown>
     </row>
     <row>
       <checkBox>
@@ -135,7 +124,7 @@
         <foreignKey>PARTICIPANT_ID</foreignKey>
         <parentKey>PARTICIPANT_ID</parentKey>
         <options>
-          <sql>select value from catissue_permissible_value where public_id = 'Race_PID' order by sortorder</sql>
+          <sql>select value from catissue_permissible_value where public_id = 'race' order by sortorder</sql>
         </options>
       </checkBox>
     </row>

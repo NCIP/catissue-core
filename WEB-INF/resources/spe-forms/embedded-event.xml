@@ -15,7 +15,7 @@
         <column>EMBEDDING_MEDIUM</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003999' order by value
+            select value from catissue_permissible_value where public_id = 'embedding_medium' order by value
           </sql>
         </options>
         <mandatory>true</mandatory>

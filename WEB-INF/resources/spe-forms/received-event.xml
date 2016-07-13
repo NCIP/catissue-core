@@ -15,7 +15,7 @@
         <column>RECEIVED_QUALITY</column>
         <options>
           <sql>
-            select value from catissue_permissible_value where public_id = '2003994' order by value
+            select value from catissue_permissible_value where public_id = 'receive_quality' order by value
           </sql>
         </options>
         <mandatory>true</mandatory>
