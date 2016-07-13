@@ -10,7 +10,9 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface SpecimenListDao extends Dao<SpecimenList> {
 	public List<SpecimenListSummary> getSpecimenLists(SpecimenListsCriteria crit);
-	
+
+	public Long getSpecimenListsCount(SpecimenListsCriteria crit);
+
 	public Map<Long, List<Specimen>> getListCpSpecimens(Long listId);
 
 	public List<Long> getListSpecimensCpIds(Long listId);

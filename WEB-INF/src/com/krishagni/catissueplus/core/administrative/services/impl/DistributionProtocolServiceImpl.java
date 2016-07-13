@@ -89,16 +89,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req) {
 		try {
-			DpListCriteria crit = req.getPayload();
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
-			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
-			
-			if (siteIds != null) {
-				crit.siteIds(siteIds);
-			}
-			
+			DpListCriteria crit = addDpListCriteria(req.getPayload());
 			List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao().getDistributionProtocols(crit);
 			List<DistributionProtocolDetail> result = DistributionProtocolDetail.from(dps);
 			
@@ -107,6 +98,19 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			}
 						
 			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getDistributionProtocolsCount(RequestEvent<DpListCriteria> req) {
+		try {
+			DpListCriteria crit = addDpListCriteria(req.getPayload());
+			return ResponseEvent.response(daoFactory.getDistributionProtocolDao().getDistributionProtocolsCount(crit));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -461,6 +465,19 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 		}
 
 		return daoFactory.getDistributionProtocolDao().getDpIds(key, value);
+	}
+
+	private DpListCriteria addDpListCriteria(DpListCriteria crit) {
+		Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
+		if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		if (siteIds != null) {
+			crit.siteIds(siteIds);
+		}
+		
+		return crit;
 	}
 
 	private void ensureSpecimenPropertyPresent(DpRequirement dpr, OpenSpecimenException ose) {

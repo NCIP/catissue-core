@@ -50,6 +50,12 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
       template: function(tElem, tAttrs) {
         var bodyAppend = angular.isDefined(tAttrs.appendToBody) ? tAttrs.appendToBody : "true";
         var tabable = angular.isDefined(tAttrs.osTabable) ? tAttrs.osTabable : "false";
+
+        var loopExpr = 'user in users';
+        if (angular.isDefined(tAttrs.selectProp)) {
+          loopExpr = 'user.' + tAttrs.selectProp + ' as ' + loopExpr;
+        }
+
         return angular.isDefined(tAttrs.multiple) ?
               '<div>' +
                 '<ui-select multiple ng-model="$parent.ngModel" reset-search-input="true"' +
@@ -57,7 +63,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
                   '<ui-select-match placeholder="{{$parent.placeholder}}">' +
                     '{{$item.lastName}}, {{$item.firstName}}' +
                   '</ui-select-match>' +
-                  '<ui-select-choices repeat="user in users" refresh="searchUsers($select.search)" refresh-delay="750">' +
+                  '<ui-select-choices repeat="' + loopExpr +'" refresh="searchUsers($select.search)" refresh-delay="750">' +
                     '<span ng-bind-html="user.lastName + \', \' + user.firstName | highlight: $select.search"></span>' +
                   '</ui-select-choices>' +
                 '</ui-select>' +
@@ -71,7 +77,7 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
                   '<ui-select-match placeholder="{{$parent.placeholder}}" allow-clear="'+ (tAttrs.required == undefined) +'">' +
                     '{{$select.selected.lastName}}, {{$select.selected.firstName}}' +
                   '</ui-select-match>' +
-                  '<ui-select-choices repeat="user in users" refresh="searchUsers($select.search)" refresh-delay="750">' +
+                  '<ui-select-choices repeat="' + loopExpr +'" refresh="searchUsers($select.search)" refresh-delay="750">' +
                     '<span ng-bind-html="user.lastName + \', \' + user.firstName | highlight: $select.search"></span>' +
                   '</ui-select-choices>' + 
                 '</ui-select>' +

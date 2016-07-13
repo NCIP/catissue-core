@@ -83,7 +83,23 @@ public class FormsController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getFormsCount(
+			@RequestParam(value = "name", required= false, defaultValue = "")
+			String name) {
+		
+		FormListCriteria crit = new FormListCriteria()
+				.query(name)
+				.formType("DataEntry");
+		
+		ResponseEvent<Long> resp = formSvc.getFormsCount(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.DELETE, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

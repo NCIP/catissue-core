@@ -35,6 +35,8 @@ import edu.common.dynamicextensions.napi.FormData;
 public interface FormService {
 	public ResponseEvent<List<FormSummary>> getForms(RequestEvent<FormListCriteria> req);
 	
+	public ResponseEvent<Long> getFormsCount(RequestEvent<FormListCriteria> req);
+	
 	public ResponseEvent<Container> getFormDefinition(RequestEvent<Long> req);
 	
 	public ResponseEvent<Boolean> deleteForm(RequestEvent<Long> req);

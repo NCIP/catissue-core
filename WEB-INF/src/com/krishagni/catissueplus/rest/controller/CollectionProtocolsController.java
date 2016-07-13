@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -97,7 +96,7 @@ public class CollectionProtocolsController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0") 
 			int startAt,
 			
-			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
 			int maxResults,
 			
 			@RequestParam(value = "detailedList", required = false, defaultValue = "false") 
@@ -118,6 +117,33 @@ public class CollectionProtocolsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getCollectionProtocolsCount(
+			@RequestParam(value = "query", required = false)
+			String searchStr,
+			
+			@RequestParam(value = "title", required = false)
+			String title,
+			
+			@RequestParam(value = "piId", required = false)
+			Long piId,
+			
+			@RequestParam(value = "repositoryName", required = false)
+			String repositoryName) {
+		
+		CpListCriteria crit = new CpListCriteria()
+			.query(searchStr)
+			.title(title)
+			.piId(piId)
+			.repositoryName(repositoryName);
+		
+		ResponseEvent<Long> resp = cpSvc.getProtocolsCount(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

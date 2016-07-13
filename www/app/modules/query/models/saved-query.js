@@ -14,7 +14,7 @@ angular.module('os.query.models.savedquery', ['os.common.models'])
             function(query) {
               return new SavedQuery(query);
             }
-          );         
+          );
         }
       );
 

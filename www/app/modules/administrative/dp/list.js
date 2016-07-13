@@ -1,30 +1,28 @@
 
 angular.module('os.administrative.dp.list', ['os.administrative.models'])
-  .controller('DpListCtrl', function($scope, $state, DistributionProtocol, Util, PvManager) {
+  .controller('DpListCtrl', function($scope, $state, DistributionProtocol, Util, PvManager, ListPagerOpts) {
+
+    var pagerOpts;
 
     function init() {
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getDpsCount});
       $scope.dpFilterOpts = {includeStats: true};
       loadDps($scope.dpFilterOpts);
-      Util.filter($scope, 'dpFilterOpts', filter);
+      Util.filter($scope, 'dpFilterOpts', loadDps);
       loadActivityStatuses();
     }
     
     function loadDps(filterOpts) {
       DistributionProtocol.query(filterOpts).then(
         function(result) {
-          $scope.distributionProtocols = result; 
+          $scope.distributionProtocols = result;
+          pagerOpts.refreshOpts(result);
         }
       );
     }
 
-    function filter(filterOpts) {
-      var dpFilterOpts = angular.copy(filterOpts);
-      if (dpFilterOpts.pi) {
-        dpFilterOpts.piId = dpFilterOpts.pi.id;
-        delete dpFilterOpts.pi;
-      }
-
-      loadDps(dpFilterOpts);
+    function getDpsCount() {
+      return DistributionProtocol.getCount($scope.dpFilterOpts);
     }
 
     $scope.showDpOverview = function(distributionProtocol) {

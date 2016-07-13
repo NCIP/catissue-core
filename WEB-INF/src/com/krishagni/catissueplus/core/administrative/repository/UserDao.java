@@ -13,6 +13,8 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface UserDao extends Dao<User> {
 	public List<UserSummary> getUsers(UserListCriteria criteria);
 	
+	public Long getUsersCount(UserListCriteria criteria);
+	
 	public List<User> getUsersByIds(List<Long> userIds);
 	
 	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId);

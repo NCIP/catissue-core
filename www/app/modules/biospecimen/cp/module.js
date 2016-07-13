@@ -45,8 +45,8 @@ angular.module('os.biospecimen.cp',
         controller: 'CpListCtrl',
         parent: 'cps',
         resolve: {
-          cpList: function(CollectionProtocol) {
-            return CollectionProtocol.list();
+          cpList: function(CollectionProtocol, ListPagerOpts) {
+            return CollectionProtocol.list({maxResults: ListPagerOpts.MAX_PAGE_RECS + 1});
           },
           
           view: function($rootScope, $state, cpList) {

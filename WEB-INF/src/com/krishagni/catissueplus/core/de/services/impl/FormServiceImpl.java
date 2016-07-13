@@ -120,12 +120,9 @@ public class FormServiceImpl implements FormService {
 
 		String entityType = crit.getFormType();
 		if (StringUtils.isBlank(entityType) || entityType.equals("DataEntry")) {
-			User currUser = AuthUtil.getCurrentUser();
-			if (!currUser.isAdmin() && !currUser.getManageForms()) {
+			crit = addFormsListCriteria(crit);
+			if (crit == null) {
 				return ResponseEvent.response(Collections.emptyList());
-			} else if (!currUser.isAdmin() && currUser.getManageForms()) {
-				crit.userId(currUser.getId());
-				crit.cpIds(AccessCtrlMgr.getInstance().getReadableCpIds());
 			}
 
 			return ResponseEvent.response(formDao.getAllFormsSummary(crit));
@@ -134,6 +131,17 @@ public class FormServiceImpl implements FormService {
 		} else {
 			return ResponseEvent.response(formDao.getFormsByEntityType(entityType));
 		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getFormsCount(RequestEvent<FormListCriteria> req) {
+		FormListCriteria crit = addFormsListCriteria(req.getPayload());
+		if (crit == null) {
+			return ResponseEvent.response(0L);
+		}
+
+		return ResponseEvent.response(formDao.getAllFormsCount(crit));
 	}
 
     @Override
@@ -695,6 +703,18 @@ public class FormServiceImpl implements FormService {
 	@PlusTransactional
 	public List<FormSummary> getEntityForms(Long cpId, String[] entityTypes) {
 		return formDao.getFormsByCpAndEntityType(cpId, entityTypes);
+	}
+
+	private FormListCriteria addFormsListCriteria(FormListCriteria crit) {
+		User currUser = AuthUtil.getCurrentUser();
+		if (!currUser.isAdmin() && !currUser.getManageForms()) {
+			return null;
+		} else if (!currUser.isAdmin() && currUser.getManageForms()) {
+			crit.userId(currUser.getId());
+			crit.cpIds(AccessCtrlMgr.getInstance().getReadableCpIds());
+		}
+		
+		return crit;
 	}
 
 	private FormFieldSummary getExtensionField(String name, String caption, List<Long> extendedFormIds ) {

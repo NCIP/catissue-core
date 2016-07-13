@@ -18,6 +18,8 @@ public interface DistributionProtocolService {
 
 	public ResponseEvent<List<DistributionProtocolDetail>> getDistributionProtocols(RequestEvent<DpListCriteria> req);
 	
+	public ResponseEvent<Long> getDistributionProtocolsCount(RequestEvent<DpListCriteria> req);
+	
 	public ResponseEvent<DistributionProtocolDetail> getDistributionProtocol(RequestEvent<Long> req);
 	
 	public ResponseEvent<DistributionProtocolDetail> createDistributionProtocol(RequestEvent<DistributionProtocolDetail> req);

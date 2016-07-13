@@ -43,8 +43,11 @@ public class CollectionProtocolRegistrationDaoImpl
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CprSummary> getCprList(CprListCriteria cprCrit) {
-		Criteria query = getCprListQuery(cprCrit);
-		query.setProjection(getCprSummaryFields(cprCrit));
+		Criteria query = getCprListQuery(cprCrit)
+			.addOrder(Order.asc("id"))
+			.setFirstResult(cprCrit.startAt())
+			.setMaxResults(cprCrit.maxResults())
+			.setProjection(getCprSummaryFields(cprCrit));
 		
 		List<CprSummary> cprs = new ArrayList<>();
 		Map<Long, CprSummary> cprMap = new HashMap<>();
@@ -71,6 +74,14 @@ public class CollectionProtocolRegistrationDaoImpl
 		}
 		
 		return cprs;
+	}
+
+	@Override
+	public Long getCprCount(CprListCriteria cprCrit) {
+		Number count = (Number) getCprListQuery(cprCrit)
+			.setProjection(Projections.rowCount())
+			.uniqueResult();
+		return count.longValue();
 	}
 
 	@Override
@@ -181,10 +192,7 @@ public class CollectionProtocolRegistrationDaoImpl
 			.createAlias("participant", "participant")
 			.add(Restrictions.ne("activityStatus", "Disabled"))
 			.add(Restrictions.ne("cp.activityStatus", "Disabled"))
-			.add(Restrictions.ne("participant.activityStatus", "Disabled"))
-			.addOrder(Order.asc("id"))
-			.setFirstResult(cprCrit.startAt() < 0 ? 0 : cprCrit.startAt())
-			.setMaxResults(cprCrit.maxResults() < 0 || cprCrit.maxResults() > 100 ? 100 : cprCrit.maxResults());
+			.add(Restrictions.ne("participant.activityStatus", "Disabled"));
 
 		addCpRestrictions(query, cprCrit);
 		addRegDateCondition(query, cprCrit);

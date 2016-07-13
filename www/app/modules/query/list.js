@@ -48,7 +48,7 @@ angular.module('os.query.list', ['os.query.models'])
 
     function loadFolderQueries(folder) {
       $scope.folders.selectedFolder = folder;
-      $scope.filterOpts = {};
+      $scope.filterOpts = {searchString: ''};
       loadQueries($scope.filterOpts);
     };
 

@@ -1,36 +1,39 @@
 
 angular.module('os.biospecimen.cp.list', ['os.biospecimen.models'])
-  .controller('CpListCtrl', 
-    function($scope, $state, cpList, CollectionProtocol, Util, PvManager, AuthorizationService) {
+  .controller('CpListCtrl', function(
+    $scope, $state, cpList, CollectionProtocol, Util, PvManager, ListPagerOpts, AuthorizationService) {
+
+    var pagerOpts, filterOpts;
 
     function init() {
-      $scope.cpFilterOpts = {};
-      $scope.cpList = cpList;
-      $scope.sites = PvManager.getSites();
-      Util.filter($scope, 'cpFilterOpts', filter);
+      pagerOpts  = $scope.pagerOpts    = new ListPagerOpts({listSizeGetter: getCpCount});
+      filterOpts = $scope.cpFilterOpts = {maxResults: ListPagerOpts.MAX_PAGE_RECS + 1};
 
+      $scope.sites = PvManager.getSites();
       $scope.allowReadJobs = AuthorizationService.isAllowed($scope.participantResource.createOpts) ||
         AuthorizationService.isAllowed($scope.participantResource.updateOpts) ||
         AuthorizationService.isAllowed($scope.specimenResource.updateOpts);
+
+      setList(cpList);
+      Util.filter($scope, 'cpFilterOpts', loadCollectionProtocols);
     }
 
-    function loadCollectionProtocols(filterOpts) {
+    function setList(list) {
+      $scope.cpList = list;
+      pagerOpts.refreshOpts(list);
+    }
+
+    function getCpCount() {
+      return CollectionProtocol.getCount(filterOpts);
+    }
+
+    function loadCollectionProtocols() {
       CollectionProtocol.list(filterOpts).then(
         function(cpList) {
-          $scope.cpList = cpList;
+          setList(cpList);
         }
       );
     };
-
-    function filter(filterOpts) {
-      var cpFilterOpts = angular.copy(filterOpts);
-      if (cpFilterOpts.pi) {
-        cpFilterOpts.piId = cpFilterOpts.pi.id;
-        delete cpFilterOpts.pi;
-      }
-
-      loadCollectionProtocols(cpFilterOpts);
-    }
 
     $scope.showCpSummary = function(cp) {
       $state.go('cp-summary-view', {cpId: cp.id});

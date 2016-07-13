@@ -19,7 +19,7 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 
 	public Map<String, Object> getContainerIds(String key, Object value);
 
-	public int getStorageContainersCount(StorageContainerListCriteria listCrit);
+	public Long getStorageContainersCount(StorageContainerListCriteria listCrit);
 
 	public List<String> getNonCompliantContainers(ContainerRestrictionsCriteria crit);
 

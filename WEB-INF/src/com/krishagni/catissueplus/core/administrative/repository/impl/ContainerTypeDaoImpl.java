@@ -25,13 +25,19 @@ public class ContainerTypeDaoImpl extends AbstractDao<ContainerType> implements 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ContainerType> getTypes(ContainerTypeListCriteria crit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(ContainerType.class)
+		return getTypesListQuery(crit)
 			.setFirstResult(crit.startAt())
 			.setMaxResults(crit.maxResults())
-			.addOrder(Order.asc("name"));
-		
-		addSearchConditions(query, crit);
-		return query.list();
+			.addOrder(Order.asc("name"))
+			.list();
+	}
+
+	@Override
+	public Long getTypesCount(ContainerTypeListCriteria crit) {
+		Number count = (Number) getTypesListQuery(crit)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+		return count.longValue();
 	}
 
 	@Override
@@ -44,11 +50,15 @@ public class ContainerTypeDaoImpl extends AbstractDao<ContainerType> implements 
 
 		return result.isEmpty() ? null : result.iterator().next();
 	}
-	
-	private void addSearchConditions(Criteria query, ContainerTypeListCriteria crit) {
-		MatchMode matchMode = crit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
-		addNameRestriction(query, crit.query(), matchMode);
+
+	private Criteria getTypesListQuery(ContainerTypeListCriteria crit) {
+		return addSearchConditions(getCurrentSession().createCriteria(ContainerType.class), crit);
+	}
+
+	private Criteria addSearchConditions(Criteria query, ContainerTypeListCriteria crit) {
+		addNameRestriction(query, crit.query(), crit.matchMode());
 		addCanHoldRestriction(query, crit.canHold());
+		return query;
 	}
 	
 	private void addNameRestriction(Criteria query, String name, MatchMode matchMode) {

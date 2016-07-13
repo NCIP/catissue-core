@@ -1,9 +1,12 @@
 
 angular.module('os.administrative.job.list', ['os.administrative.models'])
-  .controller('JobListCtrl', function($scope, $modal, ScheduledJob, Alerts) {
+  .controller('JobListCtrl', function($scope, $modal, ScheduledJob, Alerts, ListPagerOpts) {
+
+    var pagerOpts;
 
     function init() {
       $scope.jobs = [];
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getJobsCount});
       $scope.filterOpts = {query: undefined};
       loadJobs($scope.filterOpts);
     }
@@ -12,6 +15,7 @@ angular.module('os.administrative.job.list', ['os.administrative.models'])
       ScheduledJob.query(filterOpts).then(
         function(jobs) {
           $scope.jobs = jobs;
+          pagerOpts.refreshOpts(jobs);
         }
       );
     }
@@ -23,6 +27,10 @@ angular.module('os.administrative.job.list', ['os.administrative.models'])
           Alerts.success("jobs.queued_for_exec", job);
         }
       );
+    }
+
+    function getJobsCount() {
+      return ScheduledJob.getCount($scope.filterOpts);
     }
     
     $scope.executeJob = function(job) {

@@ -7,6 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
@@ -26,19 +27,22 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Shipment> getShipments(ShipmentListCriteria crit) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Shipment.class)
-				.createAlias("receivingSite", "recvSite")
-				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
-				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
+		Criteria query = getShipmentsQuery(crit)
+				.setFirstResult(crit.startAt())
+				.setMaxResults(crit.maxResults())
 				.addOrder(Order.desc("id"));
 		
-		addNameRestrictions(query, crit);
-		addInstituteRestrictions(query, crit);
-		addSiteRestrictions(query, crit);
 		return query.list();
 	}
-	
+
+	@Override
+	public Long getShipmentsCount(ShipmentListCriteria crit) {
+		Number count = (Number) getShipmentsQuery(crit)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+		return count.longValue();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public Shipment getShipmentByName(String name) {
@@ -62,6 +66,17 @@ public class ShipmentDaoImpl extends AbstractDao<Shipment> implements ShipmentDa
 	@Override
 	public Map<String, Object> getShipmentIds(String key, Object value) {
 		return getObjectIds("shipmentId", key, value);
+	}
+
+	private Criteria getShipmentsQuery(ShipmentListCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(Shipment.class)
+				.createAlias("receivingSite", "recvSite");
+		
+		addNameRestrictions(query, crit);
+		addInstituteRestrictions(query, crit);
+		addSiteRestrictions(query, crit);
+		return query;
 	}
 
 	private void addNameRestrictions(Criteria query, ShipmentListCriteria crit) {

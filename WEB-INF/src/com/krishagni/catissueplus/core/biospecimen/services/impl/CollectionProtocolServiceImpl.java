@@ -139,17 +139,12 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	@PlusTransactional
 	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<CpListCriteria> req) {
 		try {
-			Set<Long> cpIds = AccessCtrlMgr.getInstance().getReadableCpIds();
-			
-			CpListCriteria crit = req.getPayload();
-			if (cpIds != null && cpIds.isEmpty()) {
-				return ResponseEvent.response(Collections.<CollectionProtocolSummary>emptyList());
-			} else if (cpIds != null) {
-				crit.ids(new ArrayList<Long>(cpIds));
+			CpListCriteria crit = addCpListCriteria(req.getPayload());
+			if (crit == null) {
+				return ResponseEvent.response(Collections.emptyList());
 			}
-			
-			List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit);			
-			return ResponseEvent.response(cpList);
+
+			return ResponseEvent.response(daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit));
 		} catch (OpenSpecimenException oce) {
 			return ResponseEvent.error(oce);
 		} catch (Exception e) {
@@ -157,6 +152,23 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		}
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getProtocolsCount(RequestEvent<CpListCriteria> req) {
+		try {
+			CpListCriteria crit = addCpListCriteria(req.getPayload());
+			if (crit == null) {
+				return ResponseEvent.response(0L);
+			}
+			
+			return ResponseEvent.response(daoFactory.getCollectionProtocolDao().getCpCount(crit));
+		} catch (OpenSpecimenException oce) {
+			return ResponseEvent.error(oce);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolDetail> getCollectionProtocol(RequestEvent<CpQueryCriteria> req) {
@@ -177,20 +189,27 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	@PlusTransactional
 	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req) {
 		try { 
-			CprListCriteria listCrit = req.getPayload();
-
-			ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(listCrit.cpId());
-			if (!access.admin) {
-				if (access.noAccessibleSites() || (!access.phiAccess && listCrit.hasPhiFields())) {
-					return ResponseEvent.response(Collections.emptyList());
-				}
+			CprListCriteria listCrit = addCprListCriteria(req.getPayload());
+			if (listCrit == null) {
+				return ResponseEvent.response(Collections.emptyList());
 			}
 
-			listCrit.includePhi(access.phiAccess)
-				.phiSiteCps(access.phiSiteCps)
-				.siteCps(access.siteCps)
-				.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
 			return ResponseEvent.response(daoFactory.getCprDao().getCprList(listCrit));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getRegisteredParticipantsCount(RequestEvent<CprListCriteria> req) {
+		try {
+			CprListCriteria listCrit = addCprListCriteria(req.getPayload());
+			if (listCrit == null) {
+				return ResponseEvent.response(0L);
+			}
+
+			return ResponseEvent.response(daoFactory.getCprDao().getCprCount(listCrit));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -958,6 +977,31 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		}
 
 		return daoFactory.getCollectionProtocolDao().getCpIds(key, value);
+	}
+
+	private CpListCriteria addCpListCriteria(CpListCriteria crit) {
+		Set<Long> cpIds = AccessCtrlMgr.getInstance().getReadableCpIds();
+		if (cpIds != null && cpIds.isEmpty()) {
+			return null;
+		} else if (cpIds != null) {
+			crit.ids(new ArrayList<>(cpIds));
+		}
+
+		return crit;
+	}
+
+	private CprListCriteria addCprListCriteria(CprListCriteria listCrit) {
+		ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(listCrit.cpId());
+		if (!access.admin) {
+			if (access.noAccessibleSites() || (!access.phiAccess && listCrit.hasPhiFields())) {
+				return null;
+			}
+		}
+
+		return listCrit.includePhi(access.phiAccess)
+			.phiSiteCps(access.phiSiteCps)
+			.siteCps(access.siteCps)
+			.useMrnSites(AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn());
 	}
 
 	private CollectionProtocol createCollectionProtocol(CollectionProtocolDetail detail, CollectionProtocol existing, boolean createCopy) {

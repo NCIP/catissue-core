@@ -61,6 +61,19 @@ public class ScheduledJobServiceImpl implements ScheduledJobService, Application
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<Long> getScheduledJobsCount(RequestEvent<ScheduledJobListCriteria> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureReadScheduledJobRights();
+			return ResponseEvent.response(daoFactory.getScheduledJobDao().getScheduledJobsCount(req.getPayload()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<ScheduledJobDetail> getScheduledJob(RequestEvent<Long> req) {
 		try {
 			AccessCtrlMgr.getInstance().ensureReadScheduledJobRights();			

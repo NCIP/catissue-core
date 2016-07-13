@@ -1,5 +1,7 @@
 angular.module('os.administrative.site.list', ['os.administrative.models'])
-  .controller('SiteListCtrl', function($scope, $state, Site, Util) {
+  .controller('SiteListCtrl', function($scope, $state, Site, Util, ListPagerOpts) {
+
+    var pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getSitesCount})
 
     function init() {
       $scope.siteFilterOpts = {includeStats: true};
@@ -11,9 +13,14 @@ angular.module('os.administrative.site.list', ['os.administrative.models'])
       Site.query(filterOpts).then(
         function(siteList) {
           $scope.siteList = siteList;
+          pagerOpts.refreshOpts(siteList);
         }
       );
     };
+
+    function getSitesCount() {
+      return Site.getCount($scope.siteFilterOpts);
+    }
 
     $scope.showSiteOverview = function(site) {
       $state.go('site-detail.overview', {siteId: site.id});

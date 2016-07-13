@@ -51,27 +51,18 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	public FormContextBean getById(Long id) {
 		return getById(id, "deletedOn is null");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormSummary> getAllFormsSummary(FormListCriteria crit) {
-		Query query = getListFormsQuery(crit);
-
-		if (StringUtils.isNotBlank(crit.query())) {
-			query.setParameter("caption", "%" + crit.query() + "%");
-		}
-		
-		if (crit.userId() != null) {
-			query.setParameter("userId", crit.userId());
-			
-			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
-				query.setParameterList("cpList", crit.cpIds());
-			}
-		}
-		
-		return getForms(query.list());
+		return getForms(getAllFormsQuery(crit, false).list());
 	}
-	
+
+	@Override
+	public Long getAllFormsCount(FormListCriteria crit) {
+		return ((Number) getAllFormsQuery(crit, true).uniqueResult()).longValue();
+	}
+
 	@SuppressWarnings("unchecked")
  	@Override
   	public List<FormSummary> getFormsByEntityType(String entityType) {
@@ -82,6 +73,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 		return getForms(rows);
     }
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<FormSummary> getFormsByCpAndEntityType(Long cpId, String[] entityTypes) {
 		List<Object[]> rows = getCurrentSession()
@@ -541,9 +533,27 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			.setParameterList("recordIds", recordIds)
 			.executeUpdate();
 	}
+	
+	private Query getAllFormsQuery(FormListCriteria crit, boolean countReq) {
+		Query query = countReq ? getCountFormsQuery(crit) : getListFormsQuery(crit);
+
+		if (StringUtils.isNotBlank(crit.query())) {
+			query.setParameter("caption", "%" + crit.query() + "%");
+		}
+		
+		if (crit.userId() != null) {
+			query.setParameter("userId", crit.userId());
+			
+			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
+				query.setParameterList("cpList", crit.cpIds());
+			}
+		}
+		
+		return query;
+	}
 
 	private Query getListFormsQuery(FormListCriteria crit) {
-		return getCurrentSession().createSQLQuery(getListFormsSql(crit))
+		return getCurrentSession().createSQLQuery(getListFormsSql(crit, false))
 			.addScalar("formId", new LongType())
 			.addScalar("formName", new StringType())
 			.addScalar("formCaption", new StringType())
@@ -559,12 +569,16 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			.setMaxResults(crit.maxResults());
 	}
 
-	private String getListFormsSql(FormListCriteria crit) {
+	private Query getCountFormsQuery(FormListCriteria crit) {
+		return getCurrentSession().createSQLQuery(getListFormsSql(crit, true));
+	}
+
+	private String getListFormsSql(FormListCriteria crit, boolean countReq) {
 		boolean joinCps = CollectionUtils.isNotEmpty(crit.cpIds());
-		String distinct = joinCps ? " distinct " : "";
+		String proj = String.format(countReq ? GET_FORMS_COUNT_PROJ : GET_FORMS_LIST_PROJ, joinCps ? " distinct " : "");
 		String cpFormsSql =  joinCps ? CP_FORMS_JOIN : "";
 
-		StringBuilder sqlBuilder = new StringBuilder(String.format(GET_ALL_FORMS, distinct, cpFormsSql));
+		StringBuilder sqlBuilder = new StringBuilder(String.format(GET_ALL_FORMS, proj, cpFormsSql));
 		if (StringUtils.isNotBlank(crit.query())) {
 			sqlBuilder.append(" and c.caption like :caption ");
 		}
@@ -579,7 +593,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			sqlBuilder.append(")");
 		}
 		
-		sqlBuilder.append(" order by modificationTime desc ");
+		if (!countReq) {
+			sqlBuilder.append(" order by modificationTime desc ");
+		}
+		
 		return sqlBuilder.toString();
 	}
 
@@ -844,11 +861,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"  form_ctxt_id = :formCtxtId and record_id in (:recordIds)";
 
 	private static final String GET_ALL_FORMS =
-			"select %s " + // placeholder to add distinct when joined with cp forms
-			"  c.identifier as formId, c.name as formName, c.caption as formCaption, c.create_time as creationTime, " +
-			"  case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime, " +
-			"  derived.cpCount as cpCount, derived.allCp, derived.sysForm, " +
-			"  u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName " +
+			"select %s " +
 			"from " +
 			"  dyextn_containers c " +
 			"  inner join catissue_user u on u.identifier = c.created_by " +
@@ -870,6 +883,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"  %s " + // placeholder to join cp forms
 			"where " +
 			"  c.deleted_on is null ";
+
+	private static final String GET_FORMS_LIST_PROJ = "%s " + // placeholder to add distinct when joined with cp forms
+			"  c.identifier as formId, c.name as formName, c.caption as formCaption, c.create_time as creationTime, " +
+			"  case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime, " +
+			"  derived.cpCount as cpCount, derived.allCp, derived.sysForm, " +
+			"  u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName ";
+
+	private static final String GET_FORMS_COUNT_PROJ = "count(%s c.identifier) ";
 
 	private static final String CP_FORMS_JOIN =
 			"left join catissue_form_context ctxt " +

@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -91,6 +92,43 @@ public class UserController {
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getUsersCount(
+			@RequestParam(value = "searchString", required = false) 
+			String searchString,
+			
+			@RequestParam(value = "name", required = false)
+			String name,
+			
+			@RequestParam(value = "loginName", required = false)
+			String loginName,
+			
+			@RequestParam(value = "institute", required = false)
+			String institute,
+			
+			@RequestParam(value = "activityStatus", required = false)
+			String activityStatus,
+			
+			@RequestParam(value = "listAll", required = false, defaultValue = "true")
+			boolean listAll) {
+		
+		UserListCriteria crit = new UserListCriteria()
+			.query(searchString)
+			.name(name)
+			.loginName(loginName)
+			.instituteName(institute)
+			.activityStatus(activityStatus)
+			.listAll(listAll);
+		
+		RequestEvent<UserListCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<Long> resp = userService.getUsersCount(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

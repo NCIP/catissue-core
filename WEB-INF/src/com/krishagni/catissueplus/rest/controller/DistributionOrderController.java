@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -93,7 +95,52 @@ public class DistributionOrderController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getDistributionOrdersCount(
+		@RequestParam(value = "query", required = false, defaultValue = "")
+		String searchTerm,
+		
+		@RequestParam(value = "dpShortTitle", required = false, defaultValue = "")
+		String dpShortTitle,
+		
+		@RequestParam(value = "dpId", required = false)
+		Long dpId,
+		
+		@RequestParam(value = "requestor", required = false, defaultValue = "")
+		String requestor,
+		
+		@RequestParam(value = "requestorId", required = false)
+		Long requestorId,
+		
+		@RequestParam(value = "executionDate", required = false)
+		@DateTimeFormat(pattern="yyyy-MM-dd")
+		Date executionDate,
+		
+		@RequestParam(value = "receivingSite", required = false, defaultValue = "")
+		String receivingSite,
+		
+		@RequestParam(value = "receivingInstitute", required = false, defaultValue = "")
+		String receivingInstitute) {
+		
+		
+		DistributionOrderListCriteria listCrit = new DistributionOrderListCriteria()
+			.query(searchTerm)
+			.dpShortTitle(dpShortTitle)
+			.dpId(dpId)
+			.requestor(requestor)
+			.requestorId(requestorId)
+			.executionDate(executionDate)
+			.receivingSite(receivingSite)
+			.receivingInstitute(receivingInstitute);
+			
+		ResponseEvent<Long> resp = distributionService.getOrdersCount(getRequest(listCrit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

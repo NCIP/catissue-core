@@ -12,7 +12,9 @@ import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
 
 public interface ShipmentService {
 	public ResponseEvent<List<ShipmentDetail>> getShipments(RequestEvent<ShipmentListCriteria> req);
-	
+
+	public ResponseEvent<Long> getShipmentsCount(RequestEvent<ShipmentListCriteria> req);
+
 	public ResponseEvent<ShipmentDetail> getShipment(RequestEvent<Long> req);
 	
 	public ResponseEvent<ShipmentDetail> createShipment(RequestEvent<ShipmentDetail> req);

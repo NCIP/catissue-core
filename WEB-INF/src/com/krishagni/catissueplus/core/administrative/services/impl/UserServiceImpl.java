@@ -97,15 +97,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<UserSummary>> getUsers(RequestEvent<UserListCriteria> req) {
-		UserListCriteria crit = req.getPayload();		
-		if (!AuthUtil.isAdmin() && !crit.listAll()) {
-			crit.instituteName(getCurrUserInstitute().getName());
-		} 
-		
-		List<UserSummary> users = daoFactory.getUserDao().getUsers(crit);
+		List<UserSummary> users = daoFactory.getUserDao().getUsers(addUserListCriteria(req.getPayload()));
 		return ResponseEvent.response(users);
 	}
 	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getUsersCount(RequestEvent<UserListCriteria> req) {
+		return ResponseEvent.response(daoFactory.getUserDao().getUsersCount(addUserListCriteria(req.getPayload())));
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String username)
 	throws UsernameNotFoundException {
@@ -411,6 +412,14 @@ public class UserServiceImpl implements UserService {
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<Long> req) {
 		Institute institute = getInstitute(req.getPayload());
 		return ResponseEvent.response(InstituteDetail.from(institute));
+	}
+
+	private UserListCriteria addUserListCriteria(UserListCriteria crit) {
+		if (!AuthUtil.isAdmin() && !crit.listAll()) {
+			crit.instituteName(getCurrUserInstitute().getName());
+		}
+
+		return crit;
 	}
 
 	@Override

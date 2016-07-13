@@ -30,10 +30,9 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		List<SpecimenListSummary> results = new ArrayList<>();
 		Map<Long, SpecimenListSummary> listMap = new HashMap<>();
 
-		Query query = getCurrentSession().createQuery(getHql(crit))
+		Query query = getSpecimenListsQuery(crit, false)
 			.setFirstResult(crit.startAt())
 			.setMaxResults(crit.maxResults());
-		setParams(query, crit);
 
 		List<SpecimenList> lists = query.list();
 		for (SpecimenList list : lists) {
@@ -59,6 +58,11 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		}
 
 		return results;
+	}
+
+	@Override
+	public Long getSpecimenListsCount(SpecimenListsCriteria crit) {
+		return ((Number) getSpecimenListsQuery(crit, true).uniqueResult()).longValue();
 	}
 
 	@Override
@@ -134,11 +138,14 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		sessionFactory.getCurrentSession().delete(list);
 	}
 
-	private String getHql(SpecimenListsCriteria crit) {
-		StringBuilder hql = new StringBuilder()
-			.append("select distinct l from ")
-			.append(getType().getName()).append(" l");
+	private Query getSpecimenListsQuery(SpecimenListsCriteria crit, boolean countReq) {
+		Query query = getCurrentSession().createQuery(getHql(crit, countReq));
+		return setParams(query, crit);
+	}
 
+	private String getHql(SpecimenListsCriteria crit, boolean countReq) {
+		StringBuilder hql = new StringBuilder(countReq ? "select count(distinct l.id) from " : "select distinct l from ")
+			.append(getType().getName()).append(" l");
 
 		if (crit.userId() != null) {
 			hql.append(" join l.owner owner").append(" left join l.sharedWith sharedWith");
@@ -158,7 +165,7 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		return hql.toString();
 	}
 
-	private void setParams(Query query, SpecimenListsCriteria crit) {
+	private Query setParams(Query query, SpecimenListsCriteria crit) {
 		if (crit.userId() != null) {
 			query.setLong("userId", crit.userId());
 		}
@@ -166,6 +173,8 @@ public class SpecimenListDaoImpl extends AbstractDao<SpecimenList> implements Sp
 		if (StringUtils.isNotBlank(crit.query())) {
 			query.setString("name", "%" + crit.query().toUpperCase() + "%");
 		}
+
+		return query;
 	}
 
 	private static final String FQN = SpecimenList.class.getName();

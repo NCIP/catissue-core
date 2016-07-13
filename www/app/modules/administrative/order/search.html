@@ -12,8 +12,8 @@
     </div>
 
     <div class="form-group">
-      <div os-md-input ng-model="filterOpts.requestor" placeholder="{{'orders.requestor' | translate}}">
-        <os-users ng-model="filterOpts.requestor" placeholder="{{'orders.requestor' | translate}}"> 
+      <div os-md-input ng-model="filterOpts.requestorId" placeholder="{{'orders.requestor' | translate}}">
+        <os-users ng-model="filterOpts.requestorId" placeholder="{{'orders.requestor' | translate}}" select-prop="id"> 
         </os-users>
       </div>
     </div>
@@ -27,16 +27,16 @@
     </div>
 
     <div class="form-group">
-      <div os-md-input ng-model="filterOpts.dp" placeholder="{{'orders.dp' | translate}}">
-        <os-select ng-model="filterOpts.dp" class="form-control"
-          display-prop="shortTitle" list="dps" 
+      <div os-md-input ng-model="filterOpts.dpId" placeholder="{{'orders.dp' | translate}}">
+        <os-select ng-model="filterOpts.dpId" class="form-control"
+          display-prop="shortTitle" list="dps" select-prop="id"
           os-md-input refresh="loadDps" placeholder="{{'orders.dp' | translate}}">
         </os-select>
       </div>
     </div>
 
     <div class="form-group">
-      <os-date-picker date="filterOpts.executionDate" md-type="true"
+      <os-date-picker date="filterOpts.executionDate" md-type="true" date-only="true"
         placeholder="{{'orders.execution_date' | translate}}">
       </os-date-picker>
     </div>

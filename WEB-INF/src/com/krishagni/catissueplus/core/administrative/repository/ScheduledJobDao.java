@@ -10,7 +10,9 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface ScheduledJobDao extends Dao<ScheduledJob> {
 	public List<ScheduledJob> getScheduledJobs(ScheduledJobListCriteria listCriteria);
-	
+
+	public Long getScheduledJobsCount(ScheduledJobListCriteria listCriteria);
+
 	public ScheduledJobRun getJobRun(Long id);
 	
 	public ScheduledJob getJobByName(String name);

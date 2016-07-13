@@ -87,6 +87,12 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	}
 
 	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getSitesCount(RequestEvent<SiteListCriteria> req) {
+		return ResponseEvent.response(daoFactory.getSiteDao().getSitesCount(req.getPayload()));
+	}
+
+	@Override
 	@PlusTransactional		
 	public ResponseEvent<SiteDetail> getSite(RequestEvent<SiteQueryCriteria> req) {
 		SiteQueryCriteria crit = req.getPayload();

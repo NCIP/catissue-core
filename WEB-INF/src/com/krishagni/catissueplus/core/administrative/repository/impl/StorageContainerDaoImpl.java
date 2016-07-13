@@ -39,12 +39,15 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<StorageContainer> getStorageContainers(StorageContainerListCriteria listCrit) {
-		return new ListQueryBuilder(listCrit).query().list();
+		return new ListQueryBuilder(listCrit).query()
+				.setFirstResult(listCrit.startAt())
+				.setMaxResults(listCrit.maxResults())
+				.list();
 	}
 	
 	@Override
-	public int getStorageContainersCount(StorageContainerListCriteria listCrit) {
-		return ((Number) new ListQueryBuilder(listCrit, true).query().uniqueResult()).intValue();
+	public Long getStorageContainersCount(StorageContainerListCriteria listCrit) {
+		return ((Number) new ListQueryBuilder(listCrit, true).query().uniqueResult()).longValue();
 	}
 	
 	@Override
@@ -213,10 +216,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				.append(" order by c.id asc")
 				.toString();
 			
-			Query query = sessionFactory.getCurrentSession().createQuery(hql)
-					.setFirstResult(crit.startAt())
-					.setMaxResults(crit.maxResults());
-			
+			Query query = getCurrentSession().createQuery(hql);
 			for (Map.Entry<String, Object> param : params.entrySet()) {
 				if (param.getValue() instanceof Collection<?>) {
 					query.setParameterList(param.getKey(), (Collection<?>)param.getValue());

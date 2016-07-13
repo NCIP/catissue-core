@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -31,13 +30,11 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit) {
-		Criteria query = sessionFactory.getCurrentSession()
-			.createCriteria(Institute.class, "institute")
+		Criteria query = getInstituteListQuery(listCrit)
 			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
 			.setMaxResults(listCrit.maxResults());
 		
-		addSearchConditions(query, listCrit);
 		addProjectionFields(query);
 		
 		List<Object[]> rows = query.list();
@@ -62,7 +59,15 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		
 		return institutes;
 	}
-	
+
+	@Override
+	public Long getInstitutesCount(InstituteListCriteria listCrit) {
+		Number count = ((Number)getInstituteListQuery(listCrit)
+			.setProjection(Projections.rowCount())
+			.uniqueResult());
+		return count.longValue();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Institute> getInstituteByNames(List<String> names) {
@@ -103,13 +108,19 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		return results.isEmpty() ? null : results.get(0);
 	}
 
-	private void addSearchConditions(Criteria query, InstituteListCriteria listCrit) {
-		if (StringUtils.isBlank(listCrit.query())) {
-			return;
+	private Criteria getInstituteListQuery(InstituteListCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession()
+			.createCriteria(Institute.class, "institute");
+
+		return addSearchConditions(query, crit);
+	}
+
+	private Criteria addSearchConditions(Criteria query, InstituteListCriteria listCrit) {
+		if (StringUtils.isNotBlank(listCrit.query())) {
+			query.add(Restrictions.ilike("name", listCrit.query(), listCrit.matchMode()));
 		}
-		
-		MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;  
-		query.add(Restrictions.ilike("name", listCrit.query(), matchMode));		
+
+		return query;
 	}
 	
 	private void addProjectionFields(Criteria query) {

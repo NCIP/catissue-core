@@ -33,6 +33,15 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       );
     }
 
+    DistributionOrder.list = function(opts) {
+      return DistributionOrder.query(prepareFilterOpts(opts));
+    }
+
+    function prepareFilterOpts(filterOpts) {
+      var params = {includeStats: true, query: filterOpts.title};
+      return angular.extend(params, filterOpts);
+    }
+
     DistributionOrder.getItemStatusPvs = function() {
       return [
         'DISTRIBUTED',
@@ -59,6 +68,10 @@ angular.module('os.administrative.models.order', ['os.common.models'])
           return resp.data;
         }
       );
+    }
+
+    DistributionOrder.getOrdersCount = function(filterOpts) {
+      return DistributionOrder.getCount(prepareFilterOpts(filterOpts));
     }
 
     return DistributionOrder;

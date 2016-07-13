@@ -14,6 +14,14 @@ angular.module('os.biospecimen.models.cpr',
       );
  
     CollectionProtocolRegistration.listForCp = function(cpId, includeStats, filterOpts) {
+      return CollectionProtocolRegistration.query(prepareFilterOpts(cpId, includeStats, filterOpts));
+    };
+
+    CollectionProtocolRegistration.getCprCount = function(cpId, includeStats, filterOpts) {
+      return CollectionProtocolRegistration.getCount(prepareFilterOpts(cpId, includeStats, filterOpts));
+    }
+
+    function prepareFilterOpts(cpId, includeStats, filterOpts) {
       var params = {cpId: cpId, includeStats: !!includeStats};
       angular.extend(params, filterOpts || {});
 
@@ -27,8 +35,9 @@ angular.module('os.biospecimen.models.cpr',
       if (!!params.registrationDate) {
         params.registrationDate = $filter('date')(params.registrationDate, 'yyyy-MM-dd');
       }
-      return CollectionProtocolRegistration.query(params);
-    };
+
+      return params;
+    }
 
     CollectionProtocolRegistration.prototype.getType = function() {
       return 'collection_protocol_registration';

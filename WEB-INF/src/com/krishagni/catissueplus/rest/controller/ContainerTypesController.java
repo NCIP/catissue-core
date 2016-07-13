@@ -1,7 +1,9 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,18 +52,42 @@ public class ContainerTypesController {
 		int maxResults) {
 
 		ContainerTypeListCriteria crit = new ContainerTypeListCriteria()
-				.query(name)
-				.canHold(canHold)
-				.exactMatch(exactMatch)
-				.startAt(startAt)
-				.maxResults(maxResults);
+			.query(name)
+			.canHold(canHold)
+			.exactMatch(exactMatch)
+			.startAt(startAt)
+			.maxResults(maxResults);
 		
-		RequestEvent<ContainerTypeListCriteria> req = new RequestEvent<ContainerTypeListCriteria>(crit);
+		RequestEvent<ContainerTypeListCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<List<ContainerTypeSummary>> resp = containerTypeSvc.getContainerTypes(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getContainerTypesCount(
+		@RequestParam(value="name", required = false)
+		String name,
+		
+		@RequestParam(value="canHold", required = false)
+		String canHold,
+
+		@RequestParam(value = "exactMatch", required= false, defaultValue = "false")
+		boolean exactMatch) {
+			
+		ContainerTypeListCriteria crit = new ContainerTypeListCriteria()
+			.query(name)
+			.canHold(canHold)
+			.exactMatch(exactMatch);
+		
+		RequestEvent<ContainerTypeListCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<Long> resp = containerTypeSvc.getContainerTypesCount(req);
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

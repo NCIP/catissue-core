@@ -1,43 +1,28 @@
 
 angular.module('os.administrative.order.list', ['os.administrative.models'])
   .controller('OrderListCtrl', function(
-    $scope, $state, $filter, 
-    DistributionOrder, DistributionProtocol, Institute, Util) {
+    $scope, $state,
+    DistributionOrder, DistributionProtocol, Institute, Util, ListPagerOpts) {
 
     var pvsLoaded = false;
+    var pagerOpts;
 
     function init() {
       $scope.orders = [];
       $scope.dps = [];
       $scope.instituteNames = [];
       $scope.filterOpts = {};
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getOrdersCount});
 
       loadOrders($scope.filterOpts);
       Util.filter($scope, 'filterOpts', loadOrders);
     }
 
     function loadOrders(filterOpts) {
-      var opts = {
-        includeStats: true,
-        query: filterOpts.title,
-        receivingInstitute: filterOpts.receivingInstitute
-      };
-
-      if (!!filterOpts.executionDate) {
-        opts.executionDate = $filter('date')(filterOpts.executionDate, 'yyyy-MM-dd');
-      }
-
-      if (!!filterOpts.requestor) {
-        opts.requestorId = filterOpts.requestor.id;
-      }
-
-      if (!!filterOpts.dp) {
-        opts.dpId = filterOpts.dp.id;
-      }
-
-      DistributionOrder.query(opts).then(
+      DistributionOrder.list(filterOpts).then(
         function(orders) {
           $scope.orders = orders;
+          pagerOpts.refreshOpts(orders);
         }
       );
     }
@@ -67,6 +52,10 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
           $scope.instituteNames = Institute.getNames(institutes);
         }
       );
+    }
+
+    function getOrdersCount() {
+      return DistributionOrder.getOrdersCount($scope.filterOpts);
     }
     
     $scope.loadSearchPvs = loadSearchPvs;

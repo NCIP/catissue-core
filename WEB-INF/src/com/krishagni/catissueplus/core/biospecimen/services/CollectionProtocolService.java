@@ -31,10 +31,14 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface CollectionProtocolService {
 
 	public ResponseEvent<List<CollectionProtocolSummary>> getProtocols(RequestEvent<CpListCriteria> req);
-	
+
+	public ResponseEvent<Long> getProtocolsCount(RequestEvent<CpListCriteria> req);
+
 	public ResponseEvent<CollectionProtocolDetail> getCollectionProtocol(RequestEvent<CpQueryCriteria> req);
 
 	public ResponseEvent<List<CprSummary>> getRegisteredParticipants(RequestEvent<CprListCriteria> req);
+
+	public ResponseEvent<Long> getRegisteredParticipantsCount(RequestEvent<CprListCriteria> req);
 
 	public ResponseEvent<CollectionProtocolDetail> createCollectionProtocol(RequestEvent<CollectionProtocolDetail> req);
 	

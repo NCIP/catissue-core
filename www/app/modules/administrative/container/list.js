@@ -1,8 +1,11 @@
 angular.module('os.administrative.container.list', ['os.administrative.models'])
-  .controller('ContainerListCtrl', function($scope, $state, Container, Site, Util) {
+  .controller('ContainerListCtrl', function($scope, $state, Container, Site, Util, ListPagerOpts) {
+
+    var pagerOpts;
 
     function init() {
-      $scope.containerFilterOpts = {};
+      $scope.containerFilterOpts = {topLevelContainers: true};
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getContainersCount});
       loadContainers();
       loadSites();
       Util.filter($scope, 'containerFilterOpts', loadContainers);
@@ -12,6 +15,7 @@ angular.module('os.administrative.container.list', ['os.administrative.models'])
       Container.list(filterOpts).then(
         function(containers) {
           $scope.containerList = containers;
+          pagerOpts.refreshOpts(containers);
         }
       );
     }
@@ -21,6 +25,10 @@ angular.module('os.administrative.container.list', ['os.administrative.models'])
       Site.listForContainers().then(function(sites) {
         $scope.sites = sites;
       });
+    }
+
+    function getContainersCount() {
+      return Container.getCount($scope.containerFilterOpts);
     }
 
     $scope.showContainerOverview = function(container) {

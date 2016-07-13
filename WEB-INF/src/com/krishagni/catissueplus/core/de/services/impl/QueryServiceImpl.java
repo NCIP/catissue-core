@@ -576,8 +576,7 @@ public class QueryServiceImpl implements QueryService {
 	public ResponseEvent<SavedQueriesList> getFolderQueries(RequestEvent<ListFolderQueriesCriteria> req) {
 		try {
 			ListFolderQueriesCriteria crit = req.getPayload();
-			Long folderId = crit.folderId();
-			QueryFolder folder = daoFactory.getQueryFolderDao().getQueryFolder(folderId);			
+			QueryFolder folder = daoFactory.getQueryFolderDao().getQueryFolder(crit.folderId());
 			if (folder == null) {
 				return ResponseEvent.userError(SavedQueryErrorCode.FOLDER_NOT_FOUND);
 			}
@@ -588,14 +587,14 @@ public class QueryServiceImpl implements QueryService {
 			}
 			
 			List<SavedQuerySummary> queries = daoFactory.getSavedQueryDao().getQueriesByFolderId(
-					folderId, 
+					crit.folderId(),
 					crit.startAt(),
 					crit.maxResults(),
 					crit.query());
 			
 			Long count = null;
 			if (crit.countReq()) {
-				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(folderId, crit.query());
+				count = daoFactory.getSavedQueryDao().getQueriesCountByFolderId(crit.folderId(), crit.query());
 			}
 			
 			return ResponseEvent.response(SavedQueriesList.create(queries, count));

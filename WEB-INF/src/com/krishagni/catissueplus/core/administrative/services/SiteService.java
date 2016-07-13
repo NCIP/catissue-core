@@ -15,6 +15,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface SiteService {
 	public ResponseEvent<List<SiteSummary>> getSites(RequestEvent<SiteListCriteria> req);
 
+	public ResponseEvent<Long> getSitesCount(RequestEvent<SiteListCriteria> req);
+
 	public ResponseEvent<SiteDetail> getSite(RequestEvent<SiteQueryCriteria> req);
 
 	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req);

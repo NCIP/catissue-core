@@ -10,7 +10,9 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface ShipmentDao extends Dao<Shipment> {
 	public List<Shipment> getShipments(ShipmentListCriteria crit);
-	
+
+	public Long getShipmentsCount(ShipmentListCriteria crit);
+
 	public Shipment getShipmentByName(String name);
 	
 	public List<Specimen> getShippedSpecimensByLabels(List<String> specimenLabels);

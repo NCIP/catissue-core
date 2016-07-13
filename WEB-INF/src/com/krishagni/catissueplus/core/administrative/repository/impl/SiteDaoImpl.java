@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
@@ -29,15 +30,20 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Site> getSites(SiteListCriteria listCrit) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Site.class)
-				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()))
+		Criteria query = getSitesListQuery(listCrit)
 				.addOrder(Order.asc("name"))
 				.setFirstResult(listCrit.startAt())
 				.setMaxResults(listCrit.maxResults());
 				
-		addSearchConditions(query, listCrit);
 		return query.list();
+	}
+
+	@Override
+	public Long getSitesCount(SiteListCriteria crit) {
+		Number count = (Number) getSitesListQuery(crit)
+			.setProjection(Projections.rowCount())
+			.uniqueResult();
+		return count.longValue();
 	}
 
 	@Override
@@ -89,16 +95,25 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		return getObjectIds("siteId", key, value);
 	}
 
-	private void addSearchConditions(Criteria query, SiteListCriteria listCrit) {
+	private Criteria getSitesListQuery(SiteListCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(Site.class)
+				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()));
+
+		return addSearchConditions(query, crit);
+	}
+
+	private Criteria addSearchConditions(Criteria query, SiteListCriteria listCrit) {
 		if (StringUtils.isNotBlank(listCrit.query())) {
-			MatchMode matchMode = listCrit.exactMatch() ? MatchMode.EXACT : MatchMode.ANYWHERE;
-			query.add(Restrictions.ilike("name", listCrit.query(), matchMode));
+			query.add(Restrictions.ilike("name", listCrit.query(), listCrit.matchMode()));
 		}
 		
 		if (StringUtils.isNotBlank(listCrit.institute())) {
 			query.createAlias("institute", "i")
 				.add(Restrictions.eq("i.name", listCrit.institute()));	
 		}
+
+		return query;
 	}
 			
 	private static final String FQN = Site.class.getName();

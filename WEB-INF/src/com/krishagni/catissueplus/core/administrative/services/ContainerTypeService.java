@@ -12,7 +12,9 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 
 public interface ContainerTypeService {
 	public ResponseEvent<List<ContainerTypeSummary>> getContainerTypes(RequestEvent<ContainerTypeListCriteria> req);
-	
+
+	public ResponseEvent<Long> getContainerTypesCount(RequestEvent<ContainerTypeListCriteria> req);
+
 	public ResponseEvent<ContainerTypeDetail> getContainerType(RequestEvent<EntityQueryCriteria> req);
 
 	public ResponseEvent<ContainerTypeDetail> createContainerType(RequestEvent<ContainerTypeDetail> req);

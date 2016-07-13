@@ -2,13 +2,15 @@
 angular.module('os.administrative.form.list', ['os.administrative.models'])
   .controller('FormListCtrl', function(
     $scope, $state, $modal, $translate, Form, FormEntityReg,
-    CollectionProtocol, Util, DeleteUtil, Alerts) {
+    CollectionProtocol, Util, DeleteUtil, Alerts, ListPagerOpts) {
 
     var cpListQ = undefined;
+    var pagerOpts;
 
     function init() {
       $scope.formFilterOpts = {};
       $scope.formsList = [];
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getFormsCount});
       loadForms($scope.formFilterOpts);
       Util.filter($scope, 'formFilterOpts', loadForms);
     }
@@ -16,6 +18,7 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     function loadForms(filterOpts) {
       Form.query(filterOpts).then(function(result) {
         $scope.formsList = result;
+        pagerOpts.refreshOpts(result);
       })
     }
 
@@ -38,6 +41,10 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
           reloadForms();
         }
       );
+    }
+
+    function getFormsCount() {
+      return Form.getCount($scope.formFilterOpts);
     }
 
     $scope.openForm = function(form) {

@@ -72,12 +72,19 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenListSummary>> getSpecimenLists(RequestEvent<SpecimenListsCriteria> req) {
 		try {
-			SpecimenListsCriteria crit = req.getPayload();
-			if (!AuthUtil.isAdmin()) {
-				crit.userId(AuthUtil.getCurrentUser().getId());
-			}
-
+			SpecimenListsCriteria crit = addSpecimenListsCriteria(req.getPayload());
 			return ResponseEvent.response(daoFactory.getSpecimenListDao().getSpecimenLists(crit));
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getSpecimenListsCount(RequestEvent<SpecimenListsCriteria> req) {
+		try {
+			SpecimenListsCriteria crit = addSpecimenListsCriteria(req.getPayload());
+			return ResponseEvent.response(daoFactory.getSpecimenListDao().getSpecimenListsCount(crit));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -299,6 +306,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
+	}
+
+	private SpecimenListsCriteria addSpecimenListsCriteria(SpecimenListsCriteria crit) {
+		if (!AuthUtil.isAdmin()) {
+			crit.userId(AuthUtil.getCurrentUser().getId());
+		}
+
+		return crit;
 	}
 
 	@PlusTransactional

@@ -7,6 +7,8 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface ContainerTypeDao extends Dao<ContainerType> {
 	public List<ContainerType> getTypes(ContainerTypeListCriteria crit);
-	
+
+	public Long getTypesCount(ContainerTypeListCriteria crit);
+
 	public ContainerType getByName(String name);
 }

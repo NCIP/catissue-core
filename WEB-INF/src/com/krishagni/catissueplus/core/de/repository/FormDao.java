@@ -23,6 +23,8 @@ import krishagni.catissueplus.beans.FormRecordEntryBean;
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary(FormListCriteria crit);
 	
+	public Long getAllFormsCount(FormListCriteria crit);
+	
 	public List<FormSummary> getQueryForms();
 			
 	public List<FormSummary> getFormsByEntityType(String entityType);

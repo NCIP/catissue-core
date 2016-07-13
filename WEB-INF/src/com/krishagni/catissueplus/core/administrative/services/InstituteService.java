@@ -15,6 +15,8 @@ public interface InstituteService {
 
 	public ResponseEvent<List<InstituteSummary>> getInstitutes(RequestEvent<InstituteListCriteria> req);
 
+	public ResponseEvent<Long> getInstitutesCount(RequestEvent<InstituteListCriteria> req);
+
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<InstituteQueryCriteria> req);
 	
 	public ResponseEvent<InstituteDetail> createInstitute(RequestEvent<InstituteDetail> req);

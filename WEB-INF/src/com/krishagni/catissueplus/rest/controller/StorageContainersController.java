@@ -115,11 +115,77 @@ public class StorageContainersController {
 			.storeSpecimensEnabled(storeSpecimensEnabled)
 			.hierarchical(hierarchical);
 					
-		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<StorageContainerListCriteria>(crit);
+		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getStorageContainersCount (
+			@RequestParam(value = "name", required = false) 
+			String name,
+			
+			@RequestParam(value = "site", required = false)
+			String siteName,
+
+			@RequestParam(value = "canHold", required = false)
+			String canHold,
+			
+			@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
+			boolean onlyFreeContainers,
+			
+			@RequestParam(value = "parentContainerId", required = false)
+			Long parentContainerId,
+			
+			@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
+			boolean includeChildren,
+			
+			@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
+			boolean topLevelContainers,
+			
+			@RequestParam(value = "specimenClass", required = false)
+			String specimenClass,
+			
+			@RequestParam(value = "specimenType", required = false)
+			String specimenType,
+			
+			@RequestParam(value = "cpId", required = false)
+			Long[] cpIds,
+			
+			@RequestParam(value = "cpShortTitle", required = false)
+			String[] cpShortTitles,
+
+			@RequestParam(value = "storeSpecimensEnabled", required = false)
+			Boolean storeSpecimensEnabled,
+			
+			@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
+			boolean hierarchical
+			) {
+		
+		StorageContainerListCriteria crit = new StorageContainerListCriteria()
+			.query(name)
+			.siteName(siteName)
+			.canHold(canHold)
+			.onlyFreeContainers(onlyFreeContainers)
+			.parentContainerId(parentContainerId)
+			.includeChildren(includeChildren)
+			.topLevelContainers(topLevelContainers)
+			.specimenClass(specimenClass)
+			.specimenType(specimenType)
+			.cpIds(cpIds)
+			.cpShortTitles(cpShortTitles)
+			.storeSpecimensEnabled(storeSpecimensEnabled)
+			.hierarchical(hierarchical);
+
+		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<Long> resp = storageContainerSvc.getStorageContainersCount(req);
+		resp.throwErrorIfUnsuccessful();
+
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.HEAD, value="{id}")

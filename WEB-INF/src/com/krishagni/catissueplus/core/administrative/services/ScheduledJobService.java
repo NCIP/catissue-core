@@ -16,6 +16,8 @@ public interface ScheduledJobService {
 	 */
 	public ResponseEvent<List<ScheduledJobDetail>> getScheduledJobs(RequestEvent<ScheduledJobListCriteria> req);
 
+	public ResponseEvent<Long> getScheduledJobsCount(RequestEvent<ScheduledJobListCriteria> req);
+
 	public ResponseEvent<ScheduledJobDetail> getScheduledJob(RequestEvent<Long> req);
 
 	public ResponseEvent<ScheduledJobDetail> createScheduledJob(RequestEvent<ScheduledJobDetail> req);

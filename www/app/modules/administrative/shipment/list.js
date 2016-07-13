@@ -1,10 +1,13 @@
 
 angular.module('os.administrative.shipment.list', ['os.administrative.models'])
   .controller('ShipmentListCtrl', function(
-    $scope, $state, Shipment, Institute, Site, Util) {
-  
+    $scope, $state, Shipment, Institute, Site, Util, ListPagerOpts) {
+
+    var pagerOpts;
+
     function init() {
       $scope.filterOpts = {};
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getShipmentsCount});
 
       loadInstitutes();
       loadShipments($scope.filterOpts);
@@ -14,7 +17,8 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
     function loadShipments(filterOpts) {
       Shipment.query(filterOpts).then(
         function(result) {
-          $scope.shipments = result; 
+          $scope.shipments = result;
+          pagerOpts.refreshOpts(result);
         }
       );
     }
@@ -33,6 +37,10 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
           $scope.siteNames = sites;
         }
       );
+    }
+
+    function getShipmentsCount() {
+      return Shipment.getCount($scope.filterOpts);
     }
 
     $scope.showShipmentOverview = function(shipment) {

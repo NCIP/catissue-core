@@ -17,7 +17,9 @@ import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
 
 public interface DistributionOrderService {
 	public ResponseEvent<List<DistributionOrderSummary>> getOrders(RequestEvent<DistributionOrderListCriteria> req);
-	
+
+	public ResponseEvent<Long> getOrdersCount(RequestEvent<DistributionOrderListCriteria> req);
+
 	public ResponseEvent<DistributionOrderDetail> getOrder(RequestEvent<Long> req);
 	
 	public ResponseEvent<DistributionOrderDetail> createOrder(RequestEvent<DistributionOrderDetail> req);

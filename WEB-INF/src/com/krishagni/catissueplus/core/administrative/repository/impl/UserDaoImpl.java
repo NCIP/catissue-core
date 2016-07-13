@@ -34,22 +34,21 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<UserSummary> getUsers(UserListCriteria listCrit) {
-		Criteria criteria = sessionFactory.getCurrentSession()
-				.createCriteria(User.class, "u")
-				.add( // not system user
-					Restrictions.not(Restrictions.conjunction()
-						.add(Restrictions.eq("u.loginName", User.SYS_USER))
-						.add(Restrictions.eq("u.authDomain.name", User.DEFAULT_AUTH_DOMAIN))
-					)
-				)
-				.setFirstResult(listCrit.startAt())
-				.setMaxResults(listCrit.maxResults())
-				.addOrder(Order.asc("u.lastName"))
-				.addOrder(Order.asc("u.firstName"));
+		Criteria query = getUsersListQuery(listCrit)
+			.setFirstResult(listCrit.startAt())
+			.setMaxResults(listCrit.maxResults())
+			.addOrder(Order.asc("u.lastName"))
+			.addOrder(Order.asc("u.firstName"));
 		
-		addSearchConditions(criteria, listCrit);
-		addProjectionFields(criteria);
-		return getUsers(criteria.list(), listCrit);
+		addProjectionFields(query);
+		return getUsers(query.list(), listCrit);
+	}
+	
+	public Long getUsersCount(UserListCriteria listCrit) {
+		Number count = (Number) getUsersListQuery(listCrit)
+			.setProjection(Projections.rowCount())
+			.uniqueResult();
+		return count.longValue();
 	}
 
 	public List<User> getUsersByIds(List<Long> userIds) {
@@ -141,6 +140,19 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		sessionFactory.getCurrentSession().delete(token);
 	}
 
+	private Criteria getUsersListQuery(UserListCriteria crit) {
+		Criteria criteria = sessionFactory.getCurrentSession()
+			.createCriteria(User.class, "u")
+			.add( // not system user
+				Restrictions.not(Restrictions.conjunction()
+					.add(Restrictions.eq("u.loginName", User.SYS_USER))
+					.add(Restrictions.eq("u.authDomain.name", User.DEFAULT_AUTH_DOMAIN))
+				)
+			);
+		
+		return addSearchConditions(criteria, crit);
+	}
+
 	@Override
 	public List<User> getActiveUsers(Date startDate, Date endDate) {
 		return sessionFactory.getCurrentSession()
@@ -215,7 +227,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.list();
 	}
 	
-	private void addSearchConditions(Criteria criteria, UserListCriteria listCrit) {
+	private Criteria addSearchConditions(Criteria criteria, UserListCriteria listCrit) {
 		String searchString = listCrit.query();
 		
 		if (StringUtils.isBlank(searchString)) {
@@ -232,6 +244,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addActivityStatusRestriction(criteria, listCrit.activityStatus());
 		addInstituteRestriction(criteria, listCrit.instituteName());
+		return criteria;
 	}
 
 	private void addNameRestriction(Criteria criteria, String name) {

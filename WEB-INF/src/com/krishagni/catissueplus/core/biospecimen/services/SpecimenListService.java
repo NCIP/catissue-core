@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.events.ListSpecimensDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ShareSpecimenListOp;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp;
@@ -18,6 +17,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public interface SpecimenListService {
 	public ResponseEvent<List<SpecimenListSummary>> getSpecimenLists(RequestEvent<SpecimenListsCriteria> req);
+	
+	public ResponseEvent<Long> getSpecimenListsCount(RequestEvent<SpecimenListsCriteria> req);
 	
 	public ResponseEvent<SpecimenListDetails> getSpecimenList(RequestEvent<Long> req);
 	

@@ -1183,6 +1183,10 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border-bottom: 2px solid #ddd;
 }
 
+.os-list-pager {
+  position: relative;
+  bottom: 10px;
+}
 
 /*** START: time picker popup spinner fixes ***/
 .icon-chevron-up, .icon-chevron-down {

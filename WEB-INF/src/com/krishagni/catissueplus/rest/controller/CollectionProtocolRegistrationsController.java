@@ -3,8 +3,10 @@ package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,6 +128,55 @@ public class CollectionProtocolRegistrationsController {
 		ResponseEvent<List<CprSummary>> resp = cpSvc.getRegisteredParticipants(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getRegistrationsCount(
+			@RequestParam(value = "cpId",             required = true)
+			Long cpId,
+			
+			@RequestParam(value = "registrationDate", required = false)
+			@DateTimeFormat(pattern="yyyy-MM-dd")
+			Date registrationDate,
+			
+			@RequestParam(value = "query",            required = false)
+			String searchStr,
+			
+			@RequestParam(value = "name",             required = false)
+			String name,
+			
+			@RequestParam(value = "ppid",             required = false)
+			String ppid,
+
+			@RequestParam(value = "uid",             required = false)
+			String uid,
+			
+			@RequestParam(value = "participantId",    required = false)
+			String participantId,
+			
+			@RequestParam(value = "empi",             required = false)
+			String empi,
+			
+			@RequestParam(value = "dob",              required = false) 
+			@DateTimeFormat(pattern="yyyy-MM-dd")
+			Date dob) {
+
+		CprListCriteria crit = new CprListCriteria()
+			.cpId(cpId)
+			.registrationDate(registrationDate)
+			.query(searchStr)
+			.name(name)
+			.ppid(ppid)
+			.uid(uid)
+			.participantId(participantId)
+			.dob(dob)
+			.includePhi(true);
+		
+		ResponseEvent<Long> resp = cpSvc.getRegisteredParticipantsCount(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{cprId}")

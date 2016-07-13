@@ -32,7 +32,13 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<DistributionOrderSummary> getOrders(DistributionOrderListCriteria listCrit) {
-		List<Object[]> rows = getOrderList(listCrit);
+		Criteria query = getOrderListQuery(listCrit)
+				.setFirstResult(listCrit.startAt())
+				.setMaxResults(listCrit.maxResults())
+				.addOrder(Order.desc("id"));
+
+		addProjections(query, CollectionUtils.isNotEmpty(listCrit.siteIds()));
+		List<Object[]> rows = query.list();
 		
 		List<DistributionOrderSummary> result = new ArrayList<DistributionOrderSummary>();
 		Map<Long, DistributionOrderSummary> doMap = new HashMap<Long, DistributionOrderSummary>();
@@ -60,7 +66,15 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		
 		return result;
 	}
-	
+
+	@Override
+	public Long getOrdersCount(DistributionOrderListCriteria listCrit) {
+		Number count = (Number) getOrderListQuery(listCrit)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+		return count.longValue();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public DistributionOrder getOrder(String name) {
@@ -95,15 +109,12 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Object[]> getOrderList(DistributionOrderListCriteria crit) {
+	private Criteria getOrderListQuery(DistributionOrderListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
 				.createCriteria(DistributionOrder.class)
 				.createAlias("distributionProtocol", "dp")
 				.createAlias("requester", "user")
-				.createAlias("site", "site", JoinType.LEFT_OUTER_JOIN)
-				.setFirstResult(crit.startAt() < 0 ? 0 : crit.startAt())
-				.setMaxResults(crit.maxResults() < 0 || crit.maxResults() > 100 ? 100 : crit.maxResults())
-				.addOrder(Order.desc("id"));
+				.createAlias("site", "site", JoinType.LEFT_OUTER_JOIN);
 		
 		//
 		// Restrict by distributing sites
@@ -130,8 +141,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 		addReceivingSiteRestriction(query, crit, matchMode);
 		addReceivingInstRestriction(query, crit, matchMode);
 		
-		addProjections(query, CollectionUtils.isNotEmpty(crit.siteIds()));
-		return query.list();		
+		return query;
 	}
 	
 	private void addNameRestriction(Criteria query, DistributionOrderListCriteria crit, MatchMode mode) {

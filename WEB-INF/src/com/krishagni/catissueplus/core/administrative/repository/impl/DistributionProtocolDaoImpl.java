@@ -34,14 +34,20 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<DistributionProtocol> getDistributionProtocols(DpListCriteria crit) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionProtocol.class)
+		Criteria query = getDpListQuery(crit)
 				.setFirstResult(crit.startAt())
 				.setMaxResults(crit.maxResults())
-				.add(Restrictions.ne("activityStatus", "Disabled"))
 				.addOrder(Order.asc("title"));
 
-		addSearchConditions(query, crit);
 		return query.list();
+	}
+
+	@Override
+	public Long getDistributionProtocolsCount(DpListCriteria criteria) {
+		Number count = (Number) getDpListQuery(criteria)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+		return count.longValue();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -128,7 +134,14 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		return getObjectIds("dpId", key, value);
 	}
 
-	private void addSearchConditions(Criteria query, DpListCriteria crit) {
+	private Criteria getDpListQuery(DpListCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession().createCriteria(DistributionProtocol.class)
+			.add(Restrictions.ne("activityStatus", "Disabled"));
+
+		return addSearchConditions(query, crit);
+	}
+
+	private Criteria addSearchConditions(Criteria query, DpListCriteria crit) {
 		String searchTerm = crit.query();
 		
 		if (StringUtils.isBlank(searchTerm)) {
@@ -151,6 +164,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		addInstCondition(query, crit);
 		addDistSitesCondition(query, crit);
 		addActivityStatusCondition(query, crit);
+		return query;
 	}
 	
 	private void addPiCondition(Criteria query, DpListCriteria crit) {

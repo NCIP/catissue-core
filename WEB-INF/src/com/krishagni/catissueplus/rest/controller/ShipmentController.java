@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +60,31 @@ public class ShipmentController {
 		
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getShipmentsCount(
+			@RequestParam(value = "name", required = false, defaultValue = "")
+			String name,
+			
+			@RequestParam(value = "recvInstitute", required = false, defaultValue = "")
+			String recvInstitute,
+			
+			@RequestParam(value = "recvSite", required = false, defaultValue = "")
+			String recvSite) {
+		
+		ShipmentListCriteria listCrit = new ShipmentListCriteria()
+				.name(name)
+				.recvInstitute(recvInstitute)
+				.recvSite(recvSite);
+		
+		ResponseEvent<Long> resp = shipmentSvc.getShipmentsCount(getRequest(listCrit));
+		resp.throwErrorIfUnsuccessful();
+		
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

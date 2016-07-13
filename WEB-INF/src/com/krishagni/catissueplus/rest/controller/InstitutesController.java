@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,7 +69,21 @@ public class InstitutesController {
 		
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String, Long> getInstitutesCount(
+			@RequestParam(value = "name", required = false)
+			String name) {
+
+		RequestEvent<InstituteListCriteria> req = new RequestEvent<>(new InstituteListCriteria().query(name));
+		ResponseEvent<Long> resp = instituteSvc.getInstitutesCount(req);
+		resp.throwErrorIfUnsuccessful();
+
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)

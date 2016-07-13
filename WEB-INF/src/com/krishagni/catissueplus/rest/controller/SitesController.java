@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.rest.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -84,13 +85,34 @@ public class SitesController {
 			.listAll(listAll)
 			.includeStat(includeStats);
 		
-		RequestEvent<SiteListCriteria> req = new RequestEvent<SiteListCriteria>(crit);
+		RequestEvent<SiteListCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<List<SiteSummary>> resp = siteService.getSites(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getSitesCount(
+			@RequestParam(value = "name", required= false)
+			String name,
+			
+			@RequestParam(value = "institute", required = false)
+			String institute) {
+		
+		SiteListCriteria crit = new SiteListCriteria()
+			.query(name)
+			.institute(institute);
+		
+		RequestEvent<SiteListCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<Long> resp = siteService.getSitesCount(req);
+		resp.throwErrorIfUnsuccessful();
+		
+		return Collections.singletonMap("count", resp.getPayload());
+	}
+
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)

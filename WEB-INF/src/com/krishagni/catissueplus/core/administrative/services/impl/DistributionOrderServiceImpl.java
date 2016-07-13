@@ -101,16 +101,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	@PlusTransactional
 	public ResponseEvent<List<DistributionOrderSummary>> getOrders(RequestEvent<DistributionOrderListCriteria> req) {
 		try {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
-			if (siteIds != null && siteIds.isEmpty()) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
-			
-			DistributionOrderListCriteria crit = req.getPayload();
-			if (siteIds != null) {
-				crit.siteIds(siteIds);
-			}
-						
+			DistributionOrderListCriteria crit = addOrderListCriteria(req.getPayload());
 			return ResponseEvent.response(daoFactory.getDistributionOrderDao().getOrders(crit));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -118,7 +109,20 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getOrdersCount(RequestEvent<DistributionOrderListCriteria> req) {
+		try {
+			DistributionOrderListCriteria crit = addOrderListCriteria(req.getPayload());
+			return ResponseEvent.response(daoFactory.getDistributionOrderDao().getOrdersCount(crit));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<DistributionOrderDetail> getOrder(RequestEvent<Long> req) {
@@ -334,6 +338,18 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		return daoFactory.getDistributionOrderDao().getOrderIds(key, value);
 	}
 
+	private DistributionOrderListCriteria addOrderListCriteria(DistributionOrderListCriteria crit) {
+		Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessDistributionOrderSites();
+		if (siteIds != null && siteIds.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+
+		if (siteIds != null) {
+			crit.siteIds(siteIds);
+		}
+
+		return crit;
+	}
 
 	private void ensureUniqueConstraints(DistributionOrder existingOrder, DistributionOrder newOrder, OpenSpecimenException ose) {
 		if (existingOrder == null || !newOrder.getName().equals(existingOrder.getName())) {

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,17 @@ public class ScheduledJobsController {
 				.startAt(startAt)
 				.maxResults(maxRecords);		
 		return response(jobSvc.getScheduledJobs(getRequest(criteria)));
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getScheduledJobsCount(
+			@RequestParam(value = "query", required = false) 
+			String query) {
+		
+		ResponseEvent<Long> resp = jobSvc.getScheduledJobsCount(getRequest(new ScheduledJobListCriteria().query(query)));
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value="{id}")

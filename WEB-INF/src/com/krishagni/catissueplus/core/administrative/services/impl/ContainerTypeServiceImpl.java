@@ -46,7 +46,20 @@ public class ContainerTypeServiceImpl implements ContainerTypeService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getContainerTypesCount(RequestEvent<ContainerTypeListCriteria> req) {
+		try {
+			AccessCtrlMgr.getInstance().ensureReadContainerTypeRights();
+			return ResponseEvent.response(daoFactory.getContainerTypeDao().getTypesCount(req.getPayload()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ContainerTypeDetail> getContainerType(RequestEvent<EntityQueryCriteria> req) {

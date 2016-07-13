@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -77,10 +78,40 @@ public class DistributionProtocolController {
 			.includeStat(includeStats)
 			.activityStatus(activityStatus);
 		
-		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getAllDistributionProtocolsCount(
+			@RequestParam(value = "query", required = false, defaultValue = "") 
+			String searchStr,
+			
+			@RequestParam(value = "title", required = false)
+			String title,
+			
+			@RequestParam(value = "piId", required = false)
+			Long piId,
+
+			@RequestParam(value = "receivingInstitute", required = false)
+			String receivingInstitute,
+			
+			@RequestParam(value = "activityStatus", required = false)
+			String activityStatus) {
+		
+		DpListCriteria criteria = new DpListCriteria()
+			.query(searchStr)
+			.title(title)
+			.piId(piId)
+			.receivingInstitute(receivingInstitute)
+			.activityStatus(activityStatus);
+		
+		ResponseEvent<Long> resp = dpSvc.getDistributionProtocolsCount(getRequest(criteria));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")

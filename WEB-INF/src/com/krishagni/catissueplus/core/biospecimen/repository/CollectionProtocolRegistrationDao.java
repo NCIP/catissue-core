@@ -11,6 +11,8 @@ import com.krishagni.catissueplus.core.common.repository.Dao;
 public interface CollectionProtocolRegistrationDao extends Dao<CollectionProtocolRegistration> {	
 	public List<CprSummary> getCprList(CprListCriteria listCrit);
 
+	public Long getCprCount(CprListCriteria cprCrit);
+
 	public List<CollectionProtocolRegistration> getCprsByCpId(Long cpId, int startAt, int maxResults);
 
 	public CollectionProtocolRegistration getCprByPpid(Long cpId, String ppid);

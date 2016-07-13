@@ -156,6 +156,10 @@ angular.module('os.common.models', [])
         return value;
       }
 
+      Model.getCount = function(reqParams) {
+        return $http.get(url + 'count', {params: reqParams}).then(Model.noTransform);
+      }
+
       Model.getExtensionCtxt = function(params) {
         return $http.get(url + "extension-form", {params: params}).then(function(result) { return result.data; });
       }

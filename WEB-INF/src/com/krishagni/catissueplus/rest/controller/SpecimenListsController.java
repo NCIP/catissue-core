@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,6 +72,20 @@ public class SpecimenListsController {
 		ResponseEvent<List<SpecimenListSummary>> resp = specimenListSvc.getSpecimenLists(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/count")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Long> getSpecimenListsCount(
+			@RequestParam(value = "name", required = false)
+			String name) {
+
+		SpecimenListsCriteria crit = new SpecimenListsCriteria().query(name);
+
+		ResponseEvent<Long> resp = specimenListSvc.getSpecimenListsCount(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("count", resp.getPayload());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{listId}")

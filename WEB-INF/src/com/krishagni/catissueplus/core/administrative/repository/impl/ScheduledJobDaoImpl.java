@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
@@ -16,23 +17,25 @@ import com.krishagni.catissueplus.core.administrative.repository.ScheduledJobDao
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
-public class ScheduledJobDaoImpl extends AbstractDao<ScheduledJob> implements
-		ScheduledJobDao {
+public class ScheduledJobDaoImpl extends AbstractDao<ScheduledJob> implements ScheduledJobDao {
+
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<ScheduledJob> getScheduledJobs(ScheduledJobListCriteria criteria) {
-		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(ScheduledJob.class)
-				.add(Restrictions.eq("activityStatus",Status.ACTIVITY_STATUS_ACTIVE.getStatus()))				
+		Criteria query = getScheduledJobsListQuery(criteria)
 				.setFirstResult(criteria.startAt())
 				.setMaxResults(criteria.maxResults())
 				.addOrder(Order.desc("id"));
 
-		String searchTerm = criteria.query();
-		if (!StringUtils.isBlank(searchTerm)) {
-			query.add(Restrictions.ilike("name", searchTerm, MatchMode.ANYWHERE));
-		}
-
 		return query.list();
+	}
+
+	@Override
+	public Long getScheduledJobsCount(ScheduledJobListCriteria crit) {
+		Number count = (Number) getScheduledJobsListQuery(crit)
+				.setProjection(Projections.rowCount())
+				.uniqueResult();
+		return count.longValue();
 	}
 
 	@Override
@@ -78,9 +81,20 @@ public class ScheduledJobDaoImpl extends AbstractDao<ScheduledJob> implements
 		return ScheduledJob.class;
 	}
 
+	private Criteria getScheduledJobsListQuery(ScheduledJobListCriteria crit) {
+		Criteria query = sessionFactory.getCurrentSession()
+				.createCriteria(ScheduledJob.class)
+				.add(Restrictions.eq("activityStatus",Status.ACTIVITY_STATUS_ACTIVE.getStatus()));
+
+		String searchTerm = crit.query();
+		if (StringUtils.isNotBlank(searchTerm)) {
+			query.add(Restrictions.ilike("name", searchTerm, MatchMode.ANYWHERE));
+		}
+		
+		return query;
+	}
+
 	private static final String FQN = ScheduledJob.class.getName();
 
 	private static final String GET_JOB_BY_NAME = FQN + ".getJobByName";
-
-
 }

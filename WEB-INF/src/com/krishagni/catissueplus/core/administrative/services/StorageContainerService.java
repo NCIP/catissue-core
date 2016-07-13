@@ -19,6 +19,8 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface StorageContainerService {
 	public ResponseEvent<List<StorageContainerSummary>> getStorageContainers(RequestEvent<StorageContainerListCriteria> req);
 	
+	public ResponseEvent<Long> getStorageContainersCount(RequestEvent<StorageContainerListCriteria> req);
+	
 	public ResponseEvent<StorageContainerDetail> getStorageContainer(RequestEvent<ContainerQueryCriteria> req);
 	
 	public ResponseEvent<List<StorageContainerPositionDetail>> getOccupiedPositions(RequestEvent<Long> req);

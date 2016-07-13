@@ -51,7 +51,20 @@ public class InstituteServiceImpl implements InstituteService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-		
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getInstitutesCount(RequestEvent<InstituteListCriteria> req) {
+		try {
+			InstituteListCriteria listCrit = req.getPayload();
+			return ResponseEvent.response(daoFactory.getInstituteDao().getInstitutesCount(listCrit));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<InstituteDetail> getInstitute(RequestEvent<InstituteQueryCriteria> req) {

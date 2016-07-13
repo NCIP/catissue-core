@@ -95,16 +95,7 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 	@PlusTransactional
 	public ResponseEvent<List<ShipmentDetail>> getShipments(RequestEvent<ShipmentListCriteria> req) {
 		try {
-			Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessShipmentSiteIds();
-			if (siteIds != null && siteIds.isEmpty()) {
-				return ResponseEvent.userError(RbacErrorCode.ACCESS_DENIED);
-			}
-			
-			ShipmentListCriteria listCrit = req.getPayload();
-			if (siteIds != null) {
-				listCrit.siteIds(siteIds);
-			}
-			
+			ShipmentListCriteria listCrit = addShipmentListCriteria(req.getPayload());
 			return ResponseEvent.response(ShipmentDetail.from(getShipmentDao().getShipments(listCrit)));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -112,7 +103,20 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Long> getShipmentsCount(RequestEvent<ShipmentListCriteria> req) {
+		try {
+			ShipmentListCriteria crit = addShipmentListCriteria(req.getPayload());
+			return ResponseEvent.response(getShipmentDao().getShipmentsCount(crit));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ShipmentDetail> getShipment(RequestEvent<Long> req) {
@@ -274,6 +278,19 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		}
 
 		return daoFactory.getShipmentDao().getShipmentIds(key, value);
+	}
+
+	private ShipmentListCriteria addShipmentListCriteria(ShipmentListCriteria crit) {
+		Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessShipmentSiteIds();
+		if (siteIds != null && siteIds.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+		
+		if (siteIds != null) {
+			crit.siteIds(siteIds);
+		}
+		
+		return crit;
 	}
 
 	private List<Specimen> getValidSpecimens(List<String> specimenLabels, OpenSpecimenException ose) {
