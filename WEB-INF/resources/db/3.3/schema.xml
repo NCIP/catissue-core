@@ -10,6 +10,12 @@
   </changeSet>
 
   <changeSet author="vlonushte" id="Drop unique constraint on login name to add same on (login name, domain)" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="1">
+        select count(*) from user_constraints where table_name='CATISSUE_USER' and constraint_name='SYS_C00107630';
+      </sqlCheck>
+    </preConditions>
+
     <dropUniqueConstraint
       tableName="CATISSUE_USER"
       constraintName="SYS_C00107630"
