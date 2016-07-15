@@ -152,9 +152,6 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class);
 		if (StringUtils.isNotBlank(crit.parentAttribute()) || StringUtils.isNotBlank(crit.parentValue())) {
 			query.createAlias("parent", "p");
-		} else {
-			query.createAlias("parent", "p", JoinType.LEFT_OUTER_JOIN)
-				.add(Restrictions.isNull("p.id"));
 		}
 				
 		if (StringUtils.isNotBlank(crit.attribute())) {
