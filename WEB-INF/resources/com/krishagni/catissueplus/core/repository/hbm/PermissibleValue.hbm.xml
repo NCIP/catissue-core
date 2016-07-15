@@ -38,6 +38,16 @@
       <element column="VALUE" type="string" not-null="true"/>
     </map>
 
+    <query name="getSpecimenClasses">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+      where
+        pv.attribute = 'specimen_type' and
+        pv.parent is null
+    </query>
+
     <query name="getSpecimenTypes">
       select
         pv.value
@@ -45,7 +55,7 @@
         com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
         join pv.parent ppv
       where
-        ppv.attribute = '2003991' and
+        ppv.attribute = 'specimen_type' and
         ppv.value in (:specimenClasses)
     </query>
 

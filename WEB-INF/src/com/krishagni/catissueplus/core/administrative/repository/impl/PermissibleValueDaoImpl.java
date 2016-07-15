@@ -40,29 +40,7 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 			.addOrder(Order.asc("value"))
 			.list();
 	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<String> getSpecimenClasses() {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
-				.add(Restrictions.eq("attribute", SPECIMEN_CLASS));
-		return query.setProjection(Projections.property("value")).list();
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<String> getSpecimenTypes(Collection<String> specimenClasses) {
-		Criteria query = sessionFactory.getCurrentSession().createCriteria(PermissibleValue.class)
-				.createAlias("parent", "ppv")
-				.add(Restrictions.eq("ppv.attribute", SPECIMEN_CLASS));
-		
-		if (CollectionUtils.isNotEmpty(specimenClasses)) {
-			query.add(Restrictions.in("ppv.value", specimenClasses));
-		}
-		
-		return query.setProjection(Projections.property("value")).list();
-	}	
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public PermissibleValue getByConceptCode(String attribute, String conceptCode) {
@@ -86,7 +64,23 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		
 		return CollectionUtils.isEmpty(pvs) ? null : pvs.iterator().next();
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getSpecimenClasses() {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMEN_CLASSES)
+				.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getSpecimenTypes(Collection<String> specimenClasses) {
+		return sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SPECIMEN_TYPES)
+				.setParameterList("specimenClasses", specimenClasses)
+				.list();
+	}
 	
 	@Override
 	public boolean exists(String attribute, Collection<String> values) {
@@ -180,12 +174,14 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 		
 		return query;
 	}
-	
-	private static final String SPECIMEN_CLASS = "specimen_type";
-	
+
 	private static final String FQN = PermissibleValue.class.getName();
-	
+
 	private static final String GET_BY_CONCEPT_CODE = FQN + ".getByConceptCode";
-	
+
 	private static final String GET_BY_VALUE = FQN + ".getByValue";
+
+	private static final String GET_SPECIMEN_CLASSES = FQN + ".getSpecimenClasses";
+
+	private static final String GET_SPECIMEN_TYPES = FQN + ".getSpecimenTypes";
 }
