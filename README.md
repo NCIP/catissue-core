@@ -1,4 +1,4 @@
-OpenSpecimen - ![Build Status](https://img.shields.io/travis/krishagni/openspecimen.svg)
+OpenSpecimen
 ============
 
 An Open Source Biobanking Informatics Platform 
