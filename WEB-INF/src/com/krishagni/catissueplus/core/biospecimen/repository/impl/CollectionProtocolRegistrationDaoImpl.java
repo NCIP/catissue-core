@@ -401,7 +401,11 @@ public class CollectionProtocolRegistrationDaoImpl
 	
 	@SuppressWarnings("unchecked")
 	private List<Object[]> getScgAndSpecimenCounts(CprListCriteria cprCrit) {
-		Criteria countQuery = getCprListQuery(cprCrit);
+		Criteria countQuery = getCprListQuery(cprCrit)
+				.addOrder(Order.asc("id"))
+				.setFirstResult(cprCrit.startAt())
+				.setMaxResults(cprCrit.maxResults());
+		
 		if (StringUtils.isBlank(cprCrit.specimen())) {
 			countQuery
 				.createAlias("visits", "visit",
