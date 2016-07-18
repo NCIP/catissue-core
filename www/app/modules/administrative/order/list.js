@@ -11,8 +11,8 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
       $scope.orders = [];
       $scope.dps = [];
       $scope.instituteNames = [];
-      $scope.filterOpts = {};
-      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getOrdersCount});
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getOrdersCount, recordsPerPage: 50});
+      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
 
       loadOrders($scope.filterOpts);
       Util.filter($scope, 'filterOpts', loadOrders);
@@ -63,7 +63,7 @@ angular.module('os.administrative.order.list', ['os.administrative.models'])
     $scope.loadDps = loadDps;
 
     $scope.clearFilters = function() {
-      $scope.filterOpts = {};
+      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
     }
 
     $scope.showOrderOverview = function(order) {

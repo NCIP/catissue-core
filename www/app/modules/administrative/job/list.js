@@ -7,7 +7,7 @@ angular.module('os.administrative.job.list', ['os.administrative.models'])
     function init() {
       $scope.jobs = [];
       pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getJobsCount});
-      $scope.filterOpts = {query: undefined};
+      $scope.filterOpts = {query: undefined, maxResults: pagerOpts.recordsPerPage + 1};
       loadJobs($scope.filterOpts);
     }
 

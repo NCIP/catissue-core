@@ -13,8 +13,11 @@ angular.module('os.biospecimen.specimenlist',
         templateUrl: 'modules/biospecimen/specimen-list/lists.html',
         controller: 'SpecimenListsCtrl',
         resolve: {
-          lists: function(SpecimenList) {
-            return SpecimenList.query({includeStats: true});
+          pagerOpts: function(ListPagerOpts) {
+            return new ListPagerOpts({recordsPerPage: 50});
+          },
+          lists: function(SpecimenList, pagerOpts) {
+            return SpecimenList.query({includeStats: true, maxResults: pagerOpts.recordsPerPage + 1});
           }
         },
         parent: 'signed-in'

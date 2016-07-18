@@ -100,8 +100,8 @@ public class CollectionProtocolRegistrationsController {
 			@RequestParam(value = "startAt",          required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecs",          required = false, defaultValue = "100")
-			int maxRecs,
+			@RequestParam(value = "maxResults",       required = false, defaultValue = "100")
+			int maxResults,
 			
 			@RequestParam(value = "includeStats",     required = false, defaultValue = "false") 
 			boolean includeStats,
@@ -120,7 +120,7 @@ public class CollectionProtocolRegistrationsController {
 			.dob(dob)
 			.specimen(specimen)
 			.startAt(startAt)
-			.maxResults(maxRecs)
+			.maxResults(maxResults)
 			.includeStat(includeStats)
 			.exactMatch(exactMatch)
 			.includePhi(true);

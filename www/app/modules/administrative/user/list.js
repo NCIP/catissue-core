@@ -9,12 +9,12 @@ angular.module('os.administrative.user.list', ['os.administrative.models'])
 
     function init() {
       pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getUsersCount});
-      loadUsers({includeStats: true});
       initPvsAndFilterOpts();
+      loadUsers($scope.userFilterOpts);
     }
   
     function initPvsAndFilterOpts() {
-      $scope.userFilterOpts = {includeStats: true};
+      $scope.userFilterOpts = {includeStats: true, maxResults: pagerOpts.recordsPerPage + 1};
       $scope.$on('osRightDrawerOpen', function() {
         if (pvInit) {
           return;

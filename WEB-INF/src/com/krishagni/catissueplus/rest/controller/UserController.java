@@ -51,8 +51,8 @@ public class UserController {
 			@RequestParam(value = "start", required = false, defaultValue = "0") 
 			int start,
 			
-			@RequestParam(value = "max", required = false, defaultValue = "100") 
-			int max,
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
+			int maxResults,
 			
 			@RequestParam(value = "searchString", required = false) 
 			String searchString,
@@ -77,7 +77,7 @@ public class UserController {
 		
 		UserListCriteria crit = new UserListCriteria()
 			.startAt(start)
-			.maxResults(max)
+			.maxResults(maxResults)
 			.query(searchString)
 			.name(name)
 			.loginName(loginName)

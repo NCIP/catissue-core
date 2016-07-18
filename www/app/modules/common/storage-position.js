@@ -68,7 +68,7 @@ angular.module('openspecimen')
           specimenClass: scope.entity.specimenClass,
           specimenType: scope.entity.type,
           storeSpecimensEnabled: true,
-          maxRecords: 10
+          maxResults: 10
         });
       } else {
         if (!scope.entity.siteName) {

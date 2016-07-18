@@ -10,7 +10,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       $scope.cpId = $stateParams.cpId;
       $scope.cp = cp;
       pagerOpts  = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getCprCount});
-      filterOpts = $scope.filterOpts = {maxResults: ListPagerOpts.MAX_PAGE_RECS + 1};
+      filterOpts = $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
 
       $scope.participantResource = {
         registerOpts: {resource: 'ParticipantPhi', operations: ['Create'], cp: $scope.cp.shortTitle},
@@ -47,7 +47,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
     }
 
     $scope.clearFilters = function() {
-      $scope.filterOpts = {};
+      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
     };
 
     $scope.showParticipantOverview = function(cpr) {

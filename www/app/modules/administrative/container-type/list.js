@@ -4,8 +4,8 @@ angular.module('os.administrative.containertype.list', ['os.administrative.model
     var pagerOpts;
 
     function init() {
-      $scope.containerTypeFilterOpts = {};
       pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getContainerTypesCount});
+      $scope.containerTypeFilterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
       loadContainerTypes($scope.containerTypeFilterOpts);
       Util.filter($scope, 'containerTypeFilterOpts', loadContainerTypes);
     }

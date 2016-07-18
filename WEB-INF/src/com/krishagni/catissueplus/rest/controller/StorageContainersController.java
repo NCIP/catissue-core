@@ -67,8 +67,8 @@ public class StorageContainersController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords,
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults,
 			
 			@RequestParam(value = "parentContainerId", required = false)
 			Long parentContainerId,
@@ -104,7 +104,7 @@ public class StorageContainersController {
 			.canHold(canHold)
 			.onlyFreeContainers(onlyFreeContainers)
 			.startAt(startAt)
-			.maxResults(maxRecords)
+			.maxResults(maxResults)
 			.parentContainerId(parentContainerId)
 			.includeChildren(includeChildren)
 			.topLevelContainers(topLevelContainers)

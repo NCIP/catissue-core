@@ -6,7 +6,7 @@ angular.module('os.administrative.dp.list', ['os.administrative.models'])
 
     function init() {
       pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getDpsCount});
-      $scope.dpFilterOpts = {includeStats: true};
+      $scope.dpFilterOpts = {includeStats: true, maxResults: pagerOpts.recordsPerPage + 1};
       loadDps($scope.dpFilterOpts);
       Util.filter($scope, 'dpFilterOpts', loadDps);
       loadActivityStatuses();

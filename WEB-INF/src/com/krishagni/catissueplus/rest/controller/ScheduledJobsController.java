@@ -54,13 +54,13 @@ public class ScheduledJobsController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 		
 		ScheduledJobListCriteria criteria = new ScheduledJobListCriteria()
 				.query(query)
 				.startAt(startAt)
-				.maxResults(maxRecords);		
+				.maxResults(maxResults);
 		return response(jobSvc.getScheduledJobs(getRequest(criteria)));
 	}
 
@@ -126,12 +126,12 @@ public class ScheduledJobsController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 		
 		JobRunsListCriteria criteria = new JobRunsListCriteria()
 				.startAt(startAt)
-				.maxResults(maxRecords)
+				.maxResults(maxResults)
 				.scheduledJobId(jobId);
 		return response(jobSvc.getJobRuns(getRequest(criteria)));
 	}

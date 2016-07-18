@@ -6,8 +6,8 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
     var pagerOpts;
 
     function init() {
-      $scope.filterOpts = {};
-      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getShipmentsCount});
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getShipmentsCount, recordsPerPage: 50});
+      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
 
       loadInstitutes();
       loadShipments($scope.filterOpts);
@@ -53,7 +53,7 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
     }
 
     $scope.clearFilters = function() {
-      $scope.filterOpts = {};
+      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
     }
 
     init();

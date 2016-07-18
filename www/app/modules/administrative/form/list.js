@@ -8,9 +8,9 @@ angular.module('os.administrative.form.list', ['os.administrative.models'])
     var pagerOpts;
 
     function init() {
-      $scope.formFilterOpts = {};
-      $scope.formsList = [];
       pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getFormsCount});
+      $scope.formFilterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
+      $scope.formsList = [];
       loadForms($scope.formFilterOpts);
       Util.filter($scope, 'formFilterOpts', loadForms);
     }

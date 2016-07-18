@@ -55,12 +55,12 @@ public class RbacController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 		ResourceListCriteria criteria = new ResourceListCriteria()
 			.query(name)
 			.startAt(startAt)
-			.maxResults(maxRecords);
+			.maxResults(maxResults);
 		
 		ResponseEvent<List<ResourceDetail>> resp = rbacSvc.getResources(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
@@ -99,12 +99,12 @@ public class RbacController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) { 
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) { 
 		OperationListCriteria criteria = new OperationListCriteria()
 			.query(name)
 			.startAt(startAt)
-			.maxResults(maxRecords);
+			.maxResults(maxResults);
 		
 		ResponseEvent<List<OperationDetail>> resp = rbacSvc.getOperations(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
@@ -141,11 +141,11 @@ public class RbacController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 	
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 		PermissionListCriteria criteria = new PermissionListCriteria()
 			.startAt(startAt)
-			.maxResults(maxRecords);
+			.maxResults(maxResults);
 		
 		ResponseEvent<List<PermissionDetail>> resp = rbacSvc.getPermissions(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
@@ -193,12 +193,12 @@ public class RbacController {
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
-			@RequestParam(value = "maxRecords", required = false, defaultValue = "100")
-			int maxRecords) {
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 		RoleListCriteria criteria = new RoleListCriteria()
 			.query(name)
 			.startAt(startAt)
-			.maxResults(maxRecords);
+			.maxResults(maxResults);
 
 		ResponseEvent<List<RoleDetail>> resp = rbacSvc.getRoles(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();

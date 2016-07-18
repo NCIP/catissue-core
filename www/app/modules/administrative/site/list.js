@@ -1,10 +1,11 @@
 angular.module('os.administrative.site.list', ['os.administrative.models'])
   .controller('SiteListCtrl', function($scope, $state, Site, Util, ListPagerOpts) {
 
-    var pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getSitesCount})
+    var pagerOpts;
 
     function init() {
-      $scope.siteFilterOpts = {includeStats: true};
+      pagerOpts = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getSitesCount});
+      $scope.siteFilterOpts = {includeStats: true, maxResults: pagerOpts.recordsPerPage + 1};
       loadSites($scope.siteFilterOpts);
       Util.filter($scope, 'siteFilterOpts', loadSites);
     }
