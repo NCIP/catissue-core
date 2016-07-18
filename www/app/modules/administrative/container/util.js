@@ -14,7 +14,7 @@ angular.module('os.administrative.container.util', ['os.common.box'])
       };
     }
 
-    function getOpts(container, allowClicks) {
+    function getOpts(container, allowClicks, showAddMarker) {
       return {
         box: {
           instance             : container,
@@ -43,7 +43,8 @@ angular.module('os.administrative.container.util', ['os.common.box'])
         },
         createCell: function(label, x, y, existing) {
           return createSpmnPos(container, label, x, y, existing);
-        }
+        },
+        onAddEvent: showAddMarker ? function() {} : undefined
       };
     }
 

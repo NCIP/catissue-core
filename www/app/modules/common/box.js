@@ -122,7 +122,7 @@ angular.module('os.common.box', [])
         }
 
         el.append(cellDesc);
-      } else if (opts.allowClicks) {
+      } else if (typeof opts.onAddEvent == 'function') {
         el.append(getAddMarker())
           .addClass("os-pointer-cursor")
           .attr({'data-pos-x': column, 'data-pos-y': row})

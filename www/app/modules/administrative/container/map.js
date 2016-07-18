@@ -13,7 +13,9 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
       },
 
       link: function(scope, element, attrs) {
-        var opts = ContainerUtil.getOpts(scope.container, angular.isDefined(attrs.onAddEvent));
+        var showAddMarker = !scope.container.storeSpecimensEnabled;
+        var allowClick = angular.isDefined(attrs.onAddEvent);
+        var opts = ContainerUtil.getOpts(scope.container, allowClick, allowClick && showAddMarker);
 
         scope.onClick = function($event) {
           var target = angular.element($event.originalEvent.target);
