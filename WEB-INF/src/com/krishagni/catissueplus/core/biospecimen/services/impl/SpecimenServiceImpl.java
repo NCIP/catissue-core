@@ -124,6 +124,19 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<List<SpecimenInfo>> getSpecimensById(RequestEvent<List<Long>> req) {
+		try {
+			List<Specimen> specimens = getSpecimensById(req.getPayload());
+			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByIds(specimens, req.getPayload())));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<List<SpecimenInfo>> getPrimarySpecimensByCp(RequestEvent<Long> req) {
 		try {
 			Long cpId = req.getPayload();
@@ -207,19 +220,19 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenDetail>> deleteSpecimens(RequestEvent<List<SpecimenDeleteCriteria>> request) {
-		List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+	public ResponseEvent<List<SpecimenInfo>> deleteSpecimens(RequestEvent<List<SpecimenDeleteCriteria>> request) {
+		List<SpecimenInfo> result = new ArrayList<>();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		for (SpecimenDeleteCriteria criteria : request.getPayload()) {
 			Specimen specimen = getSpecimen(criteria.getId(), criteria.getLabel(), ose);
 			if (specimen == null) {
-				return ResponseEvent.error(ose);
+				continue;
 			}
 
 			AccessCtrlMgr.getInstance().ensureDeleteSpecimenRights(specimen);
 			specimen.disable(!criteria.getForceDelete());
-			result.add(SpecimenDetail.from(specimen));
+			result.add(SpecimenInfo.from(specimen));
 		}
 
 		return ResponseEvent.response(result);

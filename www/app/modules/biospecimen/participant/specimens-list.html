@@ -1,0 +1,121 @@
+<div>
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <div class="os-select-specimen-cb">
+              <os-checkbox ng-change="ctx.checkList.toggleSelectAll()" ng-model="ctx.checkList.allSelected"></os-checkbox>
+            </div>
+          </th>
+          <th class="col" ng-repeat="column in ctx.specimens.columns">
+            <span>{{column.caption}}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="row in ctx.specimens.rows track by row.hidden.specimenId"
+          os-row-click="showSpecimen(row.hidden.specimenId)">
+          <td class="col">
+            <div class="os-select-specimen-cb os-click-esc">
+              <os-checkbox ng-change="ctx.checkList.toggleSelectItem()" ng-model="ctx.checkList.items[$index].selected">
+              </os-checkbox>
+            </div>
+          </td>
+          <td class="col" ng-repeat="col in row.data track by $index">
+            <span ng-switch on="ctx.specimens.columns[$index].metainfo.showLink == 'true'">
+              <span ng-switch-when="true">
+                <a ui-sref="specimen({specimenId: row.hidden.specimenId})">
+                  <div ng-include src="'modules/biospecimen/participant/specimens-list-cell.html'"></div>
+                </a>
+              </span>
+              <span ng-switch-default>
+                <div ng-include src="'modules/biospecimen/participant/specimens-list-cell.html'"></div>
+              </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include src="'modules/biospecimen/participant/specimens-search.html'"></div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimens-list-cell.html">
+  <span ng-switch on="ctx.specimens.columns[$index].metainfo.showUnit == 'true'">
+    <span ng-switch-when="true">
+      <span>{{col | number | osNoValue}}</span>
+      <span ng-if="!!col">
+        <os-specimen-unit specimen-class="row.hidden.specimenClass" type="row.hidden.specimenType"
+          measure="{{ctx.specimens.columns[$index].metainfo.measure}}">
+        </os-specimen-unit>
+      </span>
+    </span>
+    <span ng-switch-when="false">
+      <span ng-switch on="ctx.specimens.columns[$index].metainfo.type">
+        <span ng-switch-when="'number'">
+          {{col | number | osNoValue}}
+        </span>
+        <span ng-switch-default>
+          {{col | osNoValue}}
+        </span>
+      </span>
+    </span>
+  </span>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimens-search.html">
+  <div class="os-search">
+    <div class="os-head">
+      <h3 class="os-title" translate="common.filters.title">Filters</h3>
+    </div>
+
+    <div class="os-body">
+      <div class="form-group" ng-repeat="filterCfg in ctx.filtersCfg">
+        <span ng-if="filterCfg.dataType == 'INTEGER' || filterCfg.dataType == 'FLOAT'">
+          <div class="row">
+            <div class="col-xs-6">
+              <input os-md-input type="text" ng-model="ctx.filters[$index].min" class="form-control"
+                placeholder="{{'common.filters.min' | translate: {caption: filterCfg.caption} }}">
+            </div>
+            <div class="col-xs-6">
+              <input os-md-input type="text" ng-model="ctx.filters[$index].max" class="form-control"
+                placeholder="{{'common.filters.max' | translate: {caption: filterCfg.caption} }}">
+            </div>
+          </div>
+        </span>
+        <span ng-if="filterCfg.dataType == 'DATE'">
+          <div class="row">
+            <div class="col-xs-6">
+              <os-date-picker md-type="true" date="ctx.filters[$index].min"
+                date-only="true" date-only-fmt="{{global.shortDateFmt}}"
+                placeholder="{{'common.filters.min' | translate: {caption: filterCfg.caption} }}">
+              </os-date-picker>
+            </div>
+            <div class="col-xs-6">
+              <os-date-picker md-type="true" date="ctx.filters[$index].max"
+                date-only="true" date-only-fmt="{{global.shortDateFmt}}"
+                placeholder="{{'common.filters.max' | translate: {caption: filterCfg.caption} }}">
+              </os-date-picker>
+            </div>
+          </div>
+        </span>
+        <span ng-if="filterCfg.dataType == 'STRING'">
+          <span ng-switch on="filterCfg.searchType == 'contains'">
+            <span ng-switch-when="true">
+              <input os-md-input type="text" ng-model="ctx.filters[$index]" class="form-control"
+                placeholder="{{filterCfg.caption}}">
+            </span>
+            <span ng-switch-when="false">
+              <os-select os-md-input ng-model="ctx.filters[$index]" list="filterCfg.values"
+                placeholder="{{filterCfg.caption}}" ng-click="loadFilterValues(filterCfg)">
+              </os-select>
+            </span>
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</script>
+

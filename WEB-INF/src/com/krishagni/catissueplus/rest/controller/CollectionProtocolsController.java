@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +60,10 @@ import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 import com.krishagni.catissueplus.core.de.services.CatalogService;
 import com.krishagni.catissueplus.core.de.services.FormService;
+import com.krishagni.catissueplus.core.query.Column;
+import com.krishagni.catissueplus.core.query.ListConfig;
+import com.krishagni.catissueplus.core.query.ListDetail;
+import com.krishagni.catissueplus.core.query.ListGenerator;
 
 import edu.common.dynamicextensions.nutility.IoUtil;
 
@@ -73,6 +79,9 @@ public class CollectionProtocolsController {
 
 	@Autowired
 	private CatalogService catalogSvc;
+
+	@Autowired
+	private ListGenerator listGenerator;
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
@@ -522,6 +531,7 @@ public class CollectionProtocolsController {
 			String[] entityTypes) {
 		return formSvc.getEntityForms(cpId, entityTypes);
 	}
+
 	@RequestMapping(method = RequestMethod.POST, value="/merge")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -529,6 +539,60 @@ public class CollectionProtocolsController {
 		ResponseEvent<MergeCpDetail> resp = cpSvc.mergeCollectionProtocols(getRequest(mergeDetail));
 		resp.throwErrorIfUnsuccessful();
 
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/list-config")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ListConfig getListConfig(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestParam(value = "listName", required = true)
+			String listName) {
+
+		Map<String, Object> listCfgReq = new HashMap<>();
+		listCfgReq.put("cpId", cpId);
+		listCfgReq.put("listName", listName);
+
+		ResponseEvent<ListConfig> resp = cpSvc.getCpListCfg(new RequestEvent<>(listCfgReq));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/expression-values")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Collection<Object> getExpressionValues(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestParam(value = "expr", required = true)
+			String expr,
+
+			@RequestParam(value = "searchTerm", required = false, defaultValue = "")
+			String searchTerm) {
+
+		return listGenerator.getExpressionValues(cpId, expr, searchTerm);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/specimens")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ListDetail getSpecimens(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestBody
+			List<Column> filters) {
+
+		Map<String, Object> listReq = new HashMap<>();
+		listReq.put("cpId", cpId);
+		listReq.put("filters", filters);
+
+		ResponseEvent<ListDetail> resp = cpSvc.getCpSpecimens(getRequest(listReq));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 	

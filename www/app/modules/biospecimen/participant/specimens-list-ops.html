@@ -1,0 +1,48 @@
+<!-- os-assign-to-spmn-list on-add-to-list="addSpecimensToList(list)">
+</os-assign-to-spmn-list -->
+
+<div os-show-if-menu-items-present dropdown class="inline">
+  <button class="default dropdown-toggle">
+    <span translate="specimens.ops">Specimen Ops</span>
+    <span class="fa fa-caret-down"></span>
+  </button>
+
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li show-if-allowed="specimenDeleteOpts">
+      <a ng-click="listViewCtx.ctrl.deleteSpecimens()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </a>
+    </li>
+    <li show-if-allowed="orderCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
+      <a ng-click="listViewCtx.ctrl.distributeSpecimens()">
+        <span class="fa fa-share"></span>
+        <span translate="specimen_list.distribute">Distribute</span>
+      </a>
+    </li>
+    <li show-if-allowed="shipmentCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
+      <a ng-click="listViewCtx.ctrl.shipSpecimens()">
+        <span class="fa fa-paper-plane-o"></span>
+        <span translate="specimen_list.ship">Ship</span>
+      </a>
+    </li>
+    <li show-if-allowed="specimenUpdateOpts">
+      <a ng-click="listViewCtx.ctrl.createAliquots()">
+        <span class="fa fa-share-alt"></span>
+        <span translate="specimen_list.create_aliquots">Create Aliquots</span>
+      </a>
+    </li>
+    <li show-if-allowed="specimenUpdateOpts">
+      <a ng-click="listViewCtx.ctrl.createDerivatives()">
+        <span class="fa fa-flask"></span>
+        <span translate="specimen_list.create_derivatives">Create Derivatives</span>
+      </a>
+    </li>
+    <li show-if-allowed="specimenUpdateOpts">
+      <a ng-click="listViewCtx.ctrl.addEvent()">
+        <span class="fa fa-calendar-o"></span>
+        <span translate="specimen_list.add_event">Add Event</span>
+      </a>
+    </li>
+  </ul>
+</div>

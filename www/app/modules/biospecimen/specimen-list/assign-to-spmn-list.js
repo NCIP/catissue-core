@@ -16,6 +16,9 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
 
     return {
       restrict: 'E',
+
+      replace: true,
+
       scope: {
         onAddToList: '&'
       },

@@ -4,3 +4,8 @@
   <span class="fa fa-plus"></span>
   <span translate="participant.buttons.register">Register</span>
 </button>
+
+<button ng-if="!!listViewCtx.spmnListCfg" class="default" ui-sref="cp-specimens({cpId: cp.id})">
+  <span class="fa fa-flask"></span>
+  <span>View Specimens</span>
+</button>

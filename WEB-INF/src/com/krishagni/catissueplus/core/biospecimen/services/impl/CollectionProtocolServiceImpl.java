@@ -28,6 +28,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -87,6 +88,10 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
+import com.krishagni.catissueplus.core.query.Column;
+import com.krishagni.catissueplus.core.query.ListConfig;
+import com.krishagni.catissueplus.core.query.ListDetail;
+import com.krishagni.catissueplus.core.query.ListGenerator;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
@@ -106,6 +111,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	private RbacService rbacSvc;
 	
 	private EmailService emailService;
+
+	private ListGenerator listGenerator;
 	
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
@@ -133,6 +140,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+
+	public void setListGenerator(ListGenerator listGenerator) {
+		this.listGenerator = listGenerator;
 	}
 
 	@Override
@@ -963,6 +974,51 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		}
 	}
 
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ListConfig> getCpListCfg(RequestEvent<Map<String, Object>> req) {
+		try {
+			Map<String, Object> input = req.getPayload();
+			Long cpId = (Long)input.get("cpId");
+			String listName = (String)input.get("listName");
+
+			ListConfig cfg = getListConfig(cpId, listName);
+			if (cfg == null) {
+				//
+				// TODO: return appropriate error code
+				//
+				return ResponseEvent.response(null);
+			}
+
+			cfg.setFilters(listGenerator.getFilters(cfg));
+			return ResponseEvent.response(cfg);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ListDetail> getCpSpecimens(RequestEvent<Map<String, Object>> req) {
+		try {
+			Map<String, Object> listReq = req.getPayload();
+
+			Long cpId = (Long)listReq.get("cpId");
+			ListConfig cfg = getSpecimenListConfig(cpId);
+			if (cfg == null) {
+				// TODO:
+				return ResponseEvent.response(null);
+			}
+
+			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 
 	@Override
 	public String getObjectName() {
@@ -1506,6 +1562,54 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		String dir = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.CP_SOP_DOCS_DIR, defDir);
 		new File(dir).mkdirs();
 		return dir + File.separator;
+	}
+
+	private ListConfig getSpecimenListConfig(Long cpId) {
+		ListConfig cfg = getListConfig(cpId, "specimen-list-view");
+		if (cfg == null) {
+			return null;
+		}
+
+		cfg.setCpId(cpId);
+		cfg.setDrivingForm("Specimen");
+
+		Column id = new Column();
+		id.setExpr("Specimen.id");
+		id.setCaption("specimenId");
+
+		Column type = new Column();
+		type.setExpr("Specimen.type");
+		type.setCaption("specimenType");
+
+		Column specimenClass = new Column();
+		specimenClass.setExpr("Specimen.class");
+		specimenClass.setCaption("specimenClass");
+
+		List<Column> hiddenColumns = new ArrayList<>();
+		hiddenColumns.add(id);
+		hiddenColumns.add(type);
+		hiddenColumns.add(specimenClass);
+		cfg.setHiddenColumns(hiddenColumns);
+
+		//
+		// TODO: add permission/access control based restriction
+		//
+
+		return cfg;
+	}
+
+	private ListConfig getListConfig(Long cpId, String listName) {
+		CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(cpId);
+		if (cfg == null) {
+			return null;
+		}
+
+		Workflow workflow = cfg.getWorkflows().get(listName);
+		if (workflow == null || workflow.getData() == null || workflow.getData().isEmpty()) {
+			return null;
+		}
+
+		return new ObjectMapper().convertValue(workflow.getData(), ListConfig.class);
 	}
 
 	private static final String PPID_MSG                     = "cp_ppid";

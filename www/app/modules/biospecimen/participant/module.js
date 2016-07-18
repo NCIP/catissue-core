@@ -27,6 +27,12 @@ angular.module('os.biospecimen.participant',
         controller: function($scope, cp, cpViewCtx) {
           $scope.cp = cp;
           $scope.cpViewCtx = cpViewCtx;
+
+          var sites = cp.cpSites.map(function(cpSite) { return cpSite.siteName; });
+          $scope.orderCreateOpts =    {cp: cp.shortTitle, sites: sites, resource: 'Order', operations: ['Create']};
+          $scope.shipmentCreateOpts = {cp: cp.shortTitle, sites: sites, resource: 'ShippingAndTracking', operations: ['Create']};
+          $scope.specimenUpdateOpts = {cp: cp.shortTitle, sites: sites, resource: 'VisitAndSpecimen', operations: ['Update']};
+          $scope.specimenDeleteOpts = {cp: cp.shortTitle, sites: sites, resource: 'VisitAndSpecimen', operations: ['Delete']};
         },
         resolve: {
           cp: function($stateParams, CollectionProtocol) {
@@ -51,6 +57,14 @@ angular.module('os.biospecimen.participant',
 
           listView: function(cp, CpConfigSvc) {
             return CpConfigSvc.getListView(cp.id, 'participant-list');
+          },
+
+          reqBasedDistOrShip: function($injector) {
+            if ($injector.has('spmnReqCfgUtil')) {
+              return $injector.get('spmnReqCfgUtil').isReqBasedDistOrShippingEnabled();
+            } else {
+              return {value: false};
+            }
           }
         },
         parent: 'signed-in',
@@ -84,9 +98,10 @@ angular.module('os.biospecimen.participant',
       })
       .state('cp-list-view-root', {
         templateUrl: 'modules/biospecimen/participant/list-view.html',
-        controller: function($scope, cp, defSopDoc, defSopUrl) {
+        controller: function($scope, cp, defSopDoc, defSopUrl, spmnListCfg) {
           var ctx = $scope.listViewCtx = {
-            sopDocDownloadUrl: cp.getSopDocDownloadUrl()
+            sopDocDownloadUrl: cp.getSopDocDownloadUrl(),
+            spmnListCfg: spmnListCfg
           };
 
           ctx.sopDoc = cp.sopDocumentName;
@@ -127,6 +142,10 @@ angular.module('os.biospecimen.participant',
             }
 
             return SettingUtil.getSetting('biospecimen', 'cp_sop_doc_url');
+          },
+
+          spmnListCfg: function(cp, CpConfigSvc) {
+            return CpConfigSvc.getListConfig(cp, 'specimen-list-view');
           }
         },
         parent: 'cp-view',
@@ -136,6 +155,12 @@ angular.module('os.biospecimen.participant',
         url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
+        parent: 'cp-list-view-root'
+      })
+      .state('cp-specimens', {
+        url: '/specimens',
+        templateUrl: 'modules/biospecimen/participant/specimens-list.html',
+        controller: 'SpecimensListViewCtrl',
         parent: 'cp-list-view-root'
       })
       .state('import-cp-objs', {

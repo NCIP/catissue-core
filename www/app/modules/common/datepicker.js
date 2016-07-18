@@ -61,7 +61,7 @@ angular.module('openspecimen')
             // issue. Need to check whether sending epoch time
             // without time component helps
             //
-            return $filter('date')(val, 'yyyy-MM-dd');
+            return $filter('date')(val, attrs.dateOnlyFmt || 'yyyy-MM-dd');
           }
         } catch (e) {
           return val;
@@ -109,7 +109,8 @@ angular.module('openspecimen')
         });
 
         inputEl.attr('ng-model', tAttrs.date)
-          .attr('date-only', tAttrs.dateOnly);
+          .attr('date-only', tAttrs.dateOnly)
+          .attr('date-only-fmt', tAttrs.dateOnlyFmt);
  
         var fmt = tAttrs.dateFormat;
         if (!fmt) {

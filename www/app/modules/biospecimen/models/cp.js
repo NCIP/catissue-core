@@ -142,6 +142,32 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       );
     };
 
+    CollectionProtocol.prototype.getListConfig = function(listName) {
+      var params = {listName: listName};
+      return $http.get(CollectionProtocol.url() + this.$id() + '/list-config', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    CollectionProtocol.prototype.getExpressionValues = function(expr) {
+      var params = {expr: expr};
+      return $http.get(CollectionProtocol.url() + this.$id() + '/expression-values', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    CollectionProtocol.prototype.getSpecimens = function(filters) {
+      return $http.post(CollectionProtocol.url() + this.$id() + '/specimens', filters).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
+
     CollectionProtocol.prototype.$remove = function() {
       return $http['delete'](CollectionProtocol.url() + this.$id() + '?forceDelete=true').then(
         function(resp) {

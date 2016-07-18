@@ -98,7 +98,10 @@ public class SpecimensController {
 			
 			@RequestParam(value = "dpId", required = false)
 			Long dpId,
-			
+
+			@RequestParam(value = "id", required = false)
+			List<Long> ids,
+
 			@RequestParam(value = "label", required = false)
 			List<String> labels,
 			
@@ -113,10 +116,14 @@ public class SpecimensController {
 			crit.setCprId(cprId);
 			crit.setEventId(eventId);
 			crit.setVisitId(visitId);
-			
+
 			ResponseEvent<List<SpecimenDetail>> resp = cprSvc.getSpecimens(getRequest(crit));
 			resp.throwErrorIfUnsuccessful();
-			return resp.getPayload();			
+			return resp.getPayload();
+		} else if (CollectionUtils.isNotEmpty(ids)) {
+			ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.getSpecimensById(getRequest(ids));
+			resp.throwErrorIfUnsuccessful();
+			return resp.getPayload();
 		} else if (CollectionUtils.isNotEmpty(labels)) {
 			ResponseEvent<List<SpecimenInfo>> resp = null;
 			if (dpId != null) {
@@ -225,12 +232,12 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenDetail deleteSpecimen(@PathVariable("id") Long specimenId) {
+	public SpecimenInfo deleteSpecimen(@PathVariable("id") Long specimenId) {
 		SpecimenDeleteCriteria crit = new SpecimenDeleteCriteria();
 		crit.setId(specimenId);
 		crit.setForceDelete(false);
 
-		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(Collections.singletonList(crit)));
+		ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.deleteSpecimens(getRequest(Collections.singletonList(crit)));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload().get(0);
 	}
@@ -238,16 +245,16 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<SpecimenDetail> deleteSpecimens(@RequestParam(value = "id") Long[] specimenIds) {
-		List<SpecimenDeleteCriteria> criterias = new ArrayList<SpecimenDeleteCriteria>();
+	public List<SpecimenInfo> deleteSpecimens(@RequestParam(value = "id") Long[] specimenIds) {
+		List<SpecimenDeleteCriteria> criteria = new ArrayList<SpecimenDeleteCriteria>();
 		for (Long specimenId : specimenIds) {
-			SpecimenDeleteCriteria crit = new SpecimenDeleteCriteria();
-			crit.setId(specimenId);
-			crit.setForceDelete(true);
-			criterias.add(crit);
+			SpecimenDeleteCriteria criterion = new SpecimenDeleteCriteria();
+			criterion.setId(specimenId);
+			criterion.setForceDelete(true);
+			criteria.add(criterion);
 		}
 
-		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.deleteSpecimens(getRequest(criterias));
+		ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.deleteSpecimens(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

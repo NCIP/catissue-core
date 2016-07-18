@@ -3,6 +3,8 @@ angular.module('openspecimen')
   .factory('CpConfigSvc', function(CollectionProtocol, $q) {
     var cpWorkflowsMap = {};
 
+    var listCfgsMap = {};
+
     var summarySt = undefined;
     
     function getRegParticipantTmpl(cpId, cprId) {
@@ -122,6 +124,19 @@ angular.module('openspecimen')
         return getWorkflowData(cpId, 'common').then(
           function(data) {
             return data.listView || defValue;
+          }
+        );
+      },
+
+      getListConfig: function(cp, listName) {
+        var key = 'cp-' + cp.id + '-' + listName;
+        if (!listCfgsMap[key]) {
+          listCfgsMap[key] = cp.getListConfig(listName);
+        }
+
+        return listCfgsMap[key].then(
+          function(cfg) {
+            return cfg;
           }
         );
       }

@@ -184,6 +184,7 @@
     <property name="rbacSvc" ref="rbacSvc"/>
     <property name="emailService" ref="emailService"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="listGenerator" ref="listGenerator"/>
   </bean>
   
   <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
@@ -952,6 +953,10 @@
         <ref bean="shipmentSvc"/>
       </list>
     </property>
+  </bean>
+
+  <bean id="listGenerator" class="com.krishagni.catissueplus.core.query.DefaultListGenerator">
+    <property name="querySvc" ref="querySvc"/>
   </bean>
   
   <task:scheduler id="taskScheduler" pool-size="1"/>

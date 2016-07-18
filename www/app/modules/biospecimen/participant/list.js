@@ -6,6 +6,8 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
 
     var pagerOpts, filterOpts;
 
+    var ctrl = this;
+
     function init() {
       $scope.cpId = $stateParams.cpId;
       $scope.cp = cp;
@@ -18,6 +20,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
 
       angular.extend($scope.listViewCtx, {
         listName: 'participant.list',
+        ctrl: ctrl,
         headerButtonsTmpl: 'modules/biospecimen/participant/register-button.html',
         showSearch: true
       });

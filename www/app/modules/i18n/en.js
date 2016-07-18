@@ -67,6 +67,12 @@
     "confirm_navigation": " You've unsaved form changes. If you navigate away from this page without submitting form, the changes will be lost. Are you sure you want to leave this page?",
     "footer_note": "<a href=\"http://www.openspecimen.org\" target=\"_blank\">OpenSpecimen</a> - powered by <a href=\"http://www.krishagni.com\" target=\"_blank\">Krishagni</a>",
 
+    "filters": {
+      "title": "Filters",
+      "min": "Min. {{caption}}",
+      "max": "Max. {{caption}}"
+    },
+
     "buttons": {
       "add": "Add",
       "save": "Save",
@@ -494,6 +500,7 @@
     "location" : "Location",
     "print": "Print",
     "close_parent": "Close Parent",
+    "ops": "Specimen Ops",
 
     "reason_for_closing": "Reason for closing",
 
