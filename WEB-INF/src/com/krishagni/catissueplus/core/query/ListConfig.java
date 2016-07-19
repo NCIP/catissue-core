@@ -8,6 +8,8 @@ public class ListConfig {
 
 	private String drivingForm;
 
+	private boolean distinct;
+
 	private List<Column> columns = new ArrayList<>();
 
 	private String criteria;
@@ -38,6 +40,14 @@ public class ListConfig {
 
 	public void setDrivingForm(String drivingForm) {
 		this.drivingForm = drivingForm;
+	}
+
+	public boolean isDistinct() {
+		return distinct;
+	}
+
+	public void setDistinct(boolean distinct) {
+		this.distinct = distinct;
 	}
 
 	public List<Column> getColumns() {

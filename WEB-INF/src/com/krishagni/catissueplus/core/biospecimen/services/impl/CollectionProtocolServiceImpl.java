@@ -72,6 +72,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.CpListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr.ParticipantReadAccess;
@@ -1591,10 +1592,40 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		hiddenColumns.add(specimenClass);
 		cfg.setHiddenColumns(hiddenColumns);
 
-		//
-		// TODO: add permission/access control based restriction
-		//
+		List<Pair<Long, Long>> siteCps = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps(cpId);
+		if (siteCps == null) {
+			//
+			// Admin; hence no additional restrictions
+			//
+			return cfg;
+		}
 
+		if (siteCps.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+
+		boolean useMrnSites = AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn();
+		StringBuilder restriction = new StringBuilder();
+		for (Pair<Long, Long> siteCp : siteCps) {
+			Long siteId = siteCp.first();
+
+			if (restriction.length() > 0) {
+				restriction.append(" or ");
+			}
+
+			if (useMrnSites) {
+				restriction.append("(").append("(Participant.medicalRecord.mrnSiteId exists")
+					.append(" and Participant.medicalRecord.mrnSiteId = ").append(siteId)
+					.append(") or (Participant.medicalRecord.mrnSiteId not exists ")
+					.append(" and CollectionProtocol.cpSites.siteId = ").append(siteId).append("))");
+			} else {
+				restriction.append("(CollectionProtocol.cpSites.siteId = ").append(siteId).append(")");
+			}
+		}
+
+		restriction.insert(0, "(").append(")");
+		cfg.setRestriction(restriction.toString());
+		cfg.setDistinct(true);
 		return cfg;
 	}
 

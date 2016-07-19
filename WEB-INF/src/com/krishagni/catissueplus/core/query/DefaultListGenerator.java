@@ -78,7 +78,7 @@ public class DefaultListGenerator implements ListGenerator {
 
 	private String getAql(ListConfig cfg, List<Column> searchCriteria) {
 		StringBuilder aql = new StringBuilder()
-			.append("select ").append(getSelectExpr(cfg))
+			.append("select ").append(getDistinctExpr(cfg)).append(" ").append(getSelectExpr(cfg))
 			.append(" where ").append(getCriteria(cfg, searchCriteria));
 
 		String orderBy = getOrderExpr(cfg);
@@ -88,6 +88,16 @@ public class DefaultListGenerator implements ListGenerator {
 
 		aql.append(" limit ").append(cfg.getStartAt()).append(", ").append(cfg.getMaxResults());
 		return aql.toString();
+	}
+
+	private String getDistinctExpr(ListConfig cfg) {
+		if (!cfg.isDistinct()) {
+			return StringUtils.EMPTY;
+		}
+
+		StringBuilder distinct = new StringBuilder("distinct ");
+		distinct.append(cfg.getOrderBy().stream().map(expr -> getSelectExpr(expr)).collect(Collectors.joining(", ")));
+		return distinct.append(", ").toString();
 	}
 
 	private String getSelectExpr(ListConfig cfg) {
@@ -296,10 +306,12 @@ public class DefaultListGenerator implements ListGenerator {
 	}
 
 	private ListDetail getListDetail(ListConfig cfg, QueryExecResult result) {
+		int startIdx = cfg.isDistinct() ? cfg.getOrderBy().size() : 0;
+
 		List<Row> rows = new ArrayList<>();
 		for (String[] rowData : result.getRows()) {
 			Map<String, Object> hidden = new HashMap<>();
-			int colIdx = 0;
+			int colIdx = startIdx;
 			for (Column hiddenColumn : cfg.getHiddenColumns()) {
 				hidden.put(hiddenColumn.getCaption(), rowData[colIdx++]);
 			}
