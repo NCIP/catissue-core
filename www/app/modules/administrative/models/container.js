@@ -41,7 +41,7 @@ angular.module('os.administrative.models.container', ['os.common.models'])
     };
 
     Container.getByName = function(name) {
-      return $http.get(Container.url() + '/byname/' + name).then(
+      return $http.get(Container.url() + '/byname/', {params: {name: name}}).then(
         function(result) {
           return new Container(result.data);
         }

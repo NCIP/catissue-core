@@ -223,10 +223,10 @@ public class StorageContainersController {
 		return getContainer(new ContainerQueryCriteria(containerId));
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/byname/{name}")
+	@RequestMapping(method = RequestMethod.GET, value="/byname")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetail getStorageContainer(@PathVariable("name") String name) {
+	public StorageContainerDetail getStorageContainer(@RequestParam(value = "name", required = true) String name) {
 		return getContainer(new ContainerQueryCriteria(name));
 	}
 	
