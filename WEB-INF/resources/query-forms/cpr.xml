@@ -141,10 +141,24 @@
         <name>medicalRecord</name>
         <udn>medicalRecord</udn>
         <caption>#getMessage("participant_mrn")</caption>
-        <table>PART_MED_REC_VIEW</table>
+        <table>CATISSUE_PART_MEDICAL_ID</table>
         <foreignKey>PARTICIPANT_ID</foreignKey>
         <parentKey>PARTICIPANT_ID</parentKey>
         <row>
+          <numberField>
+            <name>mrnSiteId</name>
+            <udn>mrnSiteId</udn>
+            <caption>#getMessage("participant_mrn_site_id")</caption>
+            <column>SITE_ID</column>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=id&amp;value=:value</recordUrl>
+          </numberField>
+          <siteField>
+            <name>mrnSiteName</name>
+            <udn>mrnSiteName</udn>
+            <caption>#getMessage("participant_mrn_site")</caption>
+            <column>SITE_ID</column>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
+          </siteField>
           <textField>
             <name>medicalRecordNumber</name>
             <udn>medicalRecordNumber</udn>
@@ -153,17 +167,6 @@
             <maxLength>255</maxLength>
             <phi>true</phi>
           </textField>
-    
-          <dropDown>
-            <name>mrnSiteName</name>
-            <udn>mrnSiteName</udn>
-            <caption>#getMessage("participant_mrn_site")</caption>
-            <column>SITE_NAME</column>
-            <options>
-              <sql>select distinct name from CATISSUE_SITE</sql>
-            </options>
-            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
-          </dropDown>
         </row>
       </subForm>
     </row>

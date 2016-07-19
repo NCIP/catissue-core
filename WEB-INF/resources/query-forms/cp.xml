@@ -171,6 +171,38 @@
     </row>
     <row>
       <subForm>
+        <name>cpSites</name>
+        <udn>cpSites</udn>
+        <caption>#getMessage("cp_sites")</caption>
+        <table>CATISSUE_SITE_CP</table>
+        <foreignKey>COLLECTION_PROTOCOL_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <row>
+          <numberField>
+            <name>siteId</name>
+            <udn>siteId</udn>
+            <caption>#getMessage("cp_sites_id")</caption>
+            <column>SITE_ID</column>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=id&amp;value=:value</recordUrl>
+          </numberField>
+          <siteField>
+            <name>siteName</name>
+            <udn>siteName</udn>
+            <caption>#getMessage("cp_sites_name")</caption>
+            <column>SITE_ID</column>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
+          </siteField>
+          <textField>
+            <name>siteCode</name>
+            <udn>siteCode</udn>
+            <caption>#getMessage("cp_sites_code")</caption>
+            <column>CODE</column>
+          </textField>
+        </row>
+      </subForm>
+    </row>
+    <row>
+      <subForm>
         <name>customFields</name>
         <udn>customFields</udn>
         <caption>#getMessage("cp_field_extensions")</caption>

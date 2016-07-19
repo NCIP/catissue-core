@@ -48,7 +48,7 @@ public class SiteControl extends AbstractLookupControl {
 	private static Properties initPvSourceProps() {
 		Properties props = new Properties();
 		props.put("apiUrl", "rest/ng/sites");
-		props.put("searchTermName", "searchString");
+		props.put("searchTermName", "name");
 		props.put("resultFormat", "{{name}}");
 		
 		return props;

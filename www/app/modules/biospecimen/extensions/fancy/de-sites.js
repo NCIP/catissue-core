@@ -9,7 +9,8 @@ openspecimen.ui.fancy.Sites = edu.common.de.LookupSvc.extend({
   },
 
   searchRequest: function(searchTerm) {
-    return {searchString: searchTerm, sortBy: 'name'};
+    alert(searchTerm);
+    return {name: searchTerm, sortBy: 'name'};
   },
 
   formatResults: function(sites) {
