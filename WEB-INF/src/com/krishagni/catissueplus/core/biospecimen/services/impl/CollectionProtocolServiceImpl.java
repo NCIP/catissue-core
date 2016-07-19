@@ -18,6 +18,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -980,10 +982,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	public ResponseEvent<ListConfig> getCpListCfg(RequestEvent<Map<String, Object>> req) {
 		try {
 			Map<String, Object> input = req.getPayload();
-			Long cpId = (Long)input.get("cpId");
 			String listName = (String)input.get("listName");
 
-			ListConfig cfg = getListConfig(cpId, listName);
+			ListConfig cfg = getListConfig(input, listName, null);
 			if (cfg == null) {
 				//
 				// TODO: return appropriate error code
@@ -1003,22 +1004,13 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	@Override
 	@PlusTransactional
 	public ResponseEvent<ListDetail> getCpSpecimens(RequestEvent<Map<String, Object>> req) {
-		try {
-			Map<String, Object> listReq = req.getPayload();
+		return getList(req, this::getSpecimenListConfig);
+	}
 
-			Long cpId = (Long)listReq.get("cpId");
-			ListConfig cfg = getSpecimenListConfig(cpId);
-			if (cfg == null) {
-				// TODO:
-				return ResponseEvent.response(null);
-			}
-
-			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ListDetail> getCpParticipants(RequestEvent<Map<String, Object>> req) {
+		return getList(req, this::getParticipantsListConfig);
 	}
 
 	@Override
@@ -1565,14 +1557,28 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		return dir + File.separator;
 	}
 
-	private ListConfig getSpecimenListConfig(Long cpId) {
-		ListConfig cfg = getListConfig(cpId, "specimen-list-view");
+	@PlusTransactional
+	private ResponseEvent<ListDetail> getList(RequestEvent<Map<String, Object>> req, Function<Map<String, Object>, ListConfig> configFn) {
+		try {
+			Map<String, Object> listReq = req.getPayload();
+			ListConfig cfg = configFn.apply(listReq);
+			if (cfg == null) {
+				return null;
+			}
+
+			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	private ListConfig getSpecimenListConfig(Map<String, Object> listReq) {
+		ListConfig cfg = getListConfig(listReq, "specimen-list-view", "Specimen");
 		if (cfg == null) {
 			return null;
 		}
-
-		cfg.setCpId(cpId);
-		cfg.setDrivingForm("Specimen");
 
 		Column id = new Column();
 		id.setExpr("Specimen.id");
@@ -1592,6 +1598,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		hiddenColumns.add(specimenClass);
 		cfg.setHiddenColumns(hiddenColumns);
 
+		Long cpId = (Long)listReq.get("cpId");
 		List<Pair<Long, Long>> siteCps = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps(cpId);
 		if (siteCps == null) {
 			//
@@ -1604,32 +1611,61 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
-		boolean useMrnSites = AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn();
-		StringBuilder restriction = new StringBuilder();
-		for (Pair<Long, Long> siteCp : siteCps) {
-			Long siteId = siteCp.first();
-
-			if (restriction.length() > 0) {
-				restriction.append(" or ");
-			}
-
-			if (useMrnSites) {
-				restriction.append("(").append("(Participant.medicalRecord.mrnSiteId exists")
-					.append(" and Participant.medicalRecord.mrnSiteId = ").append(siteId)
-					.append(") or (Participant.medicalRecord.mrnSiteId not exists ")
-					.append(" and CollectionProtocol.cpSites.siteId = ").append(siteId).append("))");
-			} else {
-				restriction.append("(CollectionProtocol.cpSites.siteId = ").append(siteId).append(")");
-			}
-		}
-
-		restriction.insert(0, "(").append(")");
-		cfg.setRestriction(restriction.toString());
+		Set<Long> siteIds = siteCps.stream().map(siteCp -> siteCp.first()).collect(Collectors.toSet());
+		cfg.setRestriction(getListRestriction(siteIds));
 		cfg.setDistinct(true);
 		return cfg;
 	}
 
-	private ListConfig getListConfig(Long cpId, String listName) {
+	private ListConfig getParticipantsListConfig(Map<String, Object> listReq) {
+		ListConfig cfg = getListConfig(listReq, "participant-list-view", "Participant");
+		if (cfg == null) {
+			return null;
+		}
+
+		Column id = new Column();
+		id.setExpr("Participant.id");
+		id.setCaption("cprId");
+		cfg.setHiddenColumns(Collections.singletonList(id));
+
+		Long cpId = (Long)listReq.get("cpId");
+		ParticipantReadAccess access = AccessCtrlMgr.getInstance().getParticipantReadAccess(cpId);
+		if (access.admin) {
+			return cfg;
+		}
+
+		if (access.siteCps == null || access.siteCps.isEmpty()) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+		}
+
+		Set<Long> siteIds = new HashSet<>();
+		for (Pair<Set<Long>, Long> siteCp : access.siteCps) {
+			siteIds.addAll(siteCp.first());
+		}
+
+		cfg.setRestriction(getListRestriction(siteIds));
+		cfg.setDistinct(true);
+		return cfg;
+	}
+
+	private String getListRestriction(Collection<Long> siteIds) {
+		StringBuilder restriction = new StringBuilder();
+
+		String siteIdsStr = siteIds.stream().map(siteId -> siteId.toString()).collect(Collectors.joining(", "));
+		if (AccessCtrlMgr.getInstance().isAccessRestrictedBasedOnMrn()) {
+			restriction.append("(").append("(Participant.medicalRecord.mrnSiteId exists")
+				.append(" and Participant.medicalRecord.mrnSiteId in (").append(siteIdsStr)
+				.append(")) or (Participant.medicalRecord.mrnSiteId not exists ")
+				.append(" and CollectionProtocol.cpSites.siteId in (").append(siteIdsStr).append(")))");
+		} else {
+			restriction.append("(CollectionProtocol.cpSites.siteId in (").append(siteIdsStr).append("))");
+		}
+
+		return restriction.insert(0, "(").append(")").toString();
+	}
+
+	private ListConfig getListConfig(Map<String, Object> listReq, String listName, String drivingForm) {
+		Long cpId = (Long)listReq.get("cpId");
 		CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(cpId);
 		if (cfg == null) {
 			return null;
@@ -1640,7 +1676,26 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			return null;
 		}
 
-		return new ObjectMapper().convertValue(workflow.getData(), ListConfig.class);
+		ListConfig listCfg = new ObjectMapper().convertValue(workflow.getData(), ListConfig.class);
+		listCfg.setCpId(cpId);
+		listCfg.setDrivingForm(drivingForm);
+		setListLimit(listReq, listCfg);
+		return listCfg;
+	}
+
+	private void setListLimit(Map<String, Object> listReq, ListConfig cfg) {
+		Integer startAt = (Integer)listReq.get("startAt");
+		if (startAt == null) {
+			startAt = 0;
+		}
+
+		Integer maxResults = (Integer)listReq.get("maxResults");
+		if (maxResults == null) {
+			maxResults = 100;
+		}
+
+		cfg.setStartAt(startAt);
+		cfg.setMaxResults(maxResults);
 	}
 
 	private static final String PPID_MSG                     = "cp_ppid";

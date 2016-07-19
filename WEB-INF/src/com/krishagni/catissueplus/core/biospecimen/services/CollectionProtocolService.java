@@ -148,4 +148,6 @@ public interface CollectionProtocolService {
 	//	}
 	//
 	public ResponseEvent<ListDetail> getCpSpecimens(RequestEvent<Map<String, Object>> req);
+
+	public ResponseEvent<ListDetail> getCpParticipants(RequestEvent<Map<String, Object>> req);
 }

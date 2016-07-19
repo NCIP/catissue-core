@@ -584,18 +584,53 @@ public class CollectionProtocolsController {
 			@PathVariable("id")
 			Long cpId,
 
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults,
+
 			@RequestBody
 			List<Column> filters) {
 
 		Map<String, Object> listReq = new HashMap<>();
 		listReq.put("cpId", cpId);
+		listReq.put("startAt", startAt);
+		listReq.put("maxResults", maxResults);
 		listReq.put("filters", filters);
 
 		ResponseEvent<ListDetail> resp = cpSvc.getCpSpecimens(getRequest(listReq));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/participants")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ListDetail getParticipants(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestParam(value = "startAt", required = false, defaultValue = "0")
+			int startAt,
+
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults,
+
+			@RequestBody
+			List<Column> filters) {
+
+		Map<String, Object> listReq = new HashMap<>();
+		listReq.put("cpId", cpId);
+		listReq.put("startAt", startAt);
+		listReq.put("maxResults", maxResults);
+		listReq.put("filters", filters);
+
+		ResponseEvent<ListDetail> resp = cpSvc.getCpParticipants(getRequest(listReq));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	private ConsentTierDetail performConsentTierOp(OP op, Long cpId, ConsentTierDetail consentTier) {
 		ConsentTierOp req = new ConsentTierOp();		
 		req.setConsentTier(consentTier);

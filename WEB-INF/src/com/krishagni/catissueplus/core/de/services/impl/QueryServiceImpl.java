@@ -23,6 +23,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -98,6 +100,8 @@ public class QueryServiceImpl implements QueryService {
 	private static final String cpForm = "CollectionProtocol";
 
 	private static final String cprForm = "Participant";
+
+	private static final Pattern SELECT_PATTERN = Pattern.compile("^(select\\s+distinct|select)\\s+.*$");
 	
 	private static String QUERY_DATA_EXPORTED_EMAIL_TMPL = "query_export_data";
 	
@@ -1018,8 +1022,15 @@ public class QueryServiceImpl implements QueryService {
 		if (user.isAdmin() || isCount) {
 			return aql;
 		} else {
-			String afterSelect = aql.trim().substring("select".length());
-			return "select " + cpForm + ".id, " + afterSelect;
+			aql = aql.trim();
+			Matcher matcher = SELECT_PATTERN.matcher(aql);
+			if (matcher.matches()) {
+				String select = matcher.group(1);
+				return select + " " + cpForm + ".id, " + aql.substring(select.length());
+			} else {
+				String afterSelect = aql.trim().substring("select".length());
+				return "select " + cpForm + ".id, " + afterSelect;
+			}
 		}
 	}
 	
