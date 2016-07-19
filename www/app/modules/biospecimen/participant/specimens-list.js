@@ -1,14 +1,13 @@
 angular.module('os.biospecimen.participant')
   .controller('SpecimensListViewCtrl', function(
     $scope, $state, cp, spmnListCfg, reqBasedDistOrShip,
-    CheckList, Util, Specimen, SpecimensHolder, DeleteUtil, Alerts) {
+    Util, Specimen, SpecimensHolder, DeleteUtil, Alerts) {
 
     var ctrl = this;
 
     function init() {
       $scope.ctx = {
         reqBasedDistOrShip: reqBasedDistOrShip,
-        checkList: new CheckList([]),
         filtersCfg: angular.copy(spmnListCfg.filters),
         filters: {},
         specimens: {}
@@ -26,64 +25,20 @@ angular.module('os.biospecimen.participant')
     }
 
     function loadSpecimens() {
-      var filtersCfg = $scope.ctx.filtersCfg;
-
       var filters = [];
-      angular.forEach($scope.ctx.filters,
-        function(filter, index) {
-          filter = getFilter(filter, filtersCfg[index]);
-          if (!!filter) {
-            filters.push(filter);
-          }
-        }
-      );
+      if ($scope.ctx.$listFilters) {
+        filters = $scope.ctx.$listFilters.getFilters();
+      }
 
       cp.getSpecimens(filters).then(
         function(specimens) {
-          $scope.ctx.checkList = new CheckList(specimens.rows);
           $scope.ctx.specimens = specimens;
         }
       );
     }
 
-    function getFilter(filter, filterCfg) {
-      var values;
-      if (filterCfg.dataType == 'INTEGER' ||
-          filterCfg.dataType == 'FLOAT' ||
-          filterCfg.dataType == 'DATE') {
-
-        var min = filter.min, max = filter.max;
-
-        if (!min && min != 0 && !max && max != 0) {
-          return null;
-        }
-
-        if (filterCfg.dataType == 'DATE') {
-          if (!!min) {
-            min = "\"" + min + "\"";
-          }
-
-          if (!!max) {
-            max = "\"" + max + "\"";
-          }
-        }
-
-        values = [min, max];
-      } else {
-
-        if (!filter) {
-          return null;
-        }
-
-        values = [filter];
-      }
-
-      return {expr: filterCfg.expr, values: values};
-    }
-
     function gotoView(state, params, msgCode) {
-      var selectedSpmns = $scope.ctx.checkList.getSelectedItems();
-
+      var selectedSpmns = $scope.ctx.$list.getSelectedItems();
       if (!selectedSpmns || selectedSpmns.length == 0) {
         Alerts.error('specimen_list.' + msgCode);
         return;
@@ -98,28 +53,24 @@ angular.module('os.biospecimen.participant')
       );
     }
 
-    $scope.showSpecimen = function(specimenId) {
-      $state.go('specimen', {specimenId: specimenId});
+    $scope.showSpecimen = function(row) {
+      $state.go('specimen', {specimenId: row.hidden.specimenId});
     }
 
-    $scope.loadFilterValues = function(filterCfg) {
-      if (filterCfg.values && filterCfg.values.length > 0) {
-        return;
-      }
+    $scope.loadFilterValues = function(expr) {
+      return cp.getExpressionValues(expr);
+    }
 
-      if (!filterCfg.valuesQ) {
-        filterCfg.valuesQ = cp.getExpressionValues(filterCfg.expr);
-      }
+    $scope.setListCtrl = function($list) {
+      $scope.ctx.$list = $list;
+    }
 
-      filterCfg.valuesQ.then(
-        function(values) {
-          filterCfg.values = values;
-        }
-      );
+    $scope.setFiltersCtrl = function($listFilters) {
+      $scope.ctx.$listFilters = $listFilters;
     }
 
     this.deleteSpecimens = function() {
-      var spmns = $scope.ctx.checkList.getSelectedItems();
+      var spmns = $scope.ctx.$list.getSelectedItems();
       if (!spmns || spmns.length == 0) {
         Alerts.error('specimens.no_specimens_for_delete');
         return;

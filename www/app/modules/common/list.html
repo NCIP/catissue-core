@@ -1,0 +1,36 @@
+<table class="os-table os-table-hover">
+  <thead class="os-table-head">
+    <tr class="row">
+      <th class="col" ng-if="enableSelection">
+        <div class="os-select-specimen-cb">
+          <os-checkbox ng-change="checkList.toggleSelectAll()" ng-model="checkList.allSelected"></os-checkbox>
+        </div>
+      </th>
+      <th class="col" ng-repeat="column in data.columns">
+        <span>{{column.caption}}</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody class="os-table-body">
+    <tr class="row" ng-repeat="row in data.rows track by $index" os-row-click="showItem({row: row})">
+      <td class="col" ng-if="enableSelection">
+        <div class="os-select-specimen-cb os-click-esc">
+          <os-checkbox ng-change="checkList.toggleSelectItem()" ng-model="checkList.items[$index].selected">
+          </os-checkbox>
+        </div>
+      </td>
+      <td class="col" ng-repeat="col in row.data track by $index">
+        <span ng-switch on="data.columns[$index].metainfo.showLink == 'true'">
+          <span ng-switch-when="true">
+            <a ui-sref="{{itemSref}}">
+              <div ng-include src="cellTemplate"></div>
+            </a>
+          </span>
+          <span ng-switch-default>
+            <div ng-include src="cellTemplate"></div>
+          </span>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
