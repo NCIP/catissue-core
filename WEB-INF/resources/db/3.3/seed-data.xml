@@ -89,16 +89,4 @@
         );
     </sql>
   </changeSet>
-
-  <changeSet author="mdnasim" id="Loading pathological status abbreviations">
-    <loadData file="db/3.3/specimen-path-status-abbr.csv" tableName="os_pv_props">
-      <column name="pv_id" type="NUMERIC"/>
-    </loadData>
-  </changeSet>
-  
-  <changeSet author="mdnasim" id="Loading specimen type abbreviations">
-    <loadData file="db/3.3/specimen-type-abbr.csv" tableName="os_pv_props">
-      <column name="pv_id" type="NUMERIC"/>
-    </loadData>
-  </changeSet>
 </databaseChangeLog>

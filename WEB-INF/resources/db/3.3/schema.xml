@@ -220,6 +220,16 @@
     <customChange class="com.krishagni.catissueplus.core.upgrade.MoveSpecimenUnitsToPvProps"></customChange>
   </changeSet>
 
+  <changeSet author="vgaikwad" id="Before migration remove all abbreviation properties">
+    <sql>
+      delete from os_pv_props where name='abbreviation';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Move specimen type and pathology status abbreviations from csv to PV properties">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.MoveAbbreviationsToPvProps"></customChange>
+  </changeSet>
+
   <changeSet author="vpawar" id="Drop specimen units as units are stored as PV properties">
     <dropTable tableName="OS_SPECIMEN_UNITS"/>
   </changeSet>
