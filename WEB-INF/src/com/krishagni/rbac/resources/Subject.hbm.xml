@@ -134,8 +134,7 @@
       from
         catissue_user s
         inner join rbac_subject_access_view sa on sa.subject_id = s.identifier
-        inner join os_departments dept on dept.identifier = s.department_id
-        inner join catissue_institution userInst on userInst.identifier = dept.institute_id
+        inner join catissue_institution userInst on userInst.identifier = s.institute_id
         inner join (
           select
             site.identifier as siteId, site.institute_id as instituteId

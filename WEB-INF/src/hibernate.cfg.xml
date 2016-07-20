@@ -21,7 +21,6 @@
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenList.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Visit.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
-		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ForgotPasswordToken.hbm.xml" />
 		<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />

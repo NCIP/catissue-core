@@ -429,7 +429,7 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 					put(msg("dist_exported_on"),    Utility.getDateString(Calendar.getInstance().getTime()));
 
 					User pi = dp.getPrincipalInvestigator();
-					put(msg("dist_dp_pi_inst_depart"), pi.getInstitute().getName() + " / " + pi.getDepartment().getName());
+					put(msg("dist_dp_pi_inst"),        pi.getInstitute().getName());
 					put(msg("dist_dp_pi_email_addr"),  pi.getEmailAddress());
 					put(msg("dist_dp_pi_cont_num"),    StringUtils.isBlank(pi.getPhoneNumber()) ? notSpecified : pi.getPhoneNumber());
 					put(msg("dist_dp_pi_addr"),        StringUtils.isBlank(pi.getAddress()) ? notSpecified : pi.getAddress());

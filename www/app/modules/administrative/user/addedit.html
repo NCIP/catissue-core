@@ -66,20 +66,10 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="user.institute">Institute</label>
         <div class="col-xs-6">
-          <os-select ng-model="user.instituteName" list="institutes" on-change="loadDepartments"
+          <os-select ng-model="user.instituteName" list="institutes"
             name="institute" placeholder="{{'user.institute' | translate}}" required>
           </os-select>
           <div os-field-error field="userForm.institute"></div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-xs-3 control-label" translate="user.department">Department</label>
-        <div class="col-xs-6">
-          <os-select ng-model="user.deptName" list="departments" name="department"
-            placeholder="{{'user.department' | translate}}" required>
-          </os-select>
-          <div os-field-error field="userForm.department"></div>
         </div>
       </div>
 

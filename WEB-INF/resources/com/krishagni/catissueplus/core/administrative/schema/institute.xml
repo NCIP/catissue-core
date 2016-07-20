@@ -10,16 +10,6 @@
       <attribute>name</attribute>
     </field>
 
-    <record>
-      <attribute>departments</attribute>
-      <multiple>true</multiple>
-      <caption>#getMessage("institute_department")</caption>
-      
-      <field>
-        <caption>#getMessage("institute_department_name")</caption>
-        <attribute>name</attribute>
-      </field>
-    </record>
   </record>
 </object-schema>
 

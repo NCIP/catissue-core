@@ -778,22 +778,6 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Updated the CP coordinator view" runOnChange="true">
-    <sql>
-      create or replace view cp_coord_view as (
-        select 
-          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
-          u.email_address as email_address, cpcrd.collection_protocol_id as cp_id, d.name as department_name, 
-          i.name as institute_name
-        from 
-          catissue_coll_coordinators cpcrd 
-          join catissue_user u on cpcrd.user_id = u.identifier 
-          join os_departments d on u.department_id = d.identifier
-          join catissue_institution i on i.identifier = d.institute_id
-      )
-    </sql>
-  </changeSet>
-  
   <changeSet author="vlonushte" id="Replace fixed string based ppid format with token based format">
     <customChange class="com.krishagni.catissueplus.core.upgrade.CpPpidFormatUpdater"></customChange>
   </changeSet>

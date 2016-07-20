@@ -13,4 +13,11 @@
       <column name="sopDocumentName_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update user audit table for institute">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+      <column name="INSTITUTE_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

@@ -682,9 +682,6 @@
     "create_institute": "Create Institute",
     "update_institute": "Update Institute",
     "name": "Name",
-    "department_name": "Department Name",
-    "departments": "Departments",
-    "depts_count": "Departments",
     "users_count": "Users",
 
     "bulk_import": "Import Institutes",
@@ -694,7 +691,6 @@
       "view_details": "Click to view Institute details",
       "add": "Click to add new Institute",
       "edit": "Click to edit institute",
-      "department_count": "Count of Departments",
       "user_count": "Count of Users in Institute",
       "search": "Click to search Institutes"
     },
@@ -837,7 +833,6 @@
     "email_address": "Email Address",
     "phone_number": "Phone Number",
     "institute": "Institute",
-    "department": "Department",
     "address": "Address",
     "super_admin": "Super Administrator",
     "manage_forms": "Manage Forms?",

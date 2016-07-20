@@ -23,35 +23,9 @@
 
       <div class="os-divider"></div>
 
-      <div class="form-group clearfix">
-        <div class="col-xs-offset-3 col-xs-3">
-          <label class="control-label" translate="institutes.departments">Departments</label>
-        </div>
-      </div>
-
-      <div class="form-group clearfix" ng-repeat="department in institute.departments">
-        <ng-form name="departmentForm" os-form-validator="departmentForm" parent-validator="iformValidator" novalidate>
-          <div class="col-xs-6 col-xs-offset-3">
-            <input type="text" name="departmentName" class="form-control" ng-model="department.name"
-              placeholder="{{'institutes.department_name' | translate}}" ng-focus="addDepartmentIfLast($index)"
-              required ng-maxlength="255" ng-match="department.name">
-
-            <div os-field-error field="departmentForm.departmentName"></div>
-          </div>
-
-          <div class="col-xs-1">
-            <button class="btn btn-default pull-right" ng-click="removeDepartment(department)">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-          </div>
-        </ng-form>
-      </div>
-
-      <div class="os-divider"></div>
-
       <div class="form-group">
         <div class="col-xs-offset-3 col-xs-6">
-          <button class="btn btn-primary" os-form-submit="save()" ng-click="removeDepartment()">
+          <button class="btn btn-primary" os-form-submit="save()">
             <span ng-if="!institute.id"  translate="common.buttons.create"> Create </span>
             <span ng-if="!!institute.id" translate="common.buttons.update"> Update </span>
           </button>

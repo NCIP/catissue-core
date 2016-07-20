@@ -1,13 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -27,7 +23,7 @@ public class Institute extends BaseEntity {
 
 	private String activityStatus;
 
-	private Set<Department> departments = new HashSet<Department>();
+	private Set<User> users = new HashSet<User>();
 	
 	private Set<Site> sites = new HashSet<Site>(); 
 
@@ -51,12 +47,13 @@ public class Institute extends BaseEntity {
 		this.activityStatus = activityStatus;
 	}
 
-	public Set<Department> getDepartments() {
-		return departments;
+	@NotAudited
+	public Set<User> getUsers() {
+		return users;
 	}
 
-	public void setDepartments(Set<Department> departments) {
-		this.departments = departments;
+	public void setUsers(Set<User> userCollection) {
+		this.users = userCollection;
 	}
 	
 	@NotAudited
@@ -70,19 +67,14 @@ public class Institute extends BaseEntity {
 
 	public void update(Institute other) {		
 		setName(other.getName());
-		updateDepartments(other.getDepartments());
 		updateActivityStatus(other.getActivityStatus());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {
-		int userCount = 0;
-		for (Department dept : getDepartments()) {
-			userCount += dept.getUsers().size();
-		}
 		
 		return DependentEntityDetail
 				.listBuilder()
-				.add(User.getEntityName(), userCount)
+				.add(User.getEntityName(), getUsers().size())
 				.add(Site.getEntityName(), getSites().size())
 				.build();
 	}
@@ -97,32 +89,6 @@ public class Institute extends BaseEntity {
 		}
 		
 		setActivityStatus(activityStatus);
-	}
-
-	private void updateDepartments(Collection<Department> newDepts) {
-		Map<String, Department> existingDeptsMap = new HashMap<String, Department>();
-		for (Department dept : getDepartments()) {
-			existingDeptsMap.put(dept.getName(), dept);
-		}
-
-		for (Department dept : newDepts) {
-			if (existingDeptsMap.remove(dept.getName()) != null) {
-				continue;
-			}
-
-			Department newDept = new Department();
-			newDept.setName(dept.getName());
-			newDept.setInstitute(this);
-			getDepartments().add(newDept);
-		}
-
-		for (Department removedDept : existingDeptsMap.values()) {
-			if (CollectionUtils.isNotEmpty(removedDept.getUsers())) {
-				throw OpenSpecimenException.userError(InstituteErrorCode.DEPT_REF_ENTITY_FOUND, removedDept.getName());
-			}
-		}
-
-		getDepartments().removeAll(existingDeptsMap.values());
 	}
 
 	private void updateActivityStatus(String newActivityStatus) {

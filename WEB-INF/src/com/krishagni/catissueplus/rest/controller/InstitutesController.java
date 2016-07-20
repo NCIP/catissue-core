@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
-import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
@@ -40,7 +40,7 @@ public class InstitutesController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<InstituteSummary> getInstitutes(
+	public List<InstituteDetail> getInstitutes(
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")
 			int startAt,
 			
@@ -64,7 +64,7 @@ public class InstitutesController {
 				.includeStat(includeStats);
 		
 		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(crit);
-		ResponseEvent<List<InstituteSummary>> resp = instituteSvc.getInstitutes(req);
+		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		resp.throwErrorIfUnsuccessful();
 		
 		return resp.getPayload();

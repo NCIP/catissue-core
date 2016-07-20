@@ -9,11 +9,7 @@ public enum InstituteErrorCode implements ErrorCode {
 	
 	DUP_NAME,
 	
-	DEPT_NOT_FOUND,
-	
-	REF_ENTITY_FOUND,
-	
-	DEPT_REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND;
 	
 	@Override
 	public String code() {

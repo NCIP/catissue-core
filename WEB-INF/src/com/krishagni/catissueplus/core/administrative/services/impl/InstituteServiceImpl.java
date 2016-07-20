@@ -1,19 +1,15 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
-import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -41,7 +37,7 @@ public class InstituteServiceImpl implements InstituteService {
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<InstituteSummary>> getInstitutes(RequestEvent<InstituteListCriteria> req) {
+	public ResponseEvent<List<InstituteDetail>> getInstitutes(RequestEvent<InstituteListCriteria> req) {
 		try {
 			InstituteListCriteria listCrit = req.getPayload();
 			return ResponseEvent.response(daoFactory.getInstituteDao().getInstitutes(listCrit));
@@ -72,14 +68,17 @@ public class InstituteServiceImpl implements InstituteService {
 			InstituteQueryCriteria crit = req.getPayload();
 			Institute institute = null;
 			
+			Object key = null;
 			if (crit.getId() != null) {
 				institute = daoFactory.getInstituteDao().getById(crit.getId());
+				key = crit.getId();
 			} else if (StringUtils.isNotBlank(crit.getName())) {
 				institute = daoFactory.getInstituteDao().getInstituteByName(crit.getName());
+				key = crit.getName();
 			}
 					
 			if (institute == null) {
-				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND, key);
 			}
 			
 			return ResponseEvent.response(InstituteDetail.from(institute));
@@ -120,14 +119,17 @@ public class InstituteServiceImpl implements InstituteService {
 			InstituteDetail detail = req.getPayload();			
 			Institute existing = null;
 			
+			Object key = null;
 			if (detail.getId() != null) {
 				existing = daoFactory.getInstituteDao().getById(detail.getId());
+				key = detail.getId();
 			} else if (StringUtils.isNotBlank(detail.getName())) {
 				existing = daoFactory.getInstituteDao().getInstituteByName(detail.getName());
+				key = detail.getName();
 			}
 			
 			if (existing == null) {
-				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND, key);
 			}
 			
 			Institute institute = instituteFactory.createInstitute(detail);
@@ -151,9 +153,10 @@ public class InstituteServiceImpl implements InstituteService {
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<Long> req) {
 		try {
-			Institute existing = daoFactory.getInstituteDao().getById(req.getPayload());
+			Long instituteId = req.getPayload();
+			Institute existing = daoFactory.getInstituteDao().getById(instituteId);
 			if (existing == null) {
-				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND, instituteId);
 			}
 			
 			return ResponseEvent.response(existing.getDependentEntities());
@@ -169,9 +172,10 @@ public class InstituteServiceImpl implements InstituteService {
 			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			
 			DeleteEntityOp deleteOp = req.getPayload();
-			Institute existing = daoFactory.getInstituteDao().getById(deleteOp.getId());
+			Long instituteId = deleteOp.getId();
+			Institute existing = daoFactory.getInstituteDao().getById(instituteId);
 			if (existing == null) {
-				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(InstituteErrorCode.NOT_FOUND, instituteId);
 			}
 			
 			existing.delete(deleteOp.isClose());

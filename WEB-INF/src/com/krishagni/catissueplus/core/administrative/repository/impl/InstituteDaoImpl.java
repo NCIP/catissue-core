@@ -13,9 +13,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
-import com.krishagni.catissueplus.core.administrative.events.InstituteSummary;
+import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteDao;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
@@ -29,7 +28,7 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<InstituteSummary> getInstitutes(InstituteListCriteria listCrit) {
+	public List<InstituteDetail> getInstitutes(InstituteListCriteria listCrit) {
 		Criteria query = getInstituteListQuery(listCrit)
 			.addOrder(Order.asc("institute.name"))
 			.setFirstResult(listCrit.startAt())
@@ -38,11 +37,11 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		addProjectionFields(query);
 		
 		List<Object[]> rows = query.list();
-		List<InstituteSummary> institutes = new ArrayList<InstituteSummary>();
-		Map<Long, InstituteSummary> instituteMap = new HashMap<Long, InstituteSummary>();
+		List<InstituteDetail> institutes = new ArrayList<InstituteDetail>();
+		Map<Long, InstituteDetail> instituteMap = new HashMap<Long, InstituteDetail>();
 		
 		for (Object[] row : rows) {
-			InstituteSummary institute = new InstituteSummary();
+			InstituteDetail institute = new InstituteDetail();
 			institute.setId((Long)row[0]);
 			institute.setName((String)row[1]);
 			institute.setActivityStatus((String)row[2]);
@@ -84,30 +83,6 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
 	}
 	
-	@Override
-	@SuppressWarnings(value = {"unchecked"})
-	public Department getDepartment(Long id, Long instituteId ) {
-		List<Department> result = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_DEPARTMENT)
-				.setLong("id", id)
-				.setLong("instituteId", instituteId)
-				.list();
-		
-		return CollectionUtils.isEmpty(result) ? null : result.get(0);
-	}
-	
-	@Override
-	@SuppressWarnings(value = {"unchecked"})
-	public Department getDeptByNameAndInstitute(String deptName, String instituteName) {
-		List<Department> results  = sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_DEPT_BY_NAME_AND_INSTITUTE)
-			.setString("deptName", deptName)
-			.setString("instituteName", instituteName)
-			.list();
-		
-		return results.isEmpty() ? null : results.get(0);
-	}
-
 	private Criteria getInstituteListQuery(InstituteListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
 			.createCriteria(Institute.class, "institute");
@@ -133,7 +108,7 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void addInstituteStats(Map<Long, InstituteSummary> institutesMap) {
+	private void addInstituteStats(Map<Long, InstituteDetail> institutesMap) {
 		if (institutesMap == null || institutesMap.isEmpty()) {
 			return;
 		}
@@ -144,22 +119,15 @@ public class InstituteDaoImpl extends AbstractDao<Institute> implements Institut
 			.list();
 		
 		for (Object[] stat : stats) {
-			InstituteSummary institute = institutesMap.get((Long)stat[0]);
-			institute.setDepartmentsCount(((Long)stat[1]).intValue());
-			institute.setUsersCount(((Long)stat[2]).intValue());
+			InstituteDetail institute = institutesMap.get((Long)stat[0]);
+			institute.setUsersCount(((Long)stat[1]).intValue());
 		}
 	}
 	
 	
 	private static final String INSTITUTE_FQN = Institute.class.getName();
 	
-	private static final String DEPARTMENT_FQN = Department.class.getName();
-	
 	private static final String GET_INSTITUTES_BY_NAME = INSTITUTE_FQN + ".getInstitutesByName";
 	
 	private static final String GET_INSTITUTE_STATS = INSTITUTE_FQN + ".getInstituteStats";
-	
-	private static final String GET_DEPARTMENT = DEPARTMENT_FQN + ".getDepartment";
-	
-	private static final String GET_DEPT_BY_NAME_AND_INSTITUTE = DEPARTMENT_FQN + ".getDeptByNameAndInstitute";	
 }

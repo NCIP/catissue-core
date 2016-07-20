@@ -30,30 +30,9 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
             $scope.user.instituteName = $scope.institutes[0];
           }
 
-          if ($scope.user.instituteName) {
-            $scope.loadDepartments($scope.user.instituteName);
-          }
         }
       );
     }
-
-    $scope.loadDepartments = function(instituteName) {
-      Institute.getByName(instituteName).then(
-        function(institute) {
-          $scope.departments = [];
-          if (institute) {
-            angular.forEach(institute.departments, function(department) {
-              $scope.departments.push(department.name);
-            });
-          }
-
-          //This is trick to unset department on selecting institute
-          if ($scope.departments.indexOf($scope.user.deptName) == -1) {
-            $scope.user.deptName = undefined;
-          }
-        }
-      );
-    };
 
     $scope.createUser = function() {
       var user = angular.copy($scope.user);

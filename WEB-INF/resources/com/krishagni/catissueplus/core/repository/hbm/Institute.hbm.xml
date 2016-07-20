@@ -17,14 +17,12 @@
 
     <property name="activityStatus" column="ACTIVITY_STATUS"/>
     
-    <set 
-      name="departments"
-      table="OS_DEPARTMENTS" 
-      inverse="true" 
-      cascade="all-delete-orphan">
-      
+    <set
+      name="users"
+      table="CATISSUE_USER">
       <key column="INSTITUTE_ID"/>
-      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Department" />
+      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.User" />
+      <filter name="activeEntity"/>
     </set>
     
     <set name="sites" inverse="false" cascade="none">
@@ -39,22 +37,20 @@
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute
       where
-        institute.name in (:names) and institute.activityStatus != 'Disabled'
+        institute.name in (:names)
     </query>
     
     <query name="getInstituteStats">
       select
-        institute.id, count(distinct dept.id), count(distinct user.id)
+        institute.id, count(distinct user.id)
       from
         com.krishagni.catissueplus.core.administrative.domain.Institute institute 
-        join institute.departments dept
-        left join dept.users user
+        inner join institute.users user
       where
         institute.id in (:instituteIds)
       group by
         institute.id
     </query>
-    
     
   </class>
 </hibernate-mapping>

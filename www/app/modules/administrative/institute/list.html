@@ -47,9 +47,6 @@
             <span translate="institutes.name">Name</span>
           </th>
           <th class="col">
-            <span translate="institutes.depts_count">Departments</span>
-          </th>
-          <th class="col">
             <span translate="institutes.users_count">Users</span>
           </th>
         </tr>
@@ -60,9 +57,6 @@
             <a ui-sref="institute-detail.overview({instituteId: institute.id})">
               <span>{{institute.name}}</span>
             </a>
-          </td>
-          <td class="col">
-            <span>{{institute.departmentsCount | number: 0}}</span>
           </td>
           <td class="col">
             <span>{{institute.usersCount | number: 0}}</span>

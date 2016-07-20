@@ -36,11 +36,6 @@
     </field>
 
     <field>
-      <caption>#getMessage("user_department")</caption>
-      <attribute>deptName</attribute>
-    </field>
-
-    <field>
       <caption>#getMessage("user_super_administrator")</caption>
       <attribute>admin</attribute>
     </field>

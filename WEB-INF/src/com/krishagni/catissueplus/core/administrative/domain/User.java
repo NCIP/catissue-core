@@ -29,9 +29,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_CHANGE_NOT_ALLOWED;
-import static com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode.DOMAIN_NAME_REQUIRED;
-
 @Configurable
 @Audited
 public class User extends BaseEntity implements UserDetails {
@@ -65,7 +62,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	private String activityStatus;
 
-	private Department department;
+	private Institute institute;
 
 	private String address;
 
@@ -163,16 +160,12 @@ public class User extends BaseEntity implements UserDetails {
 		this.activityStatus = activityStatus;
 	}
 
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
+	public Institute getInstitute() {
+		return institute;
 	}
 	
-	public Institute getInstitute() {
-		return getDepartment().getInstitute();
+	public void setInstitute(Institute institute) {
+		this.institute = institute;
 	}
 
 	@NotAudited
@@ -272,7 +265,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.setAuthDomain(user.getAuthDomain());
 		this.setActivityStatus(user.getActivityStatus());
 		this.setAddress(user.getAddress());
-		this.setDepartment(user.getDepartment());
+		this.setInstitute(user.getInstitute());
 		this.setEmailAddress(user.getEmailAddress());
 		this.setLoginName(user.getLoginName());
 		this.setPhoneNumber(user.getPhoneNumber());

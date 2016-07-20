@@ -62,8 +62,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 				.add(Restrictions.in("u.id", userIds));
 		
 		if (instituteId != null) {
-			criteria.createAlias("u.department", "dept")
-				.createAlias("dept.institute", "inst")
+			criteria.createAlias("u.institute", "inst")
 				.add(Restrictions.eq("inst.id", instituteId));
 		}
 		
@@ -280,8 +279,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			return;
 		}
 		
-		criteria.createAlias("u.department", "dept")
-			.createAlias("dept.institute", "institute")
+		criteria.createAlias("u.institute", "institute")
 			.add(Restrictions.eq("institute.name", instituteName));
 	}
 

@@ -100,7 +100,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		
 		Institute institute = daoFactory.getInstituteDao().getInstituteByName(instituteName);
 		if (institute == null) {
-			ose.addError(InstituteErrorCode.NOT_FOUND);
+			ose.addError(InstituteErrorCode.NOT_FOUND, instituteName);
 			return;
 		}
 		

@@ -417,7 +417,7 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		
 		Institute institute = shipment.getReceivingSite().getInstitute();
 		for (User user: shipment.getNotifyUsers()) {
-			if (!user.getDepartment().getInstitute().equals(institute)) {
+			if (!user.getInstitute().equals(institute)) {
 				ose.addError(ShipmentErrorCode.NOTIFY_USER_NOT_BELONG_TO_INST, user.formattedName(), institute.getName());
 			}
 		}

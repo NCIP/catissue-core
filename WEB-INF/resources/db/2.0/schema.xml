@@ -1577,23 +1577,6 @@
       ordered="true" />
   </changeSet>
   
-  <changeSet author="vpawar" id="Updated user view" runOnChange="true">
-    <sql>
-      create or replace view USER_VIEW as (
-        select
-          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
-          u.email_address as email_address,
-          concat(u.first_name, concat(' ', u.last_name)) as name,
-          d.name as department_name,
-          i.name as institute_name
-        from
-          catissue_user u
-          inner join os_departments d on u.department_id = d.identifier
-          inner join catissue_institution i on d.institute_id = i.identifier
-      )
-    </sql>
-  </changeSet>
-  
   <changeSet id="Create procedures for default roles" author="nmarwaha" dbms="mysql">
     <sql endDelimiter="//">
       create procedure create_role(

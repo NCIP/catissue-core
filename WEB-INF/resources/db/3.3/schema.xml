@@ -233,4 +233,93 @@
   <changeSet author="vpawar" id="Drop specimen units as units are stored as PV properties">
     <dropTable tableName="OS_SPECIMEN_UNITS"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop foreign key constraint from institution_id column in catissue_user table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="FKB025CFC71792AD22"/>
+    </preConditions>
+    
+    <dropForeignKeyConstraint baseTableName="CATISSUE_USER" constraintName="FKB025CFC71792AD22"/>
+  </changeSet>
+  
+  
+  <changeSet author="nmarwaha" id="Drop institution_id column from catissue_user table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists columnName="INSTITUTION_ID" tableName="CATISSUE_USER"/>
+    </preConditions>
+
+    <dropColumn
+      columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Added institute_id column in catissue_user table">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on institute id of user table">
+    <addForeignKeyConstraint
+      constraintName="FK_USER_INSTITUTE_ID"
+      baseTableName="CATISSUE_USER"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migrate the user's institute id from respective department" dbms="mysql">
+    <sql>
+      update 
+        catissue_user usr 
+        inner join os_departments dept on dept.identifier = usr.department_id
+        inner join catissue_institution inst on inst.identifier = dept.institute_id
+      set 
+        usr.institute_id = inst.identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migrate the user's institute id from respective department" dbms="oracle">
+    <sql>
+      merge into catissue_user usr using (
+        select 
+          u.identifier as user_id, inst.identifier as inst_id
+        from 
+          catissue_user u
+          inner join os_departments dept on dept.identifier = u.department_id
+          inner join catissue_institution inst on inst.identifier = dept.institute_id
+      ) t on (usr.identifier = t.user_id) 
+      when matched then update set usr.institute_id = t.inst_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated user view" runOnChange="true">
+    <sql>
+      create or replace view USER_VIEW as (
+        select
+          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
+          u.email_address as email_address,
+          concat(u.first_name, concat(' ', u.last_name)) as name,
+          i.name as institute_name
+        from
+          catissue_user u
+          inner join catissue_institution i on u.institute_id = i.identifier
+      )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated the CP coordinator view" runOnChange="true">
+    <sql>
+      create or replace view cp_coord_view as (
+        select 
+          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
+          u.email_address as email_address, cpcrd.collection_protocol_id as cp_id, i.name as institute_name
+        from 
+          catissue_coll_coordinators cpcrd 
+          join catissue_user u on cpcrd.user_id = u.identifier 
+          join catissue_institution i on i.identifier = u.institute_id
+      )
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>	

@@ -52,17 +52,11 @@
         </div>
       
         <div class="form-group">
-          <div class="col-xs-6">
-            <os-select ng-model="user.instituteName" list="institutes" on-change="loadDepartments"
+          <div class="col-xs-12">
+            <os-select ng-model="user.instituteName" list="institutes" 
               name="institute" placeholder="{{'user.institute' | translate}}" required>
             </os-select>
             <div os-field-error field="userForm.institute"></div>
-          </div>
-          <div class="col-xs-6">
-            <os-select ng-model="user.deptName" list="departments" name="department"
-              placeholder="{{'user.department' | translate}}" required>
-            </os-select>
-            <div os-field-error field="userForm.department"></div>
           </div>
         </div>
 

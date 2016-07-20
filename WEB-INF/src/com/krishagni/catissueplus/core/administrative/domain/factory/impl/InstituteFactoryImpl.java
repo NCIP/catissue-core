@@ -1,15 +1,10 @@
 package com.krishagni.catissueplus.core.administrative.domain.factory.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
-import com.krishagni.catissueplus.core.administrative.events.DepartmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -24,7 +19,6 @@ public class InstituteFactoryImpl implements InstituteFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		setInstituteName(details, institute, ose);
-		setDepartments(details, institute, ose);
 		setActivityStatus(details, institute, ose);
 		
 		ose.checkAndThrow();
@@ -41,19 +35,6 @@ public class InstituteFactoryImpl implements InstituteFactory {
 		institute.setName(name);
 	}
 
-	private void setDepartments(InstituteDetail detail, Institute institute, OpenSpecimenException ose) {		
-		Set<Department> departments = new HashSet<Department>();
-		
-		for (DepartmentDetail deptDetail : detail.getDepartments()) {
-			Department dept = new Department();
-			dept.setName(deptDetail.getName());
-			dept.setInstitute(institute);
-			departments.add(dept);
-		}
-		
-		institute.setDepartments(departments);
-	}
-	
 	private void setActivityStatus(InstituteDetail detail, Institute institute, OpenSpecimenException ose) {
 		String activityStatus = detail.getActivityStatus();
 		if (StringUtils.isBlank(activityStatus)) {

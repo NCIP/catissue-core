@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.administrative.domain.Department;
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
@@ -16,7 +16,6 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.CommonValidator;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
-import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 
 public class UserFactoryImpl implements UserFactory {
@@ -39,7 +38,7 @@ public class UserFactoryImpl implements UserFactory {
 		setActivityStatus(detail, user, ose);
 		setEmailAddress(detail, user, ose);
 		setPhoneNumber(detail, user, ose);
-		setDepartment(detail, user, ose);
+		setInstitute(detail, user, ose);
 		setAddress(detail, user, ose);
 		setAuthDomain(detail, user, ose);
 		setManageForms(detail, user, ose);
@@ -61,7 +60,7 @@ public class UserFactoryImpl implements UserFactory {
 		setActivityStatus(detail, existing, user, ose);
 		setEmailAddress(detail, existing, user, ose);
 		setPhoneNumber(detail, existing, user, ose);
-		setDepartment(detail, existing, user, ose);
+		setInstitute(detail, existing, user, ose);
 		setAddress(detail, existing, user, ose);
 		setAuthDomain(detail, existing, user, ose);
 		setManageForms(detail, existing, user, ose);
@@ -135,28 +134,27 @@ public class UserFactoryImpl implements UserFactory {
 		}
 	}
 	
-	private void setDepartment(UserDetail detail, User user, OpenSpecimenException ose) {
-		String departmentName = detail.getDeptName();
-		if (StringUtils.isBlank(departmentName)) {
-			ose.addError(UserErrorCode.DEPT_REQUIRED);
+	private void setInstitute(UserDetail detail, User user, OpenSpecimenException ose) {
+		String instituteName = detail.getInstituteName();
+		if (StringUtils.isBlank(instituteName)) {
+			ose.addError(UserErrorCode.INST_REQUIRED);
 			return;
 		}
 		
-		Department department = daoFactory.getInstituteDao()
-				.getDeptByNameAndInstitute(detail.getDeptName(), detail.getInstituteName());
-		if (department == null) {
-			ose.addError(InstituteErrorCode.DEPT_NOT_FOUND);
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(instituteName);
+		if (institute == null) {
+			ose.addError(InstituteErrorCode.NOT_FOUND, instituteName);
 			return;
 		}
 		
-		user.setDepartment(department);
+		user.setInstitute(institute);
 	}
 	
-	private void setDepartment(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
-		if (detail.isAttrModified("deptName")) {
-			setDepartment(detail, user, ose);
+	private void setInstitute(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("instituteName")) {
+			setInstitute(detail, user, ose);
 		} else {
-			user.setDepartment(existing.getDepartment());
+			user.setInstitute(existing.getInstitute());
 		}
 	}
 	

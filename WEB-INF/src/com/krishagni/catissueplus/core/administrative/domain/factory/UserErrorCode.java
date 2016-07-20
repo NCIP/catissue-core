@@ -41,7 +41,7 @@ public enum UserErrorCode implements ErrorCode {
 	
 	NOT_FOUND,
 	
-	DEPT_REQUIRED,
+	INST_REQUIRED,
 	
 	STATUS_CHANGE_NOT_ALLOWED,
 	

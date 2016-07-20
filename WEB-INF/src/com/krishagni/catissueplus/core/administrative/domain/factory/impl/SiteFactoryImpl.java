@@ -90,14 +90,15 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 	
 	private void setInstitute(SiteDetail detail, Site site, OpenSpecimenException ose) {
-		if (StringUtils.isBlank(detail.getInstituteName())) {
+		String instituteName = detail.getInstituteName();
+		if (StringUtils.isBlank(instituteName)) {
 			ose.addError(SiteErrorCode.INSTITUTE_REQUIRED);
 			return;
 		}
 		
-		Institute institute = daoFactory.getInstituteDao().getInstituteByName(detail.getInstituteName());
+		Institute institute = daoFactory.getInstituteDao().getInstituteByName(instituteName);
 		if (institute == null) {
-			ose.addError(InstituteErrorCode.NOT_FOUND);
+			ose.addError(InstituteErrorCode.NOT_FOUND, instituteName);
 			return;
 		}
 		
