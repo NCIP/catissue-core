@@ -43,7 +43,6 @@ angular.module('openspecimen')
 
     /** We need to have i18n keys for these as well **/
     var storageTypes = [
-      'Auto',
       'Manual',
       'Virtual'
     ];
