@@ -393,7 +393,7 @@ public class CollectionProtocolsController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody		
 	public CpWorkflowCfgDetail getWorkflowCfg(@PathVariable("id") Long cpId) {
-		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.getWorkflows(new RequestEvent<Long>(cpId));
+		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.getWorkflows(new RequestEvent<>(cpId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -409,7 +409,7 @@ public class CollectionProtocolsController {
 			input.getWorkflows().put(workflow.getName(), workflow);
 		}
 		
-		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.saveWorkflows(new RequestEvent<CpWorkflowCfgDetail>(input));
+		ResponseEvent<CpWorkflowCfgDetail> resp = cpSvc.saveWorkflows(new RequestEvent<>(input));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

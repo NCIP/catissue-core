@@ -1,61 +1,60 @@
 
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
-  .controller('ParticipantListCtrl', function(
-    $scope, $state, $stateParams, $modal, $q, osRightDrawerSvc,
-    cp, CollectionProtocolRegistration, Util, ListPagerOpts) {
-
-    var pagerOpts, filterOpts;
+  .controller('ParticipantListCtrl', function($scope, $state, osRightDrawerSvc, cp, participantListCfg, Util) {
 
     var ctrl = this;
 
     function init() {
-      $scope.cpId = $stateParams.cpId;
-      $scope.cp = cp;
-      pagerOpts  = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getCprCount});
-      filterOpts = $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
+      $scope.cpId = cp.id;
 
-      $scope.participantResource = {
-        registerOpts: {resource: 'ParticipantPhi', operations: ['Create'], cp: $scope.cp.shortTitle},
-      }
+      $scope.ctx = {
+        filtersCfg: angular.copy(participantListCfg.filters),
+        filters: {},
+        participants: {}
+      };
 
       angular.extend($scope.listViewCtx, {
         listName: 'participant.list',
         ctrl: ctrl,
         headerButtonsTmpl: 'modules/biospecimen/participant/register-button.html',
-        showSearch: true
+        showSearch: (participantListCfg.filters && participantListCfg.filters.length > 0)
       });
 
       loadParticipants();
-      Util.filter($scope, 'filterOpts', loadParticipants);
+      Util.filter($scope, 'ctx.filters', loadParticipants);
     }
 
     function loadParticipants() {
-      CollectionProtocolRegistration.listForCp($scope.cpId, true, $scope.filterOpts).then(
-        function(cprList) {
-          if (!$scope.cprList && cprList.length > 12) {
-            //
-            // Show search options when number of participants are more than 12
-            //
+      var filters = [];
+      if ($scope.ctx.$listFilters) {
+        filters = $scope.ctx.$listFilters.getFilters();
+      }
+
+      cp.getParticipants(filters).then(
+        function(participants) {
+          $scope.ctx.participants = participants;
+          if (participants.rows.length > 12 && $scope.listViewCtx.showSearch) {
             osRightDrawerSvc.open();
           }
-
-          $scope.cprList = cprList;
-          pagerOpts.refreshOpts(cprList);
         }
-      )
+      );
     }
 
-    function getCprCount() {
-      return CollectionProtocolRegistration.getCprCount($scope.cpId, true, filterOpts);
+    $scope.showParticipant = function(row) {
+      $state.go('participant-detail.overview', {cprId: row.hidden.cprId});
+    };
+
+    $scope.loadFilterValues = function(expr) {
+      return cp.getExpressionValues(expr);
     }
 
-    $scope.clearFilters = function() {
-      $scope.filterOpts = {maxResults: pagerOpts.recordsPerPage + 1};
-    };
+    $scope.setListCtrl = function($list) {
+      $scope.ctx.$list = $list;
+    }
 
-    $scope.showParticipantOverview = function(cpr) {
-      $state.go('participant-detail.overview', {cprId: cpr.cprId});
-    };
+    $scope.setFiltersCtrl = function($listFilters) {
+      $scope.ctx.$listFilters = $listFilters;
+    }
 
     init();
   });

@@ -96,12 +96,12 @@ public class ConfigurationController {
 
 			HttpServletResponse httpResp) throws IOException {
 
-		ResponseEvent<File> resp = cfgSvc.getSettingFile(request(Pair.make(moduleName, propertyName)));
-		resp.throwErrorIfUnsuccessful();
+		FileDetail detail = cfgSvc.getFileDetail(moduleName, propertyName, null);
+		if (detail == null || detail.getFileIn() == null) {
+			return;
+		}
 
-		File file = resp.getPayload();
-		String filename = file.getName().split("_", 2)[1];
-		Utility.sendToClient(httpResp, filename, file);
+		Utility.sendToClient(httpResp, detail.getFilename(), detail.getContentType(), detail.getFileIn());
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/files")

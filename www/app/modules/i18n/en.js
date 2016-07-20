@@ -500,7 +500,7 @@
     "location" : "Location",
     "print": "Print",
     "close_parent": "Close Parent",
-    "ops": "Specimen Ops",
+    "ops": "Specimen Actions",
 
     "reason_for_closing": "Reason for closing",
 
@@ -1826,7 +1826,9 @@
         "cp_sop_doc_url": "CP SOP Link",
         "cp_sop_doc_url_desc": "System level collection protocol SOP document link",
         "cp_sop_doc": "CP SOP Document",
-        "cp_sop_doc_desc": "System level collection protocol SOP document"
+        "cp_sop_doc_desc": "System level collection protocol SOP document",
+        "sys_workflows": "System Workflows",
+        "sys_workflows_desc": "System level participants and specimens list view configuration. This configuration is used when CP specific configuration is not specified"
       },
 
       "common": {

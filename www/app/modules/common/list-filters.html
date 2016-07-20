@@ -6,7 +6,7 @@
   </div>
 
   <div class="os-body">
-    <div class="form-group" ng-repeat="filterCfg in filtersCfg">
+    <div class="form-group" ng-repeat="filterCfg in filtersCfg" ng-if="ctx.hasPhiAccess || filterCfg.metainfo.phi != 'true'">
       <span ng-if="filterCfg.dataType == 'INTEGER' || filterCfg.dataType == 'FLOAT'">
         <div class="row">
           <div class="col-xs-6">
@@ -23,13 +23,13 @@
         <div class="row">
           <div class="col-xs-6">
             <os-date-picker md-type="true" date="filters[$index].min"
-              date-only="true" date-only-fmt="{{global.shortDateFmt}}"
+              date-only="true" date-only-fmt="{{ctx.global.shortDateFmt}}"
               placeholder="{{'common.filters.min' | translate: {caption: filterCfg.caption} }}">
             </os-date-picker>
           </div>
           <div class="col-xs-6">
             <os-date-picker md-type="true" date="filters[$index].max"
-              date-only="true" date-only-fmt="{{global.shortDateFmt}}"
+              date-only="true" date-only-fmt="{{ctx.global.shortDateFmt}}"
               placeholder="{{'common.filters.max' | translate: {caption: filterCfg.caption} }}">
             </os-date-picker>
           </div>

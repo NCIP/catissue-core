@@ -1,57 +1,25 @@
 <div>
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"> </os-list-pager>
-    </div>
-    <table class="os-table os-table-hover">
-      <thead class="os-table-head">
-        <tr class="row">
-          <th class="col">
-            <span translate="participant.ppid">Participant Protocol ID</span>
-          </th>
-          <th class="col">
-            <span translate="participant.name">Name</span>
-          </th>
-          <th class="col">
-            <span translate="participant.mpi">Master Patient Index</span>
-          </th>
-          <th class="col">
-            <span translate="participant.reg_date">Registration Date</span>
-          </th>
-          <th class="col">
-            <span translate="participant.visits_count">Visits</span>
-          </th>
-          <th class="col">
-            <span translate="participant.specimens_count">Specimens</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="os-table-body">
-        <tr class="row" ng-repeat="cpr in cprList" os-row-click="showParticipantOverview(cpr)">
-          <td class="col">
-            <a ui-sref="participant-detail.overview({cprId: cpr.cprId})">
-              <span>{{cpr.ppid}}</span>
-            </a>
-          </td>
-          <td class="col">
-            <span>{{cpr.participant | osUserDisplayName | osNoValue}}</span>
-          </td>
-          <td class="col">
-            <span>{{cpr.participant.empi | osNoValue}}</span>
-          </td>
-          <td class="col">
-            <span>{{cpr.registrationDate | date: global.dateFmt}}</span>
-          </td>
-          <td class="col">
-            <span>{{cpr.scgCount | number: 0}}</span>
-          </td>
-          <td class="col">
-            <span>{{cpr.specimenCount | number: 0}}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <os-list data="ctx.participants" item-sref="participant-detail.overview({cprId: row.hidden.cprId})"
+      cell-template="modules/biospecimen/participant/list-cell.html"
+      enable-selection="false" show-item="showParticipant(row)" init-ctrl="setListCtrl($list)">
+    </os-list>
   </div>
 
-  <div os-right-drawer ng-include src="'modules/biospecimen/participant/search.html'"></div>
+  <div os-right-drawer>
+    <os-list-filters filters-cfg="ctx.filtersCfg" filters="ctx.filters"
+      load-values="loadFilterValues(expr)" init-ctrl="setFiltersCtrl($listFilters)">
+    </os-list-filters>
+  </div>
 </div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/list-cell.html">
+  <span ng-switch on="data.columns[$index].metainfo.type">
+    <span ng-switch-when="'number'">
+      {{col | number | osNoValue}}
+    </span>
+    <span ng-switch-default>
+      {{col | osNoValue}}
+    </span>
+  </span>
+</script>

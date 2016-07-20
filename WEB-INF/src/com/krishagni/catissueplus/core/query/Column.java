@@ -93,4 +93,8 @@ public class Column {
 	public void setMetainfo(Map<String, String> metainfo) {
 		this.metainfo = metainfo;
 	}
+
+	public boolean isConcatExpr() {
+		return getExpr().trim().startsWith("concat(");
+	}
 }

@@ -1,8 +1,10 @@
 package com.krishagni.catissueplus.core.common.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -283,6 +285,65 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		}
 
 		return file;
+	}
+
+	@Override
+	public String getFileContent(String module, String name, File... defValue) {
+		FileDetail fileDetail = null;
+		try {
+			fileDetail = getFileDetail(module, name, defValue);
+			if (fileDetail != null && fileDetail.getFileIn() != null) {
+				return IOUtils.toString(fileDetail.getFileIn());
+			}
+
+			return StringUtils.EMPTY;
+		} catch (OpenSpecimenException ose) {
+			throw ose;
+		} catch (Exception e) {
+			throw OpenSpecimenException.serverError(e);
+		} finally {
+			if (fileDetail != null) {
+				IOUtils.closeQuietly(fileDetail.getFileIn());
+			}
+		}
+	}
+
+	@Override
+	public FileDetail getFileDetail(String module, String name, File... defValue) {
+		try {
+			InputStream in = null;
+			String contentType = null;
+			String filename = null;
+
+			String value = getStrSetting(module, name, (String)null);
+			if (StringUtils.isBlank(value)) {
+				if (defValue != null && defValue.length > 0) {
+					contentType = Utility.getContentType(defValue[0]);
+					filename = defValue[0].getName();
+					in = new FileInputStream(defValue[0]);
+				}
+			} else if (value.startsWith("classpath:")) {
+				filename = value.substring(value.lastIndexOf(File.separator) + 1);
+				in = this.getClass().getResourceAsStream(value.substring(10));
+			} else {
+				File file = new File(getSettingFilesDir() + value);
+				contentType = Utility.getContentType(file);
+				filename = file.getName().substring(file.getName().indexOf("_") + 1);
+				in = new FileInputStream(file);
+			}
+
+			if (in == null) {
+				return null;
+			}
+
+			FileDetail fileDetail = new FileDetail();
+			fileDetail.setContentType(contentType);
+			fileDetail.setFilename(filename);
+			fileDetail.setFileIn(in);
+			return fileDetail;
+		} catch (Exception e) {
+			throw OpenSpecimenException.serverError(e);
+		}
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 angular.module('openspecimen')
-  .directive('osListFilters', function($q, $rootScope) {
+  .directive('osListFilters', function($q, $rootScope, AuthorizationService) {
 
     function getFilter(filterCfg, filter) {
       var values;
@@ -71,7 +71,10 @@ angular.module('openspecimen')
       controllerAs: '$listFilters',
 
       link: function(scope, element, attrs, ctrl) {
-        scope.global = $rootScope.global;
+        scope.ctx = {
+          global: $rootScope.global,
+          hasPhiAccess: AuthorizationService.hasPhiAccess()
+        };
 
         if (scope.initCtrl) {
           scope.initCtrl({$listFilters: ctrl});

@@ -1,7 +1,7 @@
 <table class="os-table os-table-hover">
   <thead class="os-table-head">
     <tr class="row">
-      <th class="col" ng-if="enableSelection">
+      <th class="col" ng-if="enableSelection == 'true' || enableSelection == true">
         <div class="os-select-specimen-cb">
           <os-checkbox ng-change="checkList.toggleSelectAll()" ng-model="checkList.allSelected"></os-checkbox>
         </div>
@@ -13,7 +13,7 @@
   </thead>
   <tbody class="os-table-body">
     <tr class="row" ng-repeat="row in data.rows track by $index" os-row-click="showItem({row: row})">
-      <td class="col" ng-if="enableSelection">
+      <td class="col" ng-if="enableSelection == 'true' || enableSelection == true">
         <div class="os-select-specimen-cb os-click-esc">
           <os-checkbox ng-change="checkList.toggleSelectItem()" ng-model="checkList.items[$index].selected">
           </os-checkbox>

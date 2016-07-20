@@ -197,10 +197,19 @@ public class DefaultListGenerator implements ListGenerator {
 			return getRangeAql(criterion.getExpr(), criterion.getValues());
 		}
 
-		Control field = getField(criterion.getExpr(), formsCache);
-		DataType type = field.getDataType();
-		if (field instanceof LookupControl) {
-			type = ((LookupControl) field).getValueType();
+		DataType type;
+		if (criterion.isConcatExpr()) {
+			//
+			// concat expression is always of string type
+			//
+			type = DataType.STRING;
+		} else {
+			Control field = getField(criterion.getExpr(), formsCache);
+			if (field instanceof LookupControl) {
+				type = ((LookupControl) field).getValueType();
+			} else {
+				type = field.getDataType();
+			}
 		}
 
 		switch (type) {
@@ -212,7 +221,7 @@ public class DefaultListGenerator implements ListGenerator {
 
 			default:
 				String searchType = criterionCfg.getSearchType();
-				if (StringUtils.isNotBlank(searchType) && searchType.equalsIgnoreCase("contains")) {
+				if (StringUtils.equals(searchType, "contains") || criterionCfg.isConcatExpr()) {
 					return getContainsAql(criterion.getExpr(), criterion.getValues());
 				} else {
 					return getInAql(criterion.getExpr(), criterion.getValues());
@@ -332,15 +341,29 @@ public class DefaultListGenerator implements ListGenerator {
 		Column result = new Column();
 		BeanUtils.copyProperties(input, result);
 
+		result.setMetainfo(new HashMap<>());
+		result.getMetainfo().putAll(input.getMetainfo());
+
 		if (input.isTemporal()) {
 			result.setDataType(DataType.INTEGER.name());
 			return result;
 		}
 
-		Control field = getField(input.getExpr(), formsCache);
-		DataType type = field.getDataType();
-		if (field instanceof LookupControl) {
-			type = ((LookupControl) field).getValueType();
+		DataType type;
+		if (input.isConcatExpr()) {
+			type = DataType.STRING;
+			result.setSearchType("contains");
+		} else {
+			Control field = getField(input.getExpr(), formsCache);
+			if (!result.getMetainfo().containsKey("phi") && field.isPhi()) {
+				result.getMetainfo().put("phi", "true");
+			}
+
+			if (field instanceof LookupControl) {
+				type = ((LookupControl) field).getValueType();
+			} else {
+				type = field.getDataType();
+			}
 		}
 
 		result.setDataType(type.name());
@@ -350,7 +373,7 @@ public class DefaultListGenerator implements ListGenerator {
 	private Control getField(String expr, Map<String, Container> formsCache) {
 		String[] exprParts = expr.split("\\.");
 
-		String formName = null, fieldName = null;
+		String formName, fieldName;
 		if (exprParts[1].equals("extensions") || exprParts[1].equals("customFields")) {
 			if (exprParts.length < 4) {
 				throw new IllegalArgumentException("Invalid expression: " + expr);

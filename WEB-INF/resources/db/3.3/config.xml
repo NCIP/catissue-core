@@ -52,4 +52,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Default system level workflows">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'sys_workflows',
+        'sys_workflows', 'sys_workflows_desc',
+        'FILE', 'classpath:/com/krishagni/catissueplus/core/biospecimen/system-workflows.json'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

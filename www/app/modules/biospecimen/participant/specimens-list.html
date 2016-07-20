@@ -14,17 +14,17 @@
 </div>
 
 <script type="text/ng-template" id="modules/biospecimen/participant/specimens-list-cell.html">
-  <span ng-switch on="ctx.specimens.columns[$index].metainfo.showUnit == 'true'">
+  <span ng-switch on="data.columns[$index].metainfo.showUnit == 'true'">
     <span ng-switch-when="true">
       <span>{{col | number | osNoValue}}</span>
       <span ng-if="!!col">
         <os-specimen-unit specimen-class="row.hidden.specimenClass" type="row.hidden.specimenType"
-          measure="{{ctx.specimens.columns[$index].metainfo.measure}}">
+          measure="{{data.columns[$index].metainfo.measure}}">
         </os-specimen-unit>
       </span>
     </span>
     <span ng-switch-when="false">
-      <span ng-switch on="ctx.specimens.columns[$index].metainfo.type">
+      <span ng-switch on="data.columns[$index].metainfo.type">
         <span ng-switch-when="'number'">
           {{col | number | osNoValue}}
         </span>

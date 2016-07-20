@@ -73,4 +73,8 @@ public class ConfigUtil {
 	public File getFileSetting(String module, String name, File defValue) {
 		return cfgSvc.getSettingFile(module, name, defValue);
 	}
+
+	public String getFileContent(String module, String name, File defValue) {
+		return cfgSvc.getFileContent(module, name, defValue);
+	}
 }

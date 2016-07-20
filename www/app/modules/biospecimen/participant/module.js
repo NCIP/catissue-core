@@ -29,6 +29,7 @@ angular.module('os.biospecimen.participant',
           $scope.cpViewCtx = cpViewCtx;
 
           var sites = cp.cpSites.map(function(cpSite) { return cpSite.siteName; });
+          $scope.partRegOpts =        {cp: cp.shortTitle, sites: sites, resource: 'ParticipantPhi', operations: ['Create']};
           $scope.orderCreateOpts =    {cp: cp.shortTitle, sites: sites, resource: 'Order', operations: ['Create']};
           $scope.shipmentCreateOpts = {cp: cp.shortTitle, sites: sites, resource: 'ShippingAndTracking', operations: ['Create']};
           $scope.specimenUpdateOpts = {cp: cp.shortTitle, sites: sites, resource: 'VisitAndSpecimen', operations: ['Update']};
@@ -155,6 +156,11 @@ angular.module('os.biospecimen.participant',
         url: '/participants',
         templateUrl: 'modules/biospecimen/participant/list.html',
         controller: 'ParticipantListCtrl',
+        resolve: {
+          participantListCfg: function(cp, CpConfigSvc) {
+            return CpConfigSvc.getListConfig(cp, 'participant-list-view');
+          }
+        },
         parent: 'cp-list-view-root'
       })
       .state('cp-specimens', {

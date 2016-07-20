@@ -111,10 +111,6 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="collectionProtocolService" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolServiceImpl">
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>
-  </bean>
-
   <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
     <property name="daoFactory" ref="rbacDaoFactory"/>
     <property name="userDao" ref="userDao"/>
@@ -185,6 +181,7 @@
     <property name="emailService" ref="emailService"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="listGenerator" ref="listGenerator"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
   
   <bean id="participantFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.ParticipantFactoryImpl">
@@ -942,7 +939,7 @@
   <bean id="objectStateParamsResolver" class="com.krishagni.catissueplus.core.common.service.impl.ObjectStateParamsResolverFactoryImpl">
     <property name="resolvers">
       <list>
-        <ref bean="collectionProtocolService"/>
+        <ref bean="cpSvc"/>
         <ref bean="cprSvc"/>
         <ref bean="visitService"/>
         <ref bean="specimenSvc"/>

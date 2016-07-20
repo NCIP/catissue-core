@@ -37,6 +37,10 @@ public interface ConfigurationService {
 	
 	public File getSettingFile(String module, String name, File ... defValue);
 
+	public String getFileContent(String module, String name, File... defValue);
+
+	public FileDetail getFileDetail(String module, String name, File... defValue);
+
 	public void reload();
 	
 	public void registerChangeListener(String module, ConfigChangeListener callback);

@@ -26,6 +26,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -85,6 +86,8 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.EntityDeleteResp;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
@@ -99,7 +102,7 @@ import com.krishagni.rbac.common.errors.RbacErrorCode;
 import com.krishagni.rbac.service.RbacService;
 
 
-public class CollectionProtocolServiceImpl implements CollectionProtocolService, ObjectStateParamsResolver {
+public class CollectionProtocolServiceImpl implements CollectionProtocolService, ObjectStateParamsResolver, InitializingBean {
 
 	private ThreadPoolTaskExecutor taskExecutor;
 
@@ -116,6 +119,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	private EmailService emailService;
 
 	private ListGenerator listGenerator;
+
+	private ConfigurationService cfgSvc;
+
+	private CpWorkflowConfig sysWorkflows;
 	
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
@@ -147,6 +154,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	public void setListGenerator(ListGenerator listGenerator) {
 		this.listGenerator = listGenerator;
+	}
+
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
 	}
 
 	@Override
@@ -932,21 +943,21 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			if (cp == null) {
 				return ResponseEvent.userError(CpErrorCode.NOT_FOUND);
 			}
-			
+
 			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
 			CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(input.getCpId());
 			if (cfg == null) {
 				cfg = new CpWorkflowConfig();
 				cfg.setCp(cp);
 			}
-			
+
 			cfg.getWorkflows().clear();
 			for (WorkflowDetail detail : input.getWorkflows().values()) {
 				Workflow wf = new Workflow();
 				BeanUtils.copyProperties(detail, wf);
 				cfg.getWorkflows().put(wf.getName(), wf);
 			}
-			
+
 			daoFactory.getCollectionProtocolDao().saveCpWorkflows(cfg);
 			return ResponseEvent.response(CpWorkflowCfgDetail.from(cfg));
 		} catch (Exception e) {
@@ -1026,6 +1037,18 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		}
 
 		return daoFactory.getCollectionProtocolDao().getCpIds(key, value);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		cfgSvc.registerChangeListener(ConfigParams.MODULE, new ConfigChangeListener() {
+			@Override
+			public void onConfigChange(String name, String value) {
+				if (StringUtils.isBlank(name) || name.equals(ConfigParams.SYS_WORKFLOWS)) {
+					sysWorkflows = null;
+				}
+			}
+		});
 	}
 
 	private CpListCriteria addCpListCriteria(CpListCriteria crit) {
@@ -1563,7 +1586,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			Map<String, Object> listReq = req.getPayload();
 			ListConfig cfg = configFn.apply(listReq);
 			if (cfg == null) {
-				return null;
+				return ResponseEvent.response(null);
 			}
 
 			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
@@ -1666,13 +1689,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	private ListConfig getListConfig(Map<String, Object> listReq, String listName, String drivingForm) {
 		Long cpId = (Long)listReq.get("cpId");
-		CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(cpId);
-		if (cfg == null) {
-			return null;
-		}
-
-		Workflow workflow = cfg.getWorkflows().get(listName);
-		if (workflow == null || workflow.getData() == null || workflow.getData().isEmpty()) {
+		Workflow workflow = getWorkFlow(cpId, listName);
+		if (workflow == null) {
 			return null;
 		}
 
@@ -1681,6 +1699,41 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		listCfg.setDrivingForm(drivingForm);
 		setListLimit(listReq, listCfg);
 		return listCfg;
+	}
+
+	private Workflow getWorkFlow(Long cpId, String name) {
+		Workflow workflow = null;
+
+		CpWorkflowConfig cfg = daoFactory.getCollectionProtocolDao().getCpWorkflows(cpId);
+		if (cfg != null) {
+			workflow = cfg.getWorkflows().get(name);
+		}
+
+		if (workflow == null) {
+			workflow = getSysWorkflow(name);
+		}
+
+		return workflow;
+	}
+
+	private Workflow getSysWorkflow(String name) {
+		return getSysWorkflows().getWorkflows().get(name);
+	}
+
+	private CpWorkflowConfig getSysWorkflows() {
+		if (sysWorkflows == null) {
+			synchronized (this) {
+				if (sysWorkflows == null) {
+					String config = ConfigUtil.getInstance().getFileContent(ConfigParams.MODULE, ConfigParams.SYS_WORKFLOWS, null);
+					sysWorkflows = new CpWorkflowConfig();
+					if (StringUtils.isNotBlank(config)) {
+						sysWorkflows.setWorkflowsJson(config);
+					}
+				}
+			}
+		}
+
+		return sysWorkflows;
 	}
 
 	private void setListLimit(Map<String, Object> listReq, ListConfig cfg) {
