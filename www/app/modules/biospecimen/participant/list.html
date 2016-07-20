@@ -1,5 +1,9 @@
 <div>
   <div class="container">
+    <div>
+      <os-list-pager opts="pagerOpts"> </os-list-pager>
+    </div>
+
     <os-list data="ctx.participants" item-sref="participant-detail.overview({cprId: row.hidden.cprId})"
       cell-template="modules/biospecimen/participant/list-cell.html"
       enable-selection="false" show-item="showParticipant(row)" init-ctrl="setListCtrl($list)">

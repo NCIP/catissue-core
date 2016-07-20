@@ -42,19 +42,21 @@ public class DefaultListGenerator implements ListGenerator {
 			// TODO: Error empty column list
 		}
 
-		if (StringUtils.isBlank(cfg.getCriteria())) {
-			cfg.setCriteria(StringUtils.EMPTY);
-		}
-
-		if (StringUtils.isBlank(cfg.getRestriction())) {
-			cfg.setRestriction(StringUtils.EMPTY);
-		}
-
 		if (StringUtils.isBlank(cfg.getCriteria()) && StringUtils.isBlank(cfg.getRestriction())) {
 			// TODO: No list restricting criteria
 		}
 
-		return executeQuery(cfg, getAql(cfg, searchCriteria));
+		return getListDetail(cfg, searchCriteria);
+	}
+
+	@Override
+	@PlusTransactional
+	public int getTotalRows(ListConfig cfg, List<Column> searchCriteria) {
+		if (StringUtils.isBlank(cfg.getCriteria()) && StringUtils.isBlank(cfg.getRestriction())) {
+			// TODO: No list restricting criteria
+		}
+
+		return getListRowCount(cfg, getCriteria(cfg, searchCriteria));
 	}
 
 	@Override
@@ -76,10 +78,10 @@ public class DefaultListGenerator implements ListGenerator {
 		return resp.getPayload().get(0).getValues();
 	}
 
-	private String getAql(ListConfig cfg, List<Column> searchCriteria) {
+	private String getDataAql(ListConfig cfg, String criteria) {
 		StringBuilder aql = new StringBuilder()
 			.append("select ").append(getDistinctExpr(cfg)).append(" ").append(getSelectExpr(cfg))
-			.append(" where ").append(getCriteria(cfg, searchCriteria));
+			.append(" where ").append(criteria);
 
 		String orderBy = getOrderExpr(cfg);
 		if (StringUtils.isNotBlank(orderBy)) {
@@ -88,6 +90,13 @@ public class DefaultListGenerator implements ListGenerator {
 
 		aql.append(" limit ").append(cfg.getStartAt()).append(", ").append(cfg.getMaxResults());
 		return aql.toString();
+	}
+
+	private String getCountAql(ListConfig cfg, String criteria) {
+		return new StringBuilder()
+			.append("select count(distinct ").append(cfg.getPrimaryColumn().getExpr()).append(")")
+			.append(" where ").append(criteria)
+			.toString();
 	}
 
 	private String getDistinctExpr(ListConfig cfg) {
@@ -299,19 +308,42 @@ public class DefaultListGenerator implements ListGenerator {
 		return expr;
 	}
 
-	private ListDetail executeQuery(ListConfig cfg, String aql) {
+	private ListDetail getListDetail(ListConfig cfg, List<Column> searchCriteria) {
+		String criteria = getCriteria(cfg, searchCriteria);
+
+		ListDetail result = getListDetail(cfg, getListData(cfg, criteria));
+		if (result.getRows().size() == cfg.getMaxResults()) {
+			if (cfg.isIncludeCount()) {
+				result.setSize(getListRowCount(cfg, criteria));
+			}
+		} else {
+			result.setSize(result.getRows().size());
+		}
+
+		return result;
+	}
+
+	private QueryExecResult getListData(ListConfig cfg, String criteria) {
+		return executeQuery(getDataAql(cfg, criteria), cfg.getCpId(), cfg.getDrivingForm());
+	}
+
+	private int getListRowCount(ListConfig cfg, String criteria) {
+		QueryExecResult result = executeQuery(getCountAql(cfg, criteria), cfg.getCpId(), cfg.getDrivingForm());
+		return Integer.parseInt(result.getRows().get(0)[0]);
+	}
+
+	private QueryExecResult executeQuery(String aql, Long cpId, String drivingForm) {
 		ExecuteQueryEventOp op = new ExecuteQueryEventOp();
 		op.setAql(aql);
-		op.setCpId(cfg.getCpId());
+		op.setCpId(cpId);
 		op.setRunType("Data");
-		op.setDrivingForm(StringUtils.isBlank(cfg.getDrivingForm()) ? "Participant" : cfg.getDrivingForm());
+		op.setDrivingForm(StringUtils.isBlank(drivingForm) ? "Participant" : drivingForm);
 		op.setWideRowMode("OFF");
 
 		RequestEvent<ExecuteQueryEventOp> req = new RequestEvent<>(op);
 		ResponseEvent<QueryExecResult> resp = querySvc.executeQuery(req);
 		resp.throwErrorIfUnsuccessful();
-
-		return getListDetail(cfg, resp.getPayload());
+		return resp.getPayload();
 	}
 
 	private ListDetail getListDetail(ListConfig cfg, QueryExecResult result) {

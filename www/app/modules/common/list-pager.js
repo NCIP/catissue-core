@@ -24,13 +24,13 @@ angular.module('openspecimen')
 
     return Opts;
   })
-  .directive('osListPager', function() {
+  .directive('osListPager', function($q) {
 
     function showListSize(pagerCtx, opts) {
       pagerCtx.listSize = -1;
       pagerCtx.showListSize = true;
 
-      opts.listSizeGetter().then(
+      $q.when(opts.listSizeGetter()).then(
         function(resp) {
           pagerCtx.listSize = resp.count;
         }

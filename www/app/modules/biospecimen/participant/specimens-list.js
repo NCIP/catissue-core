@@ -1,16 +1,22 @@
 angular.module('os.biospecimen.participant')
   .controller('SpecimensListViewCtrl', function(
     $scope, $state, cp, spmnListCfg, reqBasedDistOrShip,
-    Util, Specimen, SpecimensHolder, DeleteUtil, Alerts) {
+    Util, Specimen, SpecimensHolder, DeleteUtil, Alerts, ListPagerOpts) {
 
     var ctrl = this;
 
+    var pagerOpts, listParams;
+
     function init() {
+      pagerOpts  = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getSpecimensCount});
+      listParams = {listName: 'specimen-list-view', maxResults: pagerOpts.recordsPerPage + 1};
+
       $scope.ctx = {
         reqBasedDistOrShip: reqBasedDistOrShip,
         filtersCfg: angular.copy(spmnListCfg.filters),
         filters: {},
-        specimens: {}
+        specimens: {},
+        listSize: -1
       };
 
       angular.extend($scope.listViewCtx, {
@@ -25,16 +31,40 @@ angular.module('os.biospecimen.participant')
     }
 
     function loadSpecimens() {
+      cp.getListDetail(listParams, getFilters()).then(
+        function(specimens) {
+          $scope.ctx.specimens = specimens;
+          if (listParams.includeCount) {
+            $scope.ctx.listSize = specimens.size;
+          }
+
+          pagerOpts.refreshOpts(specimens.rows);
+        }
+      );
+    }
+
+    function getSpecimensCount() {
+      if (!listParams.includeCount) {
+        listParams.includeCount = true;
+
+        return cp.getListSize(listParams, getFilters()).then(
+          function(size) {
+            $scope.ctx.listSize = size;
+            return {count: size};
+          }
+        );
+      } else {
+        return {count: $scope.ctx.listSize};
+      }
+    }
+
+    function getFilters() {
       var filters = [];
       if ($scope.ctx.$listFilters) {
         filters = $scope.ctx.$listFilters.getFilters();
       }
 
-      cp.getSpecimens(filters).then(
-        function(specimens) {
-          $scope.ctx.specimens = specimens;
-        }
-      );
+      return filters;
     }
 
     function gotoView(state, params, msgCode) {

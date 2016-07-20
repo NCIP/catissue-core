@@ -8,6 +8,8 @@ public class ListDetail {
 
 	private List<Row> rows = new ArrayList<>();
 
+	private int size = -1;
+
 	public List<Column> getColumns() {
 		return columns;
 	}
@@ -22,5 +24,13 @@ public class ListDetail {
 
 	public void setRows(List<Row> rows) {
 		this.rows = rows;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

@@ -160,16 +160,16 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       );
     }
 
-    CollectionProtocol.prototype.getParticipants = function(filters) {
-      return $http.post(CollectionProtocol.url() + this.$id() + '/participants', filters).then(
+    CollectionProtocol.prototype.getListSize = function(params, filters) {
+      return $http.post(CollectionProtocol.url() + this.$id() + '/list-size', filters, {params: params}).then(
         function(resp) {
-          return resp.data;
+          return resp.data.size;
         }
       );
     };
 
-    CollectionProtocol.prototype.getSpecimens = function(filters) {
-      return $http.post(CollectionProtocol.url() + this.$id() + '/specimens', filters).then(
+    CollectionProtocol.prototype.getListDetail = function(params, filters) {
+      return $http.post(CollectionProtocol.url() + this.$id() + '/list-detail', filters, {params: params}).then(
         function(resp) {
           return resp.data;
         }

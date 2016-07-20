@@ -26,6 +26,10 @@ public class ListConfig {
 
 	private int maxResults = 100;
 
+	private boolean includeCount = true;
+
+	private Column primaryColumn;
+
 	public Long getCpId() {
 		return cpId;
 	}
@@ -112,5 +116,21 @@ public class ListConfig {
 
 	public void setMaxResults(int maxResults) {
 		this.maxResults = maxResults;
+	}
+
+	public boolean isIncludeCount() {
+		return includeCount;
+	}
+
+	public void setIncludeCount(boolean includeCount) {
+		this.includeCount = includeCount;
+	}
+
+	public Column getPrimaryColumn() {
+		return primaryColumn;
+	}
+
+	public void setPrimaryColumn(Column primaryColumn) {
+		this.primaryColumn = primaryColumn;
 	}
 }

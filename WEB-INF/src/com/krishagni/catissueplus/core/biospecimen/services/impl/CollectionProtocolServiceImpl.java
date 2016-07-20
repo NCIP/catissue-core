@@ -123,6 +123,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	private ConfigurationService cfgSvc;
 
 	private CpWorkflowConfig sysWorkflows;
+
+	private Map<String, Function<Map<String, Object>, ListConfig>> listConfigFns = new HashMap<>();
 	
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
@@ -158,6 +160,11 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
+	}
+
+	public CollectionProtocolServiceImpl() {
+		listConfigFns.put("participant-list-view", this::getParticipantsListConfig);
+		listConfigFns.put("specimen-list-view", this::getSpecimenListConfig);
 	}
 
 	@Override
@@ -1014,14 +1021,42 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<ListDetail> getCpSpecimens(RequestEvent<Map<String, Object>> req) {
-		return getList(req, this::getSpecimenListConfig);
+	public ResponseEvent<ListDetail> getList(RequestEvent<Map<String, Object>> req) {
+		try {
+			Map<String, Object> listReq = req.getPayload();
+			String listName = (String)listReq.get("listName");
+			Function<Map<String, Object>, ListConfig> configFn = listConfigFns.get(listName);
+			ListConfig cfg = configFn.apply(listReq);
+			if (cfg == null) {
+				return ResponseEvent.response(null);
+			}
+
+			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<ListDetail> getCpParticipants(RequestEvent<Map<String, Object>> req) {
-		return getList(req, this::getParticipantsListConfig);
+	public ResponseEvent<Integer> getListSize(RequestEvent<Map<String, Object>> req) {
+		try {
+			Map<String, Object> listReq = req.getPayload();
+			String listName = (String)listReq.get("listName");
+			Function<Map<String, Object>, ListConfig> configFn = listConfigFns.get(listName);
+			ListConfig cfg = configFn.apply(listReq);
+			if (cfg == null) {
+				return ResponseEvent.response(null);
+			}
+
+			return ResponseEvent.response(listGenerator.getTotalRows(cfg, (List<Column>)listReq.get("filters")));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 
 	@Override
@@ -1580,23 +1615,6 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		return dir + File.separator;
 	}
 
-	@PlusTransactional
-	private ResponseEvent<ListDetail> getList(RequestEvent<Map<String, Object>> req, Function<Map<String, Object>, ListConfig> configFn) {
-		try {
-			Map<String, Object> listReq = req.getPayload();
-			ListConfig cfg = configFn.apply(listReq);
-			if (cfg == null) {
-				return ResponseEvent.response(null);
-			}
-
-			return ResponseEvent.response(listGenerator.getList(cfg, (List<Column>)listReq.get("filters")));
-		} catch (OpenSpecimenException ose) {
-			return ResponseEvent.error(ose);
-		} catch (Exception e) {
-			return ResponseEvent.serverError(e);
-		}
-	}
-
 	private ListConfig getSpecimenListConfig(Map<String, Object> listReq) {
 		ListConfig cfg = getListConfig(listReq, "specimen-list-view", "Specimen");
 		if (cfg == null) {
@@ -1606,6 +1624,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		Column id = new Column();
 		id.setExpr("Specimen.id");
 		id.setCaption("specimenId");
+		cfg.setPrimaryColumn(id);
 
 		Column type = new Column();
 		type.setExpr("Specimen.type");
@@ -1649,6 +1668,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		Column id = new Column();
 		id.setExpr("Participant.id");
 		id.setCaption("cprId");
+		cfg.setPrimaryColumn(id);
 		cfg.setHiddenColumns(Collections.singletonList(id));
 
 		Long cpId = (Long)listReq.get("cpId");
@@ -1698,6 +1718,9 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		listCfg.setCpId(cpId);
 		listCfg.setDrivingForm(drivingForm);
 		setListLimit(listReq, listCfg);
+
+		Boolean includeCount = (Boolean)listReq.get("includeCount");
+		listCfg.setIncludeCount(includeCount == null ? false : includeCount);
 		return listCfg;
 	}
 

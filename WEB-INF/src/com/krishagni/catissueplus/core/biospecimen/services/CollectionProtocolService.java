@@ -138,7 +138,11 @@ public interface CollectionProtocolService {
 	//
 	// CP based lists. Input is following
 	//	{
-	//		"cpId": ...
+	//		"cpId": ...,
+	//		"listName": ...,
+	//		"startAt": ...,
+	//		"maxResults": ...,
+	//		"includeCount": ...,
 	//		"filters": [
 	//			{
 	//				"expr": ...
@@ -147,7 +151,7 @@ public interface CollectionProtocolService {
 	//		]
 	//	}
 	//
-	public ResponseEvent<ListDetail> getCpSpecimens(RequestEvent<Map<String, Object>> req);
+	public ResponseEvent<ListDetail> getList(RequestEvent<Map<String, Object>> req);
 
-	public ResponseEvent<ListDetail> getCpParticipants(RequestEvent<Map<String, Object>> req);
+	public ResponseEvent<Integer> getListSize(RequestEvent<Map<String, Object>> req);
 }
