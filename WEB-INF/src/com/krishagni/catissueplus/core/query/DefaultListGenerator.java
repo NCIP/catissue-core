@@ -51,12 +51,12 @@ public class DefaultListGenerator implements ListGenerator {
 
 	@Override
 	@PlusTransactional
-	public int getTotalRows(ListConfig cfg, List<Column> searchCriteria) {
+	public int getListSize(ListConfig cfg, List<Column> searchCriteria) {
 		if (StringUtils.isBlank(cfg.getCriteria()) && StringUtils.isBlank(cfg.getRestriction())) {
 			// TODO: No list restricting criteria
 		}
 
-		return getListRowCount(cfg, getCriteria(cfg, searchCriteria));
+		return getListSize(cfg, getCriteria(cfg, searchCriteria));
 	}
 
 	@Override
@@ -314,7 +314,7 @@ public class DefaultListGenerator implements ListGenerator {
 		ListDetail result = getListDetail(cfg, getListData(cfg, criteria));
 		if (result.getRows().size() == cfg.getMaxResults()) {
 			if (cfg.isIncludeCount()) {
-				result.setSize(getListRowCount(cfg, criteria));
+				result.setSize(getListSize(cfg, criteria));
 			}
 		} else {
 			result.setSize(result.getRows().size());
@@ -327,7 +327,7 @@ public class DefaultListGenerator implements ListGenerator {
 		return executeQuery(getDataAql(cfg, criteria), cfg.getCpId(), cfg.getDrivingForm());
 	}
 
-	private int getListRowCount(ListConfig cfg, String criteria) {
+	private int getListSize(ListConfig cfg, String criteria) {
 		QueryExecResult result = executeQuery(getCountAql(cfg, criteria), cfg.getCpId(), cfg.getDrivingForm());
 		return Integer.parseInt(result.getRows().get(0)[0]);
 	}

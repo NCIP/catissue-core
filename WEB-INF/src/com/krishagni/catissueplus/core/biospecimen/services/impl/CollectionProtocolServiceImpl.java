@@ -1026,6 +1026,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			Map<String, Object> listReq = req.getPayload();
 			String listName = (String)listReq.get("listName");
 			Function<Map<String, Object>, ListConfig> configFn = listConfigFns.get(listName);
+			if (configFn == null) {
+				return ResponseEvent.response(null);
+			}
+
 			ListConfig cfg = configFn.apply(listReq);
 			if (cfg == null) {
 				return ResponseEvent.response(null);
@@ -1046,12 +1050,16 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			Map<String, Object> listReq = req.getPayload();
 			String listName = (String)listReq.get("listName");
 			Function<Map<String, Object>, ListConfig> configFn = listConfigFns.get(listName);
+			if (configFn == null) {
+				return ResponseEvent.response(null);
+			}
+
 			ListConfig cfg = configFn.apply(listReq);
 			if (cfg == null) {
 				return ResponseEvent.response(null);
 			}
 
-			return ResponseEvent.response(listGenerator.getTotalRows(cfg, (List<Column>)listReq.get("filters")));
+			return ResponseEvent.response(listGenerator.getListSize(cfg, (List<Column>)listReq.get("filters")));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

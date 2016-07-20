@@ -10,7 +10,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 public interface ListGenerator {
 	ListDetail getList(ListConfig cfg, List<Column> searchCriteria);
 
-	int getTotalRows(ListConfig cfg, List<Column> searchCriteria);
+	int getListSize(ListConfig cfg, List<Column> searchCriteria);
 
 	List<Column> getFilters(ListConfig cfg);
 
