@@ -177,16 +177,24 @@ public class Utility {
 	}
 
 	public static void sendToClient(HttpServletResponse httpResp, String filename, File file, boolean deleteOnSend) {
-		InputStream in = null;
 		try {
-			in = new FileInputStream(file);
-			sendToClient(httpResp, filename, getContentType(file), in);
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
+			sendToClient(httpResp, filename, getContentType(file), file);
 		} finally {
 			if (deleteOnSend && file != null) {
 				file.delete();
 			}
+		}
+	}
+
+	public static void sendToClient(HttpServletResponse httpResp, String filename, String contentType, File file) {
+		InputStream in = null;
+		try {
+			in = new FileInputStream(file);
+			sendToClient(httpResp, filename, contentType, in);
+		} catch (IOException e) {
+			throw new RuntimeException("Error sending file", e);
+		} finally {
+			IOUtils.closeQuietly(in);
 		}
 	}
 

@@ -1,10 +1,7 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.FileDetail;
 import com.krishagni.catissueplus.core.de.events.GetFileDetailOp;
 import com.krishagni.catissueplus.core.de.services.FormService;
 
-import edu.common.dynamicextensions.nutility.IoUtil;
+import edu.common.dynamicextensions.nutility.DeConfiguration;
 
 @Controller
 @RequestMapping("/form-files")
@@ -32,50 +30,65 @@ public class FormFilesController {
 	@Autowired
 	private FormService formSvc;
 	
-	@Autowired
-	private HttpServletRequest httpServletRequest;
-	
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public FileDetail uploadFile(@PathVariable("file") MultipartFile file) {
-		ResponseEvent<FileDetail> resp = formSvc.uploadFile(getRequestEvent(file));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		return response(formSvc.uploadFile(request(file)));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void downloadFile(
-			@RequestParam(value="formId", required=true) Long formId,
-			@RequestParam(value="recordId", required=true) Long recordId,
-			@RequestParam(value="ctrlName", required=true) String ctrlName,
-			HttpServletResponse response) {
+		@RequestParam(value = "formId", required = true)
+		Long formId,
+
+		@RequestParam(value = "recordId", required = true)
+		Long recordId,
+
+		@RequestParam(value = "ctrlName", required = true)
+		String ctrlName,
+
+		HttpServletResponse response) {
 		
 		GetFileDetailOp req = new GetFileDetailOp();
 		req.setFormId(formId);
 		req.setRecordId(recordId);
 		req.setCtrlName(ctrlName);
 		
-		ResponseEvent<FileDetail> resp = formSvc.getFileDetail(getRequestEvent(req));
-		resp.throwErrorIfUnsuccessful();
-
-		FileDetail file = resp.getPayload();
-		response.setContentType(file.getContentType());
-		response.setHeader("Content-Disposition", "attachment;filename=" + file.getFilename());
-			
-		InputStream in = null;
-		try {
-			in = new FileInputStream(file.getPath());
-			IoUtil.copy(in, response.getOutputStream());
-		} catch (IOException e) {
-			throw new RuntimeException("Error sending file", e);
-		} finally {
-			IoUtil.close(in);
-		}
+		FileDetail file = response(formSvc.getFileDetail(request(req)));
+		Utility.sendToClient(response, file.getFilename(), file.getContentType(), new File(file.getPath()));
 	}
-	
-	private <T> RequestEvent<T> getRequestEvent(T payload) {
+
+	@RequestMapping(method = RequestMethod.GET, value="/{fileId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void downloadFile(
+		@PathVariable("fileId")
+		String fileId,
+
+		@RequestParam(value = "contentType", required = false)
+		String contentType,
+
+		@RequestParam(value = "filename", required = false)
+		String filename,
+
+		HttpServletResponse response) {
+
+		File file = new File(DeConfiguration.getInstance().fileUploadDir() + File.separator + fileId);
+		if (!file.exists()) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		Utility.sendToClient(response, filename, contentType, file);
+	}
+
+	private <T> RequestEvent<T> request(T payload) {
 		return new RequestEvent<T>(payload);				
-	}	
+	}
+
+	private <T> T response(ResponseEvent<T> resp) {
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 }
