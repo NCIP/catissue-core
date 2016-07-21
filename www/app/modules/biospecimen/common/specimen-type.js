@@ -48,6 +48,8 @@ angular.module('os.biospecimen.common')
 
     function linker(scope, element, attrs, formCtrl) {
       scope.types = [];
+      scope.model = {value: scope.specimen.type};
+
       valuesQ = SpecimenTypeUtil.getSpecimenTypes(formCtrl);
       valuesQ.then(function(types) { scope.types = types; });
 
@@ -71,9 +73,9 @@ angular.module('os.biospecimen.common')
 
       template: 
         '<div>' +
-        '  <os-select ng-model="specimen.type" list="types" group-by="\'specimenClass\'"' +
+        '  <os-select ng-model="model.value" list="types" group-by="\'specimenClass\'"' +
         '    select-prop="type" display-prop="type" on-select="onTypeSelect($item)">' +
-        '  </os-select></div>' +
+        '  </os-select>' +
         '</div>',
 
       compile: function(tElem, tAttrs) {
