@@ -600,7 +600,16 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	}
 
 	private void generateName(StorageContainer container) {
-		container.setName(nameGenerator.generateLabel(container.getType().getNameFormat(), container));
+		ContainerType type = container.getType();
+		String name = nameGenerator.generateLabel(type.getNameFormat(), container);
+		if (StringUtils.isBlank(name)) {
+			throw OpenSpecimenException.userError(
+				StorageContainerErrorCode.INCORRECT_NAME_FMT,
+				type.getNameFormat(),
+				type.getName());
+		}
+
+		container.setName(name);
 	}
 
 	private void setPosition(StorageContainer container) {
