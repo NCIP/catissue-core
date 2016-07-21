@@ -110,7 +110,7 @@
                     "caption": "Location"
                 }
             ],
-            "criteria": "Specimen.availableQty > 0",
+            "criteria": "Specimen.availableQty > 0 and Specimen.collectionStatus = \"Collected\"",
             "orderBy": [
                 {
                     "expr": "Specimen.createdOn",
@@ -122,6 +122,10 @@
                     "expr": "Specimen.label",
                     "caption": "Label",
                     "searchType": "contains"
+                },
+                {
+                    "expr": "Specimen.lineage",
+                    "caption": "Lineage"
                 },
                 {
                     "expr": "Specimen.createdOn",
