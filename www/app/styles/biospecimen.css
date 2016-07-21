@@ -143,6 +143,10 @@
   color: white;
 }
 
+.dropdown-menu .fa.os-status-pending:before {
+  padding: 0px;
+}
+
 .os-key-values .value.os-status-collected {
   background: #5cb85c;
 }

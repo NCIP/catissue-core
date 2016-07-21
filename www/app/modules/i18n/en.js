@@ -541,6 +541,9 @@
     "specimen_type": "Specimen Type",
     "anatomic_site": "Anatomic Site",
 
+    "hide_pending":"Hide Pending",
+    "show_pending": "Show Pending",
+
     "col_event": {
       "title": "Collection Details",
       "user_time": "User and Time",
@@ -1823,7 +1826,9 @@
         "cp_sop_doc": "CP SOP Document",
         "cp_sop_doc_desc": "System level collection protocol SOP document",
         "sys_workflows": "System Workflows",
-        "sys_workflows_desc": "System level participants and specimens list view configuration. This configuration is used when CP specific configuration is not specified"
+        "sys_workflows_desc": "System level participants and specimens list view configuration. This configuration is used when CP specific configuration is not specified",
+        "pending_spmns_disp_interval": "Anticipated Specimens Display Interval",
+        "pending_spmns_disp_interval_desc": "Anticipated specimens will be automatically hidden in specimen tree after specified number of days have elapsed since collection of parent specimen or visit"
       },
 
       "common": {

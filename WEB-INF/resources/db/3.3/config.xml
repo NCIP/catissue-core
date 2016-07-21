@@ -62,4 +62,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Pending specimens display interval setting">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'pending_spmns_disp_interval',
+        'pending_spmns_disp_interval', 'pending_spmns_disp_int_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

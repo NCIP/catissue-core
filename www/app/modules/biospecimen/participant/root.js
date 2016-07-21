@@ -1,6 +1,7 @@
 
 angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
-  .controller('ParticipantRootCtrl', function($scope, cpr, hasSde, hasDict, sysDict, cpDict, AuthorizationService) {
+  .controller('ParticipantRootCtrl', function(
+    $scope, cpr, hasSde, hasDict, sysDict, cpDict, pendingSpmnsDispInterval, AuthorizationService) {
 
     function init() {
       $scope.cpr = $scope.object = cpr;
@@ -12,6 +13,7 @@ angular.module('os.biospecimen.participant.root', ['os.biospecimen.models'])
         sysDict: sysDict, cpDict: cpDict
       };
 
+      $scope.pendingSpmnsDispInterval = +pendingSpmnsDispInterval.value;
       initAuthorizationOpts();
     }
 

@@ -253,6 +253,10 @@ angular.module('os.biospecimen.participant',
 
           hasDict: function(hasSde, sysDict, cpDict) {
             return hasSde && (cpDict.length > 0 || sysDict.length > 0);
+          },
+
+          pendingSpmnsDispInterval: function(SettingUtil) {
+            return SettingUtil.getSetting('biospecimen', 'pending_spmns_disp_interval');
           }
         },
         controller: 'ParticipantRootCtrl',

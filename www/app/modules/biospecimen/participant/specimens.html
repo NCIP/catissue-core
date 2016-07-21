@@ -34,16 +34,23 @@
               <span translate="common.buttons.close"> Close </span>
             </a>
           </li>
+          <li ng-if="anyPendingSpmns">
+            <a ng-click="toggleHidePendingSpmns()" ng-switch on="hidePendingSpmns">
+              <span class="fa fa-circle os-status-pending"></span>
+              <span ng-switch-when="false" translate="specimens.hide_pending">Hide Pending</span>
+              <span ng-switch-when="true" translate="specimens.show_pending">Show Pending</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </div>
-  <div class="panel-body">
-    <div ng-if="!specimens || specimens.length == 0">
+  <div class="panel-body" ng-switch on="!specimens || specimens.length == 0 || (onlyPendingSpmns && hidePendingSpmns)">
+    <div ng-switch-when="true">
       <span translate="specimens.no_specimens_to_show">No Specimens to Show</span>
     </div>
     <div class="os-table os-table-fixed os-table-tree" ng-class="{'os-spmn-hide-options': view != 'list'}"
-      ng-if="specimens && specimens.length > 0">
+      ng-switch-when="false">
       <div class="os-table-head">
         <div class="row">
           <div class="col col-xs-5">
@@ -66,7 +73,8 @@
           'os-inplace-form-edit-po': parentSpecimen == specimen,
           'os-pool-specimen': !!specimen.pooledSpecimen}"
           ng-repeat="specimen in specimens | openedTreeNodes">
-          <div class="row title" ng-class="{'selected': specimen.selected}">
+          <div class="row title" ng-class="{'selected': specimen.selected}" 
+            ng-if="(specimen.status && specimen.status != 'Pending') || !hidePendingSpmns">
             <div class="col col-xs-5">
               <div class="clearfix">
                 <div class="os-select-specimen-cb" ng-hide="specimen.status == 'Missed Collection'">
@@ -75,14 +83,16 @@
 
                 <div style="margin-left: 12px;">
                   <div ng-style="{'padding-left': (specimen.hasChildren ? specimen.depth * 20 : specimen.depth * 20 + 16) + 'px'}">
-                    <a ng-if="specimen.hasChildren && specimen.isOpened" 
-                       class="fa fa-chevron-circle-down"
-                       ng-click="closeSpecimenNode(specimen)">
-                    </a>
-                    <a ng-if="specimen.hasChildren && !specimen.isOpened" 
-                       class="fa fa-chevron-circle-right"
-                       ng-click="openSpecimenNode(specimen)">
-                    </a>
+                    <span ng-if="!specimen.hasOnlyPendingChildren || !hidePendingSpmns">
+                      <a ng-if="specimen.hasChildren && specimen.isOpened" 
+                        class="fa fa-chevron-circle-down"
+                        ng-click="closeSpecimenNode(specimen)">
+                      </a>
+                      <a ng-if="specimen.hasChildren && !specimen.isOpened" 
+                        class="fa fa-chevron-circle-right"
+                        ng-click="openSpecimenNode(specimen)">
+                      </a>
+                    </span>
 
                     <span class="fa fa-circle"
                       ng-class="{

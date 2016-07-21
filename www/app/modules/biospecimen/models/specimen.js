@@ -62,7 +62,12 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
         var hasChildren = (!!specimen.children && specimen.children.length > 0);
         specimen.hasChildren = hasSpecimensPool || hasChildren;
         if (hasChildren) {
-          result = result.concat(Specimen.flatten(specimen.children, specimen, depth +1));
+          result = result.concat(Specimen.flatten(specimen.children, specimen, depth + 1));
+        }
+
+        specimen.hasOnlyPendingChildren = hasOnlyPendingChildren(specimen.children);
+        if (specimen.hasOnlyPendingChildren) {
+          specimen.hasOnlyPendingChildren = hasOnlyPendingChildren(specimen.specimensPool);
         }
       });
 
@@ -267,6 +272,18 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
         function(result) {
           angular.extend(specimen, result.data);
           return new Specimen(result);
+        }
+      );
+    }
+
+    function hasOnlyPendingChildren(specimens) {
+      if (!specimens || specimens.length == 0) {
+        return true;
+      }
+
+      return specimens.every(
+        function(spmn) {
+          return !spmn.status || spmn.status == 'Pending';
         }
       );
     }

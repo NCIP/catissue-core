@@ -112,6 +112,44 @@ angular.module('os.biospecimen.participant.specimen-tree',
       return specimens;
     };
 
+    function shouldHidePendingSpmns(collectionDate, pendingSpmnsDispInterval) {
+      var hidePendingSpmns = false;
+
+      if (!collectionDate || !pendingSpmnsDispInterval) {
+        return hidePendingSpmns;
+      }
+
+      var dispCutOff = new Date(collectionDate);
+      dispCutOff.setDate(dispCutOff.getDate() + pendingSpmnsDispInterval);
+      return dispCutOff.getTime() < (new Date().getTime());
+    }
+
+    function onlyPendingSpmns(specimens) {
+      return specimens.every(
+        function(spmn) {
+          return !spmn.status || spmn.status == 'Pending';
+        }
+      );
+    }
+
+    function anyPendingSpmnsInTree(specimens) {
+      return specimens.some(
+        function(spmn) {
+          if (!spmn.status || spmn.status == 'Pending') {
+            return true;
+          }
+
+          if (!!spmn.children && anyPendingSpmnsInTree(spmn.children)) {
+            return true;
+          }
+
+          if (!!spmn.specimensPool && anyPendingSpmnsInTree(spmn.specimensPool)) {
+            return true;
+          }
+        }
+      );
+    }
+
     return {
       restrict: 'E',
 
@@ -121,7 +159,9 @@ angular.module('os.biospecimen.participant.specimen-tree',
         visit: '=',
         specimenTree: '=specimens',
         allowedOps: '=',
-        reload: '&reload'
+        reload: '&reload',
+        collectionDate: '=?',
+        pendingSpmnsDispInterval: '=?'
       },
 
       templateUrl: 'modules/biospecimen/participant/specimens.html',
@@ -129,6 +169,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
       link: function(scope, element, attrs) {
         scope.view = 'list';
         scope.parentSpecimen = undefined;
+
+        scope.hidePendingSpmns = shouldHidePendingSpmns(scope.collectionDate, scope.pendingSpmnsDispInterval);
+        scope.onlyPendingSpmns = onlyPendingSpmns(scope.specimenTree);
+        scope.anyPendingSpmns  = anyPendingSpmnsInTree(scope.specimenTree);
 
         scope.specimens = Specimen.flatten(scope.specimenTree);
         openSpecimenTree(scope.specimens);
@@ -291,6 +335,10 @@ angular.module('os.biospecimen.participant.specimen-tree',
         scope.revertEdit = function() {
           scope.view = 'list';
           scope.parentSpecimen = undefined;
+        }
+
+        scope.toggleHidePendingSpmns = function() {
+          scope.hidePendingSpmns = !scope.hidePendingSpmns;
         }
 
         function getSpecimenIds(specimens) {
