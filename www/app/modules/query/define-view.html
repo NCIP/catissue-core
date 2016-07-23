@@ -6,7 +6,7 @@
 
   <div class="os-modal-body">
     <div os-wizard="defineViewWizard">
-      <os-wizard-step on-finish="prepareAggregateOpts" title="{{'queries.select_fields' | translate}}">
+      <os-wizard-step on-finish="prepareAggregateOpts()" title="{{'queries.select_fields' | translate}}">
         <div class="os-query-dv-select-fields">
           <span translate="queries.define_view_info"></span>
           <div class="form-group">
@@ -24,11 +24,11 @@
         </div>
       </os-wizard-step>
 
-      <os-wizard-step on-finish="prepareReportingOpts" title="{{'queries.aggregates' | translate}}">
+      <os-wizard-step on-finish="prepareReportingOpts()" title="{{'queries.aggregates' | translate}}">
         <div ng-include="'aggregate-functions.html'"></div>
       </os-wizard-step>
 
-      <os-wizard-step title="{{'queries.reporting_opts' | translate}}">
+      <os-wizard-step on-finish="passThrough()" title="{{'queries.reporting_opts' | translate}}">
         <div ng-include="'pivot-table.html'"></div>
       </os-wizard-step>
 

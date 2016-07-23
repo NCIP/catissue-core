@@ -21,12 +21,8 @@ angular.module('openspecimen')
             return false;
           }
 
-          var onFinish = $scope.steps[$scope.selectedStep].onFinish();
-          if (!onFinish) {
-            onFinish = function() { return true; };
-          }
-
-          return $q.when(onFinish(this.forward)).then(
+          var onFinish = $scope.steps[$scope.selectedStep].onFinish;
+          return $q.when(onFinish({forward: this.forward, wizard: this})).then(
             function(result) {
               if (!result) {
                 return false;
@@ -44,12 +40,8 @@ angular.module('openspecimen')
         this.next = function() {
           this.forward = true;
 
-          var onFinish = $scope.steps[$scope.selectedStep].onFinish();
-          if (!onFinish) {
-            onFinish = function() { return true; };
-          }
-       
-          return $q.when(onFinish(this.forward)).then(
+          var onFinish = $scope.steps[$scope.selectedStep].onFinish;
+          return $q.when(onFinish({forward: this.forward, wizard: this})).then(
             function(result) {
               if (!result) {
                 return false;

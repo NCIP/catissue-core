@@ -8,14 +8,14 @@
 
   <div class="os-modal-body">
     <div os-wizard="posWizard">
-      <os-wizard-step title="Select Container" on-finish="getOccupancyMap">
+      <os-wizard-step title="Select Container" on-finish="getOccupancyMap()">
         <div class="os-select-container-tab">
           <os-container-selector type="listOpts.type" name="listOpts.name" criteria="listOpts.criteria"
             on-toggle-selection="toggleContainerSelection(posWizard, container)">
           </os-container-selector>
         </div>
       </os-wizard-step>
-      <os-wizard-step title="Select Position">
+      <os-wizard-step title="Select Position" on-finish="passThrough()">
         <div ng-if="showGrid" class="os-container-pos-selector-wrapper">
           <os-container-position-selector container="selectedContainer" assigned-pos="assignedPositions"
             selected-pos="selectedPos">

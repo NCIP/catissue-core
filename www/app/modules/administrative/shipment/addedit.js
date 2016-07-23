@@ -161,6 +161,10 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       );
     };
 
+    $scope.passThrough = function() {
+      return true;
+    }
+
     $scope.onInstituteSelect = function(instituteName) {
       $scope.shipment.receivingSite = undefined;
       $scope.shipment.notifyUsers = [];

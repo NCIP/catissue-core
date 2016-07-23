@@ -13,11 +13,11 @@
   
   <div class="container">
     <div os-wizard="doWizard" type="classic">
-      <os-wizard-step title="{{'orders.details' | translate}}" on-finish="passThrough">
+      <os-wizard-step title="{{'orders.details' | translate}}" on-finish="passThrough()">
         <div ng-include src="'orders/addedit-detail.html'"></div>
       </os-wizard-step>
 
-      <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="passThrough">
+      <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="passThrough()">
         <div ng-include src="'orders/addedit-order-specimens.html'"></div>
       </os-wizard-step>
 

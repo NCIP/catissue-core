@@ -223,6 +223,10 @@ angular.module('os.query.defineview', ['os.query.models'])
       prepareColumnSummaryFields();
     };
 
+    $scope.passThrough = function() {
+      return true;
+    };
+
     function getForms() {
       var forms = queryCtx.selectedCp.forms.map(
         function(form) {

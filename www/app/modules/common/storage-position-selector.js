@@ -53,7 +53,11 @@ angular.module('openspecimen')
             return true;
           }
         );
-      };
+      }
+
+      $scope.passThrough = function() {
+        return true;
+      }
 
       $scope.cancel = function() {
         $modalInstance.dismiss('cancel');

@@ -18,6 +18,10 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
       loadPvs();
     }
 
+    $scope.passThrough = function() {
+      return true;
+    }
+
     $scope.receive = function() {
       var shipment = angular.copy($scope.shipment);
       shipment.status = "Received";

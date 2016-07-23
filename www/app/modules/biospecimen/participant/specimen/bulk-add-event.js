@@ -40,6 +40,10 @@ angular.module('os.biospecimen.specimen.bulkaddevent', ['os.biospecimen.models']
       Alerts.error('common.form_validation_error');
     }
 
+    $scope.passThrough = function() {
+      return true;
+    }
+
     $scope.addSpecimens = function(labels) {
       return Specimen.listByLabels(labels).then(
         function (specimens) {

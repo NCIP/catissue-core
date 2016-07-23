@@ -12,11 +12,11 @@
   
   <div class="container">
     <div os-wizard="bulkAddEventWizard" type="classic">
-      <os-wizard-step title="{{'specimens.bulk_events.select_specimens' | translate}}" on-finish="passThrough">
+      <os-wizard-step title="{{'specimens.bulk_events.select_specimens' | translate}}" on-finish="passThrough()">
         <div ng-include src="'participant/specimen/bulkevent-select-specimens.html'"></div>
       </os-wizard-step>
       
-      <os-wizard-step title="{{'specimens.bulk_events.add_event_details' | translate}}" on-finish="passThrough">
+      <os-wizard-step title="{{'specimens.bulk_events.add_event_details' | translate}}" on-finish="passThrough()">
         <div ng-include src="'participant/specimen/bulkevent-add-details.html'"></div>
       </os-wizard-step>
     </div>
