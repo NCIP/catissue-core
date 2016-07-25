@@ -297,23 +297,19 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			if (!parentSpecimen.isCollected()) {
 				return ResponseEvent.userError(SpecimenErrorCode.NOT_COLLECTED, parentSpecimen.getLabel());
 			}
-									
+
 			Integer count = spec.getNoOfAliquots();
 			BigDecimal aliquotQty = spec.getQtyPerAliquot();
-			BigDecimal reqQty = BigDecimal.ZERO;
-						
+
 			if (count != null && aliquotQty != null) {
 				if (count <= 0 || NumUtil.lessThanEqualsZero(aliquotQty)) {
 					return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
 				}
-				
-				reqQty = NumUtil.multiply(aliquotQty, count);
-				if (NumUtil.greaterThan(reqQty, parentSpecimen.getAvailableQuantity())) {
-					return ResponseEvent.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
-				}
+			} else if (parentSpecimen.getAvailableQuantity() == null) {
+				return ResponseEvent.userError(SpecimenErrorCode.ALIQUOT_CNT_N_QTY_REQ);
 			} else if (count != null && count > 0) {
 				aliquotQty = NumUtil.divide(parentSpecimen.getAvailableQuantity(), count, precision);
-			} else if (aliquotQty != null && NumUtil.greaterThanZero(aliquotQty)) {
+			} else if (NumUtil.greaterThanZero(aliquotQty)) {
 				count = parentSpecimen.getAvailableQuantity().divide(aliquotQty).intValue();
 			} else {
 				return ResponseEvent.userError(SpecimenErrorCode.INVALID_QTY_OR_CNT);
@@ -657,7 +653,6 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 			specimen.getParentSpecimen().addChildSpecimen(specimen);
 		} else {
-			specimen.checkQtyConstraints();
 			specimen.occupyPosition();
 			specimen.checkPoolStatusConstraints();
 		}

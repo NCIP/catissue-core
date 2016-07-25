@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function($rootScope, $timeout, $document, $q, QueryExecutor, Alerts) {
+  .factory('Util', function($rootScope, $timeout, $document, $q, $modal, QueryExecutor, Alerts) {
     var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
@@ -250,6 +250,34 @@ angular.module('openspecimen')
       );
     }
 
+    function showConfirm(opts) {
+      $modal.open({
+        templateUrl: opts.templateUrl || 'modules/common/show-confirm.html',
+        controller: function($scope, $modalInstance) {
+          angular.extend($scope, opts);
+
+          $scope.ok = function() {
+            $modalInstance.close(true);
+          }
+
+          $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+          }
+        }
+      }).result.then(
+        function() {
+          if (opts.ok) {
+            opts.ok();
+          }
+        },
+        function() {
+          if (opts.cancel) {
+            opts.cancel();
+          }
+        }
+      );
+    }
+
     return {
       clear: clear,
 
@@ -277,6 +305,8 @@ angular.module('openspecimen')
 
       merge: merge,
 
-      copyAttrs: copyAttrs
+      copyAttrs: copyAttrs,
+
+      showConfirm: showConfirm
     };
   });

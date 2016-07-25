@@ -70,34 +70,18 @@
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.initial_qty">Initial Quantity</strong>
-        <span class="value value-md">
-          {{specimen.initialQty | osNumberInScientificNotation}}
-          <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
-        </span>
+        <os-spmn-measure-val value="specimen.initialQty" specimen="specimen"></os-spmn-measure-val>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.available_qty">Available Quantity</strong>
-        <span class="value value-md" ng-switch="!!specimen.availableQty || specimen.availableQty == 0">
-          <span ng-switch-when="true">
-            {{specimen.availableQty | osNumberInScientificNotation}}
-            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
-            </os-specimen-unit>
-          </span>
-          <span ng-switch-when="false" translate="common.not_specified"></span>
-        </span>
+        <os-spmn-measure-val value="specimen.availableQty" specimen="specimen"></os-spmn-measure-val>
       </li>
 
       <li class="item">
         <strong class="key key-sm" translate="specimens.concentration">Concentration</strong>
-        <span class="value value-md" ng-switch="specimen.concentration != undefined && specimen.concentration != null">
-          <span ng-switch-when="true">
-            {{specimen.concentration | osNumberInScientificNotation}}
-            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type" measure="concentration">
-            </os-specimen-unit>
-          </span>
-          <span ng-switch-default translate="common.not_specified"></span>
-        </span>
+        <os-spmn-measure-val value="specimen.concentration" measure="'concentration'" specimen="specimen">
+        </os-spmn-measure-val>
       </li>
 
       <li class="item">

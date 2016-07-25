@@ -121,9 +121,7 @@
                 <span>{{specimen.cpShortTitle}}</span>
               </td>
               <td class="col">
-                <span>{{specimen.availableQty}}</span>
-                <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                </os-specimen-unit>
+                <os-spmn-measure-val specimen="specimen" value="specimen.availableQty"></os-spmn-measure-val>
               </td>
               <td class="col" ng-if="shipment.status == 'Received'">
                 <span>{{"shipments.quality." + item.receivedQuality | translate}}</span>

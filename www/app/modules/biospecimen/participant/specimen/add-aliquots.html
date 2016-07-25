@@ -43,8 +43,7 @@
         </div>
         <label class="col-xs-2 control-label" translate="specimens.available_qty">Available Quantity</label>
         <div class="col-xs-2 os-ctrl-padding-top">
-          <span>{{parentSpecimen.availableQty}}</span>
-          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type"></os-specimen-unit>
+          <os-spmn-measure-val specimen="parentSpecimen" value="parentSpecimen.availableQty"></os-spmn-measure-val>
         </div>
       </div>
 
@@ -64,7 +63,7 @@
         <div class="col-xs-6">
           <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
             class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
-            ng-required="!aliquotSpec.qtyPerAliquot" ng-pattern="/^[1-9][0-9]*$/">
+            ng-required="!aliquotSpec.qtyPerAliquot || !parentSpecimen.availableQty" ng-pattern="/^[1-9][0-9]*$/">
           <div os-field-error field="aliquotForm.noOfAliquots"></div>
         </div>
       </div>
@@ -75,7 +74,7 @@
           <div class="input-group">
             <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
               class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
-              ng-required="!aliquotSpec.noOfAliquots"
+              ng-required="!aliquotSpec.noOfAliquots || !parentSpecimen.availableQty"
               ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
             <div class="input-group-addon">
               <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">

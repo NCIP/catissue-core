@@ -291,7 +291,8 @@ public class Specimen extends BaseExtensionEntity {
 	}
 
 	public Boolean getIsAvailable() {
-		return NumUtil.greaterThanZero(getAvailableQuantity()) && (isAvailable == null ? true: isAvailable);
+		return (getAvailableQuantity() == null || NumUtil.greaterThanZero(getAvailableQuantity())) &&
+			(isAvailable == null || isAvailable);
 	}
 
 	public void setIsAvailable(Boolean isAvailable) {
@@ -624,11 +625,11 @@ public class Specimen extends BaseExtensionEntity {
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		if (NumUtil.greaterThanZero(getAvailableQuantity())) {
-			setIsAvailable(true);
-		}
-		
+		setIsAvailable(true);
+
+		//
 		// TODO: we need to add a reopen event here
+		//
 	}
 		
 	public CollectionProtocolRegistration getRegistration() {
@@ -688,9 +689,8 @@ public class Specimen extends BaseExtensionEntity {
 		setComment(specimen.getComment());
 		setExtension(specimen.getExtension());
 		setPrintLabel(specimen.isPrintLabel());
-		updatePosition(specimen.getPosition());
 		setFreezeThawCycles(specimen.getFreezeThawCycles());
-		checkQtyConstraints();
+		updatePosition(specimen.getPosition());
 	}
 	
 	//
@@ -755,14 +755,16 @@ public class Specimen extends BaseExtensionEntity {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
-		if (NumUtil.lessThan(getAvailableQuantity(), item.getQuantity())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
-		}
-
 		//
 		// Deduct distributed quantity from available quantity
 		//
-		setAvailableQuantity(getAvailableQuantity().subtract(item.getQuantity()));
+		if (getAvailableQuantity() != null) {
+			if (NumUtil.greaterThanEquals(getAvailableQuantity(), item.getQuantity())) {
+				setAvailableQuantity(getAvailableQuantity().subtract(item.getQuantity()));
+			} else {
+				setAvailableQuantity(BigDecimal.ZERO);
+			}
+		}
 
 		//
 		// add distributed event
@@ -772,7 +774,7 @@ public class Specimen extends BaseExtensionEntity {
 		//
 		// close specimen if explicitly closed or no quantity available
 		//
-		if (NumUtil.isZero(availableQuantity) || item.isDistributedAndClosed()) {
+		if (NumUtil.isZero(getAvailableQuantity()) || item.isDistributedAndClosed()) {
 			close(item.getOrder().getDistributor(), item.getOrder().getExecutionDate(), "Distributed");
 		}
 	}
@@ -813,7 +815,11 @@ public class Specimen extends BaseExtensionEntity {
 			setAvailableQuantity(item.getReturnedQuantity());
 			activate();
 		} else {
-			setAvailableQuantity(getAvailableQuantity().add(item.getReturnedQuantity()));
+			if (getAvailableQuantity() == null) {
+				setAvailableQuantity(item.getReturnedQuantity());
+			} else {
+				setAvailableQuantity(getAvailableQuantity().add(item.getReturnedQuantity()));
+			}
 		}
 
 		StorageContainer container = item.getReturningContainer();
@@ -871,15 +877,14 @@ public class Specimen extends BaseExtensionEntity {
 	public void addChildSpecimen(Specimen specimen) {
 		specimen.setParentSpecimen(this);				
 		if (specimen.isAliquot()) {
-			specimen.decAliquotedQtyFromParent();		
-			specimen.checkQtyConstraints();		
+			specimen.decAliquotedQtyFromParent();
 		}
 
 		if (specimen.getCreatedOn() != null && specimen.getCreatedOn().before(getCreatedOn())) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.CHILD_CREATED_ON_LT_PARENT);
 		}
 
-		specimen.occupyPosition();		
+		specimen.occupyPosition();
 		getChildCollection().add(specimen);
 	}
 	
@@ -896,31 +901,7 @@ public class Specimen extends BaseExtensionEntity {
 	public void setPending() {
 		updateCollectionStatus(PENDING);
 	}
-	
-	public void checkQtyConstraints() {
-		if (!isCollected()) { // No checks on un-collected specimens
-			return;
-		}
-		
-		ensureAliquotQtyOk(
-				SpecimenErrorCode.INIT_QTY_LT_ALIQUOT_QTY,
-				SpecimenErrorCode.AVBL_QTY_GT_ACTUAL);
-		
-		if (isAliquot()) {
-			//
-			// Ensure initial quantity is less than parent specimen quantity
-			//
-			if (NumUtil.greaterThan(initialQuantity, parentSpecimen.getInitialQuantity())) {
-				throw OpenSpecimenException.userError(SpecimenErrorCode.ALIQUOT_QTY_GT_PARENT_QTY);
-			}
-			
-			parentSpecimen.ensureAliquotQtyOk(
-					SpecimenErrorCode.PARENT_INIT_QTY_LT_ALIQUOT_QTY, 
-					SpecimenErrorCode.PARENT_AVBL_QTY_GT_ACTUAL);
-		}
- 
-	}
-	
+
 	public void decAliquotedQtyFromParent() {
 		if (isCollected() && isAliquot()) {
 			adjustParentSpecimenQty(initialQuantity);
@@ -970,17 +951,6 @@ public class Specimen extends BaseExtensionEntity {
 		}
 		
 		setLabel(label);
-	}
-
-	private BigDecimal getAliquotQuantity() {
-		BigDecimal aliquotQty = BigDecimal.ZERO;
-		for (Specimen child : getChildCollection()) {
-			if (child.isAliquot() && child.isCollected()) {
-				aliquotQty = aliquotQty.add(child.getInitialQuantity());
-			}
-		}
-		
-		return aliquotQty;		
 	}
 	
 	public String getLabelTmpl() {
@@ -1209,33 +1179,6 @@ public class Specimen extends BaseExtensionEntity {
 
 		return count;
 	}
-	
-	
-	/**
-	 * Ensures following constraints are adhered
-	 * 1. Specimen initial quantity is greater than or equals to sum of
-	 *    all immediate aliquot child specimens
-	 * 2. Specimen available quantity is less than 
-	 *    initial - sum of all immediate aliquot child specimens initial quantity
-	 * 3. Specimen available quantity is greater than or equals zero 
-	 */
-	private void ensureAliquotQtyOk(SpecimenErrorCode initLtAliquotQty, SpecimenErrorCode avblQtyGtAct) {
-		BigDecimal initialQty = getInitialQuantity();
-		BigDecimal aliquotQty = getAliquotQuantity();
-		
-		if (NumUtil.lessThan(initialQty, aliquotQty)) {
-			throw OpenSpecimenException.userError(initLtAliquotQty);
-		}
-
-		BigDecimal actAvailableQty = initialQty.subtract(aliquotQty);
-		if (NumUtil.greaterThan(getAvailableQuantity(), actAvailableQty)) {
-			throw OpenSpecimenException.userError(avblQtyGtAct);
-		}
-		
-		if (NumUtil.lessThanZero(getAvailableQuantity())) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.INSUFFICIENT_QTY);
-		}
-	}
 			
 	private void addOrUpdateCollectionEvent() {
 		if (isAliquot() || isDerivative()) {
@@ -1283,7 +1226,17 @@ public class Specimen extends BaseExtensionEntity {
 	}
 	
 	private void adjustParentSpecimenQty(BigDecimal qty) {
-		parentSpecimen.setAvailableQuantity(parentSpecimen.getAvailableQuantity().subtract(qty));
+		BigDecimal parentQty = parentSpecimen.getAvailableQuantity();
+		if (parentQty == null || NumUtil.isZero(parentQty)) {
+			return;
+		}
+
+		parentQty = parentQty.subtract(qty);
+		if (NumUtil.lessThanEqualsZero(parentQty)) {
+			parentQty = BigDecimal.ZERO;
+		}
+
+		parentSpecimen.setAvailableQuantity(parentQty);
 	}
 	
 	private void updateEvent(SpecimenEvent thisEvent, SpecimenEvent otherEvent) {
@@ -1306,7 +1259,7 @@ public class Specimen extends BaseExtensionEntity {
 			}
 			setPosition(null);
 				
-			deleteEvents();			
+			deleteEvents();
 		}
 				
 		for (Specimen child : getChildCollection()) {

@@ -35,8 +35,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	INVALID_COLL_STATUS,
 	
 	INVALID_QTY,
-	
-	INSUFFICIENT_QTY,
+
+	ALIQUOT_QTY_REQ,
 	
 	PARENT_REQUIRED,
 	
@@ -74,18 +74,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	EDIT_NOT_ALLOWED,
 	
-	INIT_QTY_LT_ALIQUOT_QTY,
-	
-	ALIQUOT_QTY_GT_PARENT_QTY,
-	
-	PARENT_INIT_QTY_LT_ALIQUOT_QTY,
-	
-	PARENT_AVBL_QTY_GT_ACTUAL,
-	
 	AVBL_QTY_GT_INIT_QTY,
 	
-	AVBL_QTY_GT_ACTUAL,
-			
 	REF_ENTITY_FOUND,
 	
 	NO_PRINTER_CONFIGURED,
@@ -105,7 +95,9 @@ public enum SpecimenErrorCode implements ErrorCode {
 	INVALID_RECV_QUALITY,
 	
 	INVALID_QTY_OR_CNT,
-	
+
+	ALIQUOT_CNT_N_QTY_REQ,
+
 	NOT_COLLECTED,
 	
 	NO_POOL_SPMN_COLLECTED,

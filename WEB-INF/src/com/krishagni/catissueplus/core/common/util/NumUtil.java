@@ -7,39 +7,39 @@ import java.math.RoundingMode;
 public class NumUtil {
 
     public static Boolean lessThanZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) < 0;
+        return d != null && d.compareTo(BigDecimal.ZERO) < 0;
     }
 
     public static Boolean lessThanEqualsZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) <= 0;
+        return d != null && d.compareTo(BigDecimal.ZERO) <= 0;
     }
 
     public static Boolean greaterThanZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) > 0;
+        return d != null && d.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public static Boolean greaterThanEqualsZero(BigDecimal d) {
-        return d.compareTo(BigDecimal.ZERO) >= 0;
+        return d != null && d.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     public static Boolean isZero(BigDecimal d) {
-        return d.equals(BigDecimal.ZERO);
+        return d != null && d.equals(BigDecimal.ZERO);
     }
 
     public static Boolean lessThan(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) < 0;
+        return subject != null && measure != null && subject.compareTo(measure) < 0;
     }
 
     public static Boolean lessThanEquals(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) <= 0;
+        return subject != null && measure != null && subject.compareTo(measure) <= 0;
     }
 
     public static Boolean greaterThan(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) > 0;
+        return subject != null && measure != null && subject.compareTo(measure) > 0;
     }
 
     public static Boolean greaterThanEquals(BigDecimal subject, BigDecimal measure) {
-        return subject.compareTo(measure) >= 0;
+        return subject != null && measure != null && subject.compareTo(measure) >= 0;
     }
 
     public static BigDecimal multiply(BigDecimal op1, int op2) {

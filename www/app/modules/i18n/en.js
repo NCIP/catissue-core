@@ -45,6 +45,7 @@
     "yes": "Yes",
     "no": "No",
     "none": "None",
+    "warning": "Warning",
     "form_validation_error": "There are validation errors as highlighted below. Please correct them",
     "server_error": "Internal Server Error. Please report this problem to system administrator",
     "ui_error": "UI Error. Please report this problem to system administrator",
@@ -587,8 +588,7 @@
 
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
-      "insufficient_qty": "Insufficient parent specimen quantity to create aliquots",
-      "insufficient_parent_qty": "Insufficient parent specimen {{label}} quantity to create child specimens",
+      "insufficient_qty": "Total quantity of aliquots is more than the parent's quantity. Do you want to proceed?",
       "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
       "children_created_on_lt_parent": "Created on time of children less than that of parent specimen {{parentLabel}}",
@@ -1590,6 +1590,10 @@
     "tooltip": {
       "create": "Create new distribution order",
       "search": "Filter out distribution orders"
+    },
+
+    "errors": {
+      "insufficient_qty": "The distribution quantity of {{count}} {{ count == 1 ? 'specimen' : 'specimens' }} is more than the available quantity. Do you want to proceed?"
     }
   },
 

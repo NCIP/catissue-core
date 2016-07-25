@@ -17,7 +17,7 @@
         <div ng-include src="'orders/addedit-detail.html'"></div>
       </os-wizard-step>
 
-      <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="passThrough()">
+      <os-wizard-step title="{{'orders.specimens' | translate}}" on-finish="areItemQuantitiesValid(doWizard)">
         <div ng-include src="'orders/addedit-order-specimens.html'"></div>
       </os-wizard-step>
 
@@ -236,14 +236,12 @@
             </span>
           </td>
           <td class="col">
-            <span> {{specimen.availableQty}} </span>
-            <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"></os-specimen-unit>
+            <os-spmn-measure-val specimen="specimen" value="specimen.availableQty"></os-spmn-measure-val>
           </td>
           <td class="col">
             <div class="os-input-addon-grp">
               <input type="text" os-md-input name="qty" ng-model="item.quantity" required 
                 os-ensure-range="[
-                  {tgt: specimen.availableQty, cmp: 'le', errorKey: 'distQtyGtAvailableQty'},
                   {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
                 ]" 
                 ng-model-options="{allowInvalid: 'true'}" ng-change="setStatus(item)">

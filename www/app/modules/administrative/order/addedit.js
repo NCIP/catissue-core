@@ -3,7 +3,9 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
   .controller('OrderAddEditCtrl', function(
     $scope, $state, $translate, order, spmnRequest, Institute,
     Specimen, SpecimensHolder, Site, DistributionProtocol, DistributionOrder, Alerts, Util) {
-    
+
+    var ignoreQtyWarning = false;
+
     function init() {
       $scope.order = order;
 
@@ -81,7 +83,11 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function getOrderItems(specimens) {
-      return specimens.map(
+      return specimens.filter(
+        function(specimen) {
+          return specimen.availableQty == undefined || specimen.availableQty > 0;
+        }
+      ).map(
         function(specimen) {
           return {
             specimen: specimen,
@@ -125,7 +131,45 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       return items;
     }
 
+    function areItemQuantitiesValid(order, callback) {
+      if (ignoreQtyWarning) {
+        return true;
+      }
+
+      var moreQtyItems = order.orderItems.filter(
+        function(item) {
+          return item.specimen.availableQty && item.specimen.availableQty < item.quantity;
+        }
+      );
+
+      if (moreQtyItems.length > 0) {
+        showInsufficientQtyWarning(moreQtyItems, callback);
+        return false;
+      }
+
+      return true;
+    }
+
+    function showInsufficientQtyWarning(items, callback) {
+      Util.showConfirm({
+        ok: function () {
+          ignoreQtyWarning =  true;
+          callback();
+        },
+        title: "common.warning",
+        isWarning: true,
+        confirmMsg: "orders.errors.insufficient_qty",
+        input: {
+          count: items.length
+        }
+      });
+    }
+
     function saveOrUpdate(order) {
+      if (!areItemQuantitiesValid(order, function() { saveOrUpdate(order); })) {
+        return;
+      }
+
       order.siteId = undefined;
 
       var orderClone = angular.copy(order);
@@ -190,6 +234,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     $scope.addSpecimens = function(labels) {
       return Specimen.listForDp(labels, $scope.order.distributionProtocol.id).then(
         function (specimens) {
+          ignoreQtyWarning = false;
           Util.appendAll($scope.order.orderItems, getOrderItems(specimens));
           return true;
         }
@@ -216,11 +261,19 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     $scope.passThrough = function() {
       return true;
     }
-    
+
+    $scope.areItemQuantitiesValid = function(doWizard) {
+      if (!doWizard.forward) {
+        return true;
+      }
+
+      return areItemQuantitiesValid($scope.order, function () { doWizard.next(false); });
+    }
+
     $scope.setStatus = function(item) {
       var selected = !spmnRequest ? true : item.specimen.selected;
 
-      if (item.quantity == item.specimen.availableQty && selected) {
+      if ((!item.specimen.availableQty || item.quantity >= item.specimen.availableQty) && selected) {
         item.status = 'DISTRIBUTED_AND_CLOSED';
       } else {
         item.status = 'DISTRIBUTED';

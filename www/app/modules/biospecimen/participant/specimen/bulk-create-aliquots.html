@@ -58,18 +58,18 @@
               <span>{{aliquotSpec.type}}</span>
             </td>
             <td class="col">
-              <span>{{aliquotSpec.parentAvailableQty}}</span>
-              <os-specimen-unit specimen-class="aliquotSpec.specimenClass" type="aliquotSpec.type">
-              </os-specimen-unit>
+              <os-spmn-measure-val specimen="aliquotSpec" value="aliquotSpec.parentAvailableQty"></os-spmn-measure-val>
             </td>
             <td class="col">
-              <input name="cnt" type="text" os-md-input ng-model="aliquotSpec.count" ng-required="!aliquotSpec.quantity">
+              <input name="cnt" type="text" os-md-input ng-model="aliquotSpec.count" 
+                ng-required="!aliquotSpec.quantity || !aliquotSpec.parentAvailableQty">
               <div os-field-error field="aform.cnt"></div>
             </td>
             <td class="col">
               <div class="os-input-addon-grp">
-                <input name="qty" os-md-input ng-model="aliquotSpec.quantity"
-                  ng-model-options="{allowInvalid: 'true'}" ng-required="!aliquotSpec.count">
+                <input name="qty" type="text" os-md-input ng-model="aliquotSpec.quantity"
+                  ng-model-options="{allowInvalid: 'true'}"
+                  ng-required="!aliquotSpec.count || !aliquotSpec.parentAvailableQty">
                 <div class="os-input-addon-right os-md-input-addon">
                   <os-specimen-unit specimen-class="aliquotSpec.specimenClass" type="aliquotSpec.type">
                   </os-specimen-unit>

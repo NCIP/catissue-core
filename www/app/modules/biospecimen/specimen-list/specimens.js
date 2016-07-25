@@ -77,7 +77,7 @@ angular.module('os.biospecimen.specimenlist')
     }
 
     function isSpecimenAvailable(spmn) {
-      return spmn.availableQty > 0 && (spmn.available == true);
+      return (spmn.availableQty == undefined || spmn.availableQty > 0) && (spmn.available == true);
     }
 
     function filterSpecimens(filterOpts) {

@@ -109,6 +109,9 @@ angular.module('os.biospecimen.common.specimenunit', [])
     }
   })
   .directive('osSpecimenQty', function() {
+    //
+    // TODO: Change this directive to os-specimen-measure on analysing the impact
+    //
     return {
       restrict: 'E',
 
@@ -147,5 +150,29 @@ angular.module('os.biospecimen.common.specimenunit', [])
 
         return function() { }
       }
+    }
+  })
+  .directive("osSpmnMeasureVal", function() {
+    return {
+      restrict: 'E',
+
+      scope: {
+        value   : '=',
+        specimen: '=',
+        measure : '@'
+      },
+
+      replace: true,
+
+      template:
+        '<span class="value value-md" ng-switch="!!value || value == 0">' +
+        '  <span ng-switch-when="true">' +
+        '    {{value | osNumberInScientificNotation}} ' +
+        '    <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type"' +
+        '      measure="{{measure || \'quantity\'}}">' +
+        '    </os-specimen-unit>' +
+        '  </span>' +
+        '  <span ng-switch-when="false" translate="common.not_specified"></span>' +
+        '</span>'
     }
   });

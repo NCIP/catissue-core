@@ -43,9 +43,7 @@
         </div>
         <label class="col-xs-2 control-label" translate="specimens.available_qty">Available Quantity</label>
         <div class="col-xs-2 os-ctrl-padding-top">
-          <span>{{parentSpecimen.availableQty}}</span>
-          <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
-          </os-specimen-unit>
+          <os-spmn-measure-val specimen="parentSpecimen" value="parentSpecimen.availableQty"></os-spmn-measure-val>
         </div>
       </div>
 
@@ -124,7 +122,7 @@
       <label class="col-xs-3 control-label" translate="specimens.qty">Initial Quantity</label>
       <div class="col-xs-6">
         <input name="quantity" ng-model="derivative.initialQty" class="form-control"
-          type="text" placeholder="{{'specimens.qty' | translate}}" required
+          type="text" placeholder="{{'specimens.qty' | translate}}"
           ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
         <div os-field-error field="derivativeForm.quantity"></div>
       </div>

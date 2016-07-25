@@ -1,0 +1,16 @@
+<div class="os-modal">
+  <div class="os-modal-header">
+    <span ng-class="{'text-warning' : isWarning}" translate="{{title}}"></span>
+  </div>
+  <div class="os-modal-body">
+    <div translate="{{confirmMsg}}" translate-values="input"></div>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="{{!!cancelBtn ? cancelBtn : 'common.no'}}">Cancel</span>
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+      <span translate="{{!!okBtn ? okBtn : 'common.yes'}}">Yes</span>
+    </button>
+  </div>
+</div>

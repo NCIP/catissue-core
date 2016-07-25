@@ -6,10 +6,11 @@ angular.module('os.biospecimen.participant.collect-specimens',
   .factory('CollectSpecimensSvc', function($state) {
     var data = {};
     return {
-      collect: function(stateDetail, visit, specimens) {
+      collect: function(stateDetail, visit, specimens, ignoreQtyWarn) {
         data.specimens = specimens;
         data.stateDetail = stateDetail;
         data.visit = visit;
+        data.ignoreQtyWarn = ignoreQtyWarn;
         $state.go('participant-detail.collect-specimens', {visitId: visit.id, eventId: visit.eventId});
       },
 
@@ -29,6 +30,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       getStateDetail: function() {
         return data.stateDetail;
+      },
+
+      isIgnoreQtyWarn: function() {
+        return data.ignoreQtyWarn;
       }
     };
   })
@@ -37,9 +42,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
       $scope, $translate, $state, $document,
       cpr, visit, 
       Visit, Specimen, PvManager, 
-      CollectSpecimensSvc, Container, Alerts, Util) {
+      CollectSpecimensSvc, Container, Alerts, Util, SpecimenUtil) {
+
+      var ignoreQtyWarning = false;
 
       function init() {
+        ignoreQtyWarning = CollectSpecimensSvc.isIgnoreQtyWarn() || false;
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
           function(specimen) {
             specimen.existingStatus = specimen.status;
@@ -406,6 +414,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
           return;
         }
 
+        if (!ignoreQtyWarning && !areAliquotsQtyOk($scope.specimens)) {
+          return;
+        }
+
         var specimensToSave = getSpecimensToSave($scope.cp, $scope.specimens, []);
         if (!!$scope.visit.id && $scope.visit.status == 'Complete') {
           Specimen.save(specimensToSave).then(
@@ -564,6 +576,47 @@ angular.module('os.biospecimen.participant.collect-specimens',
         specimen.laterality = uiSpecimen.laterality;
         return specimen;
       };
+
+      function areAliquotsQtyOk(specimens) {
+        for (var i = 0; i < specimens.length; i++) {
+          var specimen = specimens[i];
+          if (!specimen.children || specimen.children.length == 0) {
+            continue;
+          }
+
+          var aliquots = specimen.children.filter(
+            function(child) {
+               return child.selected && child.lineage == 'Aliquot' && child.existingStatus != 'Collected';
+             }
+          );
+
+          var aliquotsQty = aliquots.reduce(
+            function(sum, aliquot) {
+              return sum + (!aliquot.initialQty ? 0 : +aliquot.initialQty);
+            }, 0);
+
+          var parentQty = specimen.existingStatus == 'Collected' ? specimen.availableQty : specimen.initialQty;
+          if (parentQty != undefined && parentQty < aliquotsQty) {
+            showInsufficientQtyWarning();
+            return false;
+          }
+
+          if (!areAliquotsQtyOk(specimen.children)) {
+            return false;
+          }
+        };
+
+        return true;
+      }
+
+      function showInsufficientQtyWarning() {
+        SpecimenUtil.showInsufficientQtyWarning({
+          ok: function () {
+            ignoreQtyWarning = true;
+            $scope.saveSpecimens();
+          }
+        });
+      }
 
       $scope.assignLabels = function(aliquot, labels) {
         var labels = Util.splitStr(labels, /,|\t|\n/);

@@ -1,5 +1,8 @@
 angular.module('os.biospecimen.specimen')
-  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts, Util, SpecimenUtil) {
+  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts, SpecimenUtil) {
+
+    var ignoreQtyWarning = false;
+
     function init() {
       var createdOn = new Date().getTime();
 
@@ -22,11 +25,20 @@ angular.module('os.biospecimen.specimen')
       $scope.ctx = {aliquotsSpec: aliquotsSpec}
     }
 
+    function showInsufficientQtyWarning() {
+      SpecimenUtil.showInsufficientQtyWarning({
+        ok: function () {
+          ignoreQtyWarning = true;
+          $scope.createAliquots();
+        }
+      });
+    }
+
     function isValidCountQty(spec) {
       if (!!spec.quantity && !!spec.count) {
         var reqQty = spec.quantity * spec.count;
-        if (reqQty > spec.parentAvailableQty) {
-          Alerts.error("specimens.errors.insufficient_parent_qty", {label: spec.parentLabel});
+        if (!ignoreQtyWarning && spec.parentAvailableQty != undefined && reqQty > spec.parentAvailableQty) {
+          showInsufficientQtyWarning();
           return false;
         }
       } else if (!!spec.quantity) {

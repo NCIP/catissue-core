@@ -119,14 +119,22 @@
               </div>
             </td>
             <td class="col os-col-10">
-              <div class="os-input-addon-grp">
-                <input type="text" os-md-input edit-when="specimen.existingStatus != 'Collected'"
-                  name="qty" ng-model="specimen.initialQty" ng-required="specimen.status == 'Collected'"
-                  ng-model-options="{allowInvalid: 'true'}" ng-change="changeQuantity(specimen, specimen.initialQty)">
-                <div class="os-input-addon-right os-md-input-addon">
-                  <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                  </os-specimen-unit>
-                </div>
+              <div ng-switch on="specimen.existingStatus == 'Collected'">
+                <span ng-switch-when="true">
+                  <os-spmn-measure-val value="specimen.availableQty" specimen="specimen"></os-spmn-measure-val>
+                </span>
+                <span ng-switch-when="false">
+                  <div class="os-input-addon-grp">
+                    <input type="text" os-md-input name="qty" 
+                      ng-model="specimen.initialQty" ng-required="specimen.lineage == 'Aliquot'"
+                      ng-model-options="{allowInvalid: 'true'}"
+                      ng-change="changeQuantity(specimen, specimen.initialQty)">
+                    <div class="os-input-addon-right os-md-input-addon">
+                      <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                      </os-specimen-unit>
+                    </div>
+                  </div>
+                </span>
               </div>
               <div os-field-error field="sform.qty"></div>
             </td>

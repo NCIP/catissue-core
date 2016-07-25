@@ -94,13 +94,16 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     function getShipmentItems(specimens) {
       return specimens.filter(
         function(specimen) {
-          return specimen.available && specimen.availableQty > 0 && specimen.activityStatus == 'Active';
-        }).map(
+          return specimen.available && (specimen.availableQty == undefined || specimen.availableQty > 0)
+                 && specimen.activityStatus == 'Active';
+        }
+      ).map(
         function(specimen) {
           return {
             specimen: specimen
           };
-        });
+        }
+      );
     }
 
     function getShipmentItemsFromReq(reqItems, shipmentItems) {
@@ -209,6 +212,10 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
     $scope.saveDraft = function() {
       saveOrUpdate('Pending');
+    }
+
+    $scope.passThrough = function() {
+      return true;
     }
 
     $scope.toggleAllSpecimensSelect = function() {

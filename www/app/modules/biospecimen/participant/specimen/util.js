@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimen')
-  .factory('SpecimenUtil', function(Specimen, PvManager, Alerts) {
+  .factory('SpecimenUtil', function(Specimen, PvManager, Util, Alerts) {
 
     function collectAliquots(scope) {
       var spec = scope.aliquotSpec;
@@ -11,8 +11,13 @@ angular.module('os.biospecimen.specimen')
 
       if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
         var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
-        if (requiredQty > parent.availableQty) {
-          Alerts.error("specimens.errors.insufficient_qty");
+        if (parent.availableQty != undefined && requiredQty > parent.availableQty && !scope.ignoreQtyWarning) {
+          showInsufficientQtyWarning({
+            ok: function () {
+              scope.ignoreQtyWarning = true;
+              scope.collectAliquots();
+            }
+          });
           return;
         }
       } else if (!!spec.qtyPerAliquot) {
@@ -196,6 +201,14 @@ angular.module('os.biospecimen.specimen')
       );
     }
 
+    function showInsufficientQtyWarning(opts) {
+      Util.showConfirm(angular.extend({
+        title: "common.warning",
+        isWarning: true,
+        confirmMsg: "specimens.errors.insufficient_qty",
+      }, opts));
+    }
+
     return {
       collectAliquots: collectAliquots,
 
@@ -209,6 +222,8 @@ angular.module('os.biospecimen.specimen')
 
       loadPathologyStatuses: loadPathologyStatuses,
 
-      copyContainerName: copyContainerName
+      copyContainerName: copyContainerName,
+
+      showInsufficientQtyWarning: showInsufficientQtyWarning
     }
   });

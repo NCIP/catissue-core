@@ -500,7 +500,7 @@ h4 + .btn-group {
 }
 
 input.ng-dirty.ng-invalid {
-  border-color: #FA787E
+  border-color: #FA787E;
   box-shadow: none;
 }
  

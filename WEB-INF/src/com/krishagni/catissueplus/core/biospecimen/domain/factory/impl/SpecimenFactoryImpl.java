@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.ObjectUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
@@ -474,7 +473,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 		
 		if (existing == null || existing.isPending() || detail.isAttrModified("availableQty")) {
-			setAvailableQty(detail, specimen, ose);
+			setAvailableQty(detail, existing, specimen, ose);
 		} else {
 			specimen.setAvailableQuantity(existing.getAvailableQuantity());
 		}		
@@ -482,40 +481,42 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 	
 	private void setInitialQty(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		BigDecimal qty = detail.getInitialQty();
-		if (qty == null) {
-			SpecimenRequirement sr = specimen.getSpecimenRequirement();			
-			if (sr != null) {
-				qty = sr.getInitialQuantity();
-			}
-		}
-				
-		if (!Specimen.isMissed(detail.getStatus()) && (qty == null || NumUtil.lessThanEqualsZero(qty))) {
+		if (NumUtil.lessThanZero(qty)) {
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
-				
-		specimen.setInitialQuantity(qty);		
+
+		if (specimen.isAliquot() && qty == null) {
+			ose.addError(SpecimenErrorCode.ALIQUOT_QTY_REQ);
+			return;
+		}
+
+		specimen.setInitialQuantity(qty);
 	}
 	
-	private void setAvailableQty(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
+	private void setAvailableQty(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
 		BigDecimal availableQty = detail.getAvailableQty();
-		if (availableQty == null) {
+		if (availableQty == null && (existing == null || existing.isPending())) {
 			availableQty = specimen.getInitialQuantity();
 		}
 		
-		if (!Specimen.isMissed(detail.getStatus()) &&
-			(availableQty == null || NumUtil.greaterThan(availableQty, specimen.getInitialQuantity()) || NumUtil.lessThanZero(availableQty))){
+		if (NumUtil.lessThanZero(availableQty)){
 			ose.addError(SpecimenErrorCode.INVALID_QTY);
 			return;
 		}
-		
+
+		if (specimen.isAliquot() && availableQty == null) {
+			ose.addError(SpecimenErrorCode.ALIQUOT_QTY_REQ);
+			return;
+		}
+
+		if (NumUtil.lessThan(specimen.getInitialQuantity(), availableQty)) {
+			ose.addError(SpecimenErrorCode.AVBL_QTY_GT_INIT_QTY);
+			return;
+		}
+
 		specimen.setAvailableQuantity(availableQty);
-		
-		if (detail.getAvailable() == null) {
-			specimen.setIsAvailable(availableQty.compareTo(BigDecimal.ZERO) > 0);
-		} else {
-			specimen.setIsAvailable(detail.getAvailable());
-		}		
+		specimen.setIsAvailable(detail.getAvailable() == null || detail.getAvailable());
 	}
 	
 	private void setConcentration(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {
