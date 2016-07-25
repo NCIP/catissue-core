@@ -243,6 +243,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		addActivityStatusRestriction(criteria, listCrit.activityStatus());
 		addInstituteRestriction(criteria, listCrit.instituteName());
+		addDomainRestriction(criteria, listCrit.domainName());
 		return criteria;
 	}
 
@@ -281,6 +282,15 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		criteria.createAlias("u.institute", "institute")
 			.add(Restrictions.eq("institute.name", instituteName));
+	}
+	
+	private void addDomainRestriction(Criteria criteria, String domainName) {
+		if (StringUtils.isBlank(domainName)) {
+			return;
+		}
+		
+		criteria.createAlias("u.authDomain", "domain")
+			.add(Restrictions.eq("domain.name", domainName));
 	}
 
 	private void addProjectionFields(Criteria criteria) {

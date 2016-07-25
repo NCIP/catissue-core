@@ -252,6 +252,10 @@ public class Utility {
 	public static String getDateString(Date date) {
 		return new SimpleDateFormat(ConfigUtil.getInstance().getDeDateFmt()).format(date);
 	}
+	
+	public static String getDateTimeString(Date date) {
+		return new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()).format(date);
+	}
 
 	public static Date chopSeconds (Date date) {
 		if (date == null) {

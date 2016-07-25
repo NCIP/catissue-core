@@ -11,6 +11,8 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 	
 	private String instituteName;
 	
+	private String domainName;
+	
 	private boolean listAll;
 	
 	@Override
@@ -53,6 +55,15 @@ public class UserListCriteria extends AbstractListCriteria<UserListCriteria> {
 	public String instituteName() {
 		return instituteName;
 	}	
+	
+	public UserListCriteria domainName(String domainName) {
+		this.domainName = domainName;
+		return self();
+	}
+	
+	public String domainName() {
+		return domainName;
+	}
 	
 	public boolean listAll() {
 		return listAll;
