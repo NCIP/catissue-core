@@ -322,4 +322,51 @@
     </sql>
   </changeSet>
 
-</databaseChangeLog>	
+  <changeSet author="slakhani" id="Stored procedure to create indices on foreign keys" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure create_index_on_fk as
+        cnt number := 0;
+        index_name varchar2(128);
+      begin
+        declare column_already_indexed exception;
+
+        pragma exception_init(column_already_indexed, -1408); -- ora-01408
+
+        begin
+          for uc in (
+            select
+              cons.table_name as table_name, cols.column_name as column_name
+            from
+              user_constraints cons
+              left join user_cons_columns cols on cols.constraint_name = cons.constraint_name
+            where
+              cons.constraint_type = 'R'
+          )
+
+          loop
+            index_name := uc.column_name;
+            if length(index_name) > 20 then
+              index_name := substr(index_name, 0, 20);
+            end if;
+
+            index_name := index_name || cnt || '_idx';
+            begin
+              execute immediate 'create index ' || index_name || ' on ' || uc.table_name || '(' || uc.column_name || ')';
+            exception
+              when column_already_indexed then
+                continue;
+            end;
+
+            cnt:=cnt+1;
+          end loop;
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Creating indices on foreign keys" dbms="oracle">
+    <sql>call create_index_on_fk()</sql>
+  </changeSet>
+
+</databaseChangeLog>
