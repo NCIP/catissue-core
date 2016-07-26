@@ -355,7 +355,7 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		for (Specimen specimen : specimens) {
 			if (specimen.isClosed()) {
 				closedSpecimens.add(specimen);
-			} else if (!specimen.getIsAvailable()) {
+			} else if (!specimen.isAvailable()) {
 				unavailableSpecimens.add(specimen);
 			}
 		}

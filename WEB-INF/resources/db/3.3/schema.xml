@@ -369,4 +369,7 @@
     <sql>call create_index_on_fk()</sql>
   </changeSet>
 
-</databaseChangeLog>
+  <changeSet author="vlonushte" id="Drop available column from specimen table as it is no longer used">
+    <dropColumn tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE"/>
+  </changeSet>
+</databaseChangeLog>	

@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,8 +62,6 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	private BigDecimal initialQty;
 	
 	private BigDecimal availableQty;
-	
-	private Boolean available;
 	
 	private BigDecimal concentration;
 	
@@ -264,14 +261,6 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.availableQty = availableQty;
 	}
 
-	public Boolean getAvailable() {
-		return available;
-	}
-
-	public void setAvailable(Boolean available) {
-		this.available = available;
-	}
-
 	public BigDecimal getConcentration() {
 		return concentration;
 	}
@@ -386,7 +375,6 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setPathology(specimen.getPathologicalStatus());
 		result.setInitialQty(specimen.getInitialQuantity());
 		result.setAvailableQty(specimen.getAvailableQuantity());
-		result.setAvailable(specimen.getIsAvailable());
 		result.setConcentration(specimen.getConcentration());
 		if (specimen.getParentSpecimen() != null) {
 			result.setParentId(specimen.getParentSpecimen().getId());

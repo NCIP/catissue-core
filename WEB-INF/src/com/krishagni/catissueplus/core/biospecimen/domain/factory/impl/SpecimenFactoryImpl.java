@@ -516,7 +516,6 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 
 		specimen.setAvailableQuantity(availableQty);
-		specimen.setIsAvailable(detail.getAvailable() == null || detail.getAvailable());
 	}
 	
 	private void setConcentration(SpecimenDetail detail, Specimen existing, Specimen specimen, OpenSpecimenException ose) {

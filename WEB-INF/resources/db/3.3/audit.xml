@@ -20,4 +20,9 @@
       <column name="INSTITUTE_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Drop audit column as available removed from specimen table">
+    <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="AVAILABLE"/>
+    <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="isAvailable_MOD"/>
+  </changeSet>
 </databaseChangeLog>

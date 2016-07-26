@@ -23,8 +23,6 @@
 
     <property name="label" column="LABEL" />
 
-    <property name="isAvailable" column="AVAILABLE" />
-
     <property name="comment" column="COMMENTS" />
 
     <property name="activityStatus" column="ACTIVITY_STATUS" />

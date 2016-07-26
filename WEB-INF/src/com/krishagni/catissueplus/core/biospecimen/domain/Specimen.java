@@ -76,8 +76,6 @@ public class Specimen extends BaseExtensionEntity {
 
 	private String activityStatus;
 
-	private Boolean isAvailable;
-
 	private String barcode;
 
 	private String comment;
@@ -288,15 +286,6 @@ public class Specimen extends BaseExtensionEntity {
 			activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 		}
 		this.activityStatus = activityStatus;
-	}
-
-	public Boolean getIsAvailable() {
-		return (getAvailableQuantity() == null || NumUtil.greaterThanZero(getAvailableQuantity())) &&
-			(isAvailable == null || isAvailable);
-	}
-
-	public void setIsAvailable(Boolean isAvailable) {
-		this.isAvailable = isAvailable;
 	}
 
 	public String getBarcode() {
@@ -565,6 +554,10 @@ public class Specimen extends BaseExtensionEntity {
 		return isMissed(getCollectionStatus());
 	}
 
+	public Boolean isAvailable() {
+		return getAvailableQuantity() == null || NumUtil.greaterThanZero(getAvailableQuantity());
+	}
+
 	public void disable() {
 		disable(!isForceDelete());
 	}
@@ -609,7 +602,6 @@ public class Specimen extends BaseExtensionEntity {
 			return;
 		}
 		
-		setIsAvailable(false);
 		virtualize(time);
 		addDisposalEvent(user, time, reason);		
 		setActivityStatus(Status.ACTIVITY_STATUS_CLOSED.getStatus());
@@ -625,7 +617,6 @@ public class Specimen extends BaseExtensionEntity {
 		}
 		
 		setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
-		setIsAvailable(true);
 
 		//
 		// TODO: we need to add a reopen event here
@@ -647,7 +638,6 @@ public class Specimen extends BaseExtensionEntity {
 		setBarcode(specimen.getBarcode());
 		setInitialQuantity(specimen.getInitialQuantity());
 		setAvailableQuantity(specimen.getAvailableQuantity());
-		setIsAvailable(specimen.getIsAvailable());
 
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
@@ -751,7 +741,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 		
 	public void distribute(DistributionOrderItem item) {
-		if (!getIsAvailable() || !isCollected()) {
+		if (!isAvailable() || !isCollected()) {
 			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_AVAILABLE_FOR_DIST, getLabel());
 		}
 		
@@ -1251,7 +1241,6 @@ public class Specimen extends BaseExtensionEntity {
 		setCollectionStatus(status);
 
 		if (getId() != null && !isCollected(status)) {
-			setIsAvailable(false);
 			setAvailableQuantity(BigDecimal.ZERO);
 
 			if (getPosition() != null) {
