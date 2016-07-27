@@ -41,8 +41,8 @@
   padding-left: 30px;
 }
 
-.os-page-header.no-breadcrumbs .os-page-header-inner {
-  margin-top: 8px;
+.os-page-header.no-breadcrumbs .os-page-header-inner .os-page-header-content-wrapper {
+  margin-top: 7px;
 }
 
 .os-page-header-content-wrapper {

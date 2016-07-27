@@ -251,6 +251,10 @@ h4 + .btn-group {
   overflow: auto;
 }
 
+.os-page-header ~ .container.os-de-form {
+  padding: 0px 0px 5px;
+}
+
 .os-page-commands ~ .os-container-wrapper .container,
 .os-page-commands ~ .container{
   top: 161px!important;
