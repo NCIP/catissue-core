@@ -197,6 +197,17 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="specimens.comments">Comments</span>
+      </label>
+      <div class="col-xs-6">
+        <textarea ng-model="derivative.comments" class="form-control"
+          placeholder="{{'specimens.comments' | translate}}" rows="2">
+        </textarea>
+      </div>
+    </div>
+
     <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
       <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="derivative">
       </div>

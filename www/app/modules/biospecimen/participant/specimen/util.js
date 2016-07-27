@@ -52,6 +52,7 @@ angular.module('os.biospecimen.specimen')
         createdOn: spec.createdOn,
         freezeThawCycles: spec.freezeThawCycles,
         incrParentFreezeThaw: spec.incrParentFreezeThaw,
+        comments: spec.comments,
 
         selected: true,
         parent: parent,

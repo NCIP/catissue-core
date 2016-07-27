@@ -545,6 +545,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           createdOn: uiSpecimen.lineage != 'New' ? uiSpecimen.createdOn : undefined,
           freezeThawCycles: uiSpecimen.freezeThawCycles,
           incrParentFreezeThaw: uiSpecimen.incrParentFreezeThaw,
+          comments: uiSpecimen.comments,
           extensionDetail: uiSpecimen.extensionDetail
         };
 
