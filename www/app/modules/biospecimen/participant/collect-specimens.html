@@ -1,27 +1,29 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          <span>{{cpr.cpShortTitle}}</span>
-        </a> 
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <span>{{cpr.ppid}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})" translate="visits.list">
-          Visits
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a> 
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <span>{{cpr.ppid}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})" translate="visits.list">
+            Visits
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      Specimen Collection for
-      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
-    </h3>
+      <h3>
+        Specimen Collection for
+        <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

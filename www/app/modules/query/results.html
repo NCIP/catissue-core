@@ -1,21 +1,46 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="query-list" translate="queries.list">Queries</a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="query-list" translate="queries.list">Queries</a>
+        </li>
+      </ul>
 
-    <h3> 
-      <span ng-if="!queryCtx.id" translate="queries.new_query">
-        New Query
-      </span>
-      <span ng-if="!!queryCtx.id">
-        {{queryCtx.title}}
-      </span>
-      <span>({{resultsCtx.numRows}})</span>
-    </h3>
-    <div class="os-btns right os-query-btn">
+      <h3> 
+        <span ng-if="!queryCtx.id" translate="queries.new_query">
+          New Query
+        </span>
+        <span ng-if="!!queryCtx.id">
+          {{queryCtx.title}}
+        </span>
+        <span>({{resultsCtx.numRows}})</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left os-query-btn">
+      <button class="default" ng-click="editFilters()">
+        <span class="fa fa-pencil"></span>
+        <span translate="queries.edit_filters">Edit Filters</span>
+      </button>
+
+      <button class="default" ng-click="defineView()">
+        <span class="fa fa-columns"></span>
+        <span translate="queries.define_view">Columns</span>
+      </button>
+
+      <button class="default" ng-click="rerun()">
+        <span class="fa fa-repeat"></span>
+        <span translate="queries.rerun">Rerun</span>
+      </button>
+
+      <button class="default" ng-click="downloadResults()">
+        <span class="fa fa-download"></span>
+        <span translate="common.buttons.export">Export</span>
+      </button>
+
       <span ng-if="showAddToSpecimenList">
         <button class="btn default" ng-if="!resultsCtx.selectAll" ng-click="selectAllRows()">
           <span class="fa fa-check"></span>
@@ -35,12 +60,12 @@
         </button>
       </span>
 
-      <div dropdown class="inline" ng-if="cps.length > 0">
+      <div dropdown class="os-inline-btn" ng-if="cps.length > 0">
         <button class="default dropdown-toggle">
           <span translate="queries.catalogs">Catalogs</span>
           <span class="fa fa-caret-down"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right dropdown-menu-form os-menu-list">
+        <ul class="dropdown-menu dropdown-menu-form os-menu-list">
           <li>
             <input ng-model="searchCp" type="text" class="form-control"
               placeholder="{{'queries.search_cp' | translate}}">
@@ -51,39 +76,6 @@
                 <a><span>{{cp.shortTitle}}</span></a>
               </li>
             </ul>
-          </li>
-        </ul>
-      </div>
-
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li>
-            <a ng-click="editFilters()">
-              <span class="fa fa-pencil"></span>
-              <span translate="queries.edit_filters">Edit Filters</span>
-            </a>
-          </li>
-          <li>
-            <a ng-click="defineView()">
-              <span class="fa fa-columns"></span>
-              <span translate="queries.define_view">Columns</span>
-            </a>
-          </li>
-          <li>
-            <a ng-click="rerun()">
-              <span class="fa fa-repeat"></span>
-              <span translate="queries.rerun">Rerun</span>
-            </a>
-          </li>
-          <li>
-            <a ng-click="downloadResults()">
-              <span class="fa fa-download"></span>
-              <span translate="common.buttons.export">Export</span>
-            </a>
           </li>
         </ul>
       </div>

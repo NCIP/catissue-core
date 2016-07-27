@@ -16,22 +16,18 @@
         <a class="dropdown-toggle">
           <span class="fa fa-user"></span>
         </a>
-
         <ul class="dropdown-menu dropdown-menu-right" role="menu">
           <li><a>{{currentUser | osUserDisplayName}}</a></li>
           <li class="divider"></li>
           <li ng-if="currentUser.domain == global.defaultDomain">
-             <a ui-sref="user-password({userId: currentUser.id})" translate="user.change_password.change_password">Change Password</a>
+            <a ui-sref="user-password({userId: currentUser.id})">
+              <span translate="user.change_password.change_password">Change Password</span>
+            </a>
           </li>
           <li class="divider"></li>
           <li><a ui-sref="login({logout:true})"  translate="user.logout">Log Out</a></li>
         </ul>
       </li>
-      <!--li>
-        <a>
-          <span class="fa fa-bell"></span>
-        </a>
-      </li-->
       <li class="dropdown">
         <a class="dropdown-toggle">
           <span class="fa fa-info-circle"></span>

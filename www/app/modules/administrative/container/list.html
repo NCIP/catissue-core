@@ -1,27 +1,31 @@
 <div>
   <div os-page-header>
-    <h3> 
-      <span translate="container.list">Storage Containers</span>
-    </h3>
-    <div class="os-btns right">
-      <button show-if-allowed="containerResource.createOpts" class="primary"
+    <div class="os-page-header-content">
+      <h3> 
+        <span translate="container.list">Storage Containers</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="containerResource.createOpts" class="default"
         title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
+      <button class="default" ui-sref="container-type-list">
+        <span class="fa fa-cubes"></span>
+        <span translate="container_type.list">Container Types</span>
+      </button>
+      <div dropdown os-show-if-menu-items-present class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li>
-            <a ui-sref="container-type-list">
-              <span class="fa fa-cubes"></span>
-              <span translate="container_type.list">Container Types</span>
-            </a>
-          </li>
-          <li class="divider"></li>
+        <ul class="dropdown-menu">
           <li show-if-allowed="containerResource.createOpts">
             <a ui-sref="container-import">
               <span class="fa fa-dropbox"></span>
@@ -36,6 +40,8 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'container.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -44,9 +50,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

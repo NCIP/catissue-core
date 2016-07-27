@@ -1,7 +1,10 @@
-
 <div>
   <div os-page-header>
-    <h3 translate="cp.import_cp_title">Import Collection Protocol</h3>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="cp.import_cp_title">Import Collection Protocol</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">
@@ -20,11 +23,11 @@
 
     <div class="form-group">
       <div class="col-xs-offset-4 col-xs-6">
-        <button class="btn btn-primary" ng-click="importCp()" translate="common.buttons.import"> 
-          Import 
+        <button class="btn btn-primary" ng-click="importCp()">
+          <span translate="common.buttons.import">Import</span>
         </button>
-        <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard"> 
-          Discard 
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.discard">Discard</span>
         </button>
       </div>
     </div>

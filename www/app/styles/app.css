@@ -14,7 +14,7 @@ body {
 }
 
 .os-navbar {
-  height: 50px;
+  height: 40px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -28,15 +28,19 @@ body {
 }
 
 .os-navbar .logo {
-  height: 50px;
+  height: 40px;
   width: 235px;
   padding: 2.5px;
   flex-grow: 0.25;
   position: relative;
 }
 
+.os-navbar .logo img {
+  height: 30px;
+}
+
 .os-navbar .logo .deploy-env {
-  font-size: 12px;
+  font-size: 10px;
   color: #fff;
   background-color: #c33;
   padding: 2px 4px;
@@ -49,7 +53,7 @@ body {
 
 .os-navbar .search {
   flex-grow: 1;
-  padding-top: 10px;
+  padding-top: 3px;
   display: flex;
   margin-left: 100px;
 }
@@ -78,7 +82,7 @@ body {
 }
 
 .os-navbar .menu > li {
-  padding: 15px 5px;
+  padding: 10px 5px;
 }
 
 .os-navbar-default {
@@ -110,11 +114,11 @@ body {
 }
  
 .os-navbar > ul > li.form-input  {
-  padding: 8px 15px;
+  padding: 4px 12px;
 }
 
-.os-navbar > ul > li.form-input > a.btn {
-  padding: 6px 12px!important;
+.os-navbar > ul > li.form-input > .btn {
+  padding: 4px 8px!important;
   font-weight: bold;
 }
 
@@ -218,65 +222,11 @@ body {
   margin: 7px 0px;
 }
 
-.os-page-hdr {
-  padding: 30px 20px 10px 20px;
-  background: #f5f5f5;
-  border-bottom: 1px solid #ccc;
-  height: 64px;
-  color: #666666;
-  display: flex;
-  position: absolute;
-  top: 50px;
-  width: 100%;
-}
-
-.os-page-hdr.no-breadcrumbs {
-  padding-top: 18px;
-}
-
-.os-page-hdr a {
-  text-decoration: none;
-  color: #666666;
-}
-  
-.os-page-hdr .os-nav-button,
-.os-page-hdr .os-options-button,
-.os-page-hdr .os-search-button,
-.os-page-hdr .os-more-options button {
-  color: #666666;
+.os-nav-button {
+  color: #666;
   background: transparent;
   border: none;
   outline: none;
-  margin-top: -20px;
-  margin-right: 24px;
-  margin-left: -10px;
-}
-
-.os-page-hdr.no-breadcrumbs .os-nav-button,
-.os-page-hdr.no-breadcrumbs .os-options-button {
-  margin-top: -8px;
-}
-
-.os-page-hdr .os-nav-button .fa,
-.os-page-hdr .os-options-button .fa,
-.os-page-hdr .os-search-button .fa,
-.os-page-hdr .os-more-options button .fa {
-  font-size: 24px;
-}
-
-.os-page-hdr .os-title {
-  margin: 0px;
-  margin-right: 24px;
-  height: 26px;
-}
-
-.os-page-hdr .os-title button {
-  background: transparent;
-  border: 0px;
-}
-
-.os-page-hdr .os-title button span.fa {
-  font-size: 18px;
 }
 
 button.btn.os-round-btn {
@@ -286,45 +236,28 @@ button.btn.os-round-btn {
   padding: 0px;
 }
 
-.os-page-hdr .os-round-btn {
-  cursor: pointer;
-  height: 24px;
-  width: 24px;
-  border: 1px solid #428bca; 
-  border-radius: 100%;
-  position: relative;
-  background: #428bca;
-}
-
 h4 + .btn-group {
   margin-left: 10px;
 }
 
-.os-page-hdr .os-round-btn > span {
-  color: white;
-}
-
-.os-page-hdr .os-round-btn:hover {
-  cursor: pointer;
-}
-
-.os-page-hdr .os-round-btn + .dropdown-menu {
-  top: inherit;
-  left: inherit;
-}
-
-.os-page-hdr + .os-container-wrapper .container,
-.os-page-hdr + .container {
-  padding-top: 20px;
+.os-page-header ~ .os-container-wrapper .container,
+.os-page-header ~ .container {
   position: absolute;
-  top: 114px;
+  top: 107px;
+  padding-top: 10px;
   bottom: 0px;
   height: auto;
   width: 100%;
   overflow: auto;
 }
 
-.os-page-hdr + .os-cards {
+.os-page-commands ~ .os-container-wrapper .container,
+.os-page-commands ~ .container{
+  top: 161px!important;
+  padding-top: 0px!important;
+}
+
+.os-page-header ~ .os-cards {
   position: absolute;
   top: 114px;
   bottom: 0px;
@@ -333,28 +266,15 @@ h4 + .btn-group {
   transition: width 0.25s ease-in-out 0s;
 }
 
-.os-page-hdr .os-more-options {
+.os-page-header .os-more-options {
   position: absolute;
   right: 0px;
   top: 25px;
 }
 
-.os-page-hdr .os-more-options .dropdown-menu-right {
-  margin-right: 24px;
-}
-
-.os-page-hdr .os-breadcrumbs ~ .os-btns {
-  bottom: 10px;
-}
-
-.os-page-hdr .os-btns div.inline,
 .os-inline-btn {
   display: inline-block;
   position: relative;
-}
-
-.os-page-hdr .os-inline-btn {
-  margin-top: -2px;
 }
 
 .os-btns a.btn, 
@@ -392,11 +312,6 @@ h4 + .btn-group {
 
 .os-btns button.full-width {
   width: 100%;
-}
-
-.os-page-hdr .os-btns.right {
-  right: 25px;
-  float: right;
 }
 
 .panel .panel-heading .os-btns {
@@ -783,7 +698,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 
 #loading-bar .bar {
   background: #b91f1f!important;
-  top: 50px!important;
+  top: 40px!important;
   height: 3px!important;
 }
 
@@ -1185,11 +1100,6 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .os-bottom-border {
   padding-bottom: 5px;
   border-bottom: 2px solid #ddd;
-}
-
-.os-list-pager {
-  position: relative;
-  bottom: 10px;
 }
 
 /*** START: time picker popup spinner fixes ***/

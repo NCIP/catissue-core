@@ -157,7 +157,7 @@
     "sop_document": "SOP Document",
     "sop_document_url": "SOP Document URL",
     "sop_document_file": "SOP Document File",
-    "download_sop": "Download SOP",
+    "view_sop": "View SOP",
     "desc_url": "Description URL",
     "specimen_label_fmt": "Specimen Label Format",
     "derivative_label_fmt": "Derivative Label Format",
@@ -313,7 +313,7 @@
     "spmn_label_or_barcode": "Specimen Label / Barcode",
     "collection_protocol": "Collection Protocol",
     "regDate": "Registration Date",
-    "reg_another_protocol": "Register to Another Protocol",
+    "reg_another_protocol": "Add to Another Protocol",
     "confirm_merging": "Merging Participant",
     "confirm_merge": "Participant being updated will be deleted forever. Do you want to continue with merge?",
     "search_results": "Participant Search Result for {{key}}",
@@ -346,7 +346,7 @@
     "other_cps": "Other Protocols",
     
     "buttons": {
-      "register": "Register",
+      "register": "Add Participant",
       "update_registration": "Update",
       "register_selected_participant": "Register Selected Participant",
       "merge_participants": "Merge Participants",

@@ -1,48 +1,63 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li ng-repeat="breadcrumb in ctx.breadcrumbs">
-        <a ui-sref="{{breadcrumb.state}}({{breadcrumb.params}})">
-          <span ng-if="!!breadcrumb.captionKey" translate="{{breadcrumb.captionKey}}"></span>
-          <span ng-if="!!breadcrumb.caption">{{breadcrumb.caption}}</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li ng-repeat="breadcrumb in ctx.breadcrumbs">
+          <a ui-sref="{{breadcrumb.state}}({{breadcrumb.params}})">
+            <span ng-if="!!breadcrumb.captionKey" translate="{{breadcrumb.captionKey}}"></span>
+            <span ng-if="!!breadcrumb.caption">{{breadcrumb.caption}}</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <os-spmn-list-name list="ctx.list"></os-spmn-list-name>
-      <button class="btn btn-default btn-xs"
-        title="{{'specimen_list.cart_info' | translate}}"
-        data-placement="bottom" data-container="body" data-trigger="focus"
-        content-template="modules/biospecimen/specimen-list/detail-po.html" bs-popover>
-        <span class="fa fa-info-circle"></span>
-      </button>
-    </h3>
+      <h3>
+        <os-spmn-list-name list="ctx.list"></os-spmn-list-name>
+        <button class="btn btn-default btn-xs"
+          title="{{'specimen_list.cart_info' | translate}}"
+          data-placement="bottom" data-container="body" data-trigger="focus"
+          content-template="modules/biospecimen/specimen-list/detail-po.html" bs-popover>
+          <span class="fa fa-info-circle"></span>
+        </button>
+      </h3>
+    </div>
+  </div>
 
-    <div class="os-btns right">
-      <!-- Below dummy button is present to make Safari add right margin to buttons
-           added by plugins. This can be safely removed once a real button occupies
-           this space -->
-      <button class="default" ng-show="false">
-        <span></span>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="specimenUpdateOpts" class="default" ng-click="createAliquots()">
+        <span class="fa fa-share-alt"></span>
+        <span translate="specimen_list.create_aliquots">Create Aliquots</span>
       </button>
+
+      <button show-if-allowed="specimenUpdateOpts" class="default" ng-click="createDerivatives()">
+        <span class="fa fa-flask"></span>
+        <span translate="specimen_list.create_derivatives">Create Derivatives</span>
+      </button>
+
+      <button show-if-allowed="orderCreateOpts" ng-if="!ctx.reqBasedDistOrShip" class="default"
+        ng-click="distributeSpecimens()">
+        <span class="fa fa-share"></span>
+        <span translate="specimen_list.distribute">Distribute</span>
+      </button>
+
+      <button show-if-allowed="shipmentCreateOpts" ng-if="!ctx.reqBasedDistOrShip" class="default"
+        ng-click="shipSpecimens()">
+        <span class="fa fa-paper-plane-o"></span>
+        <span translate="specimen_list.ship">Ship</span>
+      </button>
+
       <os-plugin-hooks view-name="'specimen-list'" sec-name="'page-header'"></os-plugin-hooks>
-      <div dropdown os-show-if-menu-items-present class="inline">
+
+      <div dropdown os-show-if-menu-items-present class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.more">More</span>
           <span class="fa fa-caret-down"></span>
         </button>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li> 
+          <li>
             <a ui-sref="specimen-list-addedit({listId: ctx.list.id})">
               <span class="fa fa-pencil"></span>
               <span translate="common.buttons.edit">Edit</span>
-            </a>
-          </li>
-          <li> 
-            <a target="_blank" href="{{ctx.url + '/' + ctx.list.id + '/csv-file'}}">
-              <span class="fa fa-download"></span>
-              <span translate="common.buttons.export">Export</span>
             </a>
           </li>
           <li>
@@ -51,35 +66,17 @@
               <span translate="specimen_list.add_child_specimens">Add Child Specimens</span>
             </a>
           </li>
-          <li class="divider"></li>
+          <li>
+            <a target="_blank" href="{{ctx.url + '/' + ctx.list.id + '/csv-file'}}">
+              <span class="fa fa-download"></span>
+              <span translate="common.buttons.export">Export</span>
+            </a>
+          </li>
+          <li class="os-divider"></li>
           <li>
             <a ng-click="confirmRemoveSpecimens()">
               <span class="fa fa-trash"></span>
               <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-          <li show-if-allowed="orderCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
-            <a ng-click="distributeSpecimens()">
-              <span class="fa fa-share"></span>
-              <span translate="specimen_list.distribute">Distribute</span>
-            </a>
-          </li>
-          <li show-if-allowed="shipmentCreateOpts" ng-if="!ctx.reqBasedDistOrShip">
-            <a ng-click="shipSpecimens()">
-              <span class="fa fa-paper-plane-o"></span>
-              <span translate="specimen_list.ship">Ship</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenUpdateOpts">
-            <a ng-click="createAliquots()">
-              <span class="fa fa-share-alt"></span>
-              <span translate="specimen_list.create_aliquots">Create Aliquots</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenUpdateOpts">
-            <a ng-click="createDerivatives()">
-              <span class="fa fa-flask"></span>
-              <span translate="specimen_list.create_derivatives">Create Derivatives</span>
             </a>
           </li>
           <li show-if-allowed="specimenUpdateOpts">
@@ -90,6 +87,8 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle ng-if="ctx.list.specimens.length > 1">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>

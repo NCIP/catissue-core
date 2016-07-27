@@ -1,15 +1,15 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="role-list" translate="role.list">Roles</a></li>
-    </ul>
-    <h3>{{role.name}}</h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="role-list">
+            <span translate="role.list">Roles</span>
+          </a>
+        </li>
+      </ul>
 
-    <div class="os-btns right">
-      <button show-if-admin class="primary" ui-sref="role-addedit({roleId: role.id})">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
+      <h3>{{role.name}}</h3>
     </div>
   </div>
 

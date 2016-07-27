@@ -1,13 +1,15 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs ng-show="importDetail.breadcrumbs.length > 0">
-      <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
-        <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
-      </li>
-    </ul>
-    <h3>
-      <span translate="{{importDetail.title}}"></span>
-    </h3> 
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs ng-show="importDetail.breadcrumbs.length > 0">
+        <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
+          <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
+        </li>
+      </ul>
+      <h3>
+        <span translate="{{importDetail.title}}"></span>
+      </h3> 
+    </div>
   </div>
 
   <div class="container" ng-switch on="importJobs.length > 0">

@@ -1,16 +1,21 @@
-
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="cp-list" translate="cp.list">Collection Protocols</a></li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list">
+            <span translate="cp.list">Collection Protocols</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
-      <span ng-if="!!cp.id">
-        {{cp.shortTitle}} <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
-      </span>
-    </h3>
+      <h3>
+        <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
+        <span ng-if="!!cp.id">
+          {{cp.shortTitle}} <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
+        </span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

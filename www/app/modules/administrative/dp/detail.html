@@ -1,52 +1,21 @@
 <div> 
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="dp-list" translate="dp.list">Distribution Protocols</a></li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="dp-list">
+            <span translate="dp.list">Distribution Protocols</span>
+          </a>
+        </li>
+      </ul>
     
-    <h3>
-      <span>{{distributionProtocol.shortTitle}}</span>
+      <h3>
+        <span>{{distributionProtocol.shortTitle}}</span>
     
-      <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'"
-        translate="dp.closed">
-        Closed
-      </span>
-    </h3>
-
-    <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'dp.tooltip.edit' | translate}}"
-        ui-sref="dp-addedit({dpId: distributionProtocol.id})">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-admin class="default" ng-click="deleteDp()">
-            <a>
-              <span class="fa fa-trash"></span>
-              <span translate="dp.menu_options.delete">Delete</span>
-            </a>
-          </li>
-          <li show-if-admin ng-if="distributionProtocol.activityStatus != 'Closed'" class="default"
-            ng-click="closeDp()">
-            <a>
-              <span class="fa fa-remove"></span>
-              <span translate="dp.menu_options.close">Close</span>
-            </a>
-          </li>
-          <li show-if-admin ng-if="distributionProtocol.activityStatus == 'Closed'" class="default"
-            ng-click="reopenDp()">
-            <a>
-              <span class="fa fa-check"></span>
-              <span translate="dp.menu_options.reopen">Reopen</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+        <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'" translate="dp.closed">
+          Closed
+        </span>
+      </h3>
     </div>
   </div>
 

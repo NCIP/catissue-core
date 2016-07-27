@@ -1,8 +1,7 @@
 .os-breadcrumbs {
-  position: absolute;
-  top: 7px;
   list-style-type: none;
   padding-left: 0px;
+  margin: 0px;
 }
 
 .os-breadcrumbs.hover .collapsed {
@@ -35,10 +34,6 @@
 .os-breadcrumbs a:hover {
   color: #2a6496;
   text-decoration: underline;
-}
-
-.os-breadcrumbs {
-  margin: 10px 0px 0px;
 }
 
 .os-page-hdr .os-breadcrumbs {

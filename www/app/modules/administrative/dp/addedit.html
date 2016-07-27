@@ -1,21 +1,23 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="dp-list">
-          <span translate="dp.list">Distribution Protocols</span>
-        </a>
-      </li>
-    </ul>
-    <h3>
-      <span ng-if="!distributionProtocol.id" translate="dp.create_dp_title">
-        Create Distribution Protocol
-      </span>
-      <span ng-if="!!distributionProtocol.id">
-        {{distributionProtocol.shortTitle}}
-      </span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="dp-list">
+            <span translate="dp.list">Distribution Protocols</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!distributionProtocol.id" translate="dp.create_dp_title">
+          Create Distribution Protocol
+        </span>
+        <span ng-if="!!distributionProtocol.id">
+          {{distributionProtocol.shortTitle}}
+        </span>
+      </h3>
+    </div>
   </div>
   
   <div class="container">

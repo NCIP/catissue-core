@@ -1,107 +1,31 @@
 <div> 
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> 
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          {{cpr.cpShortTitle}}
-        </a> 
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <span>{{cpr.ppid}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li> 
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            {{cpr.cpShortTitle}}
+          </a> 
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <span>{{cpr.ppid}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+            <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+          </a>
+        </li>
+      </ul>
   
-    <h3 ng-switch on="!!specimen.label">
-      <span ng-switch-when="true">{{specimen.label}}</span>
-      <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
-      <span class="btn os-status-closed" ng-if="specimen.activityStatus == 'Closed'" translate="specimens.closed">
-        Closed
-      </span>
-    </h3>
-
-
-    <div class="os-btns right">
-      <button show-if-allowed="specimenResource.updateOpts" class="primary" ui-sref="specimen-addedit"
-        ng-if="!!visit.id && (!specimen.activityStatus || specimen.activityStatus == 'Active')"
-        ng-switch on="!!specimen.id"> 
-        <span ng-switch-when="true">
-          <span class="fa fa-pencil"></span>
-          <span translate="common.buttons.edit">Edit</span>
+      <h3 ng-switch on="!!specimen.label">
+        <span ng-switch-when="true">{{specimen.label}}</span>
+        <span ng-switch-default>{{specimen.type}} ({{specimen.specimenClass}})</span>
+        <span class="btn os-status-closed" ng-if="specimen.activityStatus == 'Closed'" translate="specimens.closed">
+          Closed
         </span>
-        <span ng-switch-default>
-          <span class="fa fa-plus"></span>
-          <span translate="specimens.buttons.collect">Collect</span>
-        </span>
-      </button>
-
-      <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
-      </os-assign-to-spmn-list>
-
-      <div dropdown os-show-if-menu-items-present class="os-inline-btn" ng-if="!!specimen.id">
-        <button class="btn btn-default dropdown-toggle default">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
-            <a ui-sref="specimen-create-aliquots({eventId: visit.eventId, visitId: visit.id,
-              specimenId: specimen.id, srId: specimen.reqId})">
-              <i class="fa fa-share-alt"></i>
-              <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
-            <a ui-sref="specimen-create-derivative({eventId: visit.eventId, visitId: visit.id,
-              specimenId: specimen.id, srId: specimen.reqId})">
-              <i class="fa fa-flask"></i>
-              <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.updateOpts" ng-if="specimen.activityStatus == 'Active'">
-            <a ui-sref="specimen-detail.events({eventId: visit.eventId, visitId: visit.id,
-              specimenId: specimen.id, srId: specimen.reqId})">
-              <i class="fa fa-calendar-o"></i>
-              <span translate="specimens.ctx_menu.add_event">Add Event</span>
-            </a>
-          </li>
-
-          <li show-if-allowed="specimenResource.updateOpts"
-            ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
-            <a ng-click="printSpecimenLabels()">
-              <span class="fa fa-print"></span>
-              <span translate="specimens.buttons.print">Print</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.deleteOpts"
-            ng-if="!!specimen.id">
-            <a ng-click="deleteSpecimen()">
-              <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.updateOpts"
-            ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
-            <a ng-click="closeSpecimen()">
-              <span class="fa fa-remove"></span>
-              <span translate="common.buttons.close">Close</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.updateOpts"
-            ng-if="specimen.activityStatus == 'Closed'">
-            <a ng-click="reopen()">
-              <span class="fa fa-check"></span>
-              <span translate="specimens.buttons.reopen">Reopen</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      </h3>
     </div>
   </div>
 

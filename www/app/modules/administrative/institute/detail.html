@@ -1,31 +1,15 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="institute-list" translate="institutes.list">Institutes</a></li>
-    </ul>
-    <h3>{{institute.name}}</h3>
-
-    <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'institutes.tooltip.edit' | translate}}"
-        ui-sref="institute-addedit({instituteId: institute.id})">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-admin>
-            <a ng-click="deleteInstitute()">
-              <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="institute-list">
+            <span translate="institutes.list">Institutes</span>
+          </a>
+        </li>
+      </ul>
+      <h3>{{institute.name}}</h3>
     </div>
   </div>
 

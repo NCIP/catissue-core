@@ -1,38 +1,40 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          <span>{{cpr.cpShortTitle}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
-            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
-            <span ng-switch-when="false" translate="common.na"> N/A </span>
-          </ng-switch>
-          <span>({{cpr.ppid}})</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
-          <span>{{parentSpecimen.label}}</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+              <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+              <span ng-switch-when="false" translate="common.na"> N/A </span>
+            </ng-switch>
+            <span>({{cpr.ppid}})</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+            <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            <span>{{parentSpecimen.label}}</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <span translate="specimens.create_aliquots">Create Aliquots</span>
-    </h3>
+      <h3>
+        <span translate="specimens.create_aliquots">Create Aliquots</span>
+      </h3>
+    </div>
   </div>
 
-  <div class="container os-margin-top">
+  <div class="container">
     <form name="aliquotForm" class="form-horizontal" os-form-validator="aliquotForm" validator="aliquotFormValidator" novalidate>
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>

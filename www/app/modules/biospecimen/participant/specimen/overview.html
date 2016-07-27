@@ -1,23 +1,105 @@
-<div class="clearfix">
-  <div class="col-xs-8">
-    <div ng-switch on="fieldsCtx.hasDict">
-      <div ng-switch-when="true">
-        <sde-fields-overview base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
-          obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
-        </sde-fields-overview>
-      </div>
-      <div ng-switch-default>
-        <div ng-include="'modules/biospecimen/participant/specimen/static-fields.html'"></div>
-      </div>
-    </div>
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="specimenResource.updateOpts" class="default" ui-sref="specimen-addedit"
+        ng-if="!!visit.id && (!specimen.activityStatus || specimen.activityStatus == 'Active')"
+        ng-switch on="!!specimen.id">
+        <span ng-switch-when="true">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </span>
+        <span ng-switch-default>
+          <span class="fa fa-plus"></span>
+          <span translate="specimens.buttons.collect">Collect</span>
+        </span>
+      </button>
 
-    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="treeSpecimens"
-      allowed-ops="specimenAllowedOps" reload="reload()"
-      collection-date="specimen.createdOn" pending-spmns-disp-interval="pendingSpmnsDispInterval">
-    </os-specimen-tree>
+      <span ng-if="!!specimen.id">
+        <button show-if-allowed="specimenResource.updateOpts" class="default" ui-sref="specimen-create-derivative(
+          {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})"
+          ng-if="specimen.activityStatus == 'Active'">
+          <span class="fa fa-flask"></span>
+          <span translate="specimens.ctx_menu.create_derivative">Create Derivative</span>
+        </button>
+
+        <button show-if-allowed="specimenResource.updateOpts" class="default" ui-sref="specimen-create-aliquots(
+          {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})"
+          ng-if="specimen.activityStatus == 'Active'">
+          <span class="fa fa-share-alt"></span>
+          <span translate="specimens.ctx_menu.create_aliquots">Create Aliquots</span>
+        </button>
+
+        <os-assign-to-spmn-list on-add-to-list="addSpecimensToSpecimenList(list)" ng-if="!!specimen.id">
+        </os-assign-to-spmn-list>
+
+        <button show-if-allowed="specimenResource.updateOpts" class="default" ui-sref="specimen-detail.events(
+          {eventId: visit.eventId, visitId: visit.id, specimenId: specimen.id, srId: specimen.reqId})"
+          ng-if="specimen.activityStatus == 'Active'">
+          <span class="fa fa-calendar-o"></span>
+          <span translate="specimens.ctx_menu.add_event">Add Event</span>
+        </button>
+
+        <div dropdown os-show-if-menu-items-present class="os-inline-btn">
+          <button class="btn btn-default dropdown-toggle default">
+            <span translate="common.buttons.more">More</span>
+            <span class="fa fa-caret-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li show-if-allowed="specimenResource.updateOpts"
+              ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
+              <a ng-click="printSpecimenLabels()">
+                <span class="fa fa-print"></span>
+                <span translate="specimens.buttons.print">Print</span>
+              </a>
+            </li>
+            <li show-if-allowed="specimenResource.updateOpts"
+              ng-if="specimen.activityStatus == 'Active' && specimen.status == 'Collected'">
+              <a ng-click="closeSpecimen()">
+                <span class="fa fa-remove"></span>
+                <span translate="common.buttons.close">Close</span>
+              </a>
+            </li>
+            <li show-if-allowed="specimenResource.updateOpts"
+              ng-if="specimen.activityStatus == 'Closed'">
+              <a ng-click="reopen()">
+                <span class="fa fa-check"></span>
+                <span translate="specimens.buttons.reopen">Reopen</span>
+              </a>
+            </li>
+            <li show-if-allowed="specimenResource.deleteOpts"
+              ng-if="!!specimen.id">
+              <a ng-click="deleteSpecimen()">
+                <span class="fa fa-trash"></span>
+                <span translate="common.buttons.delete">Delete</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </span>
+    </div>
   </div>
-  <div class="col-xs-4">
-    <div ng-include="'modules/biospecimen/participant/specimen/activities.html'"></div>
+
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-fields-overview base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
+          </sde-fields-overview>
+        </div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/specimen/static-fields.html'"></div>
+        </div>
+      </div>
+
+      <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="treeSpecimens"
+        allowed-ops="specimenAllowedOps" reload="reload()"
+        collection-date="specimen.createdOn" pending-spmns-disp-interval="pendingSpmnsDispInterval">
+      </os-specimen-tree>
+    </div>
+    <div class="col-xs-4">
+      <div ng-include="'modules/biospecimen/participant/specimen/activities.html'"></div>
+    </div>
   </div>
 </div>
 

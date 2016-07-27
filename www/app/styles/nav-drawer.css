@@ -1,7 +1,7 @@
 .os-nav-drawer, .os-nav-drawer-overlay {
   position: absolute;
   height: auto;
-  top: 50px;
+  top: 40px;
   bottom: 0;
 }
 
@@ -42,8 +42,8 @@
   margin-bottom: 0px;
 }
 
-.os-nav-drawer .os-page-hdr ~ ul.os-menu-items {
-  top: 64px;
+.os-nav-drawer .os-page-header ~ ul.os-menu-items {
+  top: 55px;
 }
 
 .os-nav-drawer .os-menu-items > li {
@@ -68,7 +68,7 @@
   background: #f5f5f5;
 }
 
-.os-nav-drawer .os-page-hdr { 
+.os-nav-drawer .os-page-header {
   margin-bottom: 0px;
   position: relative;
   top: 0px;

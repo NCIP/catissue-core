@@ -1,9 +1,17 @@
 <div>
   <div os-page-header>
-    <h3 translate="cp.list">Collection Protocols</h3>
-    <div class="os-btns right">
-      <div dropdown class="inline">
-        <button show-if-allowed="cpResource.createOpts" class="primary dropdown-toggle" title="{{'cp.tooltip.add' | translate}}" 
+    <div class="os-page-header-content">
+      <h3 translate="cp.list">Collection Protocols</h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"> </os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <div dropdown class="os-inline-btn">
+        <button show-if-allowed="cpResource.createOpts" class="default dropdown-toggle" title="{{'cp.tooltip.add' | translate}}"
           ui-sref="cp-addedit({cpId: ''})">
           <span class="fa fa-plus"></span>
           <span translate="common.buttons.create">Create</span>
@@ -25,7 +33,8 @@
       </div>
 
       <os-plugin-hooks view-name="'cp-list'" sec-name="'page-header'"></os-plugin-hooks>
-
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'cp.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -34,9 +43,6 @@
   </div>
    
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"> </os-list-pager>
-    </div>
 
     <table class="os-table os-table-hover">
       <thead class="os-table-head">

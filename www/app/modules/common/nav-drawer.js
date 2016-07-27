@@ -1,21 +1,22 @@
 angular.module('openspecimen')
   .directive('osNavDrawer', function($compile, $translate, osNavDrawerSvc) {
     function getNavHeader() {
-      var div = angular.element('<div/>').addClass('os-page-hdr');
+      var div = angular.element('<div class="os-page-header no-breadcrumbs"/>');
 
-      var navBtn = angular.element('<button/>')
-        .addClass('os-nav-button')
+      var navBtn = angular.element('<button class="os-nav-button"/>')
         .append('<span class="fa fa-bars"></span>');
 
-      var navigateTo = $translate.instant("menu.navigate_to");
-      var title = angular.element('<h3/>')
-        .addClass('os-title')
-        .css('margin', 0)
-        .css('margin-top', '-11px')
-        .append(navigateTo);
+      var navEl = angular.element('<div class="os-nav-button-wrapper"/>')
+        .append(navBtn);
 
-      div.append(navBtn).append(title);
-      return div;
+      var navigateTo = $translate.instant("menu.navigate_to");
+      var title = angular.element('<h3/>').append(navigateTo);
+
+      var innerEl = angular.element('<div class="os-page-header-inner"/>')
+        .append(angular.element('<div class="os-page-header-content-wrapper"/>')
+          .append(angular.element('<div class="os-page-header-content"/>').append(title)));
+
+      return div.append(navEl).append(innerEl);
     }
 
     return {

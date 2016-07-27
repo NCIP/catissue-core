@@ -1,20 +1,30 @@
 
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="user.list">Users</span>
-    </h3>
-    <div class="os-btns right">
-      <button show-if-allowed="userResource.createOpts" class="primary" title="{{'user.tooltip.add' | translate}}"
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="user.list">Users</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"> </os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="userResource.createOpts" class="default" title="{{'user.tooltip.add' | translate}}"
         ui-sref="user-addedit({userId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+
       <button show-if-admin class="default" title="{{'user.announcement.tooltip' | translate}}"
         ng-click="broadcastAnnouncement()">
         <span translate="user.announcement.new">New Announcement</span>
       </button>
-      <div show-if-allowed="userResource.createOpts" dropdown class="inline">
+
+      <div show-if-allowed="userResource.createOpts" dropdown class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.import">Import</span>
           <span class="fa fa-caret-down"></span>
@@ -42,7 +52,9 @@
       </div>
 
       <os-plugin-hooks view-name="'user-list'" sec-name="'page-header'"></os-plugin-hooks>
-
+    </div>
+   
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -51,9 +63,6 @@
   </div>
     
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"> </os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

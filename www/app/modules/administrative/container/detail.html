@@ -1,45 +1,14 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="container-list">
-          <span translate="container.list">Storage Containers</span>
-        </a>
-      </li>
-    </ul>
-    <h3>{{container.name}}</h3>
-    <div class="os-btns right">
-      <button show-if-allowed="containerResource.updateOpts" class="primary"
-        title="{{'container.tooltip.edit' | translate}}" ui-sref="container-addedit({containerId: container.id})">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li>
-            <a href="{{downloadUri}}" target="_blank">
-              <span class="fa fa-download"></span>
-              <span translate="common.buttons.export">Export</span>
-            </a>
-          </li>
-          <li show-if-allowed="containerResource.createOpts">
-            <a ui-sref="container-replicate({containerId: container.id})">
-              <span class="fa fa-copy"></span>
-              <span translate="container.replicate">Replicate</span>
-            </a>
-          </li>
-          <li show-if-allowed="containerResource.deleteOpts">
-            <a ng-click="deleteContainer()">
-              <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="container-list">
+            <span translate="container.list">Storage Containers</span>
+          </a>
+        </li>
+      </ul>
+      <h3>{{container.name}}</h3>
     </div>
   </div>
 
@@ -60,6 +29,5 @@
     </ul>
   </div>
 
-  <div class="os-side-menu-page-content" ui-view>
-  </div>
+  <div class="os-side-menu-page-content" ui-view> </div>
 </div>

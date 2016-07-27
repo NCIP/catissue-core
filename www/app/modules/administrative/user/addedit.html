@@ -1,13 +1,19 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="user-list" translate="user.list">Users</a></li>
-    </ul>
-    <h3>
-      <span ng-if="!user.id" translate="user.create_user">Create User</span>
-      <span ng-if="!!user.id">{{user.lastName}} {{user.firstName}}</span>
-    </h3> 
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="user-list">
+            <span translate="user.list">Users</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!user.id" translate="user.create_user">Create User</span>
+        <span ng-if="!!user.id">{{user.lastName}} {{user.firstName}}</span>
+      </h3> 
+    </div>
   </div>
 
   <div class="container">

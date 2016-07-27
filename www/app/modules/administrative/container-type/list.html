@@ -1,10 +1,19 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="container_type.list">Container Types</span>
-    </h3>
-    <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'container_type.tooltip.add' | translate}}" 
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="container_type.list">Container Types</span>
+      </h3>
+    </div>
+
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" title="{{'container_type.tooltip.add' | translate}}" 
         ui-sref="container-type-addedit({containerTypeId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
@@ -14,7 +23,9 @@
         <span class="fa fa-dropbox"></span>
         <span translate="container.list">Containers</span>
       </button>
+    </div>
 
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'container_type.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -23,9 +34,6 @@
   </div>
   
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

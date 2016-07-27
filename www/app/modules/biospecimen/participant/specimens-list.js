@@ -8,7 +8,7 @@ angular.module('os.biospecimen.participant')
     var pagerOpts, listParams;
 
     function init() {
-      pagerOpts  = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getSpecimensCount});
+      pagerOpts  = new ListPagerOpts({listSizeGetter: getSpecimensCount});
       listParams = {listName: 'specimen-list-view', maxResults: pagerOpts.recordsPerPage + 1};
 
       $scope.ctx = {
@@ -22,6 +22,7 @@ angular.module('os.biospecimen.participant')
       angular.extend($scope.listViewCtx, {
         listName: 'specimens.list',
         ctrl: ctrl,
+        headerActionsTmpl: 'modules/biospecimen/participant/specimens-list-pager.html',
         headerButtonsTmpl: 'modules/biospecimen/participant/specimens-list-ops.html',
         showSearch: (spmnListCfg.filters && spmnListCfg.filters.length > 0)
       });
@@ -133,6 +134,10 @@ angular.module('os.biospecimen.participant')
 
     this.addEvent = function() {
       gotoView('bulk-add-event', {}, 'no_specimens_to_add_event');
+    }
+
+    this.pagerOpts = function() {
+      return pagerOpts;
     }
 
     init();

@@ -1,17 +1,19 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="container-type-list">
-          <span translate="container_type.list">Container Types</span>
-        </a>
-      </li>
-    </ul>
-    <h3>
-      <span ng-if="!containerType.id" translate="container_type.create_container_type">Create Container Type</span>
-      <span ng-if="!!containerType.id">{{containerType.name}}</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="container-type-list">
+            <span translate="container_type.list">Container Types</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!containerType.id" translate="container_type.create_container_type">Create Container Type</span>
+        <span ng-if="!!containerType.id">{{containerType.name}}</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

@@ -1,21 +1,25 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="query-list" translate="queries.list">Queries</a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="query-list" translate="queries.list">Queries</a>
+        </li>
+      </ul>
 
-    <h3> 
-      <span ng-if="!queryLocal.id" translate="queries.new_query">
-        New Query
-      </span>
-      <span ng-if="!!queryLocal.id">
-        {{queryLocal.title}}
-      </span>
-    </h3>
+      <h3> 
+        <span ng-if="!queryLocal.id" translate="queries.new_query">
+          New Query
+        </span>
+        <span ng-if="!!queryLocal.id">
+          {{queryLocal.title}}
+        </span>
+      </h3>
+    </div>
+  </div>
 
-    <div class="os-btns right">
+  <div class="os-page-commands">
+    <div class="left">
       <button class="default" ng-click="saveQuery()"
         ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0">
         <span class="fa fa-save"></span>

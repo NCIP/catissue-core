@@ -9,7 +9,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
     var pagerOpts, listParams;
 
     function init() {
-      pagerOpts  = $scope.pagerOpts = new ListPagerOpts({listSizeGetter: getParticipantsCount});
+      pagerOpts  = new ListPagerOpts({listSizeGetter: getParticipantsCount});
       listParams = {listName: 'participant-list-view', maxResults: pagerOpts.recordsPerPage + 1};
 
       $scope.cpId = cp.id;
@@ -25,6 +25,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
         listName: 'participant.list',
         ctrl: ctrl,
         headerButtonsTmpl: 'modules/biospecimen/participant/register-button.html',
+        headerActionsTmpl: 'modules/biospecimen/participant/list-pager.html',
         showSearch: (participantListCfg.filters && participantListCfg.filters.length > 0)
       });
 
@@ -85,6 +86,10 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
 
     $scope.setFiltersCtrl = function($listFilters) {
       $scope.ctx.$listFilters = $listFilters;
+    }
+
+    this.pagerOpts = function() {
+      return pagerOpts;
     }
 
     init();

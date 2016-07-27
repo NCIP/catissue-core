@@ -1,72 +1,84 @@
 
-<div class="clearfix">
-  <div class="col-xs-8">
-    <ul class="os-key-values os-one-col" os-inline-editors on-save="editRole">
-      <li class="item">
-        <strong class="key key-sm" translate="role.name">Name</strong>
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" ui-sref="role-addedit({roleId: role.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </div>
+  </div>
 
-        <os-inline-edit editor="nameEditor" name="name" class="value value-md" value="role.name">
-          <span ng-if="nameEditor.isDisplayMode()">{{nameEditor.viewValue | osNoValue}}</span>
-          <input ng-if="nameEditor.isEditMode()" type="text" ng-model="nameEditor.editValue" 
-            class="form-control" placeholder="{{'role.name' | translate}}">
-        </os-inline-edit>
-      </li>
+  <div class="clearfix">
+    <div class="col-xs-9">
+      <ul class="os-key-values os-one-col" os-inline-editors on-save="editRole">
+        <li class="item">
+          <strong class="key key-sm" translate="role.name">Name</strong>
+          <os-inline-edit editor="nameEditor" name="name" class="value value-md" value="role.name">
+            <span ng-if="nameEditor.isDisplayMode()">{{nameEditor.viewValue | osNoValue}}</span>
+            <input ng-if="nameEditor.isEditMode()" type="text" ng-model="nameEditor.editValue" 
+              class="form-control" placeholder="{{'role.name' | translate}}">
+          </os-inline-edit>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="role.description">Description</strong>
-        <os-inline-edit editor="descriptionEditor" name="description" class="value value-md" value="role.description">
-          <span ng-if="descriptionEditor.isDisplayMode()">{{descriptionEditor.viewValue | osNoValue}}</span>
-          <textarea ng-if="descriptionEditor.isEditMode()" type="text" ng-model="descriptionEditor.editValue" 
-            class="form-control" placeholder="{{'role.description' | translate}}"></textarea>
-        </os-inline-edit>
-      </li>
-    </ul>
+        <li class="item">
+          <strong class="key key-sm" translate="role.description">Description</strong>
+          <os-inline-edit editor="descriptionEditor" name="description" class="value value-md" value="role.description">
+            <span ng-if="descriptionEditor.isDisplayMode()">{{descriptionEditor.viewValue | osNoValue}}</span>
+            <textarea ng-if="descriptionEditor.isEditMode()" type="text" ng-model="descriptionEditor.editValue" 
+              class="form-control" placeholder="{{'role.description' | translate}}"></textarea>
+          </os-inline-edit>
+        </li>
+      </ul>
 
-    <div class="os-section">
-      <h3 class="os-sub-section-title" translate="role.resources_lbl">Resources</h3>
-      <div>
-        <span ng-if="role.acl.length == 0" translate="common.none">None</span>
-        <div class="os-table os-table-muted-hdr os-border" ng-if="role.acl.length > 0">
-          <div class="os-table-head">
-            <div class="row">
-              <div class="col col-xs-5" translate="role.resource">resource</div>
-              <div class="col col-xs-7" translate="role.permission">Permission</div>
-            </div>
-          </div>
-          <div class="os-table-body">
-            <div ng-repeat="acl in role.acl">
+      <div class="os-section">
+        <h3 class="os-sub-section-title" translate="role.resources_lbl">Resources</h3>
+        <div>
+          <span ng-if="role.acl.length == 0" translate="common.none">None</span>
+          <div class="os-table os-table-muted-hdr os-border" ng-if="role.acl.length > 0">
+            <div class="os-table-head">
               <div class="row">
-                <div class="col col-xs-5">{{ 'role.resources.' + acl.resourceName | translate}}</div>
-                <div class="col col-xs-7">
-                  <div class="os-permissions">
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Read') > -1">
-                      <span class="fa fa-eye"></span>
-                      <span translate="role.read">Read</span>
-                    </div>
+                <div class="col col-xs-5" translate="role.resource">resource</div>
+                <div class="col col-xs-7" translate="role.permission">Permission</div>
+              </div>
+            </div>
+            <div class="os-table-body">
+              <div ng-repeat="acl in role.acl">
+                <div class="row">
+                  <div class="col col-xs-5">
+                    <span>{{ 'role.resources.' + acl.resourceName | translate}}</span>
+                  </div>
+                  <div class="col col-xs-7">
+                    <div class="os-permissions">
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Read') > -1">
+                        <span class="fa fa-eye"></span>
+                        <span translate="role.read">Read</span>
+                      </div>
 
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Create') > -1">
-                      <span class="fa fa-plus"></span>
-                      <span translate="role.create">Create</span>
-                    </div>
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Create') > -1">
+                        <span class="fa fa-plus"></span>
+                        <span translate="role.create">Create</span>
+                      </div>
 
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Update') > -1">
-                      <span class="fa fa-pencil"></span>
-                      <span translate="role.update">Update</span>
-                    </div>
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Update') > -1">
+                        <span class="fa fa-pencil"></span>
+                        <span translate="role.update">Update</span>
+                      </div>
 
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Delete') > -1">
-                      <span class="fa fa-trash"></span>
-                      <span translate="role.delete">Delete</span>
-                    </div>
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Delete') > -1">
+                        <span class="fa fa-trash"></span>
+                        <span translate="role.delete">Delete</span>
+                      </div>
 
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Lock') > -1">
-                      <span class="fa fa-lock"></span>
-                      <span translate="role.lock">Lock</span>
-                    </div>
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Lock') > -1">
+                        <span class="fa fa-lock"></span>
+                        <span translate="role.lock">Lock</span>
+                      </div>
 
-                    <div class="os-status" ng-if="acl.operationNames.indexOf('Unlock') > -1">
-                      <span class="fa fa-unlock"></span>
-                      <span translate="role.unlock">Unlock</span>
+                      <div class="os-status" ng-if="acl.operationNames.indexOf('Unlock') > -1">
+                        <span class="fa fa-unlock"></span>
+                        <span translate="role.unlock">Unlock</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -78,4 +90,3 @@
     </div>
   </div>
 </div>
-

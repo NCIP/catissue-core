@@ -1,35 +1,37 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> 
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          <span>{{cpr.cpShortTitle}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
-            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
-            <span ng-switch-when="false" translate="common.na"> N/A </span>
-          </ng-switch>
-          <span>({{cpr.ppid}})</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
-          T{{visit.eventPoint}}: {{visit.eventLabel}}
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li> 
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+              <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+              <span ng-switch-when="false" translate="common.na"> N/A </span>
+            </ng-switch>
+            <span>({{cpr.ppid}})</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+            T{{visit.eventPoint}}: {{visit.eventLabel}}
+          </a>
+        </li>
+      </ul>
 
-    <h3 ng-switch on="!!currSpecimen.label">
-      <span ng-switch-when="true">{{currSpecimen.label}}</span>
-      <span ng-switch-default>{{currSpecimen.type}} ({{currSpecimen.specimenClass}})</span>
-    </h3>
+      <h3 ng-switch on="!!currSpecimen.label">
+        <span ng-switch-when="true">{{currSpecimen.label}}</span>
+        <span ng-switch-default>{{currSpecimen.type}} ({{currSpecimen.specimenClass}})</span>
+      </h3>
+    </div>
   </div>
 
-  <div class="container os-margin-top">
+  <div class="container">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
       <div ng-switch on="fieldsCtx.hasDict">
         <div ng-switch-when="true">

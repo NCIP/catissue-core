@@ -1,20 +1,28 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="orders.list">Distribution Orders</span>
-    </h3>
-    <div class="os-btns right">
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="orders.list">Distribution Orders</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
       <button show-if-allowed="orderResource.createOpts"
-        class="primary" title="{{'orders.tooltip.create' | translate}}" ui-sref="order-addedit({orderId: ''})">
+        class="default" title="{{'orders.tooltip.create' | translate}}" ui-sref="order-addedit({orderId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <div show-if-allowed="orderResource.createOpts" dropdown class="inline">
+      <div show-if-allowed="orderResource.createOpts" dropdown class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.import">Import</span>
           <span class="fa fa-caret-down"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right">
+        <ul class="dropdown-menu">
           <li>
             <a ui-sref="order-import">
               <span class="fa fa-share"></span>
@@ -33,6 +41,8 @@
         <span class="fa fa-undo"></span>
         <span translate="orders.buttons.return_specimens">Return Specimens</span>
       </button>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'orders.tooltip.search' | translate}}"
         ng-click="loadSearchPvs()">
         <span class="fa fa-search"></span>
@@ -42,9 +52,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

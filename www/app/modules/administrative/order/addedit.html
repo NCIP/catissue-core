@@ -1,14 +1,18 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="order-list" translate="orders.list">Distribution Orders</a>
-      </li>
-    </ul>
-    <h3 ng-switch on="!order.id">
-      <span ng-switch-when="true" translate="orders.create_order">Create Distribution Order</span>
-      <span ng-switch-default>{{order.name}}</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="order-list">
+            <span translate="orders.list">Distribution Orders</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!order.id">
+        <span ng-switch-when="true" translate="orders.create_order">Create Distribution Order</span>
+        <span ng-switch-default>{{order.name}}</span>
+      </h3>
+    </div>
   </div>
   
   <div class="container">

@@ -1,14 +1,24 @@
 
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="form.list">Forms</span>
-    </h3>
-    <div class="os-btns right">
-      <button class="primary" title="{{'form.tooltip.add' | translate}}" ui-sref="form-addedit({formId: ''})">
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="form.list">Forms</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button class="default" title="{{'form.tooltip.add' | translate}}" ui-sref="form-addedit({formId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'form.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -17,9 +27,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

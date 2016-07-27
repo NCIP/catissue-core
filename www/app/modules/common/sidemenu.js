@@ -17,11 +17,10 @@ angular.module('openspecimen')
       }
     }
   })
-  .directive('osSideMenu', function(SideMenuState) {
+  .directive('osSideMenu', function($compile, SideMenuState) {
     return {
       restrict: "A",
       link: function(scope, element, attr) {
-        var elTop = 57;
         element.addClass('os-side-menu-wrapper');
 
         if (!SideMenuState.isOpened()) {
@@ -30,7 +29,12 @@ angular.module('openspecimen')
           element.addClass('opened');
         }
 
-        var ul = element.find('ul').addClass('os-side-menu');
+        var navBtn = angular.element('<a class="os-nav-button"/>')
+          .append('<span class="fa fa-bars"></span>')
+          .append('<span class="os-title" translate="menu.navigate_to"></span>');
+        var navEl = angular.element('<li>').append(navBtn);
+
+        element.find('ul').addClass('os-side-menu').prepend(navEl);
 
         var open = $("<button/>")
           .addClass("btn open")
@@ -51,6 +55,7 @@ angular.module('openspecimen')
           event.stopPropagation();
           element.removeClass('closed');
           element.addClass('opened');
+          element.siblings('.os-page-header').addClass('side-menu-opened');
           SideMenuState.open();
         });
 
@@ -58,8 +63,11 @@ angular.module('openspecimen')
           event.stopPropagation();
           element.removeClass('opened');
           element.addClass('closed');
+          element.siblings('.os-page-header').removeClass('side-menu-opened');
           SideMenuState.close();
         });
+
+        $compile(navBtn)(scope);
       }
     };
   });

@@ -79,11 +79,11 @@
 /** Add edit query **/
 .os-query-container {
   position: absolute;
-  top: 114px;
+  top: 161px;
   bottom: 0px;
   height: auto;
   width: 100%;
-  padding-top: 20px;
+  padding-top: 0px;
   padding-right: 15px;
   padding-bottom: 10px;
   padding-left: 15px;

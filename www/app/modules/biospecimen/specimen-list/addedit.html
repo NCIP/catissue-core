@@ -1,16 +1,18 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="specimen-list">
-          <span translate="specimen_list.lists">Specimen Lists</span>
-        </a>
-      </li>
-    </ul>
-    <h3 ng-switch on="!list.id && list.id != 0">
-      <span ng-switch-when="true" translate="specimen_list.create_list">Create Specimen List</span>
-      <span ng-switch-default translate="specimen_list.update_list">Update Specimen List</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="specimen-list">
+            <span translate="specimen_list.lists">Specimen Lists</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!list.id && list.id != 0">
+        <span ng-switch-when="true" translate="specimen_list.create_list">Create Specimen List</span>
+        <span ng-switch-default translate="specimen_list.update_list">Update Specimen List</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

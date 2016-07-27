@@ -1,56 +1,70 @@
-<div class="clearfix">
-  <div class="col-xs-8">
-    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editSite">
-      <li class="item">
-        <strong class="key key-sm" translate="site.institute">Institute</strong>
-        <os-inline-edit editor="instEditor" name="institute" class="value value-md" value="site.instituteName">
-          <span ng-if="instEditor.isDisplayMode()">{{instEditor.viewValue}}</span>
-          <div ng-if="instEditor.isEditMode()">
-            <os-select ng-model="instEditor.editValue" list="institutes" placeholder="{{'site.institute' | translate}}" required></os-select>
-          </div>
-        </os-inline-edit>
-      </li>
-
-
-      <li class="item">
-        <strong class="key key-sm" translate="site.code">Code</strong>
-        <os-inline-edit editor="codeEditor" name="code" class="value value-md" value="site.code">
-          <span ng-if="codeEditor.isDisplayMode()">{{codeEditor.viewValue | osNoValue}}</span>
-          <input ng-if="codeEditor.isEditMode()" type="text" ng-model="codeEditor.editValue" class="form-control">
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="site.coordinators">Coordinators</strong>
-        <os-inline-edit editor="coordinatorEditor" name="coordinator" class="value value-md" value="site.coordinators">
-          <span ng-if="coordinatorEditor.isDisplayMode()">{{coordinatorEditor.viewValue | osArrayJoin:getCoordinatorDisplayText  | osNoValue}}</span>
-          <os-users ng-if="coordinatorEditor.isEditMode()" multiple ng-model="coordinatorEditor.editValue"></os-users>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="site.type">Type</strong>
-        <os-inline-edit editor="typeEditor" name="type" class="value value-md" value="site.type">
-          <span ng-if="typeEditor.isDisplayMode()">{{typeEditor.viewValue | osNoValue}}</span>
-          <div ng-if="typeEditor.isEditMode()">
-            <os-select ng-model="typeEditor.editValue" list="siteTypes" required></os-select>
-          </div>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="site.address">Address</strong>
-        <os-inline-edit editor="addressEditor" name="address" class="value value-md" value="site.address">
-          <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
-          <textarea ng-if="addressEditor.isEditMode()" ng-model="addressEditor.editValue" class="form-control"></textarea>
-        </os-inline-edit>
-      </li>
-
-    </ul>
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" title="{{'site.tooltip.edit' | translate}}"
+        ui-sref="site-addedit({siteId: site.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <button show-if-admin class="default" ng-click="deleteSite()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+    </div>
   </div>
-   
-  <div class="col-xs-8" ng-if="!!site.extensionDetail">
-    <div os-extension-overview ext-object="site.extensionDetail" show-column="2"></div>
+
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <ul class="os-key-values os-two-cols" os-inline-editors on-save="editSite">
+        <li class="item">
+          <strong class="key key-sm" translate="site.institute">Institute</strong>
+          <os-inline-edit editor="instEditor" name="institute" class="value value-md" value="site.instituteName">
+            <span ng-if="instEditor.isDisplayMode()">{{instEditor.viewValue}}</span>
+            <div ng-if="instEditor.isEditMode()">
+              <os-select ng-model="instEditor.editValue" list="institutes" placeholder="{{'site.institute' | translate}}" required></os-select>
+            </div>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="site.code">Code</strong>
+          <os-inline-edit editor="codeEditor" name="code" class="value value-md" value="site.code">
+            <span ng-if="codeEditor.isDisplayMode()">{{codeEditor.viewValue | osNoValue}}</span>
+            <input ng-if="codeEditor.isEditMode()" type="text" ng-model="codeEditor.editValue" class="form-control">
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="site.coordinators">Coordinators</strong>
+          <os-inline-edit editor="coordinatorEditor" name="coordinator" class="value value-md" value="site.coordinators">
+            <span ng-if="coordinatorEditor.isDisplayMode()">{{coordinatorEditor.viewValue | osArrayJoin:getCoordinatorDisplayText  | osNoValue}}</span>
+            <os-users ng-if="coordinatorEditor.isEditMode()" multiple ng-model="coordinatorEditor.editValue"></os-users>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="site.type">Type</strong>
+          <os-inline-edit editor="typeEditor" name="type" class="value value-md" value="site.type">
+            <span ng-if="typeEditor.isDisplayMode()">{{typeEditor.viewValue | osNoValue}}</span>
+            <div ng-if="typeEditor.isEditMode()">
+              <os-select ng-model="typeEditor.editValue" list="siteTypes" required></os-select>
+            </div>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="site.address">Address</strong>
+          <os-inline-edit editor="addressEditor" name="address" class="value value-md" value="site.address">
+            <span ng-if="addressEditor.isDisplayMode()">{{addressEditor.viewValue | osNoValue}}</span>
+            <textarea ng-if="addressEditor.isEditMode()" ng-model="addressEditor.editValue" class="form-control"></textarea>
+          </os-inline-edit>
+        </li>
+      </ul>
+
+      <div ng-if="!!site.extensionDetail">
+        <div os-extension-overview ext-object="site.extensionDetail" show-column="2"></div>
+      </div>
+    </div>
   </div>
 </div>
 

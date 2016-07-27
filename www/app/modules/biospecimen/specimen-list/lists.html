@@ -1,12 +1,19 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="specimen_list.lists">
-        Specimen Lists
-      </span>
-    </h3>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="specimen_list.lists">
+          Specimen Lists
+        </span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
 
-    <div class="os-btns right">
+  <div class="os-page-commands">
+    <div class="right">
       <button class="default" os-right-drawer-toggle>
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -15,9 +22,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

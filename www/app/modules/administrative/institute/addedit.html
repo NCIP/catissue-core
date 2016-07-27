@@ -1,12 +1,18 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="institute-list" translate="institutes.list">Institutes</a></li>
-    </ul>
-    <h3>
-      <span ng-if="!institute.id" translate="institutes.create_institute"> Create Institute </span>
-      <span ng-if="!!institute.id">{{institute.name}}</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="institute-list">
+            <span translate="institutes.list">Institutes</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!institute.id" translate="institutes.create_institute"> Create Institute </span>
+        <span ng-if="!!institute.id">{{institute.name}}</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

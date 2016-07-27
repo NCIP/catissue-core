@@ -1,31 +1,25 @@
-<div os-show-if-menu-items-present dropdown class="inline">
+<a ng-if="!!listViewCtx.sopDoc" class="btn default" ng-href="{{listViewCtx.sopDocDownloadUrl}}" target="_blank">
+  <span class="fa fa-download"></span>
+  <span translate="cp.view_sop">View SOP</span>
+</a>
+
+<a ng-if="!!listViewCtx.sopUrl" class="btn default" ng-href="{{listViewCtx.sopUrl}}" target="_blank">
+  <span class="fa fa-external-link"></span>
+  <span translate="cp.view_sop">View SOP</span>
+</a>
+
+<a ng-if="!!cp.catalogQuery" class="btn default" ui-sref="query-results({queryId: cp.catalogQuery.id, cpId: cp.id})">
+  <span class="fa fa-table"></span>
+  <span translate="participant.buttons.specimen_catalog">Specimen Catalog</span>
+</a>
+
+<div os-show-if-menu-items-present dropdown class="os-inline-btn">
   <button class="default dropdown-toggle">
     <span translate="common.buttons.more">More</span>
     <span class="fa fa-caret-down"></span>
   </button>
 
   <ul class="dropdown-menu dropdown-menu-right">
-    <li ng-if="!!listViewCtx.sopDoc">
-      <a ng-href="{{listViewCtx.sopDocDownloadUrl}}" target="_blank">
-        <span class="fa fa-download"></span>
-        <span translate="cp.download_sop">Download SOP</span>
-      </a>
-    </li>
-
-    <li ng-if="!!listViewCtx.sopUrl">
-      <a ng-href="{{listViewCtx.sopUrl}}" target="_blank">
-        <span class="fa fa-external-link"></span>
-        <span translate="cp.sop_document">SOP Document</span>
-      </a>
-    </li>
-
-    <li ng-if="!!cp.catalogQuery">
-      <a ui-sref="query-results({queryId: cp.catalogQuery.id, cpId: cp.id})">
-        <span class="fa fa-table"></span>
-        <span translate="participant.buttons.specimen_catalog">Specimen Catalog</span>
-      </a>
-    </li>
-
     <li ng-if="cpViewCtx.participantUpdatedAllowed || cpViewCtx.visitSpecimenUpdateAllowed">
       <a ui-sref="import-cp-objs">
         <span class="fa fa-upload"></span>

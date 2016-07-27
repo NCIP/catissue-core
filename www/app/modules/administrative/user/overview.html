@@ -1,119 +1,140 @@
-<div class="clearfix">
-  <div class="col-xs-8">
-    <div class="alert alert-info" ng-if="user.activityStatus == 'Pending' && currentUser.admin">
-      <span>{{'user.request_pending' | translate: user }}</span>
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <div ng-if="(currentUser.admin || !user.admin) && user.activityStatus != 'Pending'">
+        <button show-if-allowed="userResource.updateOpts" class="default" title="{{'user.tooltip.edit' | translate}}"
+          ui-sref="user-addedit({userId: user.id})">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </button>
+        <button show-if-allowed="userResource.deleteOpts" class="default" ng-click="deleteUser()">
+          <span class="fa fa-trash"></span>
+          <span translate="common.buttons.delete">Delete</span>
+        </button>
+        <button class="default" ui-sref="user-password({userId: user.id})"
+          ng-if="user.domainName == global.defaultDomain && currentUser.id != user.id && currentUser.admin">
+          <span class="fa fa-key"></span>
+          <span translate="common.buttons.reset_password">Reset Password</span>
+        </button>
+      </div>
     </div>
-    <div show-if-allowed="userResource.updateOpts" class="alert alert-info" ng-if="user.activityStatus == 'Locked'">
-      <span>{{'user.locked' | translate: user }}</span>
-    </div>
-    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
-      <li class="item">
-        <strong class="key key-sm" translate="user.last_name">Last Name</strong>
-        <os-inline-edit editor="lastNameEditor" name="lastName" class="value value-md" value="user.lastName">
-          <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue}}</span>
-          <input ng-if="lastNameEditor.isEditMode()" type="text" ng-model="lastNameEditor.editValue" 
-            class="form-control" placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required>
-        </os-inline-edit>
-      </li>
+  </div>
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <div class="alert alert-info" ng-if="user.activityStatus == 'Pending' && currentUser.admin">
+        <span>{{'user.request_pending' | translate: user }}</span>
+      </div>
+      <div show-if-allowed="userResource.updateOpts" class="alert alert-info" ng-if="user.activityStatus == 'Locked'">
+        <span>{{'user.locked' | translate: user }}</span>
+      </div>
+      <ul class="os-key-values os-two-cols" os-inline-editors on-save="editUser">
+        <li class="item">
+          <strong class="key key-sm" translate="user.last_name">Last Name</strong>
+          <os-inline-edit editor="lastNameEditor" name="lastName" class="value value-md" value="user.lastName">
+            <span ng-if="lastNameEditor.isDisplayMode()">{{lastNameEditor.viewValue}}</span>
+            <input ng-if="lastNameEditor.isEditMode()" type="text" ng-model="lastNameEditor.editValue" 
+              class="form-control" placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required>
+          </os-inline-edit>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="user.first_name">First Name</strong>
-        <os-inline-edit editor="firstNameEditor" name="firstName" class="value value-md" value="user.firstName">
-          <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue}}</span>
-          <input ng-if="firstNameEditor.isEditMode()" type="text" ng-model="firstNameEditor.editValue" 
-            class="form-control" placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required>
-        </os-inline-edit>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.first_name">First Name</strong>
+          <os-inline-edit editor="firstNameEditor" name="firstName" class="value value-md" value="user.firstName">
+            <span ng-if="firstNameEditor.isDisplayMode()">{{firstNameEditor.viewValue}}</span>
+            <input ng-if="firstNameEditor.isEditMode()" type="text" ng-model="firstNameEditor.editValue" 
+              class="form-control" placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required>
+          </os-inline-edit>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="user.domain_name">Domain Name</strong>
-        <os-inline-edit editor="domainEditor" name="domain" class="value value-md" value="user.domainName">
-          <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue}}</span>
-          <div ng-if="domainEditor.isEditMode()">
-            <os-select ng-model="domainEditor.editValue" list="domains" placeholder="{{'user.domain_name' | translate}}" required></os-select>
-          </div>
-        </os-inline-edit>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.domain_name">Domain Name</strong>
+          <os-inline-edit editor="domainEditor" name="domain" class="value value-md" value="user.domainName">
+            <span ng-if="domainEditor.isDisplayMode()">{{domainEditor.viewValue}}</span>
+            <div ng-if="domainEditor.isEditMode()">
+              <os-select ng-model="domainEditor.editValue" list="domains" placeholder="{{'user.domain_name' | translate}}" required></os-select>
+            </div>
+          </os-inline-edit>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="user.login_name">Login Name</strong>
-        <os-inline-edit editor="loginNameEditor" name="loginName" class="value value-md" value="user.loginName">
-          <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue}}</span>
-          <input ng-if="loginNameEditor.isEditMode()" type="text" ng-model="loginNameEditor.editValue" class="form-control" 
-            placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
-        </os-inline-edit>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.login_name">Login Name</strong>
+          <os-inline-edit editor="loginNameEditor" name="loginName" class="value value-md" value="user.loginName">
+            <span ng-if="loginNameEditor.isDisplayMode()">{{loginNameEditor.viewValue}}</span>
+            <input ng-if="loginNameEditor.isEditMode()" type="text" ng-model="loginNameEditor.editValue" class="form-control" 
+              placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
+          </os-inline-edit>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="user.email_address">Email Address</strong>
-        <os-inline-edit editor="emailEditor" name="emailAddress" class="value value-md" value="user.emailAddress">
-          <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue}}</span>
-          <input ng-if="emailEditor.isEditMode()" type="email" ng-model="emailEditor.editValue" class="form-control"
-            placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
-        </os-inline-edit>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.email_address">Email Address</strong>
+          <os-inline-edit editor="emailEditor" name="emailAddress" class="value value-md" value="user.emailAddress">
+            <span ng-if="emailEditor.isDisplayMode()">{{emailEditor.viewValue}}</span>
+            <input ng-if="emailEditor.isEditMode()" type="email" ng-model="emailEditor.editValue" class="form-control"
+              placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required>
+          </os-inline-edit>
+        </li>
 
-      <li class="item">
-        <strong class="key key-sm" translate="user.phone_number">Phone Number</strong>
-        <span class="value value-md" os-inline-eddit>{{user.phoneNumber | osNoValue}}</span>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.phone_number">Phone Number</strong>
+          <span class="value value-md" os-inline-eddit>{{user.phoneNumber | osNoValue}}</span>
+        </li>
 
-      <li class="item">
-        <strong class="key key-sm" translate="user.institute">Institute</strong>
-        <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
-      </li>
+        <li class="item">
+          <strong class="key key-sm" translate="user.institute">Institute</strong>
+          <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
+        </li>
       
-      <li class="item">
-        <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
+        <li class="item">
+          <strong class="key key-sm" translate="user.super_admin">Super Admin</strong>
+          <os-inline-edit editor="adminEditor" name="admin" class="value value-md" value="user.admin">
+            <div ng-if="adminEditor.isDisplayMode()" ng-switch on="adminEditor.viewValue">
+              <span ng-switch-when="false" translate="common.no"></span>
+              <span ng-switch-when="true" translate="common.yes"></span>
+              <span ng-switch-default translate="common.no"></span>
+            </div>
+            <div ng-if="adminEditor.isEditMode()" class="form-control">
+              <label class="radio-inline">
+                <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="true">
+                <span translate="common.yes">Yes</span>
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="false" checked>
+                <span translate="common.no">No</span>
+              </label>
+            </div>
+          </os-inline-edit>
+        </li>
+        <li show-if-admin class="item">
+          <strong class="key key-sm" translate="user.manage_forms">Manage Forms?</strong>
+          <span class="value value-md" ng-switch on="user.manageForms">
+            <span ng-switch-when="true" translate="common.yes">Yes</span>
+            <span ng-switch-when="false" translate="common.no">No</span>
+          </span>
+        </li>
+      </ul>
 
-        <os-inline-edit editor="adminEditor" name="admin" class="value value-md" value="user.admin">
-          <div ng-if="adminEditor.isDisplayMode()" ng-switch on="adminEditor.viewValue">
-            <span ng-switch-when="false" translate="common.no"></span>
-            <span ng-switch-when="true" translate="common.yes"></span>
-            <span ng-switch-default translate="common.no"></span>
-          </div>
-          <div ng-if="adminEditor.isEditMode()" class="form-control">
-            <label class="radio-inline">
-              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="true">
-              <span translate="common.yes">Yes</span>
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="adminGrp" ng-model="adminEditor.editValue" value="false" checked>
-              <span translate="common.no">No</span>
-            </label>
-          </div>
-        </os-inline-edit>
-      </li>
-      <li show-if-admin class="item">
-        <strong class="key key-sm" translate="user.manage_forms">Manage Forms?</strong>
-        <span class="value value-md" ng-switch on="user.manageForms">
-          <span ng-switch-when="true" translate="common.yes">Yes</span>
-          <span ng-switch-when="false" translate="common.no">No</span>
-        </span>
-      </li>
-    </ul>
+      <div class="os-section os-line-section">
+        <strong class="key key-sm" translate="user.address">Address</strong>
+        <span class="value value-md">{{user.address}}</span>
+      </div>
 
-    <div class="os-section os-line-section">
-      <strong class="key key-sm" translate="user.address">Address</strong>
-      <span class="value value-md">{{user.address}}</span>
-    </div>
+      <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
+        <button class="btn btn-success" ng-click="activate()">
+          <span class="fa fa-check"></span>
+          <span translate="user.approve_user"> Approve User </span>
+        </button>
+        <button class="btn btn-danger" ng-click="deleteUser()">
+          <span class="fa fa-remove"></span>
+          <span translate="user.reject_user"> Reject User </span>
+        </button>
+      </div>
 
-    <div ng-if="user.activityStatus == 'Pending' && currentUser.admin">
-      <button class="btn btn-success" ng-click="activate()">
-        <span class="fa fa-check"></span>
-        <span translate="user.approve_user"> Approve User </span>
-      </button>
-      <button class="btn btn-danger" ng-click="deleteUser()">
-        <span class="fa fa-remove"></span>
-        <span translate="user.reject_user"> Reject User </span>
-      </button>
-    </div>
-
-    <div show-if-allowed="userResource.updateOpts" ng-if="user.activityStatus == 'Locked'">
-      <button class="btn btn-primary" ng-click="activate()">
-        <span class="fa fa-check"></span>
-        <span translate="user.unlock_user"> Unlocked User </span>
-      </button>
+      <div show-if-allowed="userResource.updateOpts" ng-if="user.activityStatus == 'Locked'">
+        <button class="btn btn-primary" ng-click="activate()">
+          <span class="fa fa-check"></span>
+          <span translate="user.unlock_user"> Unlocked User </span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

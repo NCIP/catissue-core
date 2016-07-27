@@ -1,15 +1,24 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="jobs.list">Scheduled Jobs</span>
-    </h3>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="jobs.list">Scheduled Jobs</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
 
-    <div class="os-btns right">
-      <button show-if-allowed="jobResource.createOpts" class="primary" 
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="jobResource.createOpts" class="default"
         title="{{'jobs.tooltip.create_job' | translate}}" ui-sref="job-addedit({jobId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'job.tooltip.search_jobs' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -18,9 +27,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

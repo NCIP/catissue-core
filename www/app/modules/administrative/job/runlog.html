@@ -1,17 +1,19 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="job-list">
-          <span translate="jobs.list">Scheduled Jobs</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="job-list">
+            <span translate="jobs.list">Scheduled Jobs</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <span>{{job.name}}</span>
-      <span translate="jobs.run_logs">Run Log</span>
-    </h3>
+      <h3>
+        <span>{{job.name}}</span>
+        <span translate="jobs.run_logs">Run Log</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

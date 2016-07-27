@@ -1,84 +1,110 @@
-<div class="clearfix">
-  <div class="col-xs-8">
-    <ul class="os-key-values os-two-cols" os-inline-editors on-save="editDp">
-      <li class="item">
-        <strong class="key key-sm" translate="dp.title">Title</strong>
-        <os-inline-edit editor="titleEditor" name="Title" class="value value-md" value="distributionProtocol.title">
-          <span ng-if="titleEditor.isDisplayMode()">{{titleEditor.viewValue | osNoValue}}</span>
-          <input ng-if="titleEditor.isEditMode()" type="text" ng-model="titleEditor.editValue" class="form-control" 
-            placeholder="{{'dp.title' | translate}}"/>
-        </os-inline-edit>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="dp.short_title">Short Title</strong>
-        <os-inline-edit editor="shortTitleEditor" name="shortTitle" class="value value-md" value="distributionProtocol.shortTitle">
-          <span ng-if="shortTitleEditor.isDisplayMode()">{{shortTitleEditor.viewValue | osNoValue}}</span>
-          <input ng-if="shortTitleEditor.isEditMode()" type="text" ng-model="shortTitleEditor.editValue" 
-            class="form-control" placeholder="{{'dp.short_title' | translate}}"/>
-        </os-inline-edit>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="dp.receiving_institute">Receiving Institute</strong>
-        <span class="value value-md">{{distributionProtocol.instituteName}}</span>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="dp.receiving_site">Receiving Site</strong>
-        <span class="value value-md">{{distributionProtocol.defReceivingSiteName | osNoValue}}</span>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="dp.pi">Principle Investigator</strong>
-        <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="distributionProtocol.principalInvestigator">
-          <span ng-if="piEditor.isDisplayMode()">
-            {{piEditor.viewValue | osUserDisplayName}}
-          </span>
-          <div ng-if="piEditor.isEditMode()">
-            <os-users name="pi" ng-model="piEditor.editValue" placeholder="{{'dp.pi' | translate}}" required></os-users>
-          </div>
-        </os-inline-edit>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="dp.start_date">Start Date</strong>
-        <os-inline-edit editor="sdEditor" name="startDate" class="value value-md" value="distributionProtocol.startDate">
-          <span ng-if="sdEditor.isDisplayMode()">{{sdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <os-date-picker ng-if="sdEditor.isEditMode()" date="sdEditor.editValue">
-          </os-date-picker>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="dp.end_date">End Date</strong>
-        <os-inline-edit editor="edEditor" name="endDate" class="value value-md" value="distributionProtocol.endDate">
-          <span ng-if="edEditor.isDisplayMode()">{{edEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
-          <os-date-picker ng-if="edEditor.isEditMode()" date="edEditor.editValue">
-          </os-date-picker>
-        </os-inline-edit>
-      </li>
-
-      <li class="item">
-        <strong class="key key-sm" translate="dp.irb_id">IRB Id</strong>
-        <os-inline-edit editor="irbEditor" name="irbId" class="value value-md" value="distributionProtocol.irbId">
-          <span ng-if="irbEditor.isDisplayMode()">{{irbEditor.viewValue | osNoValue}}</span>
-          <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" 
-            placeholder="{{'dp.irb_id' | translate}}" ng-maxlength="255">
-        </os-inline-edit>
-      </li>
-      
-      <li class="item">
-        <strong class="key key-sm" translate="dp.distributing_sites">Distributing Sites</strong>
-        <span class="value value-md" title="{{distributingSites}}">
-          {{distributingSites}}
-        </span>
-      </li>
-      
-    </ul>
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" title="{{'dp.tooltip.edit' | translate}}"
+        ui-sref="dp-addedit({dpId: distributionProtocol.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <button show-if-admin ng-if="distributionProtocol.activityStatus != 'Closed'"
+        class="default" ng-click="closeDp()">
+        <span class="fa fa-remove"></span>
+        <span translate="dp.menu_options.close">Close</span>
+      </button>
+      <button show-if-admin ng-if="distributionProtocol.activityStatus == 'Closed'"
+        class="default" ng-click="reopenDp()">
+        <span class="fa fa-check"></span>
+        <span translate="dp.menu_options.reopen">Reopen</span>
+      </button>
+      <button show-if-admin class="default" class="default" ng-click="deleteDp()">
+        <span class="fa fa-trash"></span>
+        <span translate="dp.menu_options.delete">Delete</span>
+      </button>
+    </div>
   </div>
 
-  <div class="col-xs-8" ng-if="!!distributionProtocol.extensionDetail">
-    <div os-extension-overview ext-object="distributionProtocol.extensionDetail" show-column="2"></div>
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <ul class="os-key-values os-two-cols" os-inline-editors on-save="editDp">
+        <li class="item">
+          <strong class="key key-sm" translate="dp.title">Title</strong>
+          <os-inline-edit editor="titleEditor" name="Title" class="value value-md" value="distributionProtocol.title">
+            <span ng-if="titleEditor.isDisplayMode()">{{titleEditor.viewValue | osNoValue}}</span>
+            <input ng-if="titleEditor.isEditMode()" type="text" ng-model="titleEditor.editValue" class="form-control" 
+              placeholder="{{'dp.title' | translate}}"/>
+          </os-inline-edit>
+        </li>
+        
+        <li class="item">
+          <strong class="key key-sm" translate="dp.short_title">Short Title</strong>
+          <os-inline-edit editor="shortTitleEditor" name="shortTitle" class="value value-md" value="distributionProtocol.shortTitle">
+            <span ng-if="shortTitleEditor.isDisplayMode()">{{shortTitleEditor.viewValue | osNoValue}}</span>
+            <input ng-if="shortTitleEditor.isEditMode()" type="text" ng-model="shortTitleEditor.editValue" 
+              class="form-control" placeholder="{{'dp.short_title' | translate}}"/>
+          </os-inline-edit>
+        </li>
+        
+        <li class="item">
+          <strong class="key key-sm" translate="dp.receiving_institute">Receiving Institute</strong>
+          <span class="value value-md">{{distributionProtocol.instituteName}}</span>
+        </li>
+        
+        <li class="item">
+          <strong class="key key-sm" translate="dp.receiving_site">Receiving Site</strong>
+          <span class="value value-md">{{distributionProtocol.defReceivingSiteName | osNoValue}}</span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="dp.pi">Principle Investigator</strong>
+          <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="distributionProtocol.principalInvestigator">
+            <span ng-if="piEditor.isDisplayMode()">
+              {{piEditor.viewValue | osUserDisplayName}}
+            </span>
+            <div ng-if="piEditor.isEditMode()">
+              <os-users name="pi" ng-model="piEditor.editValue" placeholder="{{'dp.pi' | translate}}" required></os-users>
+            </div>
+          </os-inline-edit>
+        </li>
+        
+        <li class="item">
+          <strong class="key key-sm" translate="dp.start_date">Start Date</strong>
+          <os-inline-edit editor="sdEditor" name="startDate" class="value value-md" value="distributionProtocol.startDate">
+            <span ng-if="sdEditor.isDisplayMode()">{{sdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+            <os-date-picker ng-if="sdEditor.isEditMode()" date="sdEditor.editValue">
+            </os-date-picker>
+          </os-inline-edit>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="dp.end_date">End Date</strong>
+          <os-inline-edit editor="edEditor" name="endDate" class="value value-md" value="distributionProtocol.endDate">
+            <span ng-if="edEditor.isDisplayMode()">{{edEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+            <os-date-picker ng-if="edEditor.isEditMode()" date="edEditor.editValue">
+            </os-date-picker>
+          </os-inline-edit>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="dp.irb_id">IRB Id</strong>
+          <os-inline-edit editor="irbEditor" name="irbId" class="value value-md" value="distributionProtocol.irbId">
+            <span ng-if="irbEditor.isDisplayMode()">{{irbEditor.viewValue | osNoValue}}</span>
+            <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" 
+              placeholder="{{'dp.irb_id' | translate}}" ng-maxlength="255">
+          </os-inline-edit>
+        </li>
+        
+        <li class="item">
+          <strong class="key key-sm" translate="dp.distributing_sites">Distributing Sites</strong>
+          <span class="value value-md" title="{{distributingSites}}">
+            {{distributingSites}}
+          </span>
+        </li>
+        
+      </ul>
+    </div>
+  
+    <div class="col-xs-8" ng-if="!!distributionProtocol.extensionDetail">
+      <div os-extension-overview ext-object="distributionProtocol.extensionDetail" show-column="2"></div>
+    </div>
   </div>
 </div>

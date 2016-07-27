@@ -1,36 +1,28 @@
 <div>
   <div os-page-header>
-    <h3> 
-      <span translate="queries.list">Queries</span>
-    </h3>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="queries.list">Queries</span>
+      </h3>
+    </div>
+  </div>
 
-    <div class="os-btns right">
-      <div dropdown class="inline">
-        <button class="primary dropdown-toggle">
-          <span class="fa fa-plus"></span>
-          <span translate="common.buttons.create">Create</span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li>
-            <a ui-sref="query-addedit({queryId: undefined})">
-              <i class="fa fa-plus"></i>
-              <span translate="common.buttons.create">Create</span>
-            </a>
-          </li>
-          <li>
-            <a ng-click="importQuery()">
-              <i class="fa fa-upload"></i>
-              <span translate="common.buttons.import">Import</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div dropdown ng-if="selectedQueries.length > 0" class="inline">
+  <div class="os-page-commands">
+    <div class="left">
+      <button class="default" ui-sref="query-addedit({queryId: undefined})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" ng-click="importQuery()">
+        <span class="fa fa-upload"></span>
+        <span translate="common.buttons.import">Import</span>
+      </button>
+      <div dropdown ng-if="selectedQueries.length > 0" class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span class="fa fa-folder"></span>
           <span translate="queries.assign">Assign</span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
+        <ul class="dropdown-menu os-query-folders-dd">
           <li>
             <input ng-model="searchQueryFolder" type="text" class="form-control" 
               placeholder="{{'queries.search_folder' | translate}}" 
@@ -50,12 +42,14 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="right">
       <button os-right-drawer-toggle class="default">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
       </button>
     </div>
-  </div>    
+  </div>
 
   <div class="container os-list-container">
     <div class="row">

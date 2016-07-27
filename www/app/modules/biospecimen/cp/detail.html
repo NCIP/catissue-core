@@ -1,45 +1,17 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> <a ui-sref="cp-list" translate="menu.collection_protocols"></a> </li>
-    </ul>
-    <h3>
-      <span>{{cp.shortTitle}}</span>
-      <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
-    </h3>
-
-    <div class="os-btns right">
-      <button show-if-allowed="cpResource.updateOpts" class="primary" title="{{'cp.tooltip.edit' | translate}}" 
-        ui-sref="cp-addedit({cpId:cp.id})">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-allowed="cpResource.createOpts">
-            <a ui-sref="cp-addedit({cpId:cp.id, mode:'copy'})">
-              <span class="fa fa-copy"></span>
-              <span translate="cp.menu_options.clone">Clone</span>
-            </a>
-          </li>
-          <li show-if-allowed="cpResource.deleteOpts" ng-click="deleteCp()">
-            <a>
-              <span class="fa fa-trash"></span>
-              <span translate="cp.menu_options.delete">Delete</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{downloadUri}}" target="_blank">
-              <span class="fa fa-download"></span>
-              <span translate="cp.menu_options.export">Export</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list">
+            <span translate="menu.collection_protocols"></span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span>{{cp.shortTitle}}</span>
+        <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
+      </h3>
     </div>
   </div>
 

@@ -1,34 +1,14 @@
 <div> 
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="order-list" translate="orders.list">Distribution Orders</a>
-      </li>
-    </ul>
-    <h3>{{order.name}}</h3>
-
-    <div class="os-btns right">
-      <button show-if-allowed="orderResource.updateOpts" class="primary" 
-        ui-sref="order-addedit({orderId: order.id})" ng-if="order.status == 'PENDING'">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </button>
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li ng-if="order.status == 'EXECUTED' && rptTmplConfigured">
-            <a ng-click="downloadReport()" >
-              <span class="fa fa-download"></span>
-              <span translate="orders.buttons.download_report">Download Report</span>
-            </a>
-          </li>
-
-          <os-plugin-hooks view-name="'order-detail'" sec-name="'more-menu'"></os-plugin-hooks>
-        </ul>
-      </div>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="order-list">
+            <span translate="orders.list">Distribution Orders</span>
+          </a>
+        </li>
+      </ul>
+      <h3>{{order.name}}</h3>
     </div>
   </div>
 

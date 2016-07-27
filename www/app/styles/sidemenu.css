@@ -1,11 +1,10 @@
-
 .os-side-menu-wrapper {
   position: absolute;
   width: 57px; 
   padding: 0px;
   margin: 0px;
   background: #f5f5f5;
-  top: 0px;
+  top: 40px;
   bottom: 0px;
   height: auto;
   z-index: 1;
@@ -20,10 +19,6 @@
   width: 149px;
 }
 
-.os-page-hdr + .os-side-menu-wrapper {
-  top: 114px;
-}
-  
 ul.os-side-menu {
   width: 56px; 
   background: #f5f5f5;
@@ -74,6 +69,10 @@ ul.os-side-menu li a > .fa {
   text-decoration: none;
 }
 
+ul.os-side-menu li:first-child:hover {
+  background: #f5f5f5;
+}
+
 ul.os-side-menu li:hover {
   background: #e0e0e0;
 }
@@ -97,21 +96,27 @@ ul.os-side-menu li.active a {
 }
 
 .os-side-menu-page-content {
-  padding: 15px 20px 0px 66px; 
+  padding: 10px 20px 0px 66px;
   position: absolute;
-  top: 0px;
+  top: 107px;
   bottom: 0px;
   height: auto;
   overflow-y: auto;
   width: 100%;
 }
 
+.os-side-menu-page-content .os-page-commands {
+  position: initial;
+  top: initial;
+  padding: 0px 15px 15px;
+}
+
 .os-side-menu-wrapper.opened + .os-side-menu-page-content {
   padding-left: 159px;
 }
 
-.os-page-hdr ~ .os-side-menu-page-content {
-  top: 114px;
+.os-page-header.side-menu-opened .os-page-header-inner {
+  padding-left: 123px;
 }
 
 .os-side-menu-wrapper.closed .os-side-menu li .os-title {
@@ -181,6 +186,20 @@ ul.os-side-menu li.active a {
 
 .os-side-menu-wrapper.opened .open-close .btn.open {
   display: none;
+}
+
+.os-side-menu .os-nav-button {
+  margin: 5px 0px 6px -2px;
+}
+
+.os-side-menu .os-nav-button > .fa {
+  font-size: 24px!important;
+  color: #666;
+}
+
+.os-side-menu .os-nav-button .os-title {
+  font-size: 18px;
+  color: #666;
 }
 
 /** Sub-menus **/

@@ -1,19 +1,21 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="cp-list-view({cpId: cp.id})">
-          <span>{{cp.shortTitle}}</span>
-        </a>
-      </li>
-    </ul>
-    <h3 ng-switch on="!!cpr.id"> 
-      <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
-      <span ng-switch-default translate="participant.register_participant">Register Participant</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cp.id})">
+            <span>{{cp.shortTitle}}</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!!cpr.id"> 
+        <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
+        <span ng-switch-default translate="participant.register_participant">Register Participant</span>
+      </h3>
+    </div>
   </div>
 
-  <div class="container os-margin-top">
+  <div class="container">
     <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
       <div ng-if="!matchedParticipants || matchedParticipants.length == 0">
         <div ng-switch on="fieldsCtx.hasDict">

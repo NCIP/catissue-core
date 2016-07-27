@@ -1,37 +1,39 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> 
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          <span>{{cpr.cpShortTitle}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
-            <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
-            <span ng-switch-when="false" translate="common.na"> N/A </span>
-          </ng-switch>
-          <span>({{cpr.ppid}})</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.visits({visitId: currVisit.id, eventId: currVisit.eventId})">
-          <span translate="visits.list">Visits</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li> 
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+              <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+              <span ng-switch-when="false" translate="common.na"> N/A </span>
+            </ng-switch>
+            <span>({{cpr.ppid}})</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.visits({visitId: currVisit.id, eventId: currVisit.eventId})">
+            <span translate="visits.list">Visits</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <ng-switch on="!!currVisit.id">
-        <span ng-switch-when="true">Update</span> 
-        <span ng-switch-default>Add</span>
-      </ng-switch>
-      <os-event-desc event-point="currVisit.eventPoint" event-label="currVisit.eventLabel"></os-event-desc>
-    </h3>
+      <h3>
+        <ng-switch on="!!currVisit.id">
+          <span ng-switch-when="true">Update</span> 
+          <span ng-switch-default>Add</span>
+        </ng-switch>
+        <os-event-desc event-point="currVisit.eventPoint" event-label="currVisit.eventLabel"></os-event-desc>
+      </h3>
+    </div>
   </div>
 
-  <div class="container os-margin-top">
+  <div class="container">
     <form name="vform" class="form-horizontal" os-form-validator="vform" validator="vformValidator" novalidate>
       <div ng-switch on="fieldsCtx.hasDict">
         <div ng-switch-when="true">

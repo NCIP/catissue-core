@@ -1,20 +1,28 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="site.list">Sites</span>
-    </h3>
-    <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'site.tooltip.add' | translate}}" 
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="site.list">Sites</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" title="{{'site.tooltip.add' | translate}}"
         ui-sref="site-addedit({siteId: ''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
-      <div show-if-admin dropdown class="inline">
+      <div show-if-admin dropdown class="os-inline-btn">
         <button class="default dropdown-toggle">
           <span translate="common.buttons.import">Import</span>
           <span class="fa fa-caret-down"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-right">
+        <ul class="dropdown-menu">
           <li>
             <a ui-sref="site-import">
               <span class="fa fa-hospital-o"></span>
@@ -29,6 +37,8 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="right">
       <button class="default" os-right-drawer-toggle title="{{'site.tooltip.search' | translate}}">
         <span class="fa fa-search"></span>
         <span translate="common.buttons.search">Search</span>
@@ -37,9 +47,6 @@
   </div>
 
   <div class="container">
-    <div>
-      <os-list-pager opts="pagerOpts"></os-list-pager>
-    </div>
     <table class="os-table os-table-hover">
       <thead class="os-table-head">
         <tr class="row">

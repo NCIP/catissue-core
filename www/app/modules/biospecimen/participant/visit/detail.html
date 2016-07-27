@@ -1,59 +1,27 @@
 <div> 
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li> 
-        <a ui-sref="cp-list-view({cpId: cpr.cpId})">
-          <span>{{cpr.cpShortTitle}}</span>
-        </a> 
-      </li>
-      <li>
-        <a ui-sref="participant-detail.overview({cprId: cpr.id})">
-          <span>{{cpr.ppid}}</span>
-        </a>
-      </li>
-      <li>
-        <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
-          <span translate="visits.list">Visits</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li> 
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a> 
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <span>{{cpr.ppid}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+            <span translate="visits.list">Visits</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>
-      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
-    </h3>
-
-    <div class="os-btns right">
-      <button show-if-allowed="specimenResource.updateOpts" class="primary" ng-switch on="!!visit.id" ui-sref="visit-addedit">
-        <span ng-switch-when="true">
-          <span class="fa fa-pencil"></span>
-          <span translate="common.buttons.edit">Edit</span>
-        </span>
-        <span ng-switch-default>
-          <span class="fa fa-plus"></span>
-          <span translate="common.buttons.add">Add</span>
-        </span>
-      </button>
- 
-      <div dropdown os-show-if-menu-items-present class="inline">
-        <button class="default dropdown-toggle">
-          <span translate="common.buttons.more">More</span>
-          <span class="fa fa-caret-down"></span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-right">
-          <li show-if-allowed="specimenResource.updateOpts" ng-if="!!visit.id">
-            <a ng-click="printVisitName()">
-              <span class="fa fa-print"></span>
-              <span translate="common.buttons.print">Print</span>
-            </a>
-          </li>
-          <li show-if-allowed="specimenResource.deleteOpts" ng-if="!!visit.id">
-            <a ng-click="deleteVisit()">
-              <span class="fa fa-trash"></span>
-              <span translate="common.buttons.delete">Delete</span>
-            </a>
-          </li>
-        </ul>
-      </div>
+      <h3>
+        <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+      </h3>
     </div>
   </div>
 

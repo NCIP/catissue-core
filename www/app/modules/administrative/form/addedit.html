@@ -1,13 +1,19 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="form-list" translate="form.list">Forms</a></li>
-    </ul>
-    <h3>
-      <span ng-if="!form.id" translate="form.create_form">New Form</span>
-      <span ng-if="!!form.id">{{form.caption}}</span>
-    </h3> 
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="form-list">
+            <span translate="form.list">Forms</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!form.id" translate="form.create_form">New Form</span>
+        <span ng-if="!!form.id">{{form.caption}}</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container os-de-form">

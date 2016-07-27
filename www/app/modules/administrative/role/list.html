@@ -1,16 +1,22 @@
 <div>
   <div os-page-header>
-    <h3>
-      <span translate="role.list">Roles</span>
-    </h3>
-    <div class="os-btns right">
-      <button show-if-admin class="primary" title="{{'role.tooltip.add' | translate}}"
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="role.list">Roles</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin class="default" title="{{'role.tooltip.add' | translate}}"
         ui-sref="role-addedit({roleId:''})">
         <span class="fa fa-plus"></span>
         <span translate="common.buttons.create">Create</span>
       </button>
     </div>
   </div>
+
   <div class="container">
     <table class="os-table os-table-hover">
       <thead class="os-table-head">

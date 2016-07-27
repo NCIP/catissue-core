@@ -1,13 +1,19 @@
 
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="site-list" translate="site.list">Sites</a></li>
-    </ul>
-    <h3>
-      <span ng-if="!site.id" translate="site.create_site">Create Site</span>
-      <span ng-if="!!site.id">{{site.name}}</span>
-    </h3>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="site-list">
+            <span translate="site.list">Sites</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!site.id" translate="site.create_site">Create Site</span>
+        <span ng-if="!!site.id">{{site.name}}</span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">

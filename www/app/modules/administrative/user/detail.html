@@ -1,10 +1,16 @@
 <div> 
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li><a ui-sref="user-list" translate="user.list">Users</a></li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="user-list">
+            <span translate="user.list">Users</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3>{{user.lastName}} {{user.firstName}}</h3>
+      <h3>{{user.lastName}} {{user.firstName}}</h3>
+    </div>
 
     <div class="os-btns right">
       <div ng-if="(currentUser.admin || !user.admin) && user.activityStatus != 'Pending'">

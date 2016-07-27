@@ -4,30 +4,35 @@ angular.module('openspecimen')
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        var btn = angular.element('<button/>')
+        var navBtn = angular.element('<button/>')
           .addClass('os-nav-button')
           .append('<span class="fa fa-bars"></span>');
 
-        var div = angular.element('<div/>')
-          .css('width', '100%')
-          .append(element.find(".os-btns.right"))
-          .append(element.find(":header"));
+        var navEl = angular.element('<div class="os-nav-button-wrapper"/>')
+          .append(navBtn);
 
-        element.append(div);
+        var contentEl = angular.element('<div class="os-page-header-content-wrapper"/>')
+          .append(element.find('.os-page-header-content'));
 
-        element.addClass('os-page-hdr').prepend(btn).removeAttr('os-page-header');
-        element.find(":header")
-          .addClass("os-title os-ellipsis")
-          .hover(function() {
-            var that = angular.element(this);
-            that.attr("title", that.text());
-          });
+        var actionsEl = angular.element('<div class="os-page-header-actions-wrapper"/>')
+          .append(element.find('.os-page-header-actions'));
+
+        var innerEl = angular.element('<div class="os-page-header-inner"/>')
+          .append(contentEl).append(actionsEl);
+
+        var headerEl = angular.element('<div class="clearfix"/>')
+          .append(navEl).append(innerEl);
+
+        element.children().remove();
+        element.append(headerEl);
+
+        element.addClass("os-page-header").removeAttr('os-page-header');
 
         if (element.find('.os-breadcrumbs').length == 0) {
           element.addClass('no-breadcrumbs');
         }
 
-        $compile(btn)(scope);
+        $compile(element)(scope);
       }
     };
   });

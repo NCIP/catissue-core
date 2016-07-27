@@ -1,20 +1,22 @@
 <div>
   <div os-page-header>
-    <ul os-breadcrumbs>
-      <li>
-        <a ui-sref="job-list"> 
-          <span translate="jobs.list">Scheduled Jobs</span>
-        </a>
-      </li>
-    </ul>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="job-list"> 
+            <span translate="jobs.list">Scheduled Jobs</span>
+          </a>
+        </li>
+      </ul>
 
-    <h3 ng-switch on="!job.id">
-      <span ng-switch-when="true" translate="jobs.create_job">Create Scheduled Job"</span>
-      <span ng-switch-default>
-        <span translate="common.update">Update</span> 
-        <span> {{job.name}} </span>
-      </span>
-    </h3>
+      <h3 ng-switch on="!job.id">
+        <span ng-switch-when="true" translate="jobs.create_job">Create Scheduled Job"</span>
+        <span ng-switch-default>
+          <span translate="common.update">Update</span> 
+          <span> {{job.name}} </span>
+        </span>
+      </h3>
+    </div>
   </div>
 
   <div class="container">
