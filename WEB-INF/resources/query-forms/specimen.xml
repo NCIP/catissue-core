@@ -190,15 +190,6 @@
     </row>
 
     <row>
-      <booleanCheckBox>
-        <name>isAvailable</name>
-        <udn>isAvailable</udn>
-        <caption>#getMessage("specimen_is_available")</caption>
-        <column>AVAILABLE</column>
-      </booleanCheckBox>
-    </row>
-
-    <row>
       <numberField>
         <name>concentration</name>
         <udn>concentration</udn>
