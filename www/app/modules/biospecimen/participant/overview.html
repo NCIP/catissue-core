@@ -102,7 +102,7 @@
                           </a>
                         </li>
                         <li show-if-allowed="specimenResource.updateOpts">
-                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true, redirectTo: 'participant-detail.visits'})"> 
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true})"> 
                             <i class="fa fa-repeat"></i>
                             <span translate="visits.ctx_menu.new_visit">New Visit</span>
                           </a>
@@ -178,7 +178,7 @@
                           </a>
                         </li>
                         <li show-if-allowed="specimenResource.updateOpts">
-                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true, redirectTo: 'participant-detail.visits'})"> 
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true})"> 
                             <i class="fa fa-repeat"></i>
                             <span translate="visits.ctx_menu.new_visit">New Visit</span>
                           </a>
@@ -232,13 +232,13 @@
                       </button>
                       <ul class="dropdown-menu" role="menu">
                         <li show-if-allowed="specimenResource.updateOpts">
-                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, redirectTo: 'participant-detail.visits'})">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId})">
                             <i class="fa fa-plus"></i>
                             <span translate="visits.ctx_menu.add_visit">Add Visit</span>
                           </a> 
                         </li>
                         <li show-if-allowed="specimenResource.updateOpts">
-                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, missedVisit: true, redirectTo: 'participant-detail.visits'})">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, missedVisit: true})">
                             <i class="fa fa-ban"></i>
                             <span translate="visits.ctx_menu.missed_visit">Missed Visit</span>
                           </a>
