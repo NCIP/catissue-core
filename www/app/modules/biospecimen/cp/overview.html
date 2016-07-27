@@ -26,9 +26,9 @@
       <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCp">
         <li class="item">
           <strong class="key key-sm" translate="cp.title">Title:</strong>
-          <os-inline-edit editor="stEditor" name="title" class="value value-md" value="cp.title">
-            <span ng-if="stEditor.isDisplayMode()">{{stEditor.viewValue}}</span>
-            <input ng-if="stEditor.isEditMode()" class="form-control" type="text" ng-model="stEditor.editValue">
+          <os-inline-edit editor="titleEditor" name="title" class="value value-md" value="cp.title">
+            <span ng-if="titleEditor.isDisplayMode()">{{titleEditor.viewValue}}</span>
+            <input ng-if="titleEditor.isEditMode()" class="form-control" type="text" ng-model="titleEditor.editValue">
           </os-inline-edit>
         </li>
 
