@@ -29,6 +29,21 @@
       columnNames="LOGIN_NAME, DOMAIN_NAME"/>
   </changeSet>
 
+  <changeSet author="ckhilosiya" id="Remove unique constraint to allow duplicate specimen label" dbms="mysql">
+    <dropUniqueConstraint tableName="CATISSUE_SPECIMEN" constraintName="LABEL"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Remove unique constraint to allow duplicate specimen label" dbms="oracle">
+    <dropUniqueConstraint tableName="CATISSUE_SPECIMEN" constraintName="SYS_C00107672"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Add index for faster lookup on specimen label">
+    <!-- Removal of unique constraint forces us to have an explicit index on specimen label -->
+    <createIndex indexName="CATISSUE_SPECIMEN_LABEL_IDX" tableName="CATISSUE_SPECIMEN">
+      <column name="LABEL"></column>
+    </createIndex>
+  </changeSet>
+
   <changeSet author="vlonushte" id="Collection protocol SOP document and URL">
     <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
       <column name="SOP_DOCUMENT_URL" type="${text.type}(255)"/>

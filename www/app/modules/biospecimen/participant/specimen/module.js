@@ -8,7 +8,8 @@ angular.module('os.biospecimen.specimen',
     'os.biospecimen.specimen.close',
     'os.biospecimen.specimen.addaliquots',
     'os.biospecimen.specimen.addderivative',
-    'os.biospecimen.specimen.bulkaddevent'
+    'os.biospecimen.specimen.bulkaddevent',
+    'os.biospecimen.specimen.search'
   ])
   .config(function($stateProvider) {
     $stateProvider
@@ -221,33 +222,30 @@ angular.module('os.biospecimen.specimen',
         templateUrl: 'modules/biospecimen/participant/specimen/bulk-add-event.html',
         controller: 'BulkAddEventCtrl',
         parent: 'signed-in'
+      })
+      .state('specimen-search', {
+        url: '/specimen-search',
+        templateUrl: 'modules/biospecimen/participant/specimen/search-result.html',
+        resolve: {
+          specimens: function(SpecimenSearchSvc) {
+            return SpecimenSearchSvc.getSpecimens();
+          },
+
+          searchKey: function(SpecimenSearchSvc) {
+            return SpecimenSearchSvc.getSearchKey();
+          }
+        },
+        controller: 'SpecimenResultsView',
+        parent: 'signed-in'
       });
   })
 
-  .run(function($state, QuickSearchSvc, Specimen, Alerts) {
+  .run(function(QuickSearchSvc, SpecimenSearchSvc) {
     var opts = {
       template: 'modules/biospecimen/participant/specimen/quick-search.html',
       caption: 'entities.specimen',
       order: 3,
-      search: function(searchData) {
-        Specimen.listByLabels(searchData.label).then(
-          function(specimens) {
-            if (specimens == undefined || specimens.length == 0) {
-              Alerts.error('search.error', {entity: 'Specimen', key: searchData.label});
-              return;
-            }
-
-            var specimen = specimens[0];
-            var params = {
-              cpId: specimen.cpId,
-              visitId: specimen.visitId,
-              cprId: specimen.cprId,
-              specimenId: specimen.id
-            };
-            $state.go('specimen-detail.overview', params);
-          }
-        );
-      }
+      search: SpecimenSearchSvc.search
     }
 
     QuickSearchSvc.register('specimen', opts);

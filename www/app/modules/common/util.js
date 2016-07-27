@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Util', function($rootScope, $timeout, $document, $q, $modal, QueryExecutor, Alerts) {
+  .factory('Util', function($rootScope, $timeout, $document, $q, $parse, $modal, QueryExecutor, Alerts) {
     var isoDateRe = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     function clear(input) {
       input.splice(0, input.length);
@@ -250,6 +250,29 @@ angular.module('openspecimen')
       );
     }
 
+    function addIfAbsent(dstArray, srcArray, keyProp) {
+      if (!keyProp) {
+        return;
+      }
+
+      var key = $parse(keyProp);
+      var map = {};
+      angular.forEach(dstArray,
+        function(obj) {
+          map[key(obj)] = obj;
+        }
+      );
+
+      angular.forEach(srcArray,
+        function(obj) {
+          if (!map[key(obj)]) {
+            dstArray.push(obj);
+            map[key(obj)] = obj;
+          }
+        }
+      );
+    }
+
     function showConfirm(opts) {
       $modal.open({
         templateUrl: opts.templateUrl || 'modules/common/show-confirm.html',
@@ -306,6 +329,8 @@ angular.module('openspecimen')
       merge: merge,
 
       copyAttrs: copyAttrs,
+
+      addIfAbsent: addIfAbsent,
 
       showConfirm: showConfirm
     };

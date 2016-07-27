@@ -5,6 +5,16 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+  <changeSet author="ckhilosiya" id="Enabling or Disabling unique specimen label per CP">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'unique_spmn_label_per_cp',
+        'unique_spmn_label_per_cp', 'unique_spmn_label_per_cp_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
   <changeSet author="vlonushte" id="Specifiy directory to store collection protocol SOP documents">
     <sql>
       call add_cfg_prop(

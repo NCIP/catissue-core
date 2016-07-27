@@ -9,6 +9,8 @@ public class SpecimenAliquotsSpec {
 	private Long parentId;
 	
 	private String parentLabel;
+
+	private String cpShortTitle;
 	
 	private Integer noOfAliquots;
 	
@@ -44,6 +46,14 @@ public class SpecimenAliquotsSpec {
 
 	public void setParentLabel(String parentLabel) {
 		this.parentLabel = parentLabel;
+	}
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	public Integer getNoOfAliquots() {

@@ -15,7 +15,7 @@ public interface ShipmentDao extends Dao<Shipment> {
 
 	public Shipment getShipmentByName(String name);
 	
-	public List<Specimen> getShippedSpecimensByLabels(List<String> specimenLabels);
+	public List<Specimen> getShippedSpecimensByIds(List<Long> specimenIds);
 
 	public Map<String, Object> getShipmentIds(String key, Object value);
 }

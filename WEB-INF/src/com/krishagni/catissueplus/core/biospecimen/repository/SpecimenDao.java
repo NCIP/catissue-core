@@ -14,6 +14,8 @@ public interface SpecimenDao extends Dao<Specimen> {
 	
 	public Specimen getByLabel(String label);
 
+	public Specimen getByLabelAndCp(String cpShortTitle, String label);
+
 	public Specimen getByBarcode(String barcode);
 	
 	public List<Specimen> getSpecimensByIds(List<Long> specimenIds);
@@ -28,11 +30,13 @@ public interface SpecimenDao extends Dao<Specimen> {
 
 	public Map<String, Object> getCprAndVisitIds(String key, Object value);
 	
-	public Map<String, Set<Long>> getSpecimenSites(Set<Long> specimenIds);
+	public Map<Long, Set<Long>> getSpecimenSites(Set<Long> specimenIds);
 
 	public Map<Long, String> getDistributionStatus(List<Long> specimenIds);
 
 	public String getDistributionStatus(Long specimenId);
 
 	public List<Visit> getSpecimenVisits(SpecimenListCriteria crit);
+
+	public boolean areDuplicateLabelsPresent();
 }

@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimen.bulkaddevent', ['os.biospecimen.models'])
   .controller('BulkAddEventCtrl', function($scope, $translate, SpecimensHolder, Specimen, SpecimenEvent, Alerts,
-    Util) {
+    Util, SpecimenUtil) {
     function init() {
       $scope.selectedEvent = {};
       $scope.eventTableCtrl = {};
@@ -45,15 +45,14 @@ angular.module('os.biospecimen.specimen.bulkaddevent', ['os.biospecimen.models']
     }
 
     $scope.addSpecimens = function(labels) {
-      return Specimen.listByLabels(labels).then(
+      return SpecimenUtil.getSpecimens(labels).then(
         function (specimens) {
-          if (specimens.length == labels.length) {
-            Util.appendAll($scope.specimens, specimens);
-            return true;
-          } else {
-            Alerts.error('specimens.bulk_events.specimens_not_found_or_no_access');
+          if (!specimens) {
             return false;
           }
+
+          Util.addIfAbsent($scope.specimens, specimens, 'id');
+          return true;
         }
       );
     }

@@ -1,20 +1,12 @@
 package com.krishagni.catissueplus.core.biospecimen.events;
 
-public class SpecimenDeleteCriteria {
+import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 
-	private Long id;
+public class SpecimenDeleteCriteria extends DeleteEntityOp {
 
 	private String label;
 
-	private Boolean forceDelete;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private String cpShortTitle;
 
 	public String getLabel() {
 		return label;
@@ -24,11 +16,11 @@ public class SpecimenDeleteCriteria {
 		this.label = label;
 	}
 
-	public Boolean getForceDelete() {
-		return forceDelete;
+	public String getCpShortTitle() {
+		return cpShortTitle;
 	}
 
-	public void setForceDelete(Boolean forceDelete) {
-		this.forceDelete = forceDelete;
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 }

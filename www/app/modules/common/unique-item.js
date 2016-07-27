@@ -80,9 +80,9 @@ angular.module('openspecimen')
       require: ['^form', 'ngModel', '^osUniqueItems'],
   
       link: function(scope, elm, attrs, ctrls) {
-        if (elm[0].tagName == 'DIV') {
-          return;
-        }
+        // if (elm[0].tagName == 'DIV') {
+        //   return;
+        // }
 
         var formCtrl    = ctrls[0];
         var modelCtrl   = ctrls[1];

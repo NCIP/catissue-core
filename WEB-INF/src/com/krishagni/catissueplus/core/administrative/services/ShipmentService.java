@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -20,8 +18,6 @@ public interface ShipmentService {
 	public ResponseEvent<ShipmentDetail> createShipment(RequestEvent<ShipmentDetail> req);
 	
 	public ResponseEvent<ShipmentDetail> updateShipment(RequestEvent<ShipmentDetail> req);
-	
-	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
 	
 	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req);
 }

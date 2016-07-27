@@ -2,7 +2,7 @@
 angular.module('os.administrative.shipment.addedit', ['os.administrative.models', 'os.biospecimen.models'])
   .controller('ShipmentAddEditCtrl', function(
     $scope, $state, shipment, spmnRequest, cp, Shipment,
-    Institute, Site, Specimen, SpecimensHolder, Alerts, Util) {
+    Institute, Site, Specimen, SpecimensHolder, Alerts, Util, SpecimenUtil) {
 
     function init() {
       $scope.shipment = shipment;
@@ -185,15 +185,13 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
 
     $scope.addSpecimens = function(labels) {
-      var param = {
-        label: labels,
-        sendSiteName: $scope.shipment.sendingSite,
-        recvSiteName: $scope.shipment.receivingSite
-      }
-
-      return Specimen.listForShipment(param).then(
+      return SpecimenUtil.getSpecimens(labels).then(
         function (specimens) {
-          Util.appendAll($scope.shipment.shipmentItems, getShipmentItems(specimens));
+          if (!specimens) {
+            return false;
+          }
+
+          Util.addIfAbsent($scope.shipment.shipmentItems, getShipmentItems(specimens), 'specimen.id');
           return true;
         }
       );

@@ -33,6 +33,8 @@ public class ConfigParams {
 	
 	public static final String CP_EXPIRY_REM_REPT_INTER  = "cp_expiry_rem_rept_inter";
 
+	public static final String UNIQUE_SPMN_LABEL_PER_CP  = "unique_spmn_label_per_cp";
+
 	public static final String CP_SOP_DOCS_DIR           = "cp_sop_doc_dir";
 
 	public static final String CP_SOP_DOC                = "cp_sop_doc";

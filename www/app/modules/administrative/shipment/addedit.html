@@ -206,8 +206,8 @@
     </div>
 
     <os-add-items ng-if="!shipment.request && shipment.status != 'Shipped'" 
-      item-list="shipment.shipmentItems" item-key="specimen.label"
-      on-add="addSpecimens(itemLabels)" placeholder="{{'shipments.enter_specimen_label' | translate}}">
+      item-list="shipment.shipmentItems" on-add="addSpecimens(itemLabels)"
+      placeholder="{{'shipments.enter_specimen_label' | translate}}">
     </os-add-items>
 
     <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"

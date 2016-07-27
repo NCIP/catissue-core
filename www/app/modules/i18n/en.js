@@ -490,6 +490,7 @@
     "container": "Container",
     "biohazards": "Biohazards",
     "created_on": "Created On",
+    "cp": "Collection Protocol",
     "concentration_unit": "&#181;g/&#181;l",
     "copy_first_to_all": "Copy first to all",
     "row": "Row",
@@ -500,6 +501,7 @@
     "activity_info": "{{name}} created",
     "activity_status": "Activity Status",
     "location" : "Location",
+    "search_results": "Specimen Search Result for {{key}}",
     "print": "Print",
     "close_parent": "Close Parent",
     "ops": "Specimen Actions",
@@ -543,6 +545,9 @@
     "specimen_type": "Specimen Type",
     "anatomic_site": "Anatomic Site",
 
+    "multiple_cp_specimens": "Specimen labels with multiple protocols",
+    "select_protocol": "Following specimen labels are present in multiple protocols. Please select the right protocol before proceeding",
+    "specimen_not_found": "Specimen {{label}} does not exist",
     "hide_pending":"Hide Pending",
     "show_pending": "Show Pending",
 
@@ -609,7 +614,6 @@
       "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
       "details": "Event Details",
       "copy_first_to_all": "Copy First To All",
-      "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
       "events_saved": "Event saved successfully"
     }
   },
@@ -1536,7 +1540,6 @@
     "details": "Order Details",
     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
     "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma, tab or newline and click add",
-    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "report_gen_initiated": "Generating distribution order report...",
     "downloading_report": "Downloading distribution order report...",
@@ -1622,7 +1625,6 @@
     "details": "Shipment Details",
     "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
     "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma, tab or newline and click add",
-    "specimens_not_found_or_no_access": "One or more specimens could not be loaded either because they do not exists or you do not have sufficient rights to access them",
 
     "filters": "Filters",
     "report_gen_initiated": "Generating shipment report...",
@@ -1824,7 +1826,9 @@
         "cp_expiry_rem_notif_desc": "Number of days prior to collection protocol expiry when email notification should be sent to the PI.",
         "cp_expiry_rem_rept_inter": "Repeat CP Expiry Reminder",
         "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry.",
-        "cp_sop_doc_dir": "CP SOP Documents Directory",
+        "unique_spmn_label_per_cp": "Unique Specimen Label per CP",
+        "unique_spmn_label_per_cp_desc": "Enable or Disable uniqueness of Specimen labels at CP level. Enabling this setting ensures Specimen labels are unique only within Collection Protocol. Disabling this setting ensures no two specimen labels are same throughout the system.",
+        "cp_sop_docs_dir": "SOP Documents Directory",
         "cp_sop_doc_dir_desc": "Folder on server to store collection protocol SOP documents",
         "cp_sop_doc_url": "CP SOP Link",
         "cp_sop_doc_url_desc": "System level collection protocol SOP document link",

@@ -1,14 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain.factory.impl;
 
-import static com.krishagni.catissueplus.core.common.PvAttributes.BIOHAZARD;
-import static com.krishagni.catissueplus.core.common.PvAttributes.COLL_PROC;
-import static com.krishagni.catissueplus.core.common.PvAttributes.CONTAINER;
-import static com.krishagni.catissueplus.core.common.PvAttributes.PATH_STATUS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.RECV_QUALITY;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_ANATOMIC_SITE;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_CLASS;
-import static com.krishagni.catissueplus.core.common.PvAttributes.SPECIMEN_LATERALITY;
+import static com.krishagni.catissueplus.core.common.PvAttributes.*;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.areValid;
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
@@ -41,6 +34,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -52,8 +46,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 	private DaoFactory daoFactory;
 
+	private SpecimenResolver specimenResolver;
+
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
+		this.specimenResolver = specimenResolver;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		if (parent == null) {
-			parent = getSpecimen(detail.getParentId(), detail.getParentLabel(), ose);
+			parent = getSpecimen(detail.getParentId(), detail.getCpShortTitle(), detail.getParentLabel(), ose);
 			ose.checkAndThrow();
 		}
 		
@@ -250,7 +250,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		Long parentId = detail.getParentId();
 		String parentLabel = detail.getParentLabel();
 		if (parentId != null || StringUtils.isNotBlank(parentLabel)) {
-			parent = getSpecimen(parentId, parentLabel, ose);
+			parent = getSpecimen(parentId, detail.getCpShortTitle(), parentLabel, ose);
 		} else if (specimen.getVisit() != null && specimen.getSpecimenRequirement() != null) {			
 			Long visitId = specimen.getVisit().getId();
 			Long srId = specimen.getSpecimenRequirement().getId();			
@@ -264,22 +264,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		
 		specimen.setParentSpecimen(parent);
 	}
-	
-	private Specimen getSpecimen(Long id, String label, OpenSpecimenException ose) {
+
+	private Specimen getSpecimen(Long id, String cpShortTitle, String label, OpenSpecimenException ose) {
 		Specimen specimen = null;
-		if (id != null) {
-			specimen = daoFactory.getSpecimenDao().getById(id);
-			if (specimen == null) {
-				ose.addError(SpecimenErrorCode.NOT_FOUND, id);
-			}
-		} else if (StringUtils.isNotBlank(label)) {
-			specimen = daoFactory.getSpecimenDao().getByLabel(label);
-			if (specimen == null) {
-				ose.addError(SpecimenErrorCode.NOT_FOUND, label);
-			}
+		if (id != null || StringUtils.isNotBlank(label)) {
+			specimen = specimenResolver.getSpecimen(id, cpShortTitle, label, ose);
 		}
-		
-		return specimen;		
+
+		return specimen;
 	}
 	
 	private void setParentSpecimen(SpecimenDetail detail, Specimen existing, Specimen parent, Specimen specimen, OpenSpecimenException ose) {
@@ -289,7 +281,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setParentSpecimen(existing.getParentSpecimen());
 		}
 	}
-	
+
 	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, Specimen existing, OpenSpecimenException ose) {
 		Long reqId = detail.getReqId();
 		SpecimenRequirement existingReq = existing != null ? existing.getSpecimenRequirement() : null;

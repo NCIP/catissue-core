@@ -24,9 +24,9 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionOrderDe
 import com.krishagni.catissueplus.core.administrative.events.DistributionOrderItemDetail;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -38,9 +38,15 @@ import com.krishagni.catissueplus.core.common.util.Status;
 
 public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	private DaoFactory daoFactory;
+
+	private SpecimenResolver specimenResolver;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
+		this.specimenResolver = specimenResolver;
 	}
 
 	@Override
@@ -345,27 +351,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	}
 	
 	private Specimen getSpecimen(SpecimenInfo info, OpenSpecimenException ose) {
-		Specimen specimen = null;
-		Object key = null;
-
-		if (info == null) {
-			ose.addError(SpecimenErrorCode.LABEL_REQUIRED);
-			return null;
-		}
-
-		if (info.getId() != null) {
-			key = info.getId();
-			specimen = daoFactory.getSpecimenDao().getById(info.getId());
-		} else if (StringUtils.isNotBlank(info.getLabel())) {
-			key = info.getLabel();
-			specimen = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
-		}
-		
-		if (specimen == null) {
-			ose.addError(SpecimenErrorCode.NOT_FOUND, key);
-		}
-		
-		return specimen;
+		return specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), ose);
 	}
 
 	private void setOrderItemStatus(DistributionOrderItemDetail detail, DistributionOrderItem item, OpenSpecimenException ose) {

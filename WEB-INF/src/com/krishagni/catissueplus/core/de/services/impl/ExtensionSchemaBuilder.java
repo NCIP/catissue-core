@@ -62,6 +62,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		} else if (entityType.equals("SpecimenCollectionGroup")) {
 			fields.add(getField("visitName", "Visit Name"));
 		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
+			fields.add(getField("cpShortTitle", "CP Short Title"));
 			fields.add(getField("specimenLabel", "Specimen Label"));
 		}
 		

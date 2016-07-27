@@ -5,7 +5,12 @@
 
   <record>
     <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec</name>
-   
+
+    <field>
+      <caption>#getMessage("specimen_cp_short")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+
     <field>
       <caption>#getMessage("specimen_parent_specimen_label")</caption>
       <attribute>parentLabel</attribute>

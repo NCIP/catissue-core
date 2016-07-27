@@ -21,12 +21,14 @@ angular.module('openspecimen')
             return;
           }
 
-          angular.forEach($scope.itemList, function(item) {
-            var idx = labels.indexOf($scope.labelGetter(item));
-            if (idx != -1) {
-              labels.splice(idx, 1);
-            }
-          });
+          if ($scope.labelGetter) {
+            angular.forEach($scope.itemList, function(item) {
+              var idx = labels.indexOf($scope.labelGetter(item));
+              if (idx != -1) {
+                labels.splice(idx, 1);
+              }
+            });
+          }
 
           if (labels.length == 0) {
             return;
@@ -43,12 +45,13 @@ angular.module('openspecimen')
       },
 
       link: function(scope, element, attrs, ctrl) {
-        var itemKey = "label";
+        //
+        // When item key is specified, the widget tries to remove items identified
+        // by key that are already present in source list (itemList)
+        //
         if (attrs.itemKey) {
-          itemKey = attrs.itemKey;
+          scope.labelGetter = $parse(attrs.itemKey);
         }
-
-        scope.labelGetter = $parse(itemKey);
       },
 
       template: function(tElem, tAttrs) {

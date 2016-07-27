@@ -55,7 +55,7 @@
         name in (:names)
     </query>
 
-    <query name="getDistributedItemsByLabels">
+    <query name="getDistributedItemsBySpmnIds">
       select
         oi
       from
@@ -63,7 +63,7 @@
         inner join o.orderItems oi
         inner join oi.specimen spmn
       where
-        spmn.label in (:labels) and
+        spmn.id in (:ids) and
         o.status = 'EXECUTED' and
         (oi.status = 'DISTRIBUTED' or oi.status = 'DISTRIBUTED_AND_CLOSED')
     </query>

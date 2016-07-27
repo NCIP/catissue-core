@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -21,20 +20,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
-import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
-import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
-import com.krishagni.catissueplus.core.common.events.EntityQueryCriteria;
-import com.krishagni.catissueplus.core.common.events.EntityStatusDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.EntityFormRecords;
@@ -60,24 +55,21 @@ public class SpecimensController {
 	private FormService formSvc;
 	
 	@Autowired
-	private DistributionOrderService distributionService;
-
-	@Autowired
 	private HttpServletRequest httpServletRequest;
-	
-	@Autowired
-	private ShipmentService shipmentService;
 	
 	@RequestMapping(method = RequestMethod.HEAD)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
-	public Boolean doesSpecimenExists(@RequestParam(value = "label") String label) {
-		ResponseEvent<Boolean> resp = specimenSvc.doesSpecimenExists(getRequest(label));
-		if (resp.getPayload() == true) {
-			return true;
-		}
-		
-		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, label);
+	public Boolean doesSpecimenExists(
+		@RequestParam(value = "label")
+		String label,
+
+		@RequestParam(value = "cpShortTitle", required = false)
+		String cpShortTitle) {
+		SpecimenQueryCriteria crit = new SpecimenQueryCriteria(label, cpShortTitle);
+		ResponseEvent<Boolean> resp = specimenSvc.doesSpecimenExists(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
@@ -96,20 +88,11 @@ public class SpecimensController {
 			@RequestParam(value = "visitId", required = false) 
 			Long visitId,
 			
-			@RequestParam(value = "dpId", required = false)
-			Long dpId,
-
 			@RequestParam(value = "id", required = false)
 			List<Long> ids,
 
 			@RequestParam(value = "label", required = false)
-			List<String> labels,
-			
-			@RequestParam(value = "sendSiteName", required = false)
-			String sendSiteName,
-			
-			@RequestParam(value = "recvSiteName", required = false)
-			String recvSiteName) {
+			List<String> labels) {
 				
 		if (cprId != null) { // TODO: Move this to CPR controller
 			VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
@@ -125,22 +108,7 @@ public class SpecimensController {
 			resp.throwErrorIfUnsuccessful();
 			return resp.getPayload();
 		} else if (CollectionUtils.isNotEmpty(labels)) {
-			ResponseEvent<List<SpecimenInfo>> resp = null;
-			if (dpId != null) {
-				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
-				crit.setDpId(dpId);
-				crit.setLabels(labels);
-				resp = distributionService.getSpecimens(getRequest(crit));
-			} else if (StringUtils.isNotBlank(sendSiteName)) {
-				VisitSpecimensQueryCriteria crit = new VisitSpecimensQueryCriteria();
-				crit.setSendSiteName(sendSiteName);
-				crit.setRecvSiteName(recvSiteName);
-				crit.setLabels(labels);
-				resp = shipmentService.getSpecimens(getRequest(crit));
-			} else {
-				resp = specimenSvc.getSpecimens(getRequest(labels));
-			}
-
+			ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.getSpecimens(getRequest(labels));
 			resp.throwErrorIfUnsuccessful();
 			return resp.getPayload();
 		} else if (cpId != null) {
@@ -150,15 +118,13 @@ public class SpecimensController {
 		} else {
 			return Collections.emptyList();
 		}
-		
-		
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenDetail getSpecimen(@PathVariable("id") Long id) {
-		EntityQueryCriteria crit = new EntityQueryCriteria(id);
+		SpecimenQueryCriteria crit = new SpecimenQueryCriteria(id);
 		
 		ResponseEvent<SpecimenDetail> resp = specimenSvc.getSpecimen(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
@@ -199,7 +165,7 @@ public class SpecimensController {
 			Long specimenId,
 
 			@RequestBody
-			EntityStatusDetail detail) {
+			SpecimenStatusDetail detail) {
 
 		detail.setId(specimenId);
 
@@ -213,7 +179,7 @@ public class SpecimensController {
 	@ResponseBody
 	public List<SpecimenDetail> updateSpecimensStatus(
 			@RequestBody
-			List<EntityStatusDetail> details) {
+			List<SpecimenStatusDetail> details) {
 		ResponseEvent<List<SpecimenDetail>> resp = specimenSvc.updateSpecimensStatus(getRequest(details));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -223,7 +189,7 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long specimenId) {
-		EntityQueryCriteria crit = new EntityQueryCriteria(specimenId);
+		SpecimenQueryCriteria crit = new SpecimenQueryCriteria(specimenId);
 		ResponseEvent<List<DependentEntityDetail>> resp = specimenSvc.getDependentEntities(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

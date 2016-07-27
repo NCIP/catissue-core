@@ -1,6 +1,6 @@
 angular.module('os.administrative.order.returnspecimens', [])
   .controller('OrderReturnSpecimensCtrl', function(
-    $rootScope, $scope, $state, DistributionOrder, Util, Alerts) {
+    $rootScope, $scope, $state, DistributionOrder, Util, Alerts, SpecimenUtil) {
 
     function init() {
       $scope.containerListCache = {};
@@ -28,6 +28,56 @@ angular.module('os.administrative.order.returnspecimens', [])
       }
     }
 
+    function resolveDistItems(labels, distItems) {
+      return SpecimenUtil.resolveSpecimens(labels, getUqSpecimens(distItems)).then(
+        function(specimens) {
+          if (!specimens) {
+            return;
+          }
+
+          var spmnsMap = specimens.reduce(function(map, spmn) {
+            map[spmn.id] = spmn;
+            return map;
+          }, {});
+
+          return distItems.filter(function(item) {
+            return !!spmnsMap[item.specimen.id];
+          });
+        }
+      );
+    }
+
+    function getUqSpecimens(distItems) {
+      var spmnsMap = {}, specimens = [];
+      angular.forEach(distItems,
+        function(item) {
+          if (!spmnsMap[item.specimen.id]) {
+            specimens.push(item.specimen);
+            spmnsMap[item.specimen.id] = item.specimen;
+          }
+        }
+      );
+
+      return specimens;
+    }
+
+    function addReturnItems(distItems) {
+      var returnItems = $scope.input.returnItems;
+      angular.forEach(distItems,
+        function(distItem) {
+          var key = distItem.specimen.label.toLowerCase();
+          var returnItem = returnItems[key];
+          if (!returnItem) {
+            returnItems[key] = uiReturnItem(distItem);
+            $scope.input.orderedLabels.push(key);
+          } else {
+            returnItem.orders.push({name: distItem.orderName, quantity: distItem.quantity});
+            returnItem.distQty = returnItem.orderName = returnItem.quantity = undefined;
+          }
+        }
+      );
+    }
+
     $scope.getSpecimenDetails = function() {
       var labels = Util.splitStr($scope.input.labels, /,|\t|\n/);
       labels = labels.filter(
@@ -40,22 +90,9 @@ angular.module('os.administrative.order.returnspecimens', [])
         return;
       }
 
-      var returnItems = $scope.input.returnItems;
       DistributionOrder.getDistributionDetails(labels).then(
         function(distItems) {
-          angular.forEach(distItems,
-            function(distItem) {
-              var key = distItem.specimen.label.toLowerCase();
-              var returnItem = returnItems[key];
-              if (!returnItem) {
-                returnItems[key] = uiReturnItem(distItem);
-                $scope.input.orderedLabels.push(key);
-              } else {
-                returnItem.orders.push({name: distItem.orderName, quantity: distItem.quantity});
-                returnItem.distQty = returnItem.orderName = returnItem.quantity = undefined;
-              }
-            }
-          );
+          resolveDistItems(labels, distItems).then(addReturnItems);
         }
       );
     }

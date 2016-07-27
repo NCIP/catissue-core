@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,20 +16,17 @@ import org.apache.commons.lang3.StringUtils;
 import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Shipment.Status;
-import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
+import com.krishagni.catissueplus.core.administrative.domain.SpecimenRequest;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.ShipmentFactory;
-import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenRequestErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentListCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.ShipmentDao;
 import com.krishagni.catissueplus.core.administrative.services.ShipmentService;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
-import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.Pair;
@@ -208,43 +206,6 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req) {
-		String sendSiteName = req.getPayload().getSendSiteName();
-		if (StringUtils.isBlank(sendSiteName)) {
-			return ResponseEvent.userError(ShipmentErrorCode.SEND_SITE_REQUIRED);
-		}
-		
-		Site sendingSite = daoFactory.getSiteDao().getSiteByName(sendSiteName);
-		if (sendingSite == null) {
-			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
-		}
-		
-		String recvSiteName = req.getPayload().getRecvSiteName();
-		if (StringUtils.isBlank(recvSiteName)) {
-			return ResponseEvent.userError(ShipmentErrorCode.REC_SITE_REQUIRED);
-		}
-		
-		Site receivingSite = daoFactory.getSiteDao().getSiteByName(recvSiteName);
-		if (receivingSite == null) {
-			return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
-		}
-		
-		List<String> labels = req.getPayload().getLabels();
-		
-		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		List<Specimen> specimens = getValidSpecimens(labels, ose);
-		if (specimens != null) {
-			ensureSpecimensAreAvailable(specimens, ose);
-			ensureValidSpecimenSites(specimens, sendingSite, receivingSite, ose);
-		}
-		
-		ose.checkAndThrow();
-		
-		return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, labels)));
-	}
-	
-	@Override
-	@PlusTransactional
 	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req) {
 		Shipment shipment = getShipmentDao().getById(req.getPayload());
 		if (shipment == null) {
@@ -293,19 +254,16 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		return crit;
 	}
 
-	private List<Specimen> getValidSpecimens(List<String> specimenLabels, OpenSpecimenException ose) {
+	private List<Specimen> getValidSpecimens(List<Long> specimenIds, OpenSpecimenException ose) {
 		List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		if (siteCpPairs != null && siteCpPairs.isEmpty()) {
 			ose.addError(ShipmentErrorCode.INVALID_SPECIMENS);
 			return null;
 		}
 		
-		SpecimenListCriteria crit = new SpecimenListCriteria()
-			.labels(specimenLabels)
-			.siteCps(siteCpPairs);
-		
+		SpecimenListCriteria crit = new SpecimenListCriteria().ids(specimenIds).siteCps(siteCpPairs);
 		List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-		if (specimens.size() != specimenLabels.size()) {
+		if (specimenIds.size() != specimens.size()) {
 			ose.addError(ShipmentErrorCode.INVALID_SPECIMENS);
 			return null;
 		}
@@ -338,15 +296,15 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 	}
 	
 	private void ensureValidSpecimens(Shipment shipment, OpenSpecimenException ose) {
-		List<String> specimenLabels = Utility.<List<String>>collect(shipment.getShipmentItems(), "specimen.label");
-		List<Specimen> specimens = getValidSpecimens(specimenLabels, ose);
+		List<Long> specimenIds = Utility.collect(shipment.getShipmentItems(), "specimen.id");
+		List<Specimen> specimens = getValidSpecimens(specimenIds, ose);
 		if (specimens == null) {
 			return;
 		}
 		
 		ensureSpecimensAreAvailable(specimens, ose);
 		ensureValidSpecimenSites(specimens, shipment.getSendingSite(), shipment.getReceivingSite(), ose);
-		ensureSpecimensAreNotShipped(shipment, specimenLabels, ose);
+		ensureSpecimensAreNotShipped(shipment, specimenIds, ose);
 	}
 	
 	private void ensureSpecimensAreAvailable(List<Specimen> specimens, OpenSpecimenException ose) {
@@ -372,44 +330,44 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 	}
 	
 	private void ensureValidSpecimenSites(List<Specimen> specimens, Site sendingSite, Site receivingSite, OpenSpecimenException ose) {
-		Set<Long> specimenIds = Utility.<Set<Long>>collect(specimens, "id", true);
-		Map<String, Set<Long>> specimenSiteIdsMap = daoFactory.getSpecimenDao().getSpecimenSites(specimenIds);
+		Map<Long, Specimen> specimenMap = specimens.stream().collect(Collectors.toMap(Specimen::getId, spmn -> spmn));
+		Map<Long, Set<Long>> spmnSites = daoFactory.getSpecimenDao().getSpecimenSites(specimenMap.keySet());
 		
-		Set<String> notBelongToSendSiteSpecs = new HashSet<String>();
-		Set<String> notBelongToRecSiteSpecs = new HashSet<String>();
-		for (Map.Entry<String, Set<Long>> specimenSiteId : specimenSiteIdsMap.entrySet()) {
-			if (!specimenSiteId.getValue().contains(sendingSite.getId())) {
-				notBelongToSendSiteSpecs.add(specimenSiteId.getKey());
+		Set<String> notBelongToSendSiteSpmns = new HashSet<>();
+		Set<String> notBelongToRecvSiteSpmns = new HashSet<>();
+		for (Map.Entry<Long, Set<Long>> spmnSite : spmnSites.entrySet()) {
+			if (!spmnSite.getValue().contains(sendingSite.getId())) {
+				notBelongToSendSiteSpmns.add(specimenMap.get(spmnSite.getKey()).getLabel());
 			}
 			
-			if (!specimenSiteId.getValue().contains(receivingSite.getId())) {
-				notBelongToRecSiteSpecs.add(specimenSiteId.getKey());
+			if (!spmnSite.getValue().contains(receivingSite.getId())) {
+				notBelongToRecvSiteSpmns.add(specimenMap.get(spmnSite.getKey()).getLabel());
 			}
 		}
 		
-		if (CollectionUtils.isNotEmpty(notBelongToSendSiteSpecs)) {
-			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_SEND_SITE, StringUtils.join(notBelongToSendSiteSpecs, ','),
+		if (CollectionUtils.isNotEmpty(notBelongToSendSiteSpmns)) {
+			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_SEND_SITE, StringUtils.join(notBelongToSendSiteSpmns, ','),
 					sendingSite.getName());
 		}
 		
-		if (CollectionUtils.isNotEmpty(notBelongToRecSiteSpecs)) {
-			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_REC_SITE, StringUtils.join(notBelongToRecSiteSpecs, ','),
+		if (CollectionUtils.isNotEmpty(notBelongToRecvSiteSpmns)) {
+			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_REC_SITE, StringUtils.join(notBelongToRecvSiteSpmns, ','),
 					receivingSite.getName());
 		}
 	}
 	
-	private void ensureSpecimensAreNotShipped(Shipment shipment, List<String> specimenLabels, OpenSpecimenException ose) {
+	private void ensureSpecimensAreNotShipped(Shipment shipment, List<Long> specimenIds, OpenSpecimenException ose) {
 		if (shipment.isReceived()) {
 			return;
 		}
 		
-		List<Specimen> shippedSpecimens = getShipmentDao().getShippedSpecimensByLabels(specimenLabels);
+		List<Specimen> shippedSpecimens = getShipmentDao().getShippedSpecimensByIds(specimenIds);
 		if (CollectionUtils.isNotEmpty(shippedSpecimens)) {
 			List<String> labels = Utility.<List<String>>collect(shippedSpecimens, "label");
 			ose.addError(ShipmentErrorCode.SPECIMEN_ALREADY_SHIPPED, StringUtils.join(labels, ','));
 		}
 	}
-	
+
 	public void ensureValidNotifyUsers(Shipment shipment, OpenSpecimenException ose) {
 		if (shipment.isReceived()) {
 			return;

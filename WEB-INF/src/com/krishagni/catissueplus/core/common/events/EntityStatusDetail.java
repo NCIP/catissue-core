@@ -4,7 +4,7 @@ public class EntityStatusDetail {
 	private Long id;
 	
 	private String name;
-	
+
 	private String status;
 	
 	private String reason;

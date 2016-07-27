@@ -15,7 +15,6 @@
     </sql>
   </changeSet>
 
-
   <changeSet author="vgaikwad" id="Creating scheduled job to consume bulk import files" dbms="mysql">
     <sql>
       select identifier into @userId from catissue_user where login_name = '$system';

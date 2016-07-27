@@ -27,6 +27,8 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 	private Long occupyingEntityId;
 	
 	private String occupyingEntityName;
+
+	private String cpShortTitle;
 	
 	public Long getId() {
 		return id;
@@ -106,6 +108,14 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 
 	public void setOccupyingEntityName(String occupyingEntityName) {
 		this.occupyingEntityName = occupyingEntityName;
+	}
+
+	public String getCpShortTitle() {
+		return cpShortTitle;
+	}
+
+	public void setCpShortTitle(String cpShortTitle) {
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	@Override

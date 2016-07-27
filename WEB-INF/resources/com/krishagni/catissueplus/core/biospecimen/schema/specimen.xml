@@ -5,6 +5,11 @@
 
   <record> 
     <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
+
+    <field>
+      <caption>#getMessage("specimen_cp_short")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
    
     <field>
       <caption>#getMessage("specimen_visit_name")</caption>

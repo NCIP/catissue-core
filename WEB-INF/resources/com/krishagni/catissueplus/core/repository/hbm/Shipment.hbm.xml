@@ -66,7 +66,7 @@
         name = :name
     </query>
     
-    <query name="getShippedSpecimensByLabels">
+    <query name="getShippedSpecimensByIds">
       select
         spec
       from
@@ -75,7 +75,7 @@
         join item.specimen spec
       where
         s.status = 'SHIPPED' and
-        spec.label in (:labels)
+        spec.id in (:ids)
     </query>
   </class>
 </hibernate-mapping>

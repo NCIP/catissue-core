@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -31,8 +30,8 @@ import com.krishagni.catissueplus.core.administrative.services.ContainerMapExpor
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
@@ -42,6 +41,7 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.ExportedFileDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
@@ -54,6 +54,8 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	private ContainerMapExporter mapExporter;
 
 	private LabelGenerator nameGenerator;
+
+	private SpecimenResolver specimenResolver;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -77,6 +79,10 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 	public void setNameGenerator(LabelGenerator nameGenerator) {
 		this.nameGenerator = nameGenerator;
+	}
+
+	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
+		this.specimenResolver = specimenResolver;
 	}
 
 	@Override
@@ -458,29 +464,26 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ENTITY_TYPE, "none");
 		}
 		
-		String entityName = pos.getOccupyingEntityName();
-		Long entityId = pos.getOccupyingEntityId();
-		if (StringUtils.isBlank(entityName) && entityId == null) {
+		if (StringUtils.isBlank(pos.getOccupyingEntityName()) && pos.getOccupyingEntityId() == null) {
 			throw OpenSpecimenException.userError(StorageContainerErrorCode.OCCUPYING_ENTITY_ID_OR_NAME_REQUIRED);
 		}
 		
 		if (entityType.equalsIgnoreCase("specimen")) {
-			return createSpecimenPosition(container, pos, entityId, entityName, vacateOccupant);
+			return createSpecimenPosition(container, pos, vacateOccupant);
 		} else if (entityType.equalsIgnoreCase("container")) {
-			return createChildContainerPosition(container, pos, entityId, entityName);
+			return createChildContainerPosition(container, pos);
 		}
 		
 		throw OpenSpecimenException.userError(StorageContainerErrorCode.INVALID_ENTITY_TYPE, entityType);
 	}
 	
 	private StorageContainerPosition createSpecimenPosition(
-			StorageContainer container, 
-			StorageContainerPositionDetail pos, 
-			Long specimenId, 
-			String label,
+			StorageContainer container,
+			StorageContainerPositionDetail pos,
 			boolean vacateOccupant) {
-		
-		Specimen specimen = getSpecimen(specimenId, label);
+
+
+		Specimen specimen = getSpecimen(pos);
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen, false);
 		
 		StorageContainerPosition position = null;
@@ -505,37 +508,20 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		position.setOccupyingSpecimen(specimen);
 		return position;		
 	}
-	
-	private Specimen getSpecimen(Long specimenId, String label) {
-		Specimen specimen = null;
 
-		Object key = null;
-		if (specimenId != null) {
-			key = specimenId;
-			specimen = daoFactory.getSpecimenDao().getById(specimenId);
-		} else if (StringUtils.isNotBlank(label)) {
-			key = label;
-			specimen = daoFactory.getSpecimenDao().getByLabel(label);
-		}
-
-		if (key == null) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.LABEL_REQUIRED);
-		}
-		
-		if (specimen == null) {
-			throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, key);
-		}
-
-		return specimen;
+	private Specimen getSpecimen(StorageContainerPositionDetail pos) {
+		return specimenResolver.getSpecimen(
+			pos.getOccupyingEntityId(),
+			pos.getCpShortTitle(),
+			pos.getOccupyingEntityName()
+		);
 	}
 	
 	private StorageContainerPosition createChildContainerPosition(
 			StorageContainer container, 
-			StorageContainerPositionDetail pos, 
-			Long containerId, 
-			String containerName) {
+			StorageContainerPositionDetail pos) {
 		
-		StorageContainer childContainer = getContainer(containerId, containerName);
+		StorageContainer childContainer = getContainer(pos.getOccupyingEntityId(), pos.getOccupyingEntityName());
 		AccessCtrlMgr.getInstance().ensureUpdateContainerRights(childContainer);
 		if (!container.canContain(childContainer)) {
 			throw OpenSpecimenException.userError(

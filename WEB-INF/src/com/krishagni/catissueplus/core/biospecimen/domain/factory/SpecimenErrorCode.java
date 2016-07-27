@@ -23,6 +23,8 @@ public enum SpecimenErrorCode implements ErrorCode {
 	LABEL_REQUIRED,
 	
 	DUP_LABEL,
+
+	DUP_LABEL_IN_CP,
 	
 	INVALID_LABEL,
 	
@@ -104,7 +106,9 @@ public enum SpecimenErrorCode implements ErrorCode {
 	
 	NO_POOLED_SPMN,
 
-	INVALID_FREEZE_THAW_CYCLES;
+	INVALID_FREEZE_THAW_CYCLES,
+
+	UQ_LBL_CP_CHG_NA;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

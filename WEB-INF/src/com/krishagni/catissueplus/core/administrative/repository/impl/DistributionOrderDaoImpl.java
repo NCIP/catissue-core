@@ -91,10 +91,10 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	}
 
 	@Override
-	public List<DistributionOrderItem> getDistributedOrderItems(List<String> specimenLabels) {
+	public List<DistributionOrderItem> getDistributedOrderItems(List<Long> specimenIds) {
 		return getSessionFactory().getCurrentSession()
-				.getNamedQuery(GET_DISTRIBUTED_ITEMS_BY_LABELS)
-				.setParameterList("labels", specimenLabels)
+				.getNamedQuery(GET_DISTRIBUTED_ITEMS_BY_SPMN_IDS)
+				.setParameterList("ids", specimenIds)
 				.list();
 	}
 
@@ -265,7 +265,7 @@ public class DistributionOrderDaoImpl extends AbstractDao<DistributionOrder> imp
 	
 	private static final String GET_ORDERS_BY_NAME = FQN + ".getOrdersByName";
 
-	private static final String GET_DISTRIBUTED_ITEMS_BY_LABELS = FQN + ".getDistributedItemsByLabels";
+	private static final String GET_DISTRIBUTED_ITEMS_BY_SPMN_IDS = FQN + ".getDistributedItemsBySpmnIds";
 	
 	private static final String GET_SPEC_CNT_BY_ORDER = FQN + ".getSpecimenCountByOrder";
 }

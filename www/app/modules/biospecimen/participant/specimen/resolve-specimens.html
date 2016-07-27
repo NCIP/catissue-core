@@ -1,0 +1,48 @@
+<form name="rform" class="form-horizontal" os-form-validator="rform" novalidate>
+  <div class="os-modal-header">
+    <span translate="specimens.multiple_cp_specimens">
+      Specimen labels with multiple protocols
+    </span>
+  </div>
+  <div class="os-modal-body">
+    <div class="os-section">
+      <span translate="specimens.select_protocol">
+        Following specimen labels are present in multiple protocols. Please select the right protocol before proceeding
+      </span>
+    </div>
+
+    <table class="os-table">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col col-xs-5 text-right">
+            <span translate="specimens.label"> Label </span>
+          </th>
+          <th class="col col-xs-7">
+            <span translate="specimens.cp"> Collection Protocol </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body" os-unique-items>
+        <tr class="row" ng-repeat="label in labels" ng-form="sform">
+          <td class="col col-xs-5 text-right">
+            <span>{{label.label}}</span>
+          </td>
+          <td class="col col-xs-7">
+            <os-select name="cp" ng-model="label.selected" list="label.specimens"
+              display-prop="cpShortTitle" os-unique-item required>
+            </os-select>
+            <div os-field-error field="sform.cp"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-primary" os-form-submit="done()">
+      <span translate="common.buttons.done">Done</span>
+    </button>
+  </div>
+</form>

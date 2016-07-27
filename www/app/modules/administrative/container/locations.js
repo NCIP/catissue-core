@@ -1,7 +1,7 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
     $scope, $state, container, occupancyMap,
-    Util, ContainerUtil, Alerts) {
+    Util, ContainerUtil, Alerts, SpecimenUtil) {
 
     function init() {
       $scope.container = container;
@@ -40,8 +40,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         return;
       }
 
-      var posMap = {};
-      var vacatedEntities = [];
+      var addedEntities = [], vacatedEntities = [];
       for (var i = 0; i < $scope.occupancyMap.length; ++i) {
         var pos = $scope.occupancyMap[i];
         if (!!pos.id) {
@@ -51,34 +50,54 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         if (!pos.occupyingEntityName || pos.occupyingEntityName.trim().length == 0) {
           vacatedEntities.push(pos.oldOccupant);
         } else {
-          posMap[pos.occupyingEntityName.toLowerCase()] = pos;
+          addedEntities.push(pos);
           delete pos.oldOccupant;
         }
       }
 
-      for (var i = vacatedEntities.length - 1; i >= 0; --i) {
-        var label = vacatedEntities[i].occupyingEntityName.toLowerCase();
-        if (!!posMap[label]) {
-          vacatedEntities.splice(i, 1);
-        } else {
-          posMap[label] = {occuypingEntity: 'specimen', occupyingEntityName: label};
-        }
-      }
-
-      var positions = [];
-      angular.forEach(posMap, function(pos) {
-        positions.push(pos);
-      });
-
-      if (positions.length == 0) {
+      if (addedEntities.length == 0 && vacatedEntities.length == 0) {
         return;
       }
 
-      var assignOp = {'vacateOccupant': $scope.input.vacateOccupants, 'positions': positions};
-      container.assignPositions(assignOp).then(
-        function(latestOccupancyMap) {
-          $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
-          $scope.input.labels = undefined;
+      var labels = addedEntities.map(
+        function(pos) {
+          return pos.occupyingEntityName;
+        }
+      );
+
+      SpecimenUtil.getSpecimens(labels).then(
+        function(specimens) {
+          if (!specimens) {
+            return;
+          }
+
+          var specimensMap = {};
+          angular.forEach(specimens, function(spmn) {
+            specimensMap[spmn.id] = spmn;
+          });
+
+          var positions = [];
+          angular.forEach(vacatedEntities, function(entity) {
+            if (!specimensMap[entity.occupyingEntityId]) {
+              //
+              // specimen is not reassigned a new position, vacate it from container
+              //
+              positions.push({occuypingEntity: 'specimen', occupyingEntityId: entity.occupyingEntityId});
+            }
+          });
+
+          angular.forEach(addedEntities, function(pos, index) {
+            pos.occupyingEntityId = specimens[index].id;
+            positions.push(pos);
+          });
+
+          var assignOp = {vacateOccupant: $scope.input.vacateOccupants, positions: positions};
+          container.assignPositions(assignOp).then(
+            function(latestOccupancyMap) {
+              $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
+              $scope.input.labels = undefined;
+            }
+          );
         }
       );
     }

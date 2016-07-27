@@ -22,11 +22,11 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCo
 import com.krishagni.catissueplus.core.administrative.events.ShipmentDetail;
 import com.krishagni.catissueplus.core.administrative.events.ShipmentItemDetail;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -39,6 +39,8 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	private DaoFactory daoFactory;
 	
 	private SpecimenFactory specimenFactory;
+
+	private SpecimenResolver specimenResolver;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -46,6 +48,10 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 
 	public void setSpecimenFactory(SpecimenFactory specimenFactory) {
 		this.specimenFactory = specimenFactory;
+	}
+
+	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
+		this.specimenResolver = specimenResolver;
 	}
 
 	public Shipment createShipment(ShipmentDetail detail, Shipment.Status status) {
@@ -389,30 +395,21 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private Specimen getSpecimen(SpecimenInfo info, ShipmentItem.ReceivedQuality receivedQuality, OpenSpecimenException ose) {
-		Specimen existing = null;
-		Object key = null;
-		
-		if (info.getId() != null) {
-			key = info.getId();
-			existing = daoFactory.getSpecimenDao().getById(info.getId());
-		} else if (StringUtils.isNotBlank(info.getLabel())) {
-			key = info.getLabel();
-			existing = daoFactory.getSpecimenDao().getByLabel(info.getLabel());
-		}
-		
+		Specimen existing = specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), ose);
 		if (existing == null) {
-			ose.addError(SpecimenErrorCode.NOT_FOUND, key);
 			return null;
 		}
-		
+
 		if (receivedQuality != ShipmentItem.ReceivedQuality.ACCEPTABLE) {
 			return existing;
 		} 
-		
+
+		//
+		// Assign location only if received quality is acceptable
+		//
 		SpecimenDetail detail = new SpecimenDetail();
 		detail.setId(info.getId());
 		detail.setStorageLocation(info.getStorageLocation());
-		
-		return  specimenFactory.createSpecimen(existing, detail, null);
+		return specimenFactory.createSpecimen(existing, detail, null);
 	}
 }

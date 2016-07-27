@@ -10,9 +10,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegi
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -36,6 +36,8 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 	private FormDao formDao;
 	
 	private DaoFactory daoFactory;
+
+	private SpecimenResolver specimenResolver;
 	
 	public void setFormSvc(FormService formSvc) {
 		this.formSvc = formSvc;
@@ -47,6 +49,10 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
+		this.specimenResolver = specimenResolver;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -102,11 +108,9 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 			cp = visit.getCollectionProtocol();
 		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
 			String label = (String)extnObj.get("specimenLabel");
-			Specimen specimen = daoFactory.getSpecimenDao().getByLabel(label);
-			if (specimen == null) {
-				return ResponseEvent.userError(SpecimenErrorCode.NOT_FOUND, label);
-			}
-			
+			String cpShortTitle = (String)extnObj.get("cpShortTitle");
+
+			Specimen specimen = specimenResolver.getSpecimen(cpShortTitle, label);
 			objectId = specimen.getId();
 			cp = specimen.getCollectionProtocol();
 		}

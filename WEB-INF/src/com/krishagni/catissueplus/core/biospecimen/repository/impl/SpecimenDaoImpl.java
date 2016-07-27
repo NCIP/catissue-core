@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriter
 import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 
-public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {	
+public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDao {
 	public Class<?> getType() {
 		return Specimen.class;
 	}
@@ -71,6 +71,17 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			.getNamedQuery(GET_BY_LABEL)
 			.setString("label", label)
 			.list();
+		return specimens.isEmpty() ? null : specimens.iterator().next();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Specimen getByLabelAndCp(String cpShortTitle, String label) {
+		List<Specimen> specimens = getCurrentSession().getNamedQuery(GET_BY_LABEL_AND_CP)
+			.setString("label", label)
+			.setString("cpShortTitle", cpShortTitle)
+			.list();
+
 		return specimens.isEmpty() ? null : specimens.iterator().next();
 	}
 	
@@ -152,7 +163,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Set<Long>> getSpecimenSites(Set<Long> specimenIds) {
+	public Map<Long, Set<Long>> getSpecimenSites(Set<Long> specimenIds) {
 		Criteria query = getSessionFactory().getCurrentSession().createCriteria(Specimen.class)
 				.createAlias("visit", "visit")
 				.createAlias("visit.registration", "cpr")
@@ -162,19 +173,19 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		
 		ProjectionList projs = Projections.projectionList();
 		query.setProjection(projs);
-		projs.add(Projections.property("label"));
+		projs.add(Projections.property("id"));
 		projs.add(Projections.property("site.id"));
 		query.add(Restrictions.in("id", specimenIds));
 		
 		List<Object []> rows = query.list();
-		Map<String, Set<Long>> results = new HashMap<String, Set<Long>>();
+		Map<Long, Set<Long>> results = new HashMap<>();
 		for (Object[] row: rows) {
-			String label = (String)row[0];
+			Long id = (Long)row[0];
 			Long siteId = (Long)row[1];
-			Set<Long> siteIds = results.get(label);
+			Set<Long> siteIds = results.get(id);
 			if (siteIds == null) {
 				siteIds = new HashSet<Long>();
-				results.put(label, siteIds);
+				results.put(id, siteIds);
 			}
 			
 			siteIds.add(siteId);
@@ -228,6 +239,15 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		addSiteCpsCond(query, crit);
 		addSpecimenListCond(query, crit);
 		return query.list();
+	}
+
+	@Override
+	public boolean areDuplicateLabelsPresent() {
+		List<Object[]> rows = getSessionFactory().getCurrentSession()
+			.getNamedQuery(GET_DUPLICATE_LABEL_COUNT)
+			.list();
+
+		return rows.size() > 0;
 	}
 
 	private void addIdsCond(Criteria query, List<Long> ids) {
@@ -377,6 +397,8 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String FQN = Specimen.class.getName();
 	
 	private static final String GET_BY_LABEL = FQN + ".getByLabel";
+
+	private static final String GET_BY_LABEL_AND_CP = FQN + ".getByLabelAndCp";
 	
 	private static final String GET_BY_VISIT_AND_SR = FQN + ".getByVisitAndReq";
 
@@ -389,4 +411,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_BY_VISIT_NAME = FQN + ".getByVisitName";
 	
 	private static final String GET_LATEST_DISTRIBUTION_AND_RETURN_DATES = FQN + ".getLatestDistributionAndReturnDates";
+
+	private static final String GET_DUPLICATE_LABEL_COUNT = FQN + ".getDuplicateLabelCount";
 }
