@@ -72,4 +72,27 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="mdnasim" id="Update training card url">
+    <sql>
+      update
+        os_cfg_settings
+      set
+        value = 'http://training.openspecimen.org'
+      where
+        property_id = (
+          select
+            p.identifier
+          from
+            os_cfg_props p
+            inner join os_modules m
+          on
+            p.module_id = m.identifier
+          where
+            m.name = 'common' and
+            p.name = 'training_url'
+        ) and
+        activity_status = 'Active';
+    </sql>
+  </changeSet>
 </databaseChangeLog>
