@@ -689,6 +689,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cp.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpe.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr-multiple.xml</value>
       </list>
     </property>
 
@@ -816,6 +817,12 @@
         
         <entry key="cpr">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.CprImporter">
+            <property name="cprSvc" ref="cprSvc"/>
+          </bean>
+        </entry>
+
+        <entry key="cprMultiple">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.MultiCprImporter">
             <property name="cprSvc" ref="cprSvc"/>
           </bean>
         </entry>
