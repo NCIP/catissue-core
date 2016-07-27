@@ -1,13 +1,13 @@
 <!-- os-assign-to-spmn-list on-add-to-list="addSpecimensToList(list)">
 </os-assign-to-spmn-list -->
 
-<div os-show-if-menu-items-present dropdown class="inline">
-  <button class="primary dropdown-toggle">
+<div os-show-if-menu-items-present dropdown class="os-inline-btn">
+  <button class="default dropdown-toggle">
     <span translate="specimens.ops">Specimen Ops</span>
     <span class="fa fa-caret-down"></span>
   </button>
 
-  <ul class="dropdown-menu dropdown-menu-right">
+  <ul class="dropdown-menu">
     <li show-if-allowed="specimenDeleteOpts">
       <a ng-click="listViewCtx.ctrl.deleteSpecimens()">
         <span class="fa fa-trash"></span>
@@ -46,3 +46,8 @@
     </li>
   </ul>
 </div>
+
+<button class="default" ui-sref="participant-list({cpId: cp.id})">
+  <span class="fa fa-group"></span>
+  <span translate="cp.view_participants">View Participants</span>
+</button>
