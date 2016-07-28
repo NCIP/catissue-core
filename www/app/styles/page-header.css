@@ -47,12 +47,16 @@
 
 .os-page-header-content-wrapper {
   flex: 3;
+  min-width: 0px;
 }
 
 .os-page-header-content h1, .os-page-header-content h2, 
 .os-page-header-content h3, .os-page-header-content h4, 
 .os-page-header-content h5, .os-page-header-content h6 {
   margin-top: 0px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .os-page-header-actions-wrapper {
