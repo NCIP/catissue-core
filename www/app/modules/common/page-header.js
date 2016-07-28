@@ -32,7 +32,7 @@ angular.module('openspecimen')
           element.addClass('no-breadcrumbs');
         }
 
-        $compile(element)(scope);
+        $compile(navEl)(scope);
       }
     };
   });
