@@ -57,6 +57,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
           result = result.concat(Specimen.flatten(specimen.children, specimen, depth + 1));
         }
 
+        if (specimen instanceof SpecimenRequirement) {
+          return;
+        }
+
         specimen.hasOnlyPendingChildren = hasOnlyPendingChildren(specimen.children);
         if (specimen.hasOnlyPendingChildren) {
           specimen.hasOnlyPendingChildren = hasOnlyPendingChildren(specimen.specimensPool);
