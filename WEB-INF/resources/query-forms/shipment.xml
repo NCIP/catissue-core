@@ -13,7 +13,7 @@
         <udn>id</udn>
         <caption>#getMessage("shipment_identifier")</caption>
         <column>IDENTIFIER</column>
-        <recordUrl>#/shipments/:value/overview</recordUrl>
+        <recordUrl>#/shipments/{{$value}}/overview</recordUrl>
       </numberField>
     </row>
     
@@ -23,7 +23,7 @@
         <udn>name</udn>
         <caption>#getMessage("shipment_name")</caption>
         <column>NAME</column>
-        <recordUrl>#/object-state-params-resolver?stateName=shipment-detail.overview&amp;objectName=shipment&amp;key=name&amp;value=:value</recordUrl>
+        <recordUrl>#/object-state-params-resolver?stateName=shipment-detail.overview&amp;objectName=shipment&amp;key=name&amp;value={{$value}}</recordUrl>
       </textField>
     </row>
     
@@ -72,7 +72,7 @@
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
-            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value={{$value}}</recordUrl>
           </dropDown>
         </row>
       </subForm>
@@ -124,7 +124,7 @@
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
-            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value={{$value}}</recordUrl>
           </dropDown>
         </row>
       </subForm>

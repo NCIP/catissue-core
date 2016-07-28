@@ -16,12 +16,14 @@ angular.module('os.query.results', ['os.query.models'])
     }
   })
   .controller('QueryResultsCtrl', function(
-    $rootScope, $scope, $state, $stateParams, $modal, $document, $timeout, currentUser,
+    $rootScope, $scope, $state, $stateParams, $modal, $document, $timeout, $interpolate, currentUser,
     queryCtx, cps, QueryCtxHolder, QueryUtil, QueryExecutor, SpecimenList, SpecimensHolder, Alerts) {
 
     var STR_FACETED_OPS = ['eq', 'qin', 'exists', 'any'];
 
     var RANGE_FACETED_OPS = ['le', 'ge', 'eq', 'between', 'exists', 'any'];
+
+    var currResults = {};
 
     function isNumber(val) {
       return !isNaN(val) && angular.isNumber(val);
@@ -137,8 +139,11 @@ angular.module('os.query.results', ['os.query.models'])
       $scope.showAddToSpecimenList = showAddToSpecimenList();
       $scope.resultsCtx.waitingForRecords = true;
       $scope.resultsCtx.error = false;
-      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true), qc.wideRowMode || 'DEEP').then(
+
+      currResults = {};
+      QueryExecutor.getRecords(undefined, qc.selectedCp.id, getAql(true, true), qc.wideRowMode || 'DEEP').then(
         function(result) {
+          currResults = result;
           $scope.resultsCtx.waitingForRecords = false;
           if (qc.reporting.type == 'crosstab') {
             preparePivotTable(result);
@@ -294,14 +299,15 @@ angular.module('os.query.results', ['os.query.models'])
       );
     }
 
-    function getAql(addLimit) { 
+    function getAql(addLimit, addEntityIds) {
       var qc = $scope.queryCtx;
       return QueryUtil.getDataAql(
         qc.selectedFields, 
         qc.filtersMap, 
         qc.exprNodes, 
         qc.reporting,
-        addLimit);
+        addLimit,
+        addEntityIds);
     }
 
     function removeSeparator(label)  {
@@ -352,6 +358,16 @@ angular.module('os.query.results', ['os.query.models'])
       };
     };
 
+    function columnInstance(label) {
+      var hyphenIdx = label.lastIndexOf(' - ');
+      if (hyphenIdx == -1) {
+        return {label: label, instance: 0};
+      }
+
+      var idx = parseInt(label.substring(hyphenIdx + 2));
+      return {label: label.substring(0, hyphenIdx), instance: isNaN(idx) ? 0 : idx};
+    }
+
     function prepareDataGrid(showColSummary, result) {
       var idx = -1,
           summaryRow = [];
@@ -360,38 +376,43 @@ angular.module('os.query.results', ['os.query.models'])
         summaryRow = result.rows.splice(result.rows.length - 1, 1)[0];
       }
 
-      var colDefs = result.columnLabels.map(
+      var colDefs = [];
+      angular.forEach(result.columnLabels,
         function(columnLabel) {
           ++idx;
+
+          if (columnLabel.charAt(0) == '$') {
+            return;
+          }
 
           var columnLabel = removeSeparator(columnLabel);
           var width = getColumnWidth(columnLabel);
 
           var cellTemplate = null;
           if (result.columnUrls[idx]) {
-            var url = result.columnUrls[idx].replace(":value", "{{row.getProperty(col.field).replace('#', '%23')}}");
             cellTemplate = '<div class="ngCellText" ng-class="col.colIndex()">' +
-                           '  <a href="' + url + '" target="_blank">' +
+                           '  <a href="{{cellUrl(row, col,' + idx + ')}}" target="_blank">' +
                            '    {{row.getProperty(col.field)}}' +
                            '  </a>' +
                            '</div>';
           }
 
-          return {
+          colDefs.push({
             field: "col" + idx,
+            instance: columnInstance(columnLabel).instance,
             displayName: columnLabel,
             minWidth: width < 100 ? 100 : width,
             headerCellTemplate: 'modules/query/column-filter.html',
             cellTemplate: !!cellTemplate ? cellTemplate : undefined,
             showSummary: showColSummary,
             summary: summaryRow[idx]
-          };
+          });
         }
       );
 
       $scope.resultsCtx.columnDefs = colDefs;
       $scope.resultsCtx.labelIndices = result.columnIndices;
-      $scope.resultsCtx.rows = getFormattedRows(result.rows);
+      $scope.resultsCtx.rows = getFormattedRows(result.columnLabels, result.rows);
       $scope.resultsCtx.numRows = result.rows.length;
       $scope.resultsCtx.moreData = (result.dbRowsCount >= 10000);
       $scope.selectedRows.length = 0;
@@ -403,12 +424,20 @@ angular.module('os.query.results', ['os.query.models'])
       }, 500);
     }
 
-    function getFormattedRows(rows) {
+    function getFormattedRows(labels, rows) {
       var formattedRows = [];
       for (var i = 0; i < rows.length; ++i) {
-        var formattedRow = {};
+        var formattedRow = {hidden:{}};
         for (var j = 0; j < rows[i].length; ++j) {
-          formattedRow["col" + j] = rows[i][j];
+          if (labels[j].charAt(0) == '$') {
+            var colInstance = columnInstance(labels[j]);
+            if (!formattedRow['hidden'][colInstance.instance]) {
+              formattedRow['hidden'][colInstance.instance] = {};
+            }
+            formattedRow['hidden'][colInstance.instance][colInstance.label] = rows[i][j];
+          } else {
+            formattedRow["col" + j] = rows[i][j];
+          }
         }
         formattedRows.push(formattedRow);
       }
@@ -490,6 +519,12 @@ angular.module('os.query.results', ['os.query.models'])
       scope: undefined,
       grid: undefined
     };
+
+    $scope.cellUrl = function(row, col, colIdx) {
+      var hidden = row.entity.hidden[columnInstance(col.displayName).instance];
+      var locals = angular.extend({$value: row.getProperty(col.field)}, hidden);
+      return $interpolate(currResults.columnUrls[colIdx])(locals);
+    }
 
     $scope.editFilters = function() {
       $state.go('query-addedit', {queryId: $scope.queryCtx.id});

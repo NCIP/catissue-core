@@ -12,7 +12,7 @@
         <udn>id</udn>
         <caption>#getMessage("order_identifier")</caption>
         <column>IDENTIFIER</column>
-        <recordUrl>#/orders/:value/overview</recordUrl>
+        <recordUrl>#/orders/{{$value}}/overview</recordUrl>
       </numberField>
     </row>
 
@@ -25,7 +25,7 @@
         <options>
           <sql>select name from os_orders</sql>
         </options>
-        <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value=:value</recordUrl>
+        <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value={{$value}}</recordUrl>
       </dropDown>
     </row>
 
@@ -47,7 +47,7 @@
             <options>
               <sql>select title from catissue_distribution_protocol where activity_status = 'Active'</sql>
             </options>
-            <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value=:value</recordUrl>
+            <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value={{$value}}</recordUrl>
           </dropDown>
         </row>
 
@@ -117,7 +117,7 @@
             <options>
               <sql>select distinct name from CATISSUE_SITE</sql>
             </options>
-            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value=:value</recordUrl>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value={{$value}}</recordUrl>
           </dropDown>              
         </row>
       </subForm>

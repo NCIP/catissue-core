@@ -24,6 +24,12 @@ angular.module('os.query.util', [])
       between:     {name: 'between',    desc: "", code: '&#xf1e0;',    symbol: 'between',     model: 'BETWEEN'}
     };
 
+    var entityIdFields = {
+      'Participant': {expr: 'Participant.id', caption: '$cprId'},
+      'Specimen': {expr: 'Specimen.id', caption: '$specimenId'},
+      'Specimen.parentSpecimen': {expr: 'Specimen.parentSpecimen.parentId', caption: '$parentSpecimenId'}
+    }
+
     var init = false;
 
     function initOpsDesc() {
@@ -239,8 +245,9 @@ angular.module('os.query.util', [])
       return query;
     };
 
-    function getSelectList(selectedFields, filtersMap) {
-      var result = "";
+    function getSelectList(selectedFields, filtersMap, addEntityIds) {
+      var addedEntityIds = {}, result = "";
+
       angular.forEach(selectedFields, function(field) {
         if (typeof field == "string") {
           field = getFieldExpr(filtersMap, field, true);
@@ -268,6 +275,24 @@ angular.module('os.query.util', [])
             field = getFieldExpr(filtersMap, field.name, true);
           }
         }
+
+        if (addEntityIds) {
+          for (var entity in entityIdFields) {
+            if (!entityIdFields.hasOwnProperty(entity)) {
+              continue;
+            }
+
+            if (field.indexOf(entity + '.') != 0 || addedEntityIds[entity]) {
+              continue;
+            }
+
+            var idField = entityIdFields[entity];
+            result += idField.expr + " as \"" + idField.caption + "\"" + ", ";
+
+            addedEntityIds[entity] = true;
+          }
+        }
+
         result += field + ", ";
       });
 
@@ -432,8 +457,10 @@ angular.module('os.query.util', [])
                 " where " + query;
     }
 
-    function getDataAql(selectedFields, filtersMap, exprNodes, reporting, addLimit) {
-      var selectList = getSelectList(selectedFields, filtersMap);
+    function getDataAql(selectedFields, filtersMap, exprNodes, reporting, addLimit, addEntityIds) {
+      addEntityIds = !!addEntityIds && (!reporting || reporting.type != 'crosstab');
+
+      var selectList = getSelectList(selectedFields, filtersMap, addEntityIds);
       var where = getWhereExpr(filtersMap, exprNodes);
       var rptExpr = getRptExpr(selectedFields, reporting);
       return "select " + selectList + 
