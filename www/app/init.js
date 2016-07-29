@@ -33,7 +33,14 @@ ui.os.appProps = {
 
           ui.os.appProps = appProps;
           if (appProps.plugins.length > 0) {
-            appProps.plugins.forEach(loadPluginResources);
+            var qp = '_buildVersion=' + appProps.build_version +
+              '&_buildDate=' + appProps.build_date;
+
+            appProps.plugins.forEach(
+              function(plugin) {
+                loadPluginResources(qp, plugin);
+              }
+            );
           } else {
             bootstrapApp();
           }
@@ -46,8 +53,8 @@ ui.os.appProps = {
       );
   }
 
-  function loadPluginResources(plugin) {
-    var url = 'plugin-ui-resources/' + plugin + '/def.json';
+  function loadPluginResources(qp, plugin) {
+    var url = 'plugin-ui-resources/' + plugin + '/def.json?' + qp;
     $.get(url).success(
       function(def) {
         def.styles = def.styles || [];

@@ -110,6 +110,8 @@ osApp.config(function(
     }
   })
   .factory('httpRespInterceptor', function($rootScope, $q, $injector, $window, Alerts, LocationChangeListener) {
+    var qp = '?_buildVersion=' + ui.os.appProps.build_version + '&_buildDate=' + ui.os.appProps.build_date;
+
     function displayErrMsgs(errors) {
       var errMsgs = errors.map(
         function(err) {
@@ -121,6 +123,12 @@ osApp.config(function(
 
     return {
       request: function(config) {
+        if (config.method == 'GET') {
+          if (config.url.indexOf('modules') == 0 || config.url.indexOf('plugin-ui-resources') == 0) {
+            config.url += qp;
+          }
+        }
+
         return config || $q.when(config);
       },
 
