@@ -1129,3 +1129,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 /*** END: time picker popup spinner fixes ***/
+
+.form-horizontal .control-text {
+  padding-top: 7px;
+}

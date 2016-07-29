@@ -165,7 +165,7 @@
     <div class="form-group" ng-if="currSpecimen.status == 'Collected'">
       <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
       <div class="col-xs-6">
-        <os-storage-position entity="currSpecimen" cp-id="cpr.cpId"></os-storage-position>
+        <os-storage-position entity="currSpecimen" cp-id="cpr.cpId" virtual="spmnCtx.isVirtual"></os-storage-position>
       </div>
     </div>
 

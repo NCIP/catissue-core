@@ -161,6 +161,10 @@ angular.module('openspecimen')
         loadContainers(name, scope, ctrl);
       };
 
+      scope.showStorageContainers = function () {
+        scope.virtual = false;
+      }
+
       watchOccupyingEntityChanges(scope, ctrl);
     };
 
@@ -178,6 +182,7 @@ angular.module('openspecimen')
       scope: {
         entity: '=',
         cpId: '=',
+        virtual: "=",
         containerListCache: '=?'
       },
 

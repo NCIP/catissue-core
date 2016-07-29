@@ -201,6 +201,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       return updateSpecimenStatus(this, statusSpec);
     };
 
+    Specimen.prototype.showVirtual = function() {
+      return this.storageType == 'Virtual' && (!this.status || this.status == 'Pending');
+    }
+
     function toSpecimenAttrs(sr) {
       sr.reqId = sr.id;
       sr.reqLabel = sr.name;

@@ -66,7 +66,8 @@ angular.module('os.biospecimen.specimen.addedit', [])
       $scope.currSpecimen.concentration = Util.getNumberInScientificNotation($scope.currSpecimen.concentration);
 
       $scope.spmnCtx = {
-        obj: {specimen: $scope.currSpecimen}, inObjs: ['specimen'], exObjs: exObjs
+        obj: {specimen: $scope.currSpecimen}, inObjs: ['specimen'], exObjs: exObjs,
+        isVirtual: specimen.showVirtual()
       }
 
       $scope.deFormCtrl = {};

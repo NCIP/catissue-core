@@ -1021,7 +1021,8 @@
       "add": "Click to add new Container",
       "edit": "Click to edit Container",
       "count_free_locations": "Count of free locations",
-      "search": "Click to search Storage Containers"
+      "search": "Click to search Storage Containers",
+      "select": "Click to select Storage Containers"
     },
 
     "menu": {
