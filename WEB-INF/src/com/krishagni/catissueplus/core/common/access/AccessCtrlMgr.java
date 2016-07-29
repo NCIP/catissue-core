@@ -128,13 +128,7 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	public void ensureReadDpRights() {
-		if (AuthUtil.isAdmin()) {
-			return;
-		}
-
-		User user = AuthUtil.getCurrentUser();
-		Operation[] ops = {Operation.CREATE, Operation.UPDATE};
-		if (!canUserPerformOp(user.getId(), Resource.ORDER, ops)) {
+		if (!canUserPerformOp(Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE})) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -455,6 +449,10 @@ public class AccessCtrlMgr {
 		return phiAccess;
 	}
 
+	public boolean canCreateUpdateParticipant() {
+		return canUserPerformOp(Resource.PARTICIPANT, new Operation[] {Operation.CREATE, Operation.UPDATE});
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
 	//          Visit and Specimen object access control helper methods                 //
@@ -635,13 +633,7 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	public void ensureReadContainerTypeRights() {
-		if (AuthUtil.isAdmin()) {
-			return;
-		}
-		
-		User user = AuthUtil.getCurrentUser();
-		Operation[] ops = {Operation.READ};
-		if (!canUserPerformOp(user.getId(), Resource.STORAGE_CONTAINER, ops)) {
+		if (!canUserPerformOp(Resource.STORAGE_CONTAINER, new Operation[] {Operation.READ})) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		} 
 	}
@@ -723,12 +715,7 @@ public class AccessCtrlMgr {
 	}
 	
 	public boolean canCreateUpdateDistributionOrder() {
-		if (AuthUtil.isAdmin()) {
-			return true;
-		}
-		
-		Long userId = AuthUtil.getCurrentUser().getId();
-		return canUserPerformOp(userId, Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
+		return canUserPerformOp(Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE});
 	}
 	
 	public Set<Long> getCreateUpdateAccessDistributionOrderSiteIds() {
@@ -917,8 +904,16 @@ public class AccessCtrlMgr {
 		return user.getInstitute();
 	}
 
+	private boolean canUserPerformOp(Resource resource, Operation[] ops) {
+		if (AuthUtil.isAdmin()) {
+			return true;
+		}
+
+		return canUserPerformOp(AuthUtil.getCurrentUser().getId(), resource, ops);
+	}
+
 	private boolean canUserPerformOp(Long userId, Resource resource, Operation[] operations) {
-		List<String> ops = new ArrayList<String>();
+		List<String> ops = new ArrayList<>();
 		for (Operation operation : operations) {
 			ops.add(operation.getName());
 		}
@@ -1025,12 +1020,7 @@ public class AccessCtrlMgr {
 	}
 
 	public void ensureScheduledJobRights(Operation[] ops) {
-		if (AuthUtil.isAdmin()) {
-			return;
-		}
-
-		User user = AuthUtil.getCurrentUser();
-		if (!canUserPerformOp(user.getId(), Resource.SCHEDULED_JOB, ops)) {
+		if (!canUserPerformOp(Resource.SCHEDULED_JOB, ops)) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -1063,6 +1053,10 @@ public class AccessCtrlMgr {
 		}
 		
 		return getSites(Resource.SHIPPING_N_TRACKING, Operation.READ);
+	}
+
+	public boolean canCreateUpdateShipment() {
+		return canUserPerformOp(Resource.SHIPPING_N_TRACKING, new Operation[] {Operation.CREATE, Operation.UPDATE});
 	}
 	
 	public Set<Long> getCreateUpdateAccessShipmentSiteIds() {

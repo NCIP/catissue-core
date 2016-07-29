@@ -67,7 +67,7 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 			
 			if (AuthUtil.isAdmin()) {
 				sites = daoFactory.getSiteDao().getSites(listCrit);
-			} else if (listCrit.listAll() && AccessCtrlMgr.getInstance().canCreateUpdateDistributionOrder()) {
+			} else if (listCrit.listAll() && isAllSitesAllowed()) {
 				sites = daoFactory.getSiteDao().getSites(listCrit);
 			} else {
 				sites = getAccessibleSites(listCrit);
@@ -195,6 +195,12 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 		}
 
 		return daoFactory.getSiteDao().getSiteIds(key, value);
+	}
+
+	private boolean isAllSitesAllowed() {
+		return AccessCtrlMgr.getInstance().canCreateUpdateParticipant() ||
+			AccessCtrlMgr.getInstance().canCreateUpdateDistributionOrder() ||
+			AccessCtrlMgr.getInstance().canCreateUpdateShipment();
 	}
 
 	private void addSiteStats(List<SiteSummary> sites) {
