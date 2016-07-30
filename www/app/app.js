@@ -109,7 +109,10 @@ osApp.config(function(
       return $q.when({});
     }
   })
-  .factory('httpRespInterceptor', function($rootScope, $q, $injector, $window, Alerts, LocationChangeListener) {
+  .factory('httpRespInterceptor', function(
+    $rootScope, $q, $injector, $window, $templateCache,
+    Alerts, LocationChangeListener) {
+
     var qp = '?_buildVersion=' + ui.os.appProps.build_version + '&_buildDate=' + ui.os.appProps.build_date;
 
     function displayErrMsgs(errors) {
@@ -123,7 +126,7 @@ osApp.config(function(
 
     return {
       request: function(config) {
-        if (config.method == 'GET') {
+        if (config.method == 'GET' && $templateCache.get(config.url) == null) {
           if (config.url.indexOf('modules') == 0 || config.url.indexOf('plugin-ui-resources') == 0) {
             config.url += qp;
           }
