@@ -169,7 +169,7 @@ angular.module('os.query.results', ['os.query.models'])
       var facets = [];
       angular.forEach($scope.queryCtx.filters,
         function(filter, index) {
-          if (!filter.parameterized) {
+          if (!filter.parameterized || !filter.op) {
             return;
           }
 

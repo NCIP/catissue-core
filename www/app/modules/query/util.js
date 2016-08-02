@@ -490,11 +490,12 @@ angular.module('os.query.util', [])
 
     function getDateFns() {
       return [
-        {label:'current_date', value: 'current_date()'},
-        {label:'months_between', value: 'months_between('},
-        {label:'years_between', value: 'years_between('},
-        {label:'minutes_between', value: 'minutes_between('},
-        {label:'round', value: 'round('}
+        {label: 'current_date',    value: 'current_date()'},
+        {label: 'months_between',  value: 'months_between('},
+        {label: 'years_between',   value: 'years_between('},
+        {label: 'minutes_between', value: 'minutes_between('},
+        {label: 'round',           value: 'round('},
+        {label: 'date_range',      value: 'date_range('}
       ];
     };
 
