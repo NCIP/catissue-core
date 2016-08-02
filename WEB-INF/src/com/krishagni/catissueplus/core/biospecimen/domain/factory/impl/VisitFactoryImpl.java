@@ -36,6 +36,8 @@ public class VisitFactoryImpl implements VisitFactory {
 	private DaoFactory daoFactory;
 	
 	private String defaultNameTmpl;
+	
+	private String unplannedNameTmpl;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -43,6 +45,10 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	public void setDefaultNameTmpl(String defNameTmpl) {
 		this.defaultNameTmpl = defNameTmpl;
+	}
+
+	public void setUnplannedNameTmpl(String unplannedNameTmpl) {
+		this.unplannedNameTmpl = unplannedNameTmpl;
 	}
 
 	@Override
@@ -68,7 +74,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setCohort(visitDetail, visit, ose);
 		visit.setComments(visitDetail.getComments());
 		visit.setSurgicalPathologyNumber(visitDetail.getSurgicalPathologyNumber());
-		visit.setDefNameTmpl(defaultNameTmpl);
+		visit.setDefNameTmpl(visit.isUnplanned() ? unplannedNameTmpl : defaultNameTmpl);
 		setVisitExtension(visitDetail, visit, ose);
 		
 		ose.checkAndThrow();
@@ -102,7 +108,7 @@ public class VisitFactoryImpl implements VisitFactory {
 		setMissedVisitReason(detail, existing, visit, ose);
 		setMissedBy(detail, existing, visit, ose);
 		setCohort(detail, existing, visit, ose);
-		visit.setDefNameTmpl(defaultNameTmpl);
+		visit.setDefNameTmpl(visit.isUnplanned() ? unplannedNameTmpl : defaultNameTmpl);
 		setVisitExtension(detail, existing, visit, ose);
 
 		ose.checkAndThrow();
@@ -123,13 +129,15 @@ public class VisitFactoryImpl implements VisitFactory {
 			cpe = daoFactory.getCollectionProtocolDao().getCpeByEventLabel(cpTitle, eventLabel);			
 		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(eventLabel)) {
 			cpe = daoFactory.getCollectionProtocolDao().getCpeByShortTitleAndEventLabel(cpShortTitle, eventLabel);
+		} else {
+			return;
 		}
-		
+
 		if (cpe == null) {
 			ose.addError(CpeErrorCode.NOT_FOUND);
 			return;
 		}
-					
+		
 		visit.setCpEvent(cpe);
 	}
 	
@@ -220,11 +228,15 @@ public class VisitFactoryImpl implements VisitFactory {
 	
 	private void setVisitStatus(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitStatus = visitDetail.getStatus();
+		if (StringUtils.isBlank(visitStatus)) {
+			visitStatus = Visit.VISIT_STATUS_COMPLETED;
+		}
+
 		if (!isValid(VISIT_STATUS, visitStatus)) {
 			ose.addError(VisitErrorCode.INVALID_STATUS);			
 			return;
 		}
-		
+
 		visit.setStatus(visitStatus);		
 	}
 	

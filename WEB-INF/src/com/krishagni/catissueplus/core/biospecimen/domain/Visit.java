@@ -293,6 +293,10 @@ public class Visit extends BaseExtensionEntity {
 		return isMissed(getStatus());
 	}
 	
+	public boolean isUnplanned() {
+		return getCpEvent() == null;
+	}
+
 	public List<DependentEntityDetail> getDependentEntities() {
 		return DependentEntityDetail.singletonList(Specimen.getEntityName(), getActiveSpecimens()); 
 	}
@@ -587,7 +591,7 @@ public class Visit extends BaseExtensionEntity {
 	}
 
 	private boolean shouldPrintVisitName(String prevStatus) {
-		if (isMissed()) {
+		if (isMissed() || isUnplanned()) {
 			return false;
 		}
 

@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -158,9 +159,13 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	
 	
 	private void getVisitsCollectionStatus(Long cprId, Map<String, VisitSummary> visitsMap) {
-		Set<Long> eventIds = new HashSet<Long>();
-		for (VisitSummary visit : visitsMap.values()) {
-			eventIds.add(visit.getEventId());
+		Set<Long> eventIds = visitsMap.values().stream()
+				.map(VisitSummary::getEventId)
+				.filter(id -> id != null)
+				.collect(Collectors.toSet());
+		
+		if (eventIds.isEmpty()) {
+			return;
 		}
 		
 		getPlannedCollectionStatus(cprId, eventIds, visitsMap);

@@ -302,9 +302,11 @@ public class VisitDetail extends AttributeModifiedSupport {
 		detail.setCpTitle(cpr.getCollectionProtocol().getTitle());
 		detail.setCpShortTitle(cpr.getCollectionProtocol().getShortTitle());
 		
-		detail.setEventId(visit.getCpEvent().getId());
-		detail.setEventLabel(visit.getCpEvent().getEventLabel());
-		detail.setEventPoint(visit.getCpEvent().getEventPoint());
+		if (!visit.isUnplanned()) {
+			detail.setEventId(visit.getCpEvent().getId());
+			detail.setEventLabel(visit.getCpEvent().getEventLabel());
+			detail.setEventPoint(visit.getCpEvent().getEventPoint());
+		}
 		
 		if (!partial) {
 			detail.setExtensionDetail(ExtensionDetail.from(visit.getExtension(), excludePhi));

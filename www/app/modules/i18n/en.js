@@ -400,6 +400,7 @@
     "comments": "Comments",
     "eos": "EOS",
     "end_of_study": "End of Study",
+    "unplanned_visit": "Unplanned Visit",
 
     "names_print_job_created": "Visit names print job {{jobId}} created successfully",
 

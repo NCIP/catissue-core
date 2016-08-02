@@ -155,7 +155,7 @@ public class VisitSummary implements Comparable<VisitSummary> {
 			return result;
 		}
 
-		result = eventId.compareTo(other.eventId);
+		result = ObjectUtils.compare(this.eventId, other.eventId, true);
 		if (result != 0) {
 			return result;
 		}

@@ -95,7 +95,7 @@
       <return-scalar column="regDate" type="timestamp"/>
       <return-scalar column="missedReason" type="string"/>
 
-      select   
+      select
         scg.identifier as id, cpe.identifier as eventId, scg.name as name, cpe.activity_status as eventStatus,
         cpe.collection_point_label as label, cpe.study_calendar_event_point as calendarPoint,
         scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
@@ -111,8 +111,23 @@
       where
         cpr.identifier = :cprId and
         cpr.activity_status != 'Disabled'
-      order by
-        cpe.study_calendar_event_point
+
+      union
+
+      select
+        scg.identifier as id, null as eventId, scg.name as name, null as eventStatus,
+        null as label, null as calendarPoint,
+        scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
+        scg.missed_reason as missedReason
+      from
+        catissue_coll_prot_reg cpr
+        inner join catissue_specimen_coll_group scg 
+          on scg.collection_protocol_event_id is null  and
+             scg.collection_protocol_reg_id = cpr.identifier and
+             scg.activity_status != 'Disabled'
+      where
+        cpr.identifier = :cprId and
+        cpr.activity_status != 'Disabled'
     </sql-query>
 
     <sql-query name="getVisitsCollectionStatus">
