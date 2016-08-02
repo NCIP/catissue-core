@@ -112,6 +112,8 @@
         com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
       where
         cpr.collectionProtocol.id = :cpId
+      order by
+        cpr.id
     </query>
   </class>
 </hibernate-mapping>

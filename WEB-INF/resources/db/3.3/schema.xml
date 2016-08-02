@@ -387,4 +387,83 @@
   <changeSet author="vlonushte" id="Drop available column from specimen table as it is no longer used">
     <dropColumn tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE"/>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Procedure to drop index created on foreign key" runOnChange="true" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure drop_index_on_fk(
+        tableName in varchar2,
+        columnName in varchar2
+      ) is
+        index_name_start varchar2(128);
+        index_name varchar2(128);
+      begin
+        declare index_not_exist exception;
+        pragma exception_init(index_not_exist, -1418); -- ora-01418
+
+        begin
+          index_name_start := columnName;
+          if length(index_name_start) > 20 then
+            index_name_start := substr(index_name_start, 0, 20);
+          end if;
+          index_name_start := index_name_start || '%';
+
+          select
+            index_name into index_name
+          from
+            all_ind_columns
+          where
+            table_name = tableName and
+            column_name = columnName and
+            index_name like index_name_start;
+
+          execute immediate 'drop index ' || index_name;
+          exception
+            when index_not_exist then
+              null;
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Drop index on parent specimen ID of specimen" dbms="oracle">
+    <sql>
+      call drop_index_on_fk('CATISSUE_SPECIMEN', 'PARENT_SPECIMEN_ID');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Index on parent specimen ID and activity status of specimen" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from all_ind_columns where index_name='OS_PARENT_SPMN_ACT_STAT_IDX' and table_name='CATISSUE_SPECIMEN';
+      </sqlCheck>
+    </preConditions>
+
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_PARENT_SPMN_ACT_STAT_IDX">
+      <column name="PARENT_SPECIMEN_ID"/>
+      <column name="ACTIVITY_STATUS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Index on pooled specimen ID and activity status of specimen" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from all_ind_columns where index_name='OS_POOLED_SPMN_ACT_STAT_IDX' and table_name='CATISSUE_SPECIMEN';
+      </sqlCheck>
+    </preConditions>
+
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_POOLED_SPMN_ACT_STAT_IDX">
+      <column name="POOLED_SPECIMEN_ID"/>
+      <column name="ACTIVITY_STATUS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Foreign key on pooled specimen ID of specimen table">
+    <addForeignKeyConstraint
+      constraintName="FK_POOLED_SPECIMEN_ID"
+      baseTableName="CATISSUE_SPECIMEN"
+      baseColumnNames="POOLED_SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>	
