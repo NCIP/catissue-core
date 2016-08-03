@@ -1831,7 +1831,7 @@
         "cp_expiry_rem_rept_inter_desc": "Number of days after which email notification should be repeated for collection protocol expiry.",
         "unique_spmn_label_per_cp": "Unique Specimen Label per CP",
         "unique_spmn_label_per_cp_desc": "Enable or Disable uniqueness of Specimen labels at CP level. Enabling this setting ensures Specimen labels are unique only within Collection Protocol. Disabling this setting ensures no two specimen labels are same throughout the system.",
-        "cp_sop_docs_dir": "SOP Documents Directory",
+        "cp_sop_doc_dir": "SOP Documents Directory",
         "cp_sop_doc_dir_desc": "Folder on server to store collection protocol SOP documents",
         "cp_sop_doc_url": "CP SOP Link",
         "cp_sop_doc_url_desc": "System level collection protocol SOP document link",
