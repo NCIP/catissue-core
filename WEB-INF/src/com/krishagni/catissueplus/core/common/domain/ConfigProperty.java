@@ -83,4 +83,8 @@ public class ConfigProperty extends BaseEntity {
 	public void setSecured(boolean secured) {
 		this.secured = secured;
 	}
+
+	public boolean isFile() {
+		return getDataType() == DataType.FILE;
+	}
 }

@@ -48,7 +48,7 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
         return;
       } 
 
-      if (type == 'FILE') {
+      if (type == 'FILE' && $scope.fileCtx.ctrl.isFileSelected()) {
         $scope.fileCtx.ctrl.submit().then(
           function(filename) {
             $scope.setting.value = filename;

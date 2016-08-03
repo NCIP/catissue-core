@@ -11,6 +11,10 @@ angular.module('openspecimen')
         this.data = null;
         this.q = null;
 
+        this.isFileSelected = function() {
+          return !!this.data
+        }
+
         this.submit = function() {
           this.q = $q.defer();
           if (this.data) {

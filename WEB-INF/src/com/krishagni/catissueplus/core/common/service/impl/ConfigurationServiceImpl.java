@@ -143,7 +143,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			existing.setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 
 			daoFactory.getConfigSettingDao().saveOrUpdate(existing);
-			daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);		
+			daoFactory.getConfigSettingDao().saveOrUpdate(newSetting);
 			moduleSettings.put(prop, newSetting);
 			
 			notifyListeners(module, prop, setting);
@@ -154,7 +154,9 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		} finally {
-			if (!successful) {
+			if (successful) {
+				deleteOldSettingFile(existing);
+			} else {
 				existing.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 				moduleSettings.put(prop, existing);
 			}
@@ -571,5 +573,17 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		String dir = getDataDir() + File.separator + "config-setting-files";
 		new File(dir).mkdirs();
 		return dir + File.separator;
+	}
+
+	private void deleteOldSettingFile(ConfigSetting oldSetting) {
+		if (!oldSetting.getProperty().isFile() || StringUtils.isBlank(oldSetting.getValue())) {
+			return;
+		}
+
+
+		File file = new File(getSettingFilesDir() + oldSetting.getValue());
+		if (file.exists()) {
+			file.delete(); // Very dangerous to do! Should we just rename the file?
+		}
 	}
 }
