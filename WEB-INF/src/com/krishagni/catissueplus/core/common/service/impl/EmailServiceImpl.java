@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.MessageSource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -26,6 +25,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
 public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
 	private static Log LOGGER = LogFactory.getLog(EmailServiceImpl.class);
@@ -38,13 +38,9 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 	
 	private static final String FOOTER_TMPL = "footer";
 	
-	private static String subjectPrefix;
-	
 	private JavaMailSender mailSender;
 	
 	private TemplateService templateService;
-	
-	private MessageSource messageSource;
 	
 	private ThreadPoolTaskExecutor taskExecutor;
 	
@@ -52,10 +48,6 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 
 	public void setTemplateService(TemplateService templateService) {
 		this.templateService = templateService;
-	}
-
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
@@ -175,12 +167,16 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		
 	}
 	
-	private String getSubject(String emailTmplKey, String[] subjParams) {
-		if (subjectPrefix == null) {
-			subjectPrefix = messageSource.getMessage("email_subject_prefix", null, Locale.getDefault());
-		}
-		
-		return subjectPrefix + messageSource.getMessage(emailTmplKey.toLowerCase() + "_subj", subjParams, Locale.getDefault());
+	private String getSubject(String subjKey, String[] subjParams) {
+		return getSubjectPrefix() + MessageUtil.getInstance().getMessage(subjKey.toLowerCase() + "_subj", subjParams);
+	}
+
+	private String getSubjectPrefix() {
+		String subjectPrefix = MessageUtil.getInstance().getMessage("email_subject_prefix");
+		String deployEnv = ConfigUtil.getInstance().getStrSetting("common", "deploy_env", "");
+
+		subjectPrefix += " " + StringUtils.substring(deployEnv, 0, 10);
+		return "[" + subjectPrefix.trim() + "]: ";
 	}
 	
 	private class SendMailTask implements Runnable {
