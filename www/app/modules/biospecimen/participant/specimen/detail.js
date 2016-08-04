@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimen.detail', [])
   .controller('SpecimenDetailCtrl', function(
-    $scope, $state, $modal, $stateParams,
+    $scope, $state, $modal, $stateParams, currentUser,
     cpr, visit, specimen, Specimen, SpecimenLabelPrinter, SpecimensHolder, DeleteUtil, Alerts) {
 
     function init() {
@@ -80,11 +80,12 @@ angular.module('os.biospecimen.specimen.detail', [])
     };
 
     $scope.addSpecimensToSpecimenList = function(list) {
-      var selectedSpecimens = [{label: $scope.specimen.label}];
+      var selectedSpecimens = [{id: $scope.specimen.id}];
 
       if (!!list) {
         list.addSpecimens(selectedSpecimens).then(function(specimens) {
-          Alerts.success('specimen_list.specimens_added', {name: list.name});
+          var listType = list.getListType(currentUser);
+          Alerts.success('specimen_list.specimens_added_to_' + listType, list);
         })
       } else {
         SpecimensHolder.setSpecimens(selectedSpecimens);

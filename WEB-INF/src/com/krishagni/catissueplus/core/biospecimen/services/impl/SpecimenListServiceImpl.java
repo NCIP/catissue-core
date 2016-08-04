@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -193,14 +193,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			SpecimenList specimenList = getSpecimenList(opDetail.getListId(), null);
 
 			List<Specimen> specimens = null;
-			List<String> labels = opDetail.getSpecimens();
+			List<Long> ids = opDetail.getSpecimens();
 			List<Pair<Long, Long>> siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 			
-			if (labels == null || labels.isEmpty()) {
+			if (CollectionUtils.isEmpty(ids)) {
 				specimens = new ArrayList<>();
 			} else {
-				ensureValidSpecimens(labels, siteCpPairs);
-				specimens = daoFactory.getSpecimenDao().getSpecimens(new SpecimenListCriteria().labels(labels));
+				ensureValidSpecimens(ids, siteCpPairs);
+				specimens = daoFactory.getSpecimenDao().getSpecimens(new SpecimenListCriteria().ids(ids));
 			}
 			
 			switch (opDetail.getOp()) {
@@ -377,8 +377,8 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 	private List<Specimen> getReadAccessSpecimens(Long specimenListId, List<Pair<Long, Long>> siteCpPairs) {
 		return getReadAccessSpecimens(specimenListId, null, siteCpPairs);
 	}
-	
-	private List<Specimen> getReadAccessSpecimens(Long specimenListId, List<String> specimenLabels, List<Pair<Long, Long>> siteCpPairs) {
+
+	private List<Specimen> getReadAccessSpecimens(Long specimenListId, List<Long> specimenIds, List<Pair<Long, Long>> siteCpPairs) {
 		if (siteCpPairs == null) {
 			siteCpPairs = AccessCtrlMgr.getInstance().getReadAccessSpecimenSiteCps();
 		}
@@ -389,7 +389,7 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 
 		SpecimenListCriteria crit = new SpecimenListCriteria()
 			.specimenListId(specimenListId)
-			.labels(specimenLabels)
+			.ids(specimenIds)
 			.siteCps(siteCpPairs);
 		return daoFactory.getSpecimenDao().getSpecimens(crit);
 	}
@@ -409,18 +409,14 @@ public class SpecimenListServiceImpl implements SpecimenListService {
 			return;
 		}
 		
-		List<String> labels = new ArrayList<String>();
-		for (Specimen specimen : specimenList.getSpecimens()) {
-			labels.add(specimen.getLabel());
-		}
-		
-		ensureValidSpecimens(labels, siteCpPairs);
+		List<Long> ids = specimenList.getSpecimens().stream().map(Specimen::getId).collect(Collectors.toList());
+		ensureValidSpecimens(ids, siteCpPairs);
 	}
 	
-	private void ensureValidSpecimens(List<String> specimenLabels,  List<Pair<Long, Long>> siteCpPairs) {
-		List<Specimen> specimens = getReadAccessSpecimens(null, specimenLabels, siteCpPairs);
-		if (specimens.size() != specimenLabels.size()) {
-			throw OpenSpecimenException.userError(SpecimenListErrorCode.INVALID_LABELS);
+	private void ensureValidSpecimens(List<Long> specimenIds,  List<Pair<Long, Long>> siteCpPairs) {
+		List<Specimen> specimens = getReadAccessSpecimens(null, specimenIds, siteCpPairs);
+		if (specimens.size() != specimenIds.size()) {
+			throw OpenSpecimenException.userError(SpecimenListErrorCode.INVALID_SPECIMENS);
 		}
 	}
 	

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.CollectionUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
@@ -127,18 +128,16 @@ public class SpecimenListFactoryImpl implements SpecimenListFactory {
 			return;
 		}
 		
-		List<String> labels = new ArrayList<String>();
-		if (!CollectionUtils.isEmpty(details.getSpecimens())) {
-			for (SpecimenInfo specimen : details.getSpecimens()) {
-				labels.add(specimen.getLabel());
-			}
+		List<Long> ids = new ArrayList<>();
+		if (CollectionUtils.isNotEmpty(details.getSpecimens())) {
+			ids = details.getSpecimens().stream().map(SpecimenInfo::getId).collect(Collectors.toList());
 		}
 		
-		if (labels != null && !labels.isEmpty()) {
-			SpecimenListCriteria crit = new SpecimenListCriteria().labels(labels);			
+		if (CollectionUtils.isNotEmpty(ids)) {
+			SpecimenListCriteria crit = new SpecimenListCriteria().ids(ids);
 			List<Specimen> specimens = daoFactory.getSpecimenDao().getSpecimens(crit);
-			if (specimens.size() != labels.size()) {
-				ose.addError(SpecimenListErrorCode.INVALID_LABELS);
+			if (specimens.size() != ids.size()) {
+				ose.addError(SpecimenListErrorCode.INVALID_SPECIMENS);
 			} else {
 				specimenList.setSpecimens(new HashSet<Specimen>(specimens));
 			}			

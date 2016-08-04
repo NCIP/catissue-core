@@ -293,7 +293,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
           var selectedSpecimens = [];
           getSelectedSpecimens(scope, 'specimens.no_specimens_for_specimen_list', true).map(
             function(specimen) {
-              selectedSpecimens.push({label: specimen.label});
+              selectedSpecimens.push({id: specimen.id});
             }
           );
 

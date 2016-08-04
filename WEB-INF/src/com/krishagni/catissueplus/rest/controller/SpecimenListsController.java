@@ -173,13 +173,12 @@ public class SpecimenListsController {
 	public ListSpecimensDetail updateListSpecimens(
 			@PathVariable("listId") Long listId,
 			@RequestParam(value = "operation", required = false, defaultValue = "UPDATE") String operation,
-			@RequestBody List<String> specimenLabels) {
+			@RequestBody List<Long> specimenIds) {
 		
 		UpdateListSpecimensOp opDetail = new UpdateListSpecimensOp();
 		opDetail.setListId(listId);
-		opDetail.setSpecimens(specimenLabels);
+		opDetail.setSpecimens(specimenIds);
 		opDetail.setOp(com.krishagni.catissueplus.core.biospecimen.events.UpdateListSpecimensOp.Operation.valueOf(operation));
-		
 
 		ResponseEvent<ListSpecimensDetail> resp = specimenListSvc.updateListSpecimens(getRequest(opDetail));
 		resp.throwErrorIfUnsuccessful();

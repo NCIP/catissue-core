@@ -11,7 +11,7 @@ public class UpdateListSpecimensOp {
 
 	private Long listId;
 	
-	private List<String> labels;
+	private List<Long> ids;
 	
 	private Operation op;
 
@@ -23,12 +23,12 @@ public class UpdateListSpecimensOp {
 		this.listId = listId;
 	}
 
-	public List<String> getSpecimens() {
-		return labels;
+	public List<Long> getSpecimens() {
+		return ids;
 	}
 
-	public void setSpecimens(List<String> labels) {
-		this.labels = labels;
+	public void setSpecimens(List<Long> ids) {
+		this.ids = ids;
 	}
 
 	public Operation getOp() {

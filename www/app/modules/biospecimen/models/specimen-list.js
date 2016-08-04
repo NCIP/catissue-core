@@ -10,8 +10,8 @@ angular.module('os.biospecimen.models.specimenlist', ['os.common.models'])
 
     function doSpecimenListOp(listId, specimens, op) {
       var params = "?operation=" + op;
-      var labels = specimens.map(function(specimen) { return specimen.label; });
-      return $http.put(getSpecimensUrl(listId) + params, labels).then(
+      var ids = specimens.map(function(specimen) { return specimen.id; });
+      return $http.put(getSpecimensUrl(listId) + params, ids).then(
         function(resp) {
           return resp.data;
         }

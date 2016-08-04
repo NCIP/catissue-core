@@ -11,7 +11,7 @@ angular.module('os.biospecimen.specimen.close', ['os.biospecimen.models'])
     function bulkClose() {
       var statusSpecs = [];
       angular.forEach(specimens, function(specimen) {
-        var statusSpec = {status: 'Closed', reason: $scope.closeSpec.reason, id: specimen.id, label: specimen.label};
+        var statusSpec = {status: 'Closed', reason: $scope.closeSpec.reason, id: specimen.id};
         statusSpecs.push(statusSpec);
       });
 

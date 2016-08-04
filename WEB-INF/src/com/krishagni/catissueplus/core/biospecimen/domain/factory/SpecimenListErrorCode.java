@@ -15,7 +15,7 @@ public enum SpecimenListErrorCode implements ErrorCode {
 	
 	OWNER_NOT_FOUND,
 	
-	INVALID_LABELS,
+	INVALID_SPECIMENS,
 	
 	INVALID_USERS_LIST;
 
