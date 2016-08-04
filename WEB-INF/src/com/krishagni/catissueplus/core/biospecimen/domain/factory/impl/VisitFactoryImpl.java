@@ -199,20 +199,9 @@ public class VisitFactoryImpl implements VisitFactory {
 	}
 
 	private void setVisitDate(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
-		CollectionProtocolRegistration cpr = visit.getRegistration();
-		if (cpr == null) {
-			return;
-		}
-		
-		Date regDate = cpr.getRegistrationDate();
 		Date visitDate = visitDetail.getVisitDate();
 		if (visitDate == null) {
 			visitDate = Calendar.getInstance().getTime();
-		}
-			
-		if (visitDate.before(regDate)) {
-			ose.addError(VisitErrorCode.INVALID_VISIT_DATE);
-			return;
 		}
 		
 		visit.setVisitDate(visitDate);
