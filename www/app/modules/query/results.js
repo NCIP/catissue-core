@@ -453,26 +453,9 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     function getSelectedSpecimens() {
-      var labelIndices = $scope.resultsCtx.labelIndices;
-      if (!labelIndices) {
-        return [];
-      }
-
-      var specimenLabels = [];
-      var selectedRows = $scope.selectedRows;
-      for (var i = 0; i < selectedRows.length; ++i) {
-        var selectedRow = selectedRows[i];
-        for (var j = 0; j < labelIndices.length; ++j) {
-          var label = selectedRow["col" + labelIndices[j]];
-          if (!label || specimenLabels.indexOf(label) != -1) {
-            continue;
-          }
-
-          specimenLabels.push(label);
-        }
-      }
-
-      return specimenLabels.map(function(label) { return {label: label} });
+      return $scope.selectedRows.map(function(row) {
+        return {id: row.hidden[0].$specimenId};
+      });
     };
 
     function loadCpCatalog(cp) {

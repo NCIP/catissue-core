@@ -34,7 +34,6 @@ angular.module('os.query.executor', [])
           drivingForm: 'Participant',
           runType: 'Data', 
           aql: aql, 
-          indexOf: 'Specimen.label',
           wideRowMode: wideRowMode || "OFF"
         };
         return $http.post(queryUrl, req).then(
