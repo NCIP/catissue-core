@@ -9,7 +9,7 @@ public class SpecimenQueryCriteria extends EntityQueryCriteria {
 		super(id);
 	}
 
-	public SpecimenQueryCriteria(String label, String cpShortTitle) {
+	public SpecimenQueryCriteria(String cpShortTitle, String label) {
 		super(label);
 		this.cpShortTitle = cpShortTitle;
 	}

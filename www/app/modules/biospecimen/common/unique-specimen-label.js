@@ -1,8 +1,11 @@
 angular.module('os.biospecimen.common.uniquespecimenlabel', [])
   .directive('osUniqueSpecimenLabel', function($q, Specimen) {
+    //
+    // Assumes CP is set in the scope
+    //
     return {
       require: 'ngModel',
-  
+
       link: function(scope, elm, attrs, ctrl) {
         var lastChecked = undefined;
         ctrl.$asyncValidators.uniqueSpecimenLabel = function(modelValue, viewValue) {
@@ -12,7 +15,7 @@ angular.module('os.biospecimen.common.uniquespecimenlabel', [])
 
           var def = $q.defer();
           lastChecked = modelValue;
-          Specimen.isUniqueLabel(modelValue).then(
+          Specimen.isUniqueLabel(scope.cp.shortTitle, modelValue).then(
             function(result) {
               if (result) {
                 def.resolve();

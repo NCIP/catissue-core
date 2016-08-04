@@ -78,8 +78,8 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       );
     };
 
-    Specimen.isUniqueLabel = function(label) {
-      return $http.head(Specimen.url(), {params: {label: label}}).then(
+    Specimen.isUniqueLabel = function(cpShortTitle, label) {
+      return $http.head(Specimen.url(), {params: {cpShortTitle: cpShortTitle, label: label}}).then(
         function(result) {
           return false;
         },

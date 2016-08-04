@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
@@ -29,6 +30,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenService;
+import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -61,15 +63,20 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public Boolean doesSpecimenExists(
-		@RequestParam(value = "label")
-		String label,
-
 		@RequestParam(value = "cpShortTitle", required = false)
-		String cpShortTitle) {
-		SpecimenQueryCriteria crit = new SpecimenQueryCriteria(label, cpShortTitle);
+		String cpShortTitle,
+
+		@RequestParam(value = "label")
+		String label) {
+
+		SpecimenQueryCriteria crit = new SpecimenQueryCriteria(cpShortTitle, label);
 		ResponseEvent<Boolean> resp = specimenSvc.doesSpecimenExists(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+		if (resp.getPayload() == true) {
+			return true;
+		}
+
+		throw OpenSpecimenException.userError(SpecimenErrorCode.NOT_FOUND, label);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
