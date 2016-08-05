@@ -153,6 +153,7 @@ public class MasterSpecimenImporter implements ObjectImporter<MasterSpecimenDeta
 	
 	private void createSpecimen(MasterSpecimenDetail detail) {
 		SpecimenDetail specimenDetail = new SpecimenDetail();
+		specimenDetail.setCpShortTitle(detail.getCpShortTitle());
 		specimenDetail.setVisitId(detail.getVisitId());
 		specimenDetail.setLabel(detail.getLabel());
 		specimenDetail.setSpecimenClass(detail.getSpecimenClass());
