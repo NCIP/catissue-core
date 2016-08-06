@@ -299,7 +299,7 @@ angular.module('os.query.results', ['os.query.models'])
       );
     }
 
-    function getAql(addLimit, addEntityIds) {
+    function getAql(addLimit, addPropIds) {
       var qc = $scope.queryCtx;
       return QueryUtil.getDataAql(
         qc.selectedFields, 
@@ -307,7 +307,7 @@ angular.module('os.query.results', ['os.query.models'])
         qc.exprNodes, 
         qc.reporting,
         addLimit,
-        addEntityIds);
+        addPropIds);
     }
 
     function removeSeparator(label)  {

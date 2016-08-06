@@ -24,10 +24,10 @@ angular.module('os.query.util', [])
       between:     {name: 'between',    desc: "", code: '&#xf1e0;',    symbol: 'between',     model: 'BETWEEN'}
     };
 
-    var entityIdFields = {
-      'Participant': {expr: 'Participant.id', caption: '$cprId'},
-      'Specimen': {expr: 'Specimen.id', caption: '$specimenId'},
-      'Specimen.parentSpecimen': {expr: 'Specimen.parentSpecimen.parentId', caption: '$parentSpecimenId'}
+    var propIdFields = {
+      'Participant.ppid': {expr: 'Participant.id', caption: '$cprId'},
+      'Specimen.label': {expr: 'Specimen.id', caption: '$specimenId'},
+      'Specimen.parentSpecimen.parentLabel': {expr: 'Specimen.parentSpecimen.parentId', caption: '$parentSpecimenId'}
     }
 
     var init = false;
@@ -245,8 +245,8 @@ angular.module('os.query.util', [])
       return query;
     };
 
-    function getSelectList(selectedFields, filtersMap, addEntityIds) {
-      var addedEntityIds = {}, result = "";
+    function getSelectList(selectedFields, filtersMap, addPropIds) {
+      var addedIds = {}, result = "";
 
       angular.forEach(selectedFields, function(field) {
         if (typeof field == "string") {
@@ -276,20 +276,19 @@ angular.module('os.query.util', [])
           }
         }
 
-        if (addEntityIds) {
-          for (var entity in entityIdFields) {
-            if (!entityIdFields.hasOwnProperty(entity)) {
+        if (addPropIds) {
+          for (var prop in propIdFields) {
+            if (!propIdFields.hasOwnProperty(prop)) {
               continue;
             }
 
-            if (field.indexOf(entity + '.') != 0 || addedEntityIds[entity]) {
+            var idField = propIdFields[prop];
+            if (field != prop || addedIds[idField.expr]) {
               continue;
             }
 
-            var idField = entityIdFields[entity];
             result += idField.expr + " as \"" + idField.caption + "\"" + ", ";
-
-            addedEntityIds[entity] = true;
+            addedIds[idField.expr] = true;
           }
         }
 
@@ -457,10 +456,10 @@ angular.module('os.query.util', [])
                 " where " + query;
     }
 
-    function getDataAql(selectedFields, filtersMap, exprNodes, reporting, addLimit, addEntityIds) {
-      addEntityIds = !!addEntityIds && (!reporting || reporting.type != 'crosstab');
+    function getDataAql(selectedFields, filtersMap, exprNodes, reporting, addLimit, addPropIds) {
+      addPropIds = !!addPropIds && (!reporting || reporting.type != 'crosstab');
 
-      var selectList = getSelectList(selectedFields, filtersMap, addEntityIds);
+      var selectList = getSelectList(selectedFields, filtersMap, addPropIds);
       var where = getWhereExpr(filtersMap, exprNodes);
       var rptExpr = getRptExpr(selectedFields, reporting);
       return "select " + selectList + 
