@@ -105,4 +105,14 @@
         activity_status = 'Active';
     </sql>
   </changeSet>
+  
+  <changeSet author="mdnasim" id="IT admin email address">
+    <sql>
+      call add_cfg_prop(
+        'email', 'it_admin_email_id',
+        'it_admin_email_id', 'it_admin_email_id_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

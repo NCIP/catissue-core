@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.common.events;
 
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class ResponseEvent<T> {
@@ -58,7 +59,15 @@ public class ResponseEvent<T> {
 	public boolean isSuccessful() {
 		return error == null;
 	}
-	
+
+	public boolean isSystemError() {
+		return error != null && error.getErrorType() == ErrorType.SYSTEM_ERROR;
+	}
+
+	public boolean isUnknownError() {
+		return error != null && error.getErrorType() == ErrorType.UNKNOWN_ERROR;
+	}
+
 	public static <P> ResponseEvent<P> response(P payload) {
 		return new ResponseEvent<P>(payload);
 	}

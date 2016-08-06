@@ -1877,6 +1877,8 @@
         "account_password_desc": "Password for the OpenSpecimen email account.",
         "admin_email_id": "Administrator Email Address",
         "admin_email_id_desc": "Email address of the OpenSpecimen administrator. Will be used to CC all emails.",
+        "it_admin_email_id": "IT Administrator Email Address",
+        "it_admin_email_id_desc": "Email address of the OpenSpecimen IT person, who will receive uncaught system errors notification",
         "auth_enabled": "Email Authentication",
         "auth_enabled_desc": "Enable if email authentication is required for your email server.",
         "server_host": "Email Server Hostname",

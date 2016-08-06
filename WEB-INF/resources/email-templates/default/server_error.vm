@@ -1,0 +1,57 @@
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Hello,
+                  <br><br>
+                  A brief description of the internal server error is given below:
+                  <br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td width="15%"> Username </td>
+                    <td> : $userName</td>
+                  </tr>
+                  <tr>
+                    <td width="15%"> File Name </td>
+                    <td> : $ste.getFileName()</td>
+                  </tr>
+                  <tr>
+                    <td width="15%"> Method Name </td>
+                    <td> : $ste.getMethodName()</td>
+                  </tr>
+                  <tr>
+                    <td width="15%"> Timestamp </td>
+                    <td> : $dateFmt.format($time)</td>
+                  </tr>
+                  <tr>
+                    <td width="15%" valign="top"> Exception </td>
+                    <td> : $exception</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    </tr>
+  </tbody>
+</table>

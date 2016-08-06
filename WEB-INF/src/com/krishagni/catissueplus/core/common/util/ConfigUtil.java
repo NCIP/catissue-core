@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.util;
 
 import java.io.File;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -37,7 +38,16 @@ public class ConfigUtil {
 	public String getAdminEmailId() {
 		return cfgSvc.getStrSetting("email", "admin_email_id", "");
 	}
-	
+
+	public String getItAdminEmailId() {
+		String emailId = cfgSvc.getStrSetting("email", "it_admin_email_id", "");
+		if (StringUtils.isBlank(emailId)) {
+			emailId = getAdminEmailId();
+		}
+
+		return emailId;
+	}
+
 	public String getDateFmt() {
 		return cfgSvc.getDateFormat();
 	}
