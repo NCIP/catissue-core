@@ -466,4 +466,14 @@
       referencedTableName="CATISSUE_SPECIMEN"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Truncate the comments to max length of 2000 characters" dbms="mysql">
+    <sql>
+      update catissue_specimen_coll_group set comments = SUBSTR(comments, 1, 2000)
+    </sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Modify data type for comments in visit table to keep it same for oracle/mysql" dbms="mysql">
+    <modifyDataType tableName="CATISSUE_SPECIMEN_COLL_GROUP" columnName="COMMENTS" newDataType="${text.type}(2000)" />
+  </changeSet>
 </databaseChangeLog>	

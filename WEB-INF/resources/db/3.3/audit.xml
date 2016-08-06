@@ -25,4 +25,8 @@
     <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="AVAILABLE"/>
     <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="isAvailable_MOD"/>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Modify length of comments column in visit audit table">
+    <modifyDataType tableName="CAT_SPECIMEN_COLL_GROUP_AUD" columnName="COMMENTS" newDataType="${text.type}(2000)" />
+  </changeSet>
 </databaseChangeLog>
