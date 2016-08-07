@@ -41,6 +41,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpReportSettingsDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
@@ -474,6 +475,93 @@ public class CollectionProtocolsController {
 		ResponseEvent<CpCatalogSettingDetail> resp = catalogSvc.deleteCpSetting(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
+	}
+
+	//
+	// Report settings API
+	//
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/report-settings")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CpReportSettingsDetail getReportSettings(@PathVariable("id") Long cpId) {
+		CpQueryCriteria crit = new CpQueryCriteria();
+		crit.setId(cpId);
+
+		RequestEvent<CpQueryCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<CpReportSettingsDetail> resp = cpSvc.getReportSettings(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value="/{id}/report-settings")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CpReportSettingsDetail updateReportSettings(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestBody
+			CpReportSettingsDetail detail) {
+
+		CollectionProtocolSummary cp = new CollectionProtocolSummary();
+		cp.setId(cpId);
+		detail.setCp(cp);
+
+		RequestEvent<CpReportSettingsDetail> req = new RequestEvent<>(detail);
+		ResponseEvent<CpReportSettingsDetail> resp = cpSvc.saveReportSettings(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value="/{id}/report-settings")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CpReportSettingsDetail deleteReportSettings(@PathVariable("id") Long cpId) {
+		CpQueryCriteria crit = new CpQueryCriteria();
+		crit.setId(cpId);
+
+		RequestEvent<CpQueryCriteria> req = new RequestEvent<>(crit);
+		ResponseEvent<CpReportSettingsDetail> resp = cpSvc.deleteReportSettings(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, Boolean> generateReport(@PathVariable("id") Long cpId) {
+		CpQueryCriteria crit = new CpQueryCriteria();
+		crit.setId(cpId);
+
+		ResponseEvent<Boolean> resp = cpSvc.generateReport(new RequestEvent<>(crit));
+		resp.throwErrorIfUnsuccessful();
+		return Collections.singletonMap("status", resp.getPayload());
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value="/{id}/report")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public void downloadCpReport(
+			@PathVariable("id")
+			Long cpId,
+
+			@RequestParam(value = "fileId", required = true)
+			String fileId,
+
+			HttpServletResponse httpResp)
+	throws IOException {
+		ResponseEvent<File> resp = cpSvc.getReportFile(cpId, fileId);
+		resp.throwErrorIfUnsuccessful();
+
+		File file = resp.getPayload();
+
+		String extn = ".csv";
+		int extnStartIdx = file.getName().lastIndexOf('.');
+		if (extnStartIdx != -1) {
+			extn = file.getName().substring(extnStartIdx);
+		}
+
+		Utility.sendToClient(httpResp, "CpReport" + extn, file);
 	}
 
 	//

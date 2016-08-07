@@ -106,7 +106,8 @@
       "reset_password": "Reset Password",
       "skip": "Skip",
       "back": "Back",
-      "list_view": "List View"
+      "list_view": "List View",
+      "disable": "Disable"
     }
   },
 
@@ -277,6 +278,29 @@
       "New": "Primary",
       "Derived": "Derivative",
       "Aliquot": "Aliquot"
+    },
+
+    "reporting": {
+      "title": "Report Settings",
+      "add": "Customise Report",
+      "disable": "Disable Report",
+      "enable": "Enable Report",
+      "disabled": "Reporting has been disabled for the CP. To enable, click on \"Enable Report\" button.",
+      "source_type": "Source Type",
+      "aql_type": "AQL",
+      "custom_type": "Custom",
+      "query": "Data Query",
+      "data_cfg": "Data Configuration",
+      "metrics": "Metrics Configuration",
+      "email_tmpl": "Email Template",
+      "recipients": "Report Recipients",
+      "query_help": "Saved query to use for exporting data into CSV file attached to CP report email",
+      "data_cfg_help": "JSON configuration of custom data source to use for creating file attached to CP report email",
+      "metrics_help": "JSON configuration of metrics to be displayed in email report",
+      "email_tmpl_help": "Template HTML markup to be used for composing CP report email",
+      "none": "Custom report settings not created for the CP. Create by clicking on \"Customise Report\" button.",
+      "malformed_metrics": "Metrics Configuration JSON syntax is incorrect.",
+      "malformed_data_cfg": "Data Configuration JSON is incorrect."
     }
   },
 
@@ -321,6 +345,9 @@
     "search_results": "Participant Search Result for {{key}}",
     "visits_count": "Visits",
     "specimens_count": "Specimens",
+    "generate_report": "Generate CP Report",
+    "report_gen_initiated": "Report for \"{{shortTitle}}\" is being prepared and will be emailed shortly to intended recipients",
+
     "consent": {
       "signed_form": "Signed Consent Form",
       "deleting_form": "Deleting Signed Consent Form",
@@ -1837,6 +1864,8 @@
         "cp_sop_doc_url_desc": "System level collection protocol SOP document link",
         "cp_sop_doc": "CP SOP Document",
         "cp_sop_doc_desc": "System level collection protocol SOP document",
+        "sys_cp_rpt_settings": "Default CP Report Settings",
+        "sys_cp_rpt_settings_desc": "System level collection protocol report settings. These settings are used when CP specific reporting settings are not specified",
         "sys_workflows": "System Workflows",
         "sys_workflows_desc": "System level participants and specimens list view configuration. This configuration is used when CP specific configuration is not specified",
         "pending_spmns_disp_interval": "Anticipated Specimens Display Interval",

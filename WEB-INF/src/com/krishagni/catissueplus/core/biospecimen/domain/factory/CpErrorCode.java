@@ -77,7 +77,13 @@ public enum CpErrorCode implements ErrorCode {
 
 	CANNOT_MERGE_FMT_DIFFERS,
 	
-	REF_ENTITY_FOUND;
+	REF_ENTITY_FOUND,
+
+	REQUIRED,
+
+	RPT_DISABLED,
+
+	RPT_FILE_NOT_FOUND;
 	
 	@Override
 	public String code() {

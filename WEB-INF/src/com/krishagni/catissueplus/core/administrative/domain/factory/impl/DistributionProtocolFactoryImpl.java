@@ -172,7 +172,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 
 		SavedQuery report = deDaoFactory.getSavedQueryDao().getQuery(detail.getReport().getId());
 		if (report == null) {
-			ose.addError(SavedQueryErrorCode.NOT_FOUND);
+			ose.addError(SavedQueryErrorCode.NOT_FOUND, detail.getReport().getId());
 			return;
 		}
 

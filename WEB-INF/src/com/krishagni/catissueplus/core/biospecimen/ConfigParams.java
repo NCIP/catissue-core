@@ -40,4 +40,6 @@ public class ConfigParams {
 	public static final String CP_SOP_DOC                = "cp_sop_doc";
 
 	public static final String SYS_WORKFLOWS             = "sys_workflows";
+
+	public static final String SYS_RPT_SETTINGS          = "sys_cp_rpt_settings";
 }

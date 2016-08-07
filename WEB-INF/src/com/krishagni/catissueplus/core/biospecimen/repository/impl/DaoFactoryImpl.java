@@ -33,6 +33,7 @@ import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.auth.repository.impl.AuthDaoImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
+import com.krishagni.catissueplus.core.biospecimen.repository.CpReportSettingsDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.LabelPrintJobDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
@@ -235,6 +236,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public UpgradeLogDao getUpgradeLogDao() {
 		UpgradeLogDaoImpl dao = new UpgradeLogDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public CpReportSettingsDao getCpReportSettingsDao() {
+		CpReportSettingsDaoImpl dao = new CpReportSettingsDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

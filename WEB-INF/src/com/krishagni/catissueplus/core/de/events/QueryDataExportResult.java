@@ -1,10 +1,14 @@
 package com.krishagni.catissueplus.core.de.events;
 
 
+import java.util.concurrent.Future;
+
 public class QueryDataExportResult {
 	private String dataFile;
 	
 	private boolean completed;
+
+	private Future<Boolean> promise;
 
 	public String getDataFile() {
 		return dataFile;
@@ -21,11 +25,20 @@ public class QueryDataExportResult {
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
 	}
-	
-	public static QueryDataExportResult create(String dataFile, boolean completed) {
+
+	public Future<Boolean> getPromise() {
+		return promise;
+	}
+
+	public void setPromise(Future<Boolean> promise) {
+		this.promise = promise;
+	}
+
+	public static QueryDataExportResult create(String dataFile, boolean completed, Future<Boolean> promise) {
 		QueryDataExportResult resp = new QueryDataExportResult();
 		resp.setCompleted(completed);
 		resp.setDataFile(dataFile);
+		resp.setPromise(promise);
 		return resp;
 	}
 }

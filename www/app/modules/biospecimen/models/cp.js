@@ -125,7 +125,28 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
     }
 
     CollectionProtocol.prototype.deleteCatalogSetting = function() {
-      return $http['delete'](CollectionProtocol.url() + this.$id() + '/catalog-settings');
+      return $http.delete(CollectionProtocol.url() + this.$id() + '/catalog-settings');
+    }
+
+    CollectionProtocol.prototype.getReportSettings = function() {
+      return $http.get(CollectionProtocol.url() + this.$id() + '/report-settings').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    CollectionProtocol.prototype.saveReportSettings = function(setting) {
+      var payload = angular.extend({cp: {id: this.$id()}}, setting);
+      return $http.put(CollectionProtocol.url() + this.$id() + '/report-settings', payload).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    CollectionProtocol.prototype.deleteReportSettings = function() {
+      return $http.delete(CollectionProtocol.url() + this.$id() + '/report-settings');
     }
 
     CollectionProtocol.prototype.getForms = function(entityTypes) {
@@ -175,6 +196,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
         }
       );
     };
+
+    CollectionProtocol.prototype.generateReport = function() {
+      return $http.post(CollectionProtocol.url() + this.$id() + '/report').then(
+        function(resp) {
+          return resp.data;
+        }
+      );;
+    }
 
     CollectionProtocol.prototype.$remove = function() {
       return $http['delete'](CollectionProtocol.url() + this.$id() + '?forceDelete=true').then(

@@ -105,6 +105,51 @@
         activity_status = 'Active';
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Default system level CP report settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'sys_cp_rpt_settings',
+        'sys_cp_rpt_settings', 'sys_cp_rpt_settings_desc',
+        'FILE', 'classpath:/com/krishagni/catissueplus/core/biospecimen/cp-report-settings.json'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Creating scheduled job to generate CP reports on monthly basis" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn,
+         rt_args_provided, rt_args_help_text)
+      values
+        (default, 'CP Reports Generator', @userId, now(), null, 10, 1, null,
+         1, 'Active', 'MONTHLY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpReportTask',
+         0, null)
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Creating scheduled job to generate CP reports on monthly basis" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        userId number;
+      begin
+        select identifier into userId from catissue_user where login_name like '$system';
+
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn,
+           rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'CP Reports Generator', userId, SYSDATE, null, 10, 1, null,
+           1, 'Active', 'MONTHLY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpReportTask',
+           0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
   
   <changeSet author="mdnasim" id="IT admin email address">
     <sql>

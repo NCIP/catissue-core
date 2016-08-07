@@ -69,4 +69,6 @@ public interface DaoFactory {
 	public SpecimenRequestDao getSpecimenRequestDao();
 	
 	public UpgradeLogDao getUpgradeLogDao();
+
+	public CpReportSettingsDao getCpReportSettingsDao();
 } 

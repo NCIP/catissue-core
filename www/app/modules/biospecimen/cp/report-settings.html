@@ -1,0 +1,201 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span translate="cp.reporting.title">
+      Report Settings
+    </span>
+    <span class="os-btns" show-if-allowed="cpResource.updateOpts"
+      ng-if="rptSettingsCtx.view != 'edit_settings' && rptSettingsCtx.setting.enabled">
+      <button class="default" ng-click="showEditForm()">
+        <span>
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </span>
+      </button>
+      <button class="default" ng-click="delete()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+      <button class="default" ng-click="disableReport()">
+        <span>
+          <span class="fa fa-ban"></span>
+          <span translate="common.buttons.disable">Disable</span>
+        </span>
+      </button>
+    </span>
+  </div>
+  <div class="panel-body" ng-switch on="rptSettingsCtx.view">
+    <div ng-switch-when="edit_settings">
+      <form name="rptSettingsForm" os-form-validator="rptSettingsForm" class="form-horizontal" novalidate>
+        <div class="form-group">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.source_type">Data Source</span>
+          </label>
+          <div class="col-xs-6">
+            <label class="radio-inline">
+              <input type="radio" name="sourceType" ng-model="rptSettingsCtx.sourceType" ng-value="'AQL'">
+              <span translate="cp.reporting.aql_type">AQL</span>
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="sourceType" ng-model="rptSettingsCtx.sourceType" ng-value="'CUSTOM'">
+              <span translate="cp.reporting.custom_type">Custom</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="rptSettingsCtx.sourceType == 'AQL' || !rptSettingsCtx.sourceType">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.query">Data Query</span>
+          </label>
+          <div class="col-xs-6">
+            <os-select name="query" class="form-control" ng-model="rptSettingsCtx.setting.dataQuery"
+              list="rptSettingsCtx.queryList.queries" refresh="loadQueries"
+              display-prop="title" placeholder="{{'cp.reporting.query_help' | translate}}">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group" ng-if="rptSettingsCtx.sourceType == 'CUSTOM'">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.data_cfg">Data Configuration</span>
+          </label>
+          <div class="col-xs-6">
+            <textarea name="dataCfg" class="form-control" ng-model="rptSettingsCtx.setting.dataCfg"
+              rows="4" placeholder="{{'cp.reporting.data_cfg_help' | translate}}">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.metrics">Metrics Configuration</span>
+          </label>
+          <div class="col-xs-6">
+            <textarea name="metricsCfg" class="form-control" ng-model="rptSettingsCtx.setting.metricsCfg"
+              rows="4" placeholder="{{'cp.reporting.metrics_help' | translate}}">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.email_tmpl">Email Template</span>
+          </label>
+          <div class="col-xs-6">
+            <textarea name="emailTmpl" class="form-control" ng-model="rptSettingsCtx.setting.emailTmpl"
+              rows="4" placeholder="{{'cp.reporting.email_tmpl_help' | translate}}">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-xs-3">
+            <span translate="cp.reporting.recipients">Report Recipients</span>
+          </label>
+          <div class="col-xs-6">
+            <os-users name="rcpts" ng-model="rptSettingsCtx.setting.recipients"
+              multiple placeholder="{{'cp.reporting.recipients' | translate}}">
+            </os-users>
+          </div>
+        </div>
+
+        <div class="os-divider"></div>
+
+        <div class="form-group">
+          <div class="col-xs-offset-3 col-xs-6">
+            <button class="btn btn-primary" os-form-submit="save()">
+              <span translate="common.buttons.save">Save</span>
+            </button>
+            <button class="btn os-btn-text" ng-click="revertEdit()">
+              <span translate="common.buttons.cancel">Cancel</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-switch-default ng-switch on="!!cp.reportSettings.id && cp.reportSettings.enabled">
+      <div ng-switch-when="true">
+        <div class="os-section" ng-if="!cp.reportSettings.dataCfg">
+          <h3 class="os-sub-section-title" translate="cp.reporting.query">Data Query</h3>
+          <span class="value value-md" ng-switch="!!cp.reportSettings.dataQuery.id">
+            <a ng-switch-when="true" ui-sref="query-addedit({queryId: cp.reportSettings.dataQuery.id})">
+              <span>{{cp.reportSettings.dataQuery.title}}</span>
+            </a>
+            <span ng-switch-default translate="common.not_specified">
+              Not Specified
+            </span>
+          </span>
+        </div>
+
+        <div class="os-section" ng-if="!!cp.reportSettings.dataCfg">
+          <h3 class="os-sub-section-title" translate="cp.reporting.data_cfg">Data Configuration</h3>
+          <span class="value value-md">
+            <pre>{{cp.reportSettings.dataCfg | json}}</pre>
+          </span>
+        </div>
+
+        <div class="os-section os-line-section">
+          <strong class="key key-sm">
+            <span translate="cp.reporting.metrics">Metrics</span>
+            <span>&nbsp;</span>
+          </strong>
+          <span class="value value-md" ng-switch on="!!cp.reportSettings.metricsCfg">
+            <pre ng-switch-when="true">{{cp.reportSettings.metricsCfg | json}}</pre>
+            <span ng-switch-default translate="common.not_specified">Not Specified</span>
+          </span>
+        </div>
+
+        <div class="os-section os-line-section">
+          <strong class="key key-sm">
+            <span translate="cp.reporting.email_tmpl">Email Template</span>
+            <span>&nbsp;</span>
+          </strong>
+          <span class="value value-md" ng-switch on="!!cp.reportSettings.emailTmpl">
+            <pre ng-switch-when="true">{{cp.reportSettings.emailTmpl}}</pre>
+            <span ng-switch-default translate="common.not_specified">Not Specified</span>
+          </span>
+        </div>
+
+        <div class="os-section os-line-section">
+          <strong class="key key-sm">
+            <span translate="cp.reporting.recipients">Recipients</span>
+            <span>&nbsp;</span>
+          </strong>
+          <span class="value value-md">{{cp.reportSettings.recipients | osUserDisplayName | osNoValue}}</span>
+        </div>
+      </div>
+      <div ng-switch-default ng-switch on="!cp.reportSettings.id">
+        <div ng-switch-when="true">
+          <div class="alert alert-warning">
+            <span translate="cp.reporting.none">
+              Custom report settings not created for the CP. Create one by clicking on Add button.
+            </span>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" ng-click="showEditForm()">
+              <span class="fa fa-plus"></span>
+              <span translate="cp.reporting.add">Customise Report</span>
+            </button>
+            <button class="btn btn-default" ng-click="disableReport()">
+              <span class="fa fa-ban"></span>
+              <span translate="cp.reporting.disable">Disable Report</span>
+            </button>
+          </div>
+        </div>
+        <div ng-switch-default>
+          <div class="alert alert-warning">
+            <span translate="cp.reporting.disabled">
+              Reporting has been disabled for the CP. To enable, click \"Enable Report\" button.
+            </span>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" ng-click="enableReport()">
+              <span class="fa fa-check"></span>
+              <span translate="cp.reporting.enable">Enable Report</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

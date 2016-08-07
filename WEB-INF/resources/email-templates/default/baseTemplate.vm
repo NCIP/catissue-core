@@ -12,7 +12,11 @@
             <tbody>
               <tr>
                 <td style="border: 1px solid #ccc; border-radius: 5px; background-color:#fff; padding: 15px;">
-                  #parse( $template )
+                  #if ($templateContent)
+                    #evaluate ($templateContent)
+                  #else
+                    #parse( $template )
+                  #end
                 </td>
               </tr>
             </tbody>

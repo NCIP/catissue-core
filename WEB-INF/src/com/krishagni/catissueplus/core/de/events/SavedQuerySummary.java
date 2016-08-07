@@ -57,7 +57,11 @@ public class SavedQuerySummary {
 		this.lastModifiedOn = lastModifiedOn;
 	}
 	
-	public static SavedQuerySummary fromSavedQuery(SavedQuery savedQuery){
+	public static SavedQuerySummary fromSavedQuery(SavedQuery savedQuery) {
+		if (savedQuery == null) {
+			return null;
+		}
+
 		SavedQuerySummary querySummary = new SavedQuerySummary();
 		querySummary.setId(savedQuery.getId());
 		querySummary.setTitle(savedQuery.getTitle());

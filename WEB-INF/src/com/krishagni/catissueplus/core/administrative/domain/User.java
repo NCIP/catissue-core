@@ -338,6 +338,10 @@ public class User extends BaseEntity implements UserDetails {
 		return name.toString();
 	}
 
+	public boolean isSysUser() {
+		return SYS_USER.equals(getLoginName());
+	}
+
 	private boolean isValidPasswordPattern(String password) {
 		return pattern.matcher(password).matches();
 	}

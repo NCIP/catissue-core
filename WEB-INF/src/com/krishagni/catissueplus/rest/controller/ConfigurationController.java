@@ -96,7 +96,7 @@ public class ConfigurationController {
 
 			HttpServletResponse httpResp) throws IOException {
 
-		FileDetail detail = cfgSvc.getFileDetail(moduleName, propertyName, null);
+		FileDetail detail = cfgSvc.getFileDetail(moduleName, propertyName);
 		if (detail == null || detail.getFileIn() == null) {
 			return;
 		}

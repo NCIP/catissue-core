@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.AliquotSpecimensRequirement;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolEventDetail;
@@ -15,6 +16,8 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpReportSettingsDetail;
+import com.krishagni.catissueplus.core.common.events.ReportSettingsDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
@@ -111,6 +114,19 @@ public interface CollectionProtocolService {
 	public ResponseEvent<Integer> getSrSpecimensCount(RequestEvent<Long> req);
 
 	//
+	// CP reports API
+	//
+	public ResponseEvent<CpReportSettingsDetail> getReportSettings(RequestEvent<CpQueryCriteria> req);
+
+	public ResponseEvent<CpReportSettingsDetail> saveReportSettings(RequestEvent<CpReportSettingsDetail> req);
+
+	public ResponseEvent<CpReportSettingsDetail> deleteReportSettings(RequestEvent<CpQueryCriteria> req);
+
+	public ResponseEvent<Boolean> generateReport(RequestEvent<CpQueryCriteria> req);
+
+	public ResponseEvent<File> getReportFile(Long cpId, String fileId);
+
+	//
 	// Workflow API
 	//
 	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req);
@@ -154,4 +170,11 @@ public interface CollectionProtocolService {
 	public ResponseEvent<ListDetail> getList(RequestEvent<Map<String, Object>> req);
 
 	public ResponseEvent<Integer> getListSize(RequestEvent<Map<String, Object>> req);
+
+
+	interface DataSource {
+		public Object getMetric(CollectionProtocol cp, Map<String, Object> input);
+
+		public File getDataFile(CollectionProtocol cp, Map<String, Object> input);
+	}
 }

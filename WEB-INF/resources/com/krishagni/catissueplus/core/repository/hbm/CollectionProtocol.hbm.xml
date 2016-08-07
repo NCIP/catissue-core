@@ -148,6 +148,13 @@
         cp.identifier
     </sql-query>
 
+    <query name="getAllCpIds">
+      select
+        cp.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+    </query>
+
     <query name="getCpeByCpIdAndEventLabel">
       select
         cpe

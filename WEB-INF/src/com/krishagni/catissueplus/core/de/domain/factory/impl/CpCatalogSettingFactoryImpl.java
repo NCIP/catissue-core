@@ -78,7 +78,7 @@ public class CpCatalogSettingFactoryImpl implements CpCatalogSettingFactory {
 		
 		SavedQuery savedQuery = deDaoFactory.getSavedQueryDao().getQuery(detail.getQuery().getId());
 		if (savedQuery == null) {
-			ose.addError(SavedQueryErrorCode.NOT_FOUND);
+			ose.addError(SavedQueryErrorCode.NOT_FOUND, detail.getQuery().getId());
 			return;
 		}
 		

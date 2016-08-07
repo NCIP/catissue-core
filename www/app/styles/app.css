@@ -630,6 +630,11 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   margin-bottom: 20px;
 }
 
+.os-section pre {
+  background: transparent;
+  border: none;
+}
+
 .os-line-section .os-btn-section-collapse {
   padding-top: 3px;
 } 

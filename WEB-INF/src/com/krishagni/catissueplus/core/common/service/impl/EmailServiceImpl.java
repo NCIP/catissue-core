@@ -105,31 +105,12 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 
 	@Override
 	public boolean sendEmail(String emailTmplKey, String[] to, String[] bcc, File[] attachments, Map<String, Object> props) {
-		boolean emailEnabled = cfgSvc.getBoolSetting("notifications", "email_" + emailTmplKey, true);
-		if(!emailEnabled) {
-			return false;
-		}
-		
-		String adminEmailId = getAdminEmailId();
+		return sendEmail(emailTmplKey, null, to, bcc, attachments, props);
+	}
 
-		props.put("template", getTemplate(emailTmplKey));
-		props.put("footer", getFooterTmpl());
-		props.put("appUrl", getAppUrl());
-		props.put("adminEmailAddress", adminEmailId);
-		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
-		props.put("dateFmt", new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()));
-		String subject = getSubject(emailTmplKey, (String[]) props.get("$subject"));
-		String content = templateService.render(getBaseTmpl(), props);
-			
-		Email email = new Email();
-		email.setSubject(subject);
-		email.setBody(content);
-		email.setToAddress(to);
-		email.setCcAddress(new String[] {adminEmailId});
-		email.setBccAddress(bcc);
-		email.setAttachments(attachments);
-
-		return sendEmail(email);
+	@Override
+	public boolean sendEmail(String emailTmplKey, String emailTmpl, String[] to, Map<String, Object> props) {
+		return sendEmail(emailTmplKey, emailTmpl, to, null, null, props);
 	}
 
 	@Override
@@ -165,6 +146,39 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 			return false;
 		}
 		
+	}
+
+	private boolean sendEmail(String tmplKey, String tmplContent, String[] to, String[] bcc, File[] attachments, Map<String, Object> props) {
+		boolean emailEnabled = cfgSvc.getBoolSetting("notifications", "email_" + tmplKey, true);
+		if (!emailEnabled) {
+			return false;
+		}
+
+		String adminEmailId = getAdminEmailId();
+
+		if (StringUtils.isNotBlank(tmplContent)) {
+			props.put("templateContent", tmplContent);
+		} else {
+			props.put("template", getTemplate(tmplKey));
+		}
+
+		props.put("footer", getFooterTmpl());
+		props.put("appUrl", getAppUrl());
+		props.put("adminEmailAddress", adminEmailId);
+		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
+		props.put("dateFmt", new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()));
+		String subject = getSubject(tmplKey, (String[]) props.get("$subject"));
+		String content = templateService.render(getBaseTmpl(), props);
+
+		Email email = new Email();
+		email.setSubject(subject);
+		email.setBody(content);
+		email.setToAddress(to);
+		email.setCcAddress(new String[] {adminEmailId});
+		email.setBccAddress(bcc);
+		email.setAttachments(attachments);
+
+		return sendEmail(email);
 	}
 	
 	private String getSubject(String subjKey, String[] subjParams) {

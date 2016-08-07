@@ -41,6 +41,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpReportSettings;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig.Workflow;
 import com.krishagni.catissueplus.core.biospecimen.domain.DerivedSpecimenRequirement;
@@ -49,6 +50,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CollectionProtocolFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpReportSettingsFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
@@ -63,6 +65,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ConsentTierOp.OP;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CopyCpeOpDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpReportSettingsDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CpWorkflowCfgDetail.WorkflowDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
@@ -124,6 +127,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	private CpWorkflowConfig sysWorkflows;
 
+	private CpReportSettingsFactory rptSettingsFactory;
+
 	private Map<String, Function<Map<String, Object>, ListConfig>> listConfigFns = new HashMap<>();
 	
 	public void setTaskExecutor(ThreadPoolTaskExecutor taskExecutor) {
@@ -160,6 +165,10 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
+	}
+
+	public void setRptSettingsFactory(CpReportSettingsFactory rptSettingsFactory) {
+		this.rptSettingsFactory = rptSettingsFactory;
 	}
 
 	public CollectionProtocolServiceImpl() {
@@ -922,7 +931,110 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CpReportSettingsDetail> getReportSettings(RequestEvent<CpQueryCriteria> req) {
+		try {
+			CpReportSettings settings = getReportSetting(req.getPayload());
+			if (settings == null) {
+				return ResponseEvent.response(null);
+			}
+
+			AccessCtrlMgr.getInstance().ensureReadCpRights(settings.getCp());
+			return ResponseEvent.response(CpReportSettingsDetail.from(settings));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CpReportSettingsDetail> saveReportSettings(RequestEvent<CpReportSettingsDetail> req) {
+		try {
+			CpReportSettings settings = rptSettingsFactory.createSettings(req.getPayload());
+			CollectionProtocol cp = settings.getCp();
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(cp);
+
+			CpReportSettings existing = daoFactory.getCpReportSettingsDao().getByCp(cp.getId());
+			if (existing == null) {
+				existing = settings;
+			} else {
+				existing.update(settings);
+			}
+
+			daoFactory.getCpReportSettingsDao().saveOrUpdate(existing);
+			return ResponseEvent.response(CpReportSettingsDetail.from(existing));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CpReportSettingsDetail> deleteReportSettings(RequestEvent<CpQueryCriteria> req) {
+		try {
+			CpReportSettings settings = getReportSetting(req.getPayload());
+			if (settings == null) {
+				return ResponseEvent.response(null);
+			}
+
+			AccessCtrlMgr.getInstance().ensureUpdateCpRights(settings.getCp());
+			settings.delete();
+			return ResponseEvent.response(CpReportSettingsDetail.from(settings));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> generateReport(RequestEvent<CpQueryCriteria> req) {
+		try {
+			CpQueryCriteria crit = req.getPayload();
+			CollectionProtocol cp = getCollectionProtocol(crit.getId(), crit.getTitle(), crit.getShortTitle());
+			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
+
+			CpReportSettings cpSettings = daoFactory.getCpReportSettingsDao().getByCp(cp.getId());
+			if (cpSettings != null && !cpSettings.isEnabled()) {
+				return ResponseEvent.userError(CpErrorCode.RPT_DISABLED, cp.getShortTitle());
+			}
+
+			taskExecutor.execute(new CpReportTask(cp.getId()));
+			return ResponseEvent.response(true);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<File> getReportFile(Long cpId, String fileId) {
+		try {
+			CollectionProtocol cp = getCollectionProtocol(cpId, null, null);
+			AccessCtrlMgr.getInstance().ensureReadCpRights(cp);
+
+			File file = new CpReportGenerator().getDataFile(cpId, fileId);
+			if (file == null) {
+				return ResponseEvent.userError(CpErrorCode.RPT_FILE_NOT_FOUND);
+			}
+
+			return ResponseEvent.response(file);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<CpWorkflowCfgDetail> getWorkflows(RequestEvent<Long> req) {
@@ -1621,6 +1733,17 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 		String dir = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, ConfigParams.CP_SOP_DOCS_DIR, defDir);
 		new File(dir).mkdirs();
 		return dir + File.separator;
+	}
+
+	private CpReportSettings getReportSetting(CpQueryCriteria crit) {
+		CpReportSettings settings = null;
+		if (crit.getId() != null) {
+			settings = daoFactory.getCpReportSettingsDao().getByCp(crit.getId());
+		} else if (StringUtils.isNotBlank(crit.getShortTitle())) {
+			settings = daoFactory.getCpReportSettingsDao().getByCp(crit.getShortTitle());
+		}
+
+		return settings;
 	}
 
 	private ListConfig getSpecimenListConfig(Map<String, Object> listReq) {

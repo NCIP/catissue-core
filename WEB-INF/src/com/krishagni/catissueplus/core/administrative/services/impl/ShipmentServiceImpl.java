@@ -220,7 +220,7 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		
 		SavedQuery query = deDaoFactory.getSavedQueryDao().getQuery(new Long(queryId));
 		if (query == null) {
-			return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+			return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND, queryId);
 		}
 		
 		return new ResponseEvent<QueryDataExportResult>(exportShipmentReport(shipment, query));

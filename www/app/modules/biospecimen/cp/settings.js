@@ -16,6 +16,13 @@ angular.module('os.biospecimen.cp')
       key: 'cp.catalog.title',
       caption: ''
     });
+
+    settings.addItem({
+      name: 'ReportSettings',
+      state: 'cp-detail.settings.reporting',
+      key: 'cp.reporting.title',
+      caption: ''
+    });
     
     return {
       getSettings: settings.getItems,

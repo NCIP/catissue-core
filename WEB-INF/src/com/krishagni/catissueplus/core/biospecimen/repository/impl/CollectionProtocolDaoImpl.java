@@ -68,7 +68,12 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				
 		return cpList;
 	}
-	
+
+	@Override
+	public List<Long> getAllCpIds() {
+		return getCurrentSession().getNamedQuery(GET_ALL_CP_IDS).list();
+	}
+
 	@Override
 	public Long getCpCount(CpListCriteria criteria) {
 		Number count = ((Number)getCpQuery(criteria)
@@ -408,6 +413,8 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String FQN = CollectionProtocol.class.getName();
 	
 	private static final String GET_PARTICIPANT_N_SPECIMEN_CNT = FQN + ".getParticipantAndSpecimenCount";
+
+	private static final String GET_ALL_CP_IDS = FQN + ".getAllCpIds";
 	
 	private static final String GET_CPE_BY_CP_AND_LABEL = FQN + ".getCpeByCpIdAndEventLabel";
 	

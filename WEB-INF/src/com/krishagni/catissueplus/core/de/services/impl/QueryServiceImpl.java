@@ -210,7 +210,7 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			SavedQuery savedQuery = daoFactory.getSavedQueryDao().getQuery(req.getPayload());
 			if (savedQuery == null) {
-				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND, req.getPayload());
 			}
 			
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
@@ -261,7 +261,7 @@ public class QueryServiceImpl implements QueryService {
 			SavedQuery savedQuery = getSavedQuery(queryDetail);
 			SavedQuery existing = daoFactory.getSavedQueryDao().getQuery(queryDetail.getId());
 			if (existing == null) {
-				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND, queryDetail.getId());
 			}
 			
 			User user = AuthUtil.getCurrentUser();
@@ -290,7 +290,7 @@ public class QueryServiceImpl implements QueryService {
 			Long queryId = req.getPayload();
 			SavedQuery query = daoFactory.getSavedQueryDao().getQuery(queryId);
 			if (query == null) {
-				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND, queryId);
 			}
 
 			User user = AuthUtil.getCurrentUser();
@@ -786,7 +786,7 @@ public class QueryServiceImpl implements QueryService {
 			Long queryId = req.getPayload();			
 			SavedQuery query = queryDao.getQuery(queryId);			
 			if (query == null) {
-				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND);
+				return ResponseEvent.userError(SavedQueryErrorCode.NOT_FOUND, queryId);
 			}
 			
 			User user = AuthUtil.getCurrentUser();
@@ -843,6 +843,10 @@ public class QueryServiceImpl implements QueryService {
 				private void sendEmail() {
 					try {
 						User user = userDao.getById(AuthUtil.getCurrentUser().getId());
+						if (user.isSysUser()) {
+							return;
+						}
+
 						SavedQuery savedQuery = null;
 						Long queryId = opDetail.getSavedQueryId();
 						if (queryId != null) {
@@ -864,7 +868,7 @@ public class QueryServiceImpl implements QueryService {
 				completed = false;
 			}
 
-			return QueryDataExportResult.create(filename, completed);
+			return QueryDataExportResult.create(filename, completed, result);
 		} catch (OpenSpecimenException ose) {
 			throw ose;
 		} catch (Exception e) {
@@ -942,12 +946,17 @@ public class QueryServiceImpl implements QueryService {
 		boolean countQuery = op.getRunType().equals("Count");
 		User user = AuthUtil.getCurrentUser();
 
+		String rootForm = cprForm;
+		if (StringUtils.isNotBlank(op.getDrivingForm())) {
+			rootForm = op.getDrivingForm();
+		}
+
 		Query query = Query.createQuery()
 			.wideRowMode(WideRowMode.valueOf(op.getWideRowMode()))
 			.ic(true)
 			.dateFormat(ConfigUtil.getInstance().getDeDateFmt())
 			.timeFormat(ConfigUtil.getInstance().getTimeFmt());
-		query.compile(cprForm, op.getAql());
+		query.compile(rootForm, op.getAql());
 
 		String aql = op.getAql();
 		if (query.isPhiResult(true) && !AuthUtil.isAdmin()) {
@@ -958,7 +967,7 @@ public class QueryServiceImpl implements QueryService {
 			aql = getAqlWithCpIdInSelect(user, countQuery, aql);
 		}
 
-		query.compile(cprForm, aql, getRestriction(user, op.getCpId()));
+		query.compile(rootForm, aql, getRestriction(user, op.getCpId()));
 		return query;
 	}
 

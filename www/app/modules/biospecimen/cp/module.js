@@ -175,5 +175,24 @@ angular.module('os.biospecimen.cp',
         },
         controller: 'CpCatalogSettingsCtrl'
       })
+      .state('cp-detail.settings.reporting', {
+        url: '/reporting',
+        templateUrl: 'modules/biospecimen/cp/report-settings.html',
+        parent: 'cp-detail.settings',
+        resolve: {
+          reportSettings: function(cp) {
+            if (cp.reportSettings) {
+              return cp.reportSettings;
+            }
+
+            return cp.getReportSettings().then(
+              function(settings) {
+                cp.reportSettings = settings || {enabled: true};
+              }
+            );
+          }
+        },
+        controller: 'CpReportSettingsCtrl'
+      })
     });
   

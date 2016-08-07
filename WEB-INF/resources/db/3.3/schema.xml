@@ -466,6 +466,77 @@
       referencedTableName="CATISSUE_SPECIMEN"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="CP report settings">
+    <createTable tableName="OS_CP_REPORT_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ENABLED" type="${boolean.type}" defaultValue="1">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATA_QUERY_ID" type="${int.type}"/>
+
+      <column name="CONFIG" type="${clob.type}"/>
+
+      <column name="EMAIL_TMPL" type="${clob.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report settings CP">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_SETTINGS_CP_ID"
+      baseTableName="OS_CP_REPORT_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report settings query">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_SETTINGS_QUERY_ID"
+      baseTableName="OS_CP_REPORT_SETTINGS"
+      baseColumnNames="DATA_QUERY_ID"
+      referencedTableName="CATISSUE_SAVED_QUERIES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP report recipients">
+    <createTable tableName="OS_CP_REPORT_RCPTS">
+      <column name="REPORT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on recipients' report ID">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_RCPTS_RPT_ID"
+      baseTableName="OS_CP_REPORT_RCPTS"
+      baseColumnNames="REPORT_ID"
+      referencedTableName="OS_CP_REPORT_SETTINGS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report recipients' user ID">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_RCPTS_USR_ID"
+      baseTableName="OS_CP_REPORT_RCPTS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
   
   <changeSet author="nmarwaha" id="Truncate the comments to max length of 2000 characters" dbms="mysql">
     <sql>

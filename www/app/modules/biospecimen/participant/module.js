@@ -99,7 +99,7 @@ angular.module('os.biospecimen.participant',
       })
       .state('cp-list-view-root', {
         templateUrl: 'modules/biospecimen/participant/list-view.html',
-        controller: function($scope, cp, defSopDoc, defSopUrl, spmnListCfg) {
+        controller: function($scope, cp, defSopDoc, defSopUrl, spmnListCfg, Alerts) {
           var ctx = $scope.listViewCtx = {
             sopDocDownloadUrl: cp.getSopDocDownloadUrl(),
             spmnListCfg: spmnListCfg
@@ -114,6 +114,14 @@ angular.module('os.biospecimen.participant',
                 ctx.sopUrl = defSopUrl.value;
               }
             }
+          }
+
+          $scope.generateCpReport = function() {
+            cp.generateReport().then(
+              function() {
+                Alerts.success('participant.report_gen_initiated', cp);
+              }
+            );
           }
         },
         resolve: {
