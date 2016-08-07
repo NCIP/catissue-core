@@ -491,6 +491,14 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="vpawar" id="CP report settings sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_CP_REPORT_SETTINGS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true"/>
+  </changeSet>
+
   <changeSet author="vpawar" id="FK on report settings CP">
     <addForeignKeyConstraint
       constraintName="FK_CP_RPT_SETTINGS_CP_ID"

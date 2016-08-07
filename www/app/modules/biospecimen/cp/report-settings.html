@@ -4,7 +4,7 @@
       Report Settings
     </span>
     <span class="os-btns" show-if-allowed="cpResource.updateOpts"
-      ng-if="rptSettingsCtx.view != 'edit_settings' && rptSettingsCtx.setting.enabled">
+      ng-if="rptSettingsCtx.view != 'edit_settings' && !!rptSettingsCtx.setting.id && rptSettingsCtx.setting.enabled">
       <button class="default" ng-click="showEditForm()">
         <span>
           <span class="fa fa-pencil"></span>
