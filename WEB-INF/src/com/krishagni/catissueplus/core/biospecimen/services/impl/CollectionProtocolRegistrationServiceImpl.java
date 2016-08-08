@@ -30,10 +30,12 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ConsentRespons
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpeErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -366,41 +368,26 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
 		try {
-			ParticipantRegistrationsList input = req.getPayload();
-			ParticipantDetail inputParticipant = input.getParticipant();
-			if (inputParticipant == null) {
-				inputParticipant = new ParticipantDetail();
-			}
-						
-			//
-			// Step 1: Save or update participant
-			//
-			ParticipantDetail participantDetail = participantService.saveOrUpdateParticipant(inputParticipant);
-			ParticipantDetail p = new ParticipantDetail();
-			p.setId(participantDetail.getId());
-			
-			//
-			// Step 2: Run through each registration
-			//
-			List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
-			for (CollectionProtocolRegistrationDetail cprDetail : input.getRegistrations()) {
-				cprDetail.setParticipant(p);
-				cprDetail = createRegistration(cprDetail, false);
-				cprDetail.setParticipant(null);
-				registrations.add(cprDetail);
-			}
-			
-			ParticipantRegistrationsList result = new ParticipantRegistrationsList();
-			result.setParticipant(participantDetail);
-			result.setRegistrations(registrations);			
-			return ResponseEvent.response(result);
+			return ResponseEvent.response(createRegistrations(req.getPayload(), true));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
 	}
-
+	
+	@Override
+	@PlusTransactional
+	public ResponseEvent<ParticipantRegistrationsList> registerToOtherProtocols(RequestEvent<ParticipantRegistrationsList> req) {
+		try {
+			return ResponseEvent.response(createRegistrations(req.getPayload(), false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+	
 	@Override
 	public String getObjectName() {
 		return "cpr";
@@ -437,6 +424,43 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		return CollectionProtocolRegistrationDetail.from(cpr, false);		
 	}
 	
+	private ParticipantRegistrationsList createRegistrations(ParticipantRegistrationsList input, boolean createParticipant) {
+		ParticipantDetail inputParticipant = input.getParticipant();
+		if (inputParticipant == null) {
+			inputParticipant = new ParticipantDetail();
+		}
+
+		//
+		// Step 1: Save/update or lookup existing participant
+		//
+		ParticipantDetail participantDetail = null;
+		if (createParticipant) {
+			participantDetail = participantService.saveOrUpdateParticipant(inputParticipant);
+		} else {
+			participantDetail = lookupParticipant(inputParticipant);
+		}
+
+		ParticipantDetail p = new ParticipantDetail();
+		p.setId(participantDetail.getId());
+
+		//
+		// Step 2: Run through each registration
+		//
+		List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
+		for (CollectionProtocolRegistrationDetail cprDetail : input.getRegistrations()) {
+			cprDetail.setParticipant(p);
+			cprDetail = createRegistration(cprDetail, false);
+			cprDetail.setParticipant(null);
+			registrations.add(cprDetail);
+		}
+
+		ParticipantRegistrationsList result = new ParticipantRegistrationsList();
+		result.setParticipant(participantDetail);
+		result.setRegistrations(registrations);
+
+		return result;
+	}
+
 	private void saveParticipant(CollectionProtocolRegistration existing, CollectionProtocolRegistration cpr) {		
 		Participant existingParticipant = null;
 		Participant participant = cpr.getParticipant();
@@ -528,7 +552,19 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		return null;
 	}
-		
+
+	private ParticipantDetail lookupParticipant(ParticipantDetail detail) {
+		ResponseEvent<List<MatchedParticipant>> resp = participantService.getMatchingParticipants(new RequestEvent<>(detail));
+		resp.throwErrorIfUnsuccessful();
+
+		List<MatchedParticipant> result = resp.getPayload();
+		if (result.isEmpty()) {
+			throw OpenSpecimenException.userError(ParticipantErrorCode.NOT_FOUND);
+		}
+
+		return result.iterator().next().getParticipant();
+	}
+
 	//
 	// Checks whether same participant is registered for same protocol already
 	//

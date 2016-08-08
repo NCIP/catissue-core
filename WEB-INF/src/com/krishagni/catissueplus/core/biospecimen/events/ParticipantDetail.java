@@ -143,6 +143,10 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	public void setPmis(List<PmiDetail> pmis) {
 		this.pmis = pmis;
 	}
+	
+	public void setPmi(PmiDetail pmi) {
+		this.pmis = Collections.singletonList(pmi);
+	}
 
 	public String getSexGenotype() {
 		return sexGenotype;
