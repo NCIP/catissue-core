@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.query.models'])
   .controller('DpAddEditCtrl', function(
-    $scope, $state, $translate, $q, distributionProtocol, extensionCtxt,
+    $scope, $state, $translate, $q, currentUser, distributionProtocol, extensionCtxt,
     DistributionProtocol, Institute, User, SavedQuery, Site, ExtensionsUtil) {
     
     var availableInstituteNames = [];
@@ -19,7 +19,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       loadSites($scope.distributionProtocol.instituteName);
       loadQueries();
     }
-    
+
     function loadInstitutes() {
       $scope.institutes = [];
       $scope.instituteNames = [];
@@ -28,6 +28,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
         function(institutes) {
           $scope.institutes = institutes;
           loadDistInstSites();
+          setDefaultDistInst();
         }
       );
     }
@@ -48,7 +49,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       
       filterAvailableInstituteNames();
     }
-        
+
     function getInstSiteMapFromDistSites (dp) {
       var result = [];
       angular.forEach(dp.distributingSites, function (instituteSites, institute) {
@@ -88,6 +89,17 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       return dp.distributingSites.map(function(instSite) { return instSite.instituteName});
     }
     
+    function setDefaultDistInst() {
+      if (!currentUser.admin && !distributionProtocol.id) {
+        distributionProtocol.distributingSites = [{
+          instituteName: $scope.currentUser.instituteName,
+          sites: []
+        }];
+
+        $scope.onDistInstSelect(0);
+      }
+    }
+
     function loadSites(instituteName) {
       $scope.sites = getSites(instituteName, false);
     }

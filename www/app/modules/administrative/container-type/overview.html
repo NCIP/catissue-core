@@ -8,13 +8,13 @@
         <span translate="container_type.create_container">Create Container</span>
       </button>
 
-      <button show-if-admin class="default" title="{{'container_type.tooltip.edit' | translate}}"
+      <button show-if-admin="institute" class="default" title="{{'container_type.tooltip.edit' | translate}}"
         ui-sref="container-type-addedit({containerTypeId: containerType.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
 
-      <button show-if-admin class="default" title="{{'container_type.tooltip.delete' | translate}}"
+      <button show-if-admin="institute" class="default" title="{{'container_type.tooltip.delete' | translate}}"
         ng-click="deleteContainerType()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>

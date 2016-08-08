@@ -16,7 +16,8 @@ angular.module('openspecimen')
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        if ($rootScope.currentUser.admin) {
+        var user = $rootScope.currentUser;
+        if (user.admin || (attrs.showIfAdmin == 'institute' && user.instituteAdmin)) {
           element.show();
         } else {
           element.remove();

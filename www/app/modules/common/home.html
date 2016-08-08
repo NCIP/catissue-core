@@ -50,7 +50,7 @@
         </span>
       </a>
     </li>
-    <li show-if-admin class="os-home-item"> 
+    <li show-if-admin="institute" class="os-home-item">
       <a ui-sref="site-list">
         <span class="os-home-item-icon">
           <span class="fa fa-hospital-o"></span>
@@ -94,7 +94,7 @@
         </span>
       </a>
     </li>
-    <li ng-if="currentUser.admin || currentUser.manageForms" class="os-home-item">
+    <li ng-if="currentUser.admin || currentUser.instituteAdmin || currentUser.manageForms" class="os-home-item">
       <a ui-sref="form-list">
         <span class="os-home-item-icon">
           <span class="fa fa-copy"></span>
@@ -105,7 +105,7 @@
         </span>
       </a>
     </li>
-    <li show-if-admin class="os-home-item">
+    <li show-if-admin="institute" class="os-home-item">
       <a ui-sref="dp-list">
         <span class="os-home-item-icon">
           <span class="fa fa-truck"></span>

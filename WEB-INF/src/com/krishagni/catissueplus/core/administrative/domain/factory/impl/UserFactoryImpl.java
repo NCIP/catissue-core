@@ -31,7 +31,7 @@ public class UserFactoryImpl implements UserFactory {
 		User user = new User();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 				
-		setAdmin(detail, user, ose);
+		setAdminType(detail, user, ose);
 		setFirstName(detail, user, ose);
 		setLastName(detail, user, ose);
 		setLoginName(detail, user, ose);
@@ -53,7 +53,7 @@ public class UserFactoryImpl implements UserFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		user.setId(existing.getId());
-		setAdmin(detail, existing, user, ose);
+		setAdminType(detail, existing, user, ose);
 		setFirstName(detail, existing, user, ose);
 		setLastName(detail, existing, user, ose);
 		setLoginName(detail, existing, user, ose);
@@ -67,16 +67,20 @@ public class UserFactoryImpl implements UserFactory {
 		ose.checkAndThrow();
 		return user;		
 	}
-	
-	private void setAdmin(UserDetail detail, User user, OpenSpecimenException ose) {
-		user.setAdmin(detail.getAdmin());
+
+	private void setAdminType(UserDetail detail, User user, OpenSpecimenException ose) {
+		try {
+			user.setAdminType(User.AdminType.valueOf(detail.getAdminType()));
+		} catch (IllegalArgumentException iae) {
+			ose.addError(UserErrorCode.INVALID_ADMIN_TYPE, detail.getAdminType());
+		}
 	}
-	
-	private void setAdmin(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
-		if (detail.isAttrModified("admin")) {
-			setAdmin(detail, user, ose);
+
+	private void setAdminType(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("adminType")) {
+			setAdminType(detail, user, ose);
 		} else {
-			user.setAdmin(existing.getAdmin());
+			user.setAdminType(existing.getAdminType());
 		}
 	}
 	
@@ -249,7 +253,15 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setManageForms(UserDetail detail, User user, OpenSpecimenException ose) {
-		user.setManageForms(detail.getAdmin() ? true : detail.getManageForms());
+		switch (user.getAdminType()) {
+			case SUPER:
+			case INSTITUTE:
+				user.setManageForms(true);
+				break;
+
+			default:
+				user.setManageForms(detail.getManageForms());
+		}
 	}
 
 	private void setManageForms(UserDetail detail, User existing, User user, OpenSpecimenException ose) {

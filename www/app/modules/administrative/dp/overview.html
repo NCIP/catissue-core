@@ -1,22 +1,22 @@
 <div>
   <div class="os-page-commands">
     <div class="left">
-      <button show-if-admin class="default" title="{{'dp.tooltip.edit' | translate}}"
+      <button ng-if="isEditAllowed" class="default" title="{{'dp.tooltip.edit' | translate}}"
         ui-sref="dp-addedit({dpId: distributionProtocol.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button show-if-admin ng-if="distributionProtocol.activityStatus != 'Closed'"
+      <button show-if-admin="institute" ng-if="distributionProtocol.activityStatus != 'Closed'"
         class="default" ng-click="closeDp()">
         <span class="fa fa-remove"></span>
         <span translate="dp.menu_options.close">Close</span>
       </button>
-      <button show-if-admin ng-if="distributionProtocol.activityStatus == 'Closed'"
+      <button show-if-admin="institute" ng-if="distributionProtocol.activityStatus == 'Closed'"
         class="default" ng-click="reopenDp()">
         <span class="fa fa-check"></span>
         <span translate="dp.menu_options.reopen">Reopen</span>
       </button>
-      <button show-if-admin class="default" class="default" ng-click="deleteDp()">
+      <button show-if-admin="institute" class="default" class="default" ng-click="deleteDp()">
         <span class="fa fa-trash"></span>
         <span translate="dp.menu_options.delete">Delete</span>
       </button>

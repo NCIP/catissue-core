@@ -12,6 +12,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
+import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthUtil {
@@ -26,6 +27,11 @@ public class AuthUtil {
 		}
 		
 		return (User)auth.getPrincipal();
+	}
+
+	public static Institute getCurrentUserInstitute() {
+		User user = AuthUtil.getCurrentUser();
+		return (user != null) ? user.getInstitute() : null;
 	}
 	
 	public static String getRemoteAddr() {
@@ -61,7 +67,11 @@ public class AuthUtil {
 	}
 	
 	public static boolean isAdmin() {
-		return getCurrentUser().isAdmin();
+		return getCurrentUser() != null && getCurrentUser().isAdmin();
+	}
+	
+	public static boolean isInstituteAdmin() {
+		return getCurrentUser() != null && getCurrentUser().isInstituteAdmin();
 	}
 	
 	public static String encodeToken(String token) {

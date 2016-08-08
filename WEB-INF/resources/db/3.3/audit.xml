@@ -29,4 +29,11 @@
   <changeSet author="nmarwaha" id="Modify length of comments column in visit audit table">
     <modifyDataType tableName="CAT_SPECIMEN_COLL_GROUP_AUD" columnName="COMMENTS" newDataType="${text.type}(2000)" />
   </changeSet>
+
+  <changeSet author="nmarwaha" id="Audit values of users' admin status">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="ADMIN_TYPE" type="${text.type}(16)"/>
+      <column name="adminType_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

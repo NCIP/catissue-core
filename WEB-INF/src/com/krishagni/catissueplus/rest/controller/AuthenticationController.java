@@ -54,6 +54,7 @@ public class AuthenticationController {
 		detail.put("loginName", user.getLoginName());
 		detail.put("token", (String)resp.getPayload().get("token"));
 		detail.put("admin", user.isAdmin());
+		detail.put("instituteAdmin", user.isInstituteAdmin());
 		
 		return detail;
 	}

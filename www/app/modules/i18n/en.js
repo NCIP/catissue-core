@@ -872,6 +872,7 @@
     "institute": "Institute",
     "address": "Address",
     "super_admin": "Super Administrator",
+    "inst_admin": "Institute Administrator",
     "manage_forms": "Manage Forms?",
     "login_details": "Login Details",
     "permissions": "Permissions",
@@ -946,6 +947,12 @@
     "menu": {
       "overview": "Overview",
       "roles": "Roles"
+    },
+    
+    "admin_types": {
+      "SUPER": "Super Administrator",
+      "INSTITUTE": "Institute Administrator",
+      "NONE": "None"
     },
 
     "filter": {

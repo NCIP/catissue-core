@@ -95,6 +95,10 @@ public class AccessCtrlMgr {
 			return;
 		}
 		
+		if (AuthUtil.isInstituteAdmin() && user.getInstitute().equals(AuthUtil.getCurrentUserInstitute())) {
+			return;
+		}
+		
 		Set<Site> currentUserSites = getSites(Resource.USER, Operation.UPDATE);
 		Set<Site> updateReqSites = null;
 		if (roleSite == null) {				//this is case of all sites.
@@ -124,16 +128,52 @@ public class AccessCtrlMgr {
 	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
+	//          Site object access control helper methods                               //
+	//                                                                                  //
+	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureCreateUpdateDeleteSiteRights(Site site) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+
+		boolean allowed = false;
+		if (AuthUtil.isInstituteAdmin()) {
+			allowed = AuthUtil.getCurrentUser().getInstitute().equals(site.getInstitute());
+		}
+
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
+		}
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//                                                                                  //
 	//          Distribution Protocol object access control helper methods              //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
+	public void ensureCreateUpdateDeleteDpRights(DistributionProtocol dp) {
+		if (AuthUtil.isAdmin()) {
+			return;
+		}
+
+		boolean allowed = false;
+		if (AuthUtil.isInstituteAdmin()) {
+			Institute userInst = AuthUtil.getCurrentUser().getInstitute();
+			allowed = Utility.isEmptyOrSameAs(dp.getDistributingInstitutes(), userInst);
+		}
+
+		if (!allowed) {
+			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
+		}
+	}
+
 	public void ensureReadDpRights() {
 		if (!canUserPerformOp(Resource.ORDER, new Operation[] {Operation.CREATE, Operation.UPDATE})) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
 	
-	public void ensureReadDPRights(DistributionProtocol dp) {
+	public void ensureReadDpRights(DistributionProtocol dp) {
 		if (AuthUtil.isAdmin()) {
 			return;
 		}
@@ -638,6 +678,14 @@ public class AccessCtrlMgr {
 		} 
 	}
 
+	public void ensureCreateOrUpdateContainerTypeRights() {
+		if (AuthUtil.isAdmin() || AuthUtil.isInstituteAdmin()) {
+			return;
+		}
+
+		throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	//                                                                                  //
 	//          Storage container object access control helper methods                  //
@@ -827,8 +875,17 @@ public class AccessCtrlMgr {
 
 	public Set<Site> getSites(Resource resource, Operation[] operations) {
 		User user = AuthUtil.getCurrentUser();
+
+		//
+		// Below conditional is an optimisation in that it is assumed an insitute admin will have
+		// permissions to perform "operations" on "resource" on all sites...
+		//
+		if (AuthUtil.isInstituteAdmin()) {
+			return getUserInstituteSites(user.getId());
+		}
+
 		String[] ops = new String[operations.length];
-		for(int i = 0; i < operations.length; i++ ) {
+		for (int i = 0; i < operations.length; i++ ) {
 			ops[i] = operations[i].getName();
 		}
 		

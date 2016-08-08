@@ -283,6 +283,15 @@ public class Utility {
 		return collect(collection, propertyName, false);
     }
 
+	public static <T> boolean isEmptyOrSameAs(Collection<T> collection, T element) {
+		int size = collection.size();
+		if (size > 1) {
+			return false;
+		}
+
+		return size == 0 || collection.contains(element);
+	}
+
 	public static Integer getAge(Date birthDate) {
 		if (birthDate == null) {
 			return null;

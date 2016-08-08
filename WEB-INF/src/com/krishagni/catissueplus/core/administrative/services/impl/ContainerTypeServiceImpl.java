@@ -79,7 +79,7 @@ public class ContainerTypeServiceImpl implements ContainerTypeService {
 	@PlusTransactional
 	public ResponseEvent<ContainerTypeDetail> createContainerType(RequestEvent<ContainerTypeDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateContainerTypeRights();
 
 			ContainerTypeDetail input = req.getPayload();
 			ContainerType containerType = containerTypeFactory.createContainerType(input);
@@ -98,7 +98,7 @@ public class ContainerTypeServiceImpl implements ContainerTypeService {
 	@PlusTransactional
 	public ResponseEvent<ContainerTypeDetail> updateContainerType(RequestEvent<ContainerTypeDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateContainerTypeRights();
 
 			ContainerTypeDetail input = req.getPayload();
 			ContainerType existing = getContainerType(input.getId(), input.getName());
@@ -130,7 +130,7 @@ public class ContainerTypeServiceImpl implements ContainerTypeService {
 	@PlusTransactional
 	public ResponseEvent<ContainerTypeDetail> deleteContainerType(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+			AccessCtrlMgr.getInstance().ensureCreateOrUpdateContainerTypeRights();
 			ContainerType existing = getContainerType(req.getPayload(), null);
 			existing.delete();
 			return ResponseEvent.response(ContainerTypeDetail.from(existing));

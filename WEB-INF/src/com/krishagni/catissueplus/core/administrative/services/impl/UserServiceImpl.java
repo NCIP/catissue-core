@@ -174,9 +174,9 @@ public class UserServiceImpl implements UserService {
 			}
 			
 			User user = userFactory.createUser(detail);
+			resetAttrs(user);
 
 			if (!isSignupReq) {
-				resetAttrs(user);
 				AccessCtrlMgr.getInstance().ensureCreateUserRights(user);
 			}
 		
@@ -186,6 +186,11 @@ public class UserServiceImpl implements UserService {
 			ose.checkAndThrow();
 
 			daoFactory.getUserDao().saveOrUpdate(user);
+			
+			if (user.isInstituteAdmin()) {
+				addDefaultSiteAdminRole(user);
+			}
+			
 			if (isSignupReq) {
 				sendUserSignupEmail(user);
 				sendNewUserRequestEmail(user);
@@ -193,6 +198,7 @@ public class UserServiceImpl implements UserService {
 				ForgotPasswordToken token = generateForgotPwdToken(user);
 				sendUserCreatedEmail(user, token);
 			}
+
 			return ResponseEvent.response(UserDetail.from(user));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -481,13 +487,34 @@ public class UserServiceImpl implements UserService {
 			ensureUniqueLoginName(existingUser, user, ose);
 			ose.checkAndThrow();
 
+			boolean wasInstituteAdmin = existingUser.isInstituteAdmin();
+			
 			existingUser.update(user);
+			
+			if (!wasInstituteAdmin && existingUser.isInstituteAdmin()) {
+				addDefaultSiteAdminRole(existingUser);
+			} else if (wasInstituteAdmin && !existingUser.isInstituteAdmin()) {
+				removeDefaultSiteAdminRole(existingUser);
+			}
+
 			return ResponseEvent.response(UserDetail.from(existingUser));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}		
+	}
+	
+	private void addDefaultSiteAdminRole(User user) {
+		rbacSvc.addSubjectRole(null, null, user, getDefaultSiteAdminRole());
+	}
+	
+	private void removeDefaultSiteAdminRole(User user) {
+		rbacSvc.removeSubjectRole(null, null, user, getDefaultSiteAdminRole());
+	}
+	
+	private String[] getDefaultSiteAdminRole() {
+		return new String[] {"Administrator"};
 	}
 	
 	private void sendForgotPasswordLinkEmail(User user, String token) {
@@ -550,7 +577,7 @@ public class UserServiceImpl implements UserService {
 		// Only super admin can update these attributes; therefore reset to
 		// their earlier value or default value
 		//
-		newUser.setAdmin(existingUser != null ? existingUser.isAdmin() : false);
+		newUser.setAdminType(existingUser != null ? existingUser.getAdminType() : User.AdminType.NONE);
 		newUser.setManageForms(existingUser != null ? existingUser.canManageForms() : false);
 	}
 	

@@ -32,6 +32,12 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Configurable
 @Audited
 public class User extends BaseEntity implements UserDetails {
+	public enum AdminType {
+		SUPER,
+		INSTITUTE,
+		NONE
+	};
+
 	public static final String SYS_USER = "$system";
 	
 	public static final String DEFAULT_AUTH_DOMAIN = "openspecimen";
@@ -69,8 +75,8 @@ public class User extends BaseEntity implements UserDetails {
 	private String comments;
 	
 	private String password;
-	
-	private Boolean admin;
+
+	private AdminType adminType;
 
 	private Boolean manageForms;
 	
@@ -194,16 +200,20 @@ public class User extends BaseEntity implements UserDetails {
 		this.password = password;
 	}
 
-	public boolean isAdmin() {
-		return admin != null ? admin : false;
-	}
-	
-	public Boolean getAdmin() {
-		return admin;
+	public AdminType getAdminType() {
+		return adminType;
 	}
 
-	public void setAdmin(Boolean admin) {
-		this.admin = admin;
+	public void setAdminType(AdminType adminType) {
+		this.adminType = adminType;
+	}
+
+	public boolean isAdmin() {
+		return AdminType.SUPER == getAdminType();
+	}
+	
+	public boolean isInstituteAdmin() {
+		return AdminType.INSTITUTE == getAdminType();
 	}
 	
 	public boolean canManageForms() {
@@ -260,18 +270,18 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public void update(User user) {
-		this.setFirstName(user.getFirstName());
-		this.setLastName(user.getLastName());
-		this.setAuthDomain(user.getAuthDomain());
-		this.setActivityStatus(user.getActivityStatus());
-		this.setAddress(user.getAddress());
-		this.setInstitute(user.getInstitute());
-		this.setEmailAddress(user.getEmailAddress());
-		this.setLoginName(user.getLoginName());
-		this.setPhoneNumber(user.getPhoneNumber());
-		this.setComments(user.getComments());
-		this.setAdmin(user.isAdmin());
-		this.setManageForms(user.canManageForms());
+		setFirstName(user.getFirstName());
+		setLastName(user.getLastName());
+		setAuthDomain(user.getAuthDomain());
+		setActivityStatus(user.getActivityStatus());
+		setAddress(user.getAddress());
+		setInstitute(user.getInstitute());
+		setEmailAddress(user.getEmailAddress());
+		setLoginName(user.getLoginName());
+		setPhoneNumber(user.getPhoneNumber());
+		setComments(user.getComments());
+		setAdminType(user.getAdminType());
+		setManageForms(user.canManageForms());
 	}
 	
 	public void changePassword(String newPassword) {

@@ -1,12 +1,20 @@
 angular.module('os.administrative.site.addedit', ['os.administrative.models'])
   .controller('SiteAddEditCtrl', function(
-    $scope, $state, site, extensionCtxt, Institute, ExtensionsUtil) {
+    $scope, $state, site, extensionCtxt, currentUser, Institute, ExtensionsUtil) {
 
     function init() {
       $scope.site = site;
+      if (!currentUser.admin && !site.id) {
+        site.instituteName = currentUser.instituteName;
+      }
+
       $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts(site, extensionCtxt);
-      loadPvs();
+      $scope.coordFilterOpts = {institute: currentUser.instituteName};
+      
+      if (currentUser.admin) {
+        loadPvs();
+      }
     }
 
     function loadPvs() {

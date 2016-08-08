@@ -128,7 +128,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureReadDPRights(existing);
+			AccessCtrlMgr.getInstance().ensureReadDpRights(existing);
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -141,9 +141,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> createDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			DistributionProtocol dp = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dp);
 			ensureUniqueConstraints(dp, null);
 			
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(dp);
@@ -160,8 +159,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> updateDistributionProtocol(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			Long protocolId = req.getPayload().getId();
 			String title = req.getPayload().getTitle();
 			
@@ -175,11 +172,14 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
-		
-			DistributionProtocol distributionProtocol = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
-			ensureUniqueConstraints(distributionProtocol, existing);
+
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(existing);
+
+			DistributionProtocol dp = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dp);
+			ensureUniqueConstraints(dp, existing);
 			
-			existing.update(distributionProtocol);
+			existing.update(dp);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
 			existing.addOrUpdateExtension();
 			return ResponseEvent.response(DistributionProtocolDetail.from(existing));
@@ -230,8 +230,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DistributionProtocolDetail> updateActivityStatus(RequestEvent<DistributionProtocolDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			Long dpId = req.getPayload().getId();
 			String status = req.getPayload().getActivityStatus();
 			if (StringUtils.isBlank(status) || !Status.isValidActivityStatus(status)) {
@@ -242,6 +240,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			if (existing == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
+			
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(existing);
 			
 			if (existing.getActivityStatus().equals(status)) {
 				return ResponseEvent.response(DistributionProtocolDetail.from(existing));
@@ -385,9 +385,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DpRequirementDetail> createRequirement(RequestEvent<DpRequirementDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-
 			DpRequirement dpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());	
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dpr.getDistributionProtocol());
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureSpecimenPropertyPresent(dpr, ose);
@@ -407,8 +406,6 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DpRequirementDetail> updateRequirement(RequestEvent<DpRequirementDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-
 			Long dpReqId = req.getPayload().getId();
 			DpRequirement existing = getDprDao().getById(dpReqId);
 			if (existing == null) {
@@ -416,6 +413,8 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			}
 
 			DpRequirement newDpr = dprFactory.createDistributionProtocolRequirement(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(newDpr.getDistributionProtocol());
+			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureSpecimenPropertyPresent(newDpr, ose);
 			ensureUniqueReqConstraints(existing, newDpr, ose);
@@ -435,13 +434,12 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DpRequirementDetail> deleteRequirement(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-
 			DpRequirement existing = getDprDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
 			}
-			
+
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(existing.getDistributionProtocol());
 			existing.delete();
 			getDprDao().saveOrUpdate(existing);
 			return ResponseEvent.response(DpRequirementDetail.from(existing));
@@ -562,7 +560,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 				throw OpenSpecimenException.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
 			
-			AccessCtrlMgr.getInstance().ensureReadDPRights(dp);
+			AccessCtrlMgr.getInstance().ensureReadDpRights(dp);
 		} else {
 			Set<Long> siteIds = AccessCtrlMgr.getInstance().getCreateUpdateAccessDistributionOrderSiteIds();
 			if (siteIds != null && CollectionUtils.isEmpty(siteIds)) {

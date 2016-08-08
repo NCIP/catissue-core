@@ -18,7 +18,7 @@
 
   <div class="container">
     <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
-      <div class="form-group">
+      <div class="form-group" show-if-admin>
         <label class="col-xs-3 control-label" translate="site.institute">Institute</label>
         <div class="col-xs-6">
           <os-select ng-model="site.instituteName" list="institutes" name="institute" 
@@ -48,7 +48,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="site.coordinators">Coordinators</label>
         <div class="col-xs-6">
-          <os-users multiple ng-model="site.coordinators" placeholder="{{'site.coordinators' | translate}}"></os-users>
+          <os-users multiple ng-model="site.coordinators" filter-opts="coordFilterOpts" 
+            placeholder="{{'site.coordinators' | translate}}">
+          </os-users>
         </div>
       </div>
 

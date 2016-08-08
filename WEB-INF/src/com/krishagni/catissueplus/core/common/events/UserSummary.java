@@ -31,6 +31,8 @@ public class UserSummary implements Serializable {
 
 	private Boolean admin;
 	
+	private Boolean instituteAdmin;
+	
 	private Boolean manageForms;
 
 	private int cpCount;
@@ -101,6 +103,14 @@ public class UserSummary implements Serializable {
 		this.admin = admin;
 	}
 	
+	public Boolean getInstituteAdmin() {
+		return instituteAdmin;
+	}
+	
+	public void setInstituteAdmin(Boolean instituteAdmin) {
+		this.instituteAdmin = instituteAdmin;
+	}
+
 	public Boolean getManageForms() {
 		return manageForms;
 	}
@@ -134,8 +144,10 @@ public class UserSummary implements Serializable {
 		userSummary.setDomain(user.getAuthDomain().getName());
 		userSummary.setEmailAddress(user.getEmailAddress());
 		userSummary.setAdmin(user.isAdmin());
+		userSummary.setInstituteAdmin(user.isInstituteAdmin());
 		userSummary.setCreationDate(user.getCreationDate());
 		userSummary.setManageForms(user.getManageForms());
+		userSummary.setInstituteName(user.getInstitute().getName());
 		return userSummary;
 	}
 	

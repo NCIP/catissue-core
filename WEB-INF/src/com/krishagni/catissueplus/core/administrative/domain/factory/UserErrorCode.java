@@ -49,7 +49,9 @@ public enum UserErrorCode implements ErrorCode {
 
 	ANN_SUBJECT_REQ,
 
-	ANN_MESSAGE_REQ;
+	ANN_MESSAGE_REQ,
+	
+	INVALID_ADMIN_TYPE;
 	
 	public String code() {
 		return "USER_" + this.name();

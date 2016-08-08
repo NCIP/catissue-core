@@ -30,9 +30,9 @@
 
     <property name="address" column="address"/>
 
-    <many-to-one name="institute" column="INSTITUTE_ID"/>
+    <many-to-one name="institute" column="INSTITUTE_ID" lazy="false" fetch="join"/>
 
-    <many-to-one name="authDomain" column="DOMAIN_NAME" property-ref="name"/>
+    <many-to-one name="authDomain" column="DOMAIN_NAME" property-ref="name" lazy="false" fetch="join"/>
 
     <set name="sites" table="CATISSUE_SITE_USERS" inverse="false" cascade="save-update">
       <key column="USER_ID" not-null="true"/>
@@ -47,9 +47,14 @@
     </set>
 		
     <property name="comments" column="STATUS_COMMENT"/>
+
+    <property name="adminType" column="ADMIN_TYPE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.User$AdminType</param>
+        <param name="type">12</param>
+      </type>
+    </property>
  
-    <property name="admin" column="IS_ADMIN"/>
-    
     <property name="manageForms" column="MANAGE_FORMS"/>
 
     <filter name="activeEntity"/>

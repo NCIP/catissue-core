@@ -1,8 +1,19 @@
 
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
-  .controller('DpDetailCtrl', function($scope, $q, $modal, $translate, distributionProtocol, DeleteUtil) {
+  .controller('DpDetailCtrl', function($scope, $q, $modal, $translate, currentUser, distributionProtocol, DeleteUtil) {
     $scope.distributionProtocol = distributionProtocol;
     $scope.distributingSites = '';
+    
+    function init() {
+      $scope.isEditAllowed = isEditAllowed()
+    }
+    
+    function isEditAllowed() {
+      var sites = distributionProtocol.distributingSites; // {institute: [sites]}
+      return currentUser.admin ||
+        (currentUser.instituteAdmin && Object.keys(sites).length == 1);
+    }
+
 
     $scope.editDp = function(property, value) {
       var d = $q.defer();
@@ -53,5 +64,7 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
     }
     
     getDistSiteText($scope.distributionProtocol.distributingSites);
+    
+    init();
     
   });

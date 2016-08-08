@@ -1,12 +1,12 @@
 <div>
   <div class="os-page-commands">
     <div class="left">
-      <button show-if-admin class="default" title="{{'site.tooltip.edit' | translate}}"
+      <button show-if-admin="institute" class="default" title="{{'site.tooltip.edit' | translate}}"
         ui-sref="site-addedit({siteId: site.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button show-if-admin class="default" ng-click="deleteSite()">
+      <button show-if-admin="institute" class="default" ng-click="deleteSite()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
       </button>

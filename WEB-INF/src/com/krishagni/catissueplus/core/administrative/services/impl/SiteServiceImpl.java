@@ -115,9 +115,8 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	@PlusTransactional	
 	public ResponseEvent<SiteDetail> createSite(RequestEvent<SiteDetail> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			Site site = siteFactory.createSite(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteSiteRights(site);
 			
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(site, null, ose);
@@ -164,13 +163,13 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	@PlusTransactional	
 	public ResponseEvent<SiteDetail> deleteSite(RequestEvent<DeleteEntityOp> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
-			
 			DeleteEntityOp deleteOp = req.getPayload();
 			Site existing = daoFactory.getSiteDao().getById(deleteOp.getId());
 			if (existing == null) {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
+
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteSiteRights(existing);
 			
 			removeDefaultCoordinatorRoles(existing, existing.getCoordinators());
 			existing.delete(deleteOp.isClose());
@@ -221,7 +220,6 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 
 	private ResponseEvent<SiteDetail> updateSite(RequestEvent<SiteDetail> req, boolean partial) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();			
 			SiteDetail detail = req.getPayload();
 			
 			Site existing = null;			
@@ -235,13 +233,11 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 				return ResponseEvent.userError(SiteErrorCode.NOT_FOUND);
 			}
 
-			Site site = null;
-			if (partial) {
-				site = siteFactory.createSite(existing, detail);
-			} else {
-				site = siteFactory.createSite(detail); 
-			}
-						
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteSiteRights(existing);
+
+			Site site = partial ? siteFactory.createSite(existing, detail) : siteFactory.createSite(detail);
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteSiteRights(site);
+
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureUniqueConstraint(site, existing, ose);
 			ose.checkAndThrow();

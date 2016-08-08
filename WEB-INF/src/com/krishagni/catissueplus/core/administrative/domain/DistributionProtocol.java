@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
@@ -208,6 +209,10 @@ public class DistributionProtocol extends BaseExtensionEntity {
 		}
 		
 		return sites;
+	}
+
+	public Set<Institute> getDistributingInstitutes() {
+		return getDistributingSites().stream().map(dpSite -> dpSite.getInstitute()).collect(Collectors.toSet());
 	}
 	
 	public boolean hasRequirement(String specimenType, String anatomicSite, Set<String> pathologyStatuses, String clinicalDiagnosis) {

@@ -73,7 +73,7 @@
           <li show-if-allowed="userCreateUpdateOpts">
             <a ui-sref="role-list" translate="menu.roles">Roles</a>
           </li>
-          <li show-if-admin>
+          <li show-if-admin="institute">
             <a ui-sref="site-list" translate="menu.sites">Sites</a>
           </li>
           <li show-if-allowed="containerReadOpts">
@@ -88,7 +88,7 @@
           <li ng-if="currentUser.admin || currentUser.manageForms">
             <a ui-sref="form-list" translate="menu.forms">Forms</a>
           </li>
-          <li show-if-admin>
+          <li show-if-admin="institute">
             <a ui-sref="dp-list" translate="menu.distribution_protocols">Distribution Protocols</a>
           </li>
           <li show-if-allowed="orderReadOpts">
