@@ -147,7 +147,11 @@ public class UserSummary implements Serializable {
 		userSummary.setInstituteAdmin(user.isInstituteAdmin());
 		userSummary.setCreationDate(user.getCreationDate());
 		userSummary.setManageForms(user.getManageForms());
-		userSummary.setInstituteName(user.getInstitute().getName());
+
+		if (user.getInstitute() != null) {
+			userSummary.setInstituteName(user.getInstitute().getName());
+		}
+
 		return userSummary;
 	}
 	
