@@ -106,9 +106,9 @@ edu.common.de.DataTable = function(args) {
         }
 
         tr.append($("<th/>")
-        .append($("<div/>").append(row[k].caption).addClass("truncate"))
-        .css("width", minWidth + "px")
-        .attr('title', row[k].caption));
+          .append($("<div/>").append(row[k].caption).addClass("truncate"))
+          .css("width", minWidth + "px")
+          .attr('title', row[k].caption));
         width += minWidth;
 
         ++fieldCnt;

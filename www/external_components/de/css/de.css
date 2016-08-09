@@ -229,7 +229,7 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   display: inline-block;
  }
 
-.truncate-small {
+/*.truncate-small {
   width: 95px;
   white-space: nowrap;
   overflow: hidden;
@@ -241,7 +241,7 @@ select.form-control.de-input-error + .chosen-container-multi .chosen-choices {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+}*/
 
 .de-select {
   display: block!important;

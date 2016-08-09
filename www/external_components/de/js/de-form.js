@@ -1212,6 +1212,8 @@ edu.common.de.SelectField = function(id, field, args) {
     } else if (selected) {
       that.value = selected.id;
     }
+
+    that.validator.validate();
   };
 
   var initSelection =  function(elem, callback) {
@@ -2051,7 +2053,7 @@ edu.common.de.LookupField = function(params, callback) {
       timeInterval);
   };
 
-  var onChange = function(selected) { 
+  var onChange = function(selected) {
     if (selected) {
       that.value = selected.id;
     } else {
