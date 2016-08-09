@@ -80,25 +80,25 @@
       </div>
 
       <div show-if-admin class="form-group">
-        <label class="col-xs-3 control-label">Admin Type</label>
+        <label class="col-xs-3 control-label" translate="user.type">Type</label>
         <div class="col-xs-6">
           <label class="radio-inline">
-            <input type="radio" name="adminType" ng-model="user.adminType" ng-value="'SUPER'">
+            <input type="radio" name="type" ng-model="user.type" ng-value="'SUPER'">
             <span translate="user.super_admin">Super Administrator</span>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="adminType" ng-model="user.adminType" ng-value="'INSTITUTE'">
+            <input type="radio" name="type" ng-model="user.type" ng-value="'INSTITUTE'">
             <span translate="user.inst_admin">Institute Administrator</span>
           </label>
           <label class="radio-inline">
-            <input type="radio" name="adminType" ng-model="user.adminType" ng-value="'NONE'"
+            <input type="radio" name="type" ng-model="user.type" ng-value="'NONE'"
                ng-change="user.manageForms = false">
             <span translate="common.none">None</span>
           </label>
         </div>
       </div>
       
-      <div show-if-admin="institute" class="form-group" ng-if="user.adminType == 'NONE'">
+      <div show-if-admin="institute" class="form-group" ng-if="user.type == 'NONE'">
         <label class="col-xs-3 control-label">Manage Forms?</label>
         <div class="col-xs-6">
           <label class="checkbox-inline">

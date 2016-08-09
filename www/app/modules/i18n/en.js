@@ -870,6 +870,7 @@
     "email_address": "Email Address",
     "phone_number": "Phone Number",
     "institute": "Institute",
+    "type": "Type",
     "address": "Address",
     "super_admin": "Super Administrator",
     "inst_admin": "Institute Administrator",
@@ -949,7 +950,7 @@
       "roles": "Roles"
     },
     
-    "admin_types": {
+    "types": {
       "SUPER": "Super Administrator",
       "INSTITUTE": "Institute Administrator",
       "NONE": "None"

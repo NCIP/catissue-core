@@ -48,9 +48,9 @@
 		
     <property name="comments" column="STATUS_COMMENT"/>
 
-    <property name="adminType" column="TYPE" not-null="true">
+    <property name="type" column="TYPE" not-null="true">
       <type name="org.hibernate.type.EnumType">
-        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.User$AdminType</param>
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.User$Type</param>
         <param name="type">12</param>
       </type>
     </property>

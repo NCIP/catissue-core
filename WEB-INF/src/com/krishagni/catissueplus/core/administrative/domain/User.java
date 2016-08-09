@@ -32,7 +32,7 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 @Configurable
 @Audited
 public class User extends BaseEntity implements UserDetails {
-	public enum AdminType {
+	public enum Type {
 		SUPER,
 		INSTITUTE,
 		NONE
@@ -76,7 +76,7 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private String password;
 
-	private AdminType adminType;
+	private Type type;
 
 	private Boolean manageForms;
 	
@@ -200,20 +200,20 @@ public class User extends BaseEntity implements UserDetails {
 		this.password = password;
 	}
 
-	public AdminType getAdminType() {
-		return adminType;
+	public Type getType() {
+		return type;
 	}
 
-	public void setAdminType(AdminType adminType) {
-		this.adminType = adminType;
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public boolean isAdmin() {
-		return AdminType.SUPER == getAdminType();
+		return Type.SUPER == getType();
 	}
 	
 	public boolean isInstituteAdmin() {
-		return AdminType.INSTITUTE == getAdminType();
+		return Type.INSTITUTE == getType();
 	}
 	
 	public boolean canManageForms() {
@@ -280,7 +280,7 @@ public class User extends BaseEntity implements UserDetails {
 		setLoginName(user.getLoginName());
 		setPhoneNumber(user.getPhoneNumber());
 		setComments(user.getComments());
-		setAdminType(user.getAdminType());
+		setType(user.getType());
 		setManageForms(user.canManageForms());
 	}
 	

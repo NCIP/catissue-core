@@ -39,7 +39,7 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	private String deptName;
 
-	private String adminType;
+	private String type;
 
 	private boolean manageForms;
 
@@ -133,12 +133,12 @@ public class UserDetail extends AttributeModifiedSupport {
 		this.deptName = deptName;
 	}
 
-	public String getAdminType() {
-		return adminType;
+	public String getType() {
+		return type;
 	}
 
-	public void setAdminType(String adminType) {
-		this.adminType = adminType;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Boolean getManageForms() {
@@ -177,7 +177,7 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setPhoneNumber(user.getPhoneNumber());
 		detail.setDomainName(user.getAuthDomain().getName());
 		detail.setInstituteName(user.getInstitute().getName());
-		detail.setAdminType(user.getAdminType().name());
+		detail.setType(user.getType().name());
 		detail.setAddress(user.getAddress());
 		detail.setManageForms(user.getManageForms());
 		setUserSiteNames(detail, user.getSites());	

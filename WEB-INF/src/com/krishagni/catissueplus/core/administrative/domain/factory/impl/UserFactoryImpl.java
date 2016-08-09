@@ -31,7 +31,7 @@ public class UserFactoryImpl implements UserFactory {
 		User user = new User();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 				
-		setAdminType(detail, user, ose);
+		setType(detail, user, ose);
 		setFirstName(detail, user, ose);
 		setLastName(detail, user, ose);
 		setLoginName(detail, user, ose);
@@ -53,7 +53,7 @@ public class UserFactoryImpl implements UserFactory {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		user.setId(existing.getId());
-		setAdminType(detail, existing, user, ose);
+		setType(detail, existing, user, ose);
 		setFirstName(detail, existing, user, ose);
 		setLastName(detail, existing, user, ose);
 		setLoginName(detail, existing, user, ose);
@@ -68,19 +68,19 @@ public class UserFactoryImpl implements UserFactory {
 		return user;		
 	}
 
-	private void setAdminType(UserDetail detail, User user, OpenSpecimenException ose) {
+	private void setType(UserDetail detail, User user, OpenSpecimenException ose) {
 		try {
-			user.setAdminType(User.AdminType.valueOf(detail.getAdminType()));
+			user.setType(User.Type.valueOf(detail.getType()));
 		} catch (IllegalArgumentException iae) {
-			ose.addError(UserErrorCode.INVALID_ADMIN_TYPE, detail.getAdminType());
+			ose.addError(UserErrorCode.INVALID_TYPE, detail.getType());
 		}
 	}
 
-	private void setAdminType(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
-		if (detail.isAttrModified("adminType")) {
-			setAdminType(detail, user, ose);
+	private void setType(UserDetail detail, User existing, User user, OpenSpecimenException ose) {
+		if (detail.isAttrModified("type")) {
+			setType(detail, user, ose);
 		} else {
-			user.setAdminType(existing.getAdminType());
+			user.setType(existing.getType());
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class UserFactoryImpl implements UserFactory {
 	}
 
 	private void setManageForms(UserDetail detail, User user, OpenSpecimenException ose) {
-		switch (user.getAdminType()) {
+		switch (user.getType()) {
 			case SUPER:
 			case INSTITUTE:
 				user.setManageForms(true);

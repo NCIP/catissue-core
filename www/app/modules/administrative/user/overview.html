@@ -84,9 +84,9 @@
           <span class="value value-md" os-inline-eddit>{{user.instituteName}}</span>
         </li>
       
-        <li class="item" ng-if="user.adminType != 'NONE'">
-          <strong class="key key-sm" >Admin Type</strong>
-          <span class="value value-md">{{'user.admin_types.' + user.adminType | translate}}</span>
+        <li class="item" ng-if="user.type != 'NONE'">
+          <strong class="key key-sm" translate="user.type">Type</strong>
+          <span class="value value-md">{{'user.types.' + user.type | translate}}</span>
         </li>
 
         <li show-if-admin class="item">

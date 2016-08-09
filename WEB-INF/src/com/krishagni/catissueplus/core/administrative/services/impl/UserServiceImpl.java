@@ -577,7 +577,7 @@ public class UserServiceImpl implements UserService {
 		// Only super admin can update these attributes; therefore reset to
 		// their earlier value or default value
 		//
-		newUser.setAdminType(existingUser != null ? existingUser.getAdminType() : User.AdminType.NONE);
+		newUser.setType(existingUser != null ? existingUser.getType() : User.Type.NONE);
 		newUser.setManageForms(existingUser != null ? existingUser.canManageForms() : false);
 	}
 	
