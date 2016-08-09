@@ -37,10 +37,7 @@
                     <td>邮箱地址 </td><td> : $user.emailAddress </td>
                   </tr>
                   <tr>
-                    <td>机构 </td><td> : $user.department.institute.name </td>
-                  </tr>
-                  <tr>
-                    <td>部门 </td><td> : $user.department.name </td>
+                    <td>机构 </td><td> : $user.institute.name </td>
                   </tr>
                 </table>
               </td>

@@ -37,10 +37,7 @@
                     <td>Email Address </td><td> : $user.emailAddress </td>
                   </tr>
                   <tr>
-                    <td>Institute </td><td> : $user.department.institute.name </td>
-                  </tr>
-                  <tr>
-                    <td>Department </td><td> : $user.department.name </td>
+                    <td>Institute </td><td> : $user.institute.name </td>
                   </tr>
                 </table>
               </td>
