@@ -556,31 +556,21 @@
     <modifyDataType tableName="CATISSUE_SPECIMEN_COLL_GROUP" columnName="COMMENTS" newDataType="${text.type}(2000)" />
   </changeSet>
   
-  <changeSet author="nmarwaha" id="User admin type enumeration">
+  <changeSet author="nmarwaha" id="User type enumeration">
     <addColumn tableName="CATISSUE_USER">
-      <column name="ADMIN_TYPE" type="${text.type}(16)" defaultValue="NONE"/>
+      <column name="TYPE" type="${text.type}(16)" defaultValue="NONE"/>
     </addColumn>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="Set admin type = 'SUPER' for super administrator user">
+  <changeSet author="nmarwaha" id="Set type = 'SUPER' for super administrator user">
     <sql>
       update 
         catissue_user
       set
-        admin_type = 'SUPER' 
+        type = 'SUPER' 
       where 
         is_admin = 1;
     </sql>
   </changeSet>
-  
-  <!-- changeSet author="nmarwaha" id="Set admin type = 'NONE' for non-super admin users">
-    <sql>
-      update 
-        catissue_user
-      set
-        admin_type = 'NONE' 
-      where 
-        admin_type is null;
-    </sql>
-  </changeSet -->
+
 </databaseChangeLog>	
