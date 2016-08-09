@@ -348,8 +348,8 @@ angular.module('os.query.results', ['os.query.models'])
       }
 
       $scope.resultsCtx.pivotTableOpts = {
-        height: '500px',
-        width: '1200px',
+        height: '100%',
+        width: '100%',
         colHeaders: $scope.resultsCtx.columnLabels,
         numGrpCols: numGrpCols,
         numValueCols: numValueCols,

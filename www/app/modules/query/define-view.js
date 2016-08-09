@@ -612,16 +612,18 @@ angular.module('os.query.defineview', ['os.query.models'])
     };
 
     function getMatchingNodeIdx(field, fields, level) {
-      var name;
+      var name, fqn;
       if (typeof field == "string") {
         name = field.split(".", level + 1).join(".");
+        fqn = field;
       } else {
         name = field.name.split(".", level + 1).join(".");
+        fqn = field.name;
       } 
 
       var idx = -1;
       for (var i = 0; i < fields.length; ++i) {
-        if (name == fields[i].name || field == fields[i].name) {
+        if (name == fields[i].name || fqn == fields[i].name) {
           idx = i;
           break;
         }
