@@ -101,6 +101,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
     }
 
     function loadSites(instituteName) {
+      //Passing isAddAll = false so that "All Current & Future Sites" option won't be displayed
       $scope.sites = getSites(instituteName, false);
     }
     
@@ -109,7 +110,8 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       if (availableInstSites[instituteName] && availableInstSites[instituteName].length != 0) {
         Array.prototype.push.apply(sites, availableInstSites[instituteName]);
       } else {
-        Site.listForInstitute(instituteName).then(
+    	  //Passing listAll = true to fetch the selected institute's sites only
+        Site.listForInstitute(instituteName, true).then(
           function(result) {
             availableInstSites[instituteName] = result;
             Array.prototype.push.apply(sites, result);
