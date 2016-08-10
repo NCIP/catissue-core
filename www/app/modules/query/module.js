@@ -62,8 +62,9 @@ angular.module('os.query',
        controller: 'QueryResultsCtrl',
        resolve: {
          queryCtx: function($rootScope, $stateParams, queryGlobal, QueryCtxHolder) {
-           if ($rootScope.stateChangeInfo && $rootScope.stateChangeInfo.fromState.name == 'specimen-list-addedit') {
-             queryGlobal.setQueryCtx(QueryCtxHolder.getCtx());
+           var ctx = QueryCtxHolder.getCtx();
+           if ($rootScope.stateChangeInfo && ctx && $rootScope.stateChangeInfo.fromState.name == ctx.fromState) {
+             queryGlobal.setQueryCtx(ctx);
              $stateParams.editMode = true;
            }
 

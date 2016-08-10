@@ -589,6 +589,7 @@ angular.module('os.query.results', ['os.query.models'])
     }
 
     $scope.createNewSpecimenList = function() {
+      queryCtx.fromState = 'specimen-list-addedit'
       QueryCtxHolder.setCtx(queryCtx);
       SpecimensHolder.setSpecimens(getSelectedSpecimens());
       $state.go('specimen-list-addedit', {listId: ''});
