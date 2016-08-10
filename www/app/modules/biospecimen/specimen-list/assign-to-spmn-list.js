@@ -26,6 +26,7 @@ angular.module('os.biospecimen.specimenlist.assignto',[])
       templateUrl: 'modules/biospecimen/specimen-list/assign-to-spmn-list.html',
 
       link: function(scope, element, attrs) {
+        scope.leftAlign = (attrs.menuAlign == 'left');
         scope.filterOpts = {};
         loadSpecimenLists(scope);
 

@@ -1,6 +1,3 @@
-<!-- os-assign-to-spmn-list on-add-to-list="addSpecimensToList(list)">
-</os-assign-to-spmn-list -->
-
 <div os-show-if-menu-items-present dropdown class="os-inline-btn">
   <button class="default dropdown-toggle">
     <span translate="specimens.ops">Specimen Ops</span>
@@ -46,6 +43,9 @@
     </li>
   </ul>
 </div>
+
+<os-assign-to-spmn-list menu-align="left" on-add-to-list="listViewCtx.ctrl.addSpecimensToList(list)">
+</os-assign-to-spmn-list>
 
 <button class="default" ui-sref="participant-list({cpId: cp.id})">
   <span class="fa fa-group"></span>

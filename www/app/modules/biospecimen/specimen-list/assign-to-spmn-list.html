@@ -7,7 +7,7 @@
     <span class="caret"></span>
   </button>
   
-  <ul class="dropdown-menu dropdown-menu-right os-query-folders-dd">
+  <ul class="dropdown-menu os-query-folders-dd" ng-class="{'dropdown-menu-right': !leftAlign}">
     <li>
       <input ng-model="filterOpts.name" type="text" class="form-control"
         placeholder="{{'specimen_list.search_list' | translate}}" ng-click="$event.stopPropagation()">

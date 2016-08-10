@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.participant')
   .controller('SpecimensListViewCtrl', function(
-    $scope, $state, cp, spmnListCfg, reqBasedDistOrShip,
+    $scope, $state, currentUser, cp, spmnListCfg, reqBasedDistOrShip,
     Util, Specimen, SpecimensHolder, DeleteUtil, Alerts, ListPagerOpts) {
 
     var ctrl = this;
@@ -84,6 +84,11 @@ angular.module('os.biospecimen.participant')
       );
     }
 
+    function createNewList(spmns) {
+      SpecimensHolder.setSpecimens(spmns);
+      $state.go('specimen-list-addedit', {listId: ''});
+    }
+
     $scope.showSpecimen = function(row) {
       $state.go('specimen', {specimenId: row.hidden.specimenId});
     }
@@ -138,6 +143,26 @@ angular.module('os.biospecimen.participant')
 
     this.pagerOpts = function() {
       return pagerOpts;
+    }
+
+    this.addSpecimensToList = function(list) {
+      var items = $scope.ctx.$list.getSelectedItems();
+      if (!items || items.length == 0) {
+        Alerts.error('specimens.no_specimens_for_specimen_list');
+        return;
+      }
+
+      var spmns = items.map(function(item) { return {id: item.hidden.specimenId}; });
+      if (!list) {
+        createNewList(spmns);
+      } else {
+        list.addSpecimens(spmns).then(
+          function() {
+            var type = list.getListType(currentUser);
+            Alerts.success('specimen_list.specimens_added_to_' + type, list);
+          }
+        );
+      }
     }
 
     init();
