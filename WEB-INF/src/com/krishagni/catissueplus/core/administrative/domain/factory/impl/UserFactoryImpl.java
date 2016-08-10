@@ -70,7 +70,12 @@ public class UserFactoryImpl implements UserFactory {
 
 	private void setType(UserDetail detail, User user, OpenSpecimenException ose) {
 		try {
-			user.setType(User.Type.valueOf(detail.getType()));
+			String type = detail.getType();
+			if (StringUtils.isBlank(type)) {
+				user.setType(User.Type.NONE);
+			} else {
+				user.setType(User.Type.valueOf(type));
+			}
 		} catch (IllegalArgumentException iae) {
 			ose.addError(UserErrorCode.INVALID_TYPE, detail.getType());
 		}
