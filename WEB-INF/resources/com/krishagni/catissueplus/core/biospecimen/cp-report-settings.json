@@ -1,5 +1,5 @@
 {
-  "dataQueryAql": "select Participant.ppid, SpecimenCollectionGroup.name, Specimen.label, Specimen.createdOn where Specimen.collectionStatus = \"Collected\" and date_range(Specimen.createdOn, last_cal_month)",
+  "dataQueryAql": "select SpecimenCollectionGroup.site.name, count(distinct Participant.id) as \"Participants \", count(distinct Specimen.id) as \"Specimens \", Specimen.type where  Specimen.collectionStatus = \"Collected\" and  Specimen.specimenPosition.containerName exists and date_range(Specimen.createdOn, last_cal_month) crosstab((1), 4, (-2,3))",
 
   "metricsCfg": {
     "participants": {
