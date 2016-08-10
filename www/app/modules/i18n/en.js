@@ -370,6 +370,7 @@
 
     "consents": "Consents",
     "registrations": "Participant Registrations",
+    "reg_to_other_protocols": "Register to Other Protocols",
     "master_specimens": "Master Specimens",
     "registered_cps": "Registered Protocols",
     "other_cps": "Other Protocols",
@@ -1469,6 +1470,8 @@
       "site": "Sites",
       "storageContainer": "Storage Containers",
       "cpr": "Collection Protocol Registrations",
+      "cprMultiple": "Participant Registrations",
+      "otherCpr": "Register to Other Protocols",
       "participant": "Participants",
       "consent": "Consents",
       "visit": "Visits",

@@ -18,7 +18,9 @@ angular.module('os.biospecimen.cp',
         url: '/cps',
         abstract: true,
         template: '<div ui-view></div>',
-        controller: function($scope) {
+        controller: function($scope, cpsCtx) {
+          $scope.cpsCtx = cpsCtx;
+
           // Collection Protocol Authorization Options
           $scope.cpResource = {
             createOpts: {resource: 'CollectionProtocol', operations: ['Create']},
@@ -36,6 +38,21 @@ angular.module('os.biospecimen.cp',
           }
           
           $scope.codingEnabled = $scope.global.appProps.cp_coding_enabled;
+        },
+        resolve: {
+          cpsCtx: function(currentUser, AuthorizationService) {
+            return {
+              participantUpdateAllowed: AuthorizationService.isAllowed({
+                resource: 'ParticipantPhi',
+                operations: ['Create', 'Update']
+              }),
+
+              visitSpecimenUpdateAllowed: AuthorizationService.isAllowed({
+                resource: 'VisitAndSpecimen',
+                operations: ['Create', 'Update']
+              })
+            }
+          }
         },
         parent: 'signed-in'
       })
@@ -81,6 +98,60 @@ angular.module('os.biospecimen.cp',
         url: '/import',
         templateUrl: 'modules/biospecimen/cp/import.html',
         controller: 'CpImportCtrl',
+        parent: 'cps'
+      })
+      .state('import-multi-cp-objs', {
+        url: '/import-multi-cp-objs',
+        templateUrl: 'modules/common/import/add.html',
+        controller: 'ImportObjectCtrl',
+        resolve: {
+          cp: function(CollectionProtocol) {
+            return new CollectionProtocol({id: -1});
+          },
+
+          allowedEntityTypes: function(cpsCtx) {
+            var entityTypes = [];
+            if (cpsCtx.participantUpdateAllowed) {
+              entityTypes.push('Participant');
+            }
+
+            if (cpsCtx.visitSpecimenUpdateAllowed) {
+              entityTypes = entityTypes.concat(['SpecimenCollectionGroup', 'Specimen', 'SpecimenEvent']);
+            }
+
+            return entityTypes;
+          },
+
+          forms: function(cp, allowedEntityTypes) {
+            return allowedEntityTypes.length > 0 ? cp.getForms(allowedEntityTypes) : [];
+          },
+
+          importDetail: function(cp, allowedEntityTypes, forms, ImportUtil) {
+            return ImportUtil.getImportDetail(cp, allowedEntityTypes, forms);
+          }
+        },
+        parent: 'cps'
+      })
+      .state('import-multi-cp-jobs', {
+        url: '/import-multi-cp-jobs',
+        templateUrl: 'modules/common/import/list.html',
+        controller: 'ImportJobsListCtrl',
+        resolve: {
+          importDetail: function() {
+            return {
+              breadcrumbs: [
+                {state: 'cp-list', title: "cp.list"}
+              ],
+              title: 'bulk_imports.jobs_list',
+              objectTypes: [
+                "cprMultiple", 'otherCpr', 'cpr', 'participant', 'consent', 'visit',
+                'specimen', 'specimenDerivative', 'specimenAliquot',
+                'masterSpecimen', 'extensions'
+              ],
+              objectParams: {cpId: -1}
+            }
+          }
+        },
         parent: 'cps'
       })
       .state('cp-detail', {

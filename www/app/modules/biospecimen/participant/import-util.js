@@ -20,10 +20,24 @@ angular.module('os.biospecimen.participant')
       return importTypes;
     }
 
-    function getParticipantTypes(entityForms) {
+    function getParticipantTypes(entityForms, cpId) {
       var group = $translate.instant('participant.title');
 
-      var importTypes = [
+      var importTypes = [];
+      if (cpId == -1) {
+        importTypes = [
+          {
+            group: group, type: 'cprMultiple', title: 'participant.registrations',
+            showImportType: false, importType: 'CREATE'
+          },
+          {
+            group: group, type: 'otherCpr', title: 'participant.reg_to_other_protocols',
+            showImportType: false, importType: 'CREATE'
+          }
+        ]
+      }
+
+      importTypes = importTypes.concat([
         {
           group: group, type: 'cpr', title: 'participant.list'
         },
@@ -31,7 +45,7 @@ angular.module('os.biospecimen.participant')
           group: group, type: 'consent', title: 'participant.consents',
           showImportType: false, csvType: 'MULTIPLE_ROWS_PER_OBJ', importType: 'UPDATE'
         }
-      ];
+      ]);
 
       return addForms(importTypes, group, 'Participant', entityForms['Participant']);
     } 
@@ -66,6 +80,15 @@ angular.module('os.biospecimen.participant')
     }
 
     function getImportDetail(cp, allowedEntityTypes, forms) {
+      var breadcrumbs, onSuccess;
+      if (cp.id == -1) {
+        breadcrumbs = [{state: 'cp-list', title: "cp.list"}];
+        onSuccess = {state: 'cp-list'};
+      } else {
+        breadcrumbs = [{state: 'cp-list-view', title: cp.shortTitle, params: '{cpId:' + cp.id + '}'}];
+        onSuccess = {state: 'cp-list-view', params: {cpId: cp.id}};
+      }
+
       var entityForms = {};
       angular.forEach(forms, function(form) {
         if (!entityForms[form.entityType]) {
@@ -77,7 +100,7 @@ angular.module('os.biospecimen.participant')
 
       var importTypes = [];
       if (allowedEntityTypes.indexOf('Participant') >= 0) {
-        importTypes = importTypes.concat(getParticipantTypes(entityForms));
+        importTypes = importTypes.concat(getParticipantTypes(entityForms, cp.id));
       }
 
       if (allowedEntityTypes.indexOf('SpecimenCollectionGroup') >= 0) {
@@ -99,12 +122,10 @@ angular.module('os.biospecimen.participant')
       );
 
       return {
-        breadcrumbs: [
-          {state: 'cp-list-view', title: cp.shortTitle, params: '{cpId:' + cp.id + '}'}
-        ],
+        breadcrumbs: breadcrumbs,
         title: 'Bulk Import Records',
         objectType: undefined,
-        onSuccess: {state: 'cp-list-view', params: {cpId: cp.id}},
+        onSuccess: onSuccess,
         types: importTypes,
         objectParams: {
           cpId: cp.id

@@ -53,7 +53,7 @@ public class CustomFieldsSchemaBuilder extends ExtensionSchemaBuilder {
 			cpId = -1L;
 		}
 
-		return addCustomFields(getSchema(), cpId);
+		return cpId == -1 ? getSchema() : addCustomFields(getSchema(), cpId);
 	}
 
 	private ObjectSchema getSchema() {
