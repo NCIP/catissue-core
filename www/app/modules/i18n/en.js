@@ -281,7 +281,7 @@
     },
 
     "reporting": {
-      "title": "Report Settings",
+      "title": "Monthly Report Settings",
       "add": "Customise Report",
       "disable": "Disable Report",
       "enable": "Enable Report",
