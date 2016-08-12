@@ -70,6 +70,8 @@ public interface QueryService {
 	// internal use
 	// 
 	public interface ExportProcessor {
+		public String filename();
+
 		public void headers(OutputStream out);
 	}	
 

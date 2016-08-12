@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -442,6 +443,11 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 		execReportOp.setRunType("Export");
 		
 		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {
+			@Override
+			public String filename() {
+				return "shipment_" + shipment.getId() + "_" + UUID.randomUUID().toString();
+			}
+
 			@Override
 			public void headers(OutputStream out) {
 				@SuppressWarnings("serial")

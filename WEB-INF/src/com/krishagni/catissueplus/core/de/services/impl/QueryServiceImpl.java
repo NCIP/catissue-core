@@ -810,7 +810,7 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			final Authentication auth = AuthUtil.getAuth();
 			final User user = AuthUtil.getCurrentUser();
-			final String filename = UUID.randomUUID().toString();
+			final String filename = getExportFilename(opDetail, processor);
 			final OutputStream fout = new FileOutputStream(getExportDataDir() + File.separator + filename);
 			out = fout;
 
@@ -1296,6 +1296,24 @@ public class QueryServiceImpl implements QueryService {
 
 	private int decConcurrentQueriesCnt() {
 		return concurrentQueriesCnt.decrementAndGet();
+	}
+
+	private String getExportFilename(ExecuteQueryEventOp op, ExportProcessor proc) {
+		String filename = null;
+		if (proc != null) {
+			filename = proc.filename();
+		}
+
+		if (StringUtils.isBlank(filename)) {
+			Long queryId = op.getSavedQueryId();
+			if (queryId == null) {
+				queryId = 0L; // to indicate unsaved query
+			}
+
+			filename = "query_" + queryId + "_" + UUID.randomUUID().toString();
+		}
+
+		return filename;
 	}
 
 	private SavedQueryErrorCode getErrorCode(QueryException.Code error) {

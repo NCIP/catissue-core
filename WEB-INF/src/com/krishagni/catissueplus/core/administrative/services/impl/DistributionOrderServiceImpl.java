@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -391,7 +392,12 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		execReportOp.setAql(report.getAql(new Filter[] { filter }));			
 		execReportOp.setWideRowMode(WideRowMode.DEEP.name());
 		execReportOp.setRunType("Export");
-		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {			
+		return querySvc.exportQueryData(execReportOp, new QueryService.ExportProcessor() {
+			@Override
+			public String filename() {
+				return "order_" + order.getId() + "_" + UUID.randomUUID().toString();
+			}
+
 			@Override
 			public void headers(OutputStream out) {
 				@SuppressWarnings("serial")
