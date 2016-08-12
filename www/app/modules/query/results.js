@@ -542,7 +542,7 @@ angular.module('os.query.results', ['os.query.models'])
       var qc = $scope.queryCtx;
 
       var alert = Alerts.info('queries.export_initiated', {}, false);  
-      QueryExecutor.exportQueryResultsData(undefined, qc.selectedCp.id, getAql(false), 'DEEP').then(
+      QueryExecutor.exportQueryResultsData(qc.id, qc.selectedCp.id, getAql(false), 'DEEP').then(
         function(result) {
           Alerts.remove(alert);
           if (result.completed) {
