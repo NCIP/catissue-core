@@ -30,12 +30,6 @@ angular.module('os.biospecimen.common.specimendesc', [])
               '!!specimen.collectionContainer && specimen.collectionContainer != notSpecified">' +
               '<span translate="specimens.collected_in">collected in</span> {{specimen.collectionContainer}}' +
             '</span>' +
-            '<span ng-if="!!showReqLabel" ng-switch on="!!specimen.name || !!specimen.reqLabel">' +
-              '<span ng-switch-when="true"> ({{specimen.name || specimen.reqLabel}}) </span>' +
-              '<span ng-switch-default>' +
-                '<span ng-if="!!specimen.code || !!specimen.reqCode"> ({{specimen.code || specimen.reqCode}}) </span>' +
-              '</span>' +
-            '</span>' +
           '</span>' +
           '<span ng-if="specimen.lineage == \'New\' && !!specimen.pooledSpecimen && !detailed">' +
             '<span translate="specimens.pool_specimen">Pool Specimen</span>' +
@@ -45,6 +39,14 @@ angular.module('os.biospecimen.common.specimendesc', [])
           '</span>' +
           '<span ng-if="specimen.lineage == \'Derived\' && !detailed">' +
             '<span translate="specimens.derived">Derived</span> {{specimen.type}}' +
+          '</span>' +
+          '<span ng-if="!!showReqLabel && ((specimen.lineage == \'New\' && !specimen.pooledSpecimen) || specimen.lineage == \'Derived\')">' +
+            '<span ng-switch on="!!specimen.name || !!specimen.reqLabel">' +
+              '<span ng-switch-when="true"> ({{specimen.name || specimen.reqLabel}}) </span>' +
+              '<span ng-switch-default>' +
+                '<span ng-if="!!specimen.code || !!specimen.reqCode"> ({{specimen.code || specimen.reqCode}}) </span>' +
+              '</span>' +
+            '</span>' +
           '</span>' +
         '</span>'
     };
