@@ -29,11 +29,11 @@ public class SpecimenFreezeThawEventFilter implements FormDataFilter {
 			}
 
 			ControlValue incrFreezeThaw = input.getFieldValue("incrementFreezeThaw");
-			int increment = Integer.parseInt((String) incrFreezeThaw.getValue());
-			if (increment == 1) {
+			boolean increment = incrFreezeThaw == null ? false : incrFreezeThaw.getControl().fromString((String)incrFreezeThaw.getValue());
+			if (increment) {
 				Specimen specimen = daoFactory.getSpecimenDao().getById(specimenId);
 				Integer existingCount = specimen.getFreezeThawCycles();
-				specimen.setFreezeThawCycles(existingCount == null ? increment : existingCount + increment);
+				specimen.setFreezeThawCycles(existingCount == null ? 1 : existingCount + 1);
 			}
 
 			return input;
