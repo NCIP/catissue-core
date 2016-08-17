@@ -51,7 +51,7 @@
           <span class="os-title" translate="user.menu.overview">Overview</span>
         </a>
       </li>
-      <li ng-if="!user.admin" ui-sref-active="active">
+      <li ng-if="user.type == 'NONE'" ui-sref-active="active">
         <a ui-sref=".roles">
           <i class="fa fa-users"></i>
           <span class="os-title" translate="user.menu.roles">Roles</span>
