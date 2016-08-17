@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -34,6 +36,12 @@ public class AppServletContextListener implements ServletContextListener {
 
 	private static final String PLUGIN_DIR_PROP = "plugin.dir";
 
+	private static final String VERSION_PROP    = "buildinfo.version";
+
+	private static final String BUILD_DATE_PROP = "buildinfo.date";
+
+	private static final String REVISION_PROP   = "buildinfo.commit_revision";
+
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		InputStream in = null;
@@ -44,7 +52,11 @@ public class AppServletContextListener implements ServletContextListener {
 			Properties props = new Properties();
 			props.load(in);
 
+			String msg = getWelcomeMessage(props);
+			writeToConsole(msg);
+
 			initLogging(props);
+			writeToLogFile(msg);
 
 			String pluginDir = props.getProperty(PLUGIN_DIR_PROP);
 			if (StringUtils.isNotBlank(pluginDir)) {
@@ -120,5 +132,24 @@ public class AppServletContextListener implements ServletContextListener {
 				IOUtils.closeQuietly(jarFile);
 			}
 		}
+	}
+
+	private void writeToConsole(String msg) {
+		System.out.println(msg);
+	}
+
+	private void writeToLogFile(String msg) {
+		logger.info(msg);
+	}
+
+	private String getWelcomeMessage(Properties props) {
+		return
+			"\n ***************************************************" +
+			"\n OpenSpecimen, a Krishagni Product" +
+			"\n Build Version : " + props.getProperty(VERSION_PROP) +
+			"\n Build Date    : " + new Date(Long.parseLong(props.getProperty(BUILD_DATE_PROP))) +
+			"\n Commit        : " + props.getProperty(REVISION_PROP) +
+			"\n Present Time  : " + Calendar.getInstance().getTime() +
+			"\n ***************************************************";
 	}
 }
