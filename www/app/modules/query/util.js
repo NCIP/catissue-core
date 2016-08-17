@@ -263,6 +263,8 @@ angular.module('os.query.util', [])
               var aggFn = field.aggFns[j];
               if (aggFn.name == 'count') {
                 fnExprs += 'count(distinct ';
+              } else if (aggFn.name == 'c_count') {
+                fnExprs += 'c_count(distinct ';
               } else {
                 fnExprs += aggFn.name + '(';
               }

@@ -1,11 +1,13 @@
 angular.module('os.query.defineview', ['os.query.models']) 
   .controller('DefineViewCtrl', function($scope, $modalInstance, $q, queryCtx, $translate, Form, Alerts) {
     var aggFns = { // TODO: Translate labels
-      count: {name: 'count', label: 'Count'},
-      sum:   {name: 'sum',   label: 'Sum'},
-      min:   {name: 'min',   label: 'Min'},
-      max:   {name: 'max',   label: 'Max'},
-      avg:   {name: 'avg',   label: 'Avg'}
+      count:   {name: 'count',   label: 'Count'},
+      sum:     {name: 'sum',     label: 'Sum'},
+      min:     {name: 'min',     label: 'Minimum'},
+      max:     {name: 'max',     label: 'Maximum'},
+      avg:     {name: 'avg',     label: 'Average'},
+      c_count: {name: 'c_count', label: 'Continuous Count'},
+      c_sum  : {name: 'c_sum',   label: 'Continuous Sum'}
     };
 
     var forms = undefined;
@@ -415,13 +417,13 @@ angular.module('os.query.defineview', ['os.query.models'])
     function getTypeAggFns(type, fns) {
       var result = undefined;
       if (type == 'INTEGER' || type == 'FLOAT') {
-        result = [fns.count, fns.sum, fns.min, fns.max, fns.avg];
+        result = [fns.count, fns.sum, fns.min, fns.max, fns.avg, fns.c_count, fns.c_sum];
       } else if (type == 'STRING') {
-        result = [fns.count];
+        result = [fns.count, fns.c_count];
       } else if (type == 'BOOLEAN') {
-        result = [fns.count, fns.sum];
+        result = [fns.count, fns.sum, fns.c_count, fns.c_sum];
       } else if (type == 'DATE') {
-        result = [fns.count, fns.min, fns.max];
+        result = [fns.count, fns.min, fns.max, fns.c_count];
       } else {
         result = [];
       }

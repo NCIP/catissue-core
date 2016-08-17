@@ -234,7 +234,13 @@ osApp.config(function(
   })
   .run(function(
     $rootScope, $window, $document, $http, $cookies, $q,  $state, $translate, $translatePartialLoader,
-    LocationChangeListener, ApiUtil, Setting, PluginReg) {
+    LocationChangeListener, ApiUtil, Setting, PluginReg, Util) {
+
+    if (!angular.merge) {
+      angular.merge = function(dst, src) {
+        return Util.merge(src, dst);
+      }
+    }
 
     $document.on('click', '.dropdown-menu.dropdown-menu-form', function(e) {
       e.stopPropagation();

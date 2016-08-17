@@ -1379,7 +1379,9 @@
       "sum": "Sum",
       "min": "Minimum",
       "max": "Maximum",
-      "avg": "Average"
+      "avg": "Average",
+      "c_count": "Cum. Count",
+      "c_sum": "Cum. Sum"
     },
 
     "reporting": {
