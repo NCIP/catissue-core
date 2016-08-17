@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.de.domain.Filter.Op;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.LogicalOp;
 import com.krishagni.catissueplus.core.de.domain.QueryExpressionNode.Parenthesis;
@@ -58,35 +59,43 @@ public class AqlBuilder {
 	private String buildSelectClause(Map<Integer, Filter> filterMap, Object[] selectList) {
 		StringBuilder select = new StringBuilder();
 		for (Object field : selectList) {
+			SelectField aggField = null;
 			if (field instanceof String) {
-				select.append(getFieldExpr(filterMap, (String)field, true)).append(", ");
+				aggField = new SelectField();
+				aggField.setName((String) field);
+			} else if (field instanceof Map) {
+				aggField = new ObjectMapper().convertValue(field, SelectField.class);
 			} else if (field instanceof SelectField) {
-				SelectField aggField = (SelectField)field;
-				String fieldName = aggField.getName();
-				
-				if (aggField.getAggFns() == null || aggField.getAggFns().isEmpty()) {
-					select.append(getFieldExpr(filterMap, fieldName, true)).append(", ");
-				} else {
-					String fieldExpr = getFieldExpr(filterMap, fieldName, false);
+				aggField = (SelectField) field;
+			}
+
+			if (aggField == null) {
+				continue;
+			}
+
+			String fieldName = aggField.getName();
+			if (aggField.getAggFns() == null || aggField.getAggFns().isEmpty()) {
+				select.append(getFieldExpr(filterMap, fieldName, true)).append(", ");
+			} else {
+				String fieldExpr = getFieldExpr(filterMap, fieldName, false);
 					
-					StringBuilder fnExpr = new StringBuilder("");
-					for (Function fn : aggField.getAggFns()) {
-						if (fnExpr.length() > 0) {
-							fnExpr.append(", ");
-						}
-						
-						if (fn.getName().equals("count")) {
-							fnExpr.append("count(distinct ");
-						} else {
-							fnExpr.append(fn.getName()).append("(");
-						}
-						
-						fnExpr.append(fieldExpr).append(") as \"").append(fn.getDesc()).append(" \"");
+				StringBuilder fnExpr = new StringBuilder("");
+				for (Function fn : aggField.getAggFns()) {
+					if (fnExpr.length() > 0) {
+						fnExpr.append(", ");
 					}
+						
+					if (fn.getName().equals("count")) {
+						fnExpr.append("count(distinct ");
+					} else {
+						fnExpr.append(fn.getName()).append("(");
+					}
+						
+					fnExpr.append(fieldExpr).append(") as \"").append(fn.getDesc()).append(" \"");
+				}
 					
-					select.append(fnExpr.toString()).append(", ");
-				}				
-			}							
+				select.append(fnExpr.toString()).append(", ");
+			}
 		}
 		
 		int endIdx = select.length() - 2;		
