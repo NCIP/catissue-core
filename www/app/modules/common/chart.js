@@ -1,5 +1,7 @@
 angular.module('openspecimen')
   .directive('osChart', function() {
+    var showLegends = ['pie', 'doughnut'];
+
     return {
       restrict: 'E',
 
@@ -11,12 +13,20 @@ angular.module('openspecimen')
       },
 
       link: function(scope, element, attrs) {
-        scope.options.type = scope.options.type || 'line';
+        var type = scope.options.type = scope.options.type || 'line';
+
+        if (showLegends.indexOf(type) != -1) {
+          scope.options.legend = {display: true, position: 'bottom'};
+        }
 
         scope.override = [];
-        scope.$watch('data.values',
-          function(vals) {
-            scope.override = vals.map(
+        scope.$watch('data',
+          function() {
+            if (scope.data.series && scope.data.series.length > 1) {
+              scope.options.legend = {display: true, position: 'bottom'};
+            }
+
+            scope.override = scope.data.values.map(
               function() {
                 return {pointRadius: 0, pointHitRadius: 10};
               }
