@@ -573,4 +573,16 @@
     </sql>
   </changeSet>
 
+  <changeSet author="vpawar" id="Container ancestors detail view" runOnChange="true">
+    <sql>
+      create or replace view os_container_ancestors_view as
+      select
+        h.descendent_id as container_id, a.name as freezer
+      from
+        os_containers_hierarchy h
+        inner join os_storage_containers a on a.identifier = h.ancestor_id
+      where
+        a.activity_status != 'Disabled' and a.parent_container_id is null
+    </sql>
+  </changeSet>
 </databaseChangeLog>	

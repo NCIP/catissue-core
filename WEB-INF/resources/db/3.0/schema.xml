@@ -70,19 +70,6 @@
     </sql>
   </changeSet>
   
-  <changeSet author="nmarwaha" id="View to assist query containers based on ancestor container names" runOnChange="true">
-    <sql> 
-      create or replace view os_container_ancestors_view as 
-        select 
-          h.descendent_id as container_id, a.name as ancestor_name
-        from 
-          os_containers_hierarchy h 
-          inner join os_storage_containers a on a.identifier = h.ancestor_id 
-        where 
-          a.activity_status != 'Disabled';
-    </sql>
-  </changeSet>
-
   <changeSet author="vgaikwad" id="Specimen label print settings at CP level">
     <createTable tableName="OS_CP_SPMN_LBL_PRINT_SETTINGS">
       <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
