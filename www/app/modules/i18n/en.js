@@ -107,7 +107,8 @@
       "skip": "Skip",
       "back": "Back",
       "list_view": "List View",
-      "disable": "Disable"
+      "disable": "Disable",
+      "help": "Help"
     }
   },
 
@@ -1905,8 +1906,6 @@
         "shipment_export_report_desc": "Export Report format for all shipments",
         "field_separator": "Field Separator",
         "field_separator_desc": "A single character that specifies how records in delimited text file should be split into fields. For example: CSV files use comma (,) as the field separator",
-        "training_url": "Training URL ",
-        "training_url_desc": "Training documentation URL",
         "deploy_env": "Deployment Environment",
         "deploy_env_desc": "Any meaningful text that helps users distinguish between various OpenSpecimen deployment environments like test, dev, prod, demo etc"
       },
@@ -1975,6 +1974,38 @@
         "max_concurrent_queries_desc": "Maximum number of queries that are allowed to run simultaneously before rejecting new query execution requests",
         "max_recs_in_memory": "In-memory Records Limit",
         "max_recs_in_memory_desc": "Maximum number of query records that are allowed to be cached in-memory. When limit is reached, excessive records are spooled to disk"
+      },
+
+      "training": {
+        "title": "Training",
+        "cp_help_link": "Collection Protocol",
+        "cp_help_link_desc": "Link to training materials on how to manage collection protocols",
+        "container_help_link": "Container",
+        "container_help_link_desc": "Link to training materials on how to manage containers",
+        "dp_help_link": "Distribution Protocol",
+        "dp_help_link_desc": "Link to training materials on how to manage distribution protocols",
+        "institute_help_link": "Institute",
+        "institute_help_link_desc": "Link to training materials on how to manage institutes",
+        "job_help_link": "Job",
+        "job_help_link_desc": "Link to training materials on how to manage custom jobs",
+        "order_help_link": "Distribution Order",
+        "order_help_link_desc": "Link to training materials on how to distribute specimens to others",
+        "form_help_link": "Form",
+        "form_help_link_desc": "Link to training materials on how to manage custom forms and fields",
+        "query_help_link": "Query",
+        "query_help_link_desc": "Link to training materials on how to query for data (reporting)",
+        "role_help_link": "Role",
+        "role_help_link_desc": "Link to training materials on how to manage roles",
+        "site_help_link": "Site",
+        "site_help_link_desc": "Link to training materials on how to manage sites",
+        "specimen_list_help_link": "Specimen Cart",
+        "specimen_list_help_link_desc": "Link to training materials on how to specimen carts",
+        "shipment_help_link": "Shipping and Tracking",
+        "shipment_help_link_desc": "Link to training materials on how to manage specimen shipments",
+        "user_help_link": "User",
+        "user_help_link_desc": "Link to training materials on how to manage users",
+        "training_url": "Training URL ",
+        "training_url_desc": "Link to used for the training option in the menu"
       }
     },
 

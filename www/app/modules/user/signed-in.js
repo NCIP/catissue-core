@@ -11,7 +11,7 @@ angular.module('openspecimen')
      }
      
      function getTrainingUrl() {
-       SettingUtil.getSetting("common", "training_url").then(
+       SettingUtil.getSetting("training", "training_url").then(
          function(setting) {
            $scope.userCtx.trainingUrl = setting.value;
          }
