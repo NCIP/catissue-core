@@ -266,7 +266,7 @@ osApp.config(function(
       function(event, toState, toParams, fromState, fromParams) {
         LocationChangeListener.onChange(event);
 
-        if (toState.parent != 'default') {
+        if (toState.parent != 'default-nav-buttons') {
           $rootScope.reqState = {
             name: toState.name,
             params: toParams
