@@ -169,12 +169,24 @@ angular.module('os.biospecimen.participant',
             return CpConfigSvc.getListConfig(cp, 'participant-list-view');
           }
         },
+        metaInfo: {
+          button: {
+            icon: 'fa-group',
+            label: 'cp.view_participants'
+          }
+        },
         parent: 'cp-list-view-root'
       })
       .state('cp-specimens', {
         url: '/specimens',
         templateUrl: 'modules/biospecimen/participant/specimens-list.html',
         controller: 'SpecimensListViewCtrl',
+        metaInfo: {
+          button: {
+            icon: 'fa-flask',
+            label: 'cp.view_specimens'
+          }
+        },
         parent: 'cp-list-view-root'
       })
       .state('import-cp-objs', {
