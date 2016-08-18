@@ -4,17 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -111,11 +115,12 @@ public class AppServletContextListener implements ServletContextListener {
 			throw new RuntimeException("Invalid plugin directory: " + pluginDir);
 		}
 
-		for (File file : pluginDirFile.listFiles()) {
-			if (file.isDirectory() || !file.getName().endsWith(".jar")) {
-				continue;
-			}
+		List<File> pluginFiles = Arrays.stream(pluginDirFile.listFiles())
+			.filter(f -> !f.isDirectory() && f.getName().endsWith(".jar"))
+			.sorted((f1, f2) -> ObjectUtils.compare(f1.getName(), f2.getName()))
+			.collect(Collectors.toList());
 
+		for (File file : pluginFiles) {
 			JarFile jarFile = null;
 			try {
 				logger.info("Loading plugin resource from: " + file.getAbsolutePath());
