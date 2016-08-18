@@ -28,16 +28,7 @@
           <li><a ui-sref="login({logout:true})"  translate="user.logout">Log Out</a></li>
         </ul>
       </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle">
-          <span class="fa fa-info-circle"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-          <li>
-            <div ng-include src="'modules/common/about.html'"></div>
-          </li>
-        </ul>
-      </li>
+      <os-info></os-info>
       <li ng-if="global.appProps.feedback_enabled">
         <a ng-controller="FeedbackCtrl" ng-click="openFeedbackForm()">
           <span class="fa fa-bullhorn"></span>

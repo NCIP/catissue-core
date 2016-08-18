@@ -1,24 +1,39 @@
-
 angular.module('openspecimen')
   .config(function($stateProvider) {
     $stateProvider
+      .state('default-nav-buttons', {
+        abstract: true,
+        views: {
+          'nav-buttons': {
+            templateUrl: 'modules/common/default-nav-btns.html',
+            controller: function() { }
+          },
+
+          'app-body': {
+            template: '<div ui-view></div>',
+            controller: function() { }
+          }
+        },
+        controller: function() { },
+        parent: 'default'
+      })
       .state('login', {
         url: '/?logout',
         templateUrl: 'modules/user/signin.html',
         controller: 'LoginCtrl',
-        parent: 'default'
+        parent: 'default-nav-buttons'
       })
       .state('forgot-password', {
         url: '/forgot-password',
         templateUrl: 'modules/user/forgot-password.html',
         controller: 'ForgotPasswordCtrl',
-        parent: 'default'
+        parent: 'default-nav-buttons'
       })
       .state('reset-password', {
         url: '/reset-password',
         templateUrl: 'modules/user/reset-password.html',
         controller: 'ResetPasswordCtrl',
-        parent: 'default'
+        parent: 'default-nav-buttons'
       })
       .state('sign-up', {
         url: '/sign-up',
@@ -35,7 +50,7 @@ angular.module('openspecimen')
           }
         },
         controller: 'UserAddEditCtrl',
-        parent: 'default'
+        parent: 'default-nav-buttons'
       })
       .state('welcome', {
         url: '/welcome',
@@ -46,6 +61,6 @@ angular.module('openspecimen')
           }
         },
         controller: 'WelcomeCtrl',
-        parent: 'default'
+        parent: 'default-nav-buttons'
       });
   });
