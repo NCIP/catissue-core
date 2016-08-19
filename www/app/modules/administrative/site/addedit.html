@@ -21,7 +21,7 @@
       <div class="form-group" show-if-admin>
         <label class="col-xs-3 control-label" translate="site.institute">Institute</label>
         <div class="col-xs-6">
-          <os-select ng-model="site.instituteName" list="institutes" name="institute" 
+          <os-select ng-model="site.instituteName" list="institutes" name="institute" on-select="onInstituteSelect()"
             placeholder="{{'site.institute' | translate}}" required>
           </os-select>
           <div os-field-error field="sform.institute"></div>

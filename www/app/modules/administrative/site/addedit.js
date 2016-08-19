@@ -10,7 +10,7 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
 
       $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts(site, extensionCtxt);
-      $scope.coordFilterOpts = {institute: currentUser.instituteName};
+      $scope.coordFilterOpts = {institute: $scope.site.instituteName};
       
       if (currentUser.admin) {
         loadPvs();
@@ -26,6 +26,11 @@ angular.module('os.administrative.site.addedit', ['os.administrative.models'])
           });
         }
       );
+    }
+    
+    $scope.onInstituteSelect = function() {
+      $scope.site.coordinators = undefined;
+      $scope.coordFilterOpts = {institute: $scope.site.instituteName};
     }
 
     $scope.save = function() {

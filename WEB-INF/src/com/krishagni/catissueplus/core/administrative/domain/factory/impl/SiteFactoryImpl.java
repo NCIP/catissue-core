@@ -128,22 +128,29 @@ public class SiteFactoryImpl implements SiteFactory {
 	}
 
 	private void setCoordinators(SiteDetail detail, Site site, OpenSpecimenException ose) {		
-		Set<User> result = new HashSet<User>();
+		Set<User> result = new HashSet<>();
 		
 		for (UserSummary userSummary : detail.getCoordinators()) {
 			User user = null;
+			Object key = null;
+
 			if (userSummary.getId() != null) {
 				user = daoFactory.getUserDao().getById(userSummary.getId());
+				key = userSummary.getId();
 			} else if (StringUtils.isNotBlank(userSummary.getEmailAddress())) {
 				user = daoFactory.getUserDao().getUserByEmailAddress(userSummary.getEmailAddress());
+				key = userSummary.getEmailAddress();
 			}
 						
 			if (user == null) {
-				ose.addError(UserErrorCode.NOT_FOUND);
-				return;
+				if (key != null) {
+					ose.addError(UserErrorCode.NOT_FOUND, key);
+				}
+			} else if (site.getInstitute() != null && !user.getInstitute().equals(site.getInstitute())) {
+				ose.addError(SiteErrorCode.INVALID_COORDINATOR, user.formattedName(), site.getInstitute().getName());
+			} else {
+				result.add(user);
 			}
-			
-			result.add(user);
 		}
 
 		site.setCoordinators(result);

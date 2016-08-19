@@ -20,7 +20,9 @@ public enum SiteErrorCode implements ErrorCode {
 	
 	REF_ENTITY_FOUND,
 	
-	INVALID_SITE_INSTITUTE;
+	INVALID_SITE_INSTITUTE,
+
+	INVALID_COORDINATOR;
 	
 	public String code() {
 		return "SITE_" + this.name();
