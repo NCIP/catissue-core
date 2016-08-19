@@ -108,40 +108,40 @@ angular.module('os.biospecimen.common.specimenunit', [])
       }
     }
   })
-  .directive('osSpecimenQty', function() {
+  .directive('osSpmnMeasure', function() {
     //
-    // TODO: Change this directive to os-specimen-measure on analysing the impact
+    // A DOM transformation directive; therefore shares the same scope as
+    // the parent element
     //
     return {
       restrict: 'E',
-
-      scope: {
-        quantity: '=',
-        specimen: '=',
-        measure: '@',
-        placeholder: '@'
-      },
 
       replace: true,
 
       template:
         '<div class="input-group"> ' +
-          '<input type="text" ng-model="quantity" class="form-control" ' +
-            'ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{placeholder}}"> ' +
+          '<input type="text" class="form-control" ' +
+            'ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"> ' +
           '<div class="input-group-addon"> ' +
-            '<os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type" ' +
-              'measure="{{measure || \'quantity\'}}"> ' +
+            '<os-specimen-unit></os-specimen-unit>' +
             '</os-specimen-unit> ' +
           '</div> ' +
         '</div>',
 
       compile: function(tElem, tAttrs) {
         var inputEl = tElem.find('input');
+        inputEl.attr('name',        tAttrs.name);
+        inputEl.attr('ng-model',    tAttrs.quantity);
+        inputEl.attr('placeholder', tAttrs.placeholder);
         if (tAttrs.required != undefined) {
           inputEl.attr('required', '');
         }
 
-        inputEl.attr('name', tAttrs.name);
+        var unitEl = tElem.find('os-specimen-unit');
+        unitEl.attr('specimen-class', tAttrs.specimen + '.specimenClass');
+        unitEl.attr('type',           tAttrs.specimen + '.type');
+        unitEl.attr('measure',        tAttrs.measure || 'quantity');
+
 
         if (tAttrs.mdInput) {
           tElem.addClass('os-md-input');
