@@ -19,11 +19,13 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.Distributio
 import com.krishagni.catissueplus.core.administrative.domain.factory.DistributionProtocolFactory;
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteErrorCode;
 import com.krishagni.catissueplus.core.administrative.domain.factory.SiteErrorCode;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.DistributionProtocolDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.DeObject;
@@ -54,6 +56,7 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		setInstitute(detail, distributionProtocol, ose);
 		setDefReceivingSite(detail, distributionProtocol, ose);
 		setPrincipalInvestigator(detail, distributionProtocol, ose);
+		setCoordinators(detail, distributionProtocol, ose);
 		setIrbId(detail, distributionProtocol, ose);
 		setStartDate(detail, distributionProtocol);
 		setEndDate(detail, distributionProtocol);
@@ -149,6 +152,50 @@ public class DistributionProtocolFactoryImpl implements DistributionProtocolFact
 		distributionProtocol.setPrincipalInvestigator(pi);
 	}
 	
+	private void setCoordinators(DistributionProtocolDetail input, DistributionProtocol result, OpenSpecimenException ose) {
+		List<UserSummary> users = input.getCoordinators();
+		if (CollectionUtils.isEmpty(users)) {
+			return;
+		}
+
+		Set<User> coordinators = new HashSet<>();
+		for (UserSummary user : users) {
+			User coordinator = getUser(user, ose);
+			if (coordinator == null) {
+				continue;
+			}
+
+			coordinators.add(coordinator);
+		}
+
+		result.setCoordinators(coordinators);
+	}
+
+	private User getUser(UserSummary detail, OpenSpecimenException ose) {
+		if (detail == null) {
+			return null;
+		}
+
+		User user = null;
+		Object key = null;
+		if (detail.getId() != null) {
+			user = daoFactory.getUserDao().getById(detail.getId());
+			key = detail.getId();
+		} else if (StringUtils.isNotBlank(detail.getLoginName()) && StringUtils.isNotBlank(detail.getDomain())) {
+			user = daoFactory.getUserDao().getUser(detail.getLoginName(), detail.getDomain());
+			key = detail.getLoginName() + ":" + detail.getDomain();
+		} else if (StringUtils.isNotBlank(detail.getEmailAddress())) {
+			user = daoFactory.getUserDao().getUserByEmailAddress(detail.getEmailAddress());
+			key = detail.getEmailAddress();
+		}
+
+		if (key != null && user == null) {
+			ose.addError(UserErrorCode.NOT_FOUND, key);
+		}
+
+		return user;
+	}
+
 	private void setIrbId(DistributionProtocolDetail detail, DistributionProtocol distributionProtocol, OpenSpecimenException ose) {
 		distributionProtocol.setIrbId(detail.getIrbId());
 	}

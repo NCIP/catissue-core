@@ -572,7 +572,7 @@
         is_admin = 1;
     </sql>
   </changeSet>
-
+  
   <changeSet author="vpawar" id="Container ancestors detail view" runOnChange="true">
     <sql>
       create or replace view os_container_ancestors_view as
@@ -585,4 +585,40 @@
         a.activity_status != 'Disabled' and a.parent_container_id is null
     </sql>
   </changeSet>
-</databaseChangeLog>	
+  
+  <changeSet author="nmarwaha" id="DP coordinators">
+    <createTable tableName="OS_DP_COORDINATORS">
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="DP coordinators primary key">
+    <addPrimaryKey 
+      constraintName="PK_OS_DP_COORD"
+      tableName="OS_DP_COORDINATORS" 
+      columnNames="DISTRIBUTION_PROTOCOL_ID, USER_ID"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on DP coordinator user ID">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_COORD_USER_ID"
+      baseTableName="OS_DP_COORDINATORS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on DP coordinator DP ID">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_COORD_DP_ID"
+      baseTableName="OS_DP_COORDINATORS"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+</databaseChangeLog>

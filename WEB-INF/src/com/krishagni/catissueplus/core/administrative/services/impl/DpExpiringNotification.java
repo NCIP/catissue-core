@@ -1,12 +1,14 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -45,13 +47,9 @@ public class DpExpiringNotification implements ScheduledTask {
 		Date intervalEndDate = getIntervalEndDate(intervalStartDate, notificationDays);
 		int repeatInterval = getRepeatInterval();
 		
-		List<DistributionProtocol> dps = daoFactory.getDistributionProtocolDao()
-			.getExpiringDps(intervalStartDate, intervalEndDate);
-		for (DistributionProtocol dp : dps) {
-		  if (isEligibleForReminder(dp, intervalStartDate, notificationDays, repeatInterval)) {
-		    sendExpiryReminder(dp);
-		  }
-		}
+		daoFactory.getDistributionProtocolDao().getExpiringDps(intervalStartDate, intervalEndDate).stream()
+			.filter(dp -> isEligibleForReminder(dp, intervalStartDate, notificationDays, repeatInterval))
+			.forEach(this::sendExpiryReminder);
 	}
 	
 	private Date getIntervalStartDate() {
@@ -89,8 +87,15 @@ public class DpExpiringNotification implements ScheduledTask {
 		Map<String, Object> emailProps = new HashMap<String, Object>();
 		emailProps.put("$subject", new String[] {dp.getShortTitle()});
 		emailProps.put("dp", dp);
-		String[] rcpts = {dp.getPrincipalInvestigator().getEmailAddress()};
-		emailService.sendEmail(DP_EXPIRING_NOTIFICATION_TMPL, rcpts, emailProps);
+		emailService.sendEmail(DP_EXPIRING_NOTIFICATION_TMPL, getReceipients(dp), emailProps);
+	}
+
+	private String[] getReceipients(DistributionProtocol dp) {
+		List<String> rcpts = dp.getCoordinators().stream()
+			.map(user -> user.getEmailAddress())
+			.collect(Collectors.toList());
+		rcpts.add(0, dp.getPrincipalInvestigator().getEmailAddress());
+		return rcpts.toArray(new String[0]);
 	}
 
 	private long daysBetween(Date start, Date end) {

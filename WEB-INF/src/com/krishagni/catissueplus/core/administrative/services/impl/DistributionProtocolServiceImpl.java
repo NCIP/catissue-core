@@ -144,6 +144,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			DistributionProtocol dp = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
 			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dp);
 			ensureUniqueConstraints(dp, null);
+			ensurePiCoordNotSame(dp);
 			
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(dp);
 			dp.addOrUpdateExtension();
@@ -178,6 +179,7 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			DistributionProtocol dp = distributionProtocolFactory.createDistributionProtocol(req.getPayload());
 			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dp);
 			ensureUniqueConstraints(dp, existing);
+			ensurePiCoordNotSame(dp);
 			
 			existing.update(dp);
 			daoFactory.getDistributionProtocolDao().saveOrUpdate(existing);
@@ -495,6 +497,16 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 			newDpr.getClinicalDiagnosis())) {
 			ose.addError(DpRequirementErrorCode.ALREADY_EXISTS);
 		}
+	}
+	
+	private void ensurePiCoordNotSame(DistributionProtocol dp) {
+		if (!dp.getCoordinators().contains(dp.getPrincipalInvestigator())) {
+			return;
+		}
+
+		throw OpenSpecimenException.userError(
+			DistributionProtocolErrorCode.PI_COORD_CANNOT_BE_SAME,
+			dp.getPrincipalInvestigator().formattedName());
 	}
 	
 	private void addDpStats(List<DistributionProtocolDetail> dps) {

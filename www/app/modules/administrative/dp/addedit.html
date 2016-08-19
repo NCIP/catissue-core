@@ -62,9 +62,17 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.pi">Principle Investigator</label>
         <div class="col-xs-6">
-          <os-users name="pi" ng-model="distributionProtocol.principalInvestigator" filter-opts="piFilterOpts"
+          <os-users name="pi" ng-model="distributionProtocol.principalInvestigator" filter-opts="userFilterOpts"
             placeholder="{{'dp.pi' | translate}}" required></os-users>
           <div os-field-error field="dpForm.pi"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="dp.coordinators">Protocol Coordinators</label>
+        <div class="col-xs-6">
+          <os-users multiple ng-model="distributionProtocol.coordinators" filter-opts="userFilterOpts"
+            placeholder="{{'dp.coordinators' | translate}}"></os-users>
         </div>
       </div>
      

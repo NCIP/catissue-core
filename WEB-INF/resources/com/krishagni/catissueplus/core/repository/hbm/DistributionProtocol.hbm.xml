@@ -37,6 +37,11 @@
       name="principalInvestigator"
       class="com.krishagni.catissueplus.core.administrative.domain.User"
       column="PRINCIPAL_INVESTIGATOR_ID"/>
+      
+    <set name="coordinators" table="OS_DP_COORDINATORS" inverse="false" cascade="none">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+    </set>
     
     <many-to-one
       name="report"

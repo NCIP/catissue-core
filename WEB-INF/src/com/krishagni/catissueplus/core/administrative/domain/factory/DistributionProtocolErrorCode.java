@@ -27,8 +27,10 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	INVALID_DISTRIBUTING_SITES,
 	
-	DISTRIBUTING_SITES_REQUIRED;
+	DISTRIBUTING_SITES_REQUIRED,
 	
+	PI_COORD_CANNOT_BE_SAME;
+
 	@Override
 	public String code() {
 		return "DP_" + this.name();

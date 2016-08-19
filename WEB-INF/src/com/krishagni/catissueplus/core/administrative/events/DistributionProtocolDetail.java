@@ -15,6 +15,8 @@ import com.krishagni.catissueplus.core.de.events.SavedQuerySummary;
 
 public class DistributionProtocolDetail extends DistributionProtocolSummary {
 
+	private List<UserSummary> coordinators;
+
 	private String instituteName;
 
 	private String defReceivingSiteName;
@@ -28,6 +30,14 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 	private Map<String, List<String>> distributingSites = new HashMap<String, List<String>>();
 
 	private ExtensionDetail extensionDetail;
+
+	public List<UserSummary> getCoordinators() {
+		return coordinators;
+	}
+
+	public void setCoordinators(List<UserSummary> coordinators) {
+		this.coordinators = coordinators;
+	}
 
 	public String getInstituteName() {
 		return instituteName;
@@ -85,25 +95,26 @@ public class DistributionProtocolDetail extends DistributionProtocolSummary {
 		this.extensionDetail = extensionDetail;
 	}
 
-	public static DistributionProtocolDetail from(DistributionProtocol distributionProtocol) {
+	public static DistributionProtocolDetail from(DistributionProtocol dp) {
 		DistributionProtocolDetail detail = new DistributionProtocolDetail();
 		
-		copy(distributionProtocol, detail);
-		detail.setInstituteName(distributionProtocol.getInstitute().getName());
-		if (distributionProtocol.getDefReceivingSite() != null) {
-			detail.setDefReceivingSiteName(distributionProtocol.getDefReceivingSite().getName());
+		copy(dp, detail);
+		detail.setInstituteName(dp.getInstitute().getName());
+		if (dp.getDefReceivingSite() != null) {
+			detail.setDefReceivingSiteName(dp.getDefReceivingSite().getName());
 		}
 		
-		detail.setIrbId(distributionProtocol.getIrbId());
-		detail.setPrincipalInvestigator(UserSummary.from(distributionProtocol.getPrincipalInvestigator()));
-		detail.setActivityStatus(distributionProtocol.getActivityStatus());
-		if (distributionProtocol.getReport() != null) {
-			detail.setReport(SavedQuerySummary.fromSavedQuery(distributionProtocol.getReport()));
+		detail.setIrbId(dp.getIrbId());
+		detail.setPrincipalInvestigator(UserSummary.from(dp.getPrincipalInvestigator()));
+		detail.setCoordinators(UserSummary.from(dp.getCoordinators()));
+		detail.setActivityStatus(dp.getActivityStatus());
+		if (dp.getReport() != null) {
+			detail.setReport(SavedQuerySummary.fromSavedQuery(dp.getReport()));
 		}
 		
-		Set<DpDistributionSite> distSites = distributionProtocol.getDistributingSites();
+		Set<DpDistributionSite> distSites = dp.getDistributingSites();
 		detail.setDistributingSites(DpDistributionSite.getInstituteSitesMap(distSites));
-		detail.setExtensionDetail(ExtensionDetail.from(distributionProtocol.getExtension()));
+		detail.setExtensionDetail(ExtensionDetail.from(dp.getExtension()));
 
 		return detail;
 	}

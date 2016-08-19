@@ -11,7 +11,7 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
       $scope.distributionProtocol = distributionProtocol;
       $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts(distributionProtocol, extensionCtxt);
-      $scope.piFilterOpts = {institute: distributionProtocol.instituteName};
+      $scope.userFilterOpts = {institute: distributionProtocol.instituteName};
       $scope.sites = [];
       $scope.queryList = [];
       $scope.all_sites = $translate.instant('dp.all_sites');
@@ -175,7 +175,8 @@ angular.module('os.administrative.dp.addedit', ['os.administrative.models', 'os.
 
     $scope.onInstituteSelect = function() {
       $scope.distributionProtocol.principalInvestigator = undefined;
-      $scope.piFilterOpts = {institute: $scope.distributionProtocol.instituteName};
+      $scope.distributionProtocol.coordinators = undefined;
+      $scope.userFilterOpts = {institute: $scope.distributionProtocol.instituteName};
       $scope.distributionProtocol.defReceivingSiteName = undefined;
       loadSites($scope.distributionProtocol.instituteName);
     }

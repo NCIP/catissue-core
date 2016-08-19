@@ -33,6 +33,8 @@ public class DistributionProtocol extends BaseExtensionEntity {
 
 	private User principalInvestigator;
 
+	private Set<User> coordinators = new HashSet<User>();
+
 	private String title;
 
 	private String shortTitle;
@@ -79,6 +81,14 @@ public class DistributionProtocol extends BaseExtensionEntity {
 
 	public void setPrincipalInvestigator(User principalInvestigator) {
 		this.principalInvestigator = principalInvestigator;
+	}
+
+	public Set<User> getCoordinators() {
+		return coordinators;
+	}
+
+	public void setCoordinators(Set<User> coordinators) {
+		this.coordinators = coordinators;
 	}
 
 	public String getTitle() {
@@ -161,25 +171,25 @@ public class DistributionProtocol extends BaseExtensionEntity {
 		this.requirements = requirements;
 	}
 
-	public void update(DistributionProtocol distributionProtocol) {
-		if (distributionProtocol.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
-			setShortTitle(Utility.getDisabledValue(distributionProtocol.getShortTitle(), 50));
-			setTitle(Utility.getDisabledValue(distributionProtocol.getTitle(), 255));
+	public void update(DistributionProtocol dp) {
+		if (dp.getActivityStatus().equals(Status.ACTIVITY_STATUS_DISABLED.getStatus())) {
+			setShortTitle(Utility.getDisabledValue(dp.getShortTitle(), 50));
+			setTitle(Utility.getDisabledValue(dp.getTitle(), 255));
+		} else {
+			setShortTitle(dp.getShortTitle());
+			setTitle(dp.getTitle());
 		}
-		else {
-			setShortTitle(distributionProtocol.getShortTitle());
-			setTitle(distributionProtocol.getTitle());
-		}
-		setIrbId(distributionProtocol.getIrbId());
-		setInstitute(distributionProtocol.getInstitute());
-		setDefReceivingSite(distributionProtocol.getDefReceivingSite());
-		setPrincipalInvestigator(distributionProtocol.getPrincipalInvestigator());
-		setStartDate(distributionProtocol.getStartDate());
-		setEndDate(distributionProtocol.getEndDate());
-		setActivityStatus(distributionProtocol.getActivityStatus());
-		setReport(distributionProtocol.getReport());
-		CollectionUpdater.update(getDistributingSites(), distributionProtocol.getDistributingSites());
-		setExtension(distributionProtocol.getExtension());
+		setIrbId(dp.getIrbId());
+		setInstitute(dp.getInstitute());
+		setDefReceivingSite(dp.getDefReceivingSite());
+		setPrincipalInvestigator(dp.getPrincipalInvestigator());
+		setStartDate(dp.getStartDate());
+		setEndDate(dp.getEndDate());
+		setActivityStatus(dp.getActivityStatus());
+		setReport(dp.getReport());
+		CollectionUpdater.update(getCoordinators(), dp.getCoordinators());
+		CollectionUpdater.update(getDistributingSites(), dp.getDistributingSites());
+		setExtension(dp.getExtension());
 	}
 	
 	public List<DependentEntityDetail> getDependentEntities() {

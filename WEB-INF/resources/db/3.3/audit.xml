@@ -36,4 +36,28 @@
       <column name="type_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+  
+  <changeSet author="nmarwaha" id="Audit table for DP coordinators">
+    <createTable tableName="OS_DP_COORDINATORS_AUD">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Track changes in DP coordinators collection">
+    <addColumn tableName="CAT_DISTRIBUTION_PROTOCOL_AUD">
+      <column name="COORDINATORS_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
 </databaseChangeLog>

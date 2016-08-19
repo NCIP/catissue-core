@@ -794,6 +794,7 @@
     "title": "Title",
     "short_title": "Short Title",
     "pi": "Principal Investigator",
+    "coordinators": "Protocol Coordinators",
     "date": "Date",
     "start_date": "Start Date",
     "end_date": "End Date",
