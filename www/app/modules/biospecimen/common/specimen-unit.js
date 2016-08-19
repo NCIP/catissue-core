@@ -124,7 +124,6 @@ angular.module('os.biospecimen.common.specimenunit', [])
             'ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"> ' +
           '<div class="input-group-addon"> ' +
             '<os-specimen-unit></os-specimen-unit>' +
-            '</os-specimen-unit> ' +
           '</div> ' +
         '</div>',
 
