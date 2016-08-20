@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -33,8 +36,6 @@ import com.krishagni.catissueplus.core.common.util.EmailUtil;
 @Aspect
 public class TransactionalInterceptor {
 	private static Log logger = LogFactory.getLog(TransactionalInterceptor.class);
-
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
 	private PlatformTransactionManager transactionManager;
 	
@@ -99,11 +100,16 @@ public class TransactionalInterceptor {
 				return;
 			}
 
+			StackTraceElement ste = getSte(t);
+			if (seenMaxTimesInLastInterval(ste)) {
+				return;
+			}
+
 			EmailUtil.getInstance().sendEmail(
 				SERVER_ERROR_TMPL,
 				new String[] {itAdminEmailId},
 				new File[] {getErrorLog(t)},
-				getErrorDetail(t));
+				getErrorDetail(t, ste));
 		} catch (Exception e) {
 			logger.error("Error notifying uncaught server errors", e);
 		}
@@ -127,16 +133,17 @@ public class TransactionalInterceptor {
 		}
 	}
 
-	private Map<String, Object> getErrorDetail(Throwable t) {
-		StackTraceElement[] stackTrace = t.getStackTrace();
-		StackTraceElement ste = null;
-		for (int i = 0; i < stackTrace.length; i++) {
-			if (stackTrace[i].getMethodName().contains("startTransaction")) {
-				ste = stackTrace[++i];
-				break;
+	private StackTraceElement getSte(Throwable t) {
+		for (StackTraceElement ste : t.getStackTrace()) {
+			if (ste.getMethodName().contains("startTransaction")) {
+				return ste;
 			}
 		}
 
+		return null;
+	}
+
+	private Map<String, Object> getErrorDetail(Throwable t, StackTraceElement ste) {
 		Map<String, Object> emailProps = new HashMap<>();
 		emailProps.put("userName", AuthUtil.getCurrentUser().getUsername());
 		emailProps.put("ste", ste);
@@ -155,6 +162,53 @@ public class TransactionalInterceptor {
 		emailProps.put("exception", t.getCause() != null ? t.getCause() : t);
 		return emailProps;
 	}
+
+	private synchronized boolean seenMaxTimesInLastInterval(StackTraceElement ste) {
+		long currentTime = System.currentTimeMillis();
+		List<Long> recentTimes = errorNotifTimes.get(ste);
+		if (recentTimes == null) {
+			recentTimes = new ArrayList<>();
+			errorNotifTimes.put(ste, recentTimes);
+		}
+
+		if (recentTimes.size() >= MAX_INTERVAL_ERRORS) {
+			//
+			// Our remembering capacity has exceeded.
+			// Try to remove times that do not fall in interval
+			//
+			Iterator<Long> iter = recentTimes.iterator();
+			while (iter.hasNext()) {
+				long t1 = iter.next();
+				if (areTimesInSameInterval(t1, currentTime, INTERVAL_IN_MINS)) {
+					break;
+				}
+
+				iter.remove();
+			}
+		}
+
+		boolean seenMaxTimes = (recentTimes.size() >= MAX_INTERVAL_ERRORS);
+		if (!seenMaxTimes) {
+			recentTimes.add(currentTime);
+		}
+
+		return seenMaxTimes;
+	}
+
+	private boolean areTimesInSameInterval(long t1, long t2, int interval) {
+		return ((t2 - t1) / (60 * 1000)) < interval;
+	}
+
+	//
+	// Error notification variables
+	//
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+
+	private static Map<StackTraceElement, List<Long>> errorNotifTimes = new HashMap<>();
+
+	private static final int MAX_INTERVAL_ERRORS = 5;
+
+	private static final int INTERVAL_IN_MINS = 60;
 
 	private static final String SERVER_ERROR_TMPL = "server_error";
 }
