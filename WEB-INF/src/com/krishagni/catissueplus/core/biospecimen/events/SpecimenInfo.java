@@ -403,6 +403,13 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		result.setCpId(specimen.getCollectionProtocol().getId());
 		result.setCpShortTitle(specimen.getCollectionProtocol().getShortTitle());
 		result.setFreezeThawCycles(specimen.getFreezeThawCycles());
+
+		if (specimen.getCollRecvDetails() != null) {
+			result.setCollectionContainer(specimen.getCollRecvDetails().getCollContainer());
+		} else if (specimen.isPrimary() && specimen.getSpecimenRequirement() != null) {
+			result.setCollectionContainer(specimen.getSpecimenRequirement().getCollectionContainer());
+		}
+
 		return result;
 	}	
 	

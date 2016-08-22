@@ -335,6 +335,62 @@
 
     <row>
       <subForm>
+        <name>spmnCollRecvDetails</name>
+        <udn>spmnCollRecvDetails</udn>
+        <caption>#getMessage("specimen_coll_recv_details")</caption>
+        <table>OS_SPMN_COLL_RECV_DETAILS_VIEW</table>
+        <primaryKey>SPECIMEN_ID</primaryKey>
+        <foreignKey>SPECIMEN_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        <row>
+          <textField>
+            <name>collContainer</name>
+            <udn>collContainer</udn>
+            <caption>#getMessage("specimen_collection_container")</caption>
+            <column>COLL_CONTAINER</column>
+          </textField>
+          <textField>
+            <name>collProcedure</name>
+            <udn>collProcedure</udn>
+            <caption>#getMessage("specimen_collection_procedure")</caption>
+            <column>COLL_PROCEDURE</column>
+          </textField>
+          <userField>
+            <name>collector</name>
+            <udn>collector</udn>
+            <caption>#getMessage("specimen_collector")</caption>
+            <column>COLLECTOR_ID</column>
+          </userField>
+          <datePicker>
+            <name>collTime</name>
+            <udn>collTime</udn>
+            <caption>#getMessage("specimen_collection_date")</caption>
+            <column>COLL_TIME</column>
+          </datePicker>
+          <textField>
+            <name>recvQuality</name>
+            <udn>recvQuality</udn>
+            <caption>#getMessage("specimen_received_quality")</caption>
+            <column>RECV_QUALITY</column>
+          </textField>
+          <userField>
+            <name>receiver</name>
+            <udn>receiver</udn>
+            <caption>#getMessage("specimen_receiver")</caption>
+            <column>RECEIVER_ID</column>
+          </userField>
+          <datePicker>
+            <name>recvTime</name>
+            <udn>recvTime</udn>
+            <caption>#getMessage("specimen_received_date")</caption>
+            <column>RECV_TIME</column>
+          </datePicker>
+        </row>
+      </subForm>
+    </row>
+
+    <row>
+      <subForm>
         <name>specimenStatistics</name>
         <udn>specimenStatistics</udn>
         <caption>#getMessage("specimen_statistics")</caption>

@@ -43,7 +43,7 @@
 
     <property name="freezeThawCycles" column="FREEZE_THAW_CYCLES"/>
 
-    <set name="biohazards" table="OS_SPECIMEN_BIOHAZARDS" cascade="all-delete-orphan">
+    <set name="biohazards" table="OS_SPECIMEN_BIOHAZARDS" cascade="all-delete-orphan" batch-size="25">
       <key column="SPECIMEN_ID" />
       <element column="BIOHAZARD" type="string" />
     </set>
@@ -58,7 +58,7 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"
       column="PARENT_SPECIMEN_ID" />
 
-    <set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all">
+    <set name="childCollection" table="CATISSUE_SPECIMEN" inverse="true" cascade="all" batch-size="25">
       <key column="PARENT_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
       <filter name="activeEntity"/>
@@ -83,10 +83,12 @@
       class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" 
       column="REQ_SPECIMEN_ID" />
 
-    <set 
-      name="specimenLists" 
-      table="CATISSUE_SPEC_TAG_ITEMS"
-      lazy="true">
+    <many-to-one name="collRecvDetails"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionReceiveDetail"
+      column="IDENTIFIER" not-found="ignore"
+      update="false" insert="false"/>
+
+    <set name="specimenLists" table="CATISSUE_SPEC_TAG_ITEMS" lazy="true">
       <key column="OBJ_ID"/>
       <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenList" column="TAG_ID" />
     </set>

@@ -105,10 +105,18 @@ public class Specimen extends BaseExtensionEntity {
 	private Set<Specimen> specimensPool = new HashSet<Specimen>();
 
 	private Set<ExternalIdentifier> externalIdentifierCollection = new HashSet<ExternalIdentifier>();
-	
+
+	//
+	// collectionEvent and receivedEvent are valid only for primary specimens
+	//
 	private SpecimenCollectionEvent collectionEvent;
 	
 	private SpecimenReceivedEvent receivedEvent;
+
+	//
+	// Available for all specimens in hierarchy based on values set for primary specimens
+	//
+	private SpecimenCollectionReceiveDetail collRecvDetails;
 	
 	private List<SpecimenTransferEvent> transferEvents;
 	
@@ -468,7 +476,16 @@ public class Specimen extends BaseExtensionEntity {
 	public void setReceivedEvent(SpecimenReceivedEvent receivedEvent) {
 		this.receivedEvent = receivedEvent;
 	}
-	
+
+	@NotAudited
+	public SpecimenCollectionReceiveDetail getCollRecvDetails() {
+		return collRecvDetails;
+	}
+
+	public void setCollRecvDetails(SpecimenCollectionReceiveDetail collRecvDetails) {
+		this.collRecvDetails = collRecvDetails;
+	}
+
 	@NotAudited
 	public List<SpecimenTransferEvent> getTransferEvents() {
 		if (this.transferEvents == null) {

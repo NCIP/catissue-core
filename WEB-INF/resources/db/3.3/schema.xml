@@ -621,4 +621,29 @@
       referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="Specimen collection and receive details of entire specimen hierarchy" runOnChange="true">
+    <createView viewName="OS_SPMN_COLL_RECV_DETAILS_VIEW" replaceIfExists="true">
+      select
+        h.descendent_id as specimen_id,
+        col.container as coll_container, col.collection_procedure as coll_procedure,
+        col.user_id as collector_id, col.event_timestamp as coll_time,
+        rcv.received_quality as recv_quality, rcv.user_id as receiver_id, rcv.event_timestamp as recv_time
+      from
+        catissue_specimen_hierarchy h
+        inner join catissue_form_record_entry cre on cre.object_id = h.ancestor_id
+        inner join catissue_form_context cf on cf.identifier = cre.form_ctxt_id
+        inner join dyextn_containers cfn on cfn.identifier = cf.container_id
+        inner join catissue_coll_event_param col on col.identifier = cre.record_id
+        inner join catissue_form_record_entry rre on rre.object_id = h.ancestor_id
+        inner join catissue_form_context rf on rf.identifier = rre.form_ctxt_id
+        inner join dyextn_containers rfn on rfn.identifier = rf.container_id
+        inner join catissue_received_event_param rcv on rcv.identifier = rre.record_id
+      where
+        cfn.name = 'SpecimenCollectionEvent' and cfn.deleted_on is null and
+        cf.deleted_on is null and cre.activity_status = 'ACTIVE' and
+        rfn.name = 'SpecimenReceivedEvent' and rfn.deleted_on is null and
+        rf.deleted_on is null and rre.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
 </databaseChangeLog>

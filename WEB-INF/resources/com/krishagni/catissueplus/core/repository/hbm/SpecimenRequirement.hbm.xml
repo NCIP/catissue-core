@@ -79,7 +79,7 @@
       update="true"
       column="PARENT_SPECIMEN_ID"/>
 
-    <set name="childSpecimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc">
+    <set name="childSpecimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc" batch-size="25">
       <key column="PARENT_SPECIMEN_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
       <filter name="activeEntity"/>
@@ -92,7 +92,7 @@
       update="true"
       column="POOLED_SPMN_REQ_ID"/>
 
-    <set name="specimenPoolReqs" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc">
+    <set name="specimenPoolReqs" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc" batch-size="25">
       <key column="POOLED_SPMN_REQ_ID"/>
       <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
       <filter name="activeEntity"/>

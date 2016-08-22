@@ -254,9 +254,9 @@ public class SpecimenDetail extends SpecimenInfo {
 		}
 
 		result.setReqCode(sr != null ? sr.getCode() : null);
-		result.setBiohazards(new HashSet<String>(specimen.getBiohazards()));
+		result.setBiohazards(new HashSet<>(specimen.getBiohazards()));
 		result.setComments(specimen.getComment());
-		
+
 		if (!partial) {
 			result.setExtensionDetail(ExtensionDetail.from(specimen.getExtension(), excludePhi));
 		}
