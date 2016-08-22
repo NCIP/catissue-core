@@ -23,17 +23,16 @@
 
       <div class="col-xs-3">
         <div class="form-group" ng-if="!childReq.id">
-          <input name="qtyPerAliquot" ng-model="childReq.qtyPerAliquot" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.qty_per_aliquot' | translate}}"
-            ng-required="!childReq.noOfAliquots" ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
-            ng-model-options="{allowInvalid: 'true'}">
+          <os-spmn-measure name="qtyPerAliquot" specimen="childReq" quantity="childReq.qtyPerAliquot"
+            md-input placeholder="{{'srs.qty_per_aliquot' | translate}}" 
+            ng-required="!childReq.noOfAliquots">
+          </os-spmn-measure>
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
         <div class="form-group" ng-if="!!childReq.id">
-          <input name="aliquotQty" ng-model="childReq.initialQty" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-            ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
-            ng-model-options="{allowInvalid: 'true'}">
+          <os-spmn-measure name="aliquotQty" specimen="childReq" quantity="childReq.initialQty"
+            md-input placeholder="{{'srs.qty' | translate}}"> 
+          </os-spmn-measure>
           <div os-field-error field="aliquotForm.aliquotQty"></div>
         </div>
       </div>

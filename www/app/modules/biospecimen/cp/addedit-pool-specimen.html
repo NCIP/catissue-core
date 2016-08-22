@@ -2,16 +2,10 @@
   <form name="poolSpmnForm" os-form-validator="poolSpmnForm" novalidate>
     <div class="col-xs-3">
       <div class="form-group">
-        <div class="os-input-addon-grp">
-          <input name="quantity" ng-model="poolReq.initialQty" 
-            os-md-input class="form-control" type="text" placeholder="{{'srs.qty' | translate}}"
-            required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
-          <div class="os-input-addon-right">
-            <os-specimen-unit specimen-class="parentSr.specimenClass" type="parentSr.type">
-            </os-specimen-unit>
-          </div>
-          <div os-field-error field="poolSpmnForm.quantity"></div>
-        </div>
+        <os-spmn-measure name="quantity" specimen="poolReq" quantity="poolReq.initialQty"
+          md-input placeholder="{{'srs.qty' | translate}}" required>
+        </os-spmn-measure>
+        <div os-field-error field="poolSpmnForm.quantity"></div>
       </div>
     </div>
     <div class="col-xs-3" ng-if="codingEnabled">

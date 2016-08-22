@@ -73,16 +73,10 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.qty_per_aliquot">Quantity per Aliquot</label>
         <div class="col-xs-6">
-          <div class="input-group">
-            <input name="qtyPerAliquot" ng-model="aliquotSpec.qtyPerAliquot"
-              class="form-control" type="text" placeholder="{{'specimens.qty_per_aliquot' | translate}}"
-              ng-required="!aliquotSpec.noOfAliquots || !parentSpecimen.availableQty"
-              ng-pattern="/^([1-9][0-9]*(\.([0-9]{1,2}))?)$|^([0]\.([0-9]{1,2}))$/">
-            <div class="input-group-addon">
-              <os-specimen-unit specimen-class="parentSpecimen.specimenClass" type="parentSpecimen.type">
-              </os-specimen-unit>
-            </div>
-          </div>
+          <os-spmn-measure name="qtyPerAliquot" specimen="parentSpecimen" quantity="aliquotSpec.qtyPerAliquot"
+            placeholder="{{'specimens.qty_per_aliquot' | translate}}" 
+            ng-required="!aliquotSpec.noOfAliquots || !parentSpecimen.availableQty">
+          </os-spmn-measure>
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
       </div>

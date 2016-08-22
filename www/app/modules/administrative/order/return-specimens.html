@@ -86,18 +86,13 @@
                   <div os-field-error field="sform.orderName"></div>
                 </td>
                 <td class="col">
-                  <div class="os-input-addon-grp">
-                    <input name="qty" os-md-input ng-model="item.quantity" required
-                      os-ensure-range="[
-                        {tgt: item.distQty, cmp: 'le', errorKey: 'retQtyGtDistQty'},
-                        {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
-                      ]"
-                      ng-model-options="{allowInvalid: 'true'}">
-                    <div class="os-input-addon-right os-md-input-addon">
-                      <os-specimen-unit specimen-class="item.specimen.specimenClass" type="item.specimen.type">
-                      </os-specimen-unit>
-                    </div>
-                  </div>
+                  <os-spmn-measure name="qty" md-input specimen="item.specimen" quantity="item.quantity"
+                    ensure-range="[
+                      {tgt: item.distQty, cmp: 'le', errorKey: 'retQtyGtDistQty'},
+                      {tgt: 0, cmp: 'gt', errorKey: 'distQtyLeZero'}
+                    ]" 
+                    required>
+                  </os-spmn-measure>
                   <div os-field-error field="sform.qty"></div>
                 </td>
                 <td class="col">

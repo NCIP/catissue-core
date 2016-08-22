@@ -119,10 +119,11 @@ angular.module('os.biospecimen.common.specimenunit', [])
       replace: true,
 
       template:
-        '<div class="input-group"> ' +
+        '<div> ' +
           '<input type="text" class="form-control" ' +
-            'ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"> ' +
-          '<div class="input-group-addon"> ' +
+            'ng-model-options="{allowInvalid: \'true\'}" ' +
+            'ng-pattern="/^[0-9]*(\\.[0-9]+)?(([e][+-]?)[0-9]+)?$/"> ' +
+          '<div> ' +
             '<os-specimen-unit></os-specimen-unit>' +
           '</div> ' +
         '</div>',
@@ -132,8 +133,19 @@ angular.module('os.biospecimen.common.specimenunit', [])
         inputEl.attr('name',        tAttrs.name);
         inputEl.attr('ng-model',    tAttrs.quantity);
         inputEl.attr('placeholder', tAttrs.placeholder);
-        if (tAttrs.required != undefined) {
+
+        if (tAttrs.ngRequired) {
+          inputEl.attr('ng-required', tAttrs.ngRequired);
+        } else if (tAttrs.required != undefined) {
           inputEl.attr('required', '');
+        }
+
+        if (tAttrs.onChange) {
+          inputEl.attr('ng-change', tAttrs.onChange);
+        }
+
+        if (tAttrs.ensureRange) {
+          inputEl.attr('os-ensure-range', tAttrs.ensureRange);
         }
 
         var unitEl = tElem.find('os-specimen-unit');
@@ -141,13 +153,15 @@ angular.module('os.biospecimen.common.specimenunit', [])
         unitEl.attr('type',           tAttrs.specimen + '.type');
         unitEl.attr('measure',        tAttrs.measure || 'quantity');
 
-
-        if (tAttrs.mdInput) {
-          tElem.addClass('os-md-input');
-          inputEl.next().addClass('os-md-input-addon');
+        if (tAttrs.mdInput != undefined) {
+          tElem.addClass('os-input-addon-grp os-md-input');
+          inputEl.next().addClass('os-input-addon-right os-md-input-addon');
+        } else {
+          tElem.addClass('input-group');
+          inputEl.next().addClass('input-group-addon');
         }
 
-        return function() { }
+        return function() { };
       }
     }
   })

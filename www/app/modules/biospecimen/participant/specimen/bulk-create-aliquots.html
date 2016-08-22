@@ -68,15 +68,9 @@
               <div os-field-error field="aform.cnt"></div>
             </td>
             <td class="col">
-              <div class="os-input-addon-grp">
-                <input name="qty" type="text" os-md-input ng-model="aliquotSpec.quantity"
-                  ng-model-options="{allowInvalid: 'true'}"
-                  ng-required="!aliquotSpec.count || !aliquotSpec.parentAvailableQty">
-                <div class="os-input-addon-right os-md-input-addon">
-                  <os-specimen-unit specimen-class="aliquotSpec.specimenClass" type="aliquotSpec.type">
-                  </os-specimen-unit>
-                </div>
-              </div>
+              <os-spmn-measure name="qty" specimen="aliquotSpec" quantity="aliquotSpec.quantity" md-input
+                ng-required="!aliquotSpec.count || !aliquotSpec.parentAvailableQty">
+              </os-spmn-measure>
               <div os-field-error field="aform.qty"></div>
             </td>
             <td class="col">

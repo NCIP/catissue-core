@@ -68,13 +68,8 @@
               <div os-field-error field="dform.type"></div>
             </td>
             <td class="col">
-              <div class="os-input-addon-grp">
-                <input name="qty" os-md-input ng-model="derived.initialQty" ng-model-options="{allowInvalid: 'true'}">
-                <div class="os-input-addon-right os-md-input-addon">
-                  <os-specimen-unit specimen-class="derived.specimenClass" type="derived.type">
-                  </os-specimen-unit>
-                </div>
-              </div>
+              <os-spmn-measure name="qty" specimen="derived" quantity="derived.initialQty" md-input>
+              </os-spmn-measure>
               <div os-field-error field="dform.qty"></div>
             </td>
             <td class="col">

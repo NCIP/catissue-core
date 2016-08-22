@@ -71,26 +71,18 @@
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.initial_qty">Initial Quantity</label>
         <div class="col-xs-8">
-          <div class="input-group">
-            <input name="initialQty" ng-model="sr.initialQty" class="form-control" type="text" 
-              placeholder="{{'srs.initial_qty' | translate}}" required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
-            <div class="input-group-addon">
-              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
-            </div>
-          </div>
+          <os-spmn-measure name="initialQty" specimen="sr" quantity="sr.initialQty"
+            placeholder="{{'srs.initial_qty' | translate}}" required>
+          </os-spmn-measure>
           <div os-field-error field="srForm.initialQty"></div>
         </div>
       </div>
       <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.concentration">Concentration</label>
         <div class="col-xs-8">
-          <div class="input-group">
-            <input name="concentration" ng-model="sr.concentration" class="form-control" type="text" 
-              placeholder="{{'srs.concentration' | translate}}" ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
-            <div class="input-group-addon">
-              <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type" measure="concentration"></os-specimen-unit>
-            </div>
-          </div>
+          <os-spmn-measure name="concentration" specimen="sr" quantity="sr.concentration" measure="concentration"
+            placeholder="{{'srs.concentration' | translate}}">
+          </os-spmn-measure>
           <div os-field-error field="srForm.concentration"></div>
         </div>
       </div>
@@ -199,13 +191,8 @@
                     <div os-field-error field="psForm.code"></div>
                   </td>
                   <td class="col">
-                    <div class="os-input-addon-grp">
-                      <input name="initialQty" ng-model="poolSpmn.initialQty" os-md-input class="form-control" type="text"
-                        required ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/">
-                      <div class="os-input-addon-right">
-                        <os-specimen-unit specimen-class="sr.specimenClass" type="sr.type"></os-specimen-unit>
-                      </div>
-                    </div>
+                    <os-spmn-measure name="initialQty" specimen="sr" quantity="poolSpmn.initialQty" md-input required>
+                    </os-spmn-measure>
                     <div os-field-error field="psForm.initialQty"></div>
                   </td>
                   <td class="col">

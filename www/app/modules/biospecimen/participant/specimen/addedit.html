@@ -99,15 +99,10 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.initial_qty">Initial Quantity</label>
       <div class="col-xs-6">
-        <div class="input-group">
-          <input type="text" name="qty" ng-model="currSpecimen.initialQty" class="form-control"
-            ng-required="currSpecimen.lineage == 'Aliquot'" ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
-            placeholder="{{'specimens.initial_qty' | translate}}">
-          <div class="input-group-addon">
-            <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
-            </os-specimen-unit>
-          </div>
-        </div>
+        <os-spmn-measure name="qty" specimen="currSpecimen" quantity="currSpecimen.initialQty"
+          placeholder="{{'specimens.initial_qty' | translate}}" 
+          ng-required="currSpecimen.lineage == 'Aliquot'">
+        </os-spmn-measure>
         <div os-field-error field="sform.qty"></div>
       </div>
     </div>
@@ -115,15 +110,10 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.available_qty">Available Quantity</label>
       <div class="col-xs-6"> 
-        <div class="input-group">
-          <input type="text" name="aqty" ng-model="currSpecimen.availableQty" class="form-control"
-            ng-required="currSpecimen.lineage == 'Aliquot'" ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/"
-            placeholder="{{'specimens.available_qty' | translate}}">
-          <div class="input-group-addon">
-            <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type">
-            </os-specimen-unit>
-          </div>
-        </div>
+        <os-spmn-measure name="aqty" specimen="currSpecimen" quantity="currSpecimen.availableQty"
+          placeholder="{{'specimens.available_qty' | translate}}" 
+          ng-required="currSpecimen.lineage == 'Aliquot'">
+        </os-spmn-measure>
         <div os-field-error field="sform.aqty"></div>
       </div>
     </div>
@@ -149,15 +139,9 @@
     <div class="form-group" ng-if="currSpecimen.lineage != 'Aliquot' && !currSpecimen.poolSpecimen">
       <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
       <div class="col-xs-6"> 
-        <div class="input-group">
-          <input type="text" name="concentration" ng-model="currSpecimen.concentration" class="form-control"
-            ng-pattern="/^([0-9]+|[0-9]*\.?[0-9]+[e]?[+-]?[0-9]*)$/" placeholder="{{'specimens.concentration' | translate}}">
-          <div class="input-group-addon">
-            <os-specimen-unit specimen-class="currSpecimen.specimenClass" type="currSpecimen.type"
-              measure="concentration">
-            </os-specimen-unit>
-          </div>
-        </div>
+        <os-spmn-measure name="concentration" specimen="currSpecimen" quantity="currSpecimen.concentration"
+          measure="concentration" placeholder="{{'specimens.concentration' | translate}}">
+        </os-spmn-measure>
         <div os-field-error field="sform.concentration"></div>
       </div>
     </div>

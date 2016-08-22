@@ -126,16 +126,10 @@
                   <os-spmn-measure-val value="specimen.availableQty" specimen="specimen"></os-spmn-measure-val>
                 </span>
                 <span ng-switch-when="false">
-                  <div class="os-input-addon-grp">
-                    <input type="text" os-md-input name="qty" 
-                      ng-model="specimen.initialQty" ng-required="specimen.lineage == 'Aliquot'"
-                      ng-model-options="{allowInvalid: 'true'}"
-                      ng-change="changeQuantity(specimen, specimen.initialQty)">
-                    <div class="os-input-addon-right os-md-input-addon">
-                      <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
-                      </os-specimen-unit>
-                    </div>
-                  </div>
+                  <os-spmn-measure name="qty" specimen="specimen" quantity="specimen.initialQty"
+                    md-input ng-required="specimen.lineage == 'Aliquot'"
+                    on-change="changeQuantity(specimen, specimen.initialQty)">
+                  </os-spmn-measure>
                 </span>
               </div>
               <div os-field-error field="sform.qty"></div>
