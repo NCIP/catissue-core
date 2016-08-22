@@ -106,7 +106,7 @@ ul.os-side-menu li.active a {
 }
 
 .os-side-menu-page-content .os-page-commands {
-  position: initial;
+  position: static;
   top: initial;
   padding: 0px 15px 15px;
 }
