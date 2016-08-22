@@ -86,7 +86,7 @@ angular.module('os.biospecimen.common')
 
         angular.forEach(tAttrs,
           function(val, attr) {
-            if (!attr.startsWith("$")) {
+            if (attr.indexOf('$') != 0) {
               selectEl.attr(attr, val);
             }
           }
