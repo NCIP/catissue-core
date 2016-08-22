@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.specimen')
-  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts, SpecimenUtil) {
+  .controller('BulkCreateAliquotsCtrl', function($scope, parentSpmns, Specimen, Alerts, Util, SpecimenUtil) {
 
     var ignoreQtyWarning = false;
 
