@@ -320,6 +320,7 @@ osApp.config(function(
             timeFmt: localeSettings.timeFmt,
             queryDateFmt: {format: localeSettings.deFeDateFmt},
             dateTimeFmt: localeSettings.dateFmt + ' ' + localeSettings.timeFmt,
+            locale: localeSettings.locale,
             utcOffset: localeSettings.utcOffset
           }
         );
