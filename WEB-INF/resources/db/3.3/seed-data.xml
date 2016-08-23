@@ -89,4 +89,35 @@
         );
     </sql>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Move specimen type and pathology status abbreviations from csv to PV properties">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from os_pv_props where name = 'abbreviation';
+      </sqlCheck>
+    </preConditions>
+
+    <customChange class="com.krishagni.catissueplus.core.upgrade.MoveAbbreviationsToPvProps"></customChange>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Remove specimen type and pathology status abbreviation file path configuration properties">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="2">
+        select
+          count(*)
+        from
+          os_cfg_props p
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name = 'biospecimen' and
+          p.name in ('specimen_type_abbr_map', 'spmn_path_status_abbr_map');
+      </sqlCheck>
+    </preConditions>
+
+    <sql>
+      call remove_cfg_prop('biospecimen', 'specimen_type_abbr_map');
+
+      call remove_cfg_prop('biospecimen', 'spmn_path_status_abbr_map');
+    </sql>
+  </changeSet>
 </databaseChangeLog>
