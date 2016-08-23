@@ -52,7 +52,7 @@
                   <div class="col os-col-45">
                     <span>{{'settings.' + setting.module + '.' + setting.name + '_desc' | translate}}</span>
                   </div>
-                  <div class="col os-col-30" ng-switch on="setting.type">
+                  <div class="col forced-wrap os-col-30" ng-switch on="setting.type">
                     <span ng-switch-when="BOOLEAN">
                       {{setting.value | osBoolValue: 'common.enabled': 'common.disabled': 'common.not_specified'}}
                     </span>
