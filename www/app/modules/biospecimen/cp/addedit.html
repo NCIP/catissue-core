@@ -162,7 +162,7 @@
             </div>
             <div ng-if="!!cp.sopDocumentName && !sopDocUploader.ctrl.data">
               <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
-                <span>{{cp.sopDocumentName}}</span>
+                <span>{{cp.$$sopDocDispName}}</span>
               </a>
               <a ng-click="removeSopDocument()">
                 <span class="fa fa-times-circle"></span>

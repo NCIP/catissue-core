@@ -25,9 +25,8 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         delete cp.id;
         cp.title = cp.shortTitle = cp.code = cp.sopDocumentName = cp.sopDocumentUrl = "";
       } else {
-        cp.$$sopDocumentName = cp.sopDocumentName;
         if (!!cp.sopDocumentName) {
-          cp.sopDocumentName = cp.sopDocumentName.substring(cp.sopDocumentName.indexOf("_") + 1);
+          cp.$$sopDocDispName = cp.sopDocumentName.substring(cp.sopDocumentName.indexOf("_") + 1);
         }
       }
     };
@@ -73,10 +72,10 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         cp.extensionDetail = formCtrl.getFormData();
       }
 
-      if ($scope.sopDocUploader.ctrl.data) {
+      if ($scope.sopDocUploader.ctrl.isFileSelected()) {
         $scope.sopDocUploader.ctrl.submit().then(
           function(filename) {
-            cp.sopDocumentName = cp.$$sopDocumentName = filename;
+            cp.sopDocumentName = cp.$$sopDocDispName = filename;
             cp.sopDocumentUrl = undefined;
             saveCp(cp);
           }
@@ -84,8 +83,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       } else {
         if ($scope.cp.sopDocumentUrl) {
           cp.sopDocumentName = undefined; 
-        } else {
-          cp.sopDocumentName = cp.$$sopDocumentName;
         }
 
         saveCp(cp);
