@@ -193,7 +193,7 @@
 
 .os-specimen-desc {
   display: inline-block;
-  white-space: initial;
+  white-space: pre-wrap;
   vertical-align: top;
   padding-right: 8px;
 }
