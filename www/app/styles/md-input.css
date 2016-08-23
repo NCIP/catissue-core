@@ -81,6 +81,7 @@
   outline: none;
   display: block;
   width: 100%;
+  white-space: pre-wrap;
 }
 
 /*.os-md-input .ui-select-bootstrap > .ui-select-match > .caret {
