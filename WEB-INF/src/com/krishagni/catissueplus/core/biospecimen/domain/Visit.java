@@ -347,6 +347,7 @@ public class Visit extends BaseExtensionEntity {
 		setSurgicalPathologyNumber(visit.getSurgicalPathologyNumber());
 		setVisitDate(visit.getVisitDate());
 		setCohort(visit.getCohort());
+		setDefNameTmpl(visit.getDefNameTmpl());
 		setExtension(visit.getExtension());
 	}
 
