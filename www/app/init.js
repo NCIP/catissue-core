@@ -26,7 +26,7 @@ ui.os.appProps = {
     }
 
     $.get(server.url + 'rest/ng/config-settings/app-props')
-      .success(
+      .done(
         function(appProps) {
           appProps = appProps || {};
           appProps.plugins = appProps.plugins || [];
@@ -55,7 +55,7 @@ ui.os.appProps = {
 
   function loadPluginResources(qp, plugin) {
     var url = 'plugin-ui-resources/' + plugin + '/def.json?' + qp;
-    $.get(url).success(
+    $.get(url).done(
       function(def) {
         def.styles = def.styles || [];
         def.styles.forEach(loadCss);
