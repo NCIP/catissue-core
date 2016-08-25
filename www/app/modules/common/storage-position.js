@@ -1,27 +1,27 @@
 
 angular.module('openspecimen')
   .directive('osStoragePositions', function(Container) {
-    var entities = [];
-
-    var cachedContainers = {};
-
     return {
       restrict: 'A',
 
       controllerAs: '$storagePositions',
 
       controller: function($scope) {
+        this.entities = [];
+
+        this.cachedContainers = {};
+
         this.addEntity = function(entity) {
-          entities.push(entity);
+          this.entities.push(entity);
         }
 
         this.clearEntities = function() {
-          entities.length = 0;
+          this.entities.length = 0;
         }
 
         this.assignedPositions = function() {
           var assignedPositions = {};
-          angular.forEach(entities,
+          angular.forEach(this.entities,
             function(entity) {
               if (!entity.storageLocation || !entity.storageLocation.name) {
                 return;
@@ -40,9 +40,9 @@ angular.module('openspecimen')
 
         this.getContainers = function(params) {
           var key = JSON.stringify(params);
-          var q = cachedContainers[key];
+          var q = this.cachedContainers[key];
           if (!q) {
-            q = cachedContainers[key] = Container.query(params);
+            q = this.cachedContainers[key] = Container.query(params);
           }
 
           return q;
@@ -148,7 +148,8 @@ angular.module('openspecimen')
 
         modalInstance.result.then(
           function(position) {
-            scope.entity.storageLocation = position;
+            var location = angular.extend({}, scope.entity.storageLocation);
+            scope.entity.storageLocation = angular.extend(location, position);
           }
         );
       };
