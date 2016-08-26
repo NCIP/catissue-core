@@ -10,9 +10,12 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
+import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
+import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
 @JsonSerialize(include=Inclusion.NON_NULL)
-public class CollectionProtocolRegistrationDetail {
+@ListenAttributeChanges
+public class CollectionProtocolRegistrationDetail extends AttributeModifiedSupport {
 	private Long id;
 	
 	private ParticipantDetail participant;

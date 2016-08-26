@@ -35,20 +35,38 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 	
 	@Override
 	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistrationDetail detail) {
+		return createCpr(null, detail);
+	}
+
+	@Override
+	public CollectionProtocolRegistration createCpr(CollectionProtocolRegistration existing, CollectionProtocolRegistrationDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
 		CollectionProtocolRegistration cpr = new CollectionProtocolRegistration();
-		cpr.setBarcode(detail.getBarcode());
-		setRegDate(detail, cpr, ose);
-		setActivityStatus(detail, cpr, ose);
-		setCollectionProtocol(detail, cpr, ose);
-		setPpid(detail, cpr, ose);
-		setParticipant(detail, cpr, ose);
+		setBarcode(detail, existing, cpr, ose);
+		setRegDate(detail, existing, cpr, ose);
+		setActivityStatus(detail, existing, cpr, ose);
+		setCollectionProtocol(detail, existing, cpr, ose);
+		setPpid(detail, existing, cpr, ose);
+		setParticipant(detail, existing, cpr, ose);
 		
 		ose.checkAndThrow();
 		return cpr;
 	}
-	
+
+	private void setBarcode(
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
+			CollectionProtocolRegistration cpr,
+			OpenSpecimenException ose) {
+
+		if (existing == null || detail.isAttrModified("barcode")) {
+			cpr.setBarcode(detail.getBarcode());
+		} else {
+			cpr.setBarcode(existing.getBarcode());
+		}
+	}
+
 	private void setRegDate(CollectionProtocolRegistrationDetail detail, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
 		if (detail.getRegistrationDate() == null) {
 			ose.addError(CprErrorCode.REG_DATE_REQUIRED);
@@ -56,6 +74,19 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 		
 		cpr.setRegistrationDate(detail.getRegistrationDate());
+	}
+
+	private void setRegDate(
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
+			CollectionProtocolRegistration cpr,
+			OpenSpecimenException ose) {
+
+		if (existing == null || detail.isAttrModified("registrationDate")) {
+			setRegDate(detail, cpr, ose);
+		} else {
+			cpr.setRegistrationDate(existing.getRegistrationDate());
+		}
 	}
 
 	private void setActivityStatus(CollectionProtocolRegistrationDetail detail, CollectionProtocolRegistration cpr, OpenSpecimenException ose) {
@@ -67,6 +98,19 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 			cpr.setActivityStatus(activityStatus);
 		} else {
 			ose.addError(ActivityStatusErrorCode.INVALID);
+		}
+	}
+
+	private void setActivityStatus(
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
+			CollectionProtocolRegistration cpr,
+			OpenSpecimenException ose) {
+
+		if (existing == null || detail.isAttrModified("activityStatus")) {
+			setActivityStatus(detail, cpr, ose);
+		} else {
+			cpr.setActivityStatus(existing.getActivityStatus());
 		}
 	}
 
@@ -104,22 +148,45 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		cpr.setCollectionProtocol(protocol);
 	}
 
+	private void setCollectionProtocol(
+			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
+			CollectionProtocolRegistration cpr,
+			OpenSpecimenException ose) {
+
+		if (existing == null) {
+			setCollectionProtocol(detail, cpr, ose);
+		} else {
+			cpr.setCollectionProtocol(existing.getCollectionProtocol());
+		}
+	}
+
 	private void setPpid(
 			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
 			CollectionProtocolRegistration cpr, 
 			OpenSpecimenException ose) {
-		cpr.setPpid(detail.getPpid());
+
+		if (existing == null || detail.isAttrModified("ppid")) {
+			cpr.setPpid(detail.getPpid());
+		} else {
+			cpr.setPpid(existing.getPpid());
+		}
 	}
 	
 	private void setParticipant(
 			CollectionProtocolRegistrationDetail detail,
+			CollectionProtocolRegistration existing,
 			CollectionProtocolRegistration cpr,
 			OpenSpecimenException ose) {
 		
 		ParticipantDetail participantDetail = detail.getParticipant();
 		if (participantDetail == null) {
-			ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);
-			return;
+			participantDetail = new ParticipantDetail();
+		}
+
+		if (existing != null && participantDetail.getId() == null) {
+			participantDetail.setId(existing.getParticipant().getId());
 		}
 
 		if (cpr.getCollectionProtocol() != null) {

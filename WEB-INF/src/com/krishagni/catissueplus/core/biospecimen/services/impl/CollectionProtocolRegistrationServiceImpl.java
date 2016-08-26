@@ -135,7 +135,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getCpShortTitle(), detail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 
-			CollectionProtocolRegistration cpr = cprFactory.createCpr(detail);			
+			CollectionProtocolRegistration cpr = cprFactory.createCpr(existing, detail);
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			ensureValidAndUniquePpid(existing, cpr, ose);
 			ensureUniqueBarcode(existing, cpr, ose);
