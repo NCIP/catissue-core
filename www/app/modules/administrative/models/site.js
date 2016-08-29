@@ -49,6 +49,8 @@ angular.module('os.administrative.models.site', ['os.common.models'])
     }
 
     function getSites(opts) {
+      opts = opts || {};
+      opts.maxResults = 200;
       return Site.query(opts).then(
         function(sites) {
           return sites.map(function(site) { return site.name; });

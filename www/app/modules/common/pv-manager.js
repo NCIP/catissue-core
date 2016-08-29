@@ -251,13 +251,12 @@ angular.module('openspecimen')
 
       getSites: function(opts) {
         var sites = [];
-        Site.query(opts).then(
+        Site.list(opts).then(
           function(siteList) {
-            angular.forEach(siteList, function(site) {
-              sites.push(site.name);
-            });
+            Array.prototype.push.apply(sites, siteList);
           }
         );
+
         return sites;
       },
 

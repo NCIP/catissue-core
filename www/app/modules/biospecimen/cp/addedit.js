@@ -35,10 +35,8 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.sites = [];
       var op = !$scope.cp.id ? 'Create' : 'Update';
       var opts = {resource:'CollectionProtocol', operation: op};
-      Site.query(opts).then(function(sites) {
-         angular.forEach(sites, function(site) {
-           $scope.sites.push(site.name);
-         })
+      Site.list(opts).then(function(sites) {
+         $scope.sites = sites;
          
          $scope.cp.repositoryNames = cp.getRepositoryNames();
       });
