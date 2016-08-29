@@ -220,7 +220,6 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
-
       function showSpecimenInTree(specimen) {
         if (specimen.grpLeader && (!specimen.children || specimen.children.length == 0)) {
           return;
@@ -243,15 +242,22 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       function addAliquotsToGrp(grpLeader, newSpmnsCnt) {
         var lastSpmn = grpLeader.aliquotGrp[grpLeader.aliquotGrp.length - 1];
-        
+
         var newSpmns = [];
         var pos = $scope.specimens.indexOf(lastSpmn);
         for (var i = 0; i < newSpmnsCnt; ++i) {
-          var newSpmn = angular.copy(lastSpmn);
+          var newSpmn = shallowCopy(lastSpmn);
           grpLeader.aliquotGrp.push(newSpmn);
           grpLeader.parent.children.push(newSpmn);
           $scope.specimens.splice(pos + i + 1, 0, newSpmn);
         }
+      }
+
+      function shallowCopy(spmn) {
+        var copy = new Specimen(spmn);
+        copy.storageLocation = !spmn.storageLocation ? {} : {name: spmn.storageLocation.name}
+        copy.children = [];
+        return copy;
       }
 
       function removeAliquotsFromGrp(grpLeader, count) {
