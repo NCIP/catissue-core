@@ -134,9 +134,10 @@ public class TransactionalInterceptor {
 	}
 
 	private StackTraceElement getSte(Throwable t) {
-		for (StackTraceElement ste : t.getStackTrace()) {
-			if (ste.getMethodName().contains("startTransaction")) {
-				return ste;
+		StackTraceElement[] stackTrace = t.getStackTrace();
+		for (int i = 0; i < stackTrace.length; i++) {
+			if (stackTrace[i].getMethodName().contains("startTransaction")) {
+				return (i + 1 < stackTrace.length) ? stackTrace[++i] : stackTrace[i];
 			}
 		}
 
