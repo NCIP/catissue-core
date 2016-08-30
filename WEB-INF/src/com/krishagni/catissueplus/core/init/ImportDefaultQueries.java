@@ -3,7 +3,6 @@ package com.krishagni.catissueplus.core.init;
 
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,9 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -23,7 +19,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
-import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 import com.krishagni.catissueplus.core.common.events.ConfigSettingDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -102,6 +97,8 @@ public class ImportDefaultQueries implements InitializingBean {
 
 					if (resource.getFilename().equals(DEFAULT_CATALOG_QUERY)) {
 						configureCatalogQuery(query);
+					} else if (resource.getFilename().equals(DISTRIBUTION_REPORT_QUERY)) {
+						configureDistributionReportQuery(query);
 					}
 				}
 			} else {
@@ -166,20 +163,28 @@ public class ImportDefaultQueries implements InitializingBean {
 	}
 
 	private void configureCatalogQuery(SavedQuery query) {
+		saveDefaultQuerySetting(query, "catalog", "default_query");
+	}
+
+	private void configureDistributionReportQuery(SavedQuery query) {
+		saveDefaultQuerySetting(query, "common", "distribution_report_query");
+	}
+
+	private void saveDefaultQuerySetting(SavedQuery query, String module, String name) {
 		try {
 			AuthUtil.setCurrentUser(sysUser);
 
-			int queryId = cfgService.getIntSetting("catalog", "default_query", -1);
+			Integer queryId = cfgService.getIntSetting(module, name, -1);
 			if (queryId != -1) {
 				return;
 			}
 
 			ConfigSettingDetail cfgDetail = new ConfigSettingDetail();
-			cfgDetail.setModule("catalog");
-			cfgDetail.setName("default_query");
+			cfgDetail.setModule(module);
+			cfgDetail.setName(name);
 			cfgDetail.setValue(query.getId().toString());
 
-			RequestEvent<ConfigSettingDetail> req = new RequestEvent<ConfigSettingDetail>(cfgDetail);
+			RequestEvent<ConfigSettingDetail> req = new RequestEvent<>(cfgDetail);
 			ResponseEvent<ConfigSettingDetail> resp = cfgService.saveSetting(req);
 			resp.throwErrorIfUnsuccessful();
 		} finally {
@@ -192,4 +197,6 @@ public class ImportDefaultQueries implements InitializingBean {
 	private static final String QUERIES_DIRECTORY = "/default-queries";
 
 	private static final String DEFAULT_CATALOG_QUERY = "SpecimenCatalog.json";
+
+	private static final String DISTRIBUTION_REPORT_QUERY = "DistributionReport.json";
 }

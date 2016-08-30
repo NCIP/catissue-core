@@ -479,7 +479,8 @@
     <property name="daoFactory"          ref="biospecimenDaoFactory"/>
     <property name="distributionFactory" ref="distributionFactory" />
     <property name="querySvc"            ref="querySvc"/>
-    <property name="emailService" ref="emailService"/>
+    <property name="emailService"        ref="emailService"/>
+    <property name="deDaoFactory"        ref="deDaoFactory"/>
   </bean>
   
   <bean id="dpRequirementFactory"

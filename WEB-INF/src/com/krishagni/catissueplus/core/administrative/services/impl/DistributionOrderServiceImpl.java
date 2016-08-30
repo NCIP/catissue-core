@@ -56,6 +56,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.EmailService;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
@@ -79,6 +80,8 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	
 	private EmailService emailService;
 
+	private com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory;
+
 	private List<EntityCrudListener<DistributionOrderDetail, DistributionOrder>> listeners = new ArrayList<>();
 
 	public void setDaoFactory(DaoFactory daoFactory) {
@@ -95,6 +98,10 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
+	}
+
+	public void setDeDaoFactory(com.krishagni.catissueplus.core.de.repository.DaoFactory deDaoFactory) {
+		this.deDaoFactory = deDaoFactory;
 	}
 	
 	@Override
@@ -229,11 +236,13 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			}
 			
 			AccessCtrlMgr.getInstance().ensureReadDistributionOrderRights(order);
-			if (order.getDistributionProtocol().getReport() == null) {
-				return ResponseEvent.userError(DistributionOrderErrorCode.RPT_TMPL_NOT_CONFIGURED);
+
+			SavedQuery query = getReportQuery(order);
+			if (query == null) {
+				return ResponseEvent.userError(DistributionOrderErrorCode.RPT_TMPL_NOT_CONFIGURED, order.getDistributionProtocol().getShortTitle());
 			}
 			
-			return new ResponseEvent<QueryDataExportResult>(exportOrderReport(order));
+			return new ResponseEvent<>(exportReport(order, query));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -380,8 +389,21 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		}
 	}
 
-	private QueryDataExportResult exportOrderReport(final DistributionOrder order) {
-		SavedQuery report = order.getDistributionProtocol().getReport();
+	private SavedQuery getReportQuery(DistributionOrder order) {
+		SavedQuery query = order.getDistributionProtocol().getReport();
+		if (query != null) {
+			return query;
+		}
+
+		Integer queryId = ConfigUtil.getInstance().getIntSetting("common", "distribution_report_query", -1);
+		if (queryId == -1) {
+			return null;
+		}
+
+		return deDaoFactory.getSavedQueryDao().getQuery(queryId.longValue());
+	}
+
+	private QueryDataExportResult exportReport(final DistributionOrder order, SavedQuery report) {
 		Filter filter = new Filter();
 		filter.setField("Order.id");
 		filter.setOp(Op.EQ);

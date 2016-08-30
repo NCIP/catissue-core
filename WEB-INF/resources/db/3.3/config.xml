@@ -278,4 +278,14 @@
         );
     </sql>
   </changeSet>
+
+  <changeSet author="ckhilosiya" id="Id of default query to use for distribution report">
+    <sql>
+      call add_cfg_prop(
+      'common', 'distribution_report_query',
+      'distribution_report_query', 'distribution_report_query_desc',
+      'INT', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>
