@@ -1,8 +1,11 @@
 package com.krishagni.catissueplus.core.auth.domain;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
 
 public class LoginAuditLog {
 	private Long id;
@@ -16,6 +19,8 @@ public class LoginAuditLog {
 	private Date logoutTime;
 	
 	private boolean loginSuccessful;
+	
+	private Set<UserApiCallLog> apiLogs = new HashSet<>();
 
 	public Long getId() {
 		return id;
@@ -63,6 +68,14 @@ public class LoginAuditLog {
 
 	public void setLoginSuccessful(boolean loginSuccessful) {
 		this.loginSuccessful = loginSuccessful;
+	}
+
+	public Set<UserApiCallLog> getApiLogs() {
+		return apiLogs;
+	}
+
+	public void setApiLogs(Set<UserApiCallLog> apiLogs) {
+		this.apiLogs = apiLogs;
 	}
 	
 }

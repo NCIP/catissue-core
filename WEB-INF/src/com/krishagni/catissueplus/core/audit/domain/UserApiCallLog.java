@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.audit.domain;
 import java.util.Date;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.auth.domain.LoginAuditLog;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
 public class UserApiCallLog extends BaseEntity {
@@ -14,11 +15,11 @@ public class UserApiCallLog extends BaseEntity {
 	
 	private String responseCode;
 	
-	private String authToken;
-	
 	private Date callStartTime;
 	
 	private Date callEndTime;
+	
+	private LoginAuditLog loginAuditLog;
 
 	public User getUser() {
 		return user;
@@ -52,14 +53,6 @@ public class UserApiCallLog extends BaseEntity {
 		this.responseCode = responseCode;
 	}
 
-	public String getAuthToken() {
-		return authToken;
-	}
-
-	public void setAuthToken(String authToken) {
-		this.authToken = authToken;
-	}
-
 	public Date getCallStartTime() {
 		return callStartTime;
 	}
@@ -74,6 +67,14 @@ public class UserApiCallLog extends BaseEntity {
 
 	public void setCallEndTime(Date callEndTime) {
 		this.callEndTime = callEndTime;
+	}
+
+	public LoginAuditLog getLoginAuditLog() {
+		return loginAuditLog;
+	}
+
+	public void setLoginAuditLog(LoginAuditLog loginAuditLog) {
+		this.loginAuditLog = loginAuditLog;
 	}
 
 }

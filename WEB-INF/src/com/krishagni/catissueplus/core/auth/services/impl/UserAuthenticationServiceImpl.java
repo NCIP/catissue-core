@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
 import com.krishagni.catissueplus.core.audit.services.AuditService;
@@ -91,7 +90,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 	}
 
 	@PlusTransactional
-	public ResponseEvent<User> validateToken(RequestEvent<TokenDetail> req) {
+	public ResponseEvent<AuthToken> validateToken(RequestEvent<TokenDetail> req) {
 		try {
 			TokenDetail tokenDetail = req.getPayload();
 			String token = AuthUtil.decodeToken(tokenDetail.getToken());
@@ -119,7 +118,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				Hibernate.initialize(user);
 			}
 			
-			return ResponseEvent.response(user);
+			return ResponseEvent.response(authToken);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -172,7 +171,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		authToken.setLoginAuditLog(loginAuditLog);
 		daoFactory.getAuthDao().saveAuthToken(authToken);
 
-		insertApiCallLog(loginDetail, user, token);
+		insertApiCallLog(loginDetail, user, loginAuditLog);
 		return AuthUtil.encodeToken(token);
 	}
 	
@@ -206,15 +205,15 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 		user.setActivityStatus(Status.ACTIVITY_STATUS_LOCKED.getStatus());
 	}
 	
-	private void insertApiCallLog(LoginDetail loginDetail, User user, String token) {
+	private void insertApiCallLog(LoginDetail loginDetail, User user, LoginAuditLog loginAuditLog) {
 		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(user);
 		userAuditLog.setUrl(loginDetail.getApiUrl());
 		userAuditLog.setMethod(loginDetail.getRequestMethod());
-		userAuditLog.setAuthToken(token);
 		userAuditLog.setResponseCode(Integer.toString(HttpStatus.OK.value()));
 		userAuditLog.setCallStartTime(Calendar.getInstance().getTime());
 		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
+		userAuditLog.setLoginAuditLog(loginAuditLog);
 		auditService.insertApiCallLog(userAuditLog);
 	}
 }

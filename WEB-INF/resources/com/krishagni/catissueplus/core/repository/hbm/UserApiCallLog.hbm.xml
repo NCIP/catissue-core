@@ -22,19 +22,21 @@
     
     <property name="responseCode" column="RESPONSE_CODE" />
     
-    <property name="authToken" column="AUTH_TOKEN" />
-    
     <property name="callStartTime" column="CALL_START_TIME" />
     
     <property name="callEndTime" column="CALL_END_TIME" />
     
+    <many-to-one name="loginAuditLog" column="LOGIN_AUDIT_LOG_ID"/>
+    
     <query name="getLatestApiCallTime">
       select 
-        max(callStartTime)
-      from 
-        com.krishagni.catissueplus.core.audit.domain.UserApiCallLog l
+        max(a.callStartTime)
+      from
+        com.krishagni.catissueplus.core.auth.domain.AuthToken t
+        join t.loginAuditLog l
+        join l.apiLogs a
       where 
-        l.user.id = :userId and l.authToken = :authToken   
+        a.user.id = :userId and t.token = :authToken
     </query>
    
   </class>  

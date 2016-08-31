@@ -636,4 +636,24 @@
         rf.deleted_on is null and rre.activity_status = 'ACTIVE'
     </createView>
   </changeSet>
+
+  <changeSet author="mdnasim" id="Link every API call to relevant login event">
+    <addColumn tableName="OS_USER_API_CALLS_LOG">
+      <column name="LOGIN_AUDIT_LOG_ID" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Foreign key on login event of api calls log table">
+    <addForeignKeyConstraint
+      constraintName="FK_API_CALL_LOG_AUDIT_LOG_ID"
+      baseTableName="OS_USER_API_CALLS_LOG"
+      baseColumnNames="LOGIN_AUDIT_LOG_ID"
+      referencedTableName="OS_LOGIN_AUDIT_LOGS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Drop auth token which is replaced by login event column">
+    <dropColumn tableName="OS_USER_API_CALLS_LOG" columnName="AUTH_TOKEN"/>
+  </changeSet>
 </databaseChangeLog>

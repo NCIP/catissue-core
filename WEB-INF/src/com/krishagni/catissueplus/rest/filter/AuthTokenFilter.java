@@ -25,6 +25,8 @@ import org.springframework.web.filter.GenericFilterBean;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.audit.domain.UserApiCallLog;
 import com.krishagni.catissueplus.core.audit.services.AuditService;
+import com.krishagni.catissueplus.core.auth.domain.AuthToken;
+import com.krishagni.catissueplus.core.auth.domain.LoginAuditLog;
 import com.krishagni.catissueplus.core.auth.events.LoginDetail;
 import com.krishagni.catissueplus.core.auth.events.TokenDetail;
 import com.krishagni.catissueplus.core.auth.services.UserAuthenticationService;
@@ -120,15 +122,17 @@ public class AuthTokenFilter extends GenericFilterBean {
 			authToken = AuthUtil.getTokenFromCookie(httpReq);
 		}
 		
+		LoginAuditLog loginAuditLog = null;
 		if (authToken != null) {
 			TokenDetail tokenDetail = new TokenDetail();
 			tokenDetail.setToken(authToken);
 			tokenDetail.setIpAddress(httpReq.getRemoteAddr());			
 			
 			RequestEvent<TokenDetail> atReq = new RequestEvent<TokenDetail>(tokenDetail);			
-			ResponseEvent<User> atResp = authService.validateToken(atReq);
+			ResponseEvent<AuthToken> atResp = authService.validateToken(atReq);
 			if (atResp.isSuccessful()) {
-				userDetails = atResp.getPayload();
+				userDetails = atResp.getPayload().getUser();
+				loginAuditLog = atResp.getPayload().getLoginAuditLog();
 			}
 		} else if(httpReq.getHeader(HttpHeaders.AUTHORIZATION) != null) {
 			userDetails = doBasicAuthentication(httpReq, httpResp);
@@ -149,16 +153,14 @@ public class AuthTokenFilter extends GenericFilterBean {
 		chain.doFilter(req, resp);
 		AuthUtil.clearCurrentUser();
 	
-		authToken = authToken != null ? AuthUtil.decodeToken(authToken) : null;
-		
 		UserApiCallLog userAuditLog = new UserApiCallLog();
 		userAuditLog.setUser(userDetails);
 		userAuditLog.setUrl(httpReq.getRequestURI().toString());
 		userAuditLog.setMethod(httpReq.getMethod());
-		userAuditLog.setAuthToken(authToken);
 		userAuditLog.setCallStartTime(callStartTime);
 		userAuditLog.setCallEndTime(Calendar.getInstance().getTime());
 		userAuditLog.setResponseCode(Integer.toString(httpResp.getStatus()));
+		userAuditLog.setLoginAuditLog(loginAuditLog);
 		auditService.insertApiCallLog(userAuditLog);
 	}
 	

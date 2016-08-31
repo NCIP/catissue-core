@@ -24,6 +24,11 @@
     
     <property name="loginSuccessful" column="IS_LOGIN_SUCCESSFUL"/>
     
+    <set name="apiLogs" table="OS_USER_API_CALLS_LOG">
+      <key column="LOGIN_AUDIT_LOG_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.audit.domain.UserApiCallLog"/>
+    </set>
+    
     <query name="getLogsByUserId">
       from LoginAuditLog where user.id = :userId order by id desc
     </query>

@@ -19,8 +19,8 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.auth.domain.AuthToken;
 import com.krishagni.catissueplus.core.auth.events.TokenDetail;
 import com.krishagni.catissueplus.core.auth.services.impl.UserAuthenticationServiceImpl;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -108,7 +108,7 @@ public class SamlFilter extends FilterChainProxy {
 		tokenDetail.setIpAddress(httpReq.getRemoteAddr());
 
 		RequestEvent<TokenDetail> atReq = new RequestEvent<>(tokenDetail);
-		ResponseEvent<User> atResp = authService.validateToken(atReq);
+		ResponseEvent<AuthToken> atResp = authService.validateToken(atReq);
 		return atResp.isSuccessful();
 	}
 }
