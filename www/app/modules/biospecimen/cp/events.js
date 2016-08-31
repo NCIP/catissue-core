@@ -59,6 +59,7 @@ angular.module('os.biospecimen.cp.events', ['os.biospecimen.models'])
       $scope.event = angular.copy(evt);
 
       copyFrom = $scope.event.id;
+      delete $scope.event.code;
       delete $scope.event.eventLabel;
       delete $scope.event.id;
 
