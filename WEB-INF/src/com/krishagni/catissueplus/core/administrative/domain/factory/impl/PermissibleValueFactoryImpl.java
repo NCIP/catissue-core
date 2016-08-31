@@ -27,7 +27,8 @@ public class PermissibleValueFactoryImpl implements PermissibleValueFactory {
 		setConceptCode(permissibleValue, details.getConceptCode(), ose);
 		setValue(permissibleValue, details.getValue(), ose);
 		setAttribute(permissibleValue, details.getAttribute(), ose);
-		setParent(permissibleValue, details.getParentId(), ose);
+		setParent(permissibleValue, details, ose);
+		setProps(permissibleValue, details, ose);
 		
 		ose.checkAndThrow();
 		return permissibleValue;
@@ -57,17 +58,25 @@ public class PermissibleValueFactoryImpl implements PermissibleValueFactory {
 		permissibleValue.setAttribute(attribute);
 	}
 
-	private void setParent(PermissibleValue permissibleValue, Long parentId, OpenSpecimenException ose) {
-		if (parentId == null) {
-			return;			
+	private void setParent(PermissibleValue permissibleValue, PermissibleValueDetails detail, OpenSpecimenException ose) {
+		PermissibleValue parentPv = null;
+		if (detail.getParentId() != null) {
+			parentPv = daoFactory.getPermissibleValueDao().getById(detail.getParentId());
+		} else if (StringUtils.isNotBlank(detail.getAttribute()) && StringUtils.isNotBlank(detail.getParentValue())) {
+			parentPv = daoFactory.getPermissibleValueDao().getByValue(detail.getAttribute(), detail.getParentValue());
+		} else {
+			return;
 		}
 		
-		PermissibleValue parentPv = daoFactory.getPermissibleValueDao().getById(parentId);
 		if (parentPv == null) {
 			ose.addError(PvErrorCode.PARENT_ATTR_NOT_FOUND);
 			return;
 		}
 		
 		permissibleValue.setParent(parentPv);
+	}
+	
+	private void setProps(PermissibleValue permissibleValue, PermissibleValueDetails details, OpenSpecimenException ose) {
+		permissibleValue.setProps(details.getProps());
 	}
 }

@@ -2,7 +2,9 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.PermissibleValue;
 
@@ -11,6 +13,8 @@ public class PermissibleValueDetails {
 	private Long id;
 
 	private Long parentId;
+	
+	private String parentValue;
 
 	private String value;
 
@@ -18,7 +22,7 @@ public class PermissibleValueDetails {
 
 	private String conceptCode;
 
-	private Map<String, String> props = new HashMap<String, String>();
+	private Map<String, String> props = new HashMap<>();
 	
 	public Long getId() {
 		return id;
@@ -34,6 +38,14 @@ public class PermissibleValueDetails {
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getParentValue() {
+		return parentValue;
+	}
+
+	public void setParentValue(String parentValue) {
+		this.parentValue = parentValue;
 	}
 
 	public String getValue() {
@@ -68,6 +80,13 @@ public class PermissibleValueDetails {
 		this.props = props;
 	}
 
+	//
+	// For BO Template
+	//
+	public void setPropMap(List<Map<String, String>> propMap) {
+		this.props = propMap.stream().collect(Collectors.toMap(p -> p.get("name"), p -> p.get("value")));
+	}
+
 	public static PermissibleValueDetails fromDomain(PermissibleValue permissibleValue) {
 		PermissibleValueDetails details = new PermissibleValueDetails();
 		details.setConceptCode(permissibleValue.getConceptCode());
@@ -76,6 +95,7 @@ public class PermissibleValueDetails {
 		details.setValue(permissibleValue.getValue());
 		if (permissibleValue.getParent() != null) {
 			details.setParentId(permissibleValue.getParent().getId());
+			details.setParentValue(permissibleValue.getParent().getValue());
 		}
 		
 		if (permissibleValue.getProps() != null) {
