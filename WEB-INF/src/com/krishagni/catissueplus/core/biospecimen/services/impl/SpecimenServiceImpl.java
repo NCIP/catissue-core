@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -108,10 +109,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			
 			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 			SpecimenDetail detail = SpecimenDetail.from(specimen, false, !allowPhi);
-
-			String status = daoFactory.getSpecimenDao().getDistributionStatus(detail.getId());
-			detail.setDistributionStatus(status);
-
+			setDistributionStatus(detail);
 			return ResponseEvent.response(detail);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
@@ -541,7 +539,31 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			setCreatedOn(detail.getChildren(), detail.getCreatedOn());
 		}
 	}
-	
+
+	private void setDistributionStatus(SpecimenDetail specimen) {
+		setDistributionStatus(flattenSpecimenTree(specimen));
+	}
+
+	private void setDistributionStatus(List<SpecimenInfo> specimens) {
+		List<Long> spmnIds = specimens.stream().map(spmn -> spmn.getId()).collect(Collectors.toList());
+		Map<Long, String> distStatuses = daoFactory.getSpecimenDao().getDistributionStatus(spmnIds);
+		specimens.stream().forEach(spmn -> spmn.setDistributionStatus(distStatuses.get(spmn.getId())));
+	}
+
+	private List<SpecimenInfo> flattenSpecimenTree(SpecimenDetail specimen) {
+		return flattenSpecimenTree(specimen, new ArrayList<>());
+	}
+
+	private List<SpecimenInfo> flattenSpecimenTree(SpecimenDetail specimen, List<SpecimenInfo> result) {
+		result.add(specimen);
+
+		if (CollectionUtils.isNotEmpty(specimen.getChildren())) {
+			specimen.getChildren().stream().forEach(child -> flattenSpecimenTree(child, result));
+		}
+
+		return result;
+	}
+
 	private void ensureEditAllowed(SpecimenDetail detail, Specimen existing) {
 		if (existing == null || existing.isActive()) {
 			return;
