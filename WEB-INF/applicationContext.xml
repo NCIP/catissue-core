@@ -157,8 +157,9 @@
   <bean id="cpCopier" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolCopier"/>
 
   <bean id="cpFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CollectionProtocolFactoryImpl">
+    <property name="daoFactory" ref="biospecimenDaoFactory"/>
+    <property name="ppidGenerator" ref="ppidGenerator"/>
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
-    <property name="daoFactory" ref="biospecimenDaoFactory"/>  
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
     <property name="cpCopier" ref="cpCopier"/>
   </bean>

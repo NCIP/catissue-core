@@ -38,20 +38,22 @@ import com.krishagni.catissueplus.core.de.domain.DeObject;
 public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory {
 	private DaoFactory daoFactory;
 	
+	private LabelGenerator ppidGenerator;
+
 	private LabelGenerator specimenLabelGenerator;
 	
 	private LabelGenerator visitNameGenerator;
 
 	private CollectionProtocolCopier cpCopier;
 	
-	public DaoFactory getDaoFactory() {
-		return daoFactory;
-	}
-
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-	
+
+	public void setPpidGenerator(LabelGenerator ppidGenerator) {
+		this.ppidGenerator = ppidGenerator;
+	}
+
 	public void setSpecimenLabelGenerator(LabelGenerator specimenLabelGenerator) {
 		this.specimenLabelGenerator = specimenLabelGenerator;
 	}
@@ -80,16 +82,15 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setDate(input, cp, ose);
 
 		cp.setIrbIdentifier(input.getIrbId());
-		cp.setPpidFormat(input.getPpidFmt());
-		cp.setManualPpidEnabled(input.getManualPpidEnabled());
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setSopDocumentUrl(input.getSopDocumentUrl());
 		cp.setSopDocumentName(input.getSopDocumentName());
 		cp.setDescriptionURL(input.getDescriptionUrl());
 		cp.setConsentsWaived(input.getConsentsWaived());
 
-		setVisitNameFmt(input, cp, ose);
+		setPpidFormat(input, cp, ose);
 		setLabelFormats(input, cp, ose);
+		setVisitNameFmt(input, cp, ose);
 		setVisitNamePrintMode(input, cp, ose);
 		cp.setVisitNamePrintCopies(input.getVisitNamePrintCopies());
 		setSpecimenLabelPrePrintMode(input, cp, ose);
@@ -265,6 +266,20 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 	}
 	
+	private void setPpidFormat(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		String ppidFmt = ensureValidPpidFormat(input.getPpidFmt(), ose);
+		result.setPpidFormat(ppidFmt);
+		result.setManualPpidEnabled(input.getManualPpidEnabled());
+	}
+
+	private String ensureValidPpidFormat(String ppidFmt, OpenSpecimenException ose) {
+		if (StringUtils.isNotBlank(ppidFmt) && !ppidGenerator.isValidLabelTmpl(ppidFmt)) {
+			ose.addError(CpErrorCode.INVALID_PPID_FMT, ppidFmt);
+		}
+
+		return ppidFmt;
+	}
+
 	private void setLabelFormats(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
 		String labelFmt = ensureValidLabelFmt(input.getSpecimenLabelFmt(), CpErrorCode.INVALID_SPECIMEN_LABEL_FMT, ose);		
 		result.setSpecimenLabelFormat(labelFmt);
@@ -280,7 +295,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	
 	private String ensureValidLabelFmt(String labelFmt, ErrorCode error, OpenSpecimenException ose) {
 		if (StringUtils.isNotBlank(labelFmt) && !specimenLabelGenerator.isValidLabelTmpl(labelFmt)) {
-			ose.addError(error);
+			ose.addError(error, labelFmt);
 		}
 		
 		return labelFmt;

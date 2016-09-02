@@ -31,6 +31,8 @@ public enum CpErrorCode implements ErrorCode {
 	
 	CONSENT_TIER_NOT_FOUND,
 	
+	INVALID_PPID_FMT,
+
 	INVALID_SPECIMEN_LABEL_FMT,
 	
 	INVALID_ALIQUOT_LABEL_FMT,
