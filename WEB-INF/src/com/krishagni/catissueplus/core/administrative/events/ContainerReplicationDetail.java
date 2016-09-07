@@ -46,6 +46,8 @@ public class ContainerReplicationDetail {
 		private String posOne;
 		
 		private String posTwo;
+
+		private int position;
 		
 		public String getSiteName() {
 			return siteName;
@@ -93,6 +95,14 @@ public class ContainerReplicationDetail {
 
 		public void setPosTwo(String posTwo) {
 			this.posTwo = posTwo;
+		}
+
+		public int getPosition() {
+			return position;
+		}
+
+		public void setPosition(int position) {
+			this.position = position;
 		}
 	}
 }

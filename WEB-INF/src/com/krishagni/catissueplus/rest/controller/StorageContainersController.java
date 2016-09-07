@@ -29,6 +29,8 @@ import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetai
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
+import com.krishagni.catissueplus.core.administrative.events.VacantPositionsOp;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -234,7 +236,7 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail createStorageContainer(@RequestBody StorageContainerDetail detail) {
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.createStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -253,7 +255,7 @@ public class StorageContainersController {
 		
 		detail.setId(containerId);
 		
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.updateStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -272,7 +274,7 @@ public class StorageContainersController {
 		
 		detail.setId(containerId);
 		
-		RequestEvent<StorageContainerDetail> req = new RequestEvent<StorageContainerDetail>(detail);
+		RequestEvent<StorageContainerDetail> req = new RequestEvent<>(detail);
 		ResponseEvent<StorageContainerDetail> resp = storageContainerSvc.patchStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -363,7 +365,7 @@ public class StorageContainersController {
 	public Map<String, Boolean> replicateStorageContainer(@PathVariable Long id, @RequestBody ContainerReplicationDetail repl) {
 		repl.setSourceContainerId(id);
 
-		RequestEvent<ContainerReplicationDetail> req = new RequestEvent<ContainerReplicationDetail>(repl);
+		RequestEvent<ContainerReplicationDetail> req = new RequestEvent<>(repl);
 		ResponseEvent<Boolean> resp = storageContainerSvc.replicateStorageContainer(req);
 		resp.throwErrorIfUnsuccessful();
 
@@ -378,6 +380,103 @@ public class StorageContainersController {
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.createContainerHierarchy(req);
 		resp.throwErrorIfUnsuccessful();
 		
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value="/multiple")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageContainerSummary> createMultipleContainers(@RequestBody List<StorageContainerDetail> containers) {
+		RequestEvent<List<StorageContainerDetail>> req = new RequestEvent<>(containers);
+		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.createMultipleContainers(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	//
+	// APIs created mostly for ease of implementing UI views
+	//
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/ancestors-hierarchy")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public StorageContainerSummary getAncestorsHierarchy(@PathVariable("id") Long containerId) {
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<>(new ContainerQueryCriteria(containerId));
+		ResponseEvent<StorageContainerSummary> resp = storageContainerSvc.getAncestorsHierarchy(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/child-containers")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageContainerSummary> getChildContainers(@PathVariable("id") Long containerId) {
+		RequestEvent<ContainerQueryCriteria> req = new RequestEvent<>(new ContainerQueryCriteria(containerId));
+		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getChildContainers(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/vacant-positions")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageLocationSummary> getVacantPositions(
+			@PathVariable("id")
+			Long containerId,
+
+			@RequestParam(value = "startRow", required =  false)
+			String startRow,
+
+			@RequestParam(value = "startColumn", required = false)
+			String startColumn,
+
+			@RequestParam(value = "startPosition", required = false, defaultValue = "0")
+			int startPosition,
+
+			@RequestParam(value = "numPositions", required = false, defaultValue = "1")
+			int numPositions) {
+
+		VacantPositionsOp op = new VacantPositionsOp();
+		op.setContainerId(containerId);
+		op.setStartRow(startRow);
+		op.setStartColumn(startColumn);
+		op.setStartPosition(startPosition);
+		op.setRequestedPositions(numPositions);
+
+		RequestEvent<VacantPositionsOp> req = new RequestEvent<>(op);
+		ResponseEvent<List<StorageLocationSummary>> resp = storageContainerSvc.getVacantPositions(req);
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/vacant-positions")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<StorageLocationSummary> getVacantPositions(
+			@RequestParam(value = "name")
+			String containerName,
+
+			@RequestParam(value = "startRow", required =  false)
+			String startRow,
+
+			@RequestParam(value = "startColumn", required = false)
+			String startColumn,
+
+			@RequestParam(value = "startPosition", required = false, defaultValue = "0")
+			int startPosition,
+
+			@RequestParam(value = "numPositions", required = false, defaultValue = "1")
+			int numPositions) {
+
+		VacantPositionsOp op = new VacantPositionsOp();
+		op.setContainerName(containerName);
+		op.setStartRow(startRow);
+		op.setStartColumn(startColumn);
+		op.setStartPosition(startPosition);
+		op.setRequestedPositions(numPositions);
+
+		RequestEvent<VacantPositionsOp> req = new RequestEvent<>(op);
+		ResponseEvent<List<StorageLocationSummary>> resp = storageContainerSvc.getVacantPositions(req);
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 

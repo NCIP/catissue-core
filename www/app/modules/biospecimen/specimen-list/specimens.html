@@ -159,8 +159,7 @@
           </td>
           <td class="col" ng-switch on="!!specimen.storageLocation.name">
             <span ng-switch-when="true">
-              {{specimen.storageLocation.name}}:
-              ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
+              <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
             </span>
             <span ng-switch-when="false">
               <span translate="specimens.virtually_located">Virtual</span>

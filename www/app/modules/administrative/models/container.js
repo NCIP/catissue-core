@@ -1,7 +1,18 @@
 
 angular.module('os.administrative.models.container', ['os.common.models'])
-  .factory('Container', function(osModel, $q, $http) {
-    var Container = new osModel('storage-containers');
+  .factory('Container', function(osModel, $q, $http, $translate) {
+    var Container = new osModel(
+      'storage-containers',
+      function(container) {
+        if (container.childContainers) {
+          container.childContainers = container.childContainers.map(
+            function(child) {
+              return new Container(child);
+            }
+          );
+        }
+      }
+    );
 
     Container.prototype.getType = function() {
       return 'storage_container';
@@ -11,46 +22,9 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       return this.name;
     }
 
-    Container.list = function(opts) {
-      var defOpts = {topLevelContainers: true};
-      return Container.query(angular.extend(defOpts, opts || {}));
-    };
-
-    Container.listForSite = function(siteName, onlyFreeContainers, flatten, name) {
-      var params = {
-        site: siteName,
-        name: name,
-        anyLevelContainers: true,
-        onlyFreeContainers: !!onlyFreeContainers
-      };
-
-      var ret = Container.query(params);
-      if (flatten == true) {
-        ret = ret.then(
-          function(containers) {
-            return Container._flatten(containers, 'childContainers');
-          }
-        );
-      }
-        
-      return ret;
-    };
-
-    Container.flatten = function(containers) {
-      return Container._flatten(containers, 'childContainers');
-    };
-
-    Container.getByName = function(name) {
-      return $http.get(Container.url() + '/byname/', {params: {name: name}}).then(
-        function(result) {
-          return new Container(result.data);
-        }
-      );
-    };
-
-    Container.prototype.getChildContainers = function(anyLevel) {
-      return Container.query({parentContainerId: this.$id(), includeChildren: anyLevel});
-    };
+    Container.prototype.getChildContainers = function() {
+      return $http.get(Container.url() + this.$id() + '/child-containers').then(Container.modelArrayRespTransform);
+    }
 
     Container.prototype.getOccupiedPositions = function() {
       return $http.get(Container.url() + '/' + this.$id() + '/occupied-positions').then(
@@ -83,11 +57,16 @@ angular.module('os.administrative.models.container', ['os.common.models'])
 
     Container.prototype.lazyLoadFlattenedChildren = function(containers, placeholder) {
       if (this.childContainersLoaded) {
-        return;
+        return containers;
+      }
+
+      if (!placeholder) {
+        placeholder = {name: 'Loading...'};
+        $translate('common.loading').then(function(val) { placeholder.name = val; });
       }
 
       var container = this;
-      container.getChildContainers(false).then(
+      return container.getChildContainers().then(
         function(childContainers) {
           angular.forEach(childContainers, function(childContainer, idx) {
             var dummyId = -1 * container.id + "." + idx;
@@ -104,6 +83,8 @@ angular.module('os.administrative.models.container', ['os.common.models'])
           if (childContainers.length == 0) {
             container.hasChildren = false;
           }
+
+          return containers;
         }
       );
     };
@@ -116,6 +97,60 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       );
     };
 
+    Container.prototype.getVacantPositions = function(startRow, startCol, startPos, numPos) {
+      var params = {startRow: startRow, startColumn: startCol, startPosition: startPos, numPositions: numPos};
+      return $http.get(Container.url() + this.$id() + '/vacant-positions', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
+
+    Container.list = function(opts) {
+      var defOpts = {topLevelContainers: true};
+      return Container.query(angular.extend(defOpts, opts || {}));
+    };
+
+    Container.listForSite = function(siteName, onlyFreeContainers, flatten, name) {
+      var params = {
+        site: siteName,
+        name: name,
+        anyLevelContainers: true,
+        onlyFreeContainers: !!onlyFreeContainers
+      };
+
+      var ret = Container.query(params);
+      if (flatten == true) {
+        ret = ret.then(
+          function(containers) {
+            return Container._flatten(containers, 'childContainers');
+          }
+        );
+      }
+
+      return ret;
+    };
+
+    Container.flatten = function(containers) {
+      return Container._flatten(containers, 'childContainers');
+    };
+
+    Container.getByName = function(name) {
+      return $http.get(Container.url() + '/byname/', {params: {name: name}}).then(
+        function(result) {
+          return new Container(result.data);
+        }
+      );
+    };
+
+    Container.getAncestorsHierarchy = function(containerId) {
+      return $http.get(Container.url() + containerId + '/ancestors-hierarchy').then(
+        function(result) {
+          return new Container(result.data);
+        }
+      );
+    }
+
     Container.createHierarchy = function(hierarchyDetail) {
       return $http.post(Container.url() + 'create-hierarchy', hierarchyDetail).then(
         function(resp) {
@@ -123,6 +158,19 @@ angular.module('os.administrative.models.container', ['os.common.models'])
         }
       );
     }
+
+    Container.createContainers = function(containers) {
+      return $http.post(Container.url() + 'multiple', containers).then(Container.modelArrayRespTransform);
+    }
+
+    Container.getVacantPositions = function(name, startRow, startCol, startPos, numPos) {
+      var params = {name: name, startRow: startRow, startColumn: startCol, startPosition: startPos, numPositions: numPos};
+      return $http.get(Container.url() + 'vacant-positions', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    };
 
     return Container;
   });

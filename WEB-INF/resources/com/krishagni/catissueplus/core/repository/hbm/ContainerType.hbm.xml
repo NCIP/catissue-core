@@ -23,6 +23,15 @@
 
     <property name="noOfRows" column="NO_OF_ROWS"/>
 
+    <property name="positionLabelingMode" column="POS_LABELING_MODE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainer$PositionLabelingMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
     <property name="columnLabelingScheme" column="COLUMN_LABELING_SCHEME"/>
 
     <property name="rowLabelingScheme" column="ROW_LABELING_SCHEME"/>

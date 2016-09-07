@@ -200,8 +200,9 @@
         <strong class="key key-sm" translate="specimens.storage_location">Storage Location</strong>
         <ng-switch on="!!specimen.storageLocation.id && specimen.storageLocation.id != -1">
           <span class="value value-md" ng-switch-when="true">
-            {{specimen.storageLocation.name}} 
-            ({{specimen.storageLocation.positionY}} x {{specimen.storageLocation.positionX}})
+            <a ui-sref="container-detail.locations({containerId: specimen.storageLocation.id})">
+              <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
+            </a>
           </span>
           <span class="value value-md" ng-switch-default translate="specimens.virtually_located"> 
             Virtual 

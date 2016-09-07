@@ -29,6 +29,8 @@ public class SpecimenAliquotsSpec {
 	private String positionX;
 
 	private String positionY;
+
+	private int position;
 	
 	private ExtensionDetail extensionDetail;
 
@@ -130,6 +132,14 @@ public class SpecimenAliquotsSpec {
 
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	public ExtensionDetail getExtensionDetail() {

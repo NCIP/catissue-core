@@ -65,10 +65,17 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
         .append($("<th/>").addClass("os-container-pos").append(posY));
 
       for (var j = 0; j < +container.noOfColumns; ++j) {
-        var posX = Utility.fromOrdinal(container.columnLabelingScheme, j + 1);
+        var position = i * +container.noOfColumns + (j + 1);
+        var posX     = Utility.fromOrdinal(container.columnLabelingScheme, j + 1);
+
+        var tooltip = position;
+        if (container.positionLabelingMode == 'TWO_D') {
+          tooltip = '(' + posY + ', ' + posX + ')';
+        }
+
         var td = $("<td/>")
           .addClass("os-container-pos")
-          .attr({ 'data-pos-x': posX, 'data-pos-y': posY, 'title': '(' + posY + ', ' + posX + ')'});
+          .attr({'data-pos-x': posX, 'data-pos-y': posY, 'data-pos': position, 'title': tooltip});
 
         var pos = i * container.noOfColumns + j + 1;
         if (occupiedPosMap[pos]) {
@@ -91,7 +98,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
 
     return tbody;
   }
-    
+
   function listenForSelections(table, selectedPos) {
     table.find("td.os-container-pos:not(.no-click)").on("click", function(event) {
       var posEl = $(event.currentTarget);
@@ -104,6 +111,7 @@ openspecimen.ui.container.ContainerPositionSelector = function(opts) {
         posEl.addClass("selected");
         selectedPos.posX = posEl.attr('data-pos-x');
         selectedPos.posY = posEl.attr('data-pos-y');
+        selectedPos.pos  = posEl.attr('data-pos');
       }
 
       if (typeof(opts.onSelect) == 'function') {

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +26,7 @@ import com.krishagni.catissueplus.core.administrative.events.StorageContainerDet
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
+import com.krishagni.catissueplus.core.administrative.events.VacantPositionsOp;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
@@ -33,6 +35,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.RollbackTransaction;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
@@ -287,7 +290,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	@PlusTransactional
 	public ResponseEvent<List<StorageContainerSummary>> createContainerHierarchy(RequestEvent<ContainerHierarchyDetail> req) {
 		ContainerHierarchyDetail input = req.getPayload();
-		List<StorageContainer> containers = new ArrayList<StorageContainer>();
+		List<StorageContainer> containers = new ArrayList<>();
 
 		try {
 			StorageContainer container = containerFactory.createStorageContainer("dummyName", input);
@@ -312,6 +315,125 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			}
 			
 			return ResponseEvent.response(StorageContainerDetail.from(containers));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<StorageContainerSummary>> createMultipleContainers(RequestEvent<List<StorageContainerDetail>> req) {
+		try {
+			List<StorageContainerSummary> result = new ArrayList<>();
+
+			for (StorageContainerDetail detail : req.getPayload()) {
+				if (StringUtils.isNotBlank(detail.getTypeName()) || detail.getTypeId() != null) {
+					detail.setName("dummy");
+				}
+
+				StorageContainer container = containerFactory.createStorageContainer(detail);
+				AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
+				if (container.getType() != null) {
+					generateName(container);
+				}
+
+				ensureUniqueConstraints(null, container);
+				container.validateRestrictions();
+				daoFactory.getStorageContainerDao().saveOrUpdate(container);
+				result.add(StorageContainerSummary.from(container));
+			}
+
+			return ResponseEvent.response(result);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<StorageContainerSummary> getAncestorsHierarchy(RequestEvent<ContainerQueryCriteria> req) {
+		try {
+			StorageContainer container = getContainer(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
+
+			StorageContainerSummary summary = null;
+			if (container.getParentContainer() == null) {
+				summary = new StorageContainerSummary();
+				summary.setId(container.getId());
+				summary.setName(container.getName());
+				summary.setNoOfRows(container.getNoOfRows());
+				summary.setNoOfColumns(container.getNoOfColumns());
+			} else {
+				summary = daoFactory.getStorageContainerDao().getAncestorsHierarchy(container.getId());
+			}
+
+			return ResponseEvent.response(summary);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<StorageContainerSummary>> getChildContainers(RequestEvent<ContainerQueryCriteria> req) {
+		try {
+			StorageContainer container = getContainer(req.getPayload());
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
+			return ResponseEvent.response(
+				daoFactory.getStorageContainerDao().getChildContainers(container.getId(), container.getNoOfColumns()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@RollbackTransaction
+	public ResponseEvent<List<StorageLocationSummary>> getVacantPositions(RequestEvent<VacantPositionsOp> req) {
+		try {
+			VacantPositionsOp detail = req.getPayload();
+			StorageContainer container = getContainer(detail.getContainerId(), detail.getContainerName());
+			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
+
+			int numPositions = detail.getRequestedPositions();
+			if (numPositions <= 0) {
+				numPositions = 1;
+			}
+
+			List<StorageContainerPosition> vacantPositions = new ArrayList<>();
+			for (int i = 0; i < numPositions; ++i) {
+				StorageContainerPosition position = null;
+				if (i == 0) {
+					if (StringUtils.isNotBlank(detail.getStartRow()) && StringUtils.isNotBlank(detail.getStartColumn())) {
+						position = container.nextAvailablePosition(detail.getStartRow(), detail.getStartColumn());
+					} else if (detail.getStartPosition() > 0) {
+						position = container.nextAvailablePosition(detail.getStartPosition());
+					} else {
+						position = container.nextAvailablePosition();
+					}
+				} else {
+					position = container.nextAvailablePosition(true);
+				}
+
+				if (position == null) {
+					throw OpenSpecimenException.userError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+				}
+
+				container.addPosition(position);
+				vacantPositions.add(position);
+			}
+
+			return ResponseEvent.response(
+				vacantPositions.stream()
+					.map(StorageLocationSummary::from)
+					.collect(Collectors.toList()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -549,6 +671,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		storageLocation.setName(dest.getParentContainerName());
 		storageLocation.setPositionX(dest.getPosOne());
 		storageLocation.setPositionY(dest.getPosTwo());
+		storageLocation.setPosition(dest.getPosition());
 		detail.setStorageLocation(storageLocation);
 		
 		StorageContainer replica = containerFactory.createStorageContainer(getContainerCopy(srcContainer), detail);

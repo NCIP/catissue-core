@@ -13,6 +13,8 @@ public enum ContainerTypeErrorCode implements ErrorCode {
 	DUP_NAME,
 	
 	INVALID_CAPACITY,
+
+	INVALID_POSITION_LABELING_MODE,
 	
 	INVALID_LABELING_SCHEME, 
 	

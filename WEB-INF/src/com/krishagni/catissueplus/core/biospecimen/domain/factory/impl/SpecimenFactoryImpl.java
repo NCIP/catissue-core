@@ -713,9 +713,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, container.getName(), specimen.getLabelOrDesc());
 			return;
 		}
-		
-		StorageContainerPosition position = null;
+
 		String posOne = location.getPositionX(), posTwo = location.getPositionY();
+		if (container.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR && location.getPosition() != 0) {
+			posTwo = String.valueOf((location.getPosition() - 1) / container.getNoOfColumns() + 1);
+			posOne = String.valueOf((location.getPosition() - 1) % container.getNoOfColumns() + 1);
+		}
+
+		StorageContainerPosition position = null;
 		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
 				position = container.createPosition(posOne, posTwo);

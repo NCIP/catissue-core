@@ -1,46 +1,64 @@
 angular.module('os.administrative.container.detail', ['os.administrative.models'])
   .controller('ContainerDetailCtrl', function(
-      $scope, $q, container, Container,
-      Site, CollectionProtocol, DeleteUtil) {
+    $state, $scope, $q, containerViewState, container, containerTree, Container) {
 
     function init() {
-      $scope.container = container;
-      $scope.downloadUri = Container.url() + container.$id() + '/export-map';
-      loadPvs();
+      if (!container) {
+        $state.reload();
+        return;
+      }
 
-      var opts = {sites: [$scope.container.siteName]};
+      $scope.ctx = {
+        viewState      : '',
+        container      : container,
+        containerTree  : containerTree,
+        names          : [container.name],
+        showTree       : true
+      };
+
+      selectContainer(container);
+
+      var opts = {sites: [container.siteName]};
       angular.extend($scope.containerResource.updateOpts, opts);
       angular.extend($scope.containerResource.deleteOpts, opts);
     }
 
-    function loadPvs () {
-      CollectionProtocol.query().then(
-        function(cps) {
-          $scope.cps = [];
-          angular.forEach(cps, function(cp) {
-            $scope.cps.push(cp.shortTitle);
-          });
-        }
-      );
+    function selectContainer(container) {
+      var names = [], c = container;
+      while (c) {
+        names.unshift(c.name);
+        c = c.parent;
+      }
+      $scope.ctx.names = names;
+
+      c = container.parent;
+      while (c) {
+        c.isOpened = true;
+        c = c.parent;
+      }
+
+      if (!container.parent && !container.isOpened) {
+        loadChildren(container);
+      }
+
+      containerViewState.scrollTo(container.id);
     }
 
-    $scope.editContainer = function(property, value) {
-      var d = $q.defer();
-      d.resolve({});
-      return d.promise;
+    function loadChildren(container) {
+      container.isOpened = !container.isOpened;
+      if (!container.isOpened) {
+        return;
+      }
+
+      container.lazyLoadFlattenedChildren($scope.ctx.containerTree);
     }
 
-    $scope.deleteContainer = function() {
-      var container = new Container({
-        id: $scope.container.id,
-        name: $scope.container.name
-      });
-
-      DeleteUtil.delete(container, {
-        onDeleteState: 'container-list',
-        confirmDelete: 'container.confirm_delete'
-      });
+    $scope.selectContainer = function(container) {
+      containerViewState.recordScrollPosition();
+      $state.go($scope.ctx.viewState || 'container-detail.overview', {containerId: container.id});
     }
+
+    $scope.loadChildren = loadChildren;
 
     init();
   });

@@ -279,10 +279,7 @@
           <td class="col" ng-if="shipment.status != 'Shipped'"> 
             <span ng-switch on="!!specimen.storageLocation.name">
               <span ng-switch-when="true">
-                {{specimen.storageLocation.name}} 
-                <span>
-                  ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
-                </span>
+                <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
               </span>
               <span ng-switch-default translate="shipments.spec.virtual">
                 Virtual

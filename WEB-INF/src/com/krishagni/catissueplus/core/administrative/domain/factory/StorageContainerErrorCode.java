@@ -15,7 +15,9 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	DUP_NAME,
 	
 	DUP_BARCODE,
-	
+
+	INVALID_POSITION_LABELING_MODE,
+
 	INVALID_DIMENSION_CAPACITY,
 	
 	INVALID_DIMENSION_LABELING_SCHEME,

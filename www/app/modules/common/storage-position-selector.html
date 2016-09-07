@@ -22,9 +22,14 @@
           </os-container-position-selector>
         </div>
         <div>
-          <span>Selected Position: </span>
-          <span ng-if="!!selectedPos.positionX">({{selectedPos.positionY}}, {{selectedPos.positionX}})</span>
+          <span translate="container.selected_pos">Selected Position: </span>
           <span ng-if="!selectedPos.positionX" translate="common.none">None</span>
+          <span ng-if="!!selectedPos.positionX">
+            <span ng-switch on="selectedContainer.positionLabelingMode == 'TWO_D'">
+              <span ng-switch-when="true">({{selectedPos.positionY}}, {{selectedPos.positionX}})</span>
+              <span ng-switch-when="false">{{selectedPos.position}}</span>
+            </span>
+          </span>
         </div>
       </os-wizard-step>
 

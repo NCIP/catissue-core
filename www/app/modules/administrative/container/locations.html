@@ -1,32 +1,180 @@
-<div class="os-container-locations">
-
-  <div class="input-spmn-labels" ng-if="container.storeSpecimensEnabled">
-    <div class="input-group" os-textarea-input-group>
-      <textarea ng-model="input.labels" class="form-control" 
-        placeholder="{{'container.paste_specimen_labels' | translate}}" rows="2" style="resize: none;" 
-        ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
-      </textarea>
-      <span class="input-group-btn">
-        <button ng-click="assignPositions()" class="btn btn-primary">
-          <span translate="container.assign_positions">Assign Positions</span>
-        </button>
-      </span>
-    </div>
-    <div class="os-container-vacate-cb">
-      <div class="checkbox">
-        <os-checkbox ng-model="input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
+<div class="os-full-height-container" ng-class="{'row': !!lctx.entityInfo.id}">
+  <div class="os-container-locations" ng-class="{'col-xs-8': !!lctx.entityInfo.id}">
+    <div class="input-spmn-labels" ng-if="ctx.container.storeSpecimensEnabled">
+      <div class="input-group" os-textarea-input-group>
+        <textarea ng-model="lctx.input.labels" class="form-control"
+          placeholder="{{'container.paste_specimen_labels' | translate}}" rows="2" style="resize: none;"
+          ng-change="showUpdatedMap()" ng-model-options="{debounce: 500}" os-enable-tab>
+        </textarea>
+        <span class="input-group-btn">
+          <button ng-click="assignPositions()" class="btn btn-primary">
+            <span translate="container.assign_positions">Assign Positions</span>
+          </button>
+        </span>
       </div>
-      <div class="message">
-        <span translate="container.vacate_positions">Vacate existing specimens</span>
+      <div class="os-container-vacate-cb">
+        <div class="checkbox">
+          <os-checkbox ng-model="lctx.input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
+        </div>
+        <div class="message">
+          <span translate="container.vacate_positions">Vacate existing specimens</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="map" ng-switch on='lctx.mapState'>
+      <div ng-switch-when="loading">
+        <div class="os-alert-container inline show">
+          <div class="alert alert-info">
+            <span translate="container.loading_map">Loading container map. Please wait for a moment ...</span>
+          </div>
+        </div>
+      </div>
+      <div ng-switch-when="error">
+        <div class="os-alert-container inline show">
+          <div class="alert alert-danger">
+            <span translate="container.error_loading_map">
+              Error loading container map. Please report this incident to system administrator
+            </span>
+          </div>
+        </div>
+      </div>
+      <div ng-switch-default>
+        <os-container-map container="ctx.container" occupancy-map="lctx.occupancyMap"
+          on-add-event="addContainer" cell-click="showInfo(entityType, entityId)">
+        </os-container-map>
       </div>
     </div>
   </div>
 
-  <div class="map">
-    <os-container-map 
-      container="container" 
-      occupancy-map="occupancyMap"
-      on-add-event="addContainer">
-    </os-container-map>
+  <!-- Occupant either specimen or container summary information -->
+  <div class="os-full-height-container col-xs-4" ng-if="!!lctx.entityInfo.id">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span ng-if="lctx.entityInfo.type == 'specimen'" translate="entities.specimen">
+          Specimen
+        </span>
+        <span ng-if="lctx.entityInfo.type == 'container'" translate="entities.storage_container">
+          Container
+        </span>
+
+        <div class="os-btns right" ng-click="hideInfo()">
+          <button class="btn os-btn-text">
+            <span class="fa fa-times-circle"></span>
+          </button>
+        </div>
+      </div>
+      <div class="panel-body" ng-switch on="lctx.entityInfo.type">
+        <span ng-switch-when="specimen">
+          <div ng-include src="'modules/administrative/container/specimen-info'"></div>
+        </span>
+        <span ng-switch-when="container">
+          <div ng-include src="'modules/administrative/container/container-info'"></div>
+        </span>
+      </div>
+    </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="modules/administrative/container/specimen-info">
+  <ul class="os-key-values os-one-col">
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.cp"> Collection Protocol </strong>
+      <span class="value value-md">
+        <a ui-sref="cp-list-view({cpId: lctx.entityInfo.specimen.cpId})" target="_blank">
+          <span>{{lctx.entityInfo.specimen.cpShortTitle}}</span>
+        </a>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.label">Label</strong>
+      <span class="value value-md">
+        <a ui-sref="specimen({specimenId: lctx.entityInfo.specimen.id})" target="_blank">
+          <span>{{lctx.entityInfo.specimen.label}}</span>
+        </a>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.ppid">PPID</strong>
+      <span class="value value-md">
+        <a ui-sref="participant-detail.overview({
+          cpId: lctx.entityInfo.specimen.cpId, cprId: lctx.entityInfo.specimen.cprId})" target="_blank">
+          <span>{{lctx.entityInfo.specimen.ppid}}</span>
+        </a>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.storage_location">
+        Storage Location
+      </strong>
+      <span class="value value-md">
+        <os-disp-storage-position position="lctx.entityInfo.specimen.storageLocation"></os-disp-storage-position>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.type">Type</strong>
+      <span class="value value-md"> {{lctx.entityInfo.specimen.type}}</span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.qty"> Quantity </strong>
+      <os-spmn-measure-val specimen="lctx.entityInfo.specimen" value="lctx.entityInfo.specimen.availableQty">
+      </os-spmn-measure-val>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.pathology"> Pathological Status </strong>
+      <span class="value value-md"> {{lctx.entityInfo.specimen.pathology}} </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.anatomic_site"> Anatomic Site </strong>
+      <span class="value value-md"> {{lctx.entityInfo.specimen.anatomicSite}} </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="specimens.coll_container"> Collection Container </strong>
+      <span class="value value-md"> {{lctx.entityInfo.specimen.collectionContainer | osNoValue}} </span>
+    </li>
+  </ul>
+</script>
+
+<script type="text/ng-template" id="modules/administrative/container/container-info">
+  <ul class="os-key-values os-one-col">
+    <li class="item">
+      <strong class="key key-sm" translate="container.name"> Name </strong>
+      <span class="value value-md">
+        <a ui-sref="container-detail.locations({containerId: lctx.entityInfo.container.id})">
+          <span>{{lctx.entityInfo.container.name}}</span>
+        </a>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.type"> Type </strong>
+      <span class="value value-md">{{lctx.entityInfo.container.typeName | osNoValue}}</span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.position"> Position </strong>
+      <span class="value value-md">
+        <os-disp-storage-position position="lctx.entityInfo.container.storageLocation"></os-disp-storage-position>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.dimension"> Dimension </strong>
+      <span class="value value-md">{{lctx.entityInfo.container.noOfRows}} x {{lctx.entityInfo.container.noOfColumns}}</span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.labeling_scheme"> Labeling Scheme </strong>
+      <span class="value value-md">
+        {{lctx.entityInfo.container.rowLabelingScheme}} x {{lctx.entityInfo.container.columnLabelingScheme}}
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.stores_specimens"> Stores Specimens </strong>
+      <span class="value value-md" ng-switch on="lctx.entityInfo.container.storeSpecimensEnabled">
+        <span ng-switch-when="true" translate="common.yes">Yes</span>
+        <span ng-switch-default translate="common.no">No</span>
+      </span>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="container.free_locations"> Free Locations </strong>
+      <span class="value value-md">{{lctx.entityInfo.container.freePositions}}</span>
+    </li>
+  </ul>
+</script>

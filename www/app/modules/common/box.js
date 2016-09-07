@@ -9,6 +9,7 @@ angular.module('os.common.box', [])
     //     column: function to convert column number to corresponding labeling scheme number
     //     numberOfRows: function returning number of box rows
     //     numberOfColumns: function returning number of box columns
+    //     positionLabelingMode: function returning how slots should be labeled. LINEAR or TWO_D
     //     rowLabelingScheme: function returning scheme to use for labeling box rows
     //     columnLabelingScheme: function returning scheme to use for labeling box columns
     //   },
@@ -27,11 +28,14 @@ angular.module('os.common.box', [])
       var width = element.width();
       var noOfColumns = opts.box.numberOfColumns();
       var cellWidth = Math.floor(width / 10);
-      if (cellWidth * noOfColumns > width) {
+      if (width > cellWidth * noOfColumns) {
         cellWidth = width / noOfColumns;
-        if (cellWidth < 85) {
-          cellWidth = 85;
-        }
+      }
+
+      if (cellWidth < 85) {
+        cellWidth = 85;
+      } else if (cellWidth > 125) {
+        cellWidth = 125;
       }
 
       var table = $("<table class='os-container-map' ng-click='onClick($event)'/>");
@@ -96,13 +100,15 @@ angular.module('os.common.box', [])
     };
 
     function getCellEl(cell, opts) {
+      var pos = (cell.row - 1) * opts.box.numberOfColumns() + cell.column;
       var row = NumberConverterUtil.fromNumber(opts.box.rowLabelingScheme(), cell.row);
       var column = NumberConverterUtil.fromNumber(opts.box.columnLabelingScheme(), cell.column);
 
       var el = $("<div class='slot-element'/>");
 
-      if (cell.occupied && opts.toggleCellSelect) {
-        var attrs = {'data-id': cell.occupied.id, 'data-pos-y': row, 'data-pos-x': column};
+      var occupant = cell.occupied;
+      if (occupant && opts.toggleCellSelect) {
+        var attrs = {'data-id': occupant.id, 'data-pos-y': row, 'data-pos-x': column, 'data-pos': pos};
         var checkbox = $("<label class='os-checkbox'/>")
           .append($("<input type='checkbox'>").attr(attrs))
           .append($("<span class='box'/>"))
@@ -110,30 +116,39 @@ angular.module('os.common.box', [])
         el.append($("<div class='slot-selector'/>").append(checkbox));
       }
 
-      el.append($("<div class='slot-pos'/>").append(formatPos(row, column)));
+      el.append($("<div class='slot-pos'/>").append(formatPos(opts, row, column, pos)));
 
-      if (cell.occupied) {
+      if (occupant) {
         var cellDesc = $("<a class='slot-desc'/>")
-          .attr('title', opts.occupantName(cell.occupied))
-          .append(opts.occupantName(cell.occupied));
+          .attr('title', opts.occupantName(occupant))
+          .append(opts.occupantName(occupant));
 
         if (opts.allowClicks) {
-          cellDesc.attr('ui-sref', opts.occupantSref(cell.occupied));
+          if (opts.box.occupantClick) {
+            var params = '"' + occupant.occuypingEntity + '", ' + occupant.occupyingEntityId;
+            cellDesc.attr('ng-click', 'occupantClick(' + params + ')');
+          } else if (opts.occupantSref) {
+            cellDesc.attr('ui-sref', opts.occupantSref(occupant));
+          }
         }
 
         el.append(cellDesc);
       } else if (typeof opts.onAddEvent == 'function') {
         el.append(getAddMarker())
           .addClass("os-pointer-cursor")
-          .attr({'data-pos-x': column, 'data-pos-y': row})
+          .attr({'data-pos-x': column, 'data-pos-y': row, 'data-pos': pos})
           .attr('title', 'Click to add container');
       }
 
       return el;
     }
 
-    function formatPos(row, column) {
-      return "(" + row + ", " + column + ")";
+    function formatPos(opts, row, column, pos) {
+      if (opts.box.positionLabelingMode() == 'LINEAR') {
+        return pos;
+      } else {
+        return "(" + row + ", " + column + ")";
+      }
     };
 
     function getAddMarker() {
@@ -290,6 +305,10 @@ angular.module('os.common.box', [])
       },
 
       link: function(scope, element, attrs) {
+        scope.occupantClick = function(entityType, entityId) {
+          scope.opts.box.occupantClick(entityType, entityId);
+        }
+
         scope.onClick = function($event) {
           var target = angular.element($event.originalEvent.target);
 
@@ -305,6 +324,7 @@ angular.module('os.common.box', [])
               target.attr('data-id'),
               target.attr('data-pos-y'),
               target.attr('data-pos-x'),
+              target.attr('data-pos'),
               target[0].checked);
             return;
           }
@@ -314,7 +334,7 @@ angular.module('os.common.box', [])
           }
 
           if (target.attr('data-pos-y') && target.attr('data-pos-x')) {
-            scope.opts.onAddEvent(target.attr('data-pos-y'), target.attr('data-pos-x'));
+            scope.opts.onAddEvent(target.attr('data-pos-y'), target.attr('data-pos-x'), target.attr('data-pos'));
           }
         };
 

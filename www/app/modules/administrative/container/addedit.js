@@ -9,7 +9,11 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     function init() {
       container.storageLocation = container.storageLocation || {};
       $scope.container = container;
-      $scope.ctx = {createHierarchy: $stateParams.mode == 'createHierarchy'};
+
+      $scope.ctx = { mode: 'single', view: '' };
+      if ($stateParams.mode == 'createHierarchy') {
+        $scope.ctx.mode = 'hierarchy';
+      }
 
       /**
        * Some how the ui-select's multiple option is removing pre-selected items
@@ -31,17 +35,19 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         allowAll: undefined
       };
 
-      if ($stateParams.parentContainerName && $stateParams.parentContainerId &&
+      if ($stateParams.siteName && $stateParams.parentContainerName && $stateParams.parentContainerId &&
           $stateParams.posOne && $stateParams.posTwo) {
         //
         // This happens when user adds container from container map
         //
 
         $scope.locationSelected = true;
+        container.siteName = $stateParams.siteName;
         container.storageLocation = {
           name: $stateParams.parentContainerName,
           positionX: $stateParams.posOne,
-          positionY: $stateParams.posTwo
+          positionY: $stateParams.posTwo,
+          position: $stateParams.pos
         };
         restrictCpsAndSpecimenTypes();
       }
@@ -176,31 +182,54 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       var container = angular.copy($scope.container);
       container.$saveOrUpdate().then(
         function(result) {
-          if (!$scope.locationSelected) {
-            $state.go('container-detail.overview', {containerId: result.id});
-          } else {
-            $state.go('container-detail.locations', {containerId: $stateParams.parentContainerId});
-          }
+          $state.go('container-detail.locations', {containerId: result.id});
         }
       );
     };
 
+    function createMultipleContainers() {
+      var container = $scope.container, loc = $scope.container.storageLocation;
+      if (loc.name) {
+        Container.getVacantPositions(loc.name, loc.positionY, loc.positionX, loc.position, container.numOfContainers).then(
+          function(positions) {
+            createMultipleContainers0(container, positions);
+          }
+        );
+      } else {
+        createMultipleContainers0(container, []);
+      }
+    }
+
+    function createMultipleContainers0(container, positions) {
+      var numContainers = container.numOfContainers;
+      var containers = [];
+      for (var i = 0; i < numContainers; ++i) {
+        containers[i] = angular.copy(container);
+        delete containers[i].numOfContainers;
+        if (positions.length > 0) {
+          containers[i].storageLocation = positions[i];
+        }
+      }
+
+      $scope.ctx.view       = 'review_multiple_containers';
+      $scope.ctx.containers = containers;
+    }
+
     function createHierarchy() {
       Container.createHierarchy($scope.container).then(
         function(resp) {
-
           if (resp.length == 1) {
             //
             // created only one container. go to that container detail
             //
-            $state.go('container-detail.overview', {containerId: resp[0].id});
+            $state.go('container-detail.locations', {containerId: resp[0].id});
             return;
           } else if (resp[0].storageLocation && resp[0].storageLocation.id) {
             //
             // hierarchy created under an existing container
             // go to that container detail
             //
-            $state.go('container-detail.overview', {containerId: resp[0].storageLocation.id});
+            $state.go('container-detail.locations', {containerId: resp[0].storageLocation.id});
           } else {
             //
             // hierarchy created for top-level container. go to list view with success message
@@ -226,6 +255,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       $scope.container.typeName = containerType.name;
       $scope.container.noOfRows = containerType.noOfRows;
       $scope.container.noOfColumns = containerType.noOfColumns;
+      $scope.container.positionLabelingMode = containerType.positionLabelingMode;
       $scope.container.rowLabelingScheme = containerType.rowLabelingScheme;
       $scope.container.columnLabelingScheme = containerType.columnLabelingScheme;
       $scope.container.temperature = containerType.temperature;
@@ -237,18 +267,70 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     $scope.onSelectContainerType = setContainerTypeProps;
 
     $scope.save = function() {
-      if ($scope.ctx.createHierarchy) {
-        createHierarchy();
-      } else {
+      if ($scope.ctx.mode == 'single') {
         saveContainer();
+      } else if ($scope.ctx.mode == 'multiple') {
+        createMultipleContainers();
+      } else if ($scope.ctx.mode == 'hierarchy') {
+        createHierarchy();
       }
     }
 
-    $scope.onCreateHierarchyClick = function(createHierarchy) {
-      var attrsToDelete = createHierarchy ? ['name', 'barcode'] : ['numOfContainers'];
+    $scope.onCreateModeChange = function() {
+      var attrsToDelete = $scope.ctx.mode != 'single' ? ['name', 'barcode'] : ['numOfContainers'];
       attrsToDelete.forEach(function(attr) {
         delete $scope.container[attr];
       });
+    }
+
+    //
+    // Multiple container creation logic
+    //
+    $scope.siteSelected = function(container) {
+      container.storageLocation = {};
+    }
+
+    $scope.copyFirstSiteToAll = function() {
+      var siteName = $scope.ctx.containers[0].siteName;
+      angular.forEach($scope.ctx.containers,
+        function(container, idx) {
+          if (idx == 0 || container.siteName == siteName) {
+            return;
+          }
+
+          container.siteName = siteName;
+          container.storageLocation = {};
+        }
+      );
+    }
+
+    $scope.copyFirstParentContainerToAll = function() {
+      var name = $scope.ctx.containers[0].storageLocation.name;
+      angular.forEach($scope.ctx.containers,
+        function(container, idx) {
+          if (idx == 0 || container.storageLocation.name == name) {
+            return;
+          }
+
+          container.storageLocation = {name: name};
+        }
+      );
+    }
+
+    $scope.removeContainer = function(idx) {
+      $scope.ctx.containers.splice(idx, 1);
+      if ($scope.ctx.containers.length == 0) {
+        $scope.ctx.view = '';
+      }
+    }
+
+    $scope.saveMultipleContainers = function() {
+      Container.createContainers($scope.ctx.containers).then(
+        function(result) {
+          Alerts.success('container.multiple_containers_created', {count: result.length});
+          $state.go('container-list');
+        }
+      );
     }
 
     init();

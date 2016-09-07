@@ -324,6 +324,16 @@ h4 + .btn-group {
   margin-left: 10px;
 }
 
+.panel .panel-heading .os-btns.right {
+  right: 10px;
+}
+
+.panel .panel-heading .os-btns .os-btn-text {
+  color: #777;
+  font-size: 20px;
+  margin-top: -2px;
+}
+
 .os-more-options {
   position: absolute;
   cursor: pointer;
@@ -517,6 +527,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   margin: 2px 0px 0px 0px;
   float: left;
   position: relative;
+  padding-left: 150px;
 }
 
 .os-one-col > .item {
@@ -560,6 +571,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   text-overflow: ellipsis;
   padding: 2px 5px 2px 5px;
   line-height: 24px;
+  width: 100%;
   float: left;
 }
 
@@ -567,23 +579,8 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   color: #707070;
   font-weight: normal;
   clear: left;
-  max-width: 250px;
-}
-
-.os-key-values.os-one-col .item .key.key-sm {
-  width: 30%;
-}
-
-.os-key-values.os-two-cols .item .key.key-sm {
-  width: 40%;
-}
-
-.os-key-values.os-one-col .item .value.value-md {
-  width: 70%;
-}
-
-.os-key-values.os-two-cols .item .value.value-md {
-  width: 60%;
+  margin-left: -150px;
+  width: 150px;
 }
 
 .popover .os-key-values {
@@ -1046,6 +1043,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   margin-right: 10px;
 }
 
+.os-alert-container.inline,
 .os-modal-body .os-alert-container.show {
   position: static;
   width: 100%;

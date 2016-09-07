@@ -72,9 +72,9 @@
         </tr>
       </thead>
       <tbody class="os-table-body">
-        <tr class="row" ng-repeat="container in containerList" os-row-click="showContainerOverview(container)">
+        <tr class="row" ng-repeat="container in containerList" os-row-click="showContainerDetail(container)">
           <td class="col">
-            <a ui-sref="container-detail.overview({containerId: container.id})">
+            <a ui-sref="container-detail.locations({containerId: container.id})">
               <span>{{container.name}}</span>
             </a>
           </td>

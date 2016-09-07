@@ -53,8 +53,21 @@ public class TransactionalInterceptor {
 
 	@Around("transactionalMethod()")
 	public Object startTransaction(final ProceedingJoinPoint pjp) {
+		return doWork(pjp, false);
+	}
+
+	@Pointcut("execution(@com.krishagni.catissueplus.core.common.RollbackTransaction * *(..))")
+	public void rollbackMethod() {
+	}
+
+	@Around("rollbackMethod()")
+	public Object rollbackTransaction(final ProceedingJoinPoint pjp) {
+		return doWork(pjp, true);
+	}
+
+	private Object doWork(ProceedingJoinPoint pjp, boolean rollback) {
 		try {
-			return doWork(pjp);
+			return doWork0(pjp, rollback);
 		} catch (Throwable t) {
 			notifyUncaughtServerError(t.getCause());
 			t.printStackTrace();
@@ -62,11 +75,15 @@ public class TransactionalInterceptor {
 		}
 	}
 
-	private Object doWork(ProceedingJoinPoint pjp) {
+	private Object doWork0(ProceedingJoinPoint pjp, boolean rollback) {
 		return txTmpl.execute(new TransactionCallback<Object>() {
 			@Override
 			public Object doInTransaction(TransactionStatus status) {
 				try {
+					if (rollback) {
+						status.setRollbackOnly();
+					}
+
 					Object result = pjp.proceed();
 					if (result instanceof ResponseEvent) {
 						ResponseEvent<?> resp = (ResponseEvent<?>)result;

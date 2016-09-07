@@ -206,6 +206,7 @@ public class MasterSpecimenImporter implements ObjectImporter<MasterSpecimenDeta
 		storageLocation.setName(detail.getContainer());
 		storageLocation.setPositionX(detail.getPositionX());
 		storageLocation.setPositionY(detail.getPositionY());
+		storageLocation.setPosition(detail.getPosition());
 		specimenDetail.setStorageLocation(storageLocation);
 	}
 	

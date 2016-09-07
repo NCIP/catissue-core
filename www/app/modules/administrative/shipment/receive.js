@@ -33,17 +33,19 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
     }
     
     $scope.applyFirstLocationToAll = function() {
-      var containerName = undefined;
-      
-      if ($scope.shipment.shipmentItems[0].specimen.storageLocation.name != null) {
-        containerName = $scope.shipment.shipmentItems[0].specimen.storageLocation.name;
+      var location = $scope.shipment.shipmentItems[0].specimen.storageLocation;
+      if (!location.name) {
+        return;
       }
-      
-      angular.forEach($scope.shipment.shipmentItems, function(item) {
-        item.specimen.storageLocation.name = containerName;
+
+      angular.forEach($scope.shipment.shipmentItems, function(item, idx) {
+        if (idx == 0) {
+          return;
+        }
+
+        item.specimen.storageLocation = {name: location.name, mode: location.mode};
       });
     }
 
     init();
   });
-  

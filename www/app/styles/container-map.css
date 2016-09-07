@@ -154,23 +154,32 @@
   background: #f5f5f5;
 }
 
+.os-container-tree {
+  height: 100%;
+  overflow: auto;
+}
 
 /** Scroll bar **/
+.os-container-tree::-webkit-scrollbar,
 .os-container-locations .map::-webkit-scrollbar {
   height:12px;
   width:12px
 }
 
+.os-container-tree::-webkit-scrollbar-thumb:vertical,
+.os-container-tree::-webkit-scrollbar-thumb:horizontal,
 .os-container-locations .map::-webkit-scrollbar-thumb:vertical,
 .os-container-locations .map::-webkit-scrollbar-thumb:horizontal {
   background: #d0d0d0;
 }
 
+.os-container-tree::-webkit-scrollbar-track:hover,
 .os-container-locations .map::-webkit-scrollbar-track:hover {
   background: #f5f5f5;
   border: 1px solid #ddd;
 }
 
+.os-container-tree::-webkit-scrollbar-track,
 .os-container-locations .map::-webkit-scrollbar-track {
   background: #ffffff;
 }

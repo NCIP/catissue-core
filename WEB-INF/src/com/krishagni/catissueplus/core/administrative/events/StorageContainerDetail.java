@@ -12,10 +12,6 @@ import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 public class StorageContainerDetail extends StorageContainerSummary {
 	private Double temperature;
 	
-	private String columnLabelingScheme;
-	
-	private String rowLabelingScheme;
-	
 	private String comments;
 	
 	private Set<String> allowedSpecimenClasses = new HashSet<String>();
@@ -38,22 +34,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 
 	public void setTemperature(Double temperature) {
 		this.temperature = temperature;
-	}
-
-	public String getColumnLabelingScheme() {
-		return columnLabelingScheme;
-	}
-
-	public void setColumnLabelingScheme(String columnLabelingScheme) {
-		this.columnLabelingScheme = columnLabelingScheme;
-	}
-
-	public String getRowLabelingScheme() {
-		return rowLabelingScheme;
-	}
-
-	public void setRowLabelingScheme(String rowLabelingScheme) {
-		this.rowLabelingScheme = rowLabelingScheme;
 	}
 
 	public String getComments() {
@@ -108,8 +88,7 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		return calcAllowedCollectionProtocols;
 	}
 
-	public void setCalcAllowedCollectionProtocols(
-			Set<String> calcAllowedCollectionProtocols) {
+	public void setCalcAllowedCollectionProtocols(Set<String> calcAllowedCollectionProtocols) {
 		this.calcAllowedCollectionProtocols = calcAllowedCollectionProtocols;
 	}
 	
@@ -126,8 +105,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 		StorageContainerDetail.transform(container, result);
 		
 		result.setTemperature(container.getTemperature());
-		result.setColumnLabelingScheme(container.getColumnLabelingScheme());
-		result.setRowLabelingScheme(container.getRowLabelingScheme());
 		result.setComments(container.getComments());
 		result.setAllowedSpecimenClasses(new HashSet<String>(container.getAllowedSpecimenClasses()));
 		result.setCalcAllowedSpecimenClasses(new HashSet<String>(container.getCompAllowedSpecimenClasses()));		

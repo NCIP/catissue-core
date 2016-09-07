@@ -130,7 +130,8 @@ angular.module('os.administrative.order.returnspecimens', [])
             return;
           }
 
-          tgtItem.specimen.storageLocation = {name: srcItem.specimen.storageLocation.name};
+          var location = srcItem.specimen.storageLocation;
+          tgtItem.specimen.storageLocation = {name: location.name, mode: location.mode};
           tgtItem.user = srcItem.user;
           tgtItem.time = srcItem.time;
           tgtItem.comments = srcItem.comments;

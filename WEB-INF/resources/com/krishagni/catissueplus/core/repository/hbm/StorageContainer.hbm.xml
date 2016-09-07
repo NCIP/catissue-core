@@ -21,6 +21,15 @@
 
     <property name="noOfRows" column="NO_OF_ROWS"/>
 
+    <property name="positionLabelingMode" column="POS_LABELING_MODE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainer$PositionLabelingMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
     <property name="columnLabelingScheme" column="COLUMN_LABELING_SCHEME"/>
 
     <property name="rowLabelingScheme" column="ROW_LABELING_SCHEME"/>
@@ -131,5 +140,69 @@
         c.id = :containerId
         and pos.occupyingSpecimen is not null
     </query>
+
+    <sql-query name="getAncestors">
+      <return-scalar column="ancestorId" type="long"/>
+      <return-scalar column="parentId"   type="long"/>
+
+      select
+        h.ancestor_id as ancestorId, s.parent_container_id as parentId
+      from
+        os_containers_hierarchy h
+        inner join os_storage_containers s on s.identifier = h.ancestor_id
+      where
+        h.descendent_id = :containerId and h.ancestor_id != h.descendent_id
+    </sql-query>
+
+    <sql-query name="getRootAndChildContainers">
+      <return-scalar column="containerId"   type="long"/>
+      <return-scalar column="containerName" type="string"/>
+      <return-scalar column="noOfRows"      type="int"/>
+      <return-scalar column="noOfColumns"   type="int"/>
+      <return-scalar column="parentId"      type="long"/>
+      <return-scalar column="rowNo"         type="int"/>
+      <return-scalar column="colNo"         type="int"/>
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        s.parent_container_id as parentId, p.pos_two as rowNo, p.pos_one as colNo
+      from
+        os_storage_containers s
+        inner join os_container_positions p on p.occupying_container_id = s.identifier
+      where
+        s.parent_container_id in (:parentIds) and s.activity_status != 'Disabled'
+
+      union all
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        null as parentId, null as rowNo, null as colNo
+      from
+        os_storage_containers s
+      where
+        s.identifier = :rootId and s.activity_status != 'Disabled'
+    </sql-query>
+
+    <sql-query name="getChildContainers">
+      <return-scalar column="containerId"   type="long"/>
+      <return-scalar column="containerName" type="string"/>
+      <return-scalar column="noOfRows"      type="int"/>
+      <return-scalar column="noOfColumns"   type="int"/>
+      <return-scalar column="parentId"      type="long"/>
+      <return-scalar column="rowNo"         type="int"/>
+      <return-scalar column="colNo"         type="int"/>
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        s.parent_container_id as parentId, p.pos_two as rowNo, p.pos_one as colNo
+      from
+        os_storage_containers s
+        inner join os_container_positions p on p.occupying_container_id = s.identifier
+      where
+        s.parent_container_id = :parentId and s.activity_status != 'Disabled'
+    </sql-query>
   </class>
 </hibernate-mapping>

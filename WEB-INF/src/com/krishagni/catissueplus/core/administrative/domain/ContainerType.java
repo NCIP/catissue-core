@@ -25,6 +25,8 @@ public class ContainerType extends BaseEntity {
 	private int noOfColumns;
 	
 	private int noOfRows;
+
+	private StorageContainer.PositionLabelingMode positionLabelingMode = StorageContainer.PositionLabelingMode.TWO_D;
 	
 	private String columnLabelingScheme;
 	
@@ -38,9 +40,9 @@ public class ContainerType extends BaseEntity {
 	
 	private String activityStatus;
 	
-	private Set<StorageContainer> containers = new HashSet<StorageContainer>();
+	private Set<StorageContainer> containers = new HashSet<>();
 
-	private Set<ContainerType> canBeStoredIn = new HashSet<ContainerType>();
+	private Set<ContainerType> canBeStoredIn = new HashSet<>();
 
 	public static String getEntityName() {
 		return ENTITY_NAME;
@@ -76,6 +78,14 @@ public class ContainerType extends BaseEntity {
 
 	public void setNoOfRows(int noOfRows) {
 		this.noOfRows = noOfRows;
+	}
+
+	public StorageContainer.PositionLabelingMode getPositionLabelingMode() {
+		return positionLabelingMode;
+	}
+
+	public void setPositionLabelingMode(StorageContainer.PositionLabelingMode positionLabelingMode) {
+		this.positionLabelingMode = positionLabelingMode;
 	}
 
 	public String getColumnLabelingScheme() {
@@ -150,6 +160,7 @@ public class ContainerType extends BaseEntity {
 		setNameFormat(containerType.getNameFormat());
 		setNoOfColumns(containerType.getNoOfColumns());
 		setNoOfRows(containerType.getNoOfRows());
+		setPositionLabelingMode(containerType.getPositionLabelingMode());
 		setColumnLabelingScheme(containerType.getColumnLabelingScheme());
 		setRowLabelingScheme(containerType.getRowLabelingScheme());
 		setTemperature(containerType.getTemperature());

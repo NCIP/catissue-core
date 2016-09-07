@@ -1,18 +1,21 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @ListenAttributeChanges
 public class StorageContainerSummary extends AttributeModifiedSupport {
 	private Long id;
@@ -36,13 +39,19 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	private int noOfColumns;
 	
 	private int noOfRows;
-	
+
+	private String positionLabelingMode;
+
+	private String columnLabelingScheme;
+
+	private String rowLabelingScheme;
+
 	private int freePositions;
 	
 	private Boolean storeSpecimensEnabled;
 	
 	private List<StorageContainerSummary> childContainers;
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -131,6 +140,30 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		this.noOfRows = noOfRows;
 	}
 
+	public String getPositionLabelingMode() {
+		return positionLabelingMode;
+	}
+
+	public void setPositionLabelingMode(String positionLabelingMode) {
+		this.positionLabelingMode = positionLabelingMode;
+	}
+
+	public String getColumnLabelingScheme() {
+		return columnLabelingScheme;
+	}
+
+	public void setColumnLabelingScheme(String columnLabelingScheme) {
+		this.columnLabelingScheme = columnLabelingScheme;
+	}
+
+	public String getRowLabelingScheme() {
+		return rowLabelingScheme;
+	}
+
+	public void setRowLabelingScheme(String rowLabelingScheme) {
+		this.rowLabelingScheme = rowLabelingScheme;
+	}
+
 	public int getFreePositions() {
 		return freePositions;
 	}
@@ -174,6 +207,9 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		
 		result.setNoOfColumns(container.getNoOfColumns());
 		result.setNoOfRows(container.getNoOfRows());
+		result.setPositionLabelingMode(container.getPositionLabelingMode().name());
+		result.setColumnLabelingScheme(container.getColumnLabelingScheme());
+		result.setRowLabelingScheme(container.getRowLabelingScheme());
 		result.setFreePositions(container.freePositionsCount());
 		result.setStoreSpecimensEnabled(container.isStoreSpecimenEnabled());
 		
@@ -201,17 +237,10 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	}
 	
 	public static List<StorageContainerSummary> from(Collection<StorageContainer> containers, boolean includeChildren) {
-		List<StorageContainerSummary> result = new ArrayList<StorageContainerSummary>();
-		
 		if (CollectionUtils.isEmpty(containers)) {
-			return result;
+			return Collections.emptyList();
 		}
-		
-		for (StorageContainer container : containers) {
-			result.add(from(container, includeChildren));
-		}
-		
-		return result;
+
+		return containers.stream().map(c -> from(c, includeChildren)).collect(Collectors.toList());
 	}
-	
 }

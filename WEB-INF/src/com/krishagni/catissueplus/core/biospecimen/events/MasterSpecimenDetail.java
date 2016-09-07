@@ -77,9 +77,11 @@ public class MasterSpecimenDetail {
 	private String container;
 	
 	private String positionX;
-	
+
 	private String positionY;
-	
+
+	private int position;
+
 	private Date collectionDate;
 	
 	private String collectionProcedure;
@@ -382,6 +384,14 @@ public class MasterSpecimenDetail {
 
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	public Date getCollectionDate() {

@@ -31,8 +31,8 @@ angular.module('os.administrative.container.list', ['os.administrative.models'])
       return Container.getCount($scope.containerFilterOpts);
     }
 
-    $scope.showContainerOverview = function(container) {
-      $state.go('container-detail.overview', {containerId: container.id});
+    $scope.showContainerDetail = function(container) {
+      $state.go('container-detail.locations', {containerId: container.id});
     };
 
     init();

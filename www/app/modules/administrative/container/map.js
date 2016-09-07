@@ -9,13 +9,16 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
       scope: {
         container:    '=',
         occupancyMap: '=',
-        onAddEvent:   '&'
+        onAddEvent:   '&',
+        cellClick:    '&'
       },
 
       link: function(scope, element, attrs) {
-        var showAddMarker = !scope.container.storeSpecimensEnabled;
         var allowClick = angular.isDefined(attrs.onAddEvent);
-        var opts = ContainerUtil.getOpts(scope.container, allowClick, allowClick && showAddMarker);
+
+        scope.occupantClick = function(entityType, entityId) {
+          scope.cellClick({entityType: entityType, entityId: entityId});
+        }
 
         scope.onClick = function($event) {
           var target = angular.element($event.originalEvent.target);
@@ -24,13 +27,15 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
           }
 
           if (target.attr('data-pos-x') && target.attr('data-pos-y')) {
-            scope.onAddEvent()(target.attr('data-pos-x'), target.attr('data-pos-y'));
+            scope.onAddEvent()(target.attr('data-pos-x'), target.attr('data-pos-y'), target.attr('data-pos'));
           }
         };
 
         scope.$watch('occupancyMap', function() {
           element.children().remove();
 
+          var showAddMarker = !scope.container.storeSpecimensEnabled;
+          var opts = ContainerUtil.getOpts(scope.container, allowClick, allowClick && showAddMarker);
           opts.occupants = scope.occupancyMap;
           BoxLayoutUtil.drawLayout(element, opts);
 
@@ -54,6 +59,7 @@ angular.module('os.administrative.container.map', ['os.common.box', 'os.administ
           $timeout(function() {
             selectedPos.positionX = position.posX;
             selectedPos.positionY = position.posY;
+            selectedPos.position  = position.pos;
           });
         }
       }).render();

@@ -3,10 +3,15 @@ package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +27,8 @@ import org.hibernate.sql.JoinType;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
+import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.administrative.repository.ContainerRestrictionsCriteria;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
@@ -134,6 +141,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		return query.add(restriction).list();
 	}
 
+	@SuppressWarnings(value = "unchecked")
 	@Override
 	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit) {
 		Criteria query = getCurrentSession().createCriteria(StorageContainer.class)
@@ -177,6 +185,108 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			.getNamedQuery(GET_SPECIMENS_COUNT)
 			.setLong("containerId", containerId)
 			.uniqueResult()).intValue();
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public StorageContainerSummary getAncestorsHierarchy(Long containerId) {
+		Set<Long> ancestorIds = new HashSet<>();
+		Long rootId = null;
+
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_ANCESTORS)
+			.setLong("containerId", containerId)
+			.list();
+		for (Object[] row : rows) {
+			ancestorIds.add((Long)row[0]);
+			if (row[1] == null) {
+				rootId = (Long)row[0];
+			}
+		}
+
+		rows = getCurrentSession().getNamedQuery(GET_ROOT_AND_CHILD_CONTAINERS)
+			.setLong("rootId", rootId)
+			.setParameterList("parentIds", ancestorIds)
+			.list();
+
+		Map<Long, StorageContainerSummary> containersMap = new HashMap<>();
+		for (Object[] row : rows) {
+			StorageContainerSummary container = createContainer(row, 10000);
+			containersMap.put(container.getId(), container);
+		}
+
+		linkParentChildContainers(containersMap);
+		return sortChildContainers(containersMap.get(rootId));
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public List<StorageContainerSummary> getChildContainers(Long containerId, int noOfColumns) {
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_CHILD_CONTAINERS)
+			.setLong("parentId", containerId)
+			.list();
+
+		return rows.stream().map(row -> createContainer(row, noOfColumns))
+			.sorted(this::comparePositions).collect(Collectors.toList());
+	}
+
+	private StorageContainerSummary createContainer(Object[] row, int noOfColumns) {
+		int idx = 0;
+
+		StorageContainerSummary container = new StorageContainerSummary();
+		container.setId((Long)row[idx++]);
+		container.setName((String)row[idx++]);
+		container.setNoOfRows((Integer)row[idx++]);
+		container.setNoOfColumns((Integer)row[idx++]);
+
+		if (row[idx] != null) {
+			StorageLocationSummary location = new StorageLocationSummary();
+			location.setId((Long)row[idx++]);
+
+			int rowNo = (Integer)row[idx++];
+			int colNo = (Integer)row[idx++];
+			location.setPosition((rowNo - 1) * noOfColumns + colNo);
+			container.setStorageLocation(location);
+		}
+
+		return container;
+	}
+
+	private void linkParentChildContainers(Map<Long, StorageContainerSummary> containersMap) {
+		for (StorageContainerSummary container : containersMap.values()) {
+			StorageLocationSummary location = container.getStorageLocation();
+			if (location == null) {
+				// root container
+				continue;
+			}
+
+			StorageContainerSummary parent = containersMap.get(location.getId());
+
+			//
+			// Get back actual position value based on parent container dimension
+			//
+			int rowNo = (location.getPosition() - 1) / 10000 + 1, colNo = (location.getPosition() - 1) % 10000 + 1;
+			location.setPosition((rowNo - 1) * parent.getNoOfColumns() + colNo);
+
+			if (parent.getChildContainers() == null) {
+				parent.setChildContainers(new ArrayList<>());
+			}
+
+			parent.getChildContainers().add(container);
+		}
+	}
+
+	private StorageContainerSummary sortChildContainers(StorageContainerSummary container) {
+		if (CollectionUtils.isEmpty(container.getChildContainers())) {
+			return container;
+		}
+
+		Collections.sort(container.getChildContainers(), this::comparePositions);
+		container.getChildContainers().forEach(this::sortChildContainers);
+		return container;
+	}
+
+	private int comparePositions(StorageContainerSummary s1, StorageContainerSummary s2) {
+		return s1.getStorageLocation().getPosition() - s2.getStorageLocation().getPosition();
 	}
 
 	private class ListQueryBuilder {
@@ -395,5 +505,11 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	private static final String FQN = StorageContainer.class.getName();
 
 	private static final String GET_SPECIMENS_COUNT = FQN + ".getSpecimensCount";
+
+	private static final String GET_ANCESTORS = FQN + ".getAncestors";
+
+	private static final String GET_ROOT_AND_CHILD_CONTAINERS = FQN + ".getRootAndChildContainers";
+
+	private static final String GET_CHILD_CONTAINERS = FQN + ".getChildContainers";
 
 }

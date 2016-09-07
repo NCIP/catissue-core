@@ -107,6 +107,7 @@ angular.module('os.biospecimen.specimen')
           if (j != 0 && clonedAlqt.storageLocation) {
             delete clonedAlqt.storageLocation.positionX;
             delete clonedAlqt.storageLocation.positionY;
+            delete clonedAlqt.storageLocation.position;
           }
 
           aliquots.push(clonedAlqt);

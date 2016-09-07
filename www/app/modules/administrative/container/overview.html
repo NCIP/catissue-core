@@ -2,19 +2,19 @@
   <div class="os-page-commands">
     <div class="left">
       <button show-if-allowed="containerResource.updateOpts" class="default"
-        title="{{'container.tooltip.edit' | translate}}" ui-sref="container-addedit({containerId: container.id})">
+        title="{{'container.tooltip.edit' | translate}}" ui-sref="container-addedit({containerId: ctx.container.id})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <a class="btn default" href="{{downloadUri}}" target="_blank">
+      <a class="btn default" href="{{ctx.downloadUri}}" target="_blank">
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
-      <button show-if-allowed="containerResource.createOpts" class="default"
-        ui-sref="container-replicate({containerId: container.id})">
+      <!-- button show-if-allowed="containerResource.createOpts" class="default"
+        ui-sref="container-replicate({containerId: ctx.container.id})">
         <span class="fa fa-copy"></span>
         <span translate="container.replicate">Replicate</span>
-      </button>
+      </button -->
       <button show-if-allowed="containerResource.deleteOpts" class="default" ng-click="deleteContainer()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>
@@ -24,56 +24,62 @@
 
   <div class="clearfix">
     <div class="col-xs-9">
-      <ul class="os-key-values os-one-col" os-inline-editors on-save="editContainer">
+      <ul class="os-key-values os-one-col">
         <li class="item">
           <strong class="key key-sm" translate="container.type">Type</strong>
-          <a ng-if="container.typeId"
-            ui-sref="container-type-detail.overview({containerTypeId: container.typeId})">
-            <span class="value value-md">{{container.typeName}}</span>
+          <a ng-if="ctx.container.typeId"
+            ui-sref="container-type-detail.overview({containerTypeId: ctx.container.typeId})">
+            <span class="value value-md">{{ctx.container.typeName}}</span>
           </a>
-          <span ng-if="!container.typeId" class="value value-md" translate="common.not_specified">Not Specified</span>
+          <span ng-if="!ctx.container.typeId" class="value value-md" translate="common.not_specified">
+            Not Specified
+          </span>
         </li>
+
         <li class="item">
           <strong class="key key-sm" translate="container.barcode">Barcode</strong>
-          <os-inline-edit editor="barcodeEditor" name="barcode" class="value value-md" value="container.barcode">
-            <span ng-if="barcodeEditor.isDisplayMode()">{{barcodeEditor.viewValue | osNoValue}}</span>
-            <input ng-if="barcodeEditor.isEditMode()" type="text" ng-model="barcodeEditor.editValue" class="form-control" ng-maxlength="255">
-          </os-inline-edit>
+          <span class="value value-md">{{ctx.container.barcode | osNoValue}}</span>
         </li>
   
         <li class="item">
           <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
-          <os-inline-edit editor="temperatureEditor" name="temperature" class="value value-md" value="container.temperature">
-            <span ng-if="temperatureEditor.isDisplayMode()">{{temperatureEditor.viewValue | osNoValue}}</span>
-            <input ng-if="temperatureEditor.isEditMode()" type="number" ng-model="temperatureEditor.editValue" class="form-control">
-          </os-inline-edit>
+          <span class="value value-md">{{ctx.container.temperature | osNoValue}}</span>
         </li>
   
         <li class="item">
           <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
-          <span class="value value-md">{{container.siteName}}</span>
+          <span class="value value-md">{{ctx.container.siteName}}</span>
         </li>
   
-        <li class="item" ng-if="!!container.storageLocation">
+        <li class="item" ng-if="!!ctx.container.storageLocation">
           <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
-          <a class="value value-md" ui-sref="container-detail.overview({containerId: container.storageLocation.id})">
-            {{container.storageLocation.name}} ({{container.storageLocation.positionY}} X {{container.storageLocation.positionX}})
+          <a class="value value-md" ui-sref="container-detail.overview({containerId: ctx.container.storageLocation.id})">
+            <os-disp-storage-position position="ctx.container.storageLocation"></os-disp-storage-position>
           </a>
         </li>
   
         <li class="item">
           <strong class="key key-sm" translate="container.dimension">Dimension</strong>
-          <span class="value value-md">{{container.noOfRows}} x {{container.noOfColumns}}</span>
+          <span class="value value-md">{{ctx.container.noOfRows}} x {{ctx.container.noOfColumns}}</span>
         </li>
   
         <li class="item">
+          <strong class="key key-sm" translate="container.position_labeling">Position Labeling</strong>
+          <span class="value value-md">
+            {{'container.position_labeling_modes.' + ctx.container.positionLabelingMode | translate}}
+          </span>
+        </li>
+
+        <li class="item" ng-if="ctx.container.positionLabelingMode != 'LINEAR'">
           <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labeling Scheme</strong>
-          <span class="value value-md">{{container.rowLabelingScheme}} x {{container.columnLabelingScheme}}</span>
+          <span class="value value-md">
+            {{ctx.container.rowLabelingScheme}} x {{ctx.container.columnLabelingScheme}}
+          </span>
         </li>
   
         <li class="item">
           <strong class="key key-sm" translate="container.stores_specimens">Stores Specimens</strong>
-          <span class="value value-md" ng-switch on="container.storeSpecimensEnabled">
+          <span class="value value-md" ng-switch on="ctx.container.storeSpecimensEnabled">
             <span ng-switch-when="true" translate="common.yes">Yes</span>
             <span ng-switch-default translate="common.no">No</span>
           </span>
@@ -81,8 +87,8 @@
   
         <li class="item">
           <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
-          <span class="value value-md" ng-switch on="container.calcAllowedCollectionProtocols.length > 0">
-            <span ng-switch-when="true">{{container.calcAllowedCollectionProtocols | osArrayJoin}}</span>
+          <span class="value value-md" ng-switch on="ctx.container.calcAllowedCollectionProtocols.length > 0">
+            <span ng-switch-when="true">{{ctx.container.calcAllowedCollectionProtocols | osArrayJoin}}</span>
             <span ng-switch-default translate="container.all">All</span>
           </span>
         </li>
@@ -90,70 +96,20 @@
         <li class="item">
           <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
           <div class="value value-md">
-            <span ng-if="container.calcAllowedSpecimenClasses.length > 0">
-              {{container.calcAllowedSpecimenClasses | osArrayJoin}}
+            <span ng-if="ctx.container.calcAllowedSpecimenClasses.length > 0">
+              {{ctx.container.calcAllowedSpecimenClasses | osArrayJoin}}
+              <span ng-if="ctx.container.calcAllowedSpecimenTypes.length > 0">,</span>
             </span>
-            <span ng-if="container.calcAllowedSpecimenClasses.length > 0 && container.calcAllowedSpecimenTypes.length > 0">
-              ,
+            <span ng-if="ctx.container.calcAllowedSpecimenTypes.length > 0">
+              {{ctx.container.calcAllowedSpecimenTypes | osArrayJoin}}
             </span>
-            <span ng-if="container.calcAllowedSpecimenTypes.length > 0">
-              {{container.calcAllowedSpecimenTypes | osArrayJoin}}
-            </span>
-            <span ng-if="container.calcAllowedSpecimenClasses.length == 0 && container.calcAllowedSpecimenTypes.length == 0">
-              {{'' | osNoValue}}
+            <span ng-if="ctx.container.calcAllowedSpecimenClasses.length == 0 &&
+              ctx.container.calcAllowedSpecimenTypes.length == 0">
+              <span translate="common.not_specified">Not Specified</span>
             </span>
           </div>
         </li>
       </ul>
-  
-      <div class="os-section" ng-init="ccCollapsed=false">
-        <button class="os-btn-section-collapse os-btn-transparent" ng-click="ccCollapsed=!ccCollapsed">
-          <span ng-if="!ccCollapsed" class="fa fa-chevron-circle-down"></span>
-          <span ng-if="ccCollapsed" class="fa fa-chevron-circle-right"></span>
-        </button>
-        <h3 class="os-sub-section-title" translate="container.child_containers">
-          Child Containers
-        </h3>
-        <div collapse="ccCollapsed">
-          <div ng-include src="'containers-hierarchy.html'"></div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
-
-<script type="text/ng-template" id="containers-hierarchy.html">
-  <span ng-if="!childContainers || childContainers.length == 0" translate="common.none"> </span>
-  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr" ng-if="childContainers.length > 0">
-    <div class="os-table-head">
-      <div class="row">
-        <div class="col col-xs-5" translate="container.name">Name</div>
-        <div class="col col-xs-3" translate="container.dimension">Dimension</div>
-        <div class="col col-xs-3" translate="container.free_locations">Free Locations</div>
-        <div class="col col-xs-1">&nbsp;</div>
-      </div>
-    </div>
-    <div class="os-table-body">
-      <div class="row" ng-repeat="container in childContainers | openedTreeNodes">
-        <div class="col col-xs-5">
-          <div ng-style="{'padding-left': (container.hasChildren ? container.depth * 16 : container.depth * 16 + 16) + 'px'}">
-            <a ng-if="container.hasChildren" class="fa" 
-              ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
-              ng-click="container.isOpened=!container.isOpened; loadChildren(container)">
-            </a>
-            <a ui-sref="container-detail.overview({containerId: container.id})">
-              {{container.name}}
-            </a>
-          </div>
-        </div>
-        <div class="col col-xs-3">
-          <span>{{container.noOfRows}} x {{container.noOfColumns}}</span>
-        </div>
-        <div class="col col-xs-3">
-          <span>{{container.freePositions}}</span>
-        </div>
-        <div class="col col-xs-1">&nbsp;</div>
-      </div>
-    </div>
-  </div>
-</script>

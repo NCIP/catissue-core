@@ -106,7 +106,7 @@
                     }
                 },
                 {
-                    "expr": "concat(Specimen.specimenPosition.containerName, \" (\", Specimen.specimenPosition.positionDimensionTwoString, \", \", Specimen.specimenPosition.positionDimensionOneString, \")\")",
+                    "expr": "concat(Specimen.specimenPosition.containerName, \" (\", Specimen.specimenPosition.formattedPos, \")\")",
                     "caption": "Location"
                 }
             ],

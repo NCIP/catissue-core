@@ -8,23 +8,32 @@
       </button>
     </div>
     <div ng-switch-when="false" class="os-storage-position clearfix"> 
-      <div class="os-col-60" style="padding-left: 0px;">
-        <os-select ng-model="entity.storageLocation.name" list="containers"
+      <div class="os-col-60 pos">
+        <os-select ng-model="entity.storageLocation.name" list="containerNames"
           refresh="searchContainer" on-select="onContainerChange()" placeholder="{{'container.container' | translate}}">
         </os-select>
       </div>
 
-      <div class="os-col-15">
-        <input type="text" ng-model="entity.storageLocation.positionY" class="form-control"
-          placeholder="{{'container.row' | translate}}" title="{{'container.row' | translate}}">
-      </div>
+      <span ng-if="!entity.storageLocation.mode || entity.storageLocation.mode == 'TWO_D'">
+        <div class="os-col-15 pos">
+          <input type="text" ng-model="entity.storageLocation.positionY" class="form-control"
+            placeholder="{{'container.row' | translate}}" title="{{'container.row' | translate}}">
+        </div>
 
-      <div class="os-col-15">
-        <input type="text" ng-model="entity.storageLocation.positionX" class="form-control"
-          placeholder="{{'container.column' | translate}}" title="{{'container.column' | translate}}">
-      </div>
+        <div class="os-col-15 pos">
+          <input type="text" ng-model="entity.storageLocation.positionX" class="form-control"
+            placeholder="{{'container.column' | translate}}" title="{{'container.column' | translate}}">
+        </div>
+      </span>
 
-      <div class="os-col-10">
+      <span ng-if="entity.storageLocation.mode == 'LINEAR'">
+        <div class="os-col-30 pos">
+          <input type="text" ng-model="entity.storageLocation.position" class="form-control"
+            placeholder="{{'container.position' | translate}}" title="{{'container.position' | translate}}">
+        </div>
+      </span>
+
+      <div class="os-col-10 pos">
         <button class="btn btn-default" ng-click="openPositionSelector()"
           ng-disabled="(entityType == 'specimen' && (!entity.specimenClass || !entity.type || !cpId)) ||
             (entityType == 'storage_container' && !entity.siteName)">

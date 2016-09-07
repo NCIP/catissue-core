@@ -269,7 +269,7 @@
             <caption>#getMessage("specimen_spec_position_container_name")</caption>
             <column>CONTAINER_NAME</column>
             <maxLength>255</maxLength>
-            <recordUrl>#/object-state-params-resolver?stateName=container-detail.overview&amp;objectName=container&amp;key=name&amp;value={{$value}}</recordUrl>
+            <recordUrl>#/object-state-params-resolver?stateName=container-detail.locations&amp;objectName=container&amp;key=name&amp;value={{$value}}</recordUrl>
           </textField>              
 
           <textField>
@@ -286,7 +286,15 @@
             <caption>#getMessage("specimen_spec_position_container_column")</caption>
             <column>POS_ONE_STR</column>
             <maxLength>255</maxLength>
-          </textField>              
+          </textField>
+
+          <textField>
+            <name>formattedPos</name>
+            <udn>formattedPos</udn>
+            <caption>#getMessage("specimen_spec_position_formatted_pos")</caption>
+            <column>FORMATTED_POSITION</column>
+            <maxLength>16</maxLength>
+          </textField>
         </row>
         <row>
           <subForm>

@@ -34,7 +34,7 @@ angular.module('os.administrative.container',
         parent: 'container-root'
       })
       .state('container-addedit', {
-        url: '/container-addedit/:containerId?posOne&posTwo&parentContainerId&parentContainerName&mode&containerTypeId',
+        url: '/container-addedit/:containerId?posOne&posTwo&pos&siteName&parentContainerId&parentContainerName&mode&containerTypeId',
         templateUrl: 'modules/administrative/container/addedit.html',
         resolve: {
           container: function($stateParams, Container) {
@@ -97,16 +97,58 @@ angular.module('os.administrative.container',
         },
         parent: 'container-root'
       })
+      .state('container-detail-root', {
+        url: '/containers',
+        template: '<div ui-view></div>',
+        resolve: {
+          containerViewState: function(ContainerViewState) {
+            return new ContainerViewState();
+          }
+        },
+        abstract: true,
+        parent: 'container-root'
+      })
       .state('container-detail', {
-        url: '/containers/:containerId',
+        url: '/:containerId',
         templateUrl: 'modules/administrative/container/detail.html',
         resolve: {
-          container: function($stateParams, Container) {
-            return Container.getById($stateParams.containerId);
+          rootId: function($stateParams, containerViewState, Container) {
+            if (containerViewState.getRootContainerId() == -1) {
+              return Container.getAncestorsHierarchy($stateParams.containerId).then(
+                function(hierarchy) {
+                  return containerViewState.setHierarchy(hierarchy);
+                }
+              );
+            } else {
+              return containerViewState.getRootContainerId();
+            }
+          },
+
+          //
+          // explicit dependency on rootId to ensure containerViewState
+          // is initialized with hierarchy...
+          //
+          container: function($stateParams, rootId, containerViewState) {
+            return containerViewState.getContainer($stateParams.containerId);
+          },
+
+          containerTree: function($stateParams, container, rootId, containerViewState) {
+            if (container && container.id == rootId && !container.childContainersLoaded &&
+                containerViewState.getHierarchy().length == 1) {
+              return container.getChildContainers().then(
+                function(childContainers) {
+                  container.childContainers = childContainers;
+                  containerViewState.setHierarchy(container);
+                  return containerViewState.getHierarchy();
+                }
+              );
+            } else {
+              return containerViewState.getHierarchy();
+            }
           }
         },
         controller: 'ContainerDetailCtrl',
-        parent: 'container-root'
+        parent: 'container-detail-root'
       })
       .state('container-detail.overview', {
         url: '/overview',
@@ -120,9 +162,6 @@ angular.module('os.administrative.container',
         url: '/locations',
         templateUrl: 'modules/administrative/container/locations.html',
         resolve: {
-          occupancyMap: function(container) {
-            return container.getOccupiedPositions();
-          }
         },
         controller: 'ContainerLocationsCtrl',
         parent: 'container-detail'
@@ -142,7 +181,7 @@ angular.module('os.administrative.container',
               return;
             }
 
-            $state.go('container-detail.overview', {containerId: container.id});
+            $state.go('container-detail.locations', {containerId: container.id});
           }
         );
       }

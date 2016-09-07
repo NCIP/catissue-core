@@ -22,20 +22,15 @@ angular.module('os.administrative.container.util', ['os.common.box'])
           column               : function(occupant) { return occupant.posOneOrdinal; },
           numberOfRows         : function() { return container.noOfRows; },
           numberOfColumns      : function() { return container.noOfColumns; },
+          positionLabelingMode : function() { return container.positionLabelingMode; },
           rowLabelingScheme    : function() { return container.rowLabelingScheme; },
-          columnLabelingScheme : function() { return container.columnLabelingScheme; }
+          columnLabelingScheme : function() { return container.columnLabelingScheme; },
+          occupantClick        : function() { /* dummy method to make box allow cell clicks */ }
         },
 
         occupants: [],
         occupantName: function(occupant) {
           return occupant.occupyingEntityName
-        },
-        occupantSref: function(occupant) {
-          if (occupant.occuypingEntity == 'specimen') {
-            return 'specimen({specimenId: ' + occupant.occupyingEntityId + '})';
-          } else {
-            return 'container-detail.locations({containerId: ' + occupant.occupyingEntityId + '})';
-          }
         },
         allowClicks: allowClicks,
         isVacatable: function(occupant) {

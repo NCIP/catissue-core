@@ -98,6 +98,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_location_position")</caption>
+      <attribute>position</attribute>
+    </field>
+
+    <field>
       <type>datetime</type>
       <caption>#getMessage("specimen_collection_date")</caption>
       <attribute>collectionDate</attribute>

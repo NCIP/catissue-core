@@ -58,6 +58,22 @@
 
       <div class="form-group">
         <label class="col-xs-3 control-label">
+          <span translate="container.position_labeling">Position Labeling</span>
+        </label>
+        <div class="col-xs-9">
+          <label class="radio-inline">
+            <input type="radio" name="posLabelingMode" ng-model="containerType.positionLabelingMode" ng-value="'LINEAR'">
+            <span translate="container.position_labeling_modes.LINEAR">Linear</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="posLabelingMode" ng-model="containerType.positionLabelingMode" ng-value="'TWO_D'">
+            <span translate="container.position_labeling_modes.TWO_D">Row and Column</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="containerType.positionLabelingMode == 'TWO_D'">
+        <label class="col-xs-3 control-label">
           <span translate="container.labeling_scheme">Labeling Scheme</span>
         </label>
         <div class="col-xs-3">

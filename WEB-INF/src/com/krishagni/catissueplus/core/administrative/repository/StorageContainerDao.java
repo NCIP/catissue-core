@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface StorageContainerDao extends Dao<StorageContainer> {
@@ -26,5 +27,9 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit);
 
 	public int getSpecimensCount(Long containerId);
+
+	public StorageContainerSummary getAncestorsHierarchy(Long containerId);
+
+	public List<StorageContainerSummary> getChildContainers(Long containerId, int noOfColumns);
 }
 	

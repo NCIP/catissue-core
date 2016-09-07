@@ -1,15 +1,16 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 
 public class StorageContainerPositionDetail implements Comparable<StorageContainerPositionDetail> {
 	private Long id;
-		
+
+	private String mode;
+
 	private String posOne;
 	
 	private String posTwo;
@@ -17,6 +18,8 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 	private Integer posOneOrdinal;
 	
 	private Integer posTwoOrdinal;
+
+	private int position;
 	
 	private Long containerId;
 	
@@ -36,6 +39,14 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 
 	public String getPosOne() {
@@ -68,6 +79,14 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 
 	public void setPosTwoOrdinal(Integer posTwoOrdinal) {
 		this.posTwoOrdinal = posTwoOrdinal;
+	}
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
 	}
 
 	public Long getContainerId() {
@@ -140,8 +159,10 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 		result.setPosTwo(position.getPosTwo());
 		result.setPosOneOrdinal(position.getPosOneOrdinal());
 		result.setPosTwoOrdinal(position.getPosTwoOrdinal());
+		result.setPosition(position.getPosition());
 		result.setContainerId(position.getContainer().getId());
 		result.setContainerName(position.getContainer().getName());
+		result.setMode(position.getContainer().getPositionLabelingMode().name());
 		
 		if (position.getOccupyingSpecimen() != null) {
 			result.setOccuypingEntity("specimen");
@@ -157,13 +178,6 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 	}
 	
 	public static List<StorageContainerPositionDetail> from(Collection<StorageContainerPosition> positions) {
-		List<StorageContainerPositionDetail> results = new ArrayList<StorageContainerPositionDetail>();
-		
-		for (StorageContainerPosition pos : positions) {
-			results.add(from(pos));
-		}
-		
-		Collections.sort(results);
-		return results;
+		return positions.stream().map(StorageContainerPositionDetail::from).sorted().collect(Collectors.toList());
 	}
 }

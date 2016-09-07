@@ -116,6 +116,11 @@
         <caption>#getMessage("specimen_location_column")</caption>
         <attribute>positionX</attribute>
       </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_position")</caption>
+        <attribute>position</attribute>
+      </field>
     </record>
 
     <field>

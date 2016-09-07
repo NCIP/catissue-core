@@ -122,10 +122,7 @@
               </span>
             </div>
             <div class="col col-xs-3" ng-if="specimen.storageLocation.name">
-              <span>{{specimen.storageLocation.name}}</span>
-              <span ng-if="!!specimen.storageLocation.positionX && !!specimen.storageLocation.positionY">
-                : ({{specimen.storageLocation.positionY}}, {{specimen.storageLocation.positionX}})
-              </span>
+              <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
             </div>
             <div class="col col-xs-3" ng-if="!specimen.storageLocation.name">
               <span>Virtual</span>

@@ -337,13 +337,15 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 				
 				StorageLocationSummary location = new StorageLocationSummary();
 				location.setName(spec.getContainerName());
-				if (spec.getPositionX() != null && spec.getPositionY() != null && i==0) {
-					location.setPositionX(spec.getPositionX());
-					location.setPositionY(spec.getPositionY());
+				if (i == 0) {
+					if (spec.getPosition() != 0) {
+						location.setPosition(spec.getPosition());
+					} else if (spec.getPositionX() != null && spec.getPositionY() != null) {
+						location.setPositionX(spec.getPositionX());
+						location.setPositionY(spec.getPositionY());
+					}
 				}
-
 				aliquot.setStorageLocation(location);
-
 				aliquots.add(aliquot);
 			}
 

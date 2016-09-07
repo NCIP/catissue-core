@@ -1,18 +1,60 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, container, occupancyMap,
-    Util, ContainerUtil, Alerts, SpecimenUtil) {
+    $scope, $state, container, Container, ContainerUtil, Alerts, Specimen, SpecimenUtil) {
 
     function init() {
-      $scope.container = container;
-      $scope.pristineMap = $scope.occupancyMap = occupancyMap;
-      $scope.input = {labels: '', noFreeLocs: false, vacateOccupants: false};
+      $scope.ctx.showTree  = true;
+      $scope.ctx.viewState = 'container-detail.locations';
+      $scope.lctx = {mapState: 'loading', entityInfo: {}};
+
+      loadMap(container);
     }
 
-    $scope.addContainer = function(posOne, posTwo) {
+    function loadMap(container) {
+      $scope.lctx.mapState = 'loading';
+      container.getOccupiedPositions().then(
+        function(occupancyMap) {
+          $scope.lctx.mapState = 'loaded';
+          $scope.lctx.pristineMap = $scope.lctx.occupancyMap = occupancyMap;
+          $scope.lctx.input = {labels: '', noFreeLocs: false, vacateOccupants: false};
+        },
+
+        function() {
+          $scope.lctx.mapState = 'error';
+        }
+      );
+    }
+
+    $scope.showInfo = function(entityType, entityId) {
+      $scope.lctx.entityInfo   = {type: entityType, id: entityId};
+      $scope.ctx.showTree      = false;
+
+      var promise;
+      if (entityType == 'specimen') {
+        promise = Specimen.getById(entityId);
+      } else if (entityType == 'container') {
+        promise = Container.getById(entityId);
+      } else {
+        return;
+      }
+
+      promise.then(
+        function(entity) {
+          $scope.lctx.entityInfo[entityType] = entity;
+        }
+      );
+    }
+
+    $scope.hideInfo = function() {
+      $scope.lctx.entityInfo    = {};
+      $scope.ctx.showTree       = true;
+    }
+
+    $scope.addContainer = function(posOne, posTwo, pos) {
       var params = {
         containerId: '',
-        posOne: posOne, posTwo: posTwo,
+        posOne: posOne, posTwo: posTwo, pos: pos,
+        siteName: container.siteName,
         parentContainerName: container.name,
         parentContainerId: container.id
       };
@@ -21,28 +63,28 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
 
     $scope.showUpdatedMap = function() {
       var result = ContainerUtil.assignPositions(
-        container, 
-        $scope.pristineMap, 
-        $scope.input.labels,
-        $scope.input.vacateOccupants);
+        container,
+        $scope.lctx.pristineMap,
+        $scope.lctx.input.labels,
+        $scope.lctx.input.vacateOccupants);
 
-      $scope.occupancyMap = result.map;
+      $scope.lctx.occupancyMap = result.map;
 
-      $scope.input.noFreeLocs = result.noFreeLocs;
+      $scope.lctx.input.noFreeLocs = result.noFreeLocs;
       if (result.noFreeLocs) {
         Alerts.error("container.no_free_locs");
       }
     }
 
     $scope.assignPositions = function() {
-      if ($scope.input.noFreeLocs) {
+      if ($scope.lctx.input.noFreeLocs) {
         Alerts.error("container.no_free_locs");
         return;
       }
 
       var addedEntities = [], vacatedEntities = [];
-      for (var i = 0; i < $scope.occupancyMap.length; ++i) {
-        var pos = $scope.occupancyMap[i];
+      for (var i = 0; i < $scope.lctx.occupancyMap.length; ++i) {
+        var pos = $scope.lctx.occupancyMap[i];
         if (!!pos.id) {
           continue;
         }
@@ -91,11 +133,11 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
             positions.push(pos);
           });
 
-          var assignOp = {vacateOccupant: $scope.input.vacateOccupants, positions: positions};
+          var assignOp = {vacateOccupant: $scope.lctx.input.vacateOccupants, positions: positions};
           container.assignPositions(assignOp).then(
             function(latestOccupancyMap) {
-              $scope.pristineMap = $scope.occupancyMap = latestOccupancyMap;
-              $scope.input.labels = undefined;
+              $scope.lctx.pristineMap = $scope.lctx.occupancyMap = latestOccupancyMap;
+              $scope.lctx.input.labels = undefined;
             }
           );
         }

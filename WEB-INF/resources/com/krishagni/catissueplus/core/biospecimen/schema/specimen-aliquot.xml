@@ -42,6 +42,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_location_start_position")</caption>
+      <attribute>position</attribute>
+    </field>
+
+    <field>
       <type>datetime</type>
       <caption>#getMessage("specimen_created_on")</caption>
       <attribute>createdOn</attribute>

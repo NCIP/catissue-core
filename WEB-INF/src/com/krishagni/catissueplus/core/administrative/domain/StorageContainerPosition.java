@@ -63,6 +63,10 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 		this.posTwo = posTwo;
 	}
 
+	public int getPosition() {
+		return (posTwoOrdinal - 1) * getContainer().getNoOfColumns() + posOneOrdinal;
+	}
+
 	public StorageContainer getContainer() {
 		return container;
 	}

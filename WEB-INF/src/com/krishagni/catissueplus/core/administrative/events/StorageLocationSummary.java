@@ -2,8 +2,11 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class StorageLocationSummary implements Serializable {
 	
 	private static final long serialVersionUID = 3492284917328450439L;
@@ -11,10 +14,14 @@ public class StorageLocationSummary implements Serializable {
 	private Long id;
 	
 	private String name;
+
+	private String mode;
 	
 	private String positionX;
 	
 	private String positionY;
+
+	private int position;
 
 	public Long getId() {
 		return id;
@@ -32,6 +39,14 @@ public class StorageLocationSummary implements Serializable {
 		this.name = name;
 	}
 
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
 	public String getPositionX() {
 		return positionX;
 	}
@@ -47,17 +62,27 @@ public class StorageLocationSummary implements Serializable {
 	public void setPositionY(String positionY) {
 		this.positionY = positionY;
 	}
-	
+
+	public int getPosition() {
+		return position;
+	}
+
+	public void setPosition(int position) {
+		this.position = position;
+	}
+
 	public static StorageLocationSummary from(StorageContainerPosition position) {
 		if (position == null) {
 			return null;
 		}
 		
 		StorageLocationSummary storageLocation = new StorageLocationSummary();
-		storageLocation.setName(position.getContainer().getName());
 		storageLocation.setId(position.getContainer().getId());
+		storageLocation.setName(position.getContainer().getName());
+		storageLocation.setMode(position.getContainer().getPositionLabelingMode().name());
 		storageLocation.setPositionX(position.getPosOne());
 		storageLocation.setPositionY(position.getPosTwo());
+		storageLocation.setPosition(position.getPosition());
 		return storageLocation;
 	}
 }

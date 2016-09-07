@@ -381,17 +381,15 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 			result.setParentLabel(specimen.getParentSpecimen().getLabel());
 		}
 	
-		StorageLocationSummary location = new StorageLocationSummary();
-		result.setStorageLocation(location);
+		StorageLocationSummary location = null;
 		StorageContainerPosition position = specimen.getPosition();
 		if (position == null) {
+			location = new StorageLocationSummary();
 			location.setId(-1L);
 		} else {
-			location.setId(position.getContainer().getId());
-			location.setName(position.getContainer().getName());
-			location.setPositionX(position.getPosOne());
-			location.setPositionY(position.getPosTwo());
+			location = StorageLocationSummary.from(position);
 		}
+		result.setStorageLocation(location);
 
 		result.setActivityStatus(specimen.getActivityStatus());
 		result.setCreatedOn(specimen.getCreatedOn());

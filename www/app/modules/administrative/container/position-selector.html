@@ -11,8 +11,13 @@
     </div>
     <div>
       <span translate="container.selected_pos">Selected Position: </span>
-      <span ng-if="!!position.positionX">({{position.positionY}}, {{position.positionX}})</span>
       <span ng-if="!position.positionX" translate="common.none">None</span>
+      <span ng-if="!!position.positionX">
+        <span ng-switch on="container.positionLabelingMode == 'TWO_D'">
+          <span ng-switch-when="true">({{position.positionY}}, {{position.positionX}})</span>
+          <span ng-switch-when="false">{{position.position}}</span>
+        </span>
+      </span>
     </div>
   </div>
 

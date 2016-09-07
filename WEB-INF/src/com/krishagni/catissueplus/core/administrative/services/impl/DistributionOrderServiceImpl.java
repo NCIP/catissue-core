@@ -609,8 +609,13 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		//
 		// TODO: This is duplicate code. Need to consolidate this with specimen/container objects
 		//
-		StorageContainerPosition position = null;
 		String row = location.getPositionY(), column = location.getPositionX();
+		if (container.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR && location.getPosition() != 0) {
+			row    = String.valueOf((location.getPosition() - 1) / container.getNoOfColumns() + 1);
+			column = String.valueOf((location.getPosition() - 1) % container.getNoOfColumns() + 1);
+		}
+
+		StorageContainerPosition position = null;
 		if (StringUtils.isNotBlank(row) && StringUtils.isNotBlank(column)) {
 			if (container.canSpecimenOccupyPosition(specimen.getId(), column, row)) {
 				position = container.createPosition(column, row);

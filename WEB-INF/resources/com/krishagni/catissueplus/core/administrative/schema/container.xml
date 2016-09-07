@@ -48,6 +48,11 @@
         <caption>#getMessage("container_position_column")</caption>
         <attribute>positionX</attribute>
       </field>
+
+      <field>
+        <caption>#getMessage("container_position_position")</caption>
+        <attribute>position</attribute>
+      </field>
     </record>
 
     <field>
@@ -58,6 +63,11 @@
     <field>
       <caption>#getMessage("container_no_of_rows")</caption>
       <attribute>noOfRows</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("container_position_labeling_mode")</caption>
+      <attribute>positionLabelingMode</attribute>
     </field>
 
     <field>

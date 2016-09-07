@@ -42,7 +42,12 @@ public class StorageContainer extends BaseEntity {
 	public static final String UPPER_CASE_ROMAN_LABELING_SCHEME = "Roman Upper Case";
 	
 	public static final String LOWER_CASE_ROMAN_LABELING_SCHEME = "Roman Lower Case";
-	
+
+	public enum PositionLabelingMode {
+		LINEAR,
+		TWO_D
+	}
+
 	private String name;
 
 	private String barcode;
@@ -54,6 +59,8 @@ public class StorageContainer extends BaseEntity {
 	private int noOfColumns;
 	
 	private int noOfRows;
+
+	private PositionLabelingMode positionLabelingMode = PositionLabelingMode.TWO_D;
 	
 	private String columnLabelingScheme = NUMBER_LABELING_SCHEME;
 	
@@ -157,6 +164,14 @@ public class StorageContainer extends BaseEntity {
 
 	public void setNoOfRows(int noOfRows) {
 		this.noOfRows = noOfRows;
+	}
+
+	public PositionLabelingMode getPositionLabelingMode() {
+		return positionLabelingMode;
+	}
+
+	public void setPositionLabelingMode(PositionLabelingMode positionLabelingMode) {
+		this.positionLabelingMode = positionLabelingMode;
 	}
 
 	public String getColumnLabelingScheme() {
@@ -375,18 +390,19 @@ public class StorageContainer extends BaseEntity {
 			hasParentChanged = true;
 		}
 		
-		setName(other.name);
-		setBarcode(other.barcode);
-		setType(other.type);
-		setTemperature(other.temperature);
-		updateCapacity(other.noOfColumns, other.noOfRows);
-		updateLabelingScheme(other.columnLabelingScheme, other.rowLabelingScheme);
+		setName(other.getName());
+		setBarcode(other.getBarcode());
+		setType(other.getType());
+		setTemperature(other.getTemperature());
+		updateCapacity(other.getNoOfColumns(), other.getNoOfRows());
+		setPositionLabelingMode(other.getPositionLabelingMode());
+		updateLabelingScheme(other.getColumnLabelingScheme(), other.getRowLabelingScheme());
 		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
-		updateActivityStatus(other.activityStatus);
-		setComments(other.comments);
+		updateActivityStatus(other.getActivityStatus());
+		setComments(other.getComments());
 		updateAllowedSpecimenClassAndTypes(other.getAllowedSpecimenClasses(), other.getAllowedSpecimenTypes(), hasParentChanged);
 		updateAllowedCps(other.getAllowedCps(), hasParentChanged);
-		updateStoreSpecimenEnabled(other.storeSpecimenEnabled);
+		updateStoreSpecimenEnabled(other.isStoreSpecimenEnabled());
 		
 		validateRestrictions();
 	}
@@ -469,6 +485,16 @@ public class StorageContainer extends BaseEntity {
 		}
 
 		return nextAvailablePosition(row, col);
+	}
+
+	public StorageContainerPosition nextAvailablePosition(int position) {
+		String row = null, column = null;
+		if (position > 0) {
+			row    = fromOrdinal(getRowLabelingScheme(),    (position - 1) / getNoOfColumns() + 1);
+			column = fromOrdinal(getColumnLabelingScheme(), (position - 1) % getNoOfColumns() + 1);
+		}
+
+		return nextAvailablePosition(row, column);
 	}
 
 	public StorageContainerPosition nextAvailablePosition(String row, String col) {
@@ -734,15 +760,16 @@ public class StorageContainer extends BaseEntity {
 		copy.setParentContainer(getParentContainer());
 		copy.setNoOfColumns(getNoOfColumns());
 		copy.setNoOfRows(getNoOfRows());
+		copy.setPositionLabelingMode(getPositionLabelingMode());
 		copy.setColumnLabelingScheme(getColumnLabelingScheme());
 		copy.setRowLabelingScheme(getRowLabelingScheme());
 		copy.setTemperature(getTemperature());
 		copy.setStoreSpecimenEnabled(isStoreSpecimenEnabled());
 		copy.setComments(getComments());
 		copy.setCreatedBy(getCreatedBy());
-		copy.setAllowedSpecimenClasses(new HashSet<String>(getAllowedSpecimenClasses()));		
-		copy.setAllowedSpecimenTypes(new HashSet<String>(getAllowedSpecimenTypes()));
-		copy.setAllowedCps(new HashSet<CollectionProtocol>(getAllowedCps()));
+		copy.setAllowedSpecimenClasses(new HashSet<>(getAllowedSpecimenClasses()));
+		copy.setAllowedSpecimenTypes(new HashSet<>(getAllowedSpecimenTypes()));
+		copy.setAllowedCps(new HashSet<>(getAllowedCps()));
 		copy.setCompAllowedSpecimenClasses(computeAllowedSpecimenClasses());
 		copy.setCompAllowedSpecimenTypes(computeAllowedSpecimenTypes());
 		copy.setCompAllowedCps(computeAllowedCps());
@@ -855,7 +882,7 @@ public class StorageContainer extends BaseEntity {
 		setNoOfColumns(newNoOfColumns);
 		setNoOfRows(newNoOfRows); 
 	}
-	
+
 	private void updateLabelingScheme(String newColumnLabelingScheme, String newRowLabelingScheme) {
 		boolean colSchemeChanged = !getColumnLabelingScheme().equals(newColumnLabelingScheme);
 		boolean rowSchemeChanged = !getRowLabelingScheme().equals(newRowLabelingScheme);

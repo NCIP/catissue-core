@@ -16,6 +16,8 @@ public class ContainerTypeSummary {
 	
 	private int noOfRows;
 
+	private String positionLabelingMode;
+
 	private String columnLabelingScheme;
 
 	private String rowLabelingScheme;
@@ -66,6 +68,14 @@ public class ContainerTypeSummary {
 		this.noOfRows = noOfRows;
 	}
 
+	public String getPositionLabelingMode() {
+		return positionLabelingMode;
+	}
+
+	public void setPositionLabelingMode(String positionLabelingMode) {
+		this.positionLabelingMode = positionLabelingMode;
+	}
+
 	public String getColumnLabelingScheme() {
 		return columnLabelingScheme;
 	}
@@ -112,6 +122,7 @@ public class ContainerTypeSummary {
 		detail.setNameFormat(containerType.getNameFormat());
 		detail.setNoOfColumns(containerType.getNoOfColumns());
 		detail.setNoOfRows(containerType.getNoOfRows());
+		detail.setPositionLabelingMode(containerType.getPositionLabelingMode().name());
 		detail.setColumnLabelingScheme(containerType.getColumnLabelingScheme());
 		detail.setRowLabelingScheme(containerType.getRowLabelingScheme());
 		detail.setTemperature(containerType.getTemperature());

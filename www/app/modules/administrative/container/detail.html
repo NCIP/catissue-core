@@ -8,7 +8,12 @@
           </a>
         </li>
       </ul>
-      <h3>{{container.name}}</h3>
+      <h3>
+        <span ng-repeat="name in ctx.names">
+          <span>{{name}}</span>
+          <span ng-if="!$last">&rarr;</span>
+        </span>
+      </h3>
     </div>
   </div>
 
@@ -16,18 +21,53 @@
     <ul>
       <li ui-sref-active="active">
         <a ui-sref=".overview">
-          <i class="fa fa-eye"></i>
+          <span class="fa fa-eye"></span>
           <span class="os-title" translate="container.menu.overview"> Overview </span>
         </a>
       </li>
       <li ui-sref-active="active">
         <a ui-sref=".locations">
-          <i class="fa fa-sitemap"></i>
+          <span class="fa fa-sitemap"></span>
           <span class="os-title" translate="container.menu.locations"> Locations </span> 
         </a>
       </li>
     </ul>
   </div>
 
-  <div class="os-side-menu-page-content" ui-view> </div>
+  <div class="os-side-menu-page-content">
+    <div class="os-full-height-container clearfix">
+      <div class="col-xs-3 os-container-tree" ng-if="ctx.showTree && ctx.containerTree.length > 1">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div ng-include src="'modules/administrative/container/tree.html'"></div>
+          </div>
+        </div>
+      </div>
+      <div class="os-full-height-container"
+        ng-class="{true: 'col-xs-12', false: 'col-xs-9'}[!ctx.showTree || ctx.containerTree.length <= 1]">
+        <div class="os-full-height-container" ui-view></div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script type="text/ng-template" id="modules/administrative/container/tree.html">
+  <table class="os-table os-table-hover os-table-tree os-table-muted-hdr">
+    <tbody class="os-table-body">
+      <tr id="container-{{container.id}}" class="row" ng-class="{'selected': container.id == ctx.container.id}"
+        os-row-click="selectContainer(container)" ng-repeat="container in ctx.containerTree | openedTreeNodes">
+        <td class="col" style="border: none;">
+          <div ng-style="{'padding-left': (container.hasChildren ? container.depth * 16 : container.depth * 16 + 16) + 'px'}">
+            <a ng-if="container.hasChildren" class="fa"
+              ng-class="{'fa-chevron-circle-down': container.isOpened, 'fa-chevron-circle-right': !container.isOpened}"
+              ng-click="loadChildren(container)">
+            </a>
+            <a ng-click="selectContainer(container)">
+              <span>{{container.name}}</span>
+            </a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</script>

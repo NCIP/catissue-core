@@ -40,6 +40,7 @@ public class ContainerTypeFactoryImpl implements ContainerTypeFactory {
 		setName(detail, containerType, ose);
 		setNameFormat(detail, containerType, ose);
 		setDimension(detail, containerType, ose);
+		setPositionLabelingMode(detail, containerType, ose);
 		setLabelingSchemes(detail, containerType, ose);
 		setCanHold(detail, containerType, ose);
 		setActivityStatus(detail, containerType, ose);
@@ -95,8 +96,24 @@ public class ContainerTypeFactoryImpl implements ContainerTypeFactory {
 				
 		containerType.setNoOfRows(noOfRows);		
 	}
-	
+
+	private void setPositionLabelingMode(ContainerTypeDetail detail, ContainerType containerType, OpenSpecimenException ose) {
+		try {
+			if (StringUtils.isNotBlank(detail.getPositionLabelingMode())) {
+				containerType.setPositionLabelingMode(StorageContainer.PositionLabelingMode.valueOf(detail.getPositionLabelingMode()));
+			}
+		} catch (Exception e) {
+			ose.addError(ContainerTypeErrorCode.INVALID_POSITION_LABELING_MODE, detail.getPositionLabelingMode());
+		}
+	}
+
 	private void setLabelingSchemes(ContainerTypeDetail detail, ContainerType containerType, OpenSpecimenException ose) {
+		if (containerType.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR) {
+			containerType.setColumnLabelingScheme(StorageContainer.NUMBER_LABELING_SCHEME);
+			containerType.setRowLabelingScheme(StorageContainer.NUMBER_LABELING_SCHEME);
+			return;
+		}
+
 		setColumnLabelingScheme(detail, containerType, ose);
 		setRowLabelingScheme(detail, containerType, ose);
 	}

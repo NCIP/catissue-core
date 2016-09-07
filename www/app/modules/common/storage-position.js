@@ -7,21 +7,23 @@ angular.module('openspecimen')
       controllerAs: '$storagePositions',
 
       controller: function($scope) {
+        var ctrl = this;
+
         this.entities = [];
 
         this.cachedContainers = {};
 
         this.addEntity = function(entity) {
-          this.entities.push(entity);
+          ctrl.entities.push(entity);
         }
 
         this.clearEntities = function() {
-          this.entities.length = 0;
+          ctrl.entities.length = 0;
         }
 
         this.assignedPositions = function() {
           var assignedPositions = {};
-          angular.forEach(this.entities,
+          angular.forEach(ctrl.entities,
             function(entity) {
               if (!entity.storageLocation || !entity.storageLocation.name) {
                 return;
@@ -40,9 +42,9 @@ angular.module('openspecimen')
 
         this.getContainers = function(params) {
           var key = JSON.stringify(params);
-          var q = this.cachedContainers[key];
+          var q = ctrl.cachedContainers[key];
           if (!q) {
-            q = this.cachedContainers[key] = Container.query(params);
+            q = ctrl.cachedContainers[key] = Container.query(params);
           }
 
           return q;
@@ -94,11 +96,8 @@ angular.module('openspecimen')
 
       return q.then(
         function(containers) {
-          scope.containers = containers.map(
-            function(container) { 
-              return container.name; 
-            }
-          );
+          scope.containers     = containers;
+          scope.containerNames = containers.map(function(c) { return c.name; });
         }
       );
     };
@@ -123,7 +122,19 @@ angular.module('openspecimen')
       }
 
       scope.onContainerChange = function() {
-        entity.storageLocation = {name: entity.storageLocation.name};
+        if (!entity.storageLocation || !entity.storageLocation.name) {
+          // case of unselect
+          entity.storageLocation = {};
+          return;
+        }
+
+        var containers = scope.containers;
+        for (var i = 0; i < containers.length; ++i) {
+          if (containers[i].name == entity.storageLocation.name) {
+            entity.storageLocation = {name: containers[i].name, mode: containers[i].positionLabelingMode};
+            break;
+          }
+        }
       };
 
       scope.openPositionSelector = function() {
@@ -221,4 +232,27 @@ angular.module('openspecimen')
 
       templateUrl: 'modules/common/storage-position.html'
     }
+  })
+
+  .directive('osDispStoragePosition', function() {
+    return {
+      restrict: 'E',
+
+      replace: true,
+
+      scope: {
+        position: '='
+      },
+
+      template:
+        '<span> ' +
+          '<span>{{position.name}}</span> ' +
+          '<span ng-switch on="position.mode == \'LINEAR\'"> ' +
+            '<span ng-switch-when="true">({{position.position}})</span> ' +
+            '<span ng-switch-when="false">({{position.positionY}} x  {{position.positionX}})</span> ' +
+          '</span>' +
+        '</span>',
+
+      link: function() { }
+    };
   });

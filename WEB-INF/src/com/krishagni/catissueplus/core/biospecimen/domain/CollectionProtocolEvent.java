@@ -287,11 +287,11 @@ public class CollectionProtocolEvent implements Comparable<CollectionProtocolEve
 
 	@Override
 	public int compareTo(CollectionProtocolEvent other) {
-		Double thisEventPoint = this.eventPoint == null ? 0d : this.eventPoint;
-		Double otherEventPoint = other.eventPoint == null ? 0d : other.eventPoint;
+		Double thisEventPoint = getEventPoint() == null ? 0d : getEventPoint();
+		Double otherEventPoint = other.getEventPoint() == null ? 0d : other.getEventPoint();
 
 		if (thisEventPoint.equals(otherEventPoint)) {
-			return id.compareTo(other.id);
+			return getId().compareTo(other.getId());
 		} else {
 			return thisEventPoint.compareTo(otherEventPoint);
 		}
