@@ -77,6 +77,11 @@
         <caption>#getMessage("specimen")</caption>
 
         <field>
+          <caption>#getMessage("specimen_cp_short")</caption>
+          <attribute>cpShortTitle</attribute>
+        </field>
+
+        <field>
           <caption>#getMessage("order_item_spec_label")</caption>
           <attribute>label</attribute>
         </field>
