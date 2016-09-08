@@ -108,6 +108,10 @@ angular.module('openspecimen')
           } 
         });
 
+        if (tAttrs.ngRequired) {
+          inputEl.attr("ng-required", tAttrs.ngRequired);
+        }
+
         inputEl.attr('ng-model', tAttrs.date)
           .attr('date-only', tAttrs.dateOnly)
           .attr('date-only-fmt', tAttrs.dateOnlyFmt);
