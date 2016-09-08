@@ -83,13 +83,6 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         return;
       }
 
-      $scope.$watch('sr.specimenClass', function(newVal, oldVal) {
-        if (!newVal || newVal == oldVal || !oldVal) {
-          return;
-        }
-        $scope.sr.type = '';
-      });
-
       $scope.storageTypes = PvManager.getPvs('storage-type');
 
       loadLabelAutoPrintModes();
