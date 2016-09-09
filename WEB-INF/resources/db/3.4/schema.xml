@@ -41,4 +41,11 @@
         p.occupying_specimen_id is not null
     </createView>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Unique PPID per collection protocol">
+    <addUniqueConstraint
+      constraintName="CAT_CPR_CP_ID_PPID_UQ"
+      tableName="CATISSUE_COLL_PROT_REG"
+      columnNames="COLLECTION_PROTOCOL_ID, PROTOCOL_PARTICIPANT_ID"/>
+  </changeSet>
 </databaseChangeLog>
