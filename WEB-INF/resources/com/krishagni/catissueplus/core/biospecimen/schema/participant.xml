@@ -5,6 +5,11 @@
 
   <record> 
     <name>com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail</name>
+
+    <field>
+      <caption>#getMessage("participant_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
    
     <field>
       <caption>#getMessage("participant_cp_short_title")</caption>
