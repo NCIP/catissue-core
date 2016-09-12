@@ -36,8 +36,8 @@
     </field>
 
     <field>
-      <caption>#getMessage("user_super_administrator")</caption>
-      <attribute>admin</attribute>
+      <caption>#getMessage("user_type")</caption>
+      <attribute>type</attribute>
     </field>
 
     <field>
