@@ -99,6 +99,8 @@ public class ImportDefaultQueries implements InitializingBean {
 						configureCatalogQuery(query);
 					} else if (resource.getFilename().equals(DISTRIBUTION_REPORT_QUERY)) {
 						configureDistributionReportQuery(query);
+					} else if (resource.getFilename().equals(SHIPMENT_REPORT_QUERY)) {
+						configureShipmentReportQuery(query);
 					}
 				}
 			} else {
@@ -170,6 +172,10 @@ public class ImportDefaultQueries implements InitializingBean {
 		saveDefaultQuerySetting(query, "common", "distribution_report_query");
 	}
 
+	private void configureShipmentReportQuery(SavedQuery query) {
+		saveDefaultQuerySetting(query, "common", "shipment_export_report");
+	}
+
 	private void saveDefaultQuerySetting(SavedQuery query, String module, String name) {
 		try {
 			AuthUtil.setCurrentUser(sysUser);
@@ -199,4 +205,6 @@ public class ImportDefaultQueries implements InitializingBean {
 	private static final String DEFAULT_CATALOG_QUERY = "SpecimenCatalog.json";
 
 	private static final String DISTRIBUTION_REPORT_QUERY = "DistributionReport.json";
+
+	private static final String SHIPMENT_REPORT_QUERY = "ShipmentReport.json";
 }
