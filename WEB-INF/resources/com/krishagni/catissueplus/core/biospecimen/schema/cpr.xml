@@ -22,6 +22,11 @@
       <attribute>registrationDate</attribute>
     </field>
 
+    <field>
+      <caption>#getMessage("participant_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>
+
     <record>
       <attribute>participant</attribute>
    
@@ -81,11 +86,6 @@
       <field>
         <caption>#getMessage("participant_empi")</caption>
         <attribute>empi</attribute>
-      </field>  
-
-      <field>
-        <caption>#getMessage("participant_activity_status")</caption>
-        <attribute>activityStatus</attribute>
       </field>  
 
       <record>
