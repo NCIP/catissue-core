@@ -23,6 +23,7 @@ import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
+import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
@@ -398,12 +399,26 @@ public class AccessCtrlMgr {
 		}
 	}
 	
-	public boolean  ensureUpdatePhiRights(CollectionProtocolRegistration cpr) {
+	public boolean ensureUpdatePhiRights(CollectionProtocolRegistration cpr) {
 		try {
 			return ensureUpdateCprRights(cpr);
 		} catch (OpenSpecimenException ose) {
 			throw OpenSpecimenException.userError(ParticipantErrorCode.CANNOT_UPDATE_PHI, cpr.getCollectionProtocol().getShortTitle()); 
 		}
+	}
+
+	public boolean ensureUpdateParticipantRights(Participant participant) {
+		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
+			try {
+				if (ensureUpdateCprRights(cpr)) {
+					return true;
+				}
+			} catch (OpenSpecimenException ose) {
+
+			}
+		}
+
+		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 
 	public boolean ensureCreateCprRights(Long cprId) {

@@ -48,6 +48,7 @@ import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRe
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
+import com.krishagni.catissueplus.core.common.errors.ActivityStatusErrorCode;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -118,7 +119,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public ResponseEvent<CollectionProtocolRegistrationDetail> createRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
 		try {
-			return ResponseEvent.response(createRegistration(req.getPayload(), true));
+			return ResponseEvent.response(saveOrUpdateRegistration(req.getPayload(), null, true));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -131,21 +132,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req) {
 		try {
 			CollectionProtocolRegistrationDetail detail = req.getPayload();
-			
 			CollectionProtocolRegistration existing = getCpr(detail.getId(), detail.getCpId(), detail.getCpShortTitle(), detail.getPpid());
-			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
-
-			CollectionProtocolRegistration cpr = cprFactory.createCpr(existing, detail);
-			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			ensureValidAndUniquePpid(existing, cpr, ose);
-			ensureUniqueBarcode(existing, cpr, ose);
-			ose.checkAndThrow();
-			
-			saveParticipant(existing, cpr);
-			existing.update(cpr);
-			
-			daoFactory.getCprDao().saveOrUpdate(existing);
-			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(existing, false));
+			return ResponseEvent.response(saveOrUpdateRegistration(detail, existing, true));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -368,7 +356,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	@PlusTransactional
 	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
 		try {
-			return ResponseEvent.response(createRegistrations(req.getPayload(), true));
+			return ResponseEvent.response(saveOrUpdateRegistrations(req.getPayload(), false));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -378,9 +366,9 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<ParticipantRegistrationsList> registerToOtherProtocols(RequestEvent<ParticipantRegistrationsList> req) {
+	public ResponseEvent<ParticipantRegistrationsList> updateRegistrations(RequestEvent<ParticipantRegistrationsList> req) {
 		try {
-			return ResponseEvent.response(createRegistrations(req.getPayload(), false));
+			return ResponseEvent.response(saveOrUpdateRegistrations(req.getPayload(), true));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -403,20 +391,34 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		return daoFactory.getCprDao().getCprIds(key, value);
 	}
 
-	private CollectionProtocolRegistrationDetail createRegistration(CollectionProtocolRegistrationDetail input, boolean saveParticipant) {
-		CollectionProtocolRegistration cpr = cprFactory.createCpr(input);
-		AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
+	private CollectionProtocolRegistrationDetail saveOrUpdateRegistration(
+			CollectionProtocolRegistrationDetail input,
+			CollectionProtocolRegistration existing ,
+			boolean saveParticipant) {
+
+		CollectionProtocolRegistration cpr = cprFactory.createCpr(existing, input);
+		if (existing == null) {
+			AccessCtrlMgr.getInstance().ensureCreateCprRights(cpr);
+		} else {
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(cpr);
+		}
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
-		ensureValidAndUniquePpid(null, cpr, ose);
-		ensureUniqueParticipantReg(cpr, ose);		
-		ensureUniqueBarcode(null, cpr, ose);
+		ensureValidAndUniquePpid(existing, cpr, ose);
+		ensureUniqueBarcode(existing, cpr, ose);
+		if (existing == null) {
+			ensureUniqueParticipantReg(cpr, ose);
+		}
 		
 		ose.checkAndThrow();
 		
 		if (saveParticipant) {
-			saveParticipant(null, cpr);
+			saveParticipant(existing, cpr);
+		}
+
+		if (existing != null) {
+			existing.update(cpr);
+			cpr = existing;
 		}
 		
 		cpr.setPpidIfEmpty();
@@ -424,32 +426,51 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		return CollectionProtocolRegistrationDetail.from(cpr, false);		
 	}
 	
-	private ParticipantRegistrationsList createRegistrations(ParticipantRegistrationsList input, boolean createParticipant) {
+	private ParticipantRegistrationsList saveOrUpdateRegistrations(ParticipantRegistrationsList input, boolean update) {
 		ParticipantDetail inputParticipant = input.getParticipant();
 		if (inputParticipant == null) {
 			inputParticipant = new ParticipantDetail();
 		}
 
-		//
-		// Step 1: Save/update or lookup existing participant
-		//
-		ParticipantDetail participantDetail = null;
-		if (createParticipant) {
-			participantDetail = participantService.saveOrUpdateParticipant(inputParticipant);
-		} else {
-			participantDetail = lookupParticipant(inputParticipant);
+		if (update) {
+			Participant existing = getParticipant(input);
+			if (Status.isDisabledStatus(existing.getActivityStatus())) {
+				return deleteParticipant(existing);
+			}
+
+			AccessCtrlMgr.getInstance().ensureUpdateParticipantRights(existing);
+			inputParticipant.setId(existing.getId());
 		}
+
+		//
+		// Step 1: Save/update participant
+		//
+		ParticipantDetail participantDetail = participantService.saveOrUpdateParticipant(inputParticipant);
+		Participant participant = daoFactory.getParticipantDao().getById(participantDetail.getId());
 
 		ParticipantDetail p = new ParticipantDetail();
 		p.setId(participantDetail.getId());
 
 		//
-		// Step 2: Run through each registration
+		// Step 2: Build a map of participant registrations
 		//
-		List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<CollectionProtocolRegistrationDetail>();
+		Map<String, CollectionProtocolRegistration> cprMap = participant.getCprs().stream()
+			.collect(Collectors.toMap(reg -> reg.getCpShortTitle() + "_" + reg.getPpid(), reg -> reg));
+
+		//
+		// Step 3: Run through each registration
+		//
+		List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<>();
 		for (CollectionProtocolRegistrationDetail cprDetail : input.getRegistrations()) {
 			cprDetail.setParticipant(p);
-			cprDetail = createRegistration(cprDetail, false);
+
+			CollectionProtocolRegistration existing = null;
+			if (StringUtils.isNotBlank(cprDetail.getCpShortTitle()) && StringUtils.isNotBlank(cprDetail.getPpid())) {
+				existing = cprMap.get(cprDetail.getCpShortTitle() + "_" + cprDetail.getPpid());
+			}
+
+			cprDetail = saveOrUpdateRegistration(cprDetail, existing, false);
+
 			cprDetail.setParticipant(null);
 			registrations.add(cprDetail);
 		}
@@ -457,7 +478,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		ParticipantRegistrationsList result = new ParticipantRegistrationsList();
 		result.setParticipant(participantDetail);
 		result.setRegistrations(registrations);
-
 		return result;
 	}
 
@@ -465,7 +485,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		Participant existingParticipant = null;
 		Participant participant = cpr.getParticipant();
 		
-		if (existing == null) { 
+		if (existing == null) {
 			// new registration
 			if (participant.getId() != null) { 
 				// existing participant
@@ -553,6 +573,22 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		return null;
 	}
 
+	private Participant getParticipant(ParticipantRegistrationsList input) {
+		for (CollectionProtocolRegistrationDetail cprDetail : input.getRegistrations()) {
+			String cpShortTitle = cprDetail.getCpShortTitle();
+			String ppid         = cprDetail.getPpid();
+
+			if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(ppid)) {
+				CollectionProtocolRegistration cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, ppid);
+				if (cpr != null) {
+					return cpr.getParticipant();
+				}
+			}
+		}
+
+		return daoFactory.getParticipantDao().getById(lookupParticipant(input.getParticipant()).getId());
+	}
+
 	private ParticipantDetail lookupParticipant(ParticipantDetail detail) {
 		ResponseEvent<List<MatchedParticipant>> resp = participantService.getMatchingParticipants(new RequestEvent<>(detail));
 		resp.throwErrorIfUnsuccessful();
@@ -563,6 +599,23 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 
 		return result.iterator().next().getParticipant();
+	}
+
+	//
+	// Deletes all registrations of participant
+	//
+	private ParticipantRegistrationsList deleteParticipant(Participant participant) {
+		List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<>();
+		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
+			AccessCtrlMgr.getInstance().ensureDeleteCprRights(cpr);
+			cpr.delete();
+			registrations.add(CollectionProtocolRegistrationDetail.from(cpr, true));
+		}
+
+		ParticipantRegistrationsList result = new ParticipantRegistrationsList();
+		result.setParticipant(ParticipantDetail.from(participant, true));
+		result.setRegistrations(registrations);
+		return result;
 	}
 
 	//
@@ -587,10 +640,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		}
 		
 		CollectionProtocol cp = cpr.getCollectionProtocol();
-		boolean ppidReq = cp.isManualPpidEnabled() || StringUtils.isBlank(cp.getPpidFormat());
-		
+
 		String ppid = cpr.getPpid();
 		if (StringUtils.isBlank(ppid)) {
+			boolean ppidReq = cp.isManualPpidEnabled() || StringUtils.isBlank(cp.getPpidFormat());
 			if (ppidReq) {
 				ose.addError(CprErrorCode.PPID_REQUIRED);
 			}

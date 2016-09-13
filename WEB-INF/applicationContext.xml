@@ -705,7 +705,6 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpe.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr-multiple.xml</value>
-        <value>com/krishagni/catissueplus/core/biospecimen/schema/other-cpr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
       </list>
     </property>
@@ -838,12 +837,6 @@
           </bean>
         </entry>
         
-        <entry key="otherCpr">
-          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.ExistingParticipantCprImporter">
-            <property name="cprSvc" ref="cprSvc"/>
-          </bean>
-        </entry>
-
         <entry key="cprMultiple">
           <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.MultiCprImporter">
             <property name="cprSvc" ref="cprSvc"/>

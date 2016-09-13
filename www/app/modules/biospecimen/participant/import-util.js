@@ -28,19 +28,18 @@ angular.module('os.biospecimen.participant')
         importTypes = [
           {
             group: group, type: 'cprMultiple', title: 'participant.registrations',
-            showImportType: false, importType: 'CREATE'
-          },
+            showImportType: true, importType: 'CREATE'
+          }
+        ]
+      } else {
+        importTypes = [
           {
-            group: group, type: 'otherCpr', title: 'participant.reg_to_other_protocols',
-            showImportType: false, importType: 'CREATE'
+            group: group, type: 'cpr', title: 'participant.list'
           }
         ]
       }
 
       importTypes = importTypes.concat([
-        {
-          group: group, type: 'cpr', title: 'participant.list'
-        },
         {
           group: group, type: 'consent', title: 'participant.consents',
           showImportType: false, csvType: 'MULTIPLE_ROWS_PER_OBJ', importType: 'UPDATE'

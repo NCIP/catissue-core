@@ -23,9 +23,10 @@ public class MultiCprImporter implements ObjectImporter<ParticipantRegistrations
 
 			if (detail.isCreate()) {
 				return cprSvc.createRegistrations(cprReq);
+			} else {
+				return cprSvc.updateRegistrations(cprReq);
 			}
 
-			return null;
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

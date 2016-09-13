@@ -26,6 +26,11 @@
         <caption>#getMessage("participant_registration_date")</caption>
         <attribute>registrationDate</attribute>
       </field>
+
+      <field>
+        <caption>#getMessage("participant_activity_status")</caption>
+        <attribute>activityStatus</attribute>
+      </field>
     </record>
 
     <record>

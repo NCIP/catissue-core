@@ -32,7 +32,7 @@ public interface CollectionProtocolRegistrationService {
 	
 	public ResponseEvent<ParticipantRegistrationsList> createRegistrations(RequestEvent<ParticipantRegistrationsList> req);
 	
-	public ResponseEvent<ParticipantRegistrationsList> registerToOtherProtocols(RequestEvent<ParticipantRegistrationsList> req);
+	public ResponseEvent<ParticipantRegistrationsList> updateRegistrations(RequestEvent<ParticipantRegistrationsList> req);
 	
 	//
 	// TODO: Requires review

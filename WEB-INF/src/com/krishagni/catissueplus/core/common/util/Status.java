@@ -1,6 +1,8 @@
 
 package com.krishagni.catissueplus.core.common.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class Status {
 
 	private String statusName;
@@ -39,7 +41,15 @@ public final class Status {
 	public int getStatusNo() {
 		return statusNo;
 	}
-	
+
+	public static boolean isDisabledStatus(String status) {
+		if (StringUtils.isBlank(status)) {
+			return false;
+		}
+
+		return status.equals(ACTIVITY_STATUS_DISABLED.getStatus());
+	}
+
 	public static boolean isValidActivityStatus(String status) {
 		return status.equals(ACTIVITY_STATUS_ACTIVE.statusName) || 
 				status.equals(ACTIVITY_STATUS_DISABLED.statusName) ||

@@ -372,10 +372,8 @@
 
     "consents": "Consents",
     "registrations": "Participant Registrations",
-    "reg_to_other_protocols": "Register to Other Protocols",
     "master_specimens": "Master Specimens",
     "registered_cps": "Registered Protocols",
-    "other_cps": "Other Protocols",
     
     "buttons": {
       "register": "Add Participant",

@@ -105,6 +105,10 @@ public class CollectionProtocolRegistration {
 		this.collectionProtocol = collectionProtocol;
 	}
 
+	public String getCpShortTitle() {
+		return getCollectionProtocol().getShortTitle();
+	}
+
 	@NotAudited
 	public Collection<Visit> getVisits() {
 		return visits;
