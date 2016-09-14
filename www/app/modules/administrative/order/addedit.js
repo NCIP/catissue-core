@@ -44,7 +44,7 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     }
 
     function loadDps(name) {
-      var filterOpts = {activityStatus: 'Active', query: name};
+      var filterOpts = {activityStatus: 'Active', query: name, excludeExpiredDps: true};
       if (!!spmnRequest) {
         filterOpts.receivingInstitute = spmnRequest.requestorInstitute;
       }

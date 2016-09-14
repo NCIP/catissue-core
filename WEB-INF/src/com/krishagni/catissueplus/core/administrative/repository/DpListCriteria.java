@@ -13,6 +13,8 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	private String receivingInstitute;
 	
 	private Set<Long> siteIds;
+
+	private boolean excludeExpiredDps;
 	
 	private String activityStatus;
 
@@ -54,6 +56,15 @@ public class DpListCriteria extends AbstractListCriteria<DpListCriteria> {
 	
 	public DpListCriteria siteIds(Set<Long> siteIds) {
 		this.siteIds = siteIds;
+		return self();
+	}
+
+	public boolean excludeExpiredDps() {
+		return excludeExpiredDps;
+	}
+
+	public DpListCriteria excludeExpiredDps(boolean excludeExpiredDps) {
+		this.excludeExpiredDps = excludeExpiredDps;
 		return self();
 	}
 	

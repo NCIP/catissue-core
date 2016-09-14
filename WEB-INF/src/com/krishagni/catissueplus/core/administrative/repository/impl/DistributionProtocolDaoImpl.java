@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.repository.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionProtoco
 import com.krishagni.catissueplus.core.administrative.repository.DistributionProtocolDao;
 import com.krishagni.catissueplus.core.administrative.repository.DpListCriteria;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtocol> implements DistributionProtocolDao {
 
@@ -163,6 +165,7 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		addPiCondition(query, crit);
 		addInstCondition(query, crit);
 		addDistSitesCondition(query, crit);
+		addExpiredDpsCondition(query, crit);
 		addActivityStatusCondition(query, crit);
 		return query;
 	}
@@ -194,6 +197,17 @@ public class DistributionProtocolDaoImpl extends AbstractDao<DistributionProtoco
 		query.createAlias("distributingSites", "distSites");
 		addSitesCondition(query, siteIds);
 		query.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+	}
+
+	private void addExpiredDpsCondition(Criteria query, DpListCriteria crit) {
+		if (!crit.excludeExpiredDps()) {
+			return;
+		}
+
+		Date today = Utility.chopTime(Calendar.getInstance().getTime());
+		query.add(Restrictions.or(
+			Restrictions.isNull("endDate"),
+			Restrictions.ge("endDate", today)));
 	}
 	
 	private void addActivityStatusCondition(Criteria query, DpListCriteria crit) {

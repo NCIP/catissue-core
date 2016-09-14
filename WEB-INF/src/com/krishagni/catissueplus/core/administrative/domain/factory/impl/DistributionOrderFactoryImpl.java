@@ -35,6 +35,7 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.NumUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	private DaoFactory daoFactory;
@@ -123,7 +124,14 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 			ose.addError(DistributionOrderErrorCode.INVALID_DP_FOR_REQ, dp.getShortTitle(), request.getId());
 			return;
 		}
-		
+
+		Date dpEndDate = Utility.chopTime(dp.getEndDate());
+		Date today = Utility.chopTime(Calendar.getInstance().getTime());
+		if (dpEndDate != null && today.after(dpEndDate)) {
+			ose.addError(DistributionProtocolErrorCode.EXPIRED, dp.getShortTitle());
+			return;
+		}
+
 		order.setDistributionProtocol(dp);
 	}
 

@@ -29,7 +29,9 @@ public enum DistributionProtocolErrorCode implements ErrorCode {
 	
 	DISTRIBUTING_SITES_REQUIRED,
 	
-	PI_COORD_CANNOT_BE_SAME;
+	PI_COORD_CANNOT_BE_SAME,
+
+	EXPIRED;
 
 	@Override
 	public String code() {

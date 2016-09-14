@@ -29,7 +29,6 @@ import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Utility;
-import com.krishagni.catissueplus.core.de.events.FormCtxtSummary;
 
 @Controller
 @RequestMapping("/distribution-protocols")
@@ -64,6 +63,9 @@ public class DistributionProtocolController {
 
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
 			boolean includeStats,
+
+			@RequestParam(value = "excludeExpiredDps", required = false, defaultValue = "false")
+			boolean excludeExpiredDps,
 			
 			@RequestParam(value = "activityStatus", required = false)
 			String activityStatus) {
@@ -76,6 +78,7 @@ public class DistributionProtocolController {
 			.piId(piId)
 			.receivingInstitute(receivingInstitute)
 			.includeStat(includeStats)
+			.excludeExpiredDps(excludeExpiredDps)
 			.activityStatus(activityStatus);
 		
 		ResponseEvent<List<DistributionProtocolDetail>> resp = dpSvc.getDistributionProtocols(getRequest(criteria));
