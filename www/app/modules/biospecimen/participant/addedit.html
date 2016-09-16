@@ -190,31 +190,29 @@
       </div>
     </div>
 
-    <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
-      <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator"> 
-        <div class="col-xs-3 col-xs-offset-3">
-          <ui-select name="siteName" ng-model="pmi.siteName" 
-            ng-click="addPmiIfLast($index)" ng-required="!!pmi.mrn"
-            on-select="onSiteSelect()">
-            <ui-select-match placeholder="{{'participant.select_site' | translate}}">{{$select.selected}}</ui-select-match>
-            <ui-select-choices repeat="site in sites | filter: $select.search">
-              <span ng-bind-html="site | highlight: $select.search"></span>
-            </ui-select-choices>
-          </ui-select>
-          <div os-field-error field="pmiForm.siteName"></div>
-        </div>
+    <div os-unique-items>
+      <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
+        <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator">
+          <div class="col-xs-3 col-xs-offset-3">
+            <os-sites name="siteName" ng-model="pmi.siteName" placeholder="{{'participant.select_site' | translate}}"
+              ng-required="!!pmi.mrn" ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
+              os-unique-item>
+            </os-sites>
+            <div os-field-error field="pmiForm.siteName"></div>
+          </div>
 
-        <div class="col-xs-3">
-          <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
-            placeholder="{{'participant.mrn_short' | translate}}">
-        </div>
+          <div class="col-xs-3">
+            <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
+              placeholder="{{'participant.mrn_short' | translate}}">
+          </div>
 
-        <div class="col-xs-1">
-          <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
-            <span class="glyphicon glyphicon-trash"></span>
-          </button>
-        </div>
-      </ng-form>
+          <div class="col-xs-1">
+            <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
+      </div>
     </div>
 
     <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">

@@ -34,13 +34,13 @@ angular.module('os.administrative.models.site', ['os.common.models'])
       return getSites(opts);
     }
 
-    Site.listForUsers = function(opName) {
-      var opts = {resource: 'User', operation: opName};
+    Site.listForUsers = function(opName, searchTerm) {
+      var opts = {resource: 'User', operation: opName, name: searchTerm};
       return getSites(opts);
     }
 
-    Site.listForInstitute = function(instituteName, listAll) {
-       var opts = {institute: instituteName, listAll: listAll || false};
+    Site.listForInstitute = function(instituteName, listAll, searchTerm) {
+       var opts = {institute: instituteName, listAll: listAll || false, name: searchTerm};
        return getSites(opts);
     }
     
@@ -49,8 +49,6 @@ angular.module('os.administrative.models.site', ['os.common.models'])
     }
 
     function getSites(opts) {
-      opts = opts || {};
-      opts.maxResults = 200;
       return Site.query(opts).then(
         function(sites) {
           return sites.map(function(site) { return site.name; });

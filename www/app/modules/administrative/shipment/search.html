@@ -15,17 +15,15 @@
       <div os-md-input ng-model="filterOpts.recvInstitute" placeholder="{{'shipments.receiving_institute' | translate}}">
         <os-select ng-model="filterOpts.recvInstitute" class="form-control"
           list="instituteNames" os-md-input placeholder="{{'shipments.receiving_institute' | translate}}"
-          on-select="onInstituteSelect(filterOpts.recvInstitute)">
+          on-select="onInstituteSelect()">
         </os-select>
       </div>
     </div>
     
     <div class="form-group">
-      <div os-md-input ng-model="filterOpts.recvSite" placeholder="{{'shipments.receiving_site' | translate}}">
-        <os-select ng-model="filterOpts.recvSite" class="form-control"
-          list="siteNames" os-md-input placeholder="{{'shipments.receiving_site' | translate}}">
-        </os-select>
-      </div>
+      <os-sites md-type="true" ng-model="filterOpts.recvSite" placeholder="{{'shipments.receiving_site' | translate}}"
+        institute="filterOpts.recvInstitute" list-all="true">
+      </os-sites>
     </div>
 
     <!--  will be added later with backend code

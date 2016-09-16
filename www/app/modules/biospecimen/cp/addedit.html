@@ -23,10 +23,10 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="cp.repositories">Repositories</label>
         <div class="col-xs-6">
-          <os-select multiple name="repositoryNames" ng-model="cp.repositoryNames" list="sites"
-            class="form-control" placeholder="{{'cp.repositories' | translate}}" 
+          <os-sites multiple name="repositoryNames" ng-model="cp.repositoryNames"
+            placeholder="{{'cp.repositories' | translate}}" resource="CollectionProtocol" operation="{{op}}"
             on-select="onRepositorySelect($item)" on-remove="onRepositoryRemove($item)" required>
-          </os-select>
+          </os-sites>
           <div os-field-error field="cpForm.repositoryNames"></div>
         </div>
       </div>

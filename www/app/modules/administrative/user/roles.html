@@ -73,7 +73,7 @@
       <div class="col-xs-4">
         <div class="form-group">
           <os-select os-md-input ng-model="currentRole.site" list="sitePvs" name="site" on-change="loadCps"
-            placeholder="{{'user.role.site' | translate}}" required>
+            placeholder="{{'user.role.site' | translate}}" refresh="loadSites($select.search)" required>
           </os-select>
           <div os-field-error field="pform.site"></div>
         </div>

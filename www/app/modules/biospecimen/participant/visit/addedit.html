@@ -100,9 +100,9 @@
     <div class="form-group" ng-if="currVisit.status != 'Missed Collection'">
       <label class="col-xs-3 control-label" translate="visits.visit_site">Site of Visit</label>
       <div class="col-xs-6">
-        <os-select name="site" ng-model="currVisit.site" list="sites" 
-          ng-required="currVisit.status != 'Missed Collection'" placeholder="{{'visits.visit_site' | translate}}"> 
-        </os-select>
+        <os-sites name="site" ng-model="currVisit.site" list-all="true"
+          ng-required="currVisit.status != 'Missed Collection'" placeholder="{{'visits.visit_site' | translate}}">
+        </os-sites>
         <div os-field-error field="vform.site"></div>
       </div>
     </div>

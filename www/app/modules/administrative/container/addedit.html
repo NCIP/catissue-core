@@ -101,9 +101,9 @@
         <span translate="container.parent_site">Parent Site</span>
       </label>
       <div class="col-xs-6">
-        <os-select ng-model="container.siteName" list="sites" placeholder="{{'container.site' | translate}}"
-          name="parentSite" on-change="loadAllCps" required>
-        </os-select>
+        <os-sites name="parentSite" ng-model="container.siteName" placeholder="{{'container.site' | translate}}"
+          on-select="loadAllCps()" resource="StorageContainer" operation="{{ctx.op}}" required>
+        </os-sites>
         <div os-field-error field="cform.parentSite"></div>
       </div>
     </div>

@@ -23,34 +23,33 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
     }
 
     function loadPvs() {
+      $scope.roles = [];
+      Role.query().then(
+        function(result) {
+          $scope.roles = result.map(function(r) { return r.name; });
+        }
+      );
+    }
+
+    $scope.loadSites = function(searchTerm) {
       var query = undefined;
       if ($scope.currentUser.admin) {
-        query = Site.listForInstitute($scope.user.instituteName)
+        query = Site.listForInstitute($scope.user.instituteName, false, searchTerm);
       } else {
-        query = Site.listForUsers('Update');
+        query = Site.listForUsers('Update', searchTerm);
       }
 
       $scope.sites = [$scope.all];
       query.then(function(sites) {
         $scope.sites = $scope.sites.concat(sites);
+        setSitePvs();
       });
-      setSitePvs();
-
-      $scope.roles = [];
-      Role.query().then(
-        function(result) {
-          angular.forEach(result, function(role) {
-            $scope.roles.push(role.name);
-          });
-        }
-      );
     }
     
     $scope.showAddRole = function() {
       $scope.addMode = true;
       $scope.currentRole = user.newRole();
       $scope.cps = [];
-      setSitePvs();
     }
 
     $scope.showEditRole = function(role) {
