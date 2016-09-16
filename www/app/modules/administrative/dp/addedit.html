@@ -43,7 +43,7 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.receiving_institute">Receiving Institute</label>
         <div class="col-xs-6">
-          <os-select name="institute" ng-model="distributionProtocol.instituteName" 
+          <os-select name="institute" ng-model="distributionProtocol.instituteName"
             list="institutes" select-prop="name" display-prop="name" on-select="onInstituteSelect()"
             placeholder="{{'dp.receiving_institute' | translate}}" required></os-select>
           <div os-field-error field="dpForm.institute"></div>
@@ -53,9 +53,10 @@
       <div class="form-group">
         <label class="control-label col-xs-3" translate="dp.receiving_site">Receiving Site</label>
         <div class="col-xs-6">
-          <os-select name="defReceivingSite" ng-model="distributionProtocol.defReceivingSiteName"
-            list="sites" placeholder="{{'dp.receiving_site' | translate}}">
-          </os-select>
+          <os-sites name="defReceivingSite" ng-model="distributionProtocol.defReceivingSiteName"
+            institute="distributionProtocol.instituteName" list-all="true"
+            placeholder="{{'dp.receiving_site' | translate}}">
+          </os-sites>
         </div>
       </div>
       
@@ -132,10 +133,10 @@
             </div>
           
             <div class="col-xs-3">
-              <os-select multiple name="distSites" ng-model="site.sites" placeholder="{{'dp.sites' | translate}}"
-                list="instSiteMap[site.instituteName]" on-select="onDistSiteSelect($index)"
-                on-remove="onDistSiteRemove($index)" required>
-              </os-select>
+              <os-sites multiple name="distSites" ng-model="site.sites" placeholder="{{'dp.sites' | translate}}"
+                institute="site.instituteName" on-select="onDistSiteSelect($index)" show-all-sites="true"
+                list-all="true" required>
+              </os-sites>
               <div os-field-error field="dpSitesForm.distSites"></div>
             </div>
 

@@ -29,26 +29,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     };
 
     function loadPvs() {
-      var op = !!$scope.cpr.id ? 'Update' : 'Create';
-
-      $scope.sites = [];
-      Site.listForParticipants(op, true).then(function(sites) {
-        availableSites = sites;
-        filterAvailableSites();
-      });
-
+      $scope.op = !!$scope.cpr.id ? 'Update' : 'Create';
       $scope.genders = PvManager.getPvs('gender');
       $scope.vitalStatuses = PvManager.getPvs('vital-status');
     };
-
-    function filterAvailableSites() {
-      var siteNames = $scope.cpr.getMrnSites();
-      $scope.sites = availableSites.filter(
-        function(site) {
-          return siteNames.indexOf(site) == -1;
-        }
-      );
-    }
 
     function registerParticipant() {
       var formCtrl = $scope.deFormCtrl.ctrl;
@@ -91,14 +75,11 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     $scope.removePmi = function(pmi) {
       var participant = $scope.cpr.participant;
       participant.removePmi(pmi);
-      filterAvailableSites();    
 
       if (participant.pmis.length == 0) {
         participant.addPmi(participant.newPmi());
       }
     };
-
-    $scope.onSiteSelect = filterAvailableSites;
 
     $scope.register = function() {
       var participant = $scope.cpr.participant;

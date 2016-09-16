@@ -760,6 +760,7 @@
     "type": "Type",
     "address": "Address",
     "cp_count": "Collection Protocols",
+    "all_sites": "All current and future sites",
 
     "bulk_import": "Import Sites",
     "bulk_import_jobs": "Import Sites Job List",
@@ -810,7 +811,6 @@
     "confirm_close_title": "Closing {{shortTitle}} confirmation",
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
     "add_requirement": "Add Specimen Requirement",
-    "all_sites": "All current and future sites",
     "dist_spmns_count": "Distributed Specimens",
 
     "tooltip": {

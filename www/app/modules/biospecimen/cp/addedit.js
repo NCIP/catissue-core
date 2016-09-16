@@ -6,6 +6,8 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
 
     function init() {
       $scope.cp = cp;
+      $scope.op = !cp.id ? 'Create' : 'Update';
+      $scope.cp.repositoryNames = cp.getRepositoryNames();
 
       $scope.sopDocUploader = {ctrl: {}};
       $scope.sopDocUploadUrl = $sce.trustAsResourceUrl(CollectionProtocol.getSopDocUploadUrl());
@@ -13,8 +15,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
       $scope.deFormCtrl = {};
       $scope.extnOpts = ExtensionsUtil.getExtnOpts(cp, extensionCtxt);
       $scope.coordinators = [];
-
-      loadPvs();
 
       if (!!cp.id && $stateParams.mode == 'copy') {
         $scope.mode = 'copy';
@@ -30,17 +30,6 @@ angular.module('os.biospecimen.cp.addedit', ['os.biospecimen.models', 'os.admini
         }
       }
     };
-
-    function loadPvs() {
-      $scope.sites = [];
-      var op = !$scope.cp.id ? 'Create' : 'Update';
-      var opts = {resource:'CollectionProtocol', operation: op};
-      Site.list(opts).then(function(sites) {
-         $scope.sites = sites;
-         
-         $scope.cp.repositoryNames = cp.getRepositoryNames();
-      });
-    }
 
     function saveCp(cp) {
       var q;

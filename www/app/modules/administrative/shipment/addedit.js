@@ -26,7 +26,6 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       }
 
       loadInstitutes();
-      loadSendingSites();
       setUserAndSiteList(shipment);
     }
     
@@ -42,15 +41,14 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       );
     }
 
-    function loadSites(instituteName) {
-      Site.listForInstitute(instituteName, true).then(
+    function loadRecvSites(instituteName, searchTerm) {
+      return Site.listForInstitute(instituteName, true, searchTerm).then(
         function(sites) {
-          $scope.sites = sites;
           if (!spmnRequest) {
-            return;
+            return sites;
           }
 
-          $scope.sites = cp.cpSites.map(
+          return cp.cpSites.map(
             function(cpSite) {
               return cpSite.siteName;
             }
@@ -62,16 +60,12 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         }
       );
     }
-    
-    function loadSendingSites() {
+
+    function loadSendingSites(searchTerm) {
       if (!spmnRequest) {
-        Site.list().then(
-          function(sites) {
-            $scope.sendingSites = sites;
-          }
-        );
+        return Site.list({name: searchTerm});
       } else {
-        $scope.sendingSites = cp.cpSites.map(
+        return cp.cpSites.map(
           function(cpSite) {
             return cpSite.siteName;
           }
@@ -87,7 +81,6 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       var instituteName = shipment.receivingInstitute;
       if (instituteName) {
         setUserFilterOpts(instituteName);
-        loadSites(instituteName);
       }
     }
 
@@ -164,6 +157,10 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       );
     };
 
+    $scope.loadSendingSites = loadSendingSites;
+
+    $scope.loadRecvSites = loadRecvSites;
+
     $scope.passThrough = function() {
       return true;
     }
@@ -172,7 +169,6 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       $scope.shipment.receivingSite = undefined;
       $scope.shipment.notifyUsers = [];
 
-      loadSites(instituteName);
       setUserFilterOpts(instituteName);
     }
 

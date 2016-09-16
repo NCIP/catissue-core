@@ -91,9 +91,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="orders.receiving_site">Receiving Site</label>
       <div class="col-xs-6">
-        <os-select name="site" ng-model="order.siteName" 
-          list="siteList" placeholder="{{'orders.receiving_site' | translate}}">
-        </os-select>
+        <os-sites name="site" ng-model="order.siteName" institute="order.instituteName" list-all="true"
+          placeholder="{{'orders.receiving_site' | translate}}">
+        </os-sites>
       </div>
     </div>
     

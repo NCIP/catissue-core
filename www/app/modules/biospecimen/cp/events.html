@@ -122,8 +122,9 @@
     </div>
 
     <div class="form-group clearfix">
-      <os-select os-md-input name="defaultSite" ng-model="event.defaultSite" list="sites" 
-        placeholder="{{'cp.default_site' | translate}}"> </os-select>
+      <os-sites name="defaultSite" md-type="true" ng-model="event.defaultSite"
+        placeholder="{{'cp.default_site' | translate}}">
+      </os-sites>
     </div>
 
     <div class="form-group clearfix">

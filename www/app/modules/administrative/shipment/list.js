@@ -30,14 +30,6 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
         }
       );
     }
-    
-    function loadSites(institute) {
-      Site.listForInstitute(institute, true).then(
-        function(sites) {
-          $scope.siteNames = sites;
-        }
-      );
-    }
 
     function getShipmentsCount() {
       return Shipment.getCount($scope.filterOpts);
@@ -47,9 +39,8 @@ angular.module('os.administrative.shipment.list', ['os.administrative.models'])
       $state.go('shipment-detail.overview', {shipmentId: shipment.id});
     };
     
-    $scope.onInstituteSelect = function(institute) {
+    $scope.onInstituteSelect = function() {
       $scope.filterOpts.recvSite = undefined;
-      loadSites(institute);
     }
 
     $scope.clearFilters = function() {

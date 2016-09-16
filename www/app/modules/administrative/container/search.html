@@ -9,9 +9,9 @@
         placeholder="{{'container.name' | translate}}">
     </div>
     <div class="form-group">
-      <os-select os-md-input ng-model="containerFilterOpts.site" list="sites"
+      <os-sites md-type="true" ng-model="containerFilterOpts.site" resource="StorageContainer"
         placeholder="{{'container.site' | translate}}">
-      </os-select>
+      </os-sites>
     </div>
   </div>
 </div>

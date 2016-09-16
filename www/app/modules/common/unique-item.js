@@ -80,7 +80,11 @@ angular.module('openspecimen')
       require: ['^form', 'ngModel', '^osUniqueItems'],
   
       link: function(scope, elm, attrs, ctrls) {
-        if (elm[0].tagName == 'DIV') {
+        //
+        // Workaround to ignore select container/div that have ng-model
+        // associated with them...
+        //
+        if (elm[0].tagName == 'DIV' && !elm[0].firstElementChild.classList.contains('ui-select-container')) {
           return;
         }
 

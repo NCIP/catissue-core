@@ -63,14 +63,6 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
         }
       );
     }
-
-    function loadSites(instituteName) {
-      Site.listForInstitute(instituteName, true).then(
-        function(sites) {
-          $scope.siteList = sites;
-        }
-      );    
-    }
     
     function setUserFilterOpts(institute) {
       $scope.userFilterOpts = {institute: institute};
@@ -79,7 +71,6 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     function setUserAndSiteList(order) {
       var instituteName = order.instituteName;
       setUserFilterOpts(instituteName);
-      loadSites(instituteName);
     }
 
     function getOrderItems(specimens) {
@@ -225,7 +216,6 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
     
     $scope.onInstSelect = function () {
       var instName = $scope.order.instituteName;
-      loadSites(instName);
       setUserFilterOpts(instName);
       $scope.order.siteName = '';
       $scope.order.requester = '';

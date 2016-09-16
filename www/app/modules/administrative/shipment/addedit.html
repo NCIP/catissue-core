@@ -89,9 +89,10 @@
       <div class="col-xs-6" ng-switch on="shipment.status">
         <div ng-switch-when="Shipped" class="form-value">{{shipment.sendingSite}}</div>
         <div ng-switch-default>
-          <os-select name="sendingSite" ng-model="shipment.sendingSite" list="sendingSites"
-            placeholder="{{'shipments.sending_site' | translate}}" required>
-          </os-select>
+          <os-sites name="sendingSite" ng-model="shipment.sendingSite"
+            placeholder="{{'shipments.sending_site' | translate}}"
+            list-fn="loadSendingSites(searchTerm)" required>
+          </os-sites>
           <div os-field-error field="shipForm.sendingSite"></div>
         </div>
       </div>
@@ -105,7 +106,7 @@
         <div ng-switch-when="Shipped" class="form-value">{{shipment.receivingInstitute}}</div>
         <div ng-switch-default>
           <os-select name="receivingInstitute" ng-model="shipment.receivingInstitute" list="instituteNames"
-            placeholder="{{'shipments.receiving_institute' | translate}}" 
+            placeholder="{{'shipments.receiving_institute' | translate}}"
             on-select="onInstituteSelect(shipment.receivingInstitute)" required ng-disabled="!!shipment.request">
           </os-select>
           <div os-field-error field="shipForm.receivingInstitute"></div>
@@ -118,15 +119,15 @@
       <div class="col-xs-6" ng-switch on="shipment.status">
         <div ng-switch-when="Shipped" class="form-value">{{shipment.receivingSite}}</div>
         <div ng-switch-default>
-          <os-select name="receivingSite" ng-model="shipment.receivingSite" 
-            list="sites" placeholder="{{'shipments.receiving_site' | translate}}" 
-            on-select="onSiteSelect(shipment.receivingSite)" required>
-          </os-select>
+          <os-sites name="receivingSite" ng-model="shipment.receivingSite" institute="shipment.receivingInstitute"
+            placeholder="{{'shipments.receiving_site' | translate}}"
+            list-fn="loadRecvSites(shipment.receivingInstitute, searchTerm)" on-select="onSiteSelect($item)" required>
+          </os-sites>
           <div os-field-error field="shipForm.receivingSite"></div>
         </div>
       </div>
     </div>
-    
+
     <div class="form-group" ng-if="shipment.status != 'Shipped'">
       <label class="control-label col-xs-3" translate="shipments.notify_users">Notify Users</label>
       <div class="col-xs-6">
