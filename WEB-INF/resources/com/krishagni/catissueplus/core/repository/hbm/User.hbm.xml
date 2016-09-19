@@ -121,9 +121,9 @@
         u.identifier
     </sql-query>
 
-    <query name="getActiveUsers">
+    <query name="getActiveUsersEmailIds">
       select
-        distinct user
+        distinct user.emailAddress
       from
         com.krishagni.catissueplus.core.auth.domain.LoginAuditLog log
         join log.user user

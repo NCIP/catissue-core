@@ -153,9 +153,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public List<User> getActiveUsers(Date startDate, Date endDate) {
+	@SuppressWarnings("unchecked")
+	public List<String> getActiveUsersEmailIds(Date startDate, Date endDate) {
 		return sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_ACTIVE_USERS)
+			.getNamedQuery(GET_ACTIVE_USERS_EMAIL_IDS)
 			.setTimestamp("startDate", startDate)
 			.setTimestamp("endDate", endDate)
 			.list();
@@ -335,5 +336,5 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 
-	private static final String GET_ACTIVE_USERS = FQN + ".getActiveUsers";
+	private static final String GET_ACTIVE_USERS_EMAIL_IDS = FQN + ".getActiveUsersEmailIds";
 }

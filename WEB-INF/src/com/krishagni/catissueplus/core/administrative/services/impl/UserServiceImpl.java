@@ -440,10 +440,11 @@ public class UserServiceImpl implements UserService {
 			ose.checkAndThrow();
 
 			//
-			// For now announcements are broadcast using emails.
+			// For now announcements are broadcast using emails;
+			// therefore fetching only email IDs
 			// Later we can broadcast using SMS, WhatsApp, Facebook, Twitter, and anything
 			//
-			emailAnnouncements(detail, getActiveUsers());
+			emailAnnouncements(detail, getActiveUsersEmailIds());
 			return ResponseEvent.response(true);
 		} catch(OpenSpecimenException ose){
 			return ResponseEvent.error(ose);
@@ -665,9 +666,9 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	private List<User> getActiveUsers() {
+	private List<String> getActiveUsersEmailIds() {
 		Date today = Calendar.getInstance().getTime();
-		return daoFactory.getUserDao().getActiveUsers(getActiveUserLastLoginCutoff(today), today);
+		return daoFactory.getUserDao().getActiveUsersEmailIds(getActiveUserLastLoginCutoff(today), today);
 	}
 
 	private Date getActiveUserLastLoginCutoff(Date present) {
@@ -681,9 +682,9 @@ public class UserServiceImpl implements UserService {
 		return ConfigUtil.getInstance().getIntSetting(ADMIN_MOD, ACTIVE_USER_LOGIN_DAYS_CFG, 90);
 	}
 
-	private void emailAnnouncements(AnnouncementDetail detail, List<User> users) {
+	private void emailAnnouncements(AnnouncementDetail detail, List<String> emailAddresses) {
 		String[] adminEmailAddr = {ConfigUtil.getInstance().getAdminEmailId()};
-		String[] rcpts = users.stream().map(User::getEmailAddress).toArray(String[]::new);
+		String[] rcpts = emailAddresses.toArray(new String[emailAddresses.size()]);
 
 		Map<String, Object> props = new HashMap<>();
 		props.put("user", AuthUtil.getCurrentUser());
