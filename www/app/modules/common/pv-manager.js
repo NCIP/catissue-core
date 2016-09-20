@@ -110,7 +110,7 @@ angular.module('openspecimen')
       'collection-procedure': 'collection_procedure',
       'collection-container': 'collection_container',
       'vital-status'        : 'vital_status',
-      'received-quality'    : 'received_quality',
+      'received-quality'    : 'receive_quality',
       'ethnicity'           : 'ethnicity',
       'race'                : 'race',
       'anatomic-site'       : 'anatomic_site',
