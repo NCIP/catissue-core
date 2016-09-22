@@ -10,6 +10,8 @@ public class ResponseEvent<T> {
 	private T payload;
 	
 	private boolean forceTxCommitEnabled;
+
+	private boolean rollback;
 	
 	private OpenSpecimenException error; 
 	
@@ -48,6 +50,14 @@ public class ResponseEvent<T> {
 
 	public void setForceTxCommitEnabled(boolean forceTxCommitEnabled) {
 		this.forceTxCommitEnabled = forceTxCommitEnabled;
+	}
+
+	public boolean isRollback() {
+		return rollback;
+	}
+
+	public void setRollback(boolean rollback) {
+		this.rollback = rollback;
 	}
 
 	public void throwErrorIfUnsuccessful() {

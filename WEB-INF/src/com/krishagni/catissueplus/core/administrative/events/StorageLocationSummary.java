@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -22,6 +24,8 @@ public class StorageLocationSummary implements Serializable {
 	private String positionY;
 
 	private int position;
+
+	private String reservationId;
 
 	public Long getId() {
 		return id;
@@ -71,6 +75,14 @@ public class StorageLocationSummary implements Serializable {
 		this.position = position;
 	}
 
+	public String getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(String reservationId) {
+		this.reservationId = reservationId;
+	}
+
 	public static StorageLocationSummary from(StorageContainerPosition position) {
 		if (position == null) {
 			return null;
@@ -83,6 +95,11 @@ public class StorageLocationSummary implements Serializable {
 		storageLocation.setPositionX(position.getPosOne());
 		storageLocation.setPositionY(position.getPosTwo());
 		storageLocation.setPosition(position.getPosition());
+		storageLocation.setReservationId(position.getReservationId());
 		return storageLocation;
+	}
+
+	public static List<StorageLocationSummary> from(List<StorageContainerPosition> positions) {
+		return positions.stream().map(StorageLocationSummary::from).collect(Collectors.toList());
 	}
 }

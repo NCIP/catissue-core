@@ -1,8 +1,10 @@
 
 angular.module('os.biospecimen.specimen.addderivative', [])
   .controller('AddDerivativeCtrl', function(
-    $scope, specimen, cpr, visit, extensionCtxt, hasDict,
-    SpecimenUtil, ExtensionsUtil, Alerts) {
+    $scope, cp, specimen, cpr, visit, extensionCtxt, hasDict,
+    SpecimenUtil, Container, ExtensionsUtil, Alerts) {
+
+    var autoAllocator;
 
     function init() {
       $scope.parentSpecimen = specimen;
@@ -25,7 +27,64 @@ angular.module('os.biospecimen.specimen.addderivative', [])
       }
 
       $scope.deFormCtrl = {};
+
+      autoAllocator = enableAutoAllocator();
+      $scope.$on('$destroy', cancelReservation);
     }
+
+    function enableAutoAllocator() {
+      $scope.autoAllocation = false;
+      if (!cp.containerSelectionStrategy) {
+        return undefined;
+      }
+
+      $scope.autoAllocation = true;
+      return $scope.$watch('derivative.type',
+        function(newType, oldType) {
+          if (newType == oldType) {
+            return;
+          }
+
+          var spmn = $scope.derivative;
+          var resvToCancel;
+          if (!!spmn.storageLocation) {
+            resvToCancel = spmn.storageLocation.reservationId;
+          }
+
+          Container.reservePositionForSpecimen(cp.id, spmn, resvToCancel).then(
+            function(position) {
+              spmn.storageLocation = position;
+            }
+          );
+        }
+      );
+    }
+
+    function disableAutoAllocator() {
+      if (autoAllocator) {
+        autoAllocator();
+        autoAllocator = undefined;
+      }
+
+      $scope.autoAllocation = false;
+    }
+
+    function cancelReservation() {
+      var loc = $scope.derivative.storageLocation;
+      if (!loc || !loc.reservationId) {
+        disableAutoAllocator();
+        return;
+      }
+
+      Container.cancelReservation(loc.reservationId).then(
+        function() {
+          $scope.derivative.storageLocation = {};
+          disableAutoAllocator();
+        }
+      );
+    }
+
+    $scope.cancelReservation = cancelReservation;
 
     $scope.toggleIncrParentFreezeThaw = function() {
       if ($scope.derivative.incrParentFreezeThaw) {

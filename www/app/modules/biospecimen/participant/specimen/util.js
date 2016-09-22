@@ -118,6 +118,10 @@ angular.module('os.biospecimen.specimen')
             scope.parentSpecimen.freezeThawCycles++;
           }
 
+          if (scope.derivative.storageLocation) {
+            delete scope.derivative.storageLocation.reservationId;
+          }
+
           scope.revertEdit();
         }
       );

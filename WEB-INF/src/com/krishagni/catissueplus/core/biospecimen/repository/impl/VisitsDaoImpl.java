@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
@@ -35,10 +33,9 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<VisitSummary> getVisits(VisitsListCriteria crit) {
-		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISITS_SUMMARY_BY_CPR_ID)
-				.setLong("cprId", crit.cprId())
-				.list();
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_VISITS_SUMMARY_BY_CPR_ID)
+			.setLong("cprId", crit.cprId())
+			.list();
 		
 		List<VisitSummary> visits = new ArrayList<VisitSummary>();
 		Map<String, VisitSummary> visitsMap = new HashMap<String, VisitSummary>();
@@ -61,7 +58,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 			visit.setStatus((String)row[6]);
 			visit.setVisitDate((Date)row[7]);
 			regDate = (Date)row[8];
-			visit.setMissedVisitReason((String)row[9]);
+			visit.setMissedReason((String)row[9]);
+			visit.setCpId((Long)row[10]);
 			visits.add(visit);
 
 			if (crit.includeStat()) {				

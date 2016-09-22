@@ -114,9 +114,10 @@
       name="position"
       class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"
       property-ref="occupyingContainer"
-      cascade="save-update"/>
+      cascade="save-update"
+      fetch="join"/>
 
-    <set name="occupiedPositions" table="OS_CONTAINER_POSITIONS" cascade="all-delete-orphan" batch-size="100" inverse="true">
+    <set name="occupiedPositions" table="OS_CONTAINER_POSITIONS" cascade="all-delete-orphan" inverse="true">
       <key column="STORAGE_CONTAINER_ID" not-null="true"/>
       <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"/>
     </set>
@@ -139,6 +140,22 @@
       where
         c.id = :containerId
         and pos.occupyingSpecimen is not null
+    </query>
+
+    <query name="deletePositionsByReservationIds">
+      delete from
+        com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition p
+      where
+        p.reservationId in (:reservationIds)
+    </query>
+
+    <query name="deleteReservationsOlderThanTime">
+      <![CDATA[
+        delete from
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition p
+        where
+          p.reservationTime < :expireTime
+      ]]>
     </query>
 
     <sql-query name="getAncestors">
@@ -203,6 +220,61 @@
         inner join os_container_positions p on p.occupying_container_id = s.identifier
       where
         s.parent_container_id = :parentId and s.activity_status != 'Disabled'
+    </sql-query>
+
+    <sql-query name="getLeastEmptyContainerId">
+      <return-scalar column="containerId" type="long"/>
+
+      select
+        c.identifier as containerId
+      from
+        os_storage_containers c
+        left join os_container_positions p on p.storage_container_id = c.identifier
+        left join os_stor_container_comp_cps allowed_cps on allowed_cps.storage_container_id = c.identifier
+      where
+        c.store_specimens = 1 and
+        c.activity_status = 'Active' and
+        (p.reservation_time is null or p.reservation_time > :reservedLaterThan) and
+        (
+          allowed_cps.cp_id is null or
+          allowed_cps.cp_id = :cpId or
+          (
+            select
+              count(*)
+            from
+              catissue_site_cp cp_site
+            where
+              cp_site.site_id = c.site_id and
+              cp_site.collection_protocol_id = :cpId
+          ) > 0
+        ) and
+        (
+          (
+            select
+              count(*)
+            from
+              os_stor_cont_comp_spec_classes
+            where
+              specimen_class = :specimenClass and
+              storage_container_id = c.identifier
+          ) > 0
+          or
+          (
+            select
+              count(*)
+            from
+              os_stor_cont_comp_spec_types
+            where
+              specimen_type = :specimenType and
+              storage_container_id = c.identifier
+          ) > 0
+        )
+      group by
+        c.identifier, c.no_of_rows, c.no_of_cols
+      having
+        (c.no_of_rows * c.no_of_cols - count(p.identifier)) > (:minFreeLocs - 1)
+      order by
+        (c.no_of_rows * c.no_of_cols - count(p.identifier))
     </sql-query>
   </class>
 </hibernate-mapping>

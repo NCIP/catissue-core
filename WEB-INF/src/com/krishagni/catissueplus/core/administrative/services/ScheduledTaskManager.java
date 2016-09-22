@@ -1,13 +1,20 @@
 package com.krishagni.catissueplus.core.administrative.services;
 
+import java.util.concurrent.ScheduledFuture;
+
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
 
 public interface ScheduledTaskManager {
-	public void schedule(ScheduledJob job);
+	void schedule(ScheduledJob job);
 	
-	public void schedule(Long jobId);
+	void schedule(Long jobId);
 
-	public void run(ScheduledJob job, String args);
+	void run(ScheduledJob job, String args);
 
-	public void cancel(ScheduledJob job);
+	void cancel(ScheduledJob job);
+
+	//
+	// for internal scheduled tasks
+	//
+	ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, int intervalInMinutes);
 }

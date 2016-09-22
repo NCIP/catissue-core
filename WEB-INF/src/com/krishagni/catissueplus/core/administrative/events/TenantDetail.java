@@ -1,6 +1,6 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
-public class PositionTenantDetail {
+public class TenantDetail {
 	private String containerName;
 	
 	private Long containerId;
@@ -10,6 +10,10 @@ public class PositionTenantDetail {
 	private String specimenType;
 	
 	private String specimenClass;
+
+	private String lineage;
+
+	private int numOfAliquots;
 
 	public String getContainerName() {
 		return containerName;
@@ -49,5 +53,21 @@ public class PositionTenantDetail {
 
 	public void setSpecimenClass(String specimenClass) {
 		this.specimenClass = specimenClass;
+	}
+
+	public String getLineage() {
+		return lineage;
+	}
+
+	public void setLineage(String lineage) {
+		this.lineage = lineage;
+	}
+
+	public int getNumOfAliquots() {
+		return numOfAliquots;
+	}
+
+	public void setNumOfAliquots(int numOfAliquots) {
+		this.numOfAliquots = numOfAliquots;
 	}
 }

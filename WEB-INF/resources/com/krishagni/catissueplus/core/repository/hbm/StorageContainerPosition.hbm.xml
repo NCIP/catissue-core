@@ -19,6 +19,10 @@
 
     <property name="posTwo" column="POS_TWO_STR"/>
 
+    <property name="reservationId" column="RESERVATION_ID"/>
+
+    <property name="reservationTime" column="RESERVATION_TIME"/>
+
     <many-to-one
       name="container"
       class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"

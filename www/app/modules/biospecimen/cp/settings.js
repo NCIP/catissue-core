@@ -18,6 +18,13 @@ angular.module('os.biospecimen.cp')
     });
 
     settings.addItem({
+      name: 'ContainerSettings',
+      state: 'cp-detail.settings.container',
+      key: 'cp.container.title',
+      caption: ''
+    });
+
+    settings.addItem({
       name: 'ReportSettings',
       state: 'cp-detail.settings.reporting',
       key: 'cp.reporting.title',

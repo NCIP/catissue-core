@@ -722,11 +722,28 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 
 		StorageContainerPosition position = null;
 		if (StringUtils.isNotBlank(posOne) && StringUtils.isNotBlank(posTwo)) {
-			if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
-				position = container.createPosition(posOne, posTwo);
-				container.setLastAssignedPos(position);
+			if (StringUtils.isBlank(location.getReservationId())) {
+				if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
+					position = container.createPosition(posOne, posTwo);
+					container.setLastAssignedPos(position);
+				} else {
+					ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+				}
 			} else {
-				ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+				position = container.getReservedPosition(posTwo, posOne, location.getReservationId());
+				if (position != null) {
+					container.getOccupiedPositions().remove(position);
+					position = container.createPosition(posOne, posTwo);
+				} else if (container.canSpecimenOccupyPosition(specimen.getId(), posOne, posTwo)) {
+					position = container.createPosition(posOne, posTwo);
+				} else {
+					// TODO: no free space, improve error code
+					ose.addError(StorageContainerErrorCode.NO_FREE_SPACE, container.getName());
+				}
+
+				if (position != null) {
+					container.setLastAssignedPos(position);
+				}
 			}
 		} else {
 			position = container.nextAvailablePosition(true);

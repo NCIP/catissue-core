@@ -18,4 +18,22 @@
       <column name="positionLabelingMode_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to reserved positions request ID and time">
+    <addColumn tableName="OS_CONTAINER_POSITIONS_AUD">
+      <column name="RESERVATION_ID" type="${text.type}(40)"/>
+      <column name="reservationId_MOD" type="${bit.type}"/>
+      <column name="RESERVATION_TIME" type="${nullable.ts.type}"/>
+      <column name="reservationTime_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to CP based container auto selection strategy">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="CONTAINER_SEL_STRATEGY" type="${text.type}(32)"/>
+      <column name="containerSelectionStrategy_MOD" type="${bit.type}"/>
+      <column name="ALIQUOTS_IN_SAME_CONT" type="${boolean.type}"/>
+      <column name="aliquotsInSameContainer_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

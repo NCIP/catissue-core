@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.services.ContainerSelectionStrategyFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelAutoPrintMode;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol.SpecimenLabelPrePrintMode;
@@ -45,6 +46,8 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 	private LabelGenerator visitNameGenerator;
 
 	private CollectionProtocolCopier cpCopier;
+
+	private ContainerSelectionStrategyFactory containerSelFactory;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -64,6 +67,10 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 
 	public void setCpCopier(CollectionProtocolCopier cpCopier) {
 		this.cpCopier = cpCopier;
+	}
+
+	public void setContainerSelFactory(ContainerSelectionStrategyFactory containerSelFactory) {
+		this.containerSelFactory = containerSelFactory;
 	}
 
 	@Override
@@ -91,6 +98,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		setPpidFormat(input, cp, ose);
 		setLabelFormats(input, cp, ose);
 		setVisitNameFmt(input, cp, ose);
+		setContainerSelectionStrategy(input, cp, ose);
 		setVisitNamePrintMode(input, cp, ose);
 		cp.setVisitNamePrintCopies(input.getVisitNamePrintCopies());
 		setSpecimenLabelPrePrintMode(input, cp, ose);
@@ -313,6 +321,21 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		}
 		
 		return nameFmt;
+	}
+
+	private void setContainerSelectionStrategy(CollectionProtocolDetail input, CollectionProtocol result, OpenSpecimenException ose) {
+		String strategy = input.getContainerSelectionStrategy();
+		if (StringUtils.isBlank(strategy)) {
+			return;
+		}
+
+		if (containerSelFactory.getStrategy(strategy) == null) {
+			ose.addError(CpErrorCode.INV_CONT_SEL_STRATEGY, strategy);
+			return;
+		}
+
+		result.setContainerSelectionStrategy(strategy);
+		result.setAliquotsInSameContainer(input.getAliquotsInSameContainer());
 	}
 
 	private void setVisitNamePrintMode(CollectionProtocolDetail input, CollectionProtocol cp, OpenSpecimenException ose) {

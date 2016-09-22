@@ -246,6 +246,12 @@ angular.module('os.biospecimen.cp',
         },
         controller: 'CpCatalogSettingsCtrl'
       })
+      .state('cp-detail.settings.container', {
+        url: '/container',
+        templateUrl: 'modules/biospecimen/cp/container-settings.html',
+        parent: 'cp-detail.settings',
+        controller: 'CpContainerSettingsCtrl'
+      })
       .state('cp-detail.settings.reporting', {
         url: '/reporting',
         templateUrl: 'modules/biospecimen/cp/report-settings.html',

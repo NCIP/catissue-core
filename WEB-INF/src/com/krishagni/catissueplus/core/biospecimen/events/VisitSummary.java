@@ -9,6 +9,8 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 
 public class VisitSummary implements Comparable<VisitSummary> {
 	private Long id;
+
+	private Long cpId;
 	
 	private Long eventId;
 
@@ -42,6 +44,14 @@ public class VisitSummary implements Comparable<VisitSummary> {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getCpId() {
+		return cpId;
+	}
+
+	public void setCpId(Long cpId) {
+		this.cpId = cpId;
 	}
 
 	public Long getEventId() {
@@ -136,7 +146,7 @@ public class VisitSummary implements Comparable<VisitSummary> {
 		return missedReason;
 	}
 
-	public void setMissedVisitReason(String missedReason) {
+	public void setMissedReason(String missedReason) {
 		this.missedReason = missedReason;
 	}
 

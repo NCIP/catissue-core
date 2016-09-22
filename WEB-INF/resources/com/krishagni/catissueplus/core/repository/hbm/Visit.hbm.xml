@@ -94,12 +94,13 @@
       <return-scalar column="visitDate" type="timestamp"/>
       <return-scalar column="regDate" type="timestamp"/>
       <return-scalar column="missedReason" type="string"/>
+      <return-scalar column="cpId" type="long"/>
 
       select
         scg.identifier as id, cpe.identifier as eventId, scg.name as name, cpe.activity_status as eventStatus,
         cpe.collection_point_label as label, cpe.study_calendar_event_point as calendarPoint,
         scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
-        scg.missed_reason as missedReason
+        scg.missed_reason as missedReason, cpr.collection_protocol_id as cpId
       from   
         catissue_coll_prot_reg cpr
         inner join catissue_coll_prot_event cpe 
@@ -118,7 +119,7 @@
         scg.identifier as id, null as eventId, scg.name as name, null as eventStatus,
         null as label, null as calendarPoint,
         scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
-        scg.missed_reason as missedReason
+        scg.missed_reason as missedReason, cpr.collection_protocol_id as cpId
       from
         catissue_coll_prot_reg cpr
         inner join catissue_specimen_coll_group scg 

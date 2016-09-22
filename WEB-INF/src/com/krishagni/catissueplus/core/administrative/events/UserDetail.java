@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -29,7 +30,7 @@ public class UserDetail extends AttributeModifiedSupport {
 
 	private String loginName;
 
-	private List<String> siteNames = new ArrayList<String>();
+	private List<String> siteNames = new ArrayList<>();
 
 	private Date creationDate;
 
@@ -180,26 +181,11 @@ public class UserDetail extends AttributeModifiedSupport {
 		detail.setType(user.getType().name());
 		detail.setAddress(user.getAddress());
 		detail.setManageForms(user.getManageForms());
-		setUserSiteNames(detail, user.getSites());	
-
+		detail.setSiteNames(user.getSites().stream().map(s -> s.getName()).collect(Collectors.toList()));
 		return detail;
 	}
 	
 	public static List<UserDetail> from(Collection<User> users) {
-		List<UserDetail> result = new ArrayList<UserDetail>();
-		for (User user: users) {
-			result.add(from(user));
-		}
-		
-		return result;
-	}
-
-	private static void setUserSiteNames(UserDetail detail, Set<Site> sites) {
-		List<String> siteNames = new ArrayList<String>();
-		for (Site site : sites) {
-			siteNames.add(site.getName());
-		}
-		
-		detail.setSiteNames(siteNames);
+		return users.stream().map(UserDetail::from).collect(Collectors.toList());
 	}
 }

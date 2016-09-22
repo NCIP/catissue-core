@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -76,37 +78,37 @@ public class StorageContainer extends BaseEntity {
 	
 	private String comments;
 	
-	private Set<StorageContainer> childContainers = new LinkedHashSet<StorageContainer>();
+	private Set<StorageContainer> childContainers = new LinkedHashSet<>();
 	
-	private Set<StorageContainer> ancestorContainers = new HashSet<StorageContainer>();
+	private Set<StorageContainer> ancestorContainers = new HashSet<>();
 	
-	private Set<StorageContainer> descendentContainers = new HashSet<StorageContainer>();
+	private Set<StorageContainer> descendentContainers = new HashSet<>();
 	
 	//
 	// all types of these specimen classes are allowed
 	//
-	private Set<String> allowedSpecimenClasses = new HashSet<String>(); 
+	private Set<String> allowedSpecimenClasses = new HashSet<>();
 	
-	private Set<String> allowedSpecimenTypes = new HashSet<String>();
+	private Set<String> allowedSpecimenTypes = new HashSet<>();
 	
-	private Set<CollectionProtocol> allowedCps = new HashSet<CollectionProtocol>();
+	private Set<CollectionProtocol> allowedCps = new HashSet<>();
 	
 	private boolean storeSpecimenEnabled = false;
 			
 	private StorageContainerPosition position;
 	
-	private Set<StorageContainerPosition> occupiedPositions = new HashSet<StorageContainerPosition>();
-	
+	private Set<StorageContainerPosition> occupiedPositions = new HashSet<>();
+
 	//
 	// query capabilities
 	//
 	private StorageContainerStats stats;
 	
-	private Set<String> compAllowedSpecimenClasses = new HashSet<String>();
+	private Set<String> compAllowedSpecimenClasses = new HashSet<>();
 	
-	private Set<String> compAllowedSpecimenTypes = new HashSet<String>();
+	private Set<String> compAllowedSpecimenTypes = new HashSet<>();
 	
-	private Set<CollectionProtocol> compAllowedCps = new HashSet<CollectionProtocol>();
+	private Set<CollectionProtocol> compAllowedCps = new HashSet<>();
 
 	private transient StorageContainerPosition lastAssignedPos;
 
@@ -345,7 +347,7 @@ public class StorageContainer extends BaseEntity {
 	public void setOccupiedPositions(Set<StorageContainerPosition> occupiedPositions) {
 		this.occupiedPositions = occupiedPositions;
 	}
-	
+
 	@NotAudited
 	public StorageContainerStats getStats() {
 		return stats;
@@ -410,15 +412,25 @@ public class StorageContainer extends BaseEntity {
 	public int freePositionsCount() {
 		return noOfColumns * noOfRows - occupiedPositions.size();
 	}
-	
+
+	public boolean hasFreePositionsForReservation() {
+		return hasFreePositionsForReservation(1);
+	}
+
+	public boolean hasFreePositionsForReservation(int freePositions) {
+		return (getNoOfColumns() * getNoOfRows() - getOccupiedPositions().size()) > (freePositions - 1);
+	}
+
+	public List<StorageContainer> getChildContainersSortedByPosition() {
+		return getChildContainers().stream()
+			.sorted((c1, c2) -> c1.getPosition().getPosition() - c2.getPosition().getPosition())
+			.collect(Collectors.toList());
+	}
+
 	public Set<Integer> occupiedPositionsOrdinals() {
-		Set<Integer> result = new HashSet<Integer>();
-				
-		for (StorageContainerPosition pos : getOccupiedPositions()) {
-			result.add((pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal());
-		}
-		
-		return result;
+		return getOccupiedPositions().stream()
+			.map(pos -> (pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal())
+			.collect(Collectors.toSet());
 	}
 	
 	public String toColumnLabelingScheme(int ordinal) {
@@ -598,6 +610,24 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 
+	public StorageContainerPosition getReservedPosition(String row, String column, String reservationId) {
+		StorageContainerPosition reservedPos = getOccupiedPositions().stream()
+			.filter(pos -> pos.equals(row, column, reservationId))
+			.findFirst().orElse(null);
+		if (reservedPos == null) {
+			return null;
+		}
+
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MINUTE, -5);
+		if (reservedPos.getReservationTime().before(cal.getTime())) {
+			getOccupiedPositions().remove(reservedPos);
+			return null;
+		}
+
+		return reservedPos;
+	}
+
 	public static boolean isValidScheme(String scheme) {
 		if (StringUtils.isBlank(scheme)) {
 			return false;
@@ -646,7 +676,7 @@ public class StorageContainer extends BaseEntity {
 	
 	public Set<CollectionProtocol> computeAllowedCps() {
 		if (CollectionUtils.isNotEmpty(getAllowedCps()) || getParentContainer() == null) {
-			return new HashSet<CollectionProtocol>(getAllowedCps());
+			return new HashSet<>(getAllowedCps());
 		}
 		
 		return getParentContainer().computeAllowedCps();
@@ -655,18 +685,18 @@ public class StorageContainer extends BaseEntity {
 	public Set<String> computeAllowedSpecimenClasses() {
 		if (CollectionUtils.isNotEmpty(getAllowedSpecimenTypes()) || 
 				CollectionUtils.isNotEmpty(getAllowedSpecimenClasses())) {
-			return new HashSet<String>(getAllowedSpecimenClasses());
+			return new HashSet<>(getAllowedSpecimenClasses());
 		}
 		
 		if (getParentContainer() != null) {
 			return getParentContainer().computeAllowedSpecimenClasses();
 		}
 				
-		return new HashSet<String>(getDaoFactory().getPermissibleValueDao().getSpecimenClasses());
+		return new HashSet<>(getDaoFactory().getPermissibleValueDao().getSpecimenClasses());
 	}
 	
 	public Set<String> computeAllowedSpecimenTypes() {
-		Set<String> types = new HashSet<String>();
+		Set<String> types = new HashSet<>();
 		if (CollectionUtils.isNotEmpty(getAllowedSpecimenTypes())) {
 			types.addAll(getAllowedSpecimenTypes());
 		} else if (CollectionUtils.isEmpty(getAllowedSpecimenClasses()) && getParentContainer() != null) {
@@ -780,7 +810,7 @@ public class StorageContainer extends BaseEntity {
 		getAllowedCps().remove(cp);
 		updateComputedCps();
 	}
-	
+
 	private void deleteWithoutCheck() {
 		for (StorageContainer child: getChildContainers()) {
 			child.deleteWithoutCheck();

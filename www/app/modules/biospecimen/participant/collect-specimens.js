@@ -3,15 +3,73 @@ angular.module('os.biospecimen.participant.collect-specimens',
   [ 
     'os.biospecimen.models'
   ])
-  .factory('CollectSpecimensSvc', function($state) {
+  .factory('CollectSpecimensSvc', function($state, Container) {
     var data = {};
+
+    function getReservePositionsOp(cpId, specimens) {
+      var aliquots = {}, result = [];
+      angular.forEach(specimens,
+        function(specimen) {
+          if (specimen.storageType == 'Virtual' || (!!specimen.status && specimen.status != 'Pending')) {
+            return;
+          }
+
+          if (specimen.lineage == 'Aliquot') {
+            var key = specimen.parent.id + "-" + specimen.parent.reqId;
+            var tenantDetail = aliquots[key];
+            if (!tenantDetail) {
+              aliquots[key] = tenantDetail = {
+                lineage: specimen.lineage,
+                specimenClass: specimen.specimenClass,
+                specimenType: specimen.type,
+                numOfAliquots: 0
+              };
+
+              result.push(tenantDetail);
+            }
+
+            tenantDetail.numOfAliquots++;
+          } else {
+            result.push({
+              lineage: specimen.lineage,
+              specimenClass: specimen.specimenClass,
+              specimenType: specimen.type
+            })
+          }
+        }
+      );
+
+      return {cpId: cpId, tenants: result};
+    }
+
+    function assignReservedPositions(specimens, positions) {
+      var idx = 0;
+      angular.forEach(specimens,
+        function(specimen) {
+          if (specimen.storageType == 'Virtual' || (!!specimen.status && specimen.status != 'Pending')) {
+            return;
+          }
+
+          specimen.storageLocation = positions[idx++];
+        }
+      );
+    }
+
     return {
       collect: function(stateDetail, visit, specimens, ignoreQtyWarn) {
         data.specimens = specimens;
         data.stateDetail = stateDetail;
         data.visit = visit;
         data.ignoreQtyWarn = ignoreQtyWarn;
-        $state.go('participant-detail.collect-specimens', {visitId: visit.id, eventId: visit.eventId});
+
+        Container.getReservedPositions(getReservePositionsOp(visit.cpId, specimens)).then(
+          function(positions) {
+            if (positions.length > 0) {
+              assignReservedPositions(specimens, positions);
+            }
+            $state.go('participant-detail.collect-specimens', {visitId: visit.id, eventId: visit.eventId});
+          }
+        );
       },
 
       clear: function() {
@@ -39,7 +97,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
   })
   .controller('CollectSpecimensCtrl', 
     function(
-      $scope, $translate, $state, $document,
+      $scope, $translate, $state, $document, $q,
       cpr, visit, 
       Visit, Specimen, PvManager, 
       CollectSpecimensSvc, Container, Alerts, Util, SpecimenUtil) {
@@ -71,7 +129,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
         $scope.visit = visit;
-        $scope.containerListCache = {};
+        $scope.autoPosAllocate = !!$scope.cp.containerSelectionStrategy;
         
         $scope.collDetail = {
           collector: undefined,
@@ -82,6 +140,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
         loadPvs();
         initAliquotGrps($scope.specimens);
+        $scope.$on('$destroy', vacateReservedPositions);
       };
 
       function initAliquotGrps(specimens) {
@@ -205,6 +264,17 @@ angular.module('os.biospecimen.participant.collect-specimens',
         ).join(",");
       }
 
+      function vacateReservedPositions() {
+        for (var i = 0; i < $scope.specimens.length; ++i) {
+          var loc = $scope.specimens[i].storageLocation;
+          if (loc && loc.reservationId) {
+            return Container.cancelReservation(loc.reservationId);
+          }
+        }
+
+        return null;
+      }
+
       function setShowInTree(aliquot, showInTree) {
         angular.forEach(aliquot.aliquotGrp, function(specimen) {
           if (specimen == aliquot) {
@@ -272,7 +342,11 @@ angular.module('os.biospecimen.participant.collect-specimens',
           function() {
             return specimen.storageLocation;
           },
-          function() {
+          function(newVal, oldVal) {
+            if (newVal == oldVal) {
+              return;
+            }
+
             if (specimen.expanded) {
               return;
             }
@@ -308,6 +382,20 @@ angular.module('os.biospecimen.participant.collect-specimens',
           }
         }
       };
+
+      $scope.manuallySelectContainers = function() {
+        $q.when(vacateReservedPositions()).then(
+          function() {
+            angular.forEach($scope.specimens,
+              function(spmn) {
+                spmn.storageLocation = {};
+              }
+            );
+
+            $scope.autoPosAllocate = false;
+          }
+        );
+      }
 
       $scope.openSpecimenNode = function(specimen) {
         specimen.isOpened = true;
@@ -428,6 +516,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         if (!!$scope.visit.id && $scope.visit.status == 'Complete') {
           Specimen.save(specimensToSave).then(
             function() {
+              $scope.specimens.length = 0;
               CollectSpecimensSvc.clear();
               $scope.back();
             }
@@ -441,6 +530,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
             function(result) {
               var visitId = result.data.visit.id;
               var sd = CollectSpecimensSvc.getStateDetail();
+              $scope.specimens.length = 0;
               CollectSpecimensSvc.clear();
               $state.go(sd.state.name, angular.extend(sd.params, {visitId: visitId}));
             }

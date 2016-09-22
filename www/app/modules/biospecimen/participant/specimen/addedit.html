@@ -148,8 +148,17 @@
 
     <div class="form-group" ng-if="currSpecimen.status == 'Collected'">
       <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
-      <div class="col-xs-6">
-        <os-storage-position entity="currSpecimen" cp-id="cpr.cpId" virtual="spmnCtx.isVirtual"></os-storage-position>
+      <div class="col-xs-6" ng-switch on="!!currSpecimen.storageLocation.reservationId">
+        <div class="control-text" ng-switch-when="true">
+          <os-disp-storage-position position="currSpecimen.storageLocation"></os-disp-storage-position>
+          <button class="btn btn-default btn-xs" title="{{'container.tooltip.select' | translate}}"
+            ng-click="cancelReservation()">
+            <span class="fa fa-dropbox"></span>
+          </button>
+        </div>
+        <div ng-switch-default>
+          <os-storage-position entity="currSpecimen" cp-id="cpr.cpId" virtual="spmnCtx.isVirtual"></os-storage-position>
+        </div>
       </div>
     </div>
 

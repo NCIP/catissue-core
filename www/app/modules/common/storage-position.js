@@ -245,11 +245,16 @@ angular.module('openspecimen')
       },
 
       template:
-        '<span> ' +
-          '<span>{{position.name}}</span> ' +
-          '<span ng-switch on="position.mode == \'LINEAR\'"> ' +
-            '<span ng-switch-when="true">({{position.position}})</span> ' +
-            '<span ng-switch-when="false">({{position.positionY}} x  {{position.positionX}})</span> ' +
+        '<span ng-switch on="!!position.name"> ' +
+          '<span ng-switch-when="true"> ' +
+            '<span>{{position.name}}</span> ' +
+            '<span ng-switch on="position.mode == \'LINEAR\'"> ' +
+              '<span ng-switch-when="true">({{position.position}})</span> ' +
+              '<span ng-switch-when="false">({{position.positionY}} x  {{position.positionX}})</span> ' +
+            '</span>' +
+          '</span>' +
+          '<span ng-switch-default> ' +
+            '<span translate="specimens.virtually_located">Virtual</span>' +
           '</span>' +
         '</span>',
 

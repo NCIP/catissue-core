@@ -10,6 +10,19 @@
   </div>
   
   <div class="container">
+    <div os-wizard="aliqWizard" type="classic">
+      <os-wizard-step title="{{'specimens.aliquot_specs' | translate}}" on-finish="validateSpecs()">
+        <div ng-include src="'modules/biospecimen/participant/specimen/aliquot-specs.html'"></div>
+      </os-wizard-step>
+      <os-wizard-step title="{{ctx.step2Title | translate}}" on-finish="showSpecs()">
+        <div ng-include src="'modules/biospecimen/participant/specimen/review-assign-locs.html'"></div>
+      </os-wizard-step>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimen/aliquot-specs.html">
+  <div>
     <form name="aliquotsForm" os-form-validator="aliquotsForm" novalidate>
       <div class="os-bottom-border" ng-if="ctx.aliquotsSpec.length > 1">
         <a ng-click="copyFirstToAll()">
@@ -19,13 +32,13 @@
       <table class="os-table bulk-edit">
         <thead class="os-table-head">
           <tr class="row">
-            <th class="col os-col-15">
+            <th class="col os-col-25">
               <span translate="specimens.parent_specimen">Parent Specimen</span>
             </th>
-            <th class="col os-col-10">
+            <th class="col os-col-15">
               <span translate="specimens.type">Type</span>
             </th>
-            <th class="col os-col-10">
+            <th class="col os-col-15">
               <span translate="specimens.available_qty">Available Quantity</span>
             </th>
             <th class="col os-col-10">
@@ -36,9 +49,6 @@
             </th>
             <th class="col os-col-15">
               <span translate="specimens.created_on">Created On</span>
-            </th>
-            <th class="col os-col-20">
-              <span translate="specimens.location">Location</span>
             </th>
             <th class="col os-col-5">
               <span translate="specimens.print">Print?</span>
@@ -79,11 +89,6 @@
               <div os-field-error field="aform.createdOn"></div>
             </td>
             <td class="col">
-              <os-storage-position os-md-input entity="aliquotSpec" cp-id="aliquotSpec.cpId"
-                container-list-cache="containerListCache" hide-placeholder>
-              </os-storage-position>
-            </td>
-            <td class="col">
               <os-checkbox ng-model="aliquotSpec.printLabel"></os-checkbox>
             </td>
             <td class="col">
@@ -100,16 +105,100 @@
 
       <div class="os-divider"></div>
 
-      <div class="form-group">
+      <div class="form-group right-btns">
         <div class="col-xs-12">
-          <button class="btn btn-primary" os-form-submit="createAliquots()">
-            <span translate="specimens.create_aliquots">Submit</span>
-          </button>
           <button class="btn os-btn-text" ng-click="back()">
             <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+          <button class="btn btn-primary" os-form-submit="aliqWizard.next()">
+            <span translate="common.buttons.next">Next</span>
           </button>
         </div>
       </div>
     </form>
   </div>
-</div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimen/review-assign-locs.html">
+  <div>
+    <form name="aliquotsForm" os-form-validator="aliquotsForm" novalidate>
+      <table class="os-table bulk-edit">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col os-col-25">
+              <span translate="specimens.parent_specimen">Parent Specimen</span>
+            </th>
+            <th class="col os-col-20">
+              <span translate="specimens.type">Type</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="specimens.qty">Quantity</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="specimens.created_on">Created On</span>
+            </th>
+            <th class="col os-col-25">
+              <span translate="specimens.location">
+                Location
+              </span>
+              <span style="font-weight: normal" ng-switch on="ctx.autoPosAllocate">
+                <span>(</span>
+                <a ng-switch-when="true" ng-click="manuallySelectContainers()">
+                  <span translate="specimens.manual_selection">Manual Selection</span>
+                </a>
+                <a ng-switch-default ng-click="applyFirstLocationToAll()">
+                  <span translate="specimens.copy_first_to_all">Copy First To All</span>
+                </a>
+                <span>)</span>
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body" os-storage-positions>
+          <tr class="row" ng-repeat="aliquot in ctx.aliquots" ng-form="aform">
+            <td class="col">
+              <a ui-sref="specimen({specimenId: aliquot.parentId})">
+                <span>{{aliquot.parentLabel}}</span>
+                <span>({{aliquot.ppid}})</span>
+              </a>
+            </td>
+            <td class="col">
+              <span>{{aliquot.type}}</span>
+            </td>
+            <td class="col">
+              <os-spmn-measure-val specimen="aliquot" value="aliquot.initialQty"></os-spmn-measure-val>
+            </td>
+            <td class="col">
+              <span>{{aliquot.createdOn | date: global.dateFmt}}</span>
+            </td>
+            <td class="col" style="overflow: visible;" ng-switch on="ctx.autoPosAllocate">
+              <span ng-switch-when="true">
+                <os-disp-storage-position position="aliquot.storageLocation"></os-disp-storage-position>
+              </span>
+              <span ng-switch-default>
+                <os-storage-position os-md-input entity="aliquot" cp-id="aliquot.cpId" hide-placeholder>
+                </os-storage-position>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group right-btns">
+        <div class="col-xs-12">
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+          <button class="btn os-btn-secondary" os-form-submit="aliqWizard.previous()">
+            <span translate="common.buttons.previous">Previous</span>
+          </button>
+          <button class="btn btn-primary" os-form-submit="createAliquots()">
+            <span translate="specimens.create_aliquots">Create Aliquots</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</script>

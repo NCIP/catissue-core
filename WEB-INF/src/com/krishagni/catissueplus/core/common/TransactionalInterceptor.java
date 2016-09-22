@@ -92,6 +92,8 @@ public class TransactionalInterceptor {
 							if (resp.isSystemError() || resp.isUnknownError()) {
 								notifyUncaughtServerError(resp.getError().getException());
 							}
+						} else if (resp.isRollback()) {
+							status.setRollbackOnly();
 						}
 					}
 				

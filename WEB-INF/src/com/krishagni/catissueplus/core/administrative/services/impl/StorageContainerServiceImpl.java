@@ -2,14 +2,19 @@ package com.krishagni.catissueplus.core.administrative.services.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.ContainerType;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
@@ -21,17 +26,22 @@ import com.krishagni.catissueplus.core.administrative.events.ContainerHierarchyD
 import com.krishagni.catissueplus.core.administrative.events.ContainerQueryCriteria;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail;
 import com.krishagni.catissueplus.core.administrative.events.ContainerReplicationDetail.DestinationDetail;
-import com.krishagni.catissueplus.core.administrative.events.PositionTenantDetail;
+import com.krishagni.catissueplus.core.administrative.events.ReservePositionsOp;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerPositionDetail;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
+import com.krishagni.catissueplus.core.administrative.events.TenantDetail;
 import com.krishagni.catissueplus.core.administrative.events.VacantPositionsOp;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.ContainerMapExporter;
+import com.krishagni.catissueplus.core.administrative.services.ContainerSelectionStrategy;
+import com.krishagni.catissueplus.core.administrative.services.ContainerSelectionStrategyFactory;
+import com.krishagni.catissueplus.core.administrative.services.ScheduledTaskManager;
 import com.krishagni.catissueplus.core.administrative.services.StorageContainerService;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -49,7 +59,7 @@ import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
-public class StorageContainerServiceImpl implements StorageContainerService, ObjectStateParamsResolver {
+public class StorageContainerServiceImpl implements StorageContainerService, ObjectStateParamsResolver, InitializingBean {
 	private DaoFactory daoFactory;
 	
 	private StorageContainerFactory containerFactory;
@@ -59,6 +69,10 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	private LabelGenerator nameGenerator;
 
 	private SpecimenResolver specimenResolver;
+
+	private ContainerSelectionStrategyFactory selectionStrategyFactory;
+
+	private ScheduledTaskManager taskManager;
 
 	public DaoFactory getDaoFactory() {
 		return daoFactory;
@@ -86,6 +100,14 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 	public void setSpecimenResolver(SpecimenResolver specimenResolver) {
 		this.specimenResolver = specimenResolver;
+	}
+
+	public void setSelectionStrategyFactory(ContainerSelectionStrategyFactory selectionStrategyFactory) {
+		this.selectionStrategyFactory = selectionStrategyFactory;
+	}
+
+	public void setTaskManager(ScheduledTaskManager taskManager) {
+		this.taskManager = taskManager;
 	}
 
 	@Override
@@ -177,9 +199,9 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<Boolean> isAllowed(RequestEvent<PositionTenantDetail> req) {
+	public ResponseEvent<Boolean> isAllowed(RequestEvent<TenantDetail> req) {
 		try {
-			PositionTenantDetail detail = req.getPayload();
+			TenantDetail detail = req.getPayload();
 
 			StorageContainer container = getContainer(detail.getContainerId(), detail.getContainerName());
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
@@ -355,6 +377,100 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 	@Override
 	@PlusTransactional
+	public ResponseEvent<List<StorageLocationSummary>> reservePositions(RequestEvent<ReservePositionsOp> req) {
+		long t1 = System.currentTimeMillis();
+		try {
+			ReservePositionsOp op = req.getPayload();
+			if (StringUtils.isNotBlank(op.getReservationToCancel())) {
+				cancelReservation(new RequestEvent<>(op.getReservationToCancel()));
+			}
+
+			String reservationId = UUID.randomUUID().toString();
+			Date reservationTime = Calendar.getInstance().getTime();
+
+			Long cpId = op.getCpId();
+			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
+			if (cp == null) {
+				throw OpenSpecimenException.userError(CpErrorCode.NOT_FOUND, cpId);
+			}
+
+			if (StringUtils.isBlank(cp.getContainerSelectionStrategy())) {
+				return ResponseEvent.response(Collections.emptyList());
+			}
+
+			ContainerSelectionStrategy strategy = selectionStrategyFactory.getStrategy(cp.getContainerSelectionStrategy());
+			if (strategy == null) {
+				throw OpenSpecimenException.userError(CpErrorCode.INV_CONT_SEL_STRATEGY, cp.getContainerSelectionStrategy());
+			}
+
+			List<StorageContainerPosition> reservedPositions = new ArrayList<>();
+			for (TenantDetail detail : op.getTenants()) {
+				detail.setCpId(cpId);
+
+				boolean allAllocated = false;
+				while (!allAllocated) {
+					long t2 = System.currentTimeMillis();
+					StorageContainer container = strategy.getContainer(detail, cp.getAliquotsInSameContainer());
+					if (container == null) {
+						ResponseEvent<List<StorageLocationSummary>> resp = new ResponseEvent<>(Collections.emptyList());
+						resp.setRollback(true);
+						return resp;
+					}
+
+					int numPositions = detail.getNumOfAliquots();
+					if (numPositions <= 0) {
+						numPositions = 1;
+					}
+
+					while (numPositions != 0) {
+						StorageContainerPosition pos = container.nextAvailablePosition(true);
+						if (pos == null) {
+							break;
+						}
+
+						pos.setReservationId(reservationId);
+						pos.setReservationTime(reservationTime);
+						container.addPosition(pos);
+						reservedPositions.add(pos);
+						--numPositions;
+					}
+
+					if (numPositions == 0) {
+						allAllocated = true;
+					} else {
+						detail.setNumOfAliquots(numPositions);
+					}
+
+					System.err.println("***** Allocation time: " + (System.currentTimeMillis() - t2) + " ms");
+				}
+			}
+
+			return ResponseEvent.response(StorageLocationSummary.from(reservedPositions));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		} finally {
+			System.err.println("***** Call time: " + (System.currentTimeMillis() - t1) + " ms");
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Integer> cancelReservation(RequestEvent<String> req) {
+		try {
+			int vacatedPositions = daoFactory.getStorageContainerDao()
+				.deleteReservedPositions(Collections.singletonList(req.getPayload()));
+			return ResponseEvent.response(vacatedPositions);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
 	public ResponseEvent<StorageContainerSummary> getAncestorsHierarchy(RequestEvent<ContainerQueryCriteria> req) {
 		try {
 			StorageContainer container = getContainer(req.getPayload());
@@ -454,6 +570,25 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		}
 
 		return daoFactory.getStorageContainerDao().getContainerIds(key, value);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		taskManager.scheduleWithFixedDelay(
+			new Runnable() {
+				@Override
+				@PlusTransactional
+				public void run() {
+					try {
+						Calendar cal = Calendar.getInstance();
+						cal.add(Calendar.MINUTE, -5);
+						daoFactory.getStorageContainerDao().deleteReservedPositionsOlderThan(cal.getTime());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}, 5
+		);
 	}
 
 	private StorageContainerListCriteria addContainerListCriteria(StorageContainerListCriteria crit) {

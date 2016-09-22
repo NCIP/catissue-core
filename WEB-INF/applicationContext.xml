@@ -2,15 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:context="http://www.springframework.org/schema/context"
-  xmlns:p="http://www.springframework.org/schema/p"
-  xmlns:c="http://www.springframework.org/schema/c"
-  xmlns:util="http://www.springframework.org/schema/util"
   xmlns:aop="http://www.springframework.org/schema/aop"
   xmlns:security="http://www.springframework.org/schema/security"
   xmlns:task="http://www.springframework.org/schema/task"
-  xmlns:mvc="http://www.springframework.org/schema/mvc"
-  xmlns:tx="http://www.springframework.org/schema/tx"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
     http://www.springframework.org/schema/aop 
     http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
@@ -19,10 +14,7 @@
     http://www.springframework.org/schema/task
     http://www.springframework.org/schema/task/spring-task-3.2.xsd
     http://www.springframework.org/schema/context 
-    http://www.springframework.org/schema/context/spring-context-3.2.xsd
-    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-    http://www.springframework.org/schema/tx 
-    http://www.springframework.org/schema/tx/spring-tx.xsd">
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
   <bean id="appProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
     <property name="locations">
@@ -162,6 +154,7 @@
     <property name="specimenLabelGenerator" ref="specimenLabelGenerator"/>
     <property name="visitNameGenerator" ref="visitNameGenerator"/>
     <property name="cpCopier" ref="cpCopier"/>
+    <property name="containerSelFactory" ref="containerSelectionStrategyFactory"/>
   </bean>
 
   <bean id="cpeFactory" class="com.krishagni.catissueplus.core.biospecimen.domain.factory.impl.CpeFactoryImpl">
@@ -441,12 +434,23 @@
     <property name="messageSource" ref="messageSource"/>
   </bean>
 
+  <bean id="containerSelectionStrategyFactory" class="com.krishagni.catissueplus.core.administrative.services.impl.ContainerSelectionStrategyFactoryImpl">
+    <property name="strategyClasses">
+      <map>
+        <entry key="least-empty" value="com.krishagni.catissueplus.core.administrative.services.impl.LeastEmptyContainerSelectionStrategy"/>
+        <entry key="recently-used" value="com.krishagni.catissueplus.core.administrative.services.impl.RecentlyUsedContainerSelectionStrategy"/>
+      </map>
+    </property>
+  </bean>
+
   <bean id="storageContainerSvc" class="com.krishagni.catissueplus.core.administrative.services.impl.StorageContainerServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="containerFactory" ref="storageContainerFactory"/>
     <property name="mapExporter" ref="containerMapExporter"/>
     <property name="nameGenerator" ref="containerNameGenerator"/>
     <property name="specimenResolver" ref="specimenResolver"/>
+    <property name="selectionStrategyFactory" ref="containerSelectionStrategyFactory"/>
+    <property name="taskManager" ref="scheduledTaskMgr"/>
   </bean>
 
   <bean id="containerTypeFactory" class="com.krishagni.catissueplus.core.administrative.domain.factory.impl.ContainerTypeFactoryImpl">

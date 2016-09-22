@@ -1,11 +1,13 @@
 
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
+import com.krishagni.catissueplus.core.administrative.events.ContainerSelectorCriteria;
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerSummary;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
@@ -31,5 +33,11 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public StorageContainerSummary getAncestorsHierarchy(Long containerId);
 
 	public List<StorageContainerSummary> getChildContainers(Long containerId, int noOfColumns);
+
+	public List<Long> getLeastEmptyContainerId(ContainerSelectorCriteria crit);
+
+	public int deleteReservedPositions(List<String> reservationIds);
+
+	public int deleteReservedPositionsOlderThan(Date expireTime);
 }
 	

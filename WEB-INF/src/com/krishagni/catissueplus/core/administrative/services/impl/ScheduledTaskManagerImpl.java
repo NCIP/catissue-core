@@ -90,7 +90,11 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Override
+	public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, int intervalInMinutes) {
+		return executorService.scheduleWithFixedDelay(task, intervalInMinutes, intervalInMinutes, TimeUnit.MINUTES);
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	//

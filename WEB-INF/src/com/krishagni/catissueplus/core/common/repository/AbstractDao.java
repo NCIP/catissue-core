@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.common.repository;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -60,23 +61,27 @@ public class AbstractDao<T> implements Dao<T> {
 	public T getById(Long id) {
 		return getById(id, null);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public T getById(Long id, String activeCondition) {
-		String hql = "from " + getType().getName() + " t0 where t0.id = :id";
-		
+		List<T> result = getByIds(Collections.singleton(id), activeCondition);
+		return result.isEmpty() ? null : result.iterator().next();
+	}
+
+	public List<T> getByIds(Collection<Long> ids) {
+		return getByIds(ids, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<T> getByIds(Collection<Long> ids, String activeCondition) {
+		String hql = "from " + getType().getName() + " t0 where t0.id in (:ids)";
+
 		if (activeCondition != null) {
 			hql += " and " + activeCondition;
 		}
-		
-		List<T> result = sessionFactory.getCurrentSession()
-				.createQuery(hql)
-				.setLong("id", id)
-				.list();
-		
-		return result.isEmpty() ? null : result.iterator().next();
+
+		return sessionFactory.getCurrentSession().createQuery(hql).setParameterList("ids", ids).list();
 	}
-	
+
 	public Class<?> getType() {
 		throw new UnsupportedOperationException("Override the dao method getType() to use getById()");
 	}

@@ -57,6 +57,10 @@
 
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
 
+    <property name="containerSelectionStrategy" column="CONTAINER_SEL_STRATEGY"/>
+
+    <property name="aliquotsInSameContainer" column="ALIQUOTS_IN_SAME_CONT"/>
+
     <property name="visitNamePrintMode" column="VISIT_NAME_PRINT_MODE">
       <type name="org.hibernate.type.EnumType">
         <param name="enumClass">

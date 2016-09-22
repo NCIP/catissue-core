@@ -85,7 +85,9 @@ public enum CpErrorCode implements ErrorCode {
 
 	RPT_DISABLED,
 
-	RPT_FILE_NOT_FOUND;
+	RPT_FILE_NOT_FOUND,
+
+	INV_CONT_SEL_STRATEGY;
 	
 	@Override
 	public String code() {

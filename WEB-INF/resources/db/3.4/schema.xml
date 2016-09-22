@@ -42,6 +42,20 @@
     </createView>
   </changeSet>
 
+  <changeSet author="vpawar" id="Request ID and time when the position was reserved">
+    <addColumn tableName="OS_CONTAINER_POSITIONS">
+      <column name="RESERVATION_ID" type="${text.type}(40)"/>
+      <column name="RESERVATION_TIME" type="${nullable.ts.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP based container auto selection strategy">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CONTAINER_SEL_STRATEGY" type="${text.type}(32)"/>
+      <column name="ALIQUOTS_IN_SAME_CONT" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="vlonushte" id="Unique PPID per collection protocol">
     <addUniqueConstraint
       constraintName="CAT_CPR_CP_ID_PPID_UQ"

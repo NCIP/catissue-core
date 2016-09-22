@@ -172,5 +172,48 @@ angular.module('os.administrative.models.container', ['os.common.models'])
       );
     };
 
+    Container.getReservedPositions = function(reserveOp) {
+      return $http.post(Container.url() + 'reserve-positions', reserveOp).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    Container.reservePositionForSpecimen = function(cpId, spmn, reservationToCancel) {
+      var op = {
+        cpId: cpId,
+        reservationToCancel: reservationToCancel,
+        tenants: [{
+          specimenClass: spmn.specimenClass,
+          specimenType:  spmn.type,
+          lineage: spmn.lineage
+        }]
+      };
+
+      return Container.getReservedPositions(op).then(
+        function(positions) {
+          return (positions && positions.length > 0) ? positions[0] : {};
+        }
+      );
+    }
+
+    Container.cancelReservation = function(reservationId) {
+      var params = {reservationId: reservationId};
+      return $http.delete(Container.url() + 'reserve-positions', {params: params}).then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
+    Container.getAutoAllocStrategies = function() {
+      return $http.get(Container.url() + 'auto-allocation-strategies').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     return Container;
   });

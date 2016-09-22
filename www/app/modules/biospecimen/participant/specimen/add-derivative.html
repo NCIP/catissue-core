@@ -142,8 +142,22 @@
 
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
-      <div class="col-xs-6">
-        <os-storage-position entity="derivative" cp-id="cpr.cpId"></os-storage-position>
+      <div class="col-xs-6" ng-switch on="autoAllocation">
+        <div class="control-text" ng-switch-when="true">
+          <span ng-switch on="!derivative.storageLocation || !derivative.storageLocation.name">
+            <span ng-switch-when="true" translate="specimens.auto">Auto</span>
+            <span ng-switch-default>
+              <os-disp-storage-position position="derivative.storageLocation"></os-disp-storage-position>
+            </span>
+          </span>
+          <button class="btn btn-default btn-xs" title="{{'container.tooltip.select' | translate}}"
+            ng-click="cancelReservation()">
+            <span class="fa fa-dropbox"></span>
+          </button>
+        </div>
+        <div ng-switch-default>
+          <os-storage-position entity="derivative" cp-id="cpr.cpId"></os-storage-position>
+        </div>
       </div>
     </div>
 

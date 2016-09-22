@@ -1,12 +1,10 @@
 
 angular.module('os.biospecimen.specimen.addedit', [])
   .controller('AddEditSpecimenCtrl', function(
-    $scope, $state, cpr, visit, specimen, extensionCtxt, hasDict,
-    PvManager, Util, ExtensionsUtil) {
+    $scope, $state, cp, cpr, visit, specimen, extensionCtxt, hasDict,
+    reservedPosition, Container, PvManager, Util, ExtensionsUtil) {
 
-    function loadPvs() {
-      $scope.biohazards = PvManager.getPvs('specimen-biohazard');
-    };
+    var autoAllocator;
 
     function init() {
       var currSpecimen = $scope.currSpecimen = angular.copy(specimen);
@@ -27,7 +25,9 @@ angular.module('os.biospecimen.specimen.addedit', [])
         currSpecimen.availableQty = currSpecimen.initialQty;
       }
 
-      if (!currSpecimen.storageLocation) {
+      if (!!reservedPosition) {
+        currSpecimen.storageLocation = reservedPosition;
+      } else if (!currSpecimen.storageLocation) {
         currSpecimen.storageLocation = {};
       }
 
@@ -76,7 +76,55 @@ angular.module('os.biospecimen.specimen.addedit', [])
       if (!hasDict) {
         loadPvs();
       }
+
+      autoAllocator = enableAutoAllocator();
+      $scope.$on('$destroy', cancelReservation);
     }
+
+    function loadPvs() {
+      $scope.biohazards = PvManager.getPvs('specimen-biohazard');
+    };
+
+    function enableAutoAllocator() {
+      if (!reservedPosition || $scope.currSpecimen.lineage == 'Aliquot') {
+        return undefined;
+      }
+
+      return $scope.$watch('currSpecimen.type',
+        function(newType, oldType) {
+          if (newType == oldType) {
+            return;
+          }
+
+          var spmn = $scope.currSpecimen;
+          var resvToCancel = spmn.storageLocation.reservationId;
+          Container.reservePositionForSpecimen(cp.id, spmn, resvToCancel).then(
+            function(position) {
+              spmn.storageLocation = position;
+            }
+          );
+        }
+      );
+    }
+
+    function cancelReservation() {
+      var loc = $scope.currSpecimen.storageLocation;
+      if (!loc || !loc.reservationId) {
+        return;
+      }
+
+      Container.cancelReservation(loc.reservationId).then(
+        function() {
+          $scope.currSpecimen.storageLocation = {};
+          if (autoAllocator) {
+            autoAllocator();
+            autoAllocator = undefined;
+          }
+        }
+      );
+    }
+
+    $scope.cancelReservation = cancelReservation;
 
     $scope.saveSpecimen = function() {
       var formCtrl = $scope.deFormCtrl.ctrl;

@@ -265,6 +265,12 @@
       "query_desc": "Select saved query to use for Specimen Catalog"
     },
 
+    "container": {
+      "title": "Container Settings",
+      "auto_alloc": "Auto Allocation",
+      "store_aliquots_same_box": "Store aliquots in same box"
+    },
+
     "visit_name_print_modes": {
       "PRE_PRINT": "Pre-print",
       "ON_COMPLETION": "On Completion",
@@ -502,7 +508,7 @@
     "position": "Position",
     "virtually_located": "Virtual",
     "no_specimens_to_show": "No Child Specimens to Show",
-    "aliquot_cnt": "Count of Aliquots",
+    "aliquot_cnt": "Aliquots Count",
     "qty_per_aliquot": "Quantity per Aliquot",
     "aliquots_created": "Successfully created aliquots",
     "derivatives_created": "Successfully created derived specimens",
@@ -525,6 +531,7 @@
     "cp": "Collection Protocol",
     "ppid": "PPID",
     "concentration_unit": "&#181;g/&#181;l",
+    "manual_selection": "Manual Selection",
     "copy_first_to_all": "Copy first to all",
     "row": "Row",
     "column": "Column",
@@ -538,6 +545,10 @@
     "print": "Print",
     "close_parent": "Close Parent",
     "ops": "Specimen Actions",
+    "auto": "Auto",
+    "aliquot_specs": "Aliquots Specifications",
+    "review_locations": "Review Locations",
+    "assign_locations": "Choose Locations",
 
     "reason_for_closing": "Reason for closing",
 
@@ -1059,6 +1070,11 @@
     "column": "Column",
     "replicate": "Replicate",
     "add_another": "Add Another",
+
+    "alloc_strategies": {
+      "least_empty": "Least Empty Container",
+      "recently_used": "Recently Used Container"
+    },
 
     "pos_selector": "Container Position Selector",
     "selected_pos": "Selected Position: ",
