@@ -47,5 +47,12 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
       });
     }
 
+    $scope.copyFirstQualityToAll = function() {
+      var quality = $scope.shipment.shipmentItems[0].receivedQuality;
+      angular.forEach($scope.shipment.shipmentItems, function(item) {
+        item.receivedQuality = quality;
+      });
+    }
+
     init();
   });

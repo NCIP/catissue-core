@@ -248,7 +248,12 @@
               <span translate="specimens.column">Column</span>
             </div>
           </th>
-          <th class="col os-col-10" ng-if="shipment.status == 'Shipped'" translate="shipments.spec.quality">Quality</th>
+          <th class="col os-col-10" ng-if="shipment.status == 'Shipped'">
+            <span translate="shipments.spec.quality">Quality</span>
+            <a ng-click="copyFirstQualityToAll()" style="font-weight: normal">
+              (<span translate="common.copy_first_to_all">Copy First To All</span>)
+            </a>
+          </th>
         </tr>
       </thead>
       <tbody class="os-table-body" os-storage-positions>
