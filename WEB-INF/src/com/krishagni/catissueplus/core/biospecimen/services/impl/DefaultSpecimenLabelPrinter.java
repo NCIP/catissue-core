@@ -156,18 +156,18 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			} else {
 				reader = new BufferedReader(new FileReader(rulesFile));
 			}
-						
+
 			String ruleLine = null;
 			while ((ruleLine = reader.readLine()) != null) {
 				SpecimenLabelPrintRule rule = parseRule(ruleLine);
 				if (rule == null) {
 					continue;
 				}
-				
+
 				rules.add(rule);
 				logger.info(String.format("Adding print rule: [%s]", rule));
 			}
-			
+
 			this.rules = rules;
 		} catch (Exception e) {
 			logger.error("Error loading rules from file: " + rulesFile, e);
@@ -187,13 +187,13 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			if (ruleLine.startsWith("#")) {
 				return null;
 			}
-			
+
 			String[] ruleLineFields = ruleLine.split("\\t");
-			if (ruleLineFields == null || ruleLineFields.length != 12) {
-				logger.error(String.format("Invalid rule [%s]. Expected variables: 12, Actual: [%d]", ruleLine, ruleLineFields.length));
+			if (ruleLineFields == null || ruleLineFields.length < 12 || ruleLineFields.length > 13) {
+				logger.error(String.format("Invalid rule [%s]. Expected variables: 12/13, Actual: [%d]", ruleLine, ruleLineFields.length));
 				return null;
 			}
-			
+
 			int idx = 0;
 			SpecimenLabelPrintRule rule = new SpecimenLabelPrintRule();
 			rule.setCpShortTitle(ruleLineFields[idx++]);
@@ -201,15 +201,15 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 			rule.setSpecimenClass(ruleLineFields[idx++]);
 			rule.setSpecimenType(ruleLineFields[idx++]);
 			rule.setUserLogin(ruleLineFields[idx++]);
-			
+
 			if (!ruleLineFields[idx++].equals("*")) {
 				rule.setIpAddressMatcher(new IpAddressMatcher(ruleLineFields[idx - 1]));
 			}
 			rule.setLabelType(ruleLineFields[idx++]);
-			
+
 			String[] labelTokens = ruleLineFields[idx++].split(",");
-			boolean badTokens = false;			
-			
+			boolean badTokens = false;
+
 			List<LabelTmplToken> tokens = new ArrayList<LabelTmplToken>();
 			for (String labelToken : labelTokens) {
 				LabelTmplToken token = printLabelTokensRegistrar.getToken(labelToken);
@@ -218,14 +218,14 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 					badTokens = true;
 					break;
 				}
-				
+
 				tokens.add(token);
 			}
-			
+
 			if (badTokens) {
 				return null;
 			}
-			
+
 			rule.setDataTokens(tokens);
 			rule.setLabelDesign(ruleLineFields[idx++]);
 			rule.setPrinterName(ruleLineFields[idx++]);
@@ -235,6 +235,7 @@ public class DefaultSpecimenLabelPrinter extends AbstractLabelPrinter<Specimen> 
 				rule.setCmdFileFmt(ruleLineFields[idx - 1]);
 			}
 
+			rule.setLineage(ruleLineFields.length > 12 ? ruleLineFields[idx++] : "*");
 			rule.setMessageSource(messageSource);
 			return rule;
 		} catch (Exception e) {

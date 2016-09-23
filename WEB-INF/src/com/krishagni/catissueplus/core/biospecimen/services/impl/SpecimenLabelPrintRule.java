@@ -12,6 +12,8 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 	private String specimenClass;
 	
 	private String specimenType;
+
+	private String lineage;
 	
 	public String getCpShortTitle() {
 		return cpShortTitle;
@@ -45,6 +47,18 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 		this.specimenType = specimenType;
 	}
 
+	public String getLineage() {
+		return lineage;
+	}
+
+	public void setLineage(String lineage) {
+		if (!isValidLineage(lineage)) {
+			throw new IllegalArgumentException("Invalid lineage: " + lineage + " Expected: New, Derived or Aliquot");
+		}
+
+		this.lineage = lineage;
+	}
+
 	public boolean isApplicableFor(Specimen specimen, User user, String ipAddr) {
 		if (!super.isApplicableFor(user, ipAddr)) {
 			return false;
@@ -65,6 +79,10 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 		if (!isWildCard(specimenType) && !specimen.getSpecimenType().equals(specimenType)) {
 			return false;
 		}
+
+		if (!isWildCard(lineage) && !specimen.getLineage().equals(lineage)) {
+			return false;
+		}
 		
 		return true;
 	}
@@ -72,9 +90,14 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 	public String toString() {
 		return new StringBuilder(super.toString())
 			.append(", cp = ").append(getCpShortTitle())
+			.append(", lineage = ").append(getLineage())
 			.append(", visit site = ").append(getVisitSite())
 			.append(", specimen class = ").append(getSpecimenClass())
 			.append(", specimen type = ").append(getSpecimenType())
 			.toString();
+	}
+
+	private boolean isValidLineage(String lineage) {
+		return isWildCard(lineage) || Specimen.isValidLineage(lineage);
 	}
 }
