@@ -1,13 +1,16 @@
 angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
-  .controller('FormCtxtsCtrl', function($scope, $modalInstance, $translate, args, cpList, entities, Alerts) {
+  .controller('FormCtxtsCtrl', function(
+    $scope, $modalInstance, $translate, args, cpList, entities, CollectionProtocol, Alerts) {
 
-    var reload = false;
+    var reload = false, reloadCps = false;
 
     function init() {
       $scope.showFormCtxts = true;
       $scope.extnEntities = entities;
       $scope.form = args.form;
+
       $scope.cpList = cpList;
+      reloadCps = (cpList.length >= 100);
 
       $scope.cpFormCtxts = args.formCtxts;
       angular.forEach(args.formCtxts, function(formCtx) {
@@ -30,6 +33,18 @@ angular.module('os.administrative.form.formctxts', ['os.administrative.models'])
         selectedCps: [],
         selectedEntity: undefined
       }
+    }
+
+    $scope.loadCps = function(searchTitle) {
+      if (!reloadCps) {
+        return;
+      }
+
+      CollectionProtocol.list({detailedList: false, title: searchTitle}).then(
+        function(cps) {
+          $scope.cpList = cps;
+        }
+      );
     }
 
     $scope.enableAttach = function(formCtxt) {
