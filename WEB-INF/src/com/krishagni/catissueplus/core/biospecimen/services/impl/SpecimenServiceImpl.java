@@ -647,20 +647,10 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 		Specimen specimen = existing;
 		if (existing == null || !existing.isCollected()) {
-			if (CollectionUtils.isNotEmpty(detail.getSpecimensPool())) {
-				Set<Specimen> specimensPool = new HashSet<Specimen>();
-				for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
-					specimensPool.add(collectSpecimen(poolSpmnDetail, null));
-				}
-
-				if (existing == null) {
-					existing = specimensPool.iterator().next().getPooledSpecimen();
-				}
-
-				existing.getSpecimensPool().addAll(specimensPool);
-			}
-
+			existing = collectPoolSpecimens(detail, existing);
 			specimen = saveOrUpdate(detail, existing, parent);
+		} else {
+			collectPoolSpecimens(detail, existing);
 		}
 
 		if (CollectionUtils.isNotEmpty(detail.getChildren())) {
@@ -675,7 +665,26 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 		return specimen;
 	}
-	
+
+	private Specimen collectPoolSpecimens(SpecimenDetail detail, Specimen existing) {
+		// If not pooled specimen then return existing specimen
+		if (CollectionUtils.isEmpty(detail.getSpecimensPool())) {
+			return existing;
+		}
+
+		Set<Specimen> specimensPool = new HashSet<Specimen>();
+		for (SpecimenDetail poolSpmnDetail : detail.getSpecimensPool()) {
+			specimensPool.add(collectSpecimen(poolSpmnDetail, null));
+		}
+
+		if (existing == null) {
+			existing = specimensPool.iterator().next().getPooledSpecimen();
+		}
+
+		existing.getSpecimensPool().addAll(specimensPool);
+		return existing;
+	}
+
 	private Specimen saveOrUpdate(SpecimenDetail detail, Specimen existing, Specimen parent) {
 		ensureEditAllowed(detail, existing);
 
