@@ -1867,8 +1867,8 @@
 
       "biospecimen": {
         "title": "Biospecimen",
-        "cp_coding_enabled": "Enable CP Coding",
-        "cp_coding_enabled_desc": "Enable short codes for collection protocol, events, and specimen requirements. Needed for barcoding.",
+        "cp_coding_enabled": "CP Coding",
+        "cp_coding_enabled_desc": "Enable or disable short codes for collection protocol, events, and specimen requirements. Needed for barcoding.",
         "mpi_format": "MPI Format",
         "mpi_format_desc": "Format for auto-generating master patient index (MPI).",
         "mpi_generator": "MPI Custom Generator",
