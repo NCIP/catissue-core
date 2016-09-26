@@ -2,8 +2,13 @@
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
     $scope, $q, cpr, visits, 
-    CollectionProtocol, SpecimenLabelPrinter, 
-    RegisterToNewCpsHolder, DeleteUtil) {
+    CollectionProtocol, SpecimenLabelPrinter, DeleteUtil) {
+
+    function init() {
+      $scope.cpr = cpr;
+      $scope.showRegToAnother = false;
+      loadPvs();
+    }
 
     function loadPvs() {
       var registeredCps = [];
@@ -12,23 +17,11 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
       });
 
       var siteNames = cpr.getMrnSites();
-      $scope.cpsForReg = [];
       CollectionProtocol.listForRegistrations(siteNames).then(
         function(cps) {
-          for (var i = 0; i < cps.length; ++i) {
-            if (registeredCps.indexOf(cps[i].shortTitle) == -1) {
-              $scope.cpsForReg.push(cps[i]);
-            }
-          }
+          $scope.showRegToAnother = cps.length > registeredCps.length;
         }
       );
-
-      RegisterToNewCpsHolder.setCpList($scope.cpsForReg);
-    }
-
-    function init() {
-      $scope.cpr = cpr;
-      loadPvs();
     }
 
     $scope.editCpr = function(property, value) {

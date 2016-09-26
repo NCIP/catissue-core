@@ -56,7 +56,7 @@
       </div>
       <os-select multiple ng-model="cpFormCtxt.selectedCps" list="cpList" display-prop="shortTitle"
         placeholder="{{'form.select_cps' | translate}}" name="cps" append-to-body="true" 
-        ng-show="!cpFormCtxt.allProtocols && !cpFormCtxt.selectedEntity.allCps">
+        ng-show="!cpFormCtxt.allProtocols && !cpFormCtxt.selectedEntity.allCps" refresh="loadCps">
       </os-select>
       <os-select ng-model="cpFormCtxt.selectedEntity" list="extnEntities" display-prop="caption"
         placeholder="{{'form.select_level' | translate }}" append-to-body="true">
