@@ -150,9 +150,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
       <div class="col-xs-6">
-        <os-select name="pathology" ng-model="derivative.pathology" list="pathologyStatuses"
+        <os-pvs name="pathology" ng-model="derivative.pathology" attribute="pathology-status"
           required placeholder="{{'specimens.pathology_status' | translate}}">
-        </os-select>
+        </os-pvs>
         <div os-field-error field="derivativeForm.pathology"></div>
       </div>
     </div>

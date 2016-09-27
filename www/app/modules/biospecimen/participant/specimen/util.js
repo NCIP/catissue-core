@@ -165,15 +165,6 @@ angular.module('os.biospecimen.specimen')
       scope.specimenTypes = scope.specimenClasses[specimenClass];
     }
 
-    function loadPathologyStatuses(scope) {
-      if (scope.pathologyLoaded) {
-        return;
-      }
-
-      scope.pathologyStatuses = PvManager.getPvs('pathology-status');
-      scope.pathologyLoaded = true;
-    }
-
     function getExtensionDetail(scope) {
       var formCtrl = scope.deFormCtrl.ctrl;
       if (!formCtrl || !formCtrl.validate()) {
@@ -301,8 +292,6 @@ angular.module('os.biospecimen.specimen')
       loadSpecimenClasses: loadSpecimenClasses,
 
       loadSpecimenTypes: loadSpecimenTypes,
-
-      loadPathologyStatuses: loadPathologyStatuses,
 
       copyContainerName: copyContainerName,
 

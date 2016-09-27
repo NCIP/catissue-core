@@ -6,6 +6,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
 
     function loadPvs() {
       $scope.biohazards = PvManager.getPvs('specimen-biohazard');
+      $scope.specimenStatuses = PvManager.getPvs('specimen-status');
     };
 
     function init() {

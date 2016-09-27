@@ -18,6 +18,8 @@ public class PvDetail {
 	private Long parentId;
 	
 	private String parentValue;
+	
+	private String conceptCode;
 
 	public Long getId() {
 		return id;
@@ -55,10 +57,19 @@ public class PvDetail {
 		return from(pv, false);
 	}
 	
+	public String getConceptCode() {
+		return conceptCode;
+	}
+
+	public void setConceptCode(String conceptCode) {
+		this.conceptCode = conceptCode;
+	}
+
 	public static PvDetail from(PermissibleValue pv, boolean incParent) {
 		PvDetail result = new PvDetail();
 		result.setId(pv.getId());
 		result.setValue(pv.getValue());
+		result.setConceptCode(pv.getConceptCode());
 		
 		if (incParent && pv.getParent() != null) {
 			result.setParentId(pv.getParent().getId());
