@@ -47,6 +47,8 @@ public enum DistributionOrderErrorCode implements ErrorCode {
 
 	CANT_UPDATE_EXEC_ORDER,
 
+	CANT_DELETE_EXEC_ORDER,
+
 	REQUESTER_REQ,
 
 	REQUESTER_NOT_FOUND,

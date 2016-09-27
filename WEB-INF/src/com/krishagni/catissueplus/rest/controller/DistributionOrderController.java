@@ -175,6 +175,15 @@ public class DistributionOrderController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public DistributionOrderDetail deleteOrder(@PathVariable("id") Long orderId) {
+		ResponseEvent<DistributionOrderDetail> resp = distributionService.deleteOrder(getRequest(orderId));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/report")
 	@ResponseStatus(HttpStatus.OK)
@@ -206,7 +215,7 @@ public class DistributionOrderController {
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
-	
+
 	private <T> RequestEvent<T> getRequest(T payload) {
 		return new RequestEvent<T>(payload);
 	}

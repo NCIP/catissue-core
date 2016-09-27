@@ -24,6 +24,8 @@ public interface DistributionOrderService {
 	public ResponseEvent<DistributionOrderDetail> createOrder(RequestEvent<DistributionOrderDetail> req);
 	
 	public ResponseEvent<DistributionOrderDetail> updateOrder(RequestEvent<DistributionOrderDetail> req);
+
+	public ResponseEvent<DistributionOrderDetail> deleteOrder(RequestEvent<Long> req);
 	
 	public ResponseEvent<QueryDataExportResult> exportReport(RequestEvent<Long> req);
 	

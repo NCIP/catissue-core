@@ -13,6 +13,12 @@
         <span translate="orders.buttons.download_report">Download Report</span>
       </button>
 
+      <button class="default" show-if-allowed="orderResource.deleteOpts" ng-click="deleteOrder()"
+        ng-if="order.status == 'PENDING'">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+
       <os-plugin-hooks view-name="'order-detail'" sec-name="'more-menu'"></os-plugin-hooks>
     </div>
   </div>

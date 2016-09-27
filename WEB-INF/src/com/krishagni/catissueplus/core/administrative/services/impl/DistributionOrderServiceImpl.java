@@ -224,6 +224,21 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 			return ResponseEvent.serverError(e);
 		}
 	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<DistributionOrderDetail> deleteOrder(RequestEvent<Long> req) {
+		try {
+			DistributionOrder order = getOrder(req.getPayload(), null);
+			AccessCtrlMgr.getInstance().ensureDeleteDistributionOrderRights(order);
+			order.delete();
+			return ResponseEvent.response(DistributionOrderDetail.from(order));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
 	
 	@Override
 	@PlusTransactional

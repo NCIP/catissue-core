@@ -15,6 +15,8 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.SpecimenReq
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.common.CollectionUpdater;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class DistributionOrder extends BaseEntity {
@@ -212,6 +214,15 @@ public class DistributionOrder extends BaseEntity {
 		if (getRequest() != null) {
 			getRequest().closeIfFulfilled();
 		}
+	}
+
+	public void delete() {
+		if (isOrderExecuted()) {
+			throw OpenSpecimenException.userError(DistributionOrderErrorCode.CANT_DELETE_EXEC_ORDER, getName());
+		}
+
+		setName(Utility.getDisabledValue(getName(), 255));
+		setActivityStatus(com.krishagni.catissueplus.core.common.util.Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
 
 	public boolean isOrderExecuted() {
