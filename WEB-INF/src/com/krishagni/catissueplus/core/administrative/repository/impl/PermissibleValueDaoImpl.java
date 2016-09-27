@@ -31,7 +31,12 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	public List<PermissibleValue> getPvs(ListPvCriteria crit) {
 		Criteria query = getPvQuery(crit);		
 		if (StringUtils.isNotBlank(crit.query())) {
-			query.add(Restrictions.ilike("value", crit.query(), MatchMode.ANYWHERE));
+			query.add(
+				Restrictions.or(
+					Restrictions.ilike("value", crit.query(), MatchMode.ANYWHERE), 
+					Restrictions.ilike("conceptCode", crit.query(), MatchMode.ANYWHERE)
+				)
+			);
 		}
 		
 		int maxResults = crit.maxResults() < 0 ? 100 : crit.maxResults();

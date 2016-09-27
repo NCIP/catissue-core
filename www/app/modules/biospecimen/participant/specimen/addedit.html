@@ -78,9 +78,9 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.collection_status">Collection Status</label>
       <div class="col-xs-6">
-        <os-pvs name="collectionStatus" ng-model="currSpecimen.status" attribute="specimen-status"
+        <os-select name="collectionStatus" ng-model="currSpecimen.status" list="specimenStatuses"
           required placeholder="{{'specimens.collection_status' | translate}}">
-        </os-pvs>
+        </os-select>
         <div os-field-error field="sform.collectionStatus"></div>
       </div>
     </div>
