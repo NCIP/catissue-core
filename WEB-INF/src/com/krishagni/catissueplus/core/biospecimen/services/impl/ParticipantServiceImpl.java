@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -23,7 +22,6 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.MpiGenerator;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class ParticipantServiceImpl implements ParticipantService {
 	private DaoFactory daoFactory;
@@ -99,7 +97,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 			if (existing == null) {
 				return ResponseEvent.userError(ParticipantErrorCode.NOT_FOUND);
 			}
-
 			
 			Participant participant = participantFactory.createParticipant(existing, detail);
 			updateParticipant(existing, participant);			
@@ -225,10 +222,5 @@ public class ParticipantServiceImpl implements ParticipantService {
 		}
 		
 		return result;
-	}
-	
-	private String getMpiFormat() {
-		return ConfigUtil.getInstance()
-				.getStrSetting(ConfigParams.MODULE, ConfigParams.MPI_FORMAT, null);
 	}
 }

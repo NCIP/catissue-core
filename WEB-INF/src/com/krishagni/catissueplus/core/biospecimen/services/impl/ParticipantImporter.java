@@ -7,6 +7,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.CprErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -29,6 +30,8 @@ public class ParticipantImporter implements ObjectImporter<ParticipantDetail, Pa
 	@Override
 	public ResponseEvent<ParticipantDetail> importObject(RequestEvent<ImportObjectDetail<ParticipantDetail>> req) {
 		try {
+			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
+
 			ImportObjectDetail<ParticipantDetail> detail = req.getPayload();		
 			RequestEvent<ParticipantDetail> partReq = new RequestEvent<ParticipantDetail>(detail.getObject());
 			

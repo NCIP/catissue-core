@@ -705,6 +705,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr-multiple.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/other-cpr.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
       </list>
     </property>
 
