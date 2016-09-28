@@ -1,7 +1,8 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, $translate, $modal, cp, cpr, extensionCtxt, hasDict,
+    $scope, $state, $stateParams, $translate, $modal,
+    cp, cpr, extensionCtxt, hasDict, lockedFields,
     CollectionProtocolRegistration, Participant,
     Site, PvManager, ExtensionsUtil) {
 
@@ -12,6 +13,15 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.pid = undefined;
       $scope.allowIgnoreMatches = true;
 
+      $scope.disableFieldOpts = {}
+      if (!!cpr.id) {
+        $scope.disableFieldOpts = {
+          fields: getStaticFields(lockedFields),
+          disable: !!cpr.id,
+          customFields: getCustomFields(lockedFields)
+        }
+      }
+
       $scope.cp = cp;
       $scope.cpr = angular.copy(cpr);
 
@@ -20,13 +30,39 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       }
 
       $scope.deFormCtrl = {};
-      $scope.extnOpts = ExtensionsUtil.getExtnOpts($scope.cpr.participant, extensionCtxt); 
+      $scope.extnOpts = ExtensionsUtil.getExtnOpts(
+        $scope.cpr.participant, extensionCtxt, $scope.disableFieldOpts.customFields);
 
       if (!hasDict) {
         $scope.cpr.participant.addPmi($scope.cpr.participant.newPmi());
         loadPvs();
       }
     };
+
+    function getStaticFields(fields) {
+      var result = {};
+      angular.forEach(fields,
+        function(f) {
+          if (f.indexOf('cpr.participant.extensionDetail.attrsMap') != 0) {
+            result[f] = true;
+          }
+        }
+      );
+
+      return result;
+    }
+
+    function getCustomFields(fields) {
+      return fields.filter(
+        function(f) {
+          return f.indexOf('cpr.participant.extensionDetail.attrsMap') == 0
+        }
+      ).map(
+        function(f) {
+          return f.substring('cpr.participant.extensionDetail.attrsMap.'.length);
+        }
+      );
+    }
 
     function loadPvs() {
       $scope.op = !!$scope.cpr.id ? 'Update' : 'Create';
@@ -66,6 +102,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     }
 
     $scope.addPmiIfLast = function(idx) {
+      if (lockedFields.indexOf('cpr.participant.pmis') != -1) {
+        return;
+      }
+
       var participant = $scope.cpr.participant;
       if (idx == participant.pmis.length - 1) {
         participant.addPmi(participant.newPmi());

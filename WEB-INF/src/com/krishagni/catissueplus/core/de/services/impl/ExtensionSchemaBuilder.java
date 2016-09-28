@@ -18,6 +18,8 @@ import com.krishagni.catissueplus.core.importer.services.ObjectSchemaBuilder;
 
 import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.domain.nui.DataType;
+import edu.common.dynamicextensions.domain.nui.DatePicker;
 import edu.common.dynamicextensions.domain.nui.FileUploadControl;
 import edu.common.dynamicextensions.domain.nui.MultiSelectControl;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
@@ -107,10 +109,20 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 	}
 	
 	private Field getField(Control ctrl, boolean useUdn) {
-		return getField(
-				useUdn ? ctrl.getUserDefinedName() : ctrl.getName() ,
-				ctrl.getCaption(),
-				ctrl instanceof MultiSelectControl);
+		Field field = getField(
+			useUdn ? ctrl.getUserDefinedName() : ctrl.getName() ,
+			ctrl.getCaption(),
+			ctrl instanceof MultiSelectControl);
+
+		if (ctrl.getDataType() == DataType.DATE) {
+			if (((DatePicker)ctrl).getFormat().contains("HH:mm")) {
+				field.setType("datetime");
+			} else {
+				field.setType("date");
+			}
+		}
+
+		return field;
 	}
 	
 	private Record getSubRecord(SubFormControl ctrl, boolean useUdn) {

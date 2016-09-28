@@ -78,7 +78,7 @@ angular.module('os.biospecimen.extensions.util', [])
       return attrsMap; 
     }
 
-    function getExtnOpts(entity, extnCtxt) {
+    function getExtnOpts(entity, extnCtxt, disableFields) {
       if (!extnCtxt) {
         return undefined;
       }
@@ -93,7 +93,8 @@ angular.module('os.biospecimen.extensions.util', [])
         formData: !!entity.id && !!entity.extensionDetail ? entity.extensionDetail.attrsMap : {},
         showActionBtns: false,
         showPanel: false, 
-        labelAlignment: 'horizontal'
+        labelAlignment: 'horizontal',
+        disableFields: disableFields || []
       };
     }
     

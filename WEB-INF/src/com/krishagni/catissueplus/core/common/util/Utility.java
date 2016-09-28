@@ -17,8 +17,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -26,6 +28,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanToPropertyValueTransformer;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -34,6 +37,8 @@ import org.apache.commons.lang3.time.DateUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
+import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -398,5 +403,126 @@ public class Utility {
 		} catch (IOException e) {
 			throw new RuntimeException("Error on converting Map to JSON", e);
 		}
+	}
+
+	public static List<String> diff(BaseExtensionEntity obj1, BaseExtensionEntity obj2, List<String> fields) {
+		Map<String, Object> map1 = obj1.getExtension().getAttrValues();
+		Map<String, Object> map2 = obj2.getExtension().getAttrValues();
+
+		return fields.stream().filter(field -> {
+			if (!field.startsWith("extensionDetail.attrsMap.")) {
+				return !equals(obj1, obj2, field);
+			} else {
+				field = field.substring("extensionDetail.attrsMap.".length());
+				return !equals(map1.get(field), map2.get(field));
+			}
+		}).collect(Collectors.toList());
+	}
+
+	public static List<String> equals(Object obj1, Object obj2, List<String> fields) {
+		return fields.stream().filter(field -> !equals(obj1, obj2, field)).collect(Collectors.toList());
+	}
+
+	private static boolean equals(Object obj1, Object obj2, String fieldName) {
+		try {
+			Object val1 = PropertyUtils.getProperty(obj1, fieldName);
+			Object val2 = PropertyUtils.getProperty(obj2, fieldName);
+			return equals(val1, val2);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static boolean equals(Object val1, Object val2) {
+		if (val1 instanceof Collection || val2 instanceof Collection) {
+			return equalCollections((Collection)val1, (Collection)val2);
+		} else if (val1 instanceof Map || val2 instanceof Map) {
+			return equalMaps((Map)val1, (Map)val2);
+		} else if (val1 instanceof Date) {
+			return DateUtils.isSameDay((Date)val1, (Date)val2);
+		} else if (val1 == val2) {
+			return true;
+		} else if ((val1 != null && val2 == null) || val1 == null) {
+			return false;
+		} else if (val1 instanceof BaseEntity) {
+			return ((BaseEntity) val1).sameAs(val2);
+		} else {
+			//
+			// if-else is hack for DE date fields in bulk import
+			//
+			if (val1 instanceof String && val2 instanceof Long) {
+				val2 = val2.toString();
+			} else if (val1 instanceof Long && val2 instanceof String) {
+				val1 = val1.toString();
+			}
+
+			return val1.equals(val2);
+		}
+	}
+
+	private static boolean equalCollections(Collection<?> coll1, Collection<?> coll2) {
+		if (coll1 == coll2) {
+			return true;
+		} else if (coll1 == null) {
+			return coll2.isEmpty();
+		} else if (coll2 == null) {
+			return coll1.isEmpty();
+		} else if (coll1.isEmpty() && coll2.isEmpty()) {
+			return true;
+		} else if (coll1.size() != coll2.size()) {
+			return false;
+		}
+
+		return containsAll(coll1, coll2);
+	}
+
+	private static boolean equalMaps(Map<?, ?> map1, Map<?, ?> map2) {
+		if (map1 == map2) {
+			return true;
+		} else if (map1 == null) {
+			return map2.isEmpty();
+		} else if (map2 == null) {
+			return map1.isEmpty();
+		} else if (map1.isEmpty() && map2.isEmpty()) {
+			return true;
+		} else if (map1.size() != map2.size()) {
+			return false;
+		}
+
+		for (Map.Entry<?, ?> e : map1.entrySet()) {
+			if (!equals(e.getValue(), map2.get(e.getKey()))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static boolean containsAll(Collection<?> coll1, Collection<?> coll2) {
+		for (Object e : coll2) {
+			if (!contains(coll1, e)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private static boolean contains(Collection<?> coll, Object obj) {
+		if (obj == null) {
+			for (Object e : coll) {
+				if (e == null) {
+					return true;
+				}
+			}
+		} else {
+			for (Object e : coll) {
+				if (equals(e, obj)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

@@ -54,4 +54,8 @@ public class BaseEntity {
 		BaseEntity other = (BaseEntity) obj;
 		return getId() != null ? getId().equals(other.getId()) : false;
 	}
+
+	public boolean sameAs(Object obj) {
+		return equals(obj);
+	}
 }

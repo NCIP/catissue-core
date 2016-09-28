@@ -57,7 +57,9 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	
 	@Override
 	public Participant createParticipant(Participant existing, ParticipantDetail detail) {
-		Participant participant = new Participant();		
+		existing.setCpId(detail.getCpId());
+
+		Participant participant = new Participant();
 		BeanUtils.copyProperties(existing, participant, new String[] {"cprs"});
 		
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);

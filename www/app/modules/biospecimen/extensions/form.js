@@ -75,7 +75,8 @@ angular.module('os.biospecimen.extensions', ['os.biospecimen.models'])
             skipLogicFieldValue   : opts.skipLogicFieldValue ||
               function(attrName) {
                 return ctrl.extendedObj ? ctrl.extendedObj.attrValue(attrName) : undefined
-              }
+              },
+            disableFields  : opts.disableFields || []
           };
 
           ctrl.form = new edu.common.de.Form(args);

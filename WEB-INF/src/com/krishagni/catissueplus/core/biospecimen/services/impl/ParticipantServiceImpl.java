@@ -148,8 +148,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	public void updateParticipant(Participant existing, Participant newParticipant) {
+		ParticipantUtil.ensureLockedFieldsAreUntouched(existing, newParticipant);
+
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-		
+
 		String existingUid = existing.getUid();
 		String newUid = newParticipant.getUid();
 		if (StringUtils.isNotBlank(newUid) && !newUid.equals(existingUid)) {

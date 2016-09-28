@@ -213,17 +213,7 @@ public abstract class DeObject {
 
 	public Map<String, Object> getAttrValues() {
 		loadRecordIfNotLoaded();
-		
-		Map<String, Object> vals = new HashMap<String, Object>();
-		for (Attr attr: attrs) {
-			if (isUseUdn()) {
-				vals.put(attr.getUdn(), attr.getValue());
-			} else {
-				vals.put(attr.getName(), attr.getValue());
-			}
-		}
-		
-		return vals;
+		return getAttrValues(attrs);
 	}
 
 	public Map<String, String> getLabelValueMap() {
@@ -404,6 +394,29 @@ public abstract class DeObject {
 		return attrs;
 	}
 
+	private Map<String, Object> getAttrValues(List<Attr> attrs) {
+		Map<String, Object> result = new LinkedHashMap<>();
+
+		Object value = null;
+		for (Attr attr : attrs) {
+			if (attr.isSubForm()) {
+				if (attr.isOneToOne()) {
+					value = getAttrValues((List<Attr>)attr.getValue());
+				} else {
+					value = ((List<List<Attr>>)attr.getValue()).stream()
+						.map(sfAttrs -> getAttrValues(sfAttrs))
+						.collect(Collectors.toList());
+				}
+			} else {
+				value = attr.getValue();
+			}
+
+			result.put(isUseUdn() ? attr.getUdn() : attr.getName(), value);
+		}
+
+		return result;
+	}
+
 	public static class Attr {
 		private ControlValue ctrlValue;
 
@@ -483,11 +496,11 @@ public abstract class DeObject {
 		}
 		
 		public boolean isSubForm() {
-			return type.equals("subForm");
+			return "subForm".equals(type);
 		}
 		
 		public boolean isOneToOne() {
-			if (ctrlValue.getControl() instanceof SubFormControl) {
+			if (ctrlValue != null && ctrlValue.getControl() instanceof SubFormControl) {
 				return ((SubFormControl)ctrlValue.getControl()).isOneToOne();
 			}
 

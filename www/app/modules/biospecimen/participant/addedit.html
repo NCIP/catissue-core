@@ -53,7 +53,7 @@
 </div>
 
 <script type="text/ng-template" id="modules/biospecimen/participant/static-addedit.html">
-  <div>
+  <div os-disable-fields="disableFieldOpts">
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
       <div class="col-xs-6">
@@ -67,7 +67,7 @@
     <div class="form-group" ng-if="cpr.id || !cp.ppidFmt || cp.manualPpidEnabled">
       <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
       <div class="col-xs-6">
-        <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
+        <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control"
           placeholder="{{'participant.ppid' | translate}}" required
           ng-disabled="cp.ppidFmt && !cp.manualPpidEnabled">
         <div os-field-error field="pform.ppid"></div>
@@ -79,7 +79,7 @@
     <div class="form-group">
       <label class="col-xs-3 control-label" translate="participant.name">Name</label>
       <div class="col-xs-2">
-        <input type="text" ng-model="cpr.participant.lastName" class="form-control" 
+        <input type="text" ng-model="cpr.participant.lastName" class="form-control"
           placeholder="{{'participant.last_name' | translate}}"/>
       </div>
       <div class="col-xs-2">
@@ -87,7 +87,7 @@
           placeholder="{{'participant.first_name' | translate}}"/>
       </div>
       <div class="col-xs-2">
-        <input type="text" ng-model="cpr.participant.middleName" class="form-control" 
+        <input type="text" ng-model="cpr.participant.middleName" class="form-control"
           placeholder="{{'participant.middle_name' | translate}}"/>
       </div>
     </div>
@@ -152,7 +152,7 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
         <div class="col-xs-6">
-          <os-pvs name="ethnicity" ng-model="cpr.participant.ethnicity" attribute="ethnicity" 
+          <os-pvs name="ethnicity" ng-model="cpr.participant.ethnicity" attribute="ethnicity"
             placeholder="{{'participant.ethnicity' | translate}}">
           </os-pvs>
         </div>
@@ -161,7 +161,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="participant.race">Race</label>
         <div class="col-xs-6">
-          <os-pvs multiple ng-model="cpr.participant.races" attribute="race"></os-pvs>
+          <os-pvs multiple ng-model="cpr.participant.races" attribute="race"
+            placeholder="{{'participant.select_race' | translate}}">
+          </os-pvs>
         </div>
       </div>
     </div> <!-- End of Show Adv Demographics -->
@@ -193,24 +195,26 @@
     <div os-unique-items>
       <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
         <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator">
-          <div class="col-xs-3 col-xs-offset-3">
-            <os-sites name="siteName" ng-model="pmi.siteName" placeholder="{{'participant.select_site' | translate}}"
-              ng-required="!!pmi.mrn" ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
-              os-unique-item>
-            </os-sites>
-            <div os-field-error field="pmiForm.siteName"></div>
-          </div>
+          <fieldset record-name="cpr.participant.pmis">
+            <div class="col-xs-3 col-xs-offset-3">
+              <os-sites name="siteName" ng-model="pmi.siteName" placeholder="{{'participant.select_site' | translate}}"
+                ng-required="!!pmi.mrn" ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
+                os-unique-item>
+              </os-sites>
+              <div os-field-error field="pmiForm.siteName"></div>
+            </div>
 
-          <div class="col-xs-3">
-            <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
-              placeholder="{{'participant.mrn_short' | translate}}">
-          </div>
+            <div class="col-xs-3">
+              <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
+                placeholder="{{'participant.mrn_short' | translate}}">
+            </div>
 
-          <div class="col-xs-1">
-            <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
-              <span class="glyphicon glyphicon-trash"></span>
-            </button>
-          </div>
+            <div class="col-xs-1">
+              <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
+                <span class="glyphicon glyphicon-trash"></span>
+              </button>
+            </div>
+          <fieldset>
         </ng-form>
       </div>
     </div>

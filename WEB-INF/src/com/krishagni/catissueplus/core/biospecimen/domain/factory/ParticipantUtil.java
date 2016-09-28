@@ -1,11 +1,15 @@
 package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
+import com.krishagni.catissueplus.core.biospecimen.WorkflowUtil;
+import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -16,6 +20,7 @@ import com.krishagni.catissueplus.core.common.service.MpiGenerator;
 import com.krishagni.catissueplus.core.common.service.impl.DefaultMpiGenerator;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.RegexValidator;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.common.util.Validator;
 
 public class ParticipantUtil {
@@ -98,6 +103,26 @@ public class ParticipantUtil {
 		
 		return null;
 	}
+
+	public static void ensureLockedFieldsAreUntouched(Participant existing, Participant newParticipant) {
+		List<String> lockedFields = Collections.emptyList();
+
+		CpWorkflowConfig.Workflow workflow = WorkflowUtil.getInstance().getSysWorkflow(LOCKED_FIELDS);
+		if (workflow != null && workflow.getData().get("participant") instanceof List) {
+			lockedFields = (List<String>)workflow.getData().get("participant");
+		}
+
+		lockedFields = lockedFields.stream()
+			.filter(field -> field.startsWith(PART_FIELD_PREFIX))
+			.map(field -> field.substring(PART_FIELD_PREFIX.length()))
+			.collect(Collectors.toList());
+
+		List<String> diff = Utility.diff(existing, newParticipant, lockedFields);
+		if (!diff.isEmpty()) {
+			String errFields = diff.stream().map(f -> PART_FIELD_PREFIX + f).collect(Collectors.joining(", "));
+			throw OpenSpecimenException.userError(ParticipantErrorCode.LF_UPDATE_NOT_ALLOWED, errFields);
+		}
+	}
 	
 	private static boolean isValidInput(String input, String patternCfg, String validatorCfg, ErrorCode error, OpenSpecimenException ose) {
 		String pattern = ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, patternCfg, null);
@@ -123,5 +148,9 @@ public class ParticipantUtil {
 	private static String getMpiCfgProp(String property) {
 		return ConfigUtil.getInstance().getStrSetting(ConfigParams.MODULE, property, null);
 	}
+
+	private static String LOCKED_FIELDS = "locked-fields";
+
+	private static String PART_FIELD_PREFIX = "cpr.participant.";
 
 }

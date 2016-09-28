@@ -299,6 +299,9 @@ angular.module('os.biospecimen.participant',
         resolve: {
           extensionCtxt: function(cp, Participant) {
             return Participant.getExtensionCtxt({cpId: cp.id});
+          },
+          lockedFields: function(CpConfigSvc) {
+            return CpConfigSvc.getLockedParticipantFields();
           }
         },
         parent: 'participant-root'

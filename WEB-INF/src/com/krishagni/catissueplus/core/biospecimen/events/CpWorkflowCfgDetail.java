@@ -41,9 +41,12 @@ public class CpWorkflowCfgDetail {
 	
 	public static CpWorkflowCfgDetail from(CpWorkflowConfig cfg) {
 		CpWorkflowCfgDetail result = new CpWorkflowCfgDetail();
-		result.setCpId(cfg.getCp().getId());
-		result.setShortTitle(cfg.getCp().getShortTitle());
-		
+
+		if (cfg.getCp() != null) {
+			result.setCpId(cfg.getCp().getId());
+			result.setShortTitle(cfg.getCp().getShortTitle());
+		}
+
 		for (Workflow workflow : cfg.getWorkflows().values()) {
 			WorkflowDetail wfDetail = new WorkflowDetail();
 			BeanUtils.copyProperties(workflow, wfDetail);

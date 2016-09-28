@@ -487,8 +487,24 @@ edu.common.de.Form = function(args) {
       fieldObj.$skipLogic = new edu.common.de.SkipLogic(this, fieldObj, field);
       this.$hasSkipLogic = true;
     }
-  
+
+    disableField(field, inputEl);
     return fieldEl.append(inputEl);
+  };
+
+  function disableField(field, fieldEl) {
+    if (!args.disableFields || args.disableFields.indexOf(field.name) == -1) {
+      return;
+    }
+
+    var el = fieldEl;
+    if (field.type == 'subForm') {
+      el = fieldEl.find('fieldset');
+    } else if (el[0].tagName != 'INPUT' && el[0].tagName != 'TEXTAREA') {
+      el = fieldEl.find('input');
+    }
+
+    el.attr('disabled', true);
   };
 
   this.fieldLabel = function(name, label) {
@@ -1480,8 +1496,7 @@ edu.common.de.SubFormField = function(id, sfField, args) {
 
 
     this.subFormEl = $("<div/>").prop({id: id, title: sfField.toolTip})
-      .append(subFormContent)
-      .append(this.getAddButton());
+      .append($("<fieldset/>").append(subFormContent).append(this.getAddButton()));
 
     return this.subFormEl;
   };
@@ -1715,6 +1730,11 @@ edu.common.de.FileUploadField = function(id, field, args) {
 
     this.removeBtn = $("<span/>").addClass("glyphicon glyphicon-remove de-input-addon hidden");
     this.removeBtn.on("click", function() {
+      var disabled = that.fileNameInput.attr('disabled');
+      if (typeof disabled !== typeof undefined && disabled !== false) {
+        return;
+      }
+
       that.setValue(this.recId, {filename: undefined, contentType: undefined, fileId: undefined});
     });
 

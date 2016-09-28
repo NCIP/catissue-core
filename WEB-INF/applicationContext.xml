@@ -175,7 +175,6 @@
     <property name="emailService" ref="emailService"/>
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="listGenerator" ref="listGenerator"/>
-    <property name="cfgSvc" ref="cfgSvc"/>
     <property name="rptSettingsFactory" ref="reportSettingsFact"/>
   </bean>
   

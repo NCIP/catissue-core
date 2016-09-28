@@ -510,7 +510,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private Participant mergeParticipant(CollectionProtocolRegistration existingCpr, CollectionProtocolRegistration inputCpr) {
 		if (existingCpr.getParticipant().equals(inputCpr.getParticipant())) {
 			//
-			//No change in participant between registration updates. Do nothing
+			// No change in participant between registration updates. Do nothing
 			//
 			return existingCpr.getParticipant();
 		}

@@ -139,6 +139,18 @@ angular.module('openspecimen')
             return cfg;
           }
         );
+      },
+
+      getLockedParticipantFields: function() {
+        return getWorkflowData(-1, 'locked-fields').then(
+          function(data) {
+            if (!data) {
+              return [];
+            }
+
+            return data.participant || [];
+          }
+        );
       }
     }
   });

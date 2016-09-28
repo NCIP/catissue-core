@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.biospecimen.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -43,5 +44,23 @@ public class ParticipantMedicalIdentifier extends BaseEntity {
 
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
+	}
+
+	@Override
+	public boolean sameAs(Object pmiObj) {
+		if (!(pmiObj instanceof ParticipantMedicalIdentifier)) {
+			return false;
+		}
+
+		ParticipantMedicalIdentifier otherPmi = (ParticipantMedicalIdentifier)pmiObj;
+		if (!StringUtils.equals(getMedicalRecordNumber(), otherPmi.getMedicalRecordNumber())) {
+			return false;
+		}
+
+		if (getSite() != null && otherPmi.getSite() != null && !getSite().equals(otherPmi.getSite())) {
+			return false;
+		}
+
+		return true;
 	}
 }

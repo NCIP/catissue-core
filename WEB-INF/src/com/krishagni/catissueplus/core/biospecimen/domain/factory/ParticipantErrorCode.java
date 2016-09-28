@@ -40,7 +40,9 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	MANUAL_MPI_NOT_ALLOWED,
 	
-	CANNOT_UPDATE_PHI;
+	CANNOT_UPDATE_PHI,
+
+	LF_UPDATE_NOT_ALLOWED;
 
 	public String code() {
 		return "PARTICIPANT_" + this.name();
