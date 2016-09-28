@@ -11,7 +11,7 @@ angular.module("os.biospecimen.extensions")
            }
          } else {
            if (attr.type == 'fileUpload') {
-             attr.fileDownloadUrl = ExtensionsUtil.getFileDownloadUrl(formId, recordId, attr.name);
+             attr.$$fileDownloadUrl = ExtensionsUtil.getFileDownloadUrl(formId, recordId, attr.name);
            }
          }
        });

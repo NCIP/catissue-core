@@ -43,7 +43,7 @@
 <script type="text/ng-template" id="modules/biospecimen/extensions/display-value">
   <span ng-switch on="attr.type">
     <span ng-switch-when="fileUpload">
-      <a href="{{attr.fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
+      <a href="{{attr.$$fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
       <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
     </span>
     <span ng-switch-when="datePicker">

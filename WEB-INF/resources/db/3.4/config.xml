@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Setting to enable or disable 2 step patient registration workflow">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'two_step_patient_reg',
+        'two_step_patient_reg', 'two_step_patient_reg_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

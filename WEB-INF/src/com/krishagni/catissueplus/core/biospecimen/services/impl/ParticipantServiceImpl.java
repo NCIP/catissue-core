@@ -29,8 +29,9 @@ public class ParticipantServiceImpl implements ParticipantService {
 	private ParticipantFactory participantFactory;
 	
 	private ParticipantLookupLogic participantLookupLogic;
-
 	
+	private ParticipantLookupLogic remoteParticipantRegistry;
+
 	public void setParticipantLookupLogic(ParticipantLookupLogic participantLookupLogic) {
 		this.participantLookupLogic = participantLookupLogic;
 	}
@@ -41,6 +42,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	public void setParticipantFactory(ParticipantFactory participantFactory) {
 		this.participantFactory = participantFactory;
+	}
+
+	public void setRemoteParticipantRegistry(ParticipantLookupLogic remoteParticipantRegistry) {
+		this.remoteParticipantRegistry = remoteParticipantRegistry;
 	}
 
 	@Override
@@ -131,7 +136,12 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
-		return ResponseEvent.response(participantLookupLogic.getMatchingParticipants(req.getPayload())); 
+		List<MatchedParticipant> result = participantLookupLogic.getMatchingParticipants(req.getPayload());
+		if (CollectionUtils.isEmpty(result) && remoteParticipantRegistry != null) {
+			result = remoteParticipantRegistry.getMatchingParticipants(req.getPayload());
+		}
+
+		return ResponseEvent.response(result);
 	}
 	
 	public void createParticipant(Participant participant) {

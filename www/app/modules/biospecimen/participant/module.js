@@ -300,6 +300,13 @@ angular.module('os.biospecimen.participant',
           extensionCtxt: function(cp, Participant) {
             return Participant.getExtensionCtxt({cpId: cp.id});
           },
+          twoStepReg: function(SettingUtil) {
+            return SettingUtil.getSetting('biospecimen', 'two_step_patient_reg').then(
+              function(setting) {
+                return setting.value == 'true';
+              }
+            );
+          },
           lockedFields: function(CpConfigSvc) {
             return CpConfigSvc.getLockedParticipantFields();
           }

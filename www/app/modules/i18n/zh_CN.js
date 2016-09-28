@@ -298,7 +298,6 @@
             "register_selected_participant": "寄存器选择参与者",
             "merge_participants": "合并参与者",
             "ignore_matches": "忽略匹配并继续",
-            "lookup_again": "再次查找",
             "bulk_register": "批量注册",
             "specimen_catalog": "样本目录"
         },

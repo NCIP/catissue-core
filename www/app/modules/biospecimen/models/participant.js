@@ -65,7 +65,7 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       return $http.post(Participant.url() + '/match', criteria)
         .then(function(result) {
           var response = result.data.filter(function(matched) {
-            return matched.participant.id != that.id;
+            return !that.id || matched.participant.id != that.id;
           });
           
           angular.forEach(response, function(matched) {

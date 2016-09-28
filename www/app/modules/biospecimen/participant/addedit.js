@@ -2,11 +2,12 @@
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, $translate, $modal,
-    cp, cpr, extensionCtxt, hasDict, lockedFields,
+    cp, cpr, extensionCtxt, hasDict, twoStepReg, lockedFields,
     CollectionProtocolRegistration, Participant,
     Site, PvManager, ExtensionsUtil) {
 
     var availableSites = [];
+    var inputParticipant = null;
 
     function init() {
       $scope.cpId = $stateParams.cpId;
@@ -26,7 +27,9 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpr = angular.copy(cpr);
 
       $scope.partCtx = {
-        obj: {cpr: $scope.cpr}, inObjs: ['cpr']
+        obj: {cpr: $scope.cpr},
+        inObjs: ['cpr'],
+        twoStepReg: !cpr.id && twoStepReg
       }
 
       $scope.deFormCtrl = {};
@@ -98,11 +101,11 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     };
 
     $scope.pmiText = function(pmi) {
-      return pmi.mrn + " (" + pmi.siteName + ")";
+      return pmi.siteName + (pmi.mrn ? " (" + pmi.mrn + ")" : "");
     }
 
     $scope.addPmiIfLast = function(idx) {
-      if (lockedFields.indexOf('cpr.participant.pmis') != -1) {
+      if (!$scope.partCtx.twoStepReg && lockedFields.indexOf('cpr.participant.pmis') != -1) {
         return;
       }
 
@@ -130,6 +133,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
           function(result) {
             if (!result || result.length == 0) {
               registerParticipant();
+              return;
             }
 
             $scope.allowIgnoreMatches = true;
@@ -140,8 +144,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
                 break;
               }
             } 
+
             $scope.allowIgnoreMatches = participant.id || $scope.allowIgnoreMatches;
             $scope.matchedParticipants = result;
+            inputParticipant = $scope.cpr.participant;
           }
         );
       }
@@ -152,21 +158,28 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     }
 
     $scope.selectParticipant = function(participant) {
-      $scope.selectedParticipant = participant;
+      $scope.selectedParticipant = $scope.cpr.participant = participant;
     };
 
     $scope.lookupAgain = function() {
-      $scope.matchedParticipants = undefined;
-      $scope.selectedParticipant = undefined;
+      $scope.cpr.participant = inputParticipant;
+      $scope.matchedParticipants = $scope.selectedParticipant = undefined;
       $scope.allowIgnoreMatches = true;
     };
 
     $scope.ignoreMatchesAndRegister = function() {
+      $scope.cpr.participant = inputParticipant;
       registerParticipant();
     };
 
     $scope.registerUsingSelectedParticipant = function() {
-      $scope.cpr.participant = new Participant($scope.selectedParticipant);
+      var selectedPart = $scope.selectedParticipant;
+      if (!!selectedPart.id) {
+        $scope.cpr.participant = new Participant({id: selectedPart.id, pmis: selectedPart.pmis});
+      } else {
+        $scope.cpr.participant = new Participant(selectedPart);
+      }
+
       registerParticipant();
     };
 
@@ -187,6 +200,23 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       modalInstance.result.then(
         function() {
           $scope.registerUsingSelectedParticipant(); 
+        }
+      );
+    }
+
+    $scope.lookup = function() {
+      $scope.cpr.participant.getMatchingParticipants().then(
+        function(result) {
+          if (!result || result.length == 0) {
+            $scope.partCtx.twoStepReg = false;
+            $scope.partCtx.showNoMatchWarning = true;
+          } else {
+            $scope.allowIgnoreMatches = false;
+            $scope.matchedParticipants = result;
+
+            inputParticipant = $scope.cpr.participant;
+            $scope.selectParticipant(result[0].participant);
+          }
         }
       );
     }

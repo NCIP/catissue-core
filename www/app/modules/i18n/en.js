@@ -367,7 +367,8 @@
       "clear": "Clear response"
      },
 
-    "similar_participants": "Following participants found that are similar to participant being registered/updated",
+    "similar_participants": "Following matching participant(s) found",
+    "no_matching_participant": "No matching participant found",
     "matched_attrs": "Matched Attributes",
     "matching_attr": {
       "empi": "EMPI",
@@ -387,7 +388,7 @@
       "register_selected_participant": "Register Selected Participant",
       "merge_participants": "Merge Participants",
       "ignore_matches": "Ignore Matches and Proceed",
-      "lookup_again": "Lookup Again",
+      "lookup": "Lookup",
       "bulk_register": "Bulk Register",
       "specimen_catalog": "Specimen Catalog",
       "import": "Import"
@@ -1920,7 +1921,9 @@
         "sys_workflows": "System Workflows",
         "sys_workflows_desc": "System level participants and specimens list view configuration. This configuration is used when CP specific configuration is not specified",
         "pending_spmns_disp_interval": "Anticipated Specimens Display Interval",
-        "pending_spmns_disp_interval_desc": "Anticipated specimens will be automatically hidden in specimen tree after specified number of days have elapsed since collection of parent specimen or visit"
+        "pending_spmns_disp_interval_desc": "Anticipated specimens will be automatically hidden in specimen tree after specified number of days have elapsed since collection of parent specimen or visit",
+        "two_step_patient_reg": "Two Step Participant Registration",
+        "two_step_patient_reg_desc": "Enable or disable two step participant registration workflow"
       },
 
       "common": {
