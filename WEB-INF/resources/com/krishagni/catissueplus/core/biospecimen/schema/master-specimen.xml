@@ -17,9 +17,58 @@
     </field>
 
     <field>
+      <type>date</type>
+      <caption>#getMessage("participant_registration_date")</caption>
+      <attribute>registrationDate</attribute>
+    </field>
+
+    #parse( 'com/krishagni/catissueplus/core/biospecimen/schema/participant-static-fields.xml' )
+
+    <field>
+      <caption>#getMessage("visit_event_label")</caption>
+      <attribute>eventLabel</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_visit_name")</caption>
+      <attribute>visitName</attribute>
+    </field>
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("visit_date")</caption>
+      <attribute>visitDate</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("visit_collection_site")</caption>
       <attribute>collectionSite</attribute>
-    </field>  
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_status")</caption>
+      <attribute>status</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_clinical_diagnosis")</caption>
+      <attribute>clinicalDiagnosis</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_clinical_status")</caption>
+      <attribute>clinicalStatus</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_surgical_pathology_number")</caption>
+      <attribute>surgicalPathologyNumber</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_visit_comments")</caption>
+      <attribute>visitComments</attribute>
+    </field>
 
     <field>
       <caption>#getMessage("specimen_label")</caption>

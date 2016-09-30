@@ -12,6 +12,8 @@ public class MasterSpecimenDetail {
 	
 	private String ppid;
 	
+	private Date registrationDate;
+	
 	private String firstName;
 
 	private String lastName;
@@ -44,11 +46,19 @@ public class MasterSpecimenDetail {
 	
 	private String eventLabel;
 	
+	private Date visitDate;
+	
 	private String collectionSite;
+	
+	private String status;
 	
 	private String clinicalDiagnosis;
 	
 	private String clinicalStatus;
+	
+	private String surgicalPathologyNumber;
+	
+	private String visitComments;
 	
 	private String label;
 	
@@ -112,6 +122,14 @@ public class MasterSpecimenDetail {
 
 	public void setPpid(String ppid) {
 		this.ppid = ppid;
+	}
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 
 	public String getFirstName() {
@@ -242,12 +260,28 @@ public class MasterSpecimenDetail {
 		this.eventLabel = eventLabel;
 	}
 
+	public Date getVisitDate() {
+		return visitDate;
+	}
+
+	public void setVisitDate(Date visitDate) {
+		this.visitDate = visitDate;
+	}
+
 	public String getCollectionSite() {
 		return collectionSite;
 	}
 
 	public void setCollectionSite(String collectionSite) {
 		this.collectionSite = collectionSite;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getClinicalDiagnosis() {
@@ -264,6 +298,22 @@ public class MasterSpecimenDetail {
 
 	public void setClinicalStatus(String clinicalStatus) {
 		this.clinicalStatus = clinicalStatus;
+	}
+
+	public String getSurgicalPathologyNumber() {
+		return surgicalPathologyNumber;
+	}
+
+	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) {
+		this.surgicalPathologyNumber = surgicalPathologyNumber;
+	}
+
+	public String getVisitComments() {
+		return visitComments;
+	}
+
+	public void setVisitComments(String visitComments) {
+		this.visitComments = visitComments;
 	}
 
 	public String getLabel() {

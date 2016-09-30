@@ -1,0 +1,73 @@
+<field>
+  <caption>#getMessage("participant_first_name")</caption>
+  <attribute>firstName</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_last_name")</caption>
+  <attribute>lastName</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_middle_name")</caption>
+  <attribute>middleName</attribute>
+</field>
+
+<field>
+  <type>date</type>
+  <caption>#getMessage("participant_dob")</caption>
+  <attribute>birthDate</attribute>
+</field>
+
+<field>
+  <type>date</type>
+  <caption>#getMessage("participant_death_date")</caption>
+  <attribute>deathDate</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_gender")</caption>
+  <attribute>gender</attribute>
+</field>
+
+<field>
+  <multiple>true</multiple>
+  <caption>#getMessage("participant_race")</caption>
+  <attribute>races</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_vital_status")</caption>
+  <attribute>vitalStatus</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_ethnicity")</caption>
+  <attribute>ethnicity</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_ssn")</caption>
+  <attribute>uid</attribute>
+</field>
+
+<field>
+  <caption>#getMessage("participant_empi")</caption>
+  <attribute>empi</attribute>
+</field>
+
+<record>
+  <caption>#getMessage("participant_pmi")</caption>
+  <attribute>pmis</attribute>
+  <multiple>true</multiple>
+
+  <field>
+    <caption>#getMessage("participant_pmi_site")</caption>
+    <attribute>siteName</attribute>
+  </field>
+
+  <field>
+    <caption>#getMessage("participant_pmi_mrn")</caption>
+    <attribute>mrn</attribute>
+  </field>
+</record>

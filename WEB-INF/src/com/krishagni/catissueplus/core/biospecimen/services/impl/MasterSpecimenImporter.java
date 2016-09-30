@@ -119,7 +119,7 @@ public class MasterSpecimenImporter implements ObjectImporter<MasterSpecimenDeta
 		CollectionProtocolRegistrationDetail cprDetail = new CollectionProtocolRegistrationDetail();
 		cprDetail.setPpid(ppid);
 		cprDetail.setCpShortTitle(cpShortTitle);
-		cprDetail.setRegistrationDate(collectionDate);
+		cprDetail.setRegistrationDate(detail.getRegistrationDate() == null ? collectionDate : detail.getRegistrationDate());
 		
 		setParticipant(detail, cprDetail);
 		
@@ -135,15 +135,17 @@ public class MasterSpecimenImporter implements ObjectImporter<MasterSpecimenDeta
 		}
 		
 		VisitDetail visitDetail = new VisitDetail();
+		visitDetail.setCpShortTitle(detail.getCpShortTitle());
 		visitDetail.setPpid(detail.getPpid());
 		visitDetail.setName(detail.getVisitName());
 		visitDetail.setEventLabel(getEventLabel(detail));
-		visitDetail.setCpShortTitle(detail.getCpShortTitle());
-		visitDetail.setVisitDate(detail.getCollectionDate());
+		visitDetail.setVisitDate(detail.getVisitDate() == null ? detail.getCollectionDate() : detail.getVisitDate());
 		visitDetail.setSite(detail.getCollectionSite());
 		visitDetail.setClinicalDiagnosis(detail.getClinicalDiagnosis());
 		visitDetail.setClinicalStatus(detail.getClinicalStatus());
-		visitDetail.setStatus(Visit.VISIT_STATUS_COMPLETED);
+		visitDetail.setSurgicalPathologyNumber(detail.getSurgicalPathologyNumber());
+		visitDetail.setComments(detail.getVisitComments());
+		visitDetail.setStatus(StringUtils.isBlank(detail.getStatus()) ? Visit.VISIT_STATUS_COMPLETED : detail.getStatus());
 		
 		ResponseEvent<VisitDetail> resp = visitSvc.addVisit(getRequest(visitDetail));
 		resp.throwErrorIfUnsuccessful();
