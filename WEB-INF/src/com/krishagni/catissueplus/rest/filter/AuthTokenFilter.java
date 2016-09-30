@@ -98,7 +98,7 @@ public class AuthTokenFilter extends GenericFilterBean {
 		httpResp.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 		httpResp.setHeader("Pragma", "no-cache");
 		httpResp.setDateHeader("Expires", 0);
-		
+
 		if (httpReq.getMethod().equalsIgnoreCase("options")) {
 			httpResp.setStatus(HttpServletResponse.SC_OK);	
 			return;

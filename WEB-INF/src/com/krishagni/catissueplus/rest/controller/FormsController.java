@@ -118,15 +118,17 @@ public class FormsController {
 			@RequestParam(value = "maxPvs", required = false, defaultValue = "0")
 			int maxPvListSize,
 			
-			Writer writer) 
+			HttpServletResponse httpResp)
 	throws IOException {
-
-		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequest(formId));		
+		ResponseEvent<Container> resp = formSvc.getFormDefinition(getRequest(formId));
 		resp.throwErrorIfUnsuccessful();
-		
+
+		httpResp.setCharacterEncoding("UTF-8");
+		Writer writer = httpResp.getWriter();
+
 		ContainerSerializer serializer = new ContainerJsonSerializer(resp.getPayload(), writer);
 		serializer.serialize(maxPvListSize);
-		writer.flush();		
+		writer.flush();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="{id}/fields")
