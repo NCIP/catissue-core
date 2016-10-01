@@ -118,7 +118,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
     function loadAllCps(siteName) {
       siteName = !siteName ? $scope.container.siteName : siteName;
 
-      CollectionProtocol.query({repositoryName: siteName}).then(
+      CollectionProtocol.query({repositoryName: siteName, maxResults: 1000}).then(
         function(cps) {
           $scope.cps = cps.map(function(cp) { return cp.shortTitle; });
 

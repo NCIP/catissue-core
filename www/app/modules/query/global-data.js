@@ -12,7 +12,7 @@ angular.module('os.query.globaldata', ['os.query.models', 'os.biospecimen.models
       
       if (!this.cpsQ) {
         var that = this;
-        this.cpsQ = CollectionProtocol.query().then(
+        this.cpsQ = CollectionProtocol.list({detailedList: false, maxResults: 1000}).then(
           function(result) {
             return $translate('common.none').then(
               function(none) {

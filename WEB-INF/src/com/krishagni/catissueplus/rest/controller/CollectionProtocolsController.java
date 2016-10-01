@@ -581,7 +581,10 @@ public class CollectionProtocolsController {
 			String[] siteNames,
 			
 			@RequestParam(value = "title", required = false)
-			String searchTitle)	 {
+			String searchTitle,
+
+			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+			int maxResults) {
 				
 		List<String> inputSiteList = Collections.emptyList();
 		if (siteNames != null) {
@@ -594,7 +597,7 @@ public class CollectionProtocolsController {
 		List<CollectionProtocolSummary> emptyList = Collections.<CollectionProtocolSummary>emptyList();
 		ResponseEvent<List<CollectionProtocolSummary>> resp = new ResponseEvent<List<CollectionProtocolSummary>>(emptyList);
 		if (resource == Resource.PARTICIPANT && op == Operation.CREATE) {
-			 resp = cpSvc.getRegisterEnabledCps(inputSiteList, searchTitle);			
+			 resp = cpSvc.getRegisterEnabledCps(inputSiteList, searchTitle, maxResults);
 		}
 		
 		resp.throwErrorIfUnsuccessful();

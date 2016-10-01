@@ -22,8 +22,15 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return CollectionProtocol.query(angular.extend(defOpts, opts || {}));
     }
 
-    CollectionProtocol.listForRegistrations = function(siteNames, searchTitle) {
-      var params = {siteName: siteNames, op: 'Create', resource: 'ParticipantPhi', title: searchTitle};
+    CollectionProtocol.listForRegistrations = function(siteNames, searchTitle, maxResults) {
+      var params = {
+        siteName: siteNames,
+        resource: 'ParticipantPhi',
+        op: 'Create',
+        title: searchTitle,
+        maxResults: !maxResults ? 1000 : maxResults
+      };
+
       return $http.get(CollectionProtocol.url() + 'byop', {params: params}).then(
         function(resp) {
           return resp.data;
