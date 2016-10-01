@@ -1086,20 +1086,19 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(List<String> siteNames, String searchTitle) {
+	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(
+			List<String> siteNames, String searchTitle, int maxResults) {
 		try {
 			Set<Long> cpIds = AccessCtrlMgr.getInstance().getRegisterEnabledCpIds(siteNames);
 			
-			CpListCriteria crit = new CpListCriteria()
-				.title(searchTitle);
+			CpListCriteria crit = new CpListCriteria().title(searchTitle).maxResults(maxResults);
 			if (cpIds != null && cpIds.isEmpty()) {
 				return ResponseEvent.response(Collections.<CollectionProtocolSummary>emptyList());
 			} else if (cpIds != null) {
-				crit.ids(new ArrayList<Long>(cpIds));
+				crit.ids(new ArrayList<>(cpIds));
 			}
-			
-			List<CollectionProtocolSummary> cpList = daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit);			
-			return ResponseEvent.response(cpList);
+
+			return ResponseEvent.response(daoFactory.getCollectionProtocolDao().getCollectionProtocols(crit));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

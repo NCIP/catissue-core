@@ -6,7 +6,7 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <a ng-if="showRegToAnother" class="btn default" ui-sref="participant-newreg">
+      <a ng-if="cpsForReg.length > 0" class="btn default" ui-sref="participant-newreg">
         <span class="fa fa-plus"></span>
         <span translate="participant.reg_another_protocol">
           Register to Another Protocol

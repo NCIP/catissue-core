@@ -137,9 +137,9 @@ public interface CollectionProtocolService {
 	// For UI work
 	//
 
-	// input is site names
-	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(List<String> siteNames, String searchTitle);
-
+	// Input is site names, search title and max results count
+	public ResponseEvent<List<CollectionProtocolSummary>> getRegisterEnabledCps(
+			List<String> siteNames, String searchTitle, int maxResults);
 
 	//
 	// Input is following:

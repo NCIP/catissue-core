@@ -103,7 +103,7 @@ angular.module('os.administrative.user.roles', ['os.administrative.models', 'os.
         cpsToRemove.push(role.collectionProtocol);
       });
 
-      var cpListOpts = {detailedList: false};
+      var cpListOpts = {detailedList: false, maxResults: 1000};
       if (site != $scope.all) {
         cpListOpts["repositoryName"] = site;
       }
