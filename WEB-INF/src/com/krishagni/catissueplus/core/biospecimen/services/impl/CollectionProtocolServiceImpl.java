@@ -1077,6 +1077,8 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 
 			daoFactory.getCollectionProtocolDao().saveCpWorkflows(cfg);
 			return ResponseEvent.response(CpWorkflowCfgDetail.from(cfg));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
