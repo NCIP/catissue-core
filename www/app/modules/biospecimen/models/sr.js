@@ -66,7 +66,7 @@ angular.module('os.biospecimen.models.sr', ['os.common.models'])
       var available = this.initialQty;
       angular.forEach(this.children, function(child) {
         if (child.lineage == 'Aliquot') {
-          available -= child.initialQty;
+          available = Math.round((available - child.initialQty) * 10000) / 10000;
         }
       });
 
