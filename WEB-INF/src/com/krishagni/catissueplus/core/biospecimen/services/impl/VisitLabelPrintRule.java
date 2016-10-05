@@ -34,7 +34,7 @@ public class VisitLabelPrintRule extends LabelPrintRule {
 			return false;
 		}
 		
-		if (!isWildCard(visitSite) && !visit.getSite().getName().equals(visitSite)) {
+		if (!isWildCard(visitSite) && (visit.getSite() == null || !visit.getSite().getName().equals(visitSite))) {
 			return false;
 		}
 

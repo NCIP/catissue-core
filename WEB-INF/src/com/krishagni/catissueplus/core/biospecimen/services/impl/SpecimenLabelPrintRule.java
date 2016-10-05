@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
+import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintRule;
 
 public class SpecimenLabelPrintRule extends LabelPrintRule {
@@ -68,7 +69,8 @@ public class SpecimenLabelPrintRule extends LabelPrintRule {
 			return false;
 		}
 
-		if (!isWildCard(visitSite) && !specimen.getVisit().getSite().getName().equals(visitSite)) {
+		Visit visit = specimen.getVisit();
+		if (!isWildCard(visitSite) && (visit.getSite() == null || !visit.getSite().getName().equals(visitSite))) {
 			return false;
 		}
 

@@ -276,12 +276,8 @@ public class VisitFactoryImpl implements VisitFactory {
 	private void setSite(VisitDetail visitDetail, Visit visit, OpenSpecimenException ose) {
 		String visitSite = visitDetail.getSite();
 		if (StringUtils.isBlank(visitSite)) {
-			if (visit.isCompleted()) {
-				if (visit.getCpEvent() == null || visit.getCpEvent().getDefaultSite() == null) {
-					ose.addError(VisitErrorCode.SITE_REQUIRED);
-				} else {
-					visit.setSite(visit.getCpEvent().getDefaultSite());
-				}
+			if (visit.isCompleted() && visit.getCpEvent() != null && visit.getCpEvent().getDefaultSite() != null) {
+				visit.setSite(visit.getCpEvent().getDefaultSite());
 			}
 		} else {
 			Site site = daoFactory.getSiteDao().getSiteByName(visitSite);
@@ -289,8 +285,8 @@ public class VisitFactoryImpl implements VisitFactory {
 				ose.addError(SiteErrorCode.NOT_FOUND);
 				return;
 			}
-			
-			visit.setSite(site);			
+
+			visit.setSite(site);
 		}
 	}
 	
