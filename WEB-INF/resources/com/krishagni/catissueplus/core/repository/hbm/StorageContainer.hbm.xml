@@ -236,17 +236,18 @@
         c.activity_status = 'Active' and
         (p.reservation_time is null or p.reservation_time > :reservedLaterThan) and
         (
-          allowed_cps.cp_id is null or
           allowed_cps.cp_id = :cpId or
-          (
-            select
-              count(*)
-            from
-              catissue_site_cp cp_site
-            where
-              cp_site.site_id = c.site_id and
-              cp_site.collection_protocol_id = :cpId
-          ) > 0
+          (allowed_cps.cp_id is null and
+            (
+              select
+                count(*)
+              from
+                catissue_site_cp cp_site
+              where
+                cp_site.site_id = c.site_id and
+                cp_site.collection_protocol_id = :cpId
+            ) > 0
+          )
         ) and
         (
           (
@@ -274,7 +275,7 @@
       having
         (c.no_of_rows * c.no_of_cols - count(p.identifier)) > (:minFreeLocs - 1)
       order by
-        (c.no_of_rows * c.no_of_cols - count(p.identifier))
+        (c.no_of_rows * c.no_of_cols - count(p.identifier)), c.identifier
     </sql-query>
   </class>
 </hibernate-mapping>
