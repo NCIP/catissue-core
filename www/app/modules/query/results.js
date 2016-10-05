@@ -169,7 +169,7 @@ angular.module('os.query.results', ['os.query.models'])
       var facets = [];
       angular.forEach($scope.queryCtx.filters,
         function(filter, index) {
-          if (!filter.parameterized || !filter.op) {
+          if (!filter.parameterized) {
             return;
           }
 
@@ -187,6 +187,10 @@ angular.module('os.query.results', ['os.query.models'])
             type = 'INTEGER';
           } else {
             type = filter.field.type;
+          }
+
+          if (!filter.op) {
+            return;
           }
 
           switch (type) {
