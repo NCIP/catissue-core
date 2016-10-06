@@ -64,17 +64,19 @@ angular.module('os.biospecimen.visit', [
       .state('visit-detail.overview', {
         url: '/overview',
         templateProvider: function(PluginReg, $q) {
-          return $q.when(PluginReg.getTmpls("visit-detail", "overview", "modules/biospecimen/participant/visit/overview.html")).then(
+          var defTmpl = "modules/biospecimen/participant/visit/overview.html";
+          return $q.when(PluginReg.getTmpls("visit-detail", "overview", defTmpl)).then(
             function(tmpls) {
               return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
             }
           );
         },
-        controller: function($scope, ExtensionsUtil) {
+        controller: function($scope, hasFieldsFn, ExtensionsUtil) {
           ExtensionsUtil.createExtensionFieldMap($scope.visit);
           $scope.visitCtx = {
             obj: {visit: $scope.visit},
-            inObjs: ['visit']
+            inObjs: ['visit'],
+            showEdit: hasFieldsFn(['visit'], [])
           }
         },
         parent: 'visit-detail'

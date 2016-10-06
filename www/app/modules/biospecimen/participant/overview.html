@@ -1,7 +1,7 @@
 <div>
   <div class="os-page-commands">
     <div class="left">
-      <button show-if-allowed="participantResource.updateOpts" class="default"
+      <button ng-if="partCtx.showEdit" show-if-allowed="participantResource.updateOpts" class="default"
         ui-sref="participant-addedit({cprId: cpr.id, cpId: cpr.cpId})">
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>

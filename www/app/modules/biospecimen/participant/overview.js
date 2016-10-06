@@ -1,7 +1,6 @@
 
 angular.module('os.biospecimen.participant.overview', ['os.biospecimen.models'])
-  .controller('ParticipantOverviewCtrl', function($scope, visits, Visit, ExtensionsUtil) {
-
+  .controller('ParticipantOverviewCtrl', function($scope, hasFieldsFn, visits, Visit, ExtensionsUtil) {
     function init() {
       $scope.occurredVisits    = Visit.completedVisits(visits);
       $scope.anticipatedVisits = Visit.anticipatedVisits(visits);
@@ -10,7 +9,8 @@ angular.module('os.biospecimen.participant.overview', ['os.biospecimen.models'])
       ExtensionsUtil.createExtensionFieldMap($scope.cpr.participant);
       $scope.partCtx = {
         obj: {cpr: $scope.cpr},
-        inObjs: ['cpr']
+        inObjs: ['cpr'],
+        showEdit: hasFieldsFn(['cpr'], [])
       }
     }
 

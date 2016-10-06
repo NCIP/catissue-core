@@ -1,16 +1,18 @@
 <div>
   <div class="os-page-commands">
-    <button show-if-allowed="specimenResource.updateOpts" class="default"
-      ng-switch on="!!visit.id" ui-sref="visit-addedit">
-      <span ng-switch-when="true">
-        <span class="fa fa-pencil"></span>
-        <span translate="common.buttons.edit">Edit</span>
-      </span>
-      <span ng-switch-default>
-        <span class="fa fa-plus"></span>
-        <span translate="common.buttons.add">Add</span>
-      </span>
-    </button>
+    <span ng-if="visitCtx.showEdit">
+      <button show-if-allowed="specimenResource.updateOpts" class="default"
+        ng-switch on="!!visit.id" ui-sref="visit-addedit">
+        <span ng-switch-when="true">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </span>
+        <span ng-switch-default>
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.add">Add</span>
+        </span>
+      </button>
+    </span>
     <button show-if-allowed="specimenResource.updateOpts" class="default"
       ng-if="!!visit.id" ng-click="printVisitName()">
       <span class="fa fa-print"></span>

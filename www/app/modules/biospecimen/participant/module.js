@@ -275,6 +275,17 @@ angular.module('os.biospecimen.participant',
             return hasSde && (cpDict.length > 0 || sysDict.length > 0);
           },
 
+          hasFieldsFn: function($injector, hasDict, sysDict, cpDict) {
+            return function(inObjs, exObjs) {
+              if (!hasDict) {
+                return true;
+              }
+
+              return $injector.get('sdeFieldsSvc').commonFns()
+                .hasFields(sysDict, cpDict, inObjs, exObjs);
+            }
+          },
+
           pendingSpmnsDispInterval: function(SettingUtil) {
             return SettingUtil.getSetting('biospecimen', 'pending_spmns_disp_interval');
           }
@@ -332,39 +343,15 @@ angular.module('os.biospecimen.participant',
       })
       .state('participant-detail.overview', {
         url: '/overview',
-        templateProvider: function(sdeView, $q, PluginReg) {
-          var viewName = 'participant-detail',
-              secName  = 'overview',
-              defTmpl  = 'modules/biospecimen/participant/overview.html';
-
-          if (sdeView) {
-            viewName = 'sde-participant-detail',
-            defTmpl = 'plugin-ui-resources/sde/samples-overview.html'
-          }
-
-          return $q.when(PluginReg.getTmpls(viewName, secName, defTmpl)).then(
+        templateProvider: function($q, PluginReg) {
+          var defTmpl  = 'modules/biospecimen/participant/overview.html';
+          return $q.when(PluginReg.getTmpls('participant-detail', 'overview', defTmpl)).then(
             function(tmpls) {
               return '<div ng-include src="\'' + tmpls[0] + '\'"></div>';
             }
           );
         },
-        controllerProvider: function(sdeView) {
-          return sdeView ? 'sdeSamplesOverviewCtrl' : 'ParticipantOverviewCtrl';
-        },
-        resolve: {
-          sdeView: function($stateParams, visits, hasSde, CpConfigSvc) {
-            if (!hasSde || visits.length > 1) {
-              return false;
-            }
-
-            return CpConfigSvc.getWorkflowData($stateParams.cpId, 'sde').then(
-              function(data) {
-                var fields = data.singlePatientSamples;
-                return angular.isArray(fields) && fields.length > 0;
-              }
-            );
-          }
-        },
+        controller: 'ParticipantOverviewCtrl',
         parent: 'participant-detail'
       })
       .state('participant-detail.consents', {
