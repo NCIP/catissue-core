@@ -37,8 +37,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 			.setLong("cprId", crit.cprId())
 			.list();
 		
-		List<VisitSummary> visits = new ArrayList<VisitSummary>();
-		Map<String, VisitSummary> visitsMap = new HashMap<String, VisitSummary>();
+		List<VisitSummary> visits = new ArrayList<>();
+		Map<String, VisitSummary> visitsMap = new HashMap<>();
 
 		Date regDate = null;
 		int minEventPoint = 0;
@@ -96,8 +96,8 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 		return !visits.isEmpty() ? visits.iterator().next() : null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Visit> getByName(Collection<String> names) {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_VISIT_BY_NAME)
@@ -106,21 +106,25 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Visit> getByIds(Collection<Long> ids) {
 		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISITS_BY_IDS)
-				.setParameterList("ids", ids)
-				.list();
-	}
-
-	public List<Visit> getBySpr(String sprNumber) {
-		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISIT_BY_SPR)
-				.setString("sprNumber", sprNumber)
-				.list();
+			.getNamedQuery(GET_VISITS_BY_IDS)
+			.setParameterList("ids", ids)
+			.list();
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
+	public List<Visit> getBySpr(String sprNumber) {
+		return sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_VISIT_BY_SPR)
+			.setString("sprNumber", sprNumber)
+			.list();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> getCprVisitIds(String key, Object value) {
 		List<Object[]> rows = getCurrentSession().createCriteria(Visit.class)
 			.createAlias("registration", "cpr")
@@ -154,29 +158,28 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 		key += "_" + cpeId;
 		return key;
 	}
-	
-	
+
 	private void getVisitsCollectionStatus(Long cprId, Map<String, VisitSummary> visitsMap) {
+		getPlannedCollectionStatus(cprId, visitsMap);
+		getUnplannedCollectionStatus(cprId, visitsMap);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void getPlannedCollectionStatus(Long cprId, Map<String, VisitSummary> visitsMap) {
 		Set<Long> eventIds = visitsMap.values().stream()
-				.map(VisitSummary::getEventId)
-				.filter(id -> id != null)
-				.collect(Collectors.toSet());
-		
+			.map(VisitSummary::getEventId)
+			.filter(id -> id != null)
+			.collect(Collectors.toSet());
+
 		if (eventIds.isEmpty()) {
 			return;
 		}
-		
-		getPlannedCollectionStatus(cprId, eventIds, visitsMap);
-		getUnplannedCollectionStatus(cprId, eventIds, visitsMap);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void getPlannedCollectionStatus(Long cprId, Set<Long> eventIds, Map<String, VisitSummary> visitsMap) {		
+
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISITS_COLLECTION_STATUS)
-				.setLong("cprId", cprId)
-				.setParameterList("eventIds", eventIds)
-				.list();
+			.getNamedQuery(GET_VISITS_COLLECTION_STATUS)
+			.setLong("cprId", cprId)
+			.setParameterList("eventIds", eventIds)
+			.list();
 		
 		for (Object[] row : rows) {
 			Long scgId = (Long)row[0];
@@ -190,12 +193,21 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void getUnplannedCollectionStatus(Long cprId, Set<Long> eventIds, Map<String, VisitSummary> visitsMap) {		
+	private void getUnplannedCollectionStatus(Long cprId, Map<String, VisitSummary> visitsMap) {
+		Set<Long> visitIds = visitsMap.values().stream()
+			.map(VisitSummary::getId)
+			.filter(id -> id != null)
+			.collect(Collectors.toSet());
+
+		if (visitIds.isEmpty()) {
+			return;
+		}
+
 		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISITS_UNPLANNED_SPECIMENS_STAT)
-				.setLong("cprId", cprId)
-				.setParameterList("eventIds", eventIds)
-				.list();
+			.getNamedQuery(GET_VISITS_UNPLANNED_SPECIMENS_STAT)
+			.setLong("cprId", cprId)
+			.setParameterList("visitIds", visitIds)
+			.list();
 		
 		for (Object[] row : rows) {
 			Long scgId = (Long)row[0];	

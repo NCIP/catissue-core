@@ -167,20 +167,19 @@
       <return-scalar column="unplanned" type="int"/>
  
       select 
-        scg.identifier as id, cpe.identifier as event_id,
+        scg.identifier as id, scg.collection_protocol_event_id as event_id,
         count(s.identifier) as unplanned 
-      from 
-        catissue_coll_prot_event cpe 
-        inner join catissue_specimen_coll_group scg on scg.collection_protocol_event_id = cpe.identifier
+      from
+        catissue_specimen_coll_group scg
         inner join catissue_specimen s on s.specimen_collection_group_id = scg.identifier
       where 
-        cpe.identifier in (:eventIds) and 
+        scg.identifier in (:visitIds) and
         scg.collection_protocol_reg_id = :cprId and 
         s.req_specimen_id is null and
         scg.activity_status != 'Disabled' and
         s.activity_status != 'Disabled'
       group by 
-        scg.identifier, cpe.identifier
+        scg.identifier, scg.collection_protocol_event_id
     </sql-query>
   </class>
 </hibernate-mapping>

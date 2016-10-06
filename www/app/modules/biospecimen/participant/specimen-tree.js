@@ -125,7 +125,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
     }
 
     function onlyPendingSpmns(specimens) {
-      return specimens.every(
+      return (specimens || []).every(
         function(spmn) {
           return !spmn.status || spmn.status == 'Pending';
         }
