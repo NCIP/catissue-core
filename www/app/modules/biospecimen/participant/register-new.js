@@ -31,7 +31,7 @@ angular.module('os.biospecimen.participant.newreg', ['os.biospecimen.models'])
 
       cprToSave.$saveOrUpdate().then(
         function(savedCpr) {
-          $state.go('participant-detail.overview', {cprId: savedCpr.id});
+          $state.go('participant-detail.overview', {cpId: savedCpr.cpId, cprId: savedCpr.id});
         }
       );
     }
