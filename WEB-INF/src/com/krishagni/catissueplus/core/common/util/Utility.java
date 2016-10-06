@@ -406,8 +406,8 @@ public class Utility {
 	}
 
 	public static List<String> diff(BaseExtensionEntity obj1, BaseExtensionEntity obj2, List<String> fields) {
-		Map<String, Object> map1 = obj1.getExtension().getAttrValues();
-		Map<String, Object> map2 = obj2.getExtension().getAttrValues();
+		Map<String, Object> map1 = getExtnAttrValues(obj1);
+		Map<String, Object> map2 = getExtnAttrValues(obj2);
 
 		return fields.stream().filter(field -> {
 			if (!field.startsWith("extensionDetail.attrsMap.")) {
@@ -421,6 +421,14 @@ public class Utility {
 
 	public static List<String> equals(Object obj1, Object obj2, List<String> fields) {
 		return fields.stream().filter(field -> !equals(obj1, obj2, field)).collect(Collectors.toList());
+	}
+
+	private static Map<String, Object> getExtnAttrValues(BaseExtensionEntity obj) {
+		if (obj.getExtension() != null) {
+			return obj.getExtension().getAttrValues();
+		}
+
+		return Collections.emptyMap();
 	}
 
 	private static boolean equals(Object obj1, Object obj2, String fieldName) {
