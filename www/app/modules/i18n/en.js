@@ -1063,6 +1063,11 @@
       "LINEAR": "Linear",
       "TWO_D" : "Row and Column"
     },
+    "cell_display_prop": "Display in Map",
+    "cell_display_props": {
+      "SPECIMEN_LABEL": "Specimen Label",
+      "SPECIMEN_PPID" : "PPID"
+    },
 
     "replication_count": "Enter number of containers to create",
     "no_repl_dest": "No target site or parent container specified. Add one by clicking Add Another",

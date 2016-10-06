@@ -50,6 +50,11 @@ public class StorageContainer extends BaseEntity {
 		TWO_D
 	}
 
+	public enum CellDisplayProp {
+		SPECIMEN_PPID,
+		SPECIMEN_LABEL
+	}
+
 	private String name;
 
 	private String barcode;
@@ -71,6 +76,8 @@ public class StorageContainer extends BaseEntity {
 	private Site site;
 
 	private StorageContainer parentContainer;
+
+	private CellDisplayProp cellDisplayProp;
 
 	private User createdBy;
 
@@ -233,6 +240,14 @@ public class StorageContainer extends BaseEntity {
 				descendent.getAncestorContainers().addAll(parentContainer.getAncestorContainers());
 			}
 		}
+	}
+
+	public CellDisplayProp getCellDisplayProp() {
+		return cellDisplayProp;
+	}
+
+	public void setCellDisplayProp(CellDisplayProp cellDisplayProp) {
+		this.cellDisplayProp = cellDisplayProp;
 	}
 
 	public User getCreatedBy() {
@@ -405,7 +420,8 @@ public class StorageContainer extends BaseEntity {
 		updateAllowedSpecimenClassAndTypes(other.getAllowedSpecimenClasses(), other.getAllowedSpecimenTypes(), hasParentChanged);
 		updateAllowedCps(other.getAllowedCps(), hasParentChanged);
 		updateStoreSpecimenEnabled(other.isStoreSpecimenEnabled());
-		
+		updateCellDisplayProp(other.getCellDisplayProp());
+
 		validateRestrictions();
 	}
 	
@@ -795,6 +811,7 @@ public class StorageContainer extends BaseEntity {
 		copy.setRowLabelingScheme(getRowLabelingScheme());
 		copy.setTemperature(getTemperature());
 		copy.setStoreSpecimenEnabled(isStoreSpecimenEnabled());
+		copy.setCellDisplayProp(getCellDisplayProp());
 		copy.setComments(getComments());
 		copy.setCreatedBy(getCreatedBy());
 		copy.setAllowedSpecimenClasses(new HashSet<>(getAllowedSpecimenClasses()));
@@ -1056,6 +1073,21 @@ public class StorageContainer extends BaseEntity {
 	
 	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
 		this.storeSpecimenEnabled = newStoreSpecimenEnabled;
+	}
+
+	private void updateCellDisplayProp(CellDisplayProp cellDisplayProp) {
+		if (getCellDisplayProp() == cellDisplayProp || getParentContainer() != null) {
+			return;
+		}
+
+		updateCellDisplayProp(this, cellDisplayProp);
+	}
+
+	private void updateCellDisplayProp(StorageContainer container, CellDisplayProp cellDisplayProp) {
+		container.setCellDisplayProp(cellDisplayProp);
+		for (StorageContainer childContainer : container.getChildContainers()) {
+			updateCellDisplayProp(childContainer, cellDisplayProp);
+		}
 	}
 		
 	private boolean arePositionsOccupiedBeyondCapacity(int noOfCols, int noOfRows) {

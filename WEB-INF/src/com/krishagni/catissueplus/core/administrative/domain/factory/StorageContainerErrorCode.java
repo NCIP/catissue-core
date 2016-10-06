@@ -56,8 +56,10 @@ public enum StorageContainerErrorCode implements ErrorCode {
 	
 	TYPE_REQUIRED,
 
-	INCORRECT_NAME_FMT;
-	
+	INCORRECT_NAME_FMT,
+
+	INVALID_CELL_DISP_PROP;
+
 	@Override
 	public String code() {
 		return "STORAGE_CONTAINER_" + this.name();

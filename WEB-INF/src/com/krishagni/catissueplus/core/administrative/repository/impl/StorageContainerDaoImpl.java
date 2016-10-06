@@ -547,5 +547,4 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	private static final String DEL_POS_BY_RSV_ID = FQN + ".deletePositionsByReservationIds";
 
 	private static final String DEL_EXPIRED_RSV_POS = FQN + ".deleteReservationsOlderThanTime";
-
 }

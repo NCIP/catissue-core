@@ -1,59 +1,53 @@
-angular.module('os.biospecimen.common.specimenunit', [])
-  .factory('SpecimenUnitSvc', function($http, $q, ApiUrls) {
+angular.module('os.biospecimen.common.specimenprops', [])
+  .factory('SpecimenPropsSvc', function($http, $q, ApiUrls) {
     var callQ = undefined;
-    
-    // { 'Cell': {'default': 'Cells'}, 'Tissue': {'default': 'gm', 'Fixed Tissue Block': 'blocks'}}
-    var unitsMap = undefined; 
+    var specimenPropsMap = undefined;
 
     function initCall() {
-      callQ = $http.get(ApiUrls.getBaseUrl() + '/specimen-units');
+      callQ = $http.get(ApiUrls.getBaseUrl() + '/specimen-type-props');
       return callQ;
     }
 
-    function initUnitsMap() {
+    function initPropsMap() {
       return callQ.then(
         function(result) {
           var tempMap = {};
-          angular.forEach(result.data, function(unit) {
-            var type = unit.type;
-            if (!type) {
-              type = 'default';
-            }
+          angular.forEach(result.data,
+            function(prop) {
+              var clsProps = tempMap[prop.specimenClass];
+              if (!clsProps) {
+                tempMap[prop.specimenClass] = clsProps = {};
+              }
 
-            var clsUnits = tempMap[unit.specimenClass];
-            if (!clsUnits) {
-              tempMap[unit.specimenClass] = clsUnits = {};
+              clsProps[prop.specimenType] = prop;
             }
-              
-            clsUnits[type] = unit;
-          });
+          );
 
-          unitsMap = tempMap;
-          return unitsMap;
+          return (specimenPropsMap = tempMap);
         }
-      );
+      )
     }
 
-    function getUnitFromMap(cls, type) {
-      var clsUnits = unitsMap[cls];
-      if (!clsUnits) {
+    function getPropsFromMap(cls, type) {
+      var clsProps = specimenPropsMap[cls];
+      if (!clsProps) {
         return undefined;
       }
 
-      var typeUnit = clsUnits.default;
-      if (!!type && !!clsUnits[type]) {
-        typeUnit = clsUnits[type];
+      var typeProps = undefined;
+      if (!!clsProps[type]) {
+        typeProps = clsProps[type];
       }
 
-      return typeUnit;
+      return typeProps;
     }
 
-    function getUnit(cls, type) {
+    function getProps(cls, type) {
       var d = $q.defer();
 
-      if (unitsMap) {
-        var unit = getUnitFromMap(cls, type);
-        d.resolve(unit);
+      if (specimenPropsMap) {
+        var props = getPropsFromMap(cls, type);
+        d.resolve(props);
         return d.promise;
       }
 
@@ -61,10 +55,10 @@ angular.module('os.biospecimen.common.specimenunit', [])
         initCall();
       }
 
-      initUnitsMap().then(
+      initPropsMap().then(
         function() {
-          var unit = getUnitFromMap(cls, type);
-          d.resolve(unit);
+          var props = getPropsFromMap(cls, type);
+          d.resolve(props);
         }
       );
 
@@ -72,10 +66,10 @@ angular.module('os.biospecimen.common.specimenunit', [])
     }
 
     return {
-      getUnit: getUnit
+      getProps: getProps
     }
   })
-  .directive('osSpecimenUnit', function(SpecimenUnitSvc) {
+  .directive('osSpecimenUnit', function(SpecimenPropsSvc) {
     return {
       restrict: 'E',
 
@@ -95,12 +89,13 @@ angular.module('os.biospecimen.common.specimenunit', [])
           }
 
           var measure = attrs.measure || 'quantity';
-          SpecimenUnitSvc.getUnit(scope.specimenClass, scope.type).then(
-            function(unit) {
+          SpecimenPropsSvc.getProps(scope.specimenClass, scope.type).then(
+            function(specimenProps) {
+              var props = specimenProps.props;
               if (measure == "quantity") {
-                element.html(unit.qtyHtmlDisplayCode || unit.qtyUnit);
+                element.html(props.qtyHtmlDisplayCode || props.qtyUnit);
               } else {
-                element.html(unit.concHtmlDisplayCode || unit.concUnit);
+                element.html(props.concHtmlDisplayCode || props.concUnit);
               }
             }
           );

@@ -119,9 +119,13 @@ angular.module('os.common.box', [])
       el.append($("<div class='slot-pos'/>").append(formatPos(opts, row, column, pos)));
 
       if (occupant) {
-        var cellDesc = $("<a class='slot-desc'/>")
-          .attr('title', opts.occupantName(occupant))
-          .append(opts.occupantName(occupant));
+        var cellDesc = $("<a/>").attr('title', opts.occupantName(occupant));
+        if (typeof opts.occupantDisplayHtml == 'function') {
+          // let the display html decide styling of cell...
+          cellDesc.append(opts.occupantDisplayHtml(occupant));
+        } else {
+          cellDesc.addClass('slot-desc').append(opts.occupantName(occupant));
+        }
 
         if (opts.allowClicks) {
           if (opts.box.occupantClick) {

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.administrative.events;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -11,9 +12,11 @@ import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 @ListenAttributeChanges
 public class StorageContainerDetail extends StorageContainerSummary {
 	private Double temperature;
-	
+
+	private String cellDisplayProp;
+
 	private String comments;
-	
+
 	private Set<String> allowedSpecimenClasses = new HashSet<String>();
 	
 	private Set<String> calcAllowedSpecimenClasses = new HashSet<String>();
@@ -25,7 +28,7 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	private Set<String> allowedCollectionProtocols = new HashSet<String>();
 	
 	private Set<String> calcAllowedCollectionProtocols = new HashSet<String>();
-	
+
 	private Set<Integer> occupiedPositions = new HashSet<Integer>();
 
 	public Double getTemperature() {
@@ -34,6 +37,14 @@ public class StorageContainerDetail extends StorageContainerSummary {
 
 	public void setTemperature(Double temperature) {
 		this.temperature = temperature;
+	}
+
+	public String getCellDisplayProp() {
+		return cellDisplayProp;
+	}
+
+	public void setCellDisplayProp(String cellDisplayProp) {
+		this.cellDisplayProp = cellDisplayProp;
 	}
 
 	public String getComments() {
@@ -103,13 +114,20 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	public static StorageContainerDetail from(StorageContainer container) {
 		StorageContainerDetail result = new StorageContainerDetail();
 		StorageContainerDetail.transform(container, result);
-		
+
 		result.setTemperature(container.getTemperature());
 		result.setComments(container.getComments());
-		result.setAllowedSpecimenClasses(new HashSet<String>(container.getAllowedSpecimenClasses()));
-		result.setCalcAllowedSpecimenClasses(new HashSet<String>(container.getCompAllowedSpecimenClasses()));		
-		result.setAllowedSpecimenTypes(new HashSet<String>(container.getAllowedSpecimenTypes()));
-		result.setCalcAllowedSpecimenTypes(new HashSet<String>(container.getCompAllowedSpecimenTypes()));
+		if (container.getCellDisplayProp() != null) {
+			result.setCellDisplayProp(container.getCellDisplayProp().name());
+		} else {
+			result.setCellDisplayProp(StorageContainer.CellDisplayProp.SPECIMEN_LABEL.name());
+		}
+
+		result.setAllowedSpecimenClasses(new HashSet<>(container.getAllowedSpecimenClasses()));
+		result.setCalcAllowedSpecimenClasses(new HashSet<>(container.getCompAllowedSpecimenClasses()));
+
+		result.setAllowedSpecimenTypes(new HashSet<>(container.getAllowedSpecimenTypes()));
+		result.setCalcAllowedSpecimenTypes(new HashSet<>(container.getCompAllowedSpecimenTypes()));
 		
 		result.setAllowedCollectionProtocols(getCpNames(container.getAllowedCps()));		
 		result.setCalcAllowedCollectionProtocols(getCpNames(container.getCompAllowedCps()));
@@ -119,10 +137,6 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	}
 	
 	private static Set<String> getCpNames(Collection<CollectionProtocol> cps) {
-		Set<String> cpNames = new HashSet<String>();
-		for (CollectionProtocol cp : cps) {
-			cpNames.add(cp.getShortTitle());
-		}
-		return cpNames;
+		return cps.stream().map(cp -> cp.getShortTitle()).collect(Collectors.toSet());
 	}
 }

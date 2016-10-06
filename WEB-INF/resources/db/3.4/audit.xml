@@ -36,4 +36,11 @@
       <column name="aliquotsInSameContainer_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit and track changes to cell display property setting of containers">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
+      <column name="cellDisplayProp_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>		
 </databaseChangeLog>

@@ -51,6 +51,15 @@
       class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
       column="PARENT_CONTAINER_ID"/>
 
+    <property name="cellDisplayProp" column="CELL_DISPLAY_PROP">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainer$CellDisplayProp
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
     <many-to-one
       name="createdBy"
       class="com.krishagni.catissueplus.core.administrative.domain.User"

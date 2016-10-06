@@ -73,6 +73,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		setActivityStatus(detail, existing, container, ose);
 		setComments(detail, existing, container, ose);
 		setStoreSpecimenEnabled(detail, existing, container, ose);
+		setCellDisplayProp(detail, existing, container, ose);
 		setAllowedSpecimenClasses(detail, existing, container, ose);
 		setAllowedSpecimenTypes(detail, existing, container, ose);
 		setAllowedCps(detail, existing, container, ose);
@@ -89,6 +90,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		detail.setName(name);
 		detail.setSiteName(input.getSiteName());
 		detail.setStorageLocation(input.getStorageLocation());
+		detail.setCellDisplayProp(input.getCellDisplayProp());
 		detail.setAllowedSpecimenClasses(input.getAllowedSpecimenClasses());
 		detail.setAllowedSpecimenTypes(input.getAllowedSpecimenTypes());
 		detail.setAllowedCollectionProtocols(input.getAllowedCollectionProtocols());
@@ -389,6 +391,33 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		
 		container.setParentContainer(parentContainer);
 		return parentContainer;
+	}
+
+	private void setCellDisplayProp(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		if (container.getParentContainer() != null) {
+			container.setCellDisplayProp(container.getParentContainer().getCellDisplayProp());
+			return;
+		}
+
+		StorageContainer.CellDisplayProp prop = StorageContainer.CellDisplayProp.SPECIMEN_LABEL;
+		if (StringUtils.isNotBlank(detail.getCellDisplayProp())) {
+			try {
+				prop = StorageContainer.CellDisplayProp.valueOf(detail.getCellDisplayProp());
+			} catch (IllegalArgumentException iae) {
+				ose.addError(StorageContainerErrorCode.INVALID_CELL_DISP_PROP, detail.getCellDisplayProp());
+				return;
+			}
+		}
+
+		container.setCellDisplayProp(prop);
+	}
+
+	private void setCellDisplayProp(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
+		if (detail.isAttrModified("cellDisplayProp") || existing == null) {
+			setCellDisplayProp(detail, container, ose);
+		} else {
+			container.setCellDisplayProp(existing.getCellDisplayProp());
+		}
 	}
 	
 	private void setPosition(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {

@@ -196,6 +196,22 @@
       </div>
     </div>
 
+    <div class="form-group" ng-if="!locationSelected && !container.storageLocation.name">
+      <label class="col-xs-3 control-label">
+        <span translate="container.cell_display_prop">Display</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_LABEL'">
+          <span translate="container.cell_display_props.SPECIMEN_LABEL">Specimen Labels</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_PPID'">
+          <span translate="container.cell_display_props.SPECIMEN_PPID">PPIDs</span>
+        </label>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="col-xs-3 control-label">
         <span translate="container.collection_protocol">Collection Protocol</span>

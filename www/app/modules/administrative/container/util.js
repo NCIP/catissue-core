@@ -14,6 +14,14 @@ angular.module('os.administrative.container.util', ['os.common.box'])
       };
     }
 
+    function getOccupantDisplayName(container, occupant) {
+      if (occupant.occuypingEntity == 'specimen' && container.cellDisplayProp == 'SPECIMEN_PPID') {
+        return occupant.occupantProps.ppid;
+      }
+
+      return occupant.occupyingEntityName;
+    }
+
     function getOpts(container, allowClicks, showAddMarker) {
       return {
         box: {
@@ -30,7 +38,19 @@ angular.module('os.administrative.container.util', ['os.common.box'])
 
         occupants: [],
         occupantName: function(occupant) {
-          return occupant.occupyingEntityName
+          return occupant.occupyingEntityName;
+        },
+        occupantDisplayHtml: function(occupant) {
+          var displayName = undefined;
+          if (occupant.occuypingEntity == 'specimen' && !!occupant.occupantProps) {
+            displayName = getOccupantDisplayName(container, occupant);
+           } else {
+            displayName = occupant.occupyingEntityName;
+          }
+
+          return angular.element('<span class="slot-desc"/>')
+            .attr('title', displayName)
+            .append(displayName);
         },
         allowClicks: allowClicks,
         isVacatable: function(occupant) {

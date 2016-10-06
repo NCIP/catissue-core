@@ -62,4 +62,10 @@
       tableName="CATISSUE_COLL_PROT_REG"
       columnNames="COLLECTION_PROTOCOL_ID, PROTOCOL_PARTICIPANT_ID"/>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Setting specifying occupant property value to be displayed in container map">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

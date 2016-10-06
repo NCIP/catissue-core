@@ -7,7 +7,9 @@ public enum PvErrorCode implements ErrorCode {
 	
 	VALUE_REQUIRED,
 	
-	PARENT_ATTR_NOT_FOUND;
+	PARENT_ATTR_NOT_FOUND,
+	
+	NOT_FOUND;
 
 	@Override
 	public String code() {		
