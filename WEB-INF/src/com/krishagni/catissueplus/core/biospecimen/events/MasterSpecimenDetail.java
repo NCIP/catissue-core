@@ -60,6 +60,8 @@ public class MasterSpecimenDetail {
 	
 	private String visitComments;
 	
+	private String reqCode;
+	
 	private String label;
 	
 	private String specimenClass;
@@ -314,6 +316,14 @@ public class MasterSpecimenDetail {
 
 	public void setVisitComments(String visitComments) {
 		this.visitComments = visitComments;
+	}
+
+	public String getReqCode() {
+		return reqCode;
+	}
+
+	public void setReqCode(String reqCode) {
+		this.reqCode = reqCode;
 	}
 
 	public String getLabel() {

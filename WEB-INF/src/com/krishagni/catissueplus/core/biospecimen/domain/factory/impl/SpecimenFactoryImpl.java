@@ -70,8 +70,8 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			ose.checkAndThrow();
 		}
 		
-		SpecimenRequirement sr = getSpecimenRequirement(detail, existing, ose);
 		Visit visit = getVisit(detail, existing, parent, ose);
+		SpecimenRequirement sr = getSpecimenRequirement(detail, existing, visit, ose);
 		ose.checkAndThrow();
 		
 		if (sr != null && !sr.getCollectionProtocolEvent().equals(visit.getCpEvent())) {
@@ -282,25 +282,45 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 	}
 
-	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, Specimen existing, OpenSpecimenException ose) {
+	private SpecimenRequirement getSpecimenRequirement(SpecimenDetail detail, Specimen existing, Visit visit, OpenSpecimenException ose) {
 		Long reqId = detail.getReqId();
+		String reqCode = detail.getReqCode();
+
 		SpecimenRequirement existingReq = existing != null ? existing.getSpecimenRequirement() : null;
-		if (reqId == null) {
+		if (reqId == null && !isReqCodeSpecified(detail, visit)) {
 			return existingReq;
 		}
 
 		Long existingReqId = existingReq != null ? existingReq.getId() : null;
-		if (reqId.equals(existingReqId)) {
+		if (reqId != null && reqId.equals(existingReqId)) {
 			return existingReq;
 		}
 		
-		SpecimenRequirement sr = daoFactory.getSpecimenRequirementDao().getById(reqId);
+		String existingReqCode = existingReq != null ? existingReq.getCode() : null;
+		if (reqCode != null && reqCode.equals(existingReqCode)) {
+			return existingReq;
+		}
+		
+		SpecimenRequirement sr = null;
+		if (reqId != null) {
+			sr = daoFactory.getSpecimenRequirementDao().getById(reqId);
+		} else {
+			sr = daoFactory.getSpecimenRequirementDao().getByCpEventLabelAndSrCode(
+				detail.getCpShortTitle(), visit.getCpEvent().getEventLabel(), reqCode);
+		}
+		
 		if (sr == null) {
 			ose.addError(SrErrorCode.NOT_FOUND);
 			return null;
 		}
 		
 		return sr;
+	}
+
+	private boolean isReqCodeSpecified(SpecimenDetail detail, Visit visit) {
+		return StringUtils.isNotBlank(detail.getCpShortTitle()) && // cp
+			visit != null && visit.getCpEvent() != null &&         // visit
+			StringUtils.isNotBlank(detail.getReqCode());           // req code
 	}
 	
 	private void setCollectionStatus(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
@@ -479,8 +499,14 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		}
 
 		if (specimen.isAliquot() && qty == null) {
-			ose.addError(SpecimenErrorCode.ALIQUOT_QTY_REQ);
-			return;
+			if (specimen.getSpecimenRequirement() != null) {
+				qty = specimen.getSpecimenRequirement().getInitialQuantity();
+			}
+			
+			if (qty == null) {
+				ose.addError(SpecimenErrorCode.ALIQUOT_QTY_REQ);
+				return;
+			}
 		}
 
 		specimen.setInitialQuantity(qty);

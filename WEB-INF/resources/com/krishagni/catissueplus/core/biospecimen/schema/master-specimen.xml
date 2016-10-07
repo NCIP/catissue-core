@@ -71,6 +71,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_req_code")</caption>
+      <attribute>reqCode</attribute>
+    </field>  
+
+    <field>
       <caption>#getMessage("specimen_label")</caption>
       <attribute>label</attribute>
     </field>  
