@@ -1,9 +1,12 @@
 package com.krishagni.catissueplus.core.biospecimen.label.specimen;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.common.PvAttributes;
+import com.krishagni.catissueplus.core.common.util.PvUtil;
 
-public class SpecimenTypeLabelToken extends AbstractSpmnAbbrLabelToken {
+public class SpecimenTypeLabelToken extends AbstractSpecimenLabelToken {
 
 	public SpecimenTypeLabelToken() {
 		this.name = "SP_TYPE";
@@ -11,6 +14,6 @@ public class SpecimenTypeLabelToken extends AbstractSpmnAbbrLabelToken {
 
 	@Override
 	public String getLabel(Specimen specimen) {
-		return getLabel(PvAttributes.SPECIMEN_CLASS, specimen.getSpecimenType());
+		return PvUtil.getInstance().getAbbr(PvAttributes.SPECIMEN_CLASS, specimen.getSpecimenType(), StringUtils.EMPTY);
 	}
 }

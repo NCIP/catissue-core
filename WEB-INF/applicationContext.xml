@@ -124,6 +124,8 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitYearLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitYear2LabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.EventUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitClinicalStatusLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.visit.VisitClinicalStatusAbbrToken"/>
         <ref bean="extnPvLabelToken"/>
       </list>
     </property>
