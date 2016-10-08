@@ -1,9 +1,10 @@
 package com.krishagni.catissueplus.core.common.util;
 
-import java.io.FileReader;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,9 @@ public class CsvFileReader implements CsvReader {
 	
 	public static CsvFileReader createCsvFileReader(String csvFile, boolean firstRowHeaderRow) {
 		try {
-			CSVReader csvReader = new CSVReader(new FileReader(csvFile), Utility.getFieldSeparator());
+			BufferedInputStream bin = new BufferedInputStream(new FileInputStream(csvFile));
+			InputStreamReader in = new InputStreamReader(bin, Utility.detectFileCharset(bin));
+			CSVReader csvReader = new CSVReader(in, Utility.getFieldSeparator());
 			return new CsvFileReader(csvReader, firstRowHeaderRow);
 		} catch (IOException e) {
 			throw new CsvException("Error creating CSV file reader", e);

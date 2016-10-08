@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.BufferedInputStream;
+
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -42,6 +44,8 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.PdfUtil;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import org.apache.tika.parser.txt.CharsetDetector;
+import org.apache.tika.parser.txt.CharsetMatch;
 
 public class Utility {
 	private static final String key = "0pEN@eSEncRyPtKy";
@@ -532,5 +536,29 @@ public class Utility {
 		}
 
 		return false;
+	}
+
+	public static String detectFileCharset(String file) {
+		InputStream in = null;
+		try {
+			in = new BufferedInputStream(new FileInputStream(file));
+			return detectFileCharset(in);
+		} catch (IOException ioe) {
+			throw new RuntimeException("Error while detecting character set", ioe);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+	}
+
+	public static String detectFileCharset(InputStream in) {
+		try {
+			CharsetDetector detector = new CharsetDetector();
+			detector.setText(in);
+
+			CharsetMatch match = detector.detect();
+			return match != null ? match.getName() : "UTF-8";
+		} catch (IOException ioe) {
+			throw new RuntimeException("Error detecting character set", ioe);
+		}
 	}
 }

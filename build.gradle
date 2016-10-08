@@ -112,6 +112,7 @@ dependencies {
   compile group: 'commons-logging', name: 'commons-logging', version:'1.2'
   compile group: 'org.apache.commons', name: 'commons-digester3', version:'3.2'
   compile group: 'org.apache.commons', name: 'commons-lang3', version:'3.4'
+  compile group: 'org.apache.tika', name: 'tika-parsers', version: '1.13'
   compile group: 'net.sf.kxml', name: 'kxml2-min', version:'2.3.0'
   compile group: 'net.sf.ehcache', name: 'ehcache', version:'1.2.3'
   compile group: 'net.sf.opencsv', name: 'opencsv', version:'2.3'
