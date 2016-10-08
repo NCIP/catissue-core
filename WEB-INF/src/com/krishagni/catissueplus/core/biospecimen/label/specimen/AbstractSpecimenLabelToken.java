@@ -14,12 +14,21 @@ public abstract class AbstractSpecimenLabelToken extends AbstractLabelTmplToken 
 
 	@Override
 	public String getReplacement(Object object) {
+		return getReplacement(object, new String[0]);
+	}
+
+	@Override
+	public String getReplacement(Object object, String ...args) {
 		if (!(object instanceof Specimen)) {
 			throw new RuntimeException("Invalid input object type");
 		}
 		
-		return getLabel((Specimen)object);
+		return getLabelN((Specimen)object, args);
 	}
-	
+
+	public String getLabelN(Specimen specimen, String ...args) {
+		return getLabel(specimen);
+	}
+
 	public abstract String getLabel(Specimen specimen);
 }

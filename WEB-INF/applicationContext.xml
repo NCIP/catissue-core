@@ -302,6 +302,7 @@
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenPathologyStatusToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SrCodeLabelToken"/>
         <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.PpidUniqueIdLabelToken"/>
+        <bean class="com.krishagni.catissueplus.core.biospecimen.label.specimen.SpecimenCpUniqueIdToken"/>
         <ref bean="extnPvLabelToken"/>
       </list>
     </property>
