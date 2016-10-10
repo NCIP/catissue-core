@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .factory('Alerts', function($timeout, $translate) {
+  .factory('Alerts', function($interval, $translate) {
     return {
       messages: [],
 
@@ -26,7 +26,11 @@ angular.module('openspecimen')
           timeout = 5000;
         }
 
-        $timeout(function() { self.remove(msg); }, timeout);
+        var promise = $interval(function() {
+          self.remove(msg);
+          $interval.cancel(promise);
+        }, timeout, 1);
+
         return msg;
       },
 
