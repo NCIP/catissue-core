@@ -1,6 +1,6 @@
 
 angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
-  .directive('osUsers', function(User) {
+  .directive('osUsers', function(AuthorizationService, User) {
     function loadUsers(scope, searchTerm) {
       var opts = angular.extend({searchString : searchTerm}, scope.filterOpts || {});
       User.query(opts).then(
@@ -42,7 +42,15 @@ angular.module('os.administrative.user.dropdown', ['os.administrative.models'])
       },
   
       link: function(scope, element, attrs, ctrl) {
-        if (!scope.ngModel && angular.isDefined(attrs.multiple)) {
+        if (!scope.ngModel && attrs.hasOwnProperty('defaultCurrentUser')) {
+          var user = AuthorizationService.currentUser();
+
+          if (attrs.hasOwnProperty('multiple')) {
+            scope.ngModel = [user];
+          } else {
+            scope.ngModel = user;
+          }
+        } else if (!scope.ngModel && attrs.hasOwnProperty('multiple')) {
           scope.ngModel = [];
         }
       },

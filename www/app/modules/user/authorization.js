@@ -77,6 +77,10 @@ angular.module('openspecimen')
         }
 
         return false;
+      },
+
+      currentUser: function() {
+        return currentUser;
       }
     }
   });
