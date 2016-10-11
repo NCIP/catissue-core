@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
@@ -18,6 +20,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
+import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
@@ -58,8 +61,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	@SuppressWarnings("unchecked")
 	public List<User> getUsersByIdsAndInstitute(List<Long> userIds, Long instituteId) {
 		Criteria criteria = sessionFactory.getCurrentSession()
-				.createCriteria(User.class, "u")
-				.add(Restrictions.in("u.id", userIds));
+			.createCriteria(User.class, "u")
+			.add(Restrictions.in("u.id", userIds));
 		
 		if (instituteId != null) {
 			criteria.createAlias("u.institute", "inst")
@@ -136,7 +139,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	
 	@Override
 	public void deleteFpToken(ForgotPasswordToken token) {
-		sessionFactory.getCurrentSession().delete(token);
+		getCurrentSession().delete(token);
 	}
 
 	private Criteria getUsersListQuery(UserListCriteria crit) {
@@ -161,7 +164,52 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			.setTimestamp("endDate", endDate)
 			.list();
 	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Password> getPasswordsUpdatedBefore(Date updateDate) {
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_PASSWDS_UPDATED_BEFORE)
+			.setDate("updateDate", updateDate)
+			.list();
 
+		return rows.stream().map(row -> {
+			int idx = 0;
+
+			User user = new User();
+			user.setId((Long)row[idx++]);
+			user.setFirstName((String)row[idx++]);
+			user.setLastName((String)row[idx++]);
+			user.setEmailAddress((String)row[idx++]);
+
+			Password password = new Password();
+			password.setUser(user);
+			password.setUpdationDate((Date)row[idx++]);
+
+			return password;
+
+		}).collect(Collectors.toList());
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<User> getInactiveUsers(Date lastLoginTime) {
+		return getCurrentSession().getNamedQuery(GET_INACTIVE_USERS)
+			.setDate("lastLoginTime", lastLoginTime)
+			.list();
+	}
+
+	@Override
+	public int updateStatus(List<User> users, String status) {
+		if (CollectionUtils.isEmpty(users)) {
+			return 0;
+		}
+
+		return getCurrentSession().getNamedQuery(UPDATE_STATUS)
+			.setString("activityStatus", status)
+			.setParameterList("userIds", users.stream().map(u -> u.getId()).collect(Collectors.toList()))
+			.executeUpdate();
+	}
+	
 	private List<UserSummary> getUsers(List<Object[]> rows, UserListCriteria listCrit) {		
 		Map<Long, UserSummary> userSummaryMap = new HashMap<Long, UserSummary>();
 
@@ -317,8 +365,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		
 		return dependentEntities;
  	}
-	
-	private static final String GET_USER_BY_LOGIN_NAME_HQL = 
+
+	private static final String GET_USER_BY_LOGIN_NAME_HQL =
 			"from com.krishagni.catissueplus.core.administrative.domain.User where loginName = :loginName and authDomain.name = :domainName  %s";
 	
 	private static final String GET_USER_BY_EMAIL_HQL = 
@@ -337,4 +385,10 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	private static final String GET_FP_TOKEN = TOKEN_FQN + ".getFpToken";
 
 	private static final String GET_ACTIVE_USERS_EMAIL_IDS = FQN + ".getActiveUsersEmailIds";
+	
+	private static final String GET_PASSWDS_UPDATED_BEFORE = FQN + ".getPasswordsUpdatedBeforeDate";
+	
+	private static final String GET_INACTIVE_USERS = FQN + ".getInactiveUsers";
+	
+	private static final String UPDATE_STATUS = FQN + ".updateStatus";
 }

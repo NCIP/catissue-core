@@ -1,13 +1,11 @@
 
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +77,7 @@ public class DpExpiringNotification implements ScheduledTask {
 	private Boolean isEligibleForReminder(DistributionProtocol dp, Date intervalStartDate,
 			int notificationDays, int repeatInterval) {
 
-		long daysBeforeExpiry = daysBetween(intervalStartDate, Utility.chopTime(dp.getEndDate()));
+		long daysBeforeExpiry = Utility.daysBetween(intervalStartDate, Utility.chopTime(dp.getEndDate()));
 		return daysBeforeExpiry == 0 || (notificationDays - daysBeforeExpiry) % repeatInterval == 0;
 	}
 	
@@ -98,7 +96,4 @@ public class DpExpiringNotification implements ScheduledTask {
 		return rcpts.toArray(new String[0]);
 	}
 
-	private long daysBetween(Date start, Date end) {
-		return TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
-	}
 }

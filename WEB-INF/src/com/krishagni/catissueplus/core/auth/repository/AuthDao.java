@@ -33,5 +33,7 @@ public interface AuthDao extends Dao<AuthDomain> {
 	public List<LoginAuditLog> getLoginAuditLogsByUser(Long userId, int maxResults);
 	
 	public void saveLoginAuditLog(LoginAuditLog log);
+	
+	public int deleteAuthTokensByUser(List<Long> userIds);
 
 }

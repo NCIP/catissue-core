@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -560,5 +561,9 @@ public class Utility {
 		} catch (IOException ioe) {
 			throw new RuntimeException("Error detecting character set", ioe);
 		}
+	}
+	
+	public static long daysBetween(Date start, Date end) {
+		return TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
 	}
 }

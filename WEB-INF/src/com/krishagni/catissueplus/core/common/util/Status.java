@@ -33,6 +33,8 @@ public final class Status {
 	public static final Status VISIT_STATUS_COMPLETED = new Status("Completed", 9);
 	
 	public static final Status VISIT_STATUS_PENDING = new Status("Pending", 10);
+	
+	public static final Status ACTIVITY_STATUS_EXPIRED = new Status("Expired", 11);
 
 	public String getStatus() {
 		return this.statusName;

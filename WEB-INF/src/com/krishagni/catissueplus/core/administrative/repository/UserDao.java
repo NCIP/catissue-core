@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.administrative.domain.ForgotPasswordToken;
+import com.krishagni.catissueplus.core.administrative.domain.Password;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
@@ -40,4 +41,10 @@ public interface UserDao extends Dao<User> {
 	public void deleteFpToken(ForgotPasswordToken token);
 
 	public List<String> getActiveUsersEmailIds(Date startDate, Date endDate);
+	
+	public List<Password> getPasswordsUpdatedBefore(Date updateDate);
+	
+	public List<User> getInactiveUsers(Date lastLoginTime);
+	
+	public int updateStatus(List<User> users, String status);
 }

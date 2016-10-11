@@ -1851,14 +1851,22 @@
       
       "auth": {
         "title": "Authentication",
-        "allowed_failed_logins": "Maximum Failed Login Attempts",
+        "allowed_failed_logins": "Failed Login Attempts",
         "allowed_failed_logins_desc": "Number of consecutive failed logins that are allowed before user account is locked.",
-        "token_inactive_interval": "Session Timeout Limit (minutes)",
+        "token_inactive_interval": "Session Timeout (minutes)",
         "token_inactive_interval_desc": "Minutes of inactiveness after which a user is automatically logged out.",
         "verify_token_ip_address": "IP Address Validation",
         "verify_token_ip_address_desc": "Check whether requests are made from the same IP address to which the login token was issued.",
-        "saml_enable": "Enable SAML authentication",
-        "saml_enable_desc": "Enable single sign on using SAML based identity provider"
+        "saml_enable": "SAML Authentication",
+        "saml_enable_desc": "Enable single sign on using SAML based identity provider.",
+        "password_expiry_days": "Password Age",
+        "password_expiry_days_desc": "Number of days before passwords expire",
+        "passwords_to_examine": "Password History",
+        "passwords_to_examine_desc": "Number of unique passwords before an old password can be reused.",
+        "password_pattern": "Password Complexity",
+        "password_pattern_desc": "Regular expression specifying complexity requirements that user passwords must meet. For example - pattern for at least one capital letter, one small letter, one number and should be minimum 8 characters long.",
+        "account_inactive_days": "Inactive Account",
+        "account_inactive_days_desc": "Number of days of inactivity before user account is locked."
       },
       
       "administrative": {

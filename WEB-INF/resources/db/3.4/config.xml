@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
+<databaseChangeLog 
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
   <changeSet author="vlonushte" id="Setting to enable or disable 2 step patient registration workflow">
     <sql>
@@ -12,6 +12,112 @@
         'two_step_patient_reg', 'two_step_patient_reg_desc',
         'BOOLEAN', 'false'
       );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of days after which the password is considered as old and user account is locked">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_expiry_days',
+        'password_expiry_days', 'password_expiry_days_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of previous passwords that needs to be examined to ensure password is not same as previous passwords">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'passwords_to_examine',
+        'passwords_to_examine', 'passwords_to_examine_desc',
+        'INT', '5'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Password complexity regular expression">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_pattern',
+        'password_pattern', 'password_pattern_desc',
+        'STRING', '((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of days of inactivity after which the user account will be automatically locked">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'account_inactive_days',
+        'account_inactive_days', 'account_inactive_days_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Scheduled job for notifying/locking users with old passwords" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+      
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+        scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+      values
+        (default, 'Password Expiry Notification', @userId, now(), null, 40, 01, null,
+        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.auth.services.impl.OldPasswordNotification', 0, null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for notifying/locking users with old passwords" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        userId number;
+      begin 
+        select identifier into userId from catissue_user where login_name like '$system';
+        
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Password Expiry Notification', userId, SYSDATE, null, 40, 01, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.auth.services.impl.OldPasswordNotification', 0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for locking inactive user accounts" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided,
+         rt_args_help_text)
+      values
+        (default, 'Inactive User Accounts Notification', @userId, now(), null, 30, 01, null,
+         null, 'Active', 'DAILY', 'INTERNAL', null,
+         'com.krishagni.catissueplus.core.auth.services.impl.InactiveUserAccountsNotification', 0, null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for locking inactive user accounts" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        userId number;
+      begin
+        select identifier into userId from catissue_user where login_name like '$system';
+
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided,
+           rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Inactive User Accounts Notification', userId, SYSDATE, null, 30, 01, null,
+           null, 'Active', 'DAILY', 'INTERNAL', null,
+           'com.krishagni.catissueplus.core.auth.services.impl.InactiveUserAccountsNotification', 0, null);
+      end;
+      //
     </sql>
   </changeSet>
 </databaseChangeLog>

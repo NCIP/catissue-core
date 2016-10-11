@@ -26,6 +26,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
+import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
@@ -46,10 +47,6 @@ public class User extends BaseEntity implements UserDetails {
 	
 	private static final String ENTITY_NAME = "user";
 
-	private static final Pattern pattern = Pattern.compile("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})");
-	
-	private static final int PASSWDS_TO_EXAMINE = 5;
-		
 	private String lastName;
 
 	private String firstName;
@@ -251,17 +248,17 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		return !isExpired();
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return true;
+		return !Status.ACTIVITY_STATUS_LOCKED.getStatus().equals(getActivityStatus());
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		return isAccountNonExpired();
 	}
 
 	@Override
@@ -289,17 +286,21 @@ public class User extends BaseEntity implements UserDetails {
 			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_VIOLATES_RULES);
 		}
 		
-		if (isSameAsLastNPassword(newPassword)) {
-			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_SAME_AS_LAST_N);
+		int passwordsToExamine = ConfigUtil.getInstance().getIntSetting("auth", "passwords_to_examine", 0);
+		if (isSameAsLastNPassword(newPassword, passwordsToExamine)) {
+			throw OpenSpecimenException.userError(UserErrorCode.PASSWD_SAME_AS_LAST_N, passwordsToExamine);
 		}
-		
-		this.password = passwordEncoder.encode(newPassword);
-		
+
+		setPassword(passwordEncoder.encode(newPassword));
+
 		Password password = new Password();
 		password.setUpdationDate(new Date());
 		password.setUser(this);
-		password.setPassword(this.password);
-		this.passwords.add(password);
+		password.setPassword(getPassword());
+		getPasswords().add(password);
+		if (isExpired()) {
+			setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
+		}
 	}
 	
 	//TODO: need to check few more entities like AQ, Custom form, Distribution order etc.
@@ -352,18 +353,39 @@ public class User extends BaseEntity implements UserDetails {
 		return SYS_USER.equals(getLoginName());
 	}
 
+	public boolean isActive() {
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(getActivityStatus());
+	}
+
+	public boolean isExpired() {
+		return Status.ACTIVITY_STATUS_EXPIRED.getStatus().equals(getActivityStatus());
+	}
+
 	private boolean isValidPasswordPattern(String password) {
-		return pattern.matcher(password).matches();
+		if (StringUtils.isBlank(password)) {
+			return false;
+		}
+
+		String pattern = ConfigUtil.getInstance().getStrSetting("auth", "password_pattern", "");
+		if (StringUtils.isBlank(pattern)) {
+			return true;
+		}
+
+		return Pattern.compile(pattern).matcher(password).matches();
 	}
 	
-	private boolean isSameAsLastNPassword(String newPassword) {
-		boolean isSameAsLastN = false;
-		List<Password> passwords = new ArrayList<Password>(this.getPasswords());
+	private boolean isSameAsLastNPassword(String newPassword, int passwordToExamine) {
+		if (passwordToExamine <= 0) {
+			return false;
+		}
+
+		List<Password> passwords = new ArrayList<>(this.getPasswords());
 		Collections.sort(passwords);
 		
 		int examined = 0;
-		for (Password passwd: passwords) {
-			if (examined == PASSWDS_TO_EXAMINE) {
+		boolean isSameAsLastN = false;
+		for (Password passwd : passwords) {
+			if (examined == passwordToExamine) {
 				break;
 			}
 			
@@ -373,6 +395,7 @@ public class User extends BaseEntity implements UserDetails {
 			}
 			++examined;
 		}
+
 		return isSameAsLastN;
 	}
 	

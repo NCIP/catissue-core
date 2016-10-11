@@ -105,6 +105,13 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	}
 	
 	@Override
+	public int deleteAuthTokensByUser(List<Long> userIds) {
+		return getCurrentSession().getNamedQuery(DELETE_AUTH_TOKENS_BY_USER_ID)
+			.setParameterList("ids", userIds)
+			.executeUpdate();
+	}
+	
+	@Override
 	public void saveLoginAuditLog(LoginAuditLog log) {
 		sessionFactory.getCurrentSession().saveOrUpdate(log);
 	}
@@ -124,5 +131,7 @@ public class AuthDaoImpl extends AbstractDao<AuthDomain> implements AuthDao {
 	private static final String DELETE_INACTIVE_AUTH_TOKENS = AuthToken.class.getName() + ".deleteInactiveAuthTokens";
 
 	private static final String GET_LOGIN_AUDIT_LOGS_BY_USER_ID = LoginAuditLog.class.getName() + ".getLogsByUserId";
+	
+	private static final String DELETE_AUTH_TOKENS_BY_USER_ID = AuthToken.class.getName() + ".deleteAuthTokensByUserId";
 	
 }

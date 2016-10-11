@@ -39,6 +39,13 @@
         )
       ]]>    
     </sql-query>
-         
+    
+    <query name="deleteAuthTokensByUserId">
+      delete
+      from
+        com.krishagni.catissueplus.core.auth.domain.AuthToken t
+      where
+        t.user.id in (:ids)
+    </query>
   </class>
 </hibernate-mapping>

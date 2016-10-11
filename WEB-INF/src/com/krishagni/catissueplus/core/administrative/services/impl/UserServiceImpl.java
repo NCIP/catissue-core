@@ -389,7 +389,7 @@ public class UserServiceImpl implements UserService {
 			UserDao dao = daoFactory.getUserDao();
 			String loginName = req.getPayload();
 			User user = dao.getUser(loginName, DEFAULT_AUTH_DOMAIN);
-			if (user == null || !user.getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus())) {
+			if (user == null || !(user.isActive() || user.isExpired())) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
 			}
 			

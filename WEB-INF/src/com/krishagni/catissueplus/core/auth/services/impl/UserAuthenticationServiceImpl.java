@@ -62,6 +62,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 				throw OpenSpecimenException.userError(AuthErrorCode.USER_LOCKED);
 			}
 			
+			if (user.getActivityStatus().equals(Status.ACTIVITY_STATUS_EXPIRED.getStatus())) {
+				throw OpenSpecimenException.userError(AuthErrorCode.PASSWD_EXPIRED);
+			}
+			
 			if (!user.isEnabled()) {
 				throw OpenSpecimenException.userError(AuthErrorCode.INVALID_CREDENTIALS);
 			}

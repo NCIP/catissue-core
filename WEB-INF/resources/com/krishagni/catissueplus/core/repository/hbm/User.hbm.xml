@@ -132,5 +132,50 @@
         log.loginSuccessful is true and
         user.activityStatus != 'Disabled'
     </query>
+    
+    <query name="getPasswordsUpdatedBeforeDate">
+      select
+        user.id, user.firstName, user.lastName, user.emailAddress, max(passwd.updationDate)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Password passwd
+        join passwd.user user
+      where
+        user.activityStatus = 'Active'
+      group by
+        user.id, user.firstName, user.lastName, user.emailAddress
+      having
+        max(passwd.updationDate) &lt;= :updateDate
+    </query>
+    
+    <query name="getInactiveUsers">
+      select
+        iu
+      from
+        com.krishagni.catissueplus.core.administrative.domain.User iu
+      where
+        iu.id in (
+          select
+            user.id
+          from
+            com.krishagni.catissueplus.core.auth.domain.LoginAuditLog log
+            right join log.user user
+          where
+            user.activityStatus = 'Active' and
+            ((log.loginSuccessful is null and user.creationDate &lt;= :lastLoginTime) or log.loginSuccessful = 1)
+          group by
+            user.id
+          having
+            max(log.loginTime) &lt;= :lastLoginTime or max(log.loginTime) is null)
+        )
+    </query>
+    
+    <query name="updateStatus">
+      update
+        com.krishagni.catissueplus.core.administrative.domain.User user
+      set
+        user.activityStatus = :activityStatus
+      where
+        user.id in (:userIds)
+    </query>
   </class>
 </hibernate-mapping>

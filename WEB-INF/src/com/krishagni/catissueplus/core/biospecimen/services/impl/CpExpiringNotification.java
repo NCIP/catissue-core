@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -76,7 +75,7 @@ public class CpExpiringNotification implements ScheduledTask {
 	private Boolean isEligibleForReminder(CollectionProtocol cp, Date intervalStartDate,
 			int notificationDays, int repeatInterval) {
 
-		long daysBeforeExpiry = daysBetween(intervalStartDate, Utility.chopTime(cp.getEndDate()));
+		long daysBeforeExpiry = Utility.daysBetween(intervalStartDate, Utility.chopTime(cp.getEndDate()));
 		return daysBeforeExpiry == 0 || (notificationDays - daysBeforeExpiry) % repeatInterval == 0;
 	}
 	
@@ -86,9 +85,5 @@ public class CpExpiringNotification implements ScheduledTask {
 		emailProps.put("cp", cp);
 		String[] rcpts = {cp.getPrincipalInvestigator().getEmailAddress()};
 		emailService.sendEmail(CP_EXPIRING_NOTIFICATION_TMPL, rcpts, emailProps);
-	}
-
-	private long daysBetween(Date start, Date end) {
-		return TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
 	}
 }

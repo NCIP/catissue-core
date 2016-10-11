@@ -11,7 +11,9 @@ public enum AuthErrorCode implements ErrorCode {
 	
 	TOKEN_EXPIRED,
 	
-	IP_ADDRESS_CHANGED;
+	IP_ADDRESS_CHANGED,
+
+	PASSWD_EXPIRED;
 
 	@Override
 	public String code() {
