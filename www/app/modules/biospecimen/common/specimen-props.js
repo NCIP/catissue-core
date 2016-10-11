@@ -135,6 +135,10 @@ angular.module('os.biospecimen.common.specimenprops', [])
           inputEl.attr('required', '');
         }
 
+        if (tAttrs.ngInit) {
+          inputEl.attr('ng-init', tAttrs.ngInit);
+        }
+
         if (tAttrs.onChange) {
           inputEl.attr('ng-change', tAttrs.onChange);
         }

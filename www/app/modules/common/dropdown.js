@@ -31,6 +31,10 @@ angular.module('openspecimen')
           .attr('append-to-body', tAttrs.appendToBody == true)
           .attr('os-tabable', !!tAttrs.osTabable);
     
+        if (tAttrs.ngInit) {
+          uiSelect.attr('ng-init', tAttrs.ngInit);
+        }
+
         if (tAttrs.onSelect) {
           uiSelect.attr('on-select', tAttrs.onSelect);
         }

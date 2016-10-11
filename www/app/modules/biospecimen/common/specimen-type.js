@@ -1,5 +1,5 @@
 angular.module('os.biospecimen.common')
-  .factory('SpecimenTypeUtil', function(PvManager) {
+  .factory('SpecimenTypeUtil', function($q, PvManager) {
 
     function transformer(pv) {
       return {specimenClass: pv.parentValue, type: pv.value};
@@ -9,8 +9,17 @@ angular.module('os.biospecimen.common')
       return PvManager.loadPvsByParent('specimen-class', '', true, transformer);
     }
 
-    function getSpecimenTypes(formCtrl) {
-      return formCtrl.getCachedValues('pvs', 'specimen-type', loadSpecimenTypes);
+    function loadLocalTypes(options) {
+      return function() {
+        var q = $q.defer();
+        q.resolve(options);
+        return q.promise;
+      }
+    }
+
+    function getSpecimenTypes(formCtrl, options) {
+      var loadFn = !options ? loadSpecimenTypes : loadLocalTypes(options);
+      return formCtrl.getCachedValues('pvs', 'specimen-type', loadFn);
     }
 
     function setType(specimen, types, type) {
@@ -32,8 +41,8 @@ angular.module('os.biospecimen.common')
     }
 
     return {
-      setClass: function(formCtrl, specimens) {
-        getSpecimenTypes(formCtrl).then(
+      setClass: function(formCtrl, specimens, options) {
+        getSpecimenTypes(formCtrl, options).then(
           function(types) {
             angular.forEach(specimens, function(specimen) { init(specimen, types); });
           }
@@ -47,17 +56,21 @@ angular.module('os.biospecimen.common')
     var valuesQ = undefined;
 
     function linker(scope, element, attrs, formCtrl) {
+      if (attrs.defaultValue && !scope.specimen.type) {
+        scope.specimen.type = attrs.defaultValue;
+      }
+
       scope.types = [];
       scope.model = {value: scope.specimen.type};
 
-      valuesQ = SpecimenTypeUtil.getSpecimenTypes(formCtrl);
+      valuesQ = SpecimenTypeUtil.getSpecimenTypes(formCtrl, scope.options);
       valuesQ.then(function(types) { scope.types = types; });
 
       scope.onTypeSelect = function(type) {
         angular.extend(scope.specimen, type);
       }
 
-      SpecimenTypeUtil.setClass(formCtrl, [scope.specimen]);
+      SpecimenTypeUtil.setClass(formCtrl, [scope.specimen], scope.options);
     }
 
     return {
@@ -67,6 +80,7 @@ angular.module('os.biospecimen.common')
 
       scope: {
         specimen: '=',
+        options:  '=?'
       },
 
       replace: true,

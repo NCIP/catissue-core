@@ -1,6 +1,6 @@
 
 angular.module('openspecimen')
-  .directive('osPvs', function(PvManager) {
+  .directive('osPvs', function($q, PvManager) {
     function linker(scope, element, attrs, formCtrl) {
       scope.pvs = [];
       scope.reload = true;
@@ -28,7 +28,11 @@ angular.module('openspecimen')
 
     function loadPvs(formCtrl, scope, searchTerm, attrs, parentVal) {
       var q = undefined;
-      if (attrs.parentVal) {
+      if (attrs.options) {
+        q = $q.defer();
+        q.resolve(getLocalPvs(scope, attrs));
+        q = q.promise;
+      } else if (attrs.parentVal) {
         var prop = 'P:' + attrs.attribute + ':' + parentVal;
         q = getCachedValues(formCtrl, 'pvs', prop, function() { return _loadPvsByParent(attrs, parentVal); });
       } else {
@@ -43,6 +47,19 @@ angular.module('openspecimen')
       q.then(
         function(pvs) {
           setPvs(scope, searchTerm, attrs, pvs);
+        }
+      );
+    }
+
+    function getLocalPvs(scope, attrs) {
+      var list = scope.$eval(attrs.options);
+      if (!list) {
+        list = [];
+      }
+
+      return list.map(
+        function(v) {
+          return addDisplayValue(typeof v == 'object' ? v : {value: v});
         }
       );
     }
