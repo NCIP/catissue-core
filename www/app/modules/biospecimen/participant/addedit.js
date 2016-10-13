@@ -2,9 +2,9 @@
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, $translate, $modal,
-    cp, cpr, extensionCtxt, hasDict, twoStepReg, lockedFields,
+    cp, cpr, extensionCtxt, hasDict, twoStepReg, addPatientOnLookupFail, lockedFields,
     CollectionProtocolRegistration, Participant,
-    Site, PvManager, ExtensionsUtil) {
+    Site, PvManager, ExtensionsUtil, Alerts) {
 
     var availableSites = [];
     var inputParticipant = null;
@@ -208,8 +208,12 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpr.participant.getMatchingParticipants().then(
         function(result) {
           if (!result || result.length == 0) {
-            $scope.partCtx.twoStepReg = false;
-            $scope.partCtx.showNoMatchWarning = true;
+            if (addPatientOnLookupFail) {
+              $scope.partCtx.twoStepReg = false;
+              $scope.partCtx.showNoMatchWarning = true;
+            } else {
+              Alerts.error('participant.no_matching_participant');
+            }
           } else {
             $scope.allowIgnoreMatches = false;
             $scope.matchedParticipants = result;

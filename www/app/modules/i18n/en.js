@@ -1936,7 +1936,9 @@
         "pending_spmns_disp_interval": "Anticipated Specimens Display Interval",
         "pending_spmns_disp_interval_desc": "Anticipated specimens will be automatically hidden in specimen tree after specified number of days have elapsed since collection of parent specimen or visit",
         "two_step_patient_reg": "Two Step Participant Registration",
-        "two_step_patient_reg_desc": "Enable or disable two step participant registration workflow"
+        "two_step_patient_reg_desc": "Enable or disable two step participant registration workflow",
+        "add_patient_on_lookup_fail": "Add Participant on No Match",
+        "add_patient_on_lookup_fail_desc": "Allow or disallow users to add new participants when lookup yields no matching participants in two step registration workflow"
       },
 
       "common": {

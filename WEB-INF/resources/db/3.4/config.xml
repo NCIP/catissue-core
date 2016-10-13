@@ -120,4 +120,14 @@
       //
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Setting to allow or disallow adding patients on lookup fail">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'add_patient_on_lookup_fail',
+        'add_patient_on_lookup_fail', 'add_patient_on_lookup_fail_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

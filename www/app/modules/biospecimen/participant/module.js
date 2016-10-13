@@ -318,6 +318,13 @@ angular.module('os.biospecimen.participant',
               }
             );
           },
+          addPatientOnLookupFail: function(SettingUtil) {
+            return SettingUtil.getSetting('biospecimen', 'add_patient_on_lookup_fail').then(
+              function(setting) {
+                return setting.value == 'true';
+              }
+            );
+          }, 
           lockedFields: function(CpConfigSvc) {
             return CpConfigSvc.getLockedParticipantFields();
           }
