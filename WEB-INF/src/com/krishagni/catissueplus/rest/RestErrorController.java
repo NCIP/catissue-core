@@ -44,7 +44,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 			status = getHttpStatus(ose.getErrorType());
 
 			if (ose.getException() != null) {
-				ose.getException().printStackTrace();
+				logger.error("Error handling request", ose.getException());
 
 				if (CollectionUtils.isEmpty(ose.getErrors())) {
 					errorMsgs.add(getMessage(INTERNAL_ERROR, null));
@@ -55,7 +55,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 				errorMsgs.add(getMessage(error.error(), error.params()));
 			}
 		} else {
-			exception.printStackTrace();
+			logger.error("Error handling request", exception);
 			errorMsgs.add(getMessage(INTERNAL_ERROR, null));
 		}
 

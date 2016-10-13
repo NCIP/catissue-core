@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 
 import com.krishagni.catissueplus.core.administrative.domain.factory.ScheduledJobErrorCode;
@@ -17,6 +19,8 @@ import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
 public class ScheduledJob extends BaseEntity {
+	private static final Log logger = LogFactory.getLog(ScheduledJob.class);
+
 	public enum RepeatSchedule { 
 		MINUTELY,
 		HOURLY,
@@ -368,7 +372,7 @@ public class ScheduledJob extends BaseEntity {
 		try {
 			return (ScheduledTask)Class.forName(getTaskImplfqn()).newInstance();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Invalid scheduled job class: " + getTaskImplfqn(), e);
 			throw OpenSpecimenException.userError(ScheduledJobErrorCode.INVALID_TYPE);
 		}
 	}

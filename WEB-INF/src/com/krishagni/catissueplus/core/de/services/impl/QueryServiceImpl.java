@@ -30,6 +30,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.core.Authentication;
@@ -97,6 +99,8 @@ import edu.common.dynamicextensions.query.ResultColumn;
 import edu.common.dynamicextensions.query.WideRowMode;
 
 public class QueryServiceImpl implements QueryService {
+	private static final Log logger = LogFactory.getLog(QueryServiceImpl.class);
+
 	private static final String cpForm = "CollectionProtocol";
 
 	private static final String cprForm = "Participant";
@@ -358,7 +362,7 @@ public class QueryServiceImpl implements QueryService {
 				try {
 					queryResult.close();
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Error closing query result stream", e);
 				}				
 			}
 		}
@@ -831,7 +835,7 @@ public class QueryServiceImpl implements QueryService {
 						insertAuditLog(user, opDetail, resp);
 						sendEmail();
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Error exporting query data", e);
 						throw OpenSpecimenException.serverError(e);
 					} finally {
 						IOUtils.closeQuietly(fout);
@@ -854,7 +858,7 @@ public class QueryServiceImpl implements QueryService {
 						}
 						sendQueryDataExportedEmail(user, savedQuery, filename);
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Error sending email with query exported data", e);
 					}
 				}
 			});
@@ -904,15 +908,13 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(getClass().getClassLoader());
 			Resource[] resources = resolver.getResources("classpath:/query-forms/" + dirName + "/*.xml");
-			
-			for (Resource resource: resources) {
+
+			for (Resource resource : resources) {
 				String filename = "query-forms/" + dirName + "/" + resource.getFilename();
 				templates.append(templateService.render(filename, new HashMap<String, Object>()));
 			}
-		} catch (FileNotFoundException e) {
-
-		} catch (IOException io) {
-			io.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Error rendering query forms", e);
 		}
 		
 		return templates.toString();

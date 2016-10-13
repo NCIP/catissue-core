@@ -21,7 +21,7 @@ import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 @Configurable
 public class CpReportTask implements ScheduledTask, Runnable {
-	private static Log logger = LogFactory.getLog(CpReportTask.class);
+	private static final Log logger = LogFactory.getLog(CpReportTask.class);
 
 	@Autowired
 	private DaoFactory daoFactory;
@@ -71,7 +71,6 @@ public class CpReportTask implements ScheduledTask, Runnable {
 			CollectionProtocol cp = daoFactory.getCollectionProtocolDao().getById(cpId);
 			new CpReportGenerator().generateReport(cp, sysSettings, cpSettings);
 		} catch (Exception e) {
-			e.printStackTrace();
 			logger.error("Error generating report for collection protocol: " + cpId, e);
 		}
 	}

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
@@ -32,7 +34,7 @@ import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 
 public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implements InitializingBean, ConfigChangeListener {
-	private static final Logger logger = Logger.getLogger(DefaultVisitLabelPrinter.class);
+	private static final Log logger = LogFactory.getLog(DefaultVisitLabelPrinter.class);
 	
 	private List<VisitLabelPrintRule> rules = new ArrayList<VisitLabelPrintRule>();
 	
@@ -110,7 +112,7 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 			daoFactory.getLabelPrintJobDao().saveOrUpdate(job);
 			return job;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error printing visit name labels", e);
 			throw OpenSpecimenException.serverError(e);
 		}
 	}

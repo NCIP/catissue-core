@@ -1,11 +1,16 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.services.ScheduledTaskListener;
 
 public class ScheduledTaskWrapper implements Runnable {
+	private static final Log logger = LogFactory.getLog(ScheduledTaskWrapper.class);
+
 	private ScheduledJob job;
 	
 	private String args;
@@ -29,7 +34,7 @@ public class ScheduledTaskWrapper implements Runnable {
 			job.newTask().doJob(jobRun);
 			callback.completed(jobRun); 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error running scheduled job: " + (job != null ? job.getName() : "Unknown"), e);
 			callback.failed(jobRun, e);
 		} 
 	}

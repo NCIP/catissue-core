@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun;
 import com.krishagni.catissueplus.core.administrative.services.ScheduledTask;
 
 public class ExternalScheduledTask implements ScheduledTask {
+	private static final Log logger = LogFactory.getLog(ExternalScheduledTask.class);
+
 	private static final String SPACE_DELIMITED_TOKENS = "\\s+(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
 
 	@Override
@@ -39,7 +43,7 @@ public class ExternalScheduledTask implements ScheduledTask {
 			Process process = pb.start();
 			process.waitFor();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error running scheduled job: " + jobRun.getScheduledJob().getName(), e);
 			throw new RuntimeException(e);
 		}
 	}

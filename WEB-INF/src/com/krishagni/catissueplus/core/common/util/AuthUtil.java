@@ -5,6 +5,8 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import com.krishagni.catissueplus.core.administrative.domain.Institute;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 
 public class AuthUtil {
+	private static final Log logger = LogFactory.getLog(AuthUtil.class);
+
 	public static Authentication getAuth() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
@@ -103,7 +107,7 @@ public class AuthUtil {
 						authToken = authToken.substring(1, authToken.length() - 1);
 					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Error obtaining token from cookie", e);
 				}
 				break;
 			}

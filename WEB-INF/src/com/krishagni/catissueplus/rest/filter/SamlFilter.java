@@ -14,6 +14,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -31,6 +33,8 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class SamlFilter extends FilterChainProxy {
+	private static final Log logger = LogFactory.getLog(SamlFilter.class);
+
 	private static final String SHOW_ERROR = "/#/alert";
 
 	private DaoFactory daoFactory;
@@ -61,7 +65,7 @@ public class SamlFilter extends FilterChainProxy {
 		} catch (UsernameNotFoundException use) {
 			httpResp.sendRedirect(appUrl + SHOW_ERROR + "?redirectTo=login&type=danger&msg=" + use.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error doing SAML based authentication", e);
 			httpResp.sendRedirect(appUrl + SHOW_ERROR + "?redirectTo=login&type=danger&msg=" + e.getMessage());
 		}
 	}

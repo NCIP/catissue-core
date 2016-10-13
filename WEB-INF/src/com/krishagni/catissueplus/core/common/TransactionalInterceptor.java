@@ -35,7 +35,7 @@ import com.krishagni.catissueplus.core.common.util.EmailUtil;
 
 @Aspect
 public class TransactionalInterceptor {
-	private static Log logger = LogFactory.getLog(TransactionalInterceptor.class);
+	private static final Log logger = LogFactory.getLog(TransactionalInterceptor.class);
 
 	private PlatformTransactionManager transactionManager;
 	
@@ -69,8 +69,8 @@ public class TransactionalInterceptor {
 		try {
 			return doWork0(pjp, rollback);
 		} catch (Throwable t) {
+			logger.error("Error doing work inside " + pjp.getSignature(), t);
 			notifyUncaughtServerError(t.getCause());
-			t.printStackTrace();
 			throw t;
 		}
 	}
@@ -90,6 +90,7 @@ public class TransactionalInterceptor {
 						if (!resp.isSuccessful() && !resp.isForceTxCommitEnabled()) {
 							status.setRollbackOnly();
 							if (resp.isSystemError() || resp.isUnknownError()) {
+								logger.error("Error doing work inside " + pjp.getSignature(), resp.getError().getException());
 								notifyUncaughtServerError(resp.getError().getException());
 							}
 						} else if (resp.isRollback()) {
@@ -102,7 +103,7 @@ public class TransactionalInterceptor {
 					status.setRollbackOnly();
 					throw ose;
 				} catch (Throwable t) {
-					t.printStackTrace();
+					logger.error("Error doing work inside " + pjp.getSignature(), t);
 					status.setRollbackOnly();
 					notifyUncaughtServerError(t);
 					throw OpenSpecimenException.serverError(t);

@@ -9,7 +9,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
 
 import com.krishagni.catissueplus.core.administrative.domain.ScheduledJob;
@@ -24,7 +25,7 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
 public class ScheduledTaskManagerImpl implements ScheduledTaskManager, ScheduledTaskListener {
-	private static final Logger logger = Logger.getLogger(ScheduledTaskManagerImpl.class);
+	private static final Log logger = LogFactory.getLog(ScheduledTaskManagerImpl.class);
 
 	private static ScheduledExecutorService executorService = Executors.newScheduledThreadPool(5);
 	
@@ -87,7 +88,7 @@ public class ScheduledTaskManagerImpl implements ScheduledTaskManager, Scheduled
 		try {
 			future.cancel(false);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error canceling scheduled job: " + job.getName(), e);
 		}
 	}
 

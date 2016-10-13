@@ -6,11 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.krishagni.catissueplus.core.auth.domain.factory.AuthProviderErrorCode;
 import com.krishagni.catissueplus.core.auth.services.AuthenticationService;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 
 public class AuthDomain {
+	private static final Log logger = LogFactory.getLog(AuthDomain.class);
+
 	private static Map<String, AuthenticationService> authProviderMap = new HashMap<String, AuthenticationService>();
 
 	private Long id;
@@ -82,7 +87,7 @@ public class AuthDomain {
 			
 			return authService;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error obtaining an instance of auth provider", e);
 			throw OpenSpecimenException.userError(AuthProviderErrorCode.INVALID_AUTH_IMPL);
 		}
 	}

@@ -28,7 +28,7 @@ import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
 public class EmailServiceImpl implements EmailService, ConfigChangeListener, InitializingBean {
-	private static Log LOGGER = LogFactory.getLog(EmailServiceImpl.class);
+	private static final Log logger = LogFactory.getLog(EmailServiceImpl.class);
 	
 	private static final String MODULE = "email";
 	
@@ -88,8 +88,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 			
 			this.mailSender = mailSender;
 		} catch (Exception e) {
-			e.printStackTrace();
-			new RuntimeException("Error while initialising java mail sender", e);
+			logger.error("Error initialising e-mail sender", e);
 		}
 	}
 	
@@ -142,7 +141,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 			taskExecutor.submit(new SendMailTask(mimeMessage));
 			return true;
 		} catch (Exception e) {
-			LOGGER.error("Error sending e-mail", e);
+			logger.error("Error sending e-mail", e);
 			return false;
 		}
 		
@@ -204,8 +203,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 			try{
 				mailSender.send(mimeMessage);
 			} catch(Exception e) {
-				e.printStackTrace();
-				new RuntimeException("Error while sending Email", e);
+				logger.error("Error sending e-mail", e);
 			}
 		}
 	}

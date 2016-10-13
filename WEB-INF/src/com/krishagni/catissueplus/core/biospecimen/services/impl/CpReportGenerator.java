@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -30,6 +31,8 @@ import edu.common.dynamicextensions.query.WideRowMode;
 
 @Configurable
 public class CpReportGenerator {
+	private static final Log logger = LogFactory.getLog(CpReportGenerator.class);
+
 	private static final String RPTS_DIR = "cp-reports";
 
 	@Autowired
@@ -220,7 +223,7 @@ public class CpReportGenerator {
 				try {
 					result.getPromise().get();
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error("Error retrieving CP report data file", e);
 					dataFile = null;
 				}
 			}
