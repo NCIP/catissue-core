@@ -8,9 +8,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import au.com.bytecode.opencsv.CSVWriter;
 
 public class CsvFileWriter implements CsvWriter {
+	
 	private CSVWriter csvWriter;
 
 	public CsvFileWriter(CSVWriter csvWriter) {
@@ -34,7 +37,7 @@ public class CsvFileWriter implements CsvWriter {
 	}
 	
 	public static CsvFileWriter createCsvFileWriter(Writer writer, char separator, char quotechar){
-		CSVWriter csvWriter = new CSVWriter(writer, separator, quotechar);
+		CSVWriter csvWriter = new CSVWriter(writer, separator, quotechar, getLineEnding());
 		return new CsvFileWriter(csvWriter);
 	}
 	
@@ -61,4 +64,11 @@ public class CsvFileWriter implements CsvWriter {
 			throw new CsvException("Error closing CSVWriter", e);
 		}
 	}
+	
+	private static String getLineEnding() {
+		String lineEnding = System.getProperty("line.separator");
+		return StringUtils.isNotEmpty(lineEnding) ? lineEnding : DEFAULT_LINE_ENDING;
+	}
+	
+	private static final String DEFAULT_LINE_ENDING = "\n";
 }
