@@ -303,7 +303,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				consentDetail.getCpId(), consentDetail.getCpShortTitle(), consentDetail.getPpid());
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
-			ConsentResponses consentResponses = consentResponsesFactory.createConsentResponses(consentDetail);
+			ConsentResponses consentResponses = consentResponsesFactory.createConsentResponses(existing, consentDetail);
 			existing.updateConsents(consentResponses);
 			return ResponseEvent.response(ConsentDetail.fromCpr(existing));
 		} catch (OpenSpecimenException ose) {

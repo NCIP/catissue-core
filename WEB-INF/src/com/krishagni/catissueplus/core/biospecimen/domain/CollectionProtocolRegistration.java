@@ -302,7 +302,7 @@ public class CollectionProtocolRegistration {
 
 	private void updateConsentResponses(Collection<ConsentTierResponse> consentResponses) {
 		Map<String, ConsentTierResponse> existingResps = getConsentResponses().stream()
-			.collect(Collectors.toMap(resp -> resp.getConsentTier().getStatement(), resp -> resp));
+			.collect(Collectors.toMap(ConsentTierResponse::getStatement, resp -> resp));
 
 		for(ConsentTierResponse newResp : consentResponses) {
 			ConsentTierResponse existingResp = existingResps.remove(newResp.getConsentTier().getStatement());

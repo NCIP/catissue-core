@@ -4,9 +4,8 @@ import static com.krishagni.catissueplus.core.common.PvAttributes.CONSENT_RESPON
 import static com.krishagni.catissueplus.core.common.service.PvValidator.isValid;
 
 import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -31,23 +30,25 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 	}
 	
 	@Override
-	public ConsentResponses createConsentResponses(ConsentDetail detail) {
+	public ConsentResponses createConsentResponses(CollectionProtocolRegistration cpr, ConsentDetail detail) {
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
 		ConsentResponses consentResponses = new ConsentResponses();
-		setConsentSignDate(detail, consentResponses);
-		setConsentWitness(detail, consentResponses, ose);
-		setConsentComments(detail, consentResponses);
-		setConsentResponses(detail, consentResponses, ose);
+		setConsentSignDate(detail, cpr, consentResponses);
+		setConsentWitness(detail, cpr, consentResponses, ose);
+		setConsentComments(detail, cpr, consentResponses);
+		setConsentResponses(detail, cpr, consentResponses, ose);
 
 		ose.checkAndThrow();
 		return consentResponses;
 	}
 	
-	private void setConsentSignDate(ConsentDetail detail, ConsentResponses consentResponses) {
-		if (detail.getConsentSignatureDate() != null) {
+	private void setConsentSignDate(ConsentDetail detail, CollectionProtocolRegistration cpr, ConsentResponses consentResponses) {
+		if (detail.isAttrModified("consentSignatureDate")) {
 			consentResponses.setConsentSignDate(detail.getConsentSignatureDate());
-		}				
+		} else {
+			consentResponses.setConsentSignDate(cpr.getConsentSignDate());
+		}
 	}
 	
 	private void setConsentWitness(ConsentDetail detail, ConsentResponses consentResponses, OpenSpecimenException ose) {
@@ -72,64 +73,77 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 		consentResponses.setConsentWitness(witness);
 	}
 	
-	private void setConsentComments(ConsentDetail detail, ConsentResponses consentResponses) {
-		consentResponses.setConsentComments(detail.getComments());
+	private void setConsentWitness(
+			ConsentDetail detail,
+			CollectionProtocolRegistration cpr,
+			ConsentResponses consentResponses,
+			OpenSpecimenException ose) {
+
+		if (detail.isAttrModified("witness")) {
+			setConsentWitness(detail, consentResponses, ose);
+		} else {
+			consentResponses.setConsentWitness(cpr.getConsentWitness());
+		}
 	}
 	
-	private void setConsentResponses(ConsentDetail detail, ConsentResponses consentResponses, OpenSpecimenException ose) {
-		Set<ConsentTierResponse> consentTierResponses = new HashSet<ConsentTierResponse>();
+	private void setConsentComments(ConsentDetail detail, CollectionProtocolRegistration cpr, ConsentResponses consentResponses) {
+		if (detail.isAttrModified("comments")) {
+			consentResponses.setConsentComments(detail.getComments());
+		} else {
+			consentResponses.setConsentComments(cpr.getConsentComments());
+		}
+	}
 
-		CollectionProtocolRegistration cpr = getCpr(detail.getCprId(), detail.getCpId(), detail.getCpShortTitle(), detail.getPpid());
-		if (cpr == null) {
-			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
+	private void setConsentResponses(
+			ConsentDetail detail,
+			CollectionProtocolRegistration cpr,
+			ConsentResponses consentResponses,
+			OpenSpecimenException ose) {
+
+		Map<String, ConsentTierResponse> responsesMap = cpr.getConsentResponses().stream()
+				.collect(Collectors.toMap(ConsentTierResponse::getStatement, ConsentTierResponse::copy));
+
+		for (ConsentTierResponseDetail responseDetail : detail.getConsentTierResponses()) {
+			ConsentTierResponse response = createConsentTierResponse(
+					responseDetail, cpr, responsesMap.get(responseDetail.getStatement()), ose);
+			if (response != null) {
+				responsesMap.put(response.getConsentTier().getStatement(), response);
+			}
 		}
 
-		for (ConsentTierResponseDetail consentResponse : detail.getConsentTierResponses()) {
-			if (StringUtils.isBlank(consentResponse.getResponse())) {
-				continue;
-			}
-			
-			ConsentTierResponse response = new ConsentTierResponse();
+		consentResponses.setConsentResponses(new HashSet<>(responsesMap.values()));
+	}
+
+	private ConsentTierResponse createConsentTierResponse(
+			ConsentTierResponseDetail detail,
+			CollectionProtocolRegistration cpr,
+			ConsentTierResponse response,
+			OpenSpecimenException ose) {
+
+		if (response == null) {
+			response = new ConsentTierResponse();
 			response.setCpr(cpr);
-			
-			for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) { 
-				if (consentTier.getStatement().equals(consentResponse.getStatement())) {
+
+			for (ConsentTier consentTier : cpr.getCollectionProtocol().getConsentTier()) {
+				if (consentTier.getStatement().equals(detail.getStatement())) {
 					response.setConsentTier(consentTier);
 					break;
 				}
 			}
-			
+
 			if (response.getConsentTier() == null) {
-				ose.addError(CprErrorCode.INVALID_CONSENT_STATEMENT, consentResponse.getStatement());
+				ose.addError(CprErrorCode.INVALID_CONSENT_STATEMENT, detail.getStatement());
+				return null;
 			}
-			
-			String resp = consentResponse.getResponse();
-			if (!isValid(CONSENT_RESPONSE, resp)) {
-				ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE, resp);
-				return;
-			}
-			response.setResponse(resp);
-			
-			consentTierResponses.add(response);
 		}
 
-		consentResponses.setConsentResponses(consentTierResponses);		
-	}
-	
-	private CollectionProtocolRegistration getCpr(Long cprId, Long cpId, String cpShortTitle, String ppid) {
-		CollectionProtocolRegistration cpr = null;
-		if (cprId != null) {
-			cpr = daoFactory.getCprDao().getById(cprId);
-		} else if (cpId != null && StringUtils.isNotBlank(ppid)) {
-			cpr = daoFactory.getCprDao().getCprByPpid(cpId, ppid);
-		} else if (StringUtils.isNotBlank(cpShortTitle) && StringUtils.isNotBlank(ppid)) {
-			cpr = daoFactory.getCprDao().getCprByCpShortTitleAndPpid(cpShortTitle, ppid);
+		String respStr = detail.getResponse();
+		if (!isValid(CONSENT_RESPONSE, respStr)) {
+			ose.addError(CprErrorCode.INVALID_CONSENT_RESPONSE, respStr);
+			return null;
 		}
-		
-		if (cpr == null) {
-			throw OpenSpecimenException.userError(CprErrorCode.NOT_FOUND);
-		}
-		
-		return cpr;
+
+		response.setResponse(respStr);
+		return response;
 	}
 }

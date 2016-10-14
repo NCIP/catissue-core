@@ -13,6 +13,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.springframework.beans.BeanUtils;
 
 @Audited
 @AuditTable(value="CAT_CONSENT_TIER_RESPONSE_AUD")
@@ -66,4 +67,13 @@ public class ConsentTierResponse {
 		this.cpr = cpr;
 	}
 
+	public String getStatement() {
+		return getConsentTier().getStatement();
+	}
+
+	public ConsentTierResponse copy() {
+		ConsentTierResponse copy = new ConsentTierResponse();
+		BeanUtils.copyProperties(this, copy);
+		return copy;
+	}
 }
