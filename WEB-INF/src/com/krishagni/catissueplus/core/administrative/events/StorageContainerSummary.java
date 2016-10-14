@@ -49,6 +49,10 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 	private int freePositions;
 	
 	private Boolean storeSpecimensEnabled;
+
+	private Integer capacity;
+
+	private Integer storedSpecimens;
 	
 	private List<StorageContainerSummary> childContainers;
 
@@ -187,6 +191,22 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		this.storeSpecimensEnabled = storeSpecimensEnabled;
 	}
 
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
+	public Integer getStoredSpecimens() {
+		return storedSpecimens;
+	}
+
+	public void setStoredSpecimens(Integer storedSpecimens) {
+		this.storedSpecimens = storedSpecimens;
+	}
+
 	public List<StorageContainerSummary> getChildContainers() {
 		return childContainers;
 	}
@@ -207,6 +227,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		
 		result.setNoOfColumns(container.getNoOfColumns());
 		result.setNoOfRows(container.getNoOfRows());
+		result.setCapacity(container.getCapacity());
 		result.setPositionLabelingMode(container.getPositionLabelingMode().name());
 		result.setColumnLabelingScheme(container.getColumnLabelingScheme());
 		result.setRowLabelingScheme(container.getRowLabelingScheme());

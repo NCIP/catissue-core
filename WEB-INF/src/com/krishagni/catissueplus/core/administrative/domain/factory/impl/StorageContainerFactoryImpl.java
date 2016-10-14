@@ -227,6 +227,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		} else {
 			container.setNoOfRows(existing.getNoOfRows());
 		}
+
+		if (detail.isAttrModified("capacity") || existing == null) {
+			setApproxCapacity(detail, container, ose);
+		} else {
+			container.setCapacity(existing.getCapacity());
+		}
 	}
 	
 	private void setNoOfColumns(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
@@ -255,6 +261,20 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		}
 				
 		container.setNoOfRows(noOfRows);		
+	}
+
+	private void setApproxCapacity(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
+		Integer capacity = detail.getCapacity();
+		if (capacity == null) {
+			return;
+		}
+
+		if (capacity <= 0) {
+			ose.addError(StorageContainerErrorCode.INVALID_CAPACITY, capacity);
+			return;
+		}
+
+		container.setCapacity(capacity);
 	}
 
 	private void setPositionLabelingMode(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {

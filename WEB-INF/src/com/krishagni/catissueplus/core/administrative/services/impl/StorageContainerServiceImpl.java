@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.administrative.domain.ContainerType;
@@ -60,6 +62,8 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
 
 public class StorageContainerServiceImpl implements StorageContainerService, ObjectStateParamsResolver, InitializingBean {
+	private static final Log logger = LogFactory.getLog(StorageContainerServiceImpl.class);
+
 	private DaoFactory daoFactory;
 	
 	private StorageContainerFactory containerFactory;
@@ -117,6 +121,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			StorageContainerListCriteria crit = addContainerListCriteria(req.getPayload());
 			List<StorageContainer> containers = daoFactory.getStorageContainerDao().getStorageContainers(crit);
 			List<StorageContainerSummary> result = StorageContainerSummary.from(containers, crit.includeChildren());
+			setStoredSpecimensCount(crit, result);
 			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -144,7 +149,13 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		try {		
 			StorageContainer container = getContainer(req.getPayload());						
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
-			return ResponseEvent.response(StorageContainerDetail.from(container));
+
+			StorageContainerDetail detail = StorageContainerDetail.from(container);
+			if (req.getPayload().includeStats()) {
+				detail.setSpecimensByType(daoFactory.getStorageContainerDao().getSpecimensCountByType(detail.getId()));
+			}
+
+			return ResponseEvent.response(detail);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -175,7 +186,12 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
 			
 			ensureUniqueConstraints(null, container);
-			container.validateRestrictions();			
+			container.validateRestrictions();
+
+			if (container.isStoreSpecimenEnabled()) {
+				container.setFreezerCapacity();
+			}
+
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
 		} catch (OpenSpecimenException ose) {
@@ -319,6 +335,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			AccessCtrlMgr.getInstance().ensureCreateContainerRights(container);
 			container.validateRestrictions();
 
+			boolean setCapacity = true;
 			for (int i = 1; i <= input.getNumOfContainers(); i++) {
 				StorageContainer cloned = null;
 				if (i == 1) {
@@ -330,7 +347,12 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 				generateName(cloned);
 				ensureUniqueConstraints(null, cloned);
-				
+
+				if (cloned.isStoreSpecimenEnabled() && setCapacity) {
+					cloned.setFreezerCapacity();
+					setCapacity = false;
+				}
+
 				createContainerHierarchy(cloned.getType().getCanHold(), cloned);
 				daoFactory.getStorageContainerDao().saveOrUpdate(cloned);
 				containers.add(cloned);
@@ -584,7 +606,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 						cal.add(Calendar.MINUTE, -5);
 						daoFactory.getStorageContainerDao().deleteReservedPositionsOlderThan(cal.getTime());
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Error deleting older reserved container slots", e);
 					}
 				}
 			}, 5
@@ -615,6 +637,20 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		}
 
 		return crit;
+	}
+
+	private void setStoredSpecimensCount(StorageContainerListCriteria crit, List<StorageContainerSummary> containers) {
+		if (!crit.includeStat() || !crit.topLevelContainers()) {
+			return;
+		}
+
+		List<Long> containerIds = containers.stream().map(StorageContainerSummary::getId).collect(Collectors.toList());
+		if (CollectionUtils.isEmpty(containerIds)) {
+			return;
+		}
+
+		Map<Long, Integer> countMap = daoFactory.getStorageContainerDao().getRootContainerSpecimensCount(containerIds);
+		containers.forEach(c -> c.setStoredSpecimens(countMap.get(c.getId())));
 	}
 
 	private StorageContainer getContainer(ContainerQueryCriteria crit) {
@@ -828,6 +864,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		
 		StorageContainer container = containerFactory.createStorageContainer("dummyName", containerType, parentContainer);
 		int noOfContainers = parentContainer.getNoOfRows() * parentContainer.getNoOfColumns();
+		boolean setCapacity = true;
 		for (int i = 1; i <= noOfContainers; i++) {
 			StorageContainer cloned = null;
 			if (i == 1) {
@@ -839,6 +876,12 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 			generateName(cloned);
 			parentContainer.addChildContainer(cloned);
+
+			if (cloned.isStoreSpecimenEnabled() && setCapacity) {
+				cloned.setFreezerCapacity();
+				setCapacity = false;
+			}
+
 			createContainerHierarchy(containerType.getCanHold(), cloned);
 		}
 	}

@@ -68,4 +68,76 @@
       <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Track approx. freezer capacity which can be used for computing utilisation">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="CAPACITY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Approximate capacity of existing freezers" dbms="mysql">
+    <sql>
+      update
+        os_storage_containers cu
+        inner join (
+          select
+            t.freezer_id as freezer_id, round(exp(sum(log(a.no_of_rows * a.no_of_cols)))) as capacity
+          from
+            os_storage_containers a
+            inner join os_containers_hierarchy h on h.ancestor_id = a.identifier
+            inner join (
+              select
+                f.identifier as freezer_id, min(b.identifier) as box_id
+              from
+                os_storage_containers f
+                inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+                inner join os_storage_containers b on b.identifier = h.descendent_id
+              where
+                f.parent_container_id is null and
+                f.activity_status != 'Disabled' and
+                b.store_specimens = 1 and
+                b.activity_status != 'Disabled'
+              group by
+                f.identifier
+            ) t on t.box_id = h.descendent_id
+          group by
+            t.freezer_id
+        ) c_capacity on cu.identifier = c_capacity.freezer_id
+      set
+        cu.capacity = c_capacity.capacity
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Approximate capacity of existing freezers" dbms="oracle">
+    <sql>
+      merge into os_storage_containers cu using (
+        select
+          t.freezer_id as freezer_id, round(exp(sum(ln(a.no_of_rows * a.no_of_cols)))) as capacity
+        from
+          os_storage_containers a
+          inner join os_containers_hierarchy h on h.ancestor_id = a.identifier
+          inner join (
+            select
+              f.identifier as freezer_id, min(b.identifier) as box_id
+            from
+              os_storage_containers f
+              inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+              inner join os_storage_containers b on b.identifier = h.descendent_id
+            where
+              f.parent_container_id is null and
+              f.activity_status != 'Disabled' and
+              b.store_specimens = 1 and
+              b.activity_status != 'Disabled'
+            group by
+              f.identifier
+          ) t on t.box_id = h.descendent_id
+        group by
+          t.freezer_id
+      ) c_capacity on (cu.identifier = c_capacity.freezer_id)
+      when
+        matched
+      then
+        update set cu.capacity = c_capacity.capacity
+    </sql>
+  </changeSet>
 </databaseChangeLog>

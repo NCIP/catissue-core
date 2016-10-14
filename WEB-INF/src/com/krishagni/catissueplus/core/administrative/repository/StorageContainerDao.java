@@ -1,6 +1,7 @@
 
 package com.krishagni.catissueplus.core.administrative.repository;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ public interface StorageContainerDao extends Dao<StorageContainer> {
 	public List<String> getNonCompliantSpecimens(ContainerRestrictionsCriteria crit);
 
 	public int getSpecimensCount(Long containerId);
+
+	public Map<Long, Integer> getRootContainerSpecimensCount(Collection<Long> containerIds);
+
+	public Map<String, Integer> getSpecimensCountByType(Long containerId);
 
 	public StorageContainerSummary getAncestorsHierarchy(Long containerId);
 

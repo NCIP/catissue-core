@@ -67,7 +67,13 @@
             <span translate="container.dimension">Dimension</span>
           </th>
           <th class="col">
-            <span translate="container.free_locations">Free Locations</span>
+            <span translate="container.stored_spmns">Stored Specimens</span>
+          </th>
+          <th class="col">
+            <span translate="container.capacity">Capacity</span>
+          </th>
+          <th class="col">
+            <span translate="container.utilisation">Utilisation</span>
           </th>
         </tr>
       </thead>
@@ -88,7 +94,20 @@
             <span>{{container.noOfRows}} X {{container.noOfColumns}}</span>
           </td>
           <td class="col">
-            <span>{{container.freePositions | number: 0}}</span>
+            <span>{{container.storedSpecimens | number: 0}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.capacity | number: 0 | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <progress class="progress" max="100">
+              <bar value="container.utilisation" type="danger">
+                <span><b>{{container.utilisation}}%</b></span>
+              </bar>
+              <bar value="100 - container.utilisation" type="success">
+                <span><b>{{100 - container.utilisation}}%</b></span>
+              </bar>
+            </progress>
           </td>
         </tr>
       </tbody>

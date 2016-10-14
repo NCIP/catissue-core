@@ -16,11 +16,50 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
         showTree       : true
       };
 
+      if (!container.storageLocation || !container.storageLocation.name) {
+        if (!container.$$metrics) {
+          container.$$metrics = computeMetrics(container);
+        }
+
+        $scope.ctx.charts = {
+          spmnType: container.$$metrics.spmnTypeChartOpts
+        }
+      } else {
+        $scope.ctx.charts = undefined;
+      }
+
       selectContainer(container);
 
       var opts = {sites: [container.siteName]};
       angular.extend($scope.containerResource.updateOpts, opts);
       angular.extend($scope.containerResource.deleteOpts, opts);
+    }
+
+    function computeMetrics(container) {
+      var types = Object.keys(container.specimensByType).sort(
+        function(t1, t2) {
+          return container.specimensByType[t1] - container.specimensByType[t2];
+        }
+      );
+
+      var data = {categories: [], values: []}, total = 0;
+      angular.forEach(types,
+        function(type) {
+          if (data.categories.length < 5) {
+            data.categories.push(type);
+            data.values.push(container.specimensByType[type]);
+          }
+
+          total += container.specimensByType[type];
+        }
+      );
+
+      container.storedSpecimens = total;
+      if (container.capacity) {
+        container.utilisation = Math.round(total / container.capacity * 100);
+      }
+
+      return {spmnTypeChartOpts: {data: data, options: {type: 'doughnut'}}};
     }
 
     function selectContainer(container) {

@@ -42,5 +42,12 @@
       <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
       <column name="cellDisplayProp_MOD" type="${bit.type}"/>
     </addColumn>
-  </changeSet>		
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to container/freezer capacity">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="CAPACITY" type="${int.type}"/>
+      <column name="capacity_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

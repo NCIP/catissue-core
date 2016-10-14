@@ -62,51 +62,53 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageContainerSummary> getStorageContainers(
-			@RequestParam(value = "name", required = false) 
-			String name,
+		@RequestParam(value = "name", required = false)
+		String name,
 			
-			@RequestParam(value = "site", required = false)
-			String siteName,
+		@RequestParam(value = "site", required = false)
+		String siteName,
 
-			@RequestParam(value = "canHold", required = false)
-			String canHold,
+		@RequestParam(value = "canHold", required = false)
+		String canHold,
 			
-			@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
-			boolean onlyFreeContainers,
+		@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
+		boolean onlyFreeContainers,
 			
-			@RequestParam(value = "startAt", required = false, defaultValue = "0")
-			int startAt,
+		@RequestParam(value = "startAt", required = false, defaultValue = "0")
+		int startAt,
 			
-			@RequestParam(value = "maxResults", required = false, defaultValue = "100")
-			int maxResults,
+		@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+		int maxResults,
 			
-			@RequestParam(value = "parentContainerId", required = false)
-			Long parentContainerId,
+		@RequestParam(value = "parentContainerId", required = false)
+		Long parentContainerId,
 			
-			@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
-			boolean includeChildren,
+		@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
+		boolean includeChildren,
 			
-			@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
-			boolean topLevelContainers,
+		@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
+		boolean topLevelContainers,
 			
-			@RequestParam(value = "specimenClass", required = false)
-			String specimenClass,
+		@RequestParam(value = "specimenClass", required = false)
+		String specimenClass,
 			
-			@RequestParam(value = "specimenType", required = false)
-			String specimenType,
+		@RequestParam(value = "specimenType", required = false)
+		String specimenType,
 			
-			@RequestParam(value = "cpId", required = false)
-			Long[] cpIds,
+		@RequestParam(value = "cpId", required = false)
+		Long[] cpIds,
 			
-			@RequestParam(value = "cpShortTitle", required = false)
-			String[] cpShortTitles,
+		@RequestParam(value = "cpShortTitle", required = false)
+		String[] cpShortTitles,
 
-			@RequestParam(value = "storeSpecimensEnabled", required = false)
-			Boolean storeSpecimensEnabled,
+		@RequestParam(value = "storeSpecimensEnabled", required = false)
+		Boolean storeSpecimensEnabled,
 			
-			@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
-			boolean hierarchical
-			) {
+		@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
+		boolean hierarchical,
+
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+		boolean includeStats) {
 		
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
 			.query(name)
@@ -123,7 +125,8 @@ public class StorageContainersController {
 			.cpIds(cpIds)
 			.cpShortTitles(cpShortTitles)
 			.storeSpecimensEnabled(storeSpecimensEnabled)
-			.hierarchical(hierarchical);
+			.hierarchical(hierarchical)
+			.includeStat(includeStats);
 					
 		RequestEvent<StorageContainerListCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<List<StorageContainerSummary>> resp = storageContainerSvc.getStorageContainers(req);
@@ -136,45 +139,44 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public Map<String, Long> getStorageContainersCount (
-			@RequestParam(value = "name", required = false) 
-			String name,
+		@RequestParam(value = "name", required = false)
+		String name,
 			
-			@RequestParam(value = "site", required = false)
-			String siteName,
+		@RequestParam(value = "site", required = false)
+		String siteName,
 
-			@RequestParam(value = "canHold", required = false)
-			String canHold,
+		@RequestParam(value = "canHold", required = false)
+		String canHold,
 			
-			@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
-			boolean onlyFreeContainers,
+		@RequestParam(value = "onlyFreeContainers", required = false, defaultValue = "false")
+		boolean onlyFreeContainers,
 			
-			@RequestParam(value = "parentContainerId", required = false)
-			Long parentContainerId,
+		@RequestParam(value = "parentContainerId", required = false)
+		Long parentContainerId,
 			
-			@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
-			boolean includeChildren,
+		@RequestParam(value = "includeChildren", required = false, defaultValue = "false")
+		boolean includeChildren,
 			
-			@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
-			boolean topLevelContainers,
+		@RequestParam(value = "topLevelContainers", required = false, defaultValue = "false")
+		boolean topLevelContainers,
 			
-			@RequestParam(value = "specimenClass", required = false)
-			String specimenClass,
+		@RequestParam(value = "specimenClass", required = false)
+		String specimenClass,
 			
-			@RequestParam(value = "specimenType", required = false)
-			String specimenType,
+		@RequestParam(value = "specimenType", required = false)
+		String specimenType,
 			
-			@RequestParam(value = "cpId", required = false)
-			Long[] cpIds,
+		@RequestParam(value = "cpId", required = false)
+		Long[] cpIds,
 			
-			@RequestParam(value = "cpShortTitle", required = false)
-			String[] cpShortTitles,
+		@RequestParam(value = "cpShortTitle", required = false)
+		String[] cpShortTitles,
 
-			@RequestParam(value = "storeSpecimensEnabled", required = false)
-			Boolean storeSpecimensEnabled,
+		@RequestParam(value = "storeSpecimensEnabled", required = false)
+		Boolean storeSpecimensEnabled,
 			
-			@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
-			boolean hierarchical
-			) {
+		@RequestParam(value = "hierarchical", required = false, defaultValue = "false")
+		boolean hierarchical) {
 		
 		StorageContainerListCriteria crit = new StorageContainerListCriteria()
 			.query(name)
@@ -202,17 +204,17 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public Boolean isTenantAllowed(
-			@PathVariable("id") 
-			Long containerId,
+		@PathVariable("id")
+		Long containerId,
 			
-			@RequestParam(value = "cpId", required = true) 
-			Long cpId,
+		@RequestParam(value = "cpId", required = true)
+		Long cpId,
 			
-			@RequestParam(value = "specimenType", required = true)
-			String specimenType,
+		@RequestParam(value = "specimenType", required = true)
+		String specimenType,
 			
-			@RequestParam(value = "specimenClass", required = true)
-			String specimenClass) {
+		@RequestParam(value = "specimenClass", required = true)
+		String specimenClass) {
 		
 		TenantDetail detail = new TenantDetail();
 		detail.setContainerId(containerId);
@@ -229,17 +231,29 @@ public class StorageContainersController {
 	@RequestMapping(method = RequestMethod.GET, value="{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetail getStorageContainer(@PathVariable("id") Long containerId) {
-		return getContainer(new ContainerQueryCriteria(containerId));
+	public StorageContainerDetail getStorageContainer(
+		@PathVariable("id")
+		Long containerId,
+
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+		boolean includeStats) {
+
+		return getContainer(new ContainerQueryCriteria(containerId).includeStats(includeStats));
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value="/byname")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public StorageContainerDetail getStorageContainer(@RequestParam(value = "name", required = true) String name) {
-		return getContainer(new ContainerQueryCriteria(name));
+	public StorageContainerDetail getStorageContainer(
+		@RequestParam(value = "name", required = true)
+		String name,
+
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+		boolean includeStats) {
+
+		return getContainer(new ContainerQueryCriteria(name).includeStats(includeStats));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -255,11 +269,11 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail updateStorageContainer(
-			@PathVariable("id") 
-			Long containerId,
+		@PathVariable("id")
+		Long containerId,
 			
-			@RequestBody 
-			StorageContainerDetail detail) {
+		@RequestBody
+		StorageContainerDetail detail) {
 		
 		detail.setId(containerId);
 		
@@ -274,11 +288,11 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public StorageContainerDetail patchStorageContainer(
-			@PathVariable("id") 
-			Long containerId,
+		@PathVariable("id")
+		Long containerId,
 			
-			@RequestBody 
-			StorageContainerDetail detail) {
+		@RequestBody
+		StorageContainerDetail detail) {
 		
 		detail.setId(containerId);
 		
@@ -330,11 +344,11 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageContainerPositionDetail> assignPositions(
-			@PathVariable("id")
-			Long containerId,
+		@PathVariable("id")
+		Long containerId,
 			
-			@RequestBody
-			AssignPositionsOp detail) {
+		@RequestBody
+		AssignPositionsOp detail) {
 		
 		detail.setContainerId(containerId);
 		
@@ -465,20 +479,20 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageLocationSummary> getVacantPositions(
-			@PathVariable("id")
-			Long containerId,
+		@PathVariable("id")
+		Long containerId,
 
-			@RequestParam(value = "startRow", required =  false)
-			String startRow,
+		@RequestParam(value = "startRow", required =  false)
+		String startRow,
 
-			@RequestParam(value = "startColumn", required = false)
-			String startColumn,
+		@RequestParam(value = "startColumn", required = false)
+		String startColumn,
 
-			@RequestParam(value = "startPosition", required = false, defaultValue = "0")
-			int startPosition,
+		@RequestParam(value = "startPosition", required = false, defaultValue = "0")
+		int startPosition,
 
-			@RequestParam(value = "numPositions", required = false, defaultValue = "1")
-			int numPositions) {
+		@RequestParam(value = "numPositions", required = false, defaultValue = "1")
+		int numPositions) {
 
 		VacantPositionsOp op = new VacantPositionsOp();
 		op.setContainerId(containerId);
@@ -497,20 +511,20 @@ public class StorageContainersController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<StorageLocationSummary> getVacantPositions(
-			@RequestParam(value = "name")
-			String containerName,
+		@RequestParam(value = "name")
+		String containerName,
 
-			@RequestParam(value = "startRow", required =  false)
-			String startRow,
+		@RequestParam(value = "startRow", required =  false)
+		String startRow,
 
-			@RequestParam(value = "startColumn", required = false)
-			String startColumn,
+		@RequestParam(value = "startColumn", required = false)
+		String startColumn,
 
-			@RequestParam(value = "startPosition", required = false, defaultValue = "0")
-			int startPosition,
+		@RequestParam(value = "startPosition", required = false, defaultValue = "0")
+		int startPosition,
 
-			@RequestParam(value = "numPositions", required = false, defaultValue = "1")
-			int numPositions) {
+		@RequestParam(value = "numPositions", required = false, defaultValue = "1")
+		int numPositions) {
 
 		VacantPositionsOp op = new VacantPositionsOp();
 		op.setContainerName(containerName);

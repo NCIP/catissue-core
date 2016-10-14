@@ -23,7 +23,7 @@
   </div>
 
   <div class="clearfix">
-    <div class="col-xs-9">
+    <div ng-class="{true: 'col-xs-6', false: 'col-xs-12'}[!ctx.container.storageLocation.name && ctx.container.storedSpecimens > 0]">
       <ul class="os-key-values os-one-col">
         <li class="item">
           <strong class="key key-sm" translate="container.type">Type</strong>
@@ -61,6 +61,30 @@
         <li class="item">
           <strong class="key key-sm" translate="container.dimension">Dimension</strong>
           <span class="value value-md">{{ctx.container.noOfRows}} x {{ctx.container.noOfColumns}}</span>
+        </li>
+
+        <li class="item" ng-if="!ctx.container.storageLocation.name">
+          <strong class="key key-sm" translate="container.stored">Stored</strong>
+          <span class="value value-md">
+            <span>{{ctx.container.storedSpecimens | number}}</span>
+            <span translate="container.out_of">out of</span>
+            <span>{{ctx.container.capacity | number | osNoValue}}</span>
+            <span translate="container.specimens">specimens</span>
+          </span>
+        </li>
+
+        <li class="item" ng-if="!ctx.container.storageLocation.name">
+          <strong class="key key-sm" translate="container.utilisation">Utilisation</strong>
+          <span class="value value-md" style="max-width: 275px;">
+            <progress class="progress" max="100" style="margin-bottom: 0px;">
+              <bar value="ctx.container.utilisation" type="danger">
+                <span><b>{{ctx.container.utilisation}}%</b></span>
+              </bar>
+              <bar value="100 - ctx.container.utilisation" type="success">
+                <span><b>{{100 - ctx.container.utilisation}}%</b></span>
+              </bar>
+            </progress>
+          </span>
         </li>
   
         <li class="item">
@@ -110,6 +134,18 @@
           </div>
         </li>
       </ul>
+    </div>
+    <div class="col-xs-6" ng-if="!ctx.container.storageLocation.name && ctx.container.storedSpecimens > 0">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span translate="container.chart.top_5_spmn_types">Top 5 specimen types</span>
+        </div>
+        <div class="panel-body">
+          <div>
+            <os-chart data="ctx.charts.spmnType.data" options="ctx.charts.spmnType.options"></os-chart>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -133,6 +133,22 @@
       </div>
     </div>
 
+    <div class="form-group" ng-if="!container.storageLocation.name">
+      <label class="col-xs-3 control-label">
+        <span translate="container.capacity">Capacity</span>
+      </label>
+      <div class="col-xs-6">
+        <div class="input-group">
+          <input type="text" name="capacity" ng-model="container.capacity" class="form-control"
+            placeholder="{{'container.capacity' | translate}}" ng-pattern="/^[1-9][0-9]*$/" ng-required="ctx.capacityReq">
+          <div class="input-group-addon">
+            <span translate="container.specimens">specimens</span>
+          </div>
+        </div>
+        <div os-field-error field="cform.capacity"></div>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="col-xs-3 control-label">
         <span translate="container.position_labeling">Position Labeling</span>

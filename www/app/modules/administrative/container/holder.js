@@ -58,7 +58,8 @@ angular.module('os.administrative.container')
         }
 
         if (!container.$$detailLoaded) {
-          return Container.getById(containerId).then(
+          var params = {includeStats: containerId == state.getRootContainerId()}
+          return Container.getById(containerId, params).then(
             function(result) {
               angular.extend(container, result);
               container.$$detailLoaded = true;

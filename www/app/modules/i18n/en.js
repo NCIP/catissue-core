@@ -1031,6 +1031,12 @@
     "one": "One",
     "two": "Two",
     "dimension": "Dimension",
+    "capacity": "Capacity",
+    "specimens": "specimens",
+    "out_of": "out of",
+    "stored": "Stored",
+    "stored_spmns": "Stored Specimens",
+    "utilisation": "Occupied v/s Free",
     "horizontal_dimension": "Columns",
     "vertical_dimension": "Rows",
     "labeling_scheme": "Labeling Scheme",
@@ -1113,6 +1119,10 @@
 
     "menu_options": {
       "delete": "Delete"
+    },
+
+    "chart": {
+      "top_5_spmn_types": "Top 5 specimen types"
     }
   },
 

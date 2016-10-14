@@ -10,7 +10,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       container.storageLocation = container.storageLocation || {};
       $scope.container = container;
 
-      $scope.ctx = { mode: 'single', view: '' };
+      $scope.ctx = { mode: 'single', view: '', capacityReq: !!container.capacity};
       if ($stateParams.mode == 'createHierarchy') {
         $scope.ctx.mode = 'hierarchy';
       }

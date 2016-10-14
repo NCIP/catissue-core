@@ -69,6 +69,8 @@
 
     <property name="comments" column="COMMENTS"/>
 
+    <property name="capacity" column="CAPACITY"/>
+
     <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true" cascade="all-delete-orphan">
       <key column="PARENT_CONTAINER_ID"/>
       <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
@@ -285,6 +287,42 @@
         (c.no_of_rows * c.no_of_cols - count(p.identifier)) > (:minFreeLocs - 1)
       order by
         (c.no_of_rows * c.no_of_cols - count(p.identifier)), c.identifier
+    </sql-query>
+
+    <sql-query name="getRootContainerSpecimensCount">
+      <return-scalar column="containerId" type="long"/>
+      <return-scalar column="storedSpecimens" type="integer"/>
+
+      select
+        f.identifier as containerId, count(p.occupying_specimen_id) as storedSpecimens
+      from
+        os_storage_containers f
+        inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+        left join os_container_positions p on p.storage_container_id = h.descendent_id
+      where
+        f.identifier in (:containerIds) and
+        f.parent_container_id is null and
+        f.activity_status != 'Disabled'
+      group by
+        f.identifier
+    </sql-query>
+
+    <sql-query name="getSpecimenCountsByType">
+      <return-scalar column="type" type="string"/>
+      <return-scalar column="specimens" type="integer"/>
+
+      select
+        s.specimen_type as type, count(s.identifier) as specimens
+      from
+        os_storage_containers f
+        inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+        inner join os_container_positions p on p.storage_container_id = h.descendent_id
+        inner join catissue_specimen s on s.identifier = p.occupying_specimen_id
+      where
+        f.activity_status != 'Disabled' and
+        f.identifier = :containerId
+      group by
+        s.specimen_type
     </sql-query>
   </class>
 </hibernate-mapping>

@@ -183,10 +183,27 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 
 	@Override
 	public int getSpecimensCount(Long containerId) {
-		return ((Number)sessionFactory.getCurrentSession()
-			.getNamedQuery(GET_SPECIMENS_COUNT)
+		return ((Number)getCurrentSession().getNamedQuery(GET_SPECIMENS_COUNT)
 			.setLong("containerId", containerId)
 			.uniqueResult()).intValue();
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public Map<Long, Integer> getRootContainerSpecimensCount(Collection<Long> containerIds) {
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_ROOT_CONT_SPMNS_COUNT)
+			.setParameterList("containerIds", containerIds)
+			.list();
+		return rows.stream().collect(Collectors.toMap(row -> (Long)row[0], row -> (Integer)row[1]));
+	}
+
+	@Override
+	@SuppressWarnings(value = "unchecked")
+	public Map<String, Integer> getSpecimensCountByType(Long containerId) {
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_SPMNS_CNT_BY_TYPE)
+			.setLong("containerId", containerId)
+			.list();
+		return rows.stream().collect(Collectors.toMap(row -> (String)row[0], row -> (Integer)row[1]));
 	}
 
 	@Override
@@ -547,4 +564,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	private static final String DEL_POS_BY_RSV_ID = FQN + ".deletePositionsByReservationIds";
 
 	private static final String DEL_EXPIRED_RSV_POS = FQN + ".deleteReservationsOlderThanTime";
+
+	private static final String GET_ROOT_CONT_SPMNS_COUNT = FQN + ".getRootContainerSpecimensCount";
+
+	private static final String GET_SPMNS_CNT_BY_TYPE = FQN + ".getSpecimenCountsByType";
 }

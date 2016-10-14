@@ -2,13 +2,17 @@ package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @ListenAttributeChanges
 public class StorageContainerDetail extends StorageContainerSummary {
 	private Double temperature;
@@ -30,6 +34,8 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	private Set<String> calcAllowedCollectionProtocols = new HashSet<String>();
 
 	private Set<Integer> occupiedPositions = new HashSet<Integer>();
+
+	private Map<String, Integer> specimensByType;
 
 	public Double getTemperature() {
 		return temperature;
@@ -110,7 +116,15 @@ public class StorageContainerDetail extends StorageContainerSummary {
 	public void setOccupiedPositions(Set<Integer> occupiedPositions) {
 		this.occupiedPositions = occupiedPositions;
 	}
-	
+
+	public Map<String, Integer> getSpecimensByType() {
+		return specimensByType;
+	}
+
+	public void setSpecimensByType(Map<String, Integer> specimensByType) {
+		this.specimensByType = specimensByType;
+	}
+
 	public static StorageContainerDetail from(StorageContainer container) {
 		StorageContainerDetail result = new StorageContainerDetail();
 		StorageContainerDetail.transform(container, result);

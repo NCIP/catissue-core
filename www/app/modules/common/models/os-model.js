@@ -43,8 +43,9 @@ angular.module('os.common.models', [])
         return $http.get(url, {params: reqParams}).then(respTransformer);
       };
 
-      Model.getById = function (id) {
-        return $http.get(url + id).then(Model.modelRespTransform);
+      Model.getById = function (id, params) {
+        params = !params ? undefined: {params: params};
+        return $http.get(url + id, params).then(Model.modelRespTransform);
       };
 
       Model._lazyCollectionInit = function(source, dest) {

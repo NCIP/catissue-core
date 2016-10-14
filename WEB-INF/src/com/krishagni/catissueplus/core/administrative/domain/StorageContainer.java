@@ -84,6 +84,8 @@ public class StorageContainer extends BaseEntity {
 	private String activityStatus = Status.ACTIVITY_STATUS_ACTIVE.getStatus();
 	
 	private String comments;
+
+	private Integer capacity;
 	
 	private Set<StorageContainer> childContainers = new LinkedHashSet<>();
 	
@@ -274,6 +276,14 @@ public class StorageContainer extends BaseEntity {
 		this.comments = comments;
 	}
 
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
 	public StorageContainerPosition getLastAssignedPos() {
 		return lastAssignedPos;
 	}
@@ -411,7 +421,7 @@ public class StorageContainer extends BaseEntity {
 		setBarcode(other.getBarcode());
 		setType(other.getType());
 		setTemperature(other.getTemperature());
-		updateCapacity(other.getNoOfColumns(), other.getNoOfRows());
+		updateCapacity(other.getNoOfColumns(), other.getNoOfRows(), other.getCapacity());
 		setPositionLabelingMode(other.getPositionLabelingMode());
 		updateLabelingScheme(other.getColumnLabelingScheme(), other.getRowLabelingScheme());
 		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
@@ -828,6 +838,26 @@ public class StorageContainer extends BaseEntity {
 		updateComputedCps();
 	}
 
+	public void setFreezerCapacity() {
+		List<StorageContainer> containers = new ArrayList<>();
+		StorageContainer freezer = this;
+		while (freezer.getParentContainer() != null) {
+			containers.add(freezer);
+			freezer = freezer.getParentContainer();
+		}
+
+		if (freezer.getCapacity() != null && freezer.getCapacity() > 0) {
+			return;
+		}
+
+		int capacity = freezer.getNoOfRows() * freezer.getNoOfColumns();
+		for (StorageContainer container : containers) {
+			capacity *= container.getNoOfRows() * container.getNoOfColumns();
+		}
+
+		freezer.setCapacity(capacity);
+	}
+
 	private void deleteWithoutCheck() {
 		for (StorageContainer child: getChildContainers()) {
 			child.deleteWithoutCheck();
@@ -919,7 +949,7 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private void updateCapacity(int newNoOfColumns, int newNoOfRows) {
+	private void updateCapacity(int newNoOfColumns, int newNoOfRows, Integer newCapacity) {
 		if (newNoOfColumns < getNoOfColumns() || newNoOfRows < getNoOfRows()) {
 			if (arePositionsOccupiedBeyondCapacity(newNoOfColumns, newNoOfRows)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
@@ -927,7 +957,11 @@ public class StorageContainer extends BaseEntity {
 		}
 		
 		setNoOfColumns(newNoOfColumns);
-		setNoOfRows(newNoOfRows); 
+		setNoOfRows(newNoOfRows);
+
+		if (newCapacity != null && newCapacity > 0) {
+			setCapacity(newCapacity);
+		}
 	}
 
 	private void updateLabelingScheme(String newColumnLabelingScheme, String newRowLabelingScheme) {
@@ -1072,7 +1106,11 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
-		this.storeSpecimenEnabled = newStoreSpecimenEnabled;
+		if (isStoreSpecimenEnabled() != newStoreSpecimenEnabled && newStoreSpecimenEnabled) {
+			setFreezerCapacity();
+		}
+
+		setStoreSpecimenEnabled(newStoreSpecimenEnabled);
 	}
 
 	private void updateCellDisplayProp(CellDisplayProp cellDisplayProp) {
