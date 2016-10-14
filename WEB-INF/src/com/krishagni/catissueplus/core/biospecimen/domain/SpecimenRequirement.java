@@ -356,7 +356,10 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 			}
 		}
 		
-		setName(sr.getName());
+		if (!StringUtils.equals(getName(), sr.getName())) {
+			updateName(sr.getName());
+		}
+
 		setCode(sr.getCode());
 		setSortOrder(sr.getSortOrder());
 		setInitialQuantity(sr.getInitialQuantity());
@@ -539,6 +542,14 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 		}
 
 		return cpe.getSrByCode(getCode()) == null;
+	}
+
+	private void updateName(String name) {
+		setName(name);
+
+		getChildSpecimenRequirements().stream()
+			.filter(SpecimenRequirement::isAliquot)
+			.forEach(child -> child.updateName(name));
 	}
 
 	private void updateRequirementAttrs(SpecimenRequirement sr) {
