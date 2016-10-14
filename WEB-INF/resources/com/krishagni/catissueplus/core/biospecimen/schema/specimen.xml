@@ -7,6 +7,11 @@
     <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
 
     <field>
+      <caption>#getMessage("specimen_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("specimen_cp_short")</caption>
       <attribute>cpShortTitle</attribute>
     </field>

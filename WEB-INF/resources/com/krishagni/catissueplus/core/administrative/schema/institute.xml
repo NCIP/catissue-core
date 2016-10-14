@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.InstituteDetail</name>
     
     <field>
+      <caption>#getMessage("institute_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("institute_name")</caption>
       <attribute>name</attribute>
     </field>

@@ -6,6 +6,11 @@
     <name>com.krishagni.rbac.events.SubjectRolesList</name>
     
     <field>
+      <caption>#getMessage("user_roles_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("user_roles_email")</caption>
       <attribute>emailAddress</attribute>
     </field>

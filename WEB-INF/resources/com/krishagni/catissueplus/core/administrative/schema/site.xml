@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.SiteDetail</name>
     
     <field>
+      <caption>#getMessage("site_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("site_name")</caption>
       <attribute>name</attribute>
     </field>

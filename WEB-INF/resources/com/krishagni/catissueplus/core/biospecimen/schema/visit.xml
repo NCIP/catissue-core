@@ -7,6 +7,11 @@
     <name>com.krishagni.catissueplus.core.biospecimen.events.VisitDetail</name>
    
     <field>
+      <caption>#getMessage("visit_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("visit_cp_short_title")</caption>
       <attribute>cpShortTitle</attribute>
     </field>     

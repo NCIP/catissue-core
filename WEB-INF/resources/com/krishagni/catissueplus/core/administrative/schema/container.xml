@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail</name>
     
     <field>
+      <caption>#getMessage("container_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("container_name")</caption>
       <attribute>name</attribute>
     </field>

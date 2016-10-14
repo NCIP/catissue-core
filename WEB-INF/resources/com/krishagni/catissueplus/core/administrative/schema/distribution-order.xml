@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.DistributionOrderDetail</name>
 
     <field>
+      <caption>#getMessage("order_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("order_name")</caption>
       <attribute>name</attribute>
       <key>true</key>

@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.ShipmentDetail</name>
     
     <field>
+      <caption>#getMessage("shipment_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("shipment_name")</caption>
       <attribute>name</attribute>
       <key>true</key>

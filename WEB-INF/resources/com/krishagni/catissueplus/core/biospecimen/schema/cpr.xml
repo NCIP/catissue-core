@@ -7,6 +7,11 @@
     <name>com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail</name>
     
     <field>
+      <caption>#getMessage("participant_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("participant_cp_short_title")</caption>
       <attribute>cpShortTitle</attribute>
     </field>

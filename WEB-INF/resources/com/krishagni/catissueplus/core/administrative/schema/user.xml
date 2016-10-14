@@ -6,6 +6,11 @@
     <name>com.krishagni.catissueplus.core.administrative.events.UserDetail</name>
     
     <field>
+      <caption>#getMessage("user_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
       <caption>#getMessage("user_last_name")</caption>
       <attribute>lastName</attribute>
     </field>
