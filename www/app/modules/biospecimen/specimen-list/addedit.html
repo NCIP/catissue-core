@@ -3,7 +3,7 @@
     <div class="os-page-header-content">
       <ul os-breadcrumbs>
         <li>
-          <a ui-sref="specimen-list">
+          <a ui-sref="specimen-lists">
             <span translate="specimen_list.lists">Specimen Lists</span>
           </a>
         </li>
@@ -45,6 +45,18 @@
         <div class="col-xs-6">
           <textarea rows="2" placeholder="{{'specimen_list.description' | translate}}" ng-model="list.description" class="form-control">
           </textarea>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!isQueryOrSpecimenPage">
+        <label class="col-xs-3 control-label" translate="specimen_list.specimens">
+          Specimens
+        </label>
+        <div class="col-xs-6">
+          <textarea rows="2" name="specimens" ng-model="input.labelText" class="form-control" ng-required="!list.id"
+            placeholder="{{'specimen_list.enter_specimen_label' | translate}}">
+          </textarea>
+          <div os-field-error field="listForm.specimens"></div>
         </div>
       </div>
 

@@ -1609,7 +1609,8 @@
     "search_def_list_tip": "Use $$ to search users' default carts",
     "add_child_specimens": "Add Child Specimens",
     "child_specimens_added": "Successfully added {{count}} child specimens",
-    "available_spmns": "Available Specimens"
+    "available_spmns": "Available Specimens",
+    "enter_specimen_label": "Enter specimen labels separated by a comma, tab or newline"
   },
 
   "orders": {
