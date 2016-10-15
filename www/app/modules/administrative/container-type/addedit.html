@@ -46,12 +46,12 @@
         </label>
         <div class="col-xs-3">
           <input type="text" name="noOfRows" ng-model="containerType.noOfRows" class="form-control"
-            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
           <div os-field-error field="ctform.noOfRows"></div>
         </div>
         <div class="col-xs-3">
           <input type="text" name="noOfColumns" ng-model="containerType.noOfColumns" class="form-control"
-            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
           <div os-field-error field="ctform.noOfColumns"></div>
         </div>
       </div>
