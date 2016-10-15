@@ -640,9 +640,9 @@ public class FormServiceImpl implements FormService {
 			String controlName = input.getControlName();
 			Control control = null;
 			if (input.isUseUdn()) {
-				control = form.getControlByUdn(controlName);
+				control = form.getControlByUdn(controlName, "\\.");
 			} else {
-				control = form.getControl(controlName);
+				control = form.getControl(controlName, "\\.");
 			}
 
 			if (!(control instanceof SelectControl)) {
