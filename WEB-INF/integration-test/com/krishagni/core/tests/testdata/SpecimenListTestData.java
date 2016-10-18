@@ -7,7 +7,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenListDetails;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.common.events.UserSummary;
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class SpecimenListTestData {
 	public static SpecimenListDetails getSpecimenListDetail() {

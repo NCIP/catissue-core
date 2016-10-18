@@ -99,7 +99,6 @@ dependencies {
   compile group: 'aopalliance', name: 'aopalliance', version:'1.0'
   compile group: 'asm', name: 'asm', version:'3.3.1'
   compile group: 'org.aspectj', name: 'aspectjweaver', version:'1.8.6'
-  compile group: 'backport-util-concurrent', name: 'backport-util-concurrent', version:'2.1'
   compile group: 'cglib', name: 'cglib', version:'3.1'
   compile group: 'commons-beanutils', name: 'commons-beanutils', version:'1.9.2'
   compile group: 'commons-codec', name: 'commons-codec', version:'1.10'

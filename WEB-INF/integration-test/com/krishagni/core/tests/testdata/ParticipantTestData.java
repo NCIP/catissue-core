@@ -6,8 +6,6 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.PmiDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 
-import edu.emory.mathcs.backport.java.util.Collections;
-
 public class ParticipantTestData {
 	public static ParticipantDetail getParticipant() {
 		ParticipantDetail participant = new ParticipantDetail();
