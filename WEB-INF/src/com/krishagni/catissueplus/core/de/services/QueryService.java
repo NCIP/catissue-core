@@ -10,75 +10,75 @@ import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.de.events.*;
 
 public interface QueryService {	
-	public ResponseEvent<SavedQueriesList> getSavedQueries(RequestEvent<ListSavedQueriesCriteria> req);
+	ResponseEvent<SavedQueriesList> getSavedQueries(RequestEvent<ListSavedQueriesCriteria> req);
 
-	public ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req);
+	ResponseEvent<SavedQueryDetail> getSavedQuery(RequestEvent<Long> req);
 
-	public ResponseEvent<SavedQueryDetail> saveQuery(RequestEvent<SavedQueryDetail> req);
+	ResponseEvent<SavedQueryDetail> saveQuery(RequestEvent<SavedQueryDetail> req);
 
-	public ResponseEvent<SavedQueryDetail> updateQuery(RequestEvent<SavedQueryDetail> req);
+	ResponseEvent<SavedQueryDetail> updateQuery(RequestEvent<SavedQueryDetail> req);
 
-	public ResponseEvent<Long> deleteQuery(RequestEvent<Long> req);
+	ResponseEvent<Long> deleteQuery(RequestEvent<Long> req);
 
 	//
 	// query execution APIs
 	//
 
-	public ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req);
+	ResponseEvent<QueryExecResult> executeQuery(RequestEvent<ExecuteQueryEventOp> req);
 
-	public ResponseEvent<QueryExecResult> executeSavedQuery(RequestEvent<ExecuteSavedQueryOp> req);
+	ResponseEvent<QueryExecResult> executeSavedQuery(RequestEvent<ExecuteSavedQueryOp> req);
 
-	public ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req);
+	ResponseEvent<QueryDataExportResult> exportQueryData(RequestEvent<ExecuteQueryEventOp> req);
 
-	public ResponseEvent<File> getExportDataFile(RequestEvent<String> req);
+	ResponseEvent<File> getExportDataFile(RequestEvent<String> req);
 
-	public ResponseEvent<List<FacetDetail>> getFacetValues(RequestEvent<GetFacetValuesOp> req);
+	ResponseEvent<List<FacetDetail>> getFacetValues(RequestEvent<GetFacetValuesOp> req);
 
 	//
 	// folder related APIs
 	//
 
-	public ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req);
+	ResponseEvent<List<QueryFolderSummary>> getUserFolders(RequestEvent<?> req);
 
-	public ResponseEvent<QueryFolderDetails> getFolder(RequestEvent<Long> req);
+	ResponseEvent<QueryFolderDetails> getFolder(RequestEvent<Long> req);
 
-	public ResponseEvent<QueryFolderDetails> createFolder(RequestEvent<QueryFolderDetails> req);
+	ResponseEvent<QueryFolderDetails> createFolder(RequestEvent<QueryFolderDetails> req);
 
-	public ResponseEvent<QueryFolderDetails> updateFolder(RequestEvent<QueryFolderDetails> req);
+	ResponseEvent<QueryFolderDetails> updateFolder(RequestEvent<QueryFolderDetails> req);
 
-	public ResponseEvent<Long> deleteFolder(RequestEvent<Long> req);
+	ResponseEvent<Long> deleteFolder(RequestEvent<Long> req);
 
-	public ResponseEvent<SavedQueriesList> getFolderQueries(RequestEvent<ListFolderQueriesCriteria> req);
+	ResponseEvent<SavedQueriesList> getFolderQueries(RequestEvent<ListFolderQueriesCriteria> req);
 
-	public ResponseEvent<List<SavedQuerySummary>> updateFolderQueries(RequestEvent<UpdateFolderQueriesOp> req);
+	ResponseEvent<List<SavedQuerySummary>> updateFolderQueries(RequestEvent<UpdateFolderQueriesOp> req);
 
-	public ResponseEvent<List<UserSummary>> shareFolder(RequestEvent<ShareQueryFolderOp> req);
+	ResponseEvent<List<UserSummary>> shareFolder(RequestEvent<ShareQueryFolderOp> req);
 
 	//
 	// query audit logs related APIs
 	//	
-	public ResponseEvent<QueryAuditLogsList> getAuditLogs(RequestEvent<ListQueryAuditLogsCriteria> req);
+	ResponseEvent<QueryAuditLogsList> getAuditLogs(RequestEvent<ListQueryAuditLogsCriteria> req);
 
-	public ResponseEvent<QueryAuditLogDetail> getAuditLog(RequestEvent<Long> req);
+	ResponseEvent<QueryAuditLogDetail> getAuditLog(RequestEvent<Long> req);
 
 	//
 	// query export APIs
 	//
-	public ResponseEvent<String> getQueryDef(RequestEvent<Long> req);
+	ResponseEvent<String> getQueryDef(RequestEvent<Long> req);
 
 	//
 	// internal use
 	// 
-	public interface ExportProcessor {
-		public String filename();
+	interface ExportProcessor {
+		String filename();
 
-		public void headers(OutputStream out);
+		void headers(OutputStream out);
 	}	
 
-	public QueryDataExportResult exportQueryData(ExecuteQueryEventOp opDetail, ExportProcessor processor);
+	QueryDataExportResult exportQueryData(ExecuteQueryEventOp opDetail, ExportProcessor processor);
 
 	//
 	// internal use
 	// 
-	public String insertCustomQueryForms(String dirName) ;
+	String insertCustomQueryForms(String dirName) ;
 }

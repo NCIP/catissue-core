@@ -1,6 +1,8 @@
 package com.krishagni.catissueplus.core.de.events;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ExecuteQueryEventOp  {
 	
 	private Long cpId;
@@ -13,7 +15,7 @@ public class ExecuteQueryEventOp  {
 	
 	private Long savedQueryId;
 	
-	private String runType;
+	private String runType = "Data";
 	
 	private String indexOf;
 
@@ -58,7 +60,7 @@ public class ExecuteQueryEventOp  {
 	}
 
 	public String getRunType() {
-		return runType;
+		return StringUtils.isBlank(runType) ? "Data" : runType;
 	}
 
 	public void setRunType(String runType) {

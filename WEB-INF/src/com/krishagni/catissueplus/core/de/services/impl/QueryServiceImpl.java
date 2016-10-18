@@ -240,11 +240,11 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getSavedQueryDao().saveOrUpdate(savedQuery);
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(savedQuery));
 		} catch (QueryParserException qpe) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, qpe.getMessage());
 		} catch (QueryException qe) {
-			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()), qe.getMessage());
 		} catch (IllegalArgumentException iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, iae.getMessage());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}	
@@ -277,11 +277,11 @@ public class QueryServiceImpl implements QueryService {
 			daoFactory.getSavedQueryDao().saveOrUpdate(existing);	
 			return ResponseEvent.response(SavedQueryDetail.fromSavedQuery(existing));
 		} catch (QueryParserException qpe) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, qpe.getMessage());
 		} catch (QueryException qe) {
-			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()), qe.getMessage());
 		} catch (IllegalArgumentException iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, iae.getMessage());
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}
@@ -342,13 +342,13 @@ public class QueryServiceImpl implements QueryService {
 					.setColumnIndices(indices)
 			);
 		} catch (QueryParserException qpe) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, qpe.getMessage());
 		} catch (QueryException qe) {
-			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()), qe.getMessage());
 		} catch (IllegalArgumentException iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, iae.getMessage());
 		} catch (IllegalAccessError iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
+			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED, iae.getMessage());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -419,13 +419,13 @@ public class QueryServiceImpl implements QueryService {
 			queryCntIncremented = incConcurrentQueriesCnt();
 			return ResponseEvent.response(exportQueryData(req.getPayload(), null));
 		} catch (QueryParserException qpe) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);		
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, qpe.getMessage());
 		} catch (QueryException qe) {
-			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()));
+			return ResponseEvent.userError(getErrorCode(qe.getErrorCode()), qe.getMessage());
 		} catch (IllegalArgumentException iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED);
+			return ResponseEvent.userError(SavedQueryErrorCode.MALFORMED, iae.getMessage());
 		} catch (IllegalAccessError iae) {
-			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED);
+			return ResponseEvent.userError(SavedQueryErrorCode.OP_NOT_ALLOWED, iae.getMessage());
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -945,7 +945,7 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	private Query getQuery(ExecuteQueryEventOp op) {
-		boolean countQuery = op.getRunType().equals("Count");
+		boolean countQuery = "Count".equals(op.getRunType());
 		User user = AuthUtil.getCurrentUser();
 
 		String rootForm = cprForm;
