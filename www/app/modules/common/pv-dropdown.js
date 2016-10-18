@@ -24,6 +24,11 @@ angular.module('openspecimen')
           loadPvs(formCtrl, scope, searchTerm, attrs);
         }
       };
+
+      var selectedVal = scope.$eval(attrs.ngModel);
+      if (!!selectedVal) {
+        scope.searchPvs();
+      }
     }
 
     function loadPvs(formCtrl, scope, searchTerm, attrs, parentVal) {
