@@ -50,13 +50,18 @@
       </div>
 
       <div class="form-group">
-        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
-        <div class="col-xs-2 os-ctrl-padding-top">
-          <span>{{parentSpecimen.type}}</span>
-        </div>
-        <label class="col-xs-2 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
-        <div class="col-xs-2 os-ctrl-padding-top">
+        <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-6 os-ctrl-padding-top">
           <span>{{parentSpecimen.anatomicSite}}</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
+        <div class="col-xs-6">
+          <os-specimen-types name="type" specimen="aliquotSpec" required placeholder="{{'specimens.type' | translate}}">
+          </os-specimen-types>
+          <div os-field-error field="aliquotForm.type"></div>
         </div>
       </div>
 
@@ -65,7 +70,8 @@
         <div class="col-xs-6">
           <input name="noOfAliquots" ng-model="aliquotSpec.noOfAliquots"
             class="form-control" type="text" placeholder="{{'specimens.aliquot_cnt' | translate}}"
-            ng-required="!aliquotSpec.qtyPerAliquot || !parentSpecimen.availableQty" ng-pattern="/^[1-9][0-9]*$/">
+            ng-required="parentSpecimen.type != aliquotSpec.type || !aliquotSpec.qtyPerAliquot || !parentSpecimen.availableQty"
+            ng-pattern="/^[1-9][0-9]*$/">
           <div os-field-error field="aliquotForm.noOfAliquots"></div>
         </div>
       </div>
@@ -73,9 +79,9 @@
       <div class="form-group">
         <label class="col-xs-3 control-label" translate="specimens.qty_per_aliquot">Quantity per Aliquot</label>
         <div class="col-xs-6">
-          <os-spmn-measure name="qtyPerAliquot" specimen="parentSpecimen" quantity="aliquotSpec.qtyPerAliquot"
+          <os-spmn-measure name="qtyPerAliquot" specimen="aliquotSpec" quantity="aliquotSpec.qtyPerAliquot"
             placeholder="{{'specimens.qty_per_aliquot' | translate}}" 
-            ng-required="!aliquotSpec.noOfAliquots || !parentSpecimen.availableQty">
+            ng-required="parentSpecimen.type != aliquotSpec.type || !aliquotSpec.noOfAliquots || !parentSpecimen.availableQty">
           </os-spmn-measure>
           <div os-field-error field="aliquotForm.qtyPerAliquot"></div>
         </div>
@@ -174,7 +180,7 @@
     </div>
 
     <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
-      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="parentSpecimen">
+      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="aliquotSpec">
       </div>
     </div>
   </div>

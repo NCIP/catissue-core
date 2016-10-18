@@ -11,7 +11,10 @@ angular.module('os.biospecimen.specimen')
 
       if (!!spec.qtyPerAliquot && !!spec.noOfAliquots) {
         var requiredQty = spec.qtyPerAliquot * spec.noOfAliquots;
-        if (parent.availableQty != undefined && requiredQty > parent.availableQty && !scope.ignoreQtyWarning) {
+        if (parent.type == spec.type &&
+          parent.availableQty != undefined && requiredQty > parent.availableQty &&
+          !scope.ignoreQtyWarning) {
+
           showInsufficientQtyWarning({
             ok: function () {
               scope.ignoreQtyWarning = true;
@@ -38,29 +41,18 @@ angular.module('os.biospecimen.specimen')
       parent.depth = 0;
       parent.closeAfterChildrenCreation = spec.closeParent;
 
-      var aliquot = new Specimen({
-        lineage: 'Aliquot',
-        specimenClass: parent.specimenClass,
-        type: parent.type,
-        parentId: parent.id,
-        initialQty: spec.qtyPerAliquot,
-        storageLocation: {name: '', positionX:'', positionY: ''},
-        status: 'Pending',
-        children: [],
-        cprId: scope.cpr.id,
-        visitId: parent.visitId,
-        createdOn: spec.createdOn,
-        freezeThawCycles: spec.freezeThawCycles,
-        incrParentFreezeThaw: spec.incrParentFreezeThaw,
-        comments: spec.comments,
+      var derived = undefined;
+      if (spec.specimenClass != parent.specimenClass || spec.type != parent.type) {
+        derived = getSpmnToSave(
+          'Derived', spec, parent,
+          Math.round(spec.qtyPerAliquot * spec.noOfAliquots),
+          scope.cpr.derivativeLabelFmt);
+      }
 
-        selected: true,
-        parent: parent,
-        depth: 1,
-        isOpened: true,
-        hasChildren: false,
-        labelFmt: scope.cpr.aliquotLabelFmt
-      });
+      var aliquot = getSpmnToSave(
+        'Aliquot', spec, (derived ? derived : parent),
+        spec.qtyPerAliquot,
+        scope.cpr.aliquotLabelFmt);
 
       var aliquots = [];
       for (var i = 0; i < spec.noOfAliquots; ++i) {
@@ -69,8 +61,19 @@ angular.module('os.biospecimen.specimen')
         aliquots.push(clonedAlqt);
       }
 
-      parent.children = [].concat(aliquots);
-      var specimens = aliquots;
+      var specimens = [];
+      if (derived) {
+        derived.storageType = 'Virtual';
+        derived.closeAfterChildrenCreation = spec.closeParent;
+        derived.hasChildren = true;
+        derived.children = [].concat(aliquots);
+        parent.children = [derived];
+        specimens = [derived].concat(aliquots);
+      } else {
+        parent.children = [].concat(aliquots);
+        specimens = aliquots;
+      }
+
       specimens.unshift(parent);
       return specimens;
     }
@@ -284,6 +287,32 @@ angular.module('os.biospecimen.specimen')
         isWarning: true,
         confirmMsg: "specimens.errors.insufficient_qty",
       }, opts));
+    }
+
+    function getSpmnToSave(lineage, spec, parent, qty, fmt) {
+      return new Specimen({
+        lineage: lineage,
+        specimenClass: spec.specimenClass,
+        type: spec.type,
+        parentId: parent.id,
+        initialQty: qty,
+        storageLocation: {name: '', positionX:'', positionY: ''},
+        status: 'Pending',
+        children: [],
+        cprId: parent.cprId,
+        visitId: parent.visitId,
+        createdOn: spec.createdOn,
+        freezeThawCycles: spec.freezeThawCycles,
+        incrParentFreezeThaw: spec.incrParentFreezeThaw,
+        comments: spec.comments,
+
+        selected: true,
+        parent: parent,
+        depth: parent.depth + 1,
+        isOpened: true,
+        hasChildren: false,
+        labelFmt: fmt
+      });
     }
 
     return {

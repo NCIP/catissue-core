@@ -11,6 +11,8 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
       $scope.aliquotSpec = {
         cpId: visit.cpId,
         lineage: 'Aliquot',
+        specimenClass: specimen.specimenClass,
+        type: specimen.type,
         createdOn : new Date(),
         freezeThawCycles: specimen.freezeThawCycles + 1,
         incrParentFreezeThaw: 1

@@ -13,13 +13,17 @@ angular.module('os.biospecimen.specimen')
           return new Specimen({
             cpId: ps.cpId,
             ppid: ps.ppid,
-            parentId: ps.id,
-            parentLabel: ps.label,
-            parentAvailableQty: ps.availableQty,
-            parentCreatedOn: ps.createdOn,
             specimenClass: ps.specimenClass,
             type: ps.type,
-            createdOn: createdOn
+            createdOn: createdOn,
+            parent: {
+              id: ps.id,
+              label: ps.label,
+              availableQty: ps.availableQty,
+              createdOn: ps.createdOn,
+              specimenClass: ps.specimenClass,
+              type: ps.type
+            }
           });
         }
       );
@@ -47,24 +51,26 @@ angular.module('os.biospecimen.specimen')
     function isValidCountQty(spec) {
       if (!!spec.quantity && !!spec.count) {
         var reqQty = spec.quantity * spec.count;
-        if (!ignoreQtyWarning && spec.parentAvailableQty != undefined && reqQty > spec.parentAvailableQty) {
+        if (!ignoreQtyWarning &&
+            spec.type == spec.parent.type &&
+            spec.parent.availableQty != undefined && reqQty > spec.parent.availableQty) {
           return false;
         }
       } else if (!!spec.quantity) {
-        spec.count = Math.floor(spec.parentAvailableQty / spec.quantity);
+        spec.count = Math.floor(spec.parent.availableQty / spec.quantity);
       } else if (!!spec.count) {
-        spec.quantity = Math.round(spec.parentAvailableQty / spec.count * 10000) / 10000;
+        spec.quantity = Math.round(spec.parent.availableQty / spec.count * 10000) / 10000;
       }
 
       return true;
     }
 
     function isValidCreatedOn(spec) {
-      if (spec.createdOn < spec.parentCreatedOn) {
-        Alerts.error("specimens.errors.children_created_on_lt_parent", {parentLabel: spec.parentLabel});
+      if (spec.createdOn < spec.parent.createdOn) {
+        Alerts.error("specimens.errors.children_created_on_lt_parent", {parentLabel: spec.parent.label});
         return false;
       } else if (spec.createdOn > new Date().getTime()) {
-        Alerts.error("specimens.errors.children_created_on_gt_curr_time", {parentLabel: spec.parentLabel});
+        Alerts.error("specimens.errors.children_created_on_gt_curr_time", {parentLabel: spec.parent.label});
         return false;
       } else {
         return true;
@@ -78,8 +84,8 @@ angular.module('os.biospecimen.specimen')
         specimenClass: spec.specimenClass,
         type: spec.type,
         ppid: spec.ppid,
-        parentId: spec.parentId,
-        parentLabel: spec.parentLabel,
+        parentId: spec.parent.id,
+        parentLabel: spec.parent.label,
         initialQty: spec.quantity,
         storageLocation: spec.storageLocation,
         status: 'Collected',
@@ -87,6 +93,29 @@ angular.module('os.biospecimen.specimen')
         createdOn: spec.createdOn,
         printLabel: spec.printLabel
       });
+    }
+
+    function getDerivative(spec, aliquots, aliquotIdx) {
+      var derivative = new Specimen({
+        lineage: 'Derived',
+        parentId: spec.parent.id,
+        createdOn: spec.createdOn,
+        specimenClass: spec.specimenClass,
+        type: spec.type,
+        initialQty: Math.round(spec.count * spec.quantity),
+        status: 'Collected',
+        closeAfterChildrenCreation: spec.closeParent,
+        children: aliquots.slice(aliquotIdx, aliquotIdx + +spec.count)
+      });
+
+      angular.forEach(derivative.children,
+        function(aliquot) {
+          delete aliquot.parentId;
+          delete aliquot.parentLabel;
+        }
+      );
+
+      return derivative;
     }
 
     function vacateReservedPositions() {
@@ -106,7 +135,7 @@ angular.module('os.biospecimen.specimen')
             return {
               specimenClass: spec.specimenClass,
               specimenType: spec.type,
-              numOfAliquots: spec.count
+              numOfAliquots: +spec.count
             }
           }
         )
@@ -227,18 +256,25 @@ angular.module('os.biospecimen.specimen')
 
       angular.forEach($scope.ctx.aliquotsSpec,
         function(spec) {
+          var children;
+          if (spec.specimenClass != spec.parent.specimenClass || spec.type != spec.parent.type) {
+            children = [getDerivative(spec, aliquots, aliquotIdx)];
+          } else {
+            children = aliquots.slice(aliquotIdx, aliquotIdx + +spec.count);
+          }
+
           if (spec.closeParent) {
             result.push(new Specimen({
-              id: spec.parentId,
+              id: spec.parent.id,
               status: 'Collected',
-              children: aliquots.slice(aliquotIdx, aliquotIdx + spec.count),
+              children: children,
               closeAfterChildrenCreation: true
             }));
           } else {
-            result = result.concat(aliquots.slice(aliquotIdx, aliquotIdx + spec.count))
+            result = result.concat(children);
           }
 
-          aliquotIdx += spec.count;
+          aliquotIdx += +spec.count;
         }
       );
 
