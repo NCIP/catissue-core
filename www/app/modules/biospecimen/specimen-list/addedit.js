@@ -50,7 +50,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
           }
 
           var addedSpmns = getAddedSpecimens(specimens);
-          if (addedSpmns.length == 0) {
+          if (addedSpmns.length == 0 && !!specimenList.id) {
             status.patched = true;
             return specimenList.$patch(specimenList);
           }
@@ -82,7 +82,7 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
 
       var status = {patched: false};
       var promise = undefined;
-      if (labels.length == 0) {
+      if (labels.length == 0 && !!specimenList.id) {
         promise = specimenList.$patch(specimenList);
         status.patched = true;
       } else {
