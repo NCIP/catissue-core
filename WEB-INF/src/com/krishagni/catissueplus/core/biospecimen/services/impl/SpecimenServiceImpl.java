@@ -18,6 +18,8 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 
+import com.krishagni.catissueplus.core.administrative.domain.User;
+import com.krishagni.catissueplus.core.administrative.domain.factory.UserErrorCode;
 import com.krishagni.catissueplus.core.administrative.events.StorageLocationSummary;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -52,6 +54,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.events.UserSummary;
 import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -203,17 +206,17 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> updateSpecimensStatus(RequestEvent<List<SpecimenStatusDetail>> req) {
 		try {
-			List<SpecimenDetail> result = new ArrayList<SpecimenDetail>();
+			List<SpecimenDetail> result = new ArrayList<>();
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			for (SpecimenStatusDetail detail : req.getPayload()) {
 				Specimen specimen = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getName(), ose);
-				if (specimen == null) {
-					return ResponseEvent.error(ose);
-				}
+				User user = getUser(detail.getUser(), ose);
+				Date date = getDisposalDate(specimen, detail.getDate(), ose);
+				ose.checkAndThrow();
 
 				AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen, false);
-				specimen.updateStatus(detail.getStatus(), detail.getReason());
+				specimen.updateStatus(detail.getStatus(), user, date, detail.getReason(), detail.isForceUpdate());
 				result.add(SpecimenDetail.from(specimen));
 			}
 
@@ -819,5 +822,43 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		}
 
 		spec.getParentSpecimen().incrementFreezeThaw(detail.getIncrParentFreezeThaw());
+	}
+
+	private User getUser(UserSummary detail, OpenSpecimenException ose) {
+		Long userId = null;
+		String emailAddress = null;
+		if (detail != null) {
+			userId = detail.getId();
+			emailAddress = detail.getEmailAddress();
+		}
+
+		User user;
+		if (userId != null) {
+			user = daoFactory.getUserDao().getById(userId);
+		} else if (StringUtils.isNotBlank(emailAddress)) {
+			user = daoFactory.getUserDao().getUserByEmailAddress(emailAddress);
+		} else {
+			user = AuthUtil.getCurrentUser();
+		}
+
+		if (user == null) {
+			ose.addError(UserErrorCode.NOT_FOUND);
+		}
+
+		return user;
+	}
+
+	private Date getDisposalDate(Specimen specimen, Date disposalDate, OpenSpecimenException ose) {
+		if (disposalDate == null) {
+			return Calendar.getInstance().getTime();
+		}
+
+		if (specimen.isPrimary() && disposalDate.before(specimen.getCollectionEvent().getTime())) {
+			ose.addError(SpecimenErrorCode.DISPOSAL_DT_LT_COLL_DT, disposalDate, specimen.getCollectionEvent().getTime());
+		} else if (!specimen.isPrimary() && disposalDate.before(specimen.getCreatedOn())) {
+			ose.addError(SpecimenErrorCode.DISPOSAL_DT_LT_CREATED_ON, disposalDate, specimen.getCreatedOn());
+		}
+
+		return disposalDate;
 	}
 }

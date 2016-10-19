@@ -108,7 +108,13 @@ public enum SpecimenErrorCode implements ErrorCode {
 
 	INVALID_FREEZE_THAW_CYCLES,
 
-	UQ_LBL_CP_CHG_NA;
+	UQ_LBL_CP_CHG_NA,
+
+	INVALID_DISPOSE_STATUS,
+
+	DISPOSAL_DT_LT_COLL_DT,
+
+	DISPOSAL_DT_LT_CREATED_ON;
 
 	public String code() {
 		return "SPECIMEN_" + this.name();

@@ -700,18 +700,22 @@ public class Specimen extends BaseExtensionEntity {
 		updatePosition(specimen.getPosition());
 	}
 	
+	public void updateStatus(String activityStatus, String reason){
+		updateStatus(activityStatus, AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), reason, false);
+	}
+	
 	//
 	// TODO: Modify to accommodate pooled specimens
 	//	
-	public void updateStatus(String activityStatus, String reason) {
+	public void updateStatus(String activityStatus, User user, Date date, String reason, boolean isForceDelete) {
 		if (this.activityStatus != null && this.activityStatus.equals(activityStatus)) {
 			return;
 		}
 		
 		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(activityStatus)) {
-			disable();
+			disable(!isForceDelete);
 		} else if (Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(activityStatus)) {
-			close(AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), reason);
+			close(user, date, reason);
 		} else if (Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(activityStatus)) {
 			activate();
 		}

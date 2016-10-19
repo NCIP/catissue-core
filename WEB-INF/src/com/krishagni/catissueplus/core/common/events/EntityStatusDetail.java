@@ -1,13 +1,21 @@
 package com.krishagni.catissueplus.core.common.events;
 
+import java.util.Date;
+
 public class EntityStatusDetail {
 	private Long id;
 	
 	private String name;
 
 	private String status;
+
+	private UserSummary user;
+
+	private Date date;
 	
 	private String reason;
+
+	private boolean forceUpdate;
 
 	public Long getId() {
 		return id;
@@ -33,11 +41,35 @@ public class EntityStatusDetail {
 		this.status = status;
 	}
 
+	public UserSummary getUser() {
+		return user;
+	}
+
+	public void setUser(UserSummary user) {
+		this.user = user;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
 	public String getReason() {
 		return reason;
 	}
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public boolean isForceUpdate() {
+		return forceUpdate;
+	}
+
+	public void setForceUpdate(boolean forceUpdate) {
+		this.forceUpdate = forceUpdate;
 	}
 }

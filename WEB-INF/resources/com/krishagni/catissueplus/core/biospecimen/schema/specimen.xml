@@ -154,11 +154,11 @@
       </field>
 
       <record>
-        <caption>#getMessage("specimen_coll_event_user")</caption>
+        <caption>#getMessage("specimen_event_user")</caption>
         <attribute>user</attribute>
 
         <field>
-          <caption>#getMessage("specimen_coll_event_user_email")</caption>
+          <caption>#getMessage("specimen_event_user_email")</caption>
           <attribute>emailAddress</attribute>
         </field>
       </record>
@@ -190,11 +190,11 @@
       </field>
 
       <record>
-        <caption>#getMessage("specimen_received_event_user")</caption>
+        <caption>#getMessage("specimen_event_user")</caption>
         <attribute>user</attribute>
 
         <field>
-          <caption>#getMessage("specimen_received_event_user_email")</caption>
+          <caption>#getMessage("specimen_event_user_email")</caption>
           <attribute>emailAddress</attribute>
         </field>
       </record>

@@ -146,7 +146,7 @@ angular.module('os.biospecimen.cp',
               objectTypes: [
                 "cprMultiple", 'otherCpr', 'cpr', 'participant', 'consent', 'visit',
                 'specimen', 'specimenDerivative', 'specimenAliquot',
-                'masterSpecimen', 'extensions'
+                'masterSpecimen', 'specimenDisposal', 'extensions'
               ],
               objectParams: {cpId: -1}
             }

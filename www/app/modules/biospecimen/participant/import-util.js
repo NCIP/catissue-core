@@ -73,6 +73,10 @@ angular.module('os.biospecimen.participant')
         group: group, type: 'masterSpecimen', title: 'participant.master_specimens',
         showImportType: false, importType    : 'CREATE'
       });
+      importTypes.push({
+        group: group, type: 'specimenDisposal', title: 'participant.specimen_disposal',
+        showImportType: false, importType    : 'UPDATE'
+      });
 
       addForms(importTypes, group, 'Specimen', entityForms['Specimen']);
       return addForms(importTypes, group, 'SpecimenEvent', entityForms['SpecimenEvent']);

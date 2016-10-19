@@ -712,6 +712,7 @@
         <value>com/krishagni/catissueplus/core/biospecimen/schema/sr.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/cpr-multiple.xml</value>
         <value>com/krishagni/catissueplus/core/biospecimen/schema/participant.xml</value>
+        <value>com/krishagni/catissueplus/core/biospecimen/schema/specimen-disposal.xml</value>
       </list>
     </property>
 
@@ -895,6 +896,12 @@
           </bean>
         </entry>
 
+        <entry key="specimenDisposal">
+          <bean class="com.krishagni.catissueplus.core.biospecimen.services.impl.SpecimenDisposalImporter">
+            <property name="specimenSvc" ref="specimenSvc"/>
+          </bean>
+        </entry>
+        
         <entry key="extensions">
           <bean id="extensionImporter" class="com.krishagni.catissueplus.core.de.services.impl.ExtensionsImporter">
             <property name="formSvc" ref="formSvc"/>

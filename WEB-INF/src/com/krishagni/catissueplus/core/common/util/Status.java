@@ -44,12 +44,20 @@ public final class Status {
 		return statusNo;
 	}
 
-	public static boolean isDisabledStatus(String status) {
+	public boolean equals(String status) {
 		if (StringUtils.isBlank(status)) {
 			return false;
 		}
 
-		return status.equals(ACTIVITY_STATUS_DISABLED.getStatus());
+		return getStatus().equals(status);
+	}
+
+	public static boolean isClosedStatus(String status) {
+		return ACTIVITY_STATUS_CLOSED.equals(status);
+	}
+
+	public static boolean isDisabledStatus(String status) {
+		return ACTIVITY_STATUS_DISABLED.equals(status);
 	}
 
 	public static boolean isValidActivityStatus(String status) {

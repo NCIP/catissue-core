@@ -231,7 +231,7 @@ angular.module('os.biospecimen.participant',
               objectTypes: [
                 'cpr', 'participant', 'consent', 'visit',
                 'specimen', 'specimenDerivative', 'specimenAliquot',
-                'masterSpecimen', 'extensions'
+                'masterSpecimen', 'specimenDisposal', 'extensions'
               ],
               objectParams: {cpId: cp.id}
             }

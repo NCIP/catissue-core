@@ -380,6 +380,7 @@
     "consents": "Consents",
     "registrations": "Participant Registrations",
     "master_specimens": "Master Specimens",
+    "specimen_disposal": "Specimen Disposal",
     "registered_cps": "Registered Protocols",
     
     "buttons": {
@@ -1531,6 +1532,7 @@
       "specimenAliquot": "Specimen Aliquots",
       "specimenDerivative": "Derived Specimens",
       "masterSpecimen": "Master Specimens",
+      "specimenDisposal": "Specimen Disposal",
       "shipment": "Shipment",
       "distributionOrder": "Distribution Order"
     },
