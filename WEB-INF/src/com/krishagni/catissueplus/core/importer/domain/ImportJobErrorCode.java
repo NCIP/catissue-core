@@ -4,6 +4,8 @@ import com.krishagni.catissueplus.core.common.errors.ErrorCode;
 
 public enum ImportJobErrorCode implements ErrorCode {
 	NOT_FOUND,
+
+	FAIL,
 	
 	ACCESS_DENIED,
 			

@@ -83,6 +83,7 @@
       "create": "Create",
       "delete": "Delete",
       "import": "Import",
+      "validate_and_import": "Validate and Import",
       "cancel": "Cancel",
       "discard": "Discard",
       "upload": "Upload",

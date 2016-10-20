@@ -75,7 +75,9 @@ public class ImportServiceImpl implements ImportService {
 	private PlatformTransactionManager transactionManager;
 
 	private TransactionTemplate txTmpl;
-	
+
+	private TransactionTemplate newTxTmpl;
+
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
@@ -98,8 +100,12 @@ public class ImportServiceImpl implements ImportService {
 
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
+
 		this.txTmpl = new TransactionTemplate(this.transactionManager);
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+		this.newTxTmpl = new TransactionTemplate(this.transactionManager);
+		this.newTxTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
 	}
 
 	@Override
@@ -330,7 +336,11 @@ public class ImportServiceImpl implements ImportService {
 		private ImportJob job;
 
 		private ImportListener callback;
-		
+
+		private long totalRecords = 0;
+
+		private long failedRecords = 0;
+
 		public ImporterTask(Authentication auth, ImportJob job, ImportListener callback) {
 			this.auth = auth;
 			this.job = job;
@@ -339,35 +349,33 @@ public class ImportServiceImpl implements ImportService {
 
 		@Override
 		public void run() {
-			SecurityContextHolder.getContext().setAuthentication(auth);			
+			SecurityContextHolder.getContext().setAuthentication(auth);
 
 			ObjectReader objReader = null;
 			CsvWriter csvWriter = null;
-			long totalRecords = 0, failedRecords = 0;
 			try {
 				ObjectSchema   schema   = schemaFactory.getSchema(job.getName(), job.getParams());
-				ObjectImporter<Object, Object> importer = importerFactory.getImporter(job.getName());
-
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
+				csvWriter = getOutputCsvWriter(job);
 				objReader = new ObjectReader(
-						filePath, schema, 
+						filePath, schema,
 						ConfigUtil.getInstance().getDeDateFmt(),
 						ConfigUtil.getInstance().getTimeFmt());
-				
+
 				List<String> columnNames = objReader.getCsvColumnNames();
 				columnNames.add("OS_IMPORT_STATUS");
 				columnNames.add("OS_ERROR_MESSAGE");
-				
-				csvWriter = getOutputCsvWriter(job);
-				csvWriter.writeNext(columnNames.toArray(new String[0]));
-				
-				if (job.getCsvtype() == CsvType.MULTIPLE_ROWS_PER_OBJ) {
-					processMultipleRowsPerObj(objReader, csvWriter, importer);
-				} else {
-					processSingleRowPerObj(objReader, csvWriter, importer);
-				}
 
-				success();
+				csvWriter.writeNext(columnNames.toArray(new String[0]));
+
+				Status status = processRows(objReader, csvWriter);
+				saveJob(totalRecords, failedRecords, status);
+
+				if (status == Status.COMPLETED) {
+					success();
+				} else {
+					failed(OpenSpecimenException.userError(ImportJobErrorCode.FAIL, failedRecords, totalRecords));
+				}
 			} catch (Exception e) {
 				logger.error("Error running import records job", e);
 				saveJob(totalRecords, failedRecords, Status.FAILED);
@@ -377,10 +385,31 @@ public class ImportServiceImpl implements ImportService {
 				closeQuietly(csvWriter);
 			}
 		}
-		
-		private void processSingleRowPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {
-			long totalRecords = 0, failedRecords = 0;
 
+		private Status processRows(ObjectReader objReader, CsvWriter csvWriter) {
+			ObjectImporter<Object, Object> importer = importerFactory.getImporter(job.getName());
+
+			return txTmpl.execute(new TransactionCallback<Status>() {
+				@Override
+				public Status doInTransaction(TransactionStatus txnStatus) {
+					if (job.getCsvtype() == CsvType.MULTIPLE_ROWS_PER_OBJ) {
+						processMultipleRowsPerObj(objReader, csvWriter, importer);
+					} else {
+						processSingleRowPerObj(objReader, csvWriter, importer);
+					}
+
+					Status jobStatus = Status.COMPLETED;
+					if (failedRecords > 0) {
+						txnStatus.setRollbackOnly();
+						jobStatus = Status.FAILED;
+					}
+
+					return jobStatus;
+				}
+			});
+		}
+
+		private void processSingleRowPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {
 			while (true) {
 				String errMsg = null;
 				try {
@@ -411,12 +440,9 @@ public class ImportServiceImpl implements ImportService {
 					saveJob(totalRecords, failedRecords, Status.IN_PROGRESS);
 				}
 			}
-			
-			saveJob(totalRecords, failedRecords, Status.COMPLETED);
 		}
-		
+
 		private void processMultipleRowsPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {
-			long totalRecords = 0, failedRecords = 0;
 			LinkedEhCacheMap<String, MergedObject> objectsMap =  new LinkedEhCacheMap<String, MergedObject>();
 			
 			while (true) {
@@ -479,9 +505,8 @@ public class ImportServiceImpl implements ImportService {
 				MergedObject mergedObj = mergedObjIter.next();
 				csvWriter.writeAll(mergedObj.getRowsWithStatus());
 			}
-			
+
 			objectsMap.clear();
-			saveJob(totalRecords, failedRecords, Status.COMPLETED);
 		}
 		
 		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, String> params) {
@@ -527,8 +552,8 @@ public class ImportServiceImpl implements ImportService {
 			if (status == Status.COMPLETED || status == Status.FAILED) {
 				job.setEndTime(Calendar.getInstance().getTime());
 			}
-			
-			txTmpl.execute(new TransactionCallback<Void>() {
+
+			newTxTmpl.execute(new TransactionCallback<Void>() {
 				@Override
 				public Void doInTransaction(TransactionStatus status) {
 					importJobDao.saveOrUpdate(job);
