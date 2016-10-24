@@ -140,4 +140,10 @@
         update set cu.capacity = c_capacity.capacity
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="CP level configuration to enable or disable extraction of text from SPR PDF docs">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="EXTRACT_SPR_TEXT" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

@@ -161,6 +161,7 @@
     "sop_document": "SOP Document",
     "sop_document_url": "SOP Document URL",
     "sop_document_file": "SOP Document File",
+    "extract_spr_text": "Extract Text from SPR PDF Docs?",
     "view_sop": "View SOP",
     "desc_url": "Description URL",
     "specimen_label_fmt": "Specimen Label Format",
@@ -1952,7 +1953,9 @@
         "two_step_patient_reg": "Two Step Participant Registration",
         "two_step_patient_reg_desc": "Enable or disable two step participant registration workflow",
         "add_patient_on_lookup_fail": "Add Participant on No Match",
-        "add_patient_on_lookup_fail_desc": "Allow or disallow users to add new participants when lookup yields no matching participants in two step registration workflow"
+        "add_patient_on_lookup_fail_desc": "Allow or disallow users to add new participants when lookup yields no matching participants in two step registration workflow",
+        "extract_spr_text": "Extract Text from SPR PDF Docs",
+        "extract_spr_text_desc": "Enable or disable extraction of text content from SPR PDF documents"
       },
 
       "common": {

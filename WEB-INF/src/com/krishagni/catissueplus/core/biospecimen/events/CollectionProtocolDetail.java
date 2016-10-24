@@ -26,6 +26,8 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	private String sopDocumentName;
 
+	private Boolean extractSprText;
+
 	private String descriptionUrl;
 
 	private String specimenLabelFmt;
@@ -119,6 +121,14 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 
 	public void setSopDocumentName(String sopDocumentName) {
 		this.sopDocumentName = sopDocumentName;
+	}
+
+	public Boolean getExtractSprText() {
+		return extractSprText;
+	}
+
+	public void setExtractSprText(Boolean extractSprText) {
+		this.extractSprText = extractSprText;
 	}
 
 	public String getDescriptionUrl() {
@@ -279,6 +289,7 @@ public class CollectionProtocolDetail extends CollectionProtocolSummary {
 		result.setAnticipatedParticipantsCount(cp.getEnrollment());
 		result.setSopDocumentUrl(cp.getSopDocumentUrl());
 		result.setSopDocumentName(cp.getSopDocumentName());
+		result.setExtractSprText(cp.getExtractSprText());
 		result.setDescriptionUrl(cp.getDescriptionURL());
 		result.setSpecimenLabelFmt(cp.getSpecimenLabelFormat());
 		result.setDerivativeLabelFmt(cp.getDerivativeLabelFormat());

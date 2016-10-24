@@ -75,6 +75,8 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	private String sopDocumentName;
 
+	private Boolean extractSprText;
+
 	private String descriptionURL;
 	
 	private String specimenLabelFormat;
@@ -211,6 +213,14 @@ public class CollectionProtocol extends BaseExtensionEntity {
 
 	public void setSopDocumentName(String sopDocumentName) {
 		this.sopDocumentName = sopDocumentName;
+	}
+
+	public Boolean getExtractSprText() {
+		return extractSprText;
+	}
+
+	public void setExtractSprText(Boolean extractSprText) {
+		this.extractSprText = extractSprText;
 	}
 
 	public String getDescriptionURL() {
@@ -444,6 +454,7 @@ public class CollectionProtocol extends BaseExtensionEntity {
 		setEnrollment(cp.getEnrollment());
 		setSopDocumentUrl(cp.getSopDocumentUrl());
 		setSopDocumentName(cp.getSopDocumentName());
+		setExtractSprText(cp.getExtractSprText());
 		setDescriptionURL(cp.getDescriptionURL());
 		setPpidFormat(cp.getPpidFormat());
 		setManualPpidEnabled(cp.isManualPpidEnabled());

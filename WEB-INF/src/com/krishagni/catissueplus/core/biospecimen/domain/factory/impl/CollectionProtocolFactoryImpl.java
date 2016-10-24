@@ -92,6 +92,7 @@ public class CollectionProtocolFactoryImpl implements CollectionProtocolFactory 
 		cp.setEnrollment(input.getAnticipatedParticipantsCount());
 		cp.setSopDocumentUrl(input.getSopDocumentUrl());
 		cp.setSopDocumentName(input.getSopDocumentName());
+		cp.setExtractSprText(input.getExtractSprText());
 		cp.setDescriptionURL(input.getDescriptionUrl());
 		cp.setConsentsWaived(input.getConsentsWaived());
 

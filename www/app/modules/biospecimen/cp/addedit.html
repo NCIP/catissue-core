@@ -172,6 +172,20 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.extract_spr_text">Extract Text from SPR PDF Docs?</label>
+        <div class="col-xs-9">
+          <label class="radio-inline"> 
+            <input type="radio" name="extractSprText" ng-model="cp.extractSprText" ng-value="true">
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline"> 
+            <input type="radio" name="extractSprText" ng-model="cp.extractSprText" ng-value="false">
+            <span translate="common.no">No</span>
+          </label>
+        </div>
+      </div>
+
       <div ng-if="!mode || mode != 'copy'">
         <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
           <div id="de-form" class="os-extn-form" os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="cp"></div>

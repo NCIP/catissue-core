@@ -313,7 +313,7 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 			ensureUpdateSprRights(visit);
 			
 			String filename = detail.getFilename();
-			if (detail.isTextContent() || detail.isPdfContent()) {
+			if (detail.isTextContent() || (detail.isPdfContent() && isExtractSprTextEnabled(visit))) {
 				String sprText = getTextFromReq(detail);
 
 				File sprFile = new File(getSprDirPath(visit.getId()) + File.separator + "spr.txt");
@@ -702,5 +702,15 @@ public class VisitServiceImpl implements VisitService, ObjectStateParamsResolver
 		}
 
 		return visits;
+	}
+
+	private boolean isExtractSprTextEnabled(Visit visit) {
+		Boolean extractSprText = visit.getCollectionProtocol().getExtractSprText();
+		if (extractSprText == null) {
+			extractSprText = ConfigUtil.getInstance().getBoolSetting(
+				ConfigParams.MODULE, ConfigParams.EXTRACT_SPR_TEXT, false);
+		}
+
+		return extractSprText;
 	}
 }

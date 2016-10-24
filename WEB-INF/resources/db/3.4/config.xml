@@ -130,4 +130,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Setting to enable or disable extraction of text from SPR PDF documents">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'extract_spr_text',
+        'extract_spr_text', 'extract_spr_text_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

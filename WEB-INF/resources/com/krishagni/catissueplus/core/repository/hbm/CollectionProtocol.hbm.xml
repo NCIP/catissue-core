@@ -37,6 +37,8 @@
 
     <property name="sopDocumentName" column="SOP_DOCUMENT_NAME"/>
 
+    <property name="extractSprText" column="EXTRACT_SPR_TEXT"/>
+
     <property name="descriptionURL" column="DESCRIPTION_URL"/>
 
     <property name="specimenLabelFormat" column="LABEL_FORMAT"/>
