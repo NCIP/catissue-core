@@ -18,6 +18,8 @@ public class ImportDetail {
 	
 	private Map<String, String> objectParams = new HashMap<>();
 
+	private boolean atomic;
+
 	public String getObjectType() {
 		return objectType;
 	}
@@ -64,5 +66,13 @@ public class ImportDetail {
 
 	public void setListener(ImportListener listener) {
 		this.listener = listener;
+	}
+
+	public boolean isAtomic() {
+		return atomic;
+	}
+
+	public void setAtomic(boolean atomic) {
+		this.atomic = atomic;
 	}
 }

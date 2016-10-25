@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
+
 import au.com.bytecode.opencsv.CSVReader;
 
 public class CsvFileReader implements CsvReader {
@@ -40,6 +42,21 @@ public class CsvFileReader implements CsvReader {
 			return new CsvFileReader(csvReader, firstRowHeaderRow);
 		} catch (IOException e) {
 			throw new CsvException("Error creating CSV file reader", e);
+		}
+	}
+
+	public static int getRowsCount(String csvFile, boolean firstRowHeaderRow) {
+		CsvFileReader reader = null;
+		try {
+			reader = createCsvFileReader(csvFile, firstRowHeaderRow);
+
+			int count = 0;
+			while (reader.next()) {
+				count++;
+			}
+			return count;
+		} finally {
+			IOUtils.closeQuietly(reader);
 		}
 	}
 

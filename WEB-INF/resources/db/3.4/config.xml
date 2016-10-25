@@ -137,6 +137,15 @@
         'biospecimen', 'extract_spr_text',
         'extract_spr_text', 'extract_spr_text_desc',
         'BOOLEAN', 'false'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Maximum no. of records that can be accommodated in single transaction">
+    <sql>
+      call add_cfg_prop(
+        'common', 'import_max_records_per_txn',
+        'import_max_records_per_txn', 'import_max_records_per_txn_desc',
+        'INT', '10000'
       );
     </sql>
   </changeSet>

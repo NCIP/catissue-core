@@ -1490,7 +1490,7 @@
 
   "bulk_imports": {
     "no_jobs": "No bulk imports jobs to show.",
-
+    "txn_size_exceeded": "Only {{maxTxnSize}} records can be pre-validated before importing into database. However, input file contains {{inputRecsCount}} records. Do you want to proceed with option of importing only valid records into database; whilst rejecting invalid records?",
     "job_submitted": "Bulk Import Job {{id}} Submitted",
     "select_extn": "Select Form",
     "input_file": "Input Records File",
@@ -1981,7 +1981,9 @@
         "deploy_env": "Deployment Environment",
         "deploy_env_desc": "Any meaningful text that helps users distinguish between various OpenSpecimen deployment environments like test, dev, prod, demo etc",
         "distribution_report_query": "Default Distribution Report Query",
-        "distribution_report_query_desc": "Identifier of saved query to be used as default distribution report query"
+        "distribution_report_query_desc": "Identifier of saved query to be used as default distribution report query",
+        "import_max_records_per_txn": "Pre-validate Records Limit",
+        "import_max_records_per_txn_desc": "Maximum number of records that can be pre-validated before importing to database."
       },
 
       "email": {

@@ -35,6 +35,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
@@ -61,6 +62,10 @@ import edu.common.dynamicextensions.query.cachestore.LinkedEhCacheMap;
 
 public class ImportServiceImpl implements ImportService {
 	private static final Log logger = LogFactory.getLog(ImportServiceImpl.class);
+
+	private static final int MAX_RECS_PER_TXN = 10000;
+
+	private static final String CFG_MAX_TXN_SIZE = "import_max_records_per_txn";
 
 	private ConfigurationService cfgSvc;
 
@@ -191,23 +196,32 @@ public class ImportServiceImpl implements ImportService {
 	public ResponseEvent<ImportJobDetail> importObjects(RequestEvent<ImportDetail> req) {
 		try {
 			ImportDetail detail = req.getPayload();
-			ImportJob job = createImportJob(detail);						
+			String inputFile = getFilePath(detail.getInputFileId());
+
+			//
+			// Ensure transaction size is well within configured limits
+			//
+			int inputRecordsCnt = CsvFileReader.getRowsCount(inputFile, true);
+			if (detail.isAtomic() && inputRecordsCnt > getMaxRecsPerTxn()) {
+				return ResponseEvent.response(ImportJobDetail.txnSizeExceeded(inputRecordsCnt));
+			}
+
+			ImportJob job = createImportJob(detail);
 			importJobDao.saveOrUpdate(job, true);
 			
 			//
 			// Set up file in job's directory
 			//
-			String inputFile = getFilePath(detail.getInputFileId());
 			createJobDir(job.getId());
 			moveToJobDir(inputFile, job.getId());
 			
-			taskExecutor.submit(new ImporterTask(AuthUtil.getAuth(), job, detail.getListener()));
+			taskExecutor.submit(new ImporterTask(AuthUtil.getAuth(), job, detail.getListener(), detail.isAtomic()));
 			return ResponseEvent.response(ImportJobDetail.from(job));
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);			
-		}		
+		}
 	}
-	
+
 	@Override
 	public ResponseEvent<String> getInputFileTemplate(RequestEvent<ObjectSchemaCriteria> req) {
 		try {
@@ -263,6 +277,10 @@ public class ImportServiceImpl implements ImportService {
 				file.delete();
 			}
 		}
+	}
+
+	private int getMaxRecsPerTxn() {
+		return ConfigUtil.getInstance().getIntSetting("common", CFG_MAX_TXN_SIZE, MAX_RECS_PER_TXN);
 	}
 
 	private ImportJob getImportJob(Long jobId) {
@@ -337,14 +355,17 @@ public class ImportServiceImpl implements ImportService {
 
 		private ImportListener callback;
 
+		private boolean atomic;
+
 		private long totalRecords = 0;
 
 		private long failedRecords = 0;
 
-		public ImporterTask(Authentication auth, ImportJob job, ImportListener callback) {
+		public ImporterTask(Authentication auth, ImportJob job, ImportListener callback, boolean atomic) {
 			this.auth = auth;
 			this.job = job;
 			this.callback = callback;
+			this.atomic = atomic;
 		}
 
 		@Override
@@ -387,26 +408,38 @@ public class ImportServiceImpl implements ImportService {
 		}
 
 		private Status processRows(ObjectReader objReader, CsvWriter csvWriter) {
+			if (atomic) {
+				return txTmpl.execute(new TransactionCallback<Status>() {
+					@Override
+					public Status doInTransaction(TransactionStatus txnStatus) {
+						Status jobStatus = processRows0(objReader, csvWriter);
+						if (failedRecords > 0) {
+							txnStatus.setRollbackOnly();
+							jobStatus = Status.FAILED;
+						}
+
+						return jobStatus;
+					}
+				});
+			} else {
+				return processRows0(objReader, csvWriter);
+			}
+		}
+
+		private Status processRows0(ObjectReader objReader, CsvWriter csvWriter) {
 			ObjectImporter<Object, Object> importer = importerFactory.getImporter(job.getName());
+			if (job.getCsvtype() == CsvType.MULTIPLE_ROWS_PER_OBJ) {
+				processMultipleRowsPerObj(objReader, csvWriter, importer);
+			} else {
+				processSingleRowPerObj(objReader, csvWriter, importer);
+			}
 
-			return txTmpl.execute(new TransactionCallback<Status>() {
-				@Override
-				public Status doInTransaction(TransactionStatus txnStatus) {
-					if (job.getCsvtype() == CsvType.MULTIPLE_ROWS_PER_OBJ) {
-						processMultipleRowsPerObj(objReader, csvWriter, importer);
-					} else {
-						processSingleRowPerObj(objReader, csvWriter, importer);
-					}
+			Status jobStatus = Status.COMPLETED;
+			if (failedRecords > 0) {
+				jobStatus = Status.FAILED;
+			}
 
-					Status jobStatus = Status.COMPLETED;
-					if (failedRecords > 0) {
-						txnStatus.setRollbackOnly();
-						jobStatus = Status.FAILED;
-					}
-
-					return jobStatus;
-				}
-			});
+			return jobStatus;
 		}
 
 		private void processSingleRowPerObj(ObjectReader objReader, CsvWriter csvWriter, ObjectImporter<Object, Object> importer) {

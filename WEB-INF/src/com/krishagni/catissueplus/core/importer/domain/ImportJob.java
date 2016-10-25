@@ -14,7 +14,8 @@ public class ImportJob extends BaseEntity {
 	public static enum Status {
 		COMPLETED,
 		FAILED,
-		IN_PROGRESS
+		IN_PROGRESS,
+		TXN_SIZE_EXCEEDED
 	}
 	
 	public static enum Type {
