@@ -137,6 +137,7 @@
         'biospecimen', 'extract_spr_text',
         'extract_spr_text', 'extract_spr_text_desc',
         'BOOLEAN', 'false'
+      );
     </sql>
   </changeSet>
 
