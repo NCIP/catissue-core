@@ -75,6 +75,11 @@
       <filter name="activeEntity"/>
     </set>
 
+    <many-to-one 
+      name="collectionProtocol"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" 
+      column="COLLECTION_PROTOCOL_ID" />
+
     <many-to-one name="visit"
       class="com.krishagni.catissueplus.core.biospecimen.domain.Visit"
       column="SPECIMEN_COLLECTION_GROUP_ID"/>

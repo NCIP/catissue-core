@@ -146,4 +146,60 @@
       <column name="EXTRACT_SPR_TEXT" type="${boolean.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Collection protocol to which the specimen belongs">
+    <addColumn tableName="CATISSUE_SPECIMEN">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"/> 
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Foreign key on CP ID of specimen table">
+    <addForeignKeyConstraint
+      constraintName="FK_SPEC_CP_ID"
+      baseTableName="CATISSUE_SPECIMEN"
+      baseColumnNames="COLLECTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Updating collection protocol id of specimen table" dbms="mysql">
+    <sql>
+      update 
+        catissue_specimen spec 
+        inner join catissue_specimen_coll_group visit on visit.identifier = spec.specimen_collection_group_id 
+        inner join catissue_coll_prot_reg cpr on cpr.identifier = visit.collection_protocol_reg_id 
+      set
+        spec.collection_protocol_id = cpr.collection_protocol_id;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Updating collection protocol id of specimen table" dbms="oracle">
+    <sql>
+      merge into catissue_specimen spec using (
+        select
+          visit.identifier as visitId, cpr.collection_protocol_id as cpId
+        from
+          catissue_specimen_coll_group visit
+          inner join catissue_coll_prot_reg cpr on cpr.identifier = visit.collection_protocol_reg_id
+      ) t0 on (t0.visitId = spec.specimen_collection_group_id)
+      when
+        matched
+      then
+        update set spec.collection_protocol_id = t0.cpId;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique specimen label per collection protocol">
+    <addUniqueConstraint
+      constraintName="CAT_SPEC_CP_ID_LABEL_UQ"
+      tableName="CATISSUE_SPECIMEN"
+      columnNames="COLLECTION_PROTOCOL_ID, LABEL"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add not null constraint on collection protocol id of specimen table">
+    <addNotNullConstraint
+      tableName="CATISSUE_SPECIMEN"
+      columnName="COLLECTION_PROTOCOL_ID"
+      columnDataType="${int.type}" />
+  </changeSet>
 </databaseChangeLog>

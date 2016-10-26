@@ -98,10 +98,11 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setId(detail.getId());
 		}
 		
+		specimen.setCollectionProtocol(visit.getCollectionProtocol());
 		specimen.setVisit(visit);
 		specimen.setForceDelete(detail.isForceDelete());
 		specimen.setPrintLabel(detail.isPrintLabel());
-		
+
 		setCollectionStatus(detail, existing, specimen, ose);
 		setLineage(detail, existing, specimen, ose);
 		setParentSpecimen(detail, existing, parent, specimen, ose);
@@ -970,6 +971,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 					ose.addError(SpecimenErrorCode.NO_POOLED_SPMN);
 				} else {
 					pooledSpecimen = sr.getPooledSpecimenRequirement().getSpecimen();
+					pooledSpecimen.setCollectionProtocol(specimen.getCollectionProtocol());
 					pooledSpecimen.setVisit(specimen.getVisit());
 					pooledSpecimen.setCollectionStatus(Specimen.PENDING);
 				}

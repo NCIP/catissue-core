@@ -57,4 +57,11 @@
       <column name="extractSprText_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vlonushte" id="Audit and track changes to specimen's collection protocol">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"/>
+      <column name="collectionProtocol_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

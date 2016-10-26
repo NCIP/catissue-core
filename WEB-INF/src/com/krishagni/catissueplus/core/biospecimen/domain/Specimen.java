@@ -90,6 +90,8 @@ public class Specimen extends BaseExtensionEntity {
 
 	private Integer freezeThawCycles;
 
+	private CollectionProtocol collectionProtocol;
+
 	private Visit visit;
 
 	private SpecimenRequirement specimenRequirement;
@@ -366,6 +368,14 @@ public class Specimen extends BaseExtensionEntity {
 
 	public void setFreezeThawCycles(Integer freezeThawCycles) {
 		this.freezeThawCycles = freezeThawCycles;
+	}
+
+	public CollectionProtocol getCollectionProtocol() {
+		return collectionProtocol;
+	}
+
+	public void setCollectionProtocol(CollectionProtocol collectionProtocol) {
+		this.collectionProtocol = collectionProtocol;
 	}
 
 	public Visit getVisit() {
@@ -903,10 +913,6 @@ public class Specimen extends BaseExtensionEntity {
 		specimen.setPooledSpecimen(this);
 		specimen.occupyPosition();
 		getSpecimensPool().add(specimen);
-	}
-	
-	public CollectionProtocol getCollectionProtocol() {
-		return getVisit().getCollectionProtocol();
 	}
 	
 	public void setPending() {
