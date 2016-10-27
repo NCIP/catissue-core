@@ -1491,7 +1491,12 @@
   "bulk_imports": {
     "no_jobs": "No bulk imports jobs to show.",
     "txn_size_exceeded": "Only {{maxTxnSize}} records can be pre-validated before importing into database. However, input file contains {{inputRecsCount}} records. Do you want to proceed with option of importing only valid records into database; whilst rejecting invalid records?",
-    "job_submitted": "Bulk Import Job {{id}} Submitted",
+    "job_submitted": "Bulk import job {{id}} submitted",
+    "job_stopped": "Bulk import job #{{jobId}} stopped successfully.",
+    "job_completed": "Bulk import job #{{jobId}} has run to completion.",
+    "job_stop_in_progress": "It is taking more time than anticipated to stop bulk import job #{{jobId}}. Please revisit this page after some time to view latest status.",
+    "confirm_job_stop_title": "Confirm Stop Job #{{jobId}}",
+    "confirm_job_stop": "Are you sure you want to stop the job #{{jobId}}?",
     "select_extn": "Select Form",
     "input_file": "Input Records File",
     "download_input_file_tmpl": "Download Template File",
@@ -1502,6 +1507,7 @@
     "status_COMPLETED": "Completed",
     "status_FAILED": "Failed",
     "status_IN_PROGRESS": "In Progress",
+    "status_STOPPED": "Stopped",
 
     "job_id": "Job ID",
     "submitted_by": "Submitted By",

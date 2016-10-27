@@ -19,7 +19,7 @@
     <table class="os-table" ng-switch-when="true">
       <thead class="os-table-head">
         <tr class="row">
-          <th class="col os-col-25">
+          <th class="col os-col-20">
             <span translate="bulk_imports.job_id">Job ID</span>
           </th>
           <th class="col os-col-15">
@@ -39,13 +39,15 @@
           </th>
           <th class="col os-col-10">
             <span translate="bulk_imports.status">Status</span>
+          </th>
+          <th class="col os-col-5">
             <span>&nbsp;</span>
           </th>
         </tr>
       </thead>
       <tbody class="os-table-body">
         <tr class="row" ng-repeat="importJob in importJobs">
-          <td class="col os-col-25">
+          <td class="col os-col-20">
             <a>
               <span>#{{importJob.id}}</span> 
               <span translate="bulk_imports.import_types.{{importJob.type}}"></span>
@@ -70,11 +72,21 @@
           <td class="col os-col-10">
             <span>{{importJob.failedRecords}}</span>
           </td>
-          <td class="col os-col-10 clearfix">
+          <td class="col os-col-10">
             <span translate="bulk_imports.status_{{importJob.status}}"></span>
-            <a class="pull-right" href="{{importJob.outputFileUrl}}" target="_blank">
-              <span class="fa fa-download"></span>
-            </a>
+          </td>
+          <td class="col os-col-5">
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-default">
+                <a href="{{importJob.outputFileUrl}}" target="_blank">
+                  <span class="fa fa-download"></span>
+                </a>
+              </button>
+              <button ng-if="importJob.status == 'IN_PROGRESS'" type="button" class="btn btn-default"
+                ng-click="stopJob(importJob)">
+                <span class="fa fa-stop-circle-o"></span>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>

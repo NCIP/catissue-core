@@ -192,4 +192,14 @@ public class BulkObjectImportController {
 		
 		return resp.getPayload();
 	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "{id}/stop")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public ImportJobDetail stopImportJob(@PathVariable("id") Long jobId) {
+		ResponseEvent<ImportJobDetail> resp = importSvc.stopJob(new RequestEvent<>(jobId));
+		resp.throwErrorIfUnsuccessful();
+
+		return resp.getPayload();
+	}
 }

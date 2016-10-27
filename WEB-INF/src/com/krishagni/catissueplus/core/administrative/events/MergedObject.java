@@ -18,6 +18,8 @@ public class MergedObject implements Serializable {
 	
 	private String errMsg;
 
+	private boolean processed;
+
 	public String getKey() {
 		return key;
 	}
@@ -61,18 +63,30 @@ public class MergedObject implements Serializable {
 	public boolean isErrorneous() {
 		return StringUtils.isNotBlank(errMsg);
 	}
-	
+
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+
 	public List<String[]> getRowsWithStatus() {
 		List<String[]> processedRows = new ArrayList<String[]>();
 		for (List<String> row : rows) {
-			if (isErrorneous()) {
-				row.add("FAIL");
-				row.add(errMsg);
-			} else {
-				row.add("SUCCESS");
-				row.add("");
+			String status = "", message = "";
+			if (isProcessed()) {
+				if (isErrorneous()) {
+					status = "FAIL";
+					message = errMsg;
+				} else {
+					status = "SUCCESS";
+				}
 			}
-			
+
+			row.add(status);
+			row.add(message);
 			processedRows.add(row.toArray(new String[0]));
 		}
 		

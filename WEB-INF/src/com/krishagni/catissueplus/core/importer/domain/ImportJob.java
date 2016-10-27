@@ -4,9 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.BaseEntity;
 
@@ -15,6 +12,7 @@ public class ImportJob extends BaseEntity {
 		COMPLETED,
 		FAILED,
 		IN_PROGRESS,
+		STOPPED,
 		TXN_SIZE_EXCEEDED
 	}
 	
@@ -34,7 +32,7 @@ public class ImportJob extends BaseEntity {
 	
 	private CsvType csvtype;
 	
-	private Status status;
+	private volatile Status status;
 	
 	private Long totalRecords;
 	
@@ -45,6 +43,8 @@ public class ImportJob extends BaseEntity {
 	private Date creationTime;
 	
 	private Date endTime;
+
+	private transient volatile  boolean stopRunning;
 	
 	private Map<String, String> params = new HashMap<>();
 	
@@ -126,5 +126,25 @@ public class ImportJob extends BaseEntity {
 
 	public void setParams(Map<String, String> params) {
 		this.params = params;
+	}
+
+	public boolean isAskedToStop() {
+		return stopRunning;
+	}
+
+	public void stop() {
+		this.stopRunning = true;
+	}
+
+	public boolean isInProgress() {
+		return getStatus() == Status.IN_PROGRESS;
+	}
+
+	public boolean isStopped() {
+		return getStatus() == Status.STOPPED;
+	}
+
+	public boolean isFailed() {
+		return getStatus() == Status.FAILED;
 	}
 }

@@ -26,4 +26,6 @@ public interface ImportService {
 	public ResponseEvent<String> getInputFileTemplate(RequestEvent<ObjectSchemaCriteria> req);
 
 	public ResponseEvent<List<Map<String, Object>>> processFileRecords(RequestEvent<FileRecordsDetail> req);
+
+	public ResponseEvent<ImportJobDetail> stopJob(RequestEvent<Long> req);
 }

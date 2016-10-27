@@ -13,7 +13,9 @@ public enum ImportJobErrorCode implements ErrorCode {
 	
 	OBJ_SCHEMA_NOT_FOUND,
 	
-	RECORD_PARSE_ERROR;
+	RECORD_PARSE_ERROR,
+
+	NOT_IN_PROGRESS;
 
 	@Override
 	public String code() {		
