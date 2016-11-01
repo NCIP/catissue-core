@@ -32,6 +32,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.EmailUtil;
+import com.krishagni.catissueplus.core.common.util.UnhandledExceptionUtil;
 
 @Aspect
 public class TransactionalInterceptor {
@@ -40,11 +41,16 @@ public class TransactionalInterceptor {
 	private PlatformTransactionManager transactionManager;
 	
 	private TransactionTemplate txTmpl;
+	
+	private TransactionTemplate newTxTmpl;
 
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 		this.txTmpl = new TransactionTemplate(transactionManager);
 		this.txTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+		
+		this.newTxTmpl = new TransactionTemplate(transactionManager);
+		this.newTxTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
 	}
 
 	@Pointcut("execution(@com.krishagni.catissueplus.core.common.PlusTransactional * *(..))")
@@ -70,7 +76,7 @@ public class TransactionalInterceptor {
 			return doWork0(pjp, rollback);
 		} catch (Throwable t) {
 			logger.error("Error doing work inside " + pjp.getSignature(), t);
-			notifyUncaughtServerError(t.getCause());
+			handleServerError(t.getCause(), pjp.getArgs());
 			throw t;
 		}
 	}
@@ -91,28 +97,28 @@ public class TransactionalInterceptor {
 							status.setRollbackOnly();
 							if (resp.isSystemError() || resp.isUnknownError()) {
 								logger.error("Error doing work inside " + pjp.getSignature(), resp.getError().getException());
-								notifyUncaughtServerError(resp.getError().getException());
+								handleServerError(resp.getError().getException(), pjp.getArgs());
 							}
 						} else if (resp.isRollback()) {
 							status.setRollbackOnly();
 						}
 					}
 				
-					return result ;
+					return result;
 				} catch (OpenSpecimenException ose) {
 					status.setRollbackOnly();
 					throw ose;
 				} catch (Throwable t) {
 					logger.error("Error doing work inside " + pjp.getSignature(), t);
 					status.setRollbackOnly();
-					notifyUncaughtServerError(t);
+					handleServerError(t, pjp.getArgs());
 					throw OpenSpecimenException.serverError(t);
 				}
 			}
 		});
 	}
 
-	private void notifyUncaughtServerError(Throwable t) {
+	private void handleServerError(Throwable t, Object[] args) {
 		try {
 			String itAdminEmailId = ConfigUtil.getInstance().getItAdminEmailId();
 			if (StringUtils.isBlank(itAdminEmailId)) {
@@ -130,6 +136,8 @@ public class TransactionalInterceptor {
 				new String[] {itAdminEmailId},
 				new File[] {getErrorLog(t)},
 				getErrorDetail(t, ste));
+			
+			saveUnhandledExceptionToDb(t, ste, args);
 		} catch (Exception e) {
 			logger.error("Error notifying uncaught server errors", e);
 		}
@@ -159,8 +167,8 @@ public class TransactionalInterceptor {
 			if (stackTrace[i].getMethodName().contains("startTransaction")) {
 				return (i + 1 < stackTrace.length) ? stackTrace[++i] : stackTrace[i];
 			}
-		}
 
+		}
 		return null;
 	}
 
@@ -218,6 +226,22 @@ public class TransactionalInterceptor {
 
 	private boolean areTimesInSameInterval(long t1, long t2, int interval) {
 		return ((t2 - t1) / (60 * 1000)) < interval;
+	}
+	
+	private void saveUnhandledExceptionToDb(Throwable t, StackTraceElement ste, Object[] args) {
+		newTxTmpl.execute(new TransactionCallback<Void>() {
+			@Override
+			public Void doInTransaction(TransactionStatus status) {
+				try {
+					UnhandledExceptionUtil.getInstance().saveUnhandledException(t, ste, args);
+				} catch (Throwable t) {
+					status.setRollbackOnly();
+					logger.error("Error saving unhandled exception to DB", t);
+				}
+
+				return null;
+			}
+		});
 	}
 
 	//

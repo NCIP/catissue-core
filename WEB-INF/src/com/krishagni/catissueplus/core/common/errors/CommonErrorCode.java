@@ -5,7 +5,9 @@ public enum CommonErrorCode implements ErrorCode {
 
 	CONSTRAINT_VIOLATION,
 	
-	FILE_NOT_FOUND;
+	FILE_NOT_FOUND,
+
+	EXCEPTION_NOT_FOUND;
 
 	@Override
 	public String code() {

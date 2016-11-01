@@ -202,4 +202,55 @@
       columnName="COLLECTION_PROTOCOL_ID"
       columnDataType="${int.type}" />
   </changeSet>
+  
+  <changeSet author="mdnasim" id="Track unhandled exceptions">
+    <createTable tableName="OS_UNHANDLED_EXCEPTIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="CLASS_NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="METHOD_NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="TIMESTAMP" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="EXCEPTION" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="STACK_TRACE" type="${clob.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="INPUT_ARGS" type="${clob.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Unhandled exception sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_UNHANDLED_EXCEPTIONS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="FK on user who got unhandled exception">
+    <addForeignKeyConstraint
+      constraintName="FK_UNHANDLED_EXCEPTION_USER_ID"
+      baseTableName="OS_UNHANDLED_EXCEPTIONS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>
