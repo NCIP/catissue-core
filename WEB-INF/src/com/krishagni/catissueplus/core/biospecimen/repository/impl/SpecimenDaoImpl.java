@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
@@ -56,6 +57,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		addSiteCpsCond(query, crit);
 		addCpCond(query, crit);
 		addSpecimenListCond(query, crit);
+		addStorageLocationSiteCond(query, crit);
 
 		if (crit.limitItems()) {
 			query.setFirstResult(crit.startAt()).setMaxResults(crit.maxResults());
@@ -241,6 +243,7 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		return query.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean areDuplicateLabelsPresent() {
 		List<Object[]> rows = getSessionFactory().getCurrentSession()
@@ -248,6 +251,19 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 			.list();
 
 		return rows.size() > 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<Long, Long> getSpecimenStorageSite(Set<Long> specimenIds) {
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_STORAGE_SITE)
+			.setParameterList("specimenIds", specimenIds)
+			.list();
+
+		// null value for site means virtual specimen
+		HashMap<Long, Long> result = new HashMap<>();
+		rows.forEach((row) -> result.put((Long)row[0], (Long)row[1]));
+		return result;
 	}
 
 	private void addIdsCond(Criteria query, List<Long> ids) {
@@ -380,6 +396,20 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 		query.createAlias("specimen.specimenLists", "list").add(Restrictions.eq("list.id", crit.specimenListId()));
 	}
 
+	private void addStorageLocationSiteCond(Criteria query, SpecimenListCriteria crit) {
+		if (StringUtils.isBlank(crit.storageLocationSite())) {
+			return;
+		}
+
+		query.createAlias("specimen.position", "pos", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("pos.container", "cont", JoinType.LEFT_OUTER_JOIN)
+			.createAlias("cont.site", "contSite", JoinType.LEFT_OUTER_JOIN)
+			.add(Restrictions.or(
+				Restrictions.isNull("pos.id"),
+				Restrictions.eq("contSite.name", crit.storageLocationSite())
+			));
+	}
+
 	@SuppressWarnings("unchecked")
 	private Specimen getByVisitAndSrId(String hql, Long visitId, Long srId) {
 		List<Specimen> specimens = sessionFactory.getCurrentSession()
@@ -413,4 +443,6 @@ public class SpecimenDaoImpl extends AbstractDao<Specimen> implements SpecimenDa
 	private static final String GET_LATEST_DISTRIBUTION_AND_RETURN_DATES = FQN + ".getLatestDistributionAndReturnDates";
 
 	private static final String GET_DUPLICATE_LABEL_COUNT = FQN + ".getDuplicateLabelCount";
+
+	private static final String GET_STORAGE_SITE = FQN + ".getStorageSite";
 }

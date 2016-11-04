@@ -74,6 +74,8 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 	private String storageType;
 	
 	private String collectionContainer;
+
+	private String storageSite;
 	
 	private String activityStatus;
 	
@@ -309,6 +311,14 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 		this.collectionContainer = collectionContainer;
 	}
 
+	public String getStorageSite() {
+		return storageSite;
+	}
+
+	public void setStorageSite(String storageSite) {
+		this.storageSite = storageSite;
+	}
+
 	public String getActivityStatus() {
 		return activityStatus;
 	}
@@ -388,6 +398,7 @@ public class SpecimenInfo extends AttributeModifiedSupport implements Comparable
 			location.setId(-1L);
 		} else {
 			location = StorageLocationSummary.from(position);
+			result.setStorageSite(position.getContainer().getSite().getName());
 		}
 		result.setStorageLocation(location);
 

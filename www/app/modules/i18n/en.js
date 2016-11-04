@@ -596,6 +596,7 @@
     "multiple_cp_specimens": "Specimen labels with multiple protocols",
     "select_protocol": "Following specimen labels are present in multiple protocols. Please select the right protocol before proceeding",
     "specimen_not_found": "Specimen {{label}} does not exist",
+    "specimen_not_found_at_send_site": "Specimen {{label}} either does not exist or not stored at {{sendingSite}} site",
     "hide_pending":"Hide Pending",
     "show_pending": "Show Pending",
 
@@ -1733,6 +1734,7 @@
     "details": "Shipment Details",
     "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
     "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma, tab or newline and click add",
+    "multi_site_specimens": "Can't ship specimens from multiple storage sites",
 
     "filters": "Filters",
     "report_gen_initiated": "Generating shipment report...",

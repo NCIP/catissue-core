@@ -20,6 +20,8 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	
 	private boolean useMrnSites;
 
+	private String storageLocationSite;
+
 	public SpecimenListCriteria() {
 		exactMatch(true);
 	}
@@ -89,6 +91,15 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	
 	public SpecimenListCriteria useMrnSites(boolean useMrnSites) {
 		this.useMrnSites = useMrnSites;
+		return self();
+	}
+
+	public String storageLocationSite() {
+		return storageLocationSite;
+	}
+
+	public SpecimenListCriteria storageLocationSite(String storageLocationSite) {
+		this.storageLocationSite = storageLocationSite;
 		return self();
 	}
 }

@@ -39,4 +39,6 @@ public interface SpecimenDao extends Dao<Specimen> {
 	public List<Visit> getSpecimenVisits(SpecimenListCriteria crit);
 
 	public boolean areDuplicateLabelsPresent();
+
+	public Map<Long, Long> getSpecimenStorageSite(Set<Long> specimenIds);
 }

@@ -332,28 +332,36 @@ public class ShipmentServiceImpl implements ShipmentService, ObjectStateParamsRe
 	
 	private void ensureValidSpecimenSites(List<Specimen> specimens, Site sendingSite, Site receivingSite, OpenSpecimenException ose) {
 		Map<Long, Specimen> specimenMap = specimens.stream().collect(Collectors.toMap(Specimen::getId, spmn -> spmn));
+		ensureValidSpecimenSendingSites(specimenMap, sendingSite, ose);
+		ensureValidSpecimenRecvSites(specimenMap, receivingSite, ose);
+	}
+
+	private void ensureValidSpecimenSendingSites(Map<Long, Specimen> specimenMap, Site sendingSite, OpenSpecimenException ose) {
+		Map<Long, Long> spmnStorageSites = daoFactory.getSpecimenDao().getSpecimenStorageSite(specimenMap.keySet());
+
+		String invalidSpmnLabels = specimenMap.values().stream()
+			.filter(spmn -> {
+				Long spmnSiteId = spmnStorageSites.get(spmn.getId());
+				return spmnSiteId != null && !spmnSiteId.equals(sendingSite.getId());
+			})
+			.map(spmn -> spmn.getLabel())
+			.collect(Collectors.joining(", "));
+
+		if (StringUtils.isNotBlank(invalidSpmnLabels)) {
+			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_SEND_SITE, invalidSpmnLabels, sendingSite.getName());
+		}
+	}
+
+	private void ensureValidSpecimenRecvSites(Map<Long, Specimen> specimenMap, Site receivingSite, OpenSpecimenException ose) {
 		Map<Long, Set<Long>> spmnSites = daoFactory.getSpecimenDao().getSpecimenSites(specimenMap.keySet());
-		
-		Set<String> notBelongToSendSiteSpmns = new HashSet<>();
-		Set<String> notBelongToRecvSiteSpmns = new HashSet<>();
-		for (Map.Entry<Long, Set<Long>> spmnSite : spmnSites.entrySet()) {
-			if (!spmnSite.getValue().contains(sendingSite.getId())) {
-				notBelongToSendSiteSpmns.add(specimenMap.get(spmnSite.getKey()).getLabel());
-			}
-			
-			if (!spmnSite.getValue().contains(receivingSite.getId())) {
-				notBelongToRecvSiteSpmns.add(specimenMap.get(spmnSite.getKey()).getLabel());
-			}
-		}
-		
-		if (CollectionUtils.isNotEmpty(notBelongToSendSiteSpmns)) {
-			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_SEND_SITE, StringUtils.join(notBelongToSendSiteSpmns, ','),
-					sendingSite.getName());
-		}
-		
-		if (CollectionUtils.isNotEmpty(notBelongToRecvSiteSpmns)) {
-			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_REC_SITE, StringUtils.join(notBelongToRecvSiteSpmns, ','),
-					receivingSite.getName());
+
+		String invalidSpmnLabels = spmnSites.entrySet().stream()
+			.filter(spmnSite -> !spmnSite.getValue().contains(receivingSite.getId()))
+			.map(spmnSite -> specimenMap.get(spmnSite.getKey()).getLabel())
+			.collect(Collectors.joining(", "));
+
+		if (StringUtils.isNotBlank(invalidSpmnLabels)) {
+			ose.addError(ShipmentErrorCode.SPEC_NOT_BELONG_TO_REC_SITE, invalidSpmnLabels, receivingSite.getName());
 		}
 	}
 	

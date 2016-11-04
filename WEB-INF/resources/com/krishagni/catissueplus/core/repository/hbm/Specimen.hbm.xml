@@ -217,5 +217,17 @@
       having
         count(id) > 1
     </query>
+
+    <query name="getStorageSite">
+      select
+        spmn.id, site.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Specimen spmn
+        left join spmn.position as pos
+        left join pos.container as container
+        left join container.site as site
+      where
+        spmn.id in :specimenIds
+    </query>
   </class>
 </hibernate-mapping>

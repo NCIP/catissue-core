@@ -69,6 +69,7 @@ angular.module('openspecimen')
           cpId: scope.cpId,
           specimenClass: scope.entity.specimenClass,
           specimenType: scope.entity.type,
+          site: scope.site,
           storeSpecimensEnabled: true,
           maxResults: 10
         });
@@ -191,7 +192,8 @@ angular.module('openspecimen')
         entity: '=',
         cpId: '=',
         virtual: "=",
-        containerListCache: '=?'
+        containerListCache: '=?',
+        site: '=?'
       },
 
       compile: function(tElem, tAttrs) {

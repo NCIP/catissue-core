@@ -121,10 +121,15 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<List<String>> req) {
+	public ResponseEvent<List<SpecimenInfo>> getSpecimens(RequestEvent<SpecimenListCriteria> req) {
 		try {
-			List<Specimen> specimens = getSpecimensByLabel(req.getPayload());
-			return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, req.getPayload())));
+			SpecimenListCriteria crit = req.getPayload();
+			List<Specimen> specimens = getSpecimens(crit);
+			if (CollectionUtils.isNotEmpty(crit.labels())) {
+				return ResponseEvent.response(SpecimenInfo.from(Specimen.sortByLabels(specimens, crit.labels())));
+			}
+
+			return ResponseEvent.response(SpecimenInfo.from(specimens));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

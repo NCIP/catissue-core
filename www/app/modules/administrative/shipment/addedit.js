@@ -20,13 +20,51 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
         shipment.shipmentItems = getShipmentItems(SpecimensHolder.getSpecimens());
         SpecimensHolder.setSpecimens(null);
       }
-      
+
+      if (!shipment.id && !areSpmnsOfSameSite(shipment.shipmentItems)) {
+        Alerts.error('shipments.multi_site_specimens');
+        $scope.back();
+        return;
+      }
+
       if (!shipment.shippedDate) {
         shipment.shippedDate = new Date();
       }
 
       loadInstitutes();
       setUserAndSiteList(shipment);
+    }
+
+    function areSpmnsOfSameSite(shipmentItems) {
+      if (!shipmentItems) {
+        return true;
+      }
+
+      var site, sameSite = true;
+      for (var i = 0; i < shipmentItems.length; ++i) {
+        var spmn = shipmentItems[i].specimen;
+
+        if (!spmn.storageSite || (!!spmnRequest && !spmn.selected)) {
+          //
+          // either the specimen doesn't have storage site or
+          // it is coming from request but not selected for shipping
+          //
+          continue;
+        }
+
+        if (!!site && site != spmn.storageSite) {
+          sameSite = false;
+          break;
+        }
+
+        site = spmn.storageSite;
+      }
+
+      if (sameSite) {
+        $scope.shipment.sendingSite = site;
+      }
+
+      return sameSite;
     }
     
     function loadInstitutes () {
@@ -181,7 +219,13 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
     }
 
     $scope.addSpecimens = function(labels) {
-      return SpecimenUtil.getSpecimens(labels).then(
+      var filterOpts = {storageLocationSite: $scope.shipment.sendingSite};
+      var errorOpts  = {
+        code  : 'specimens.specimen_not_found_at_send_site',
+        params: {sendingSite: $scope.shipment.sendingSite}
+      };
+
+      return SpecimenUtil.getSpecimens(labels, filterOpts, errorOpts).then(
         function (specimens) {
           if (!specimens) {
             return false;

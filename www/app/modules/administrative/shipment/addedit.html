@@ -299,7 +299,8 @@
           </td>
           <td class="col" style="overflow: visible;" ng-if="shipment.status == 'Shipped'">
             <os-storage-position os-md-input
-              entity="specimen" cp-id="specimen.cpId" container-list-cache="containerListCache" hide-placeholder>
+              entity="specimen" cp-id="specimen.cpId" container-list-cache="containerListCache"
+              site="shipment.receivingSite" hide-placeholder>
             </os-storage-position>
           </td>
           <td class="col" style="overflow: visible;" ng-if="shipment.status == 'Shipped'">
