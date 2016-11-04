@@ -65,5 +65,6 @@
 
   <include file="db/3.4/schema.xml"/>
   <include file="db/3.4/config.xml"/>
+  <include file="db/3.4/permissible-values.xml"/>
   <include file="db/3.4/audit.xml"/>
 </databaseChangeLog>

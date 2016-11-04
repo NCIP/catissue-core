@@ -1505,6 +1505,9 @@
     "object_type": "Object Type",
     "create": "Create",
     "update": "Update",
+    "date_format": "Date Format",
+    "time_format": "Time Format",
+    "date_time_format": "Date and Time Format",
     "status_COMPLETED": "Completed",
     "status_FAILED": "Failed",
     "status_IN_PROGRESS": "In Progress",
@@ -1550,7 +1553,7 @@
       "CREATE": "Create",
       "UPDATE": "Update"
     },
-    
+
     "extension_name": "{{params.formName}} ({{params.entityType}})"
   },
 
@@ -2064,6 +2067,8 @@
 
       "training": {
         "title": "Training",
+        "bo_datetime_fmt_help_link": "Import Date and Time Formats",
+        "bo_datetime_fmt_help_link_desc": "Link to document describing date and time formats that can be used in bulk import input file",
         "cp_help_link": "Collection Protocol",
         "cp_help_link_desc": "Link to training materials on how to manage collection protocols",
         "container_help_link": "Container",

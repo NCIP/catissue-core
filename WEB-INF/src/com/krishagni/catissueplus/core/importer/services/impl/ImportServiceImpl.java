@@ -31,6 +31,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.events.MergedObject;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
@@ -40,6 +41,7 @@ import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.Status;
@@ -228,6 +230,10 @@ public class ImportServiceImpl implements ImportService {
 				runningJobs.remove(job.getId());
 			}
 
+			if (e instanceof OpenSpecimenException) {
+				return ResponseEvent.error((OpenSpecimenException) e);
+			}
+
 			return ResponseEvent.serverError(e);			
 		}
 	}
@@ -368,21 +374,55 @@ public class ImportServiceImpl implements ImportService {
 	}
 	
 	private ImportJob createImportJob(ImportDetail detail) { // TODO: ensure checks are done
+		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+
 		ImportJob job = new ImportJob();
 		job.setCreatedBy(AuthUtil.getCurrentUser());
 		job.setCreationTime(Calendar.getInstance().getTime());
 		job.setName(detail.getObjectType());
 		job.setStatus(Status.IN_PROGRESS);
 		job.setParams(detail.getObjectParams());
-		
-		String importType = detail.getImportType();
-		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));
-		
-		String csvType = detail.getCsvType();
-		job.setCsvtype(StringUtils.isBlank(csvType) ? CsvType.SINGLE_ROW_PER_OBJ : CsvType.valueOf(csvType));
+
+		setImportType(detail, job, ose);
+		setCsvType(detail, job, ose);
+		setDateAndTimeFormat(detail, job, ose);
+		ose.checkAndThrow();
+
 		return job;		
 	}
-	
+
+	private void setImportType(ImportDetail detail, ImportJob job, OpenSpecimenException ose) {
+		String importType = detail.getImportType();
+		job.setType(StringUtils.isBlank(importType) ? Type.CREATE : Type.valueOf(importType));
+	}
+
+	private void setCsvType(ImportDetail detail, ImportJob job, OpenSpecimenException ose) {
+		String csvType = detail.getCsvType();
+		job.setCsvtype(StringUtils.isBlank(csvType) ? CsvType.SINGLE_ROW_PER_OBJ : CsvType.valueOf(csvType));
+	}
+
+	private void setDateAndTimeFormat(ImportDetail detail, ImportJob job, OpenSpecimenException ose) {
+		String dateFormat = detail.getDateFormat();
+		if (StringUtils.isBlank(dateFormat)) {
+			dateFormat = ConfigUtil.getInstance().getDeDateFmt();
+		} else if (!Utility.isValidDateFormat(dateFormat)) {
+			ose.addError(ImportJobErrorCode.INVALID_DATE_FORMAT, dateFormat);
+			return;
+		}
+
+		job.setDateFormat(dateFormat);
+
+		String timeFormat = detail.getTimeFormat();
+		if (StringUtils.isBlank(timeFormat)) {
+			timeFormat = ConfigUtil.getInstance().getTimeFmt();
+		} else if (!Utility.isValidDateFormat(dateFormat + " " + timeFormat)) {
+			ose.addError(ImportJobErrorCode.INVALID_TIME_FORMAT, timeFormat);
+			return;
+		}
+
+		job.setTimeFormat(timeFormat);
+	}
+
 	private class ImporterTask implements Runnable {
 		private Authentication auth;
 		
@@ -410,13 +450,10 @@ public class ImportServiceImpl implements ImportService {
 			ObjectReader objReader = null;
 			CsvWriter csvWriter = null;
 			try {
-				ObjectSchema   schema   = schemaFactory.getSchema(job.getName(), job.getParams());
+				ObjectSchema schema = schemaFactory.getSchema(job.getName(), job.getParams());
 				String filePath = getJobDir(job.getId()) + File.separator + "input.csv";
 				csvWriter = getOutputCsvWriter(job);
-				objReader = new ObjectReader(
-						filePath, schema,
-						ConfigUtil.getInstance().getDeDateFmt(),
-						ConfigUtil.getInstance().getTimeFmt());
+				objReader = new ObjectReader(filePath, schema, job.getDateFormat(), job.getTimeFormat());
 
 				List<String> columnNames = objReader.getCsvColumnNames();
 				columnNames.add("OS_IMPORT_STATUS");

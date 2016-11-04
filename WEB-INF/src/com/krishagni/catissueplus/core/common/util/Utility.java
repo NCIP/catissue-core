@@ -566,4 +566,15 @@ public class Utility {
 	public static long daysBetween(Date start, Date end) {
 		return TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
 	}
+
+	public static boolean isValidDateFormat(String format) {
+		boolean isValid = true;
+		try {
+			new SimpleDateFormat(format);
+		} catch (IllegalArgumentException e) {
+			isValid = false;
+		}
+
+		return isValid;
+	}
 }

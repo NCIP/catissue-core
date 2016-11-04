@@ -252,5 +252,12 @@
       baseColumnNames="USER_ID"
       referencedTableName="CATISSUE_USER"
       referencedColumnNames="IDENTIFIER"/>
+  </changeSet>		
+
+  <changeSet author="vgaikwad" id="Bulk import input file date and time format">
+    <addColumn tableName="OS_BULK_IMPORT_JOBS">
+      <column name="DATE_FORMAT" type="${text.type}(16)"/>
+      <column name="TIME_FORMAT" type="${text.type}(16)"/>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

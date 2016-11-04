@@ -150,4 +150,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Date and time formats help link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'bo_datetime_fmt_help_link',
+        'bo_datetime_fmt_help_link', 'bo_datetime_fmt_help_link_desc',
+        'STRING', 'https://openspecimen.atlassian.net/wiki/x/MoAcB'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

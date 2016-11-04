@@ -8,6 +8,8 @@ angular.module('openspecimen')
       if (attrs.link) {
         loadLink(scope, module, attrs.link);
       }
+
+
     }
 
     function loadLink(scope, module, property) {

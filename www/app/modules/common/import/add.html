@@ -54,8 +54,8 @@
       </div>
     </form>
 
-    <form class="form-horizontal" ng-hide="importDetail.showImportType == false">
-      <div class="form-group">
+    <form class="form-horizontal">
+      <div class="form-group" ng-hide="importDetail.showImportType == false">
         <label class="col-xs-3 control-label" translate="bulk_imports.import_type">
           Import Type
         </label>
@@ -68,6 +68,27 @@
             <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'UPDATE'"> 
             <span translate="bulk_imports.update"></span>
           </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.date_time_format">
+          Date and Time Format
+        </label>
+        <div class="col-xs-3">
+          <os-pvs name="dateFormat" ng-model="importJob.dateFormat" attribute="date_format"
+            placeholder="{{'bulk_imports.date_format' | translate}}" required>
+          </os-pvs>
+        </div>
+        <div class="col-xs-2">
+          <os-pvs name="timeFormat" ng-model="importJob.timeFormat" attribute="time_format"
+            placeholder="{{'bulk_imports.time_format' | translate}}" required>
+          </os-pvs>
+        </div>
+        <div class="col-xs-1">
+          <div class="os-btns">
+            <os-help class="btn default" link="bo_datetime_fmt_help_link"></os-help>
+          </div>
         </div>
       </div>
     </form>

@@ -31,7 +31,11 @@ public class ImportJob extends BaseEntity {
 	private Type type;
 	
 	private CsvType csvtype;
-	
+
+	private String dateFormat;
+
+	private String timeFormat;
+
 	private volatile Status status;
 	
 	private Long totalRecords;
@@ -70,6 +74,22 @@ public class ImportJob extends BaseEntity {
 
 	public void setCsvtype(CsvType csvtype) {
 		this.csvtype = csvtype;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getTimeFormat() {
+		return timeFormat;
+	}
+
+	public void setTimeFormat(String timeFormat) {
+		this.timeFormat = timeFormat;
 	}
 
 	public Status getStatus() {
