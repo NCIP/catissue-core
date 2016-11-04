@@ -6,7 +6,7 @@
         <div class="value value-md" ng-if="!uploadMode">
           <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
             <span ng-switch-when="true">
-              <span ng-switch on="hasPhiAccess">
+              <span ng-switch on="userCtx.hasPhiAccess">
                 <a ng-switch-when="true" ng-href="{{consentFormUrl}}" target="_blank">
                   <span>{{consent.consentDocumentName}}</span>
                 </a>
