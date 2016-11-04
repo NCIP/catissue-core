@@ -134,14 +134,14 @@ public class ConsentDetail extends AttributeModifiedSupport implements Mergeable
 		this.response = response;
 	}
 
-	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr) {
+	public static ConsentDetail fromCpr(CollectionProtocolRegistration cpr, boolean excludePhi) {
 		ConsentDetail consent = new ConsentDetail();
 		consent.setConsentSignatureDate(cpr.getConsentSignDate());
 		consent.setComments(cpr.getConsentComments());
 		
 		String fileName = cpr.getSignedConsentDocumentName();
 		if (fileName != null) {
-			fileName = fileName.split("_", 2)[1];
+			fileName = excludePhi ? "###" : fileName.split("_", 2)[1];
 		}
 		consent.setConsentDocumentName(fileName);
 		

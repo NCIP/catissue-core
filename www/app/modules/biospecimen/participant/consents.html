@@ -5,10 +5,20 @@
         <strong class="key key-sm" translate="participant.consent.signed_form">Signed Consent Form</strong>
         <div class="value value-md" ng-if="!uploadMode">
           <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
-            <a ng-href="{{consentFormUrl}}" target="_blank" ng-switch-when="true">{{consent.consentDocumentName}}</a>
+            <span ng-switch-when="true">
+              <span ng-switch on="hasPhiAccess">
+                <a ng-switch-when="true" ng-href="{{consentFormUrl}}" target="_blank">
+                  <span>{{consent.consentDocumentName}}</span>
+                </a>
+                <span ng-switch-when="false">
+                  {{consent.consentDocumentName}}
+                </span>
+              </span>
+            </span>
             <span ng-switch-when="false" translate="common.not_specified">Not Specified</span>
           </div>
-          <div class="col-xs-2" ng-switch on="!!consent.consentDocumentName" show-if-allowed="participantResource.updateOpts">
+          <div class="col-xs-2" ng-switch on="!!consent.consentDocumentName" ng-if="userCtx.hasPhiAccess"
+            show-if-allowed="participantResource.updateOpts">
             <div class="btn btn-default btn-xs" ng-switch-when="false" ng-click="showUploadMode()">
               <span class="fa fa-wrench"></span>
             </div>

@@ -1,7 +1,6 @@
 
 angular.module('os.biospecimen.participant.consents', [])
-  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consent,
-    PvManager,  DeleteUtil) {
+  .controller('ParticipantConsentsCtrl', function($scope, $sce, cpr, consent, PvManager,  DeleteUtil) {
 
     function init() {
       $scope.consentFormUploader = {};
