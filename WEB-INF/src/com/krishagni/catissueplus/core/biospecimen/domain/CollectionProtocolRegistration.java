@@ -61,6 +61,8 @@ public class CollectionProtocolRegistration {
 	@Qualifier("ppidGenerator")
 	private LabelGenerator labelGenerator;
 
+	private transient boolean forceDelete;
+
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -201,6 +203,14 @@ public class CollectionProtocolRegistration {
 		this.barcode = barcode;
 	}
 
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
+
 	public boolean isActive() {
 		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(this.getActivityStatus());
 	}
@@ -224,7 +234,7 @@ public class CollectionProtocolRegistration {
 	}
 	
 	public void delete() {
-		delete(true);
+		delete(!isForceDelete());
 	}
 
 	public void delete(boolean checkDependency) {
@@ -252,6 +262,7 @@ public class CollectionProtocolRegistration {
 	}
 
 	public void update(CollectionProtocolRegistration cpr) {
+		setForceDelete(cpr.isForceDelete());
 		updateActivityStatus(cpr.getActivityStatus());
 		if (!isActive()) {
 			return;

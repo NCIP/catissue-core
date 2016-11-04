@@ -19,6 +19,7 @@ public class CprImporter implements ObjectImporter<CollectionProtocolRegistratio
 	public ResponseEvent<CollectionProtocolRegistrationDetail> importObject(RequestEvent<ImportObjectDetail<CollectionProtocolRegistrationDetail>> req) {
 		try {
 			ImportObjectDetail<CollectionProtocolRegistrationDetail> detail = req.getPayload();
+			detail.getObject().setForceDelete(true);
 			RequestEvent<CollectionProtocolRegistrationDetail> cprReq = new RequestEvent<>(detail.getObject());
 			
 			if (detail.isCreate()) {

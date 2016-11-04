@@ -37,7 +37,7 @@ angular.module('os.common.delete', [])
       if (entityProps.entityIds) {
         bulkDelete();
       } else {
-        $scope.entity.$remove().then(onDeletion);
+        $scope.entity.$remove(!!entityProps.forceDelete).then(onDeletion);
       }
     };
 

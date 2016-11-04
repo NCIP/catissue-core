@@ -711,7 +711,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 	
 	public void updateStatus(String activityStatus, String reason){
-		updateStatus(activityStatus, AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), reason, false);
+		updateStatus(activityStatus, AuthUtil.getCurrentUser(), Calendar.getInstance().getTime(), reason, isForceDelete());
 	}
 	
 	//

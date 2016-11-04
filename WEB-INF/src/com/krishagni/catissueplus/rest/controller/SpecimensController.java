@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenQueryCriteria;
@@ -55,9 +53,6 @@ public class SpecimensController {
 	
 	@Autowired
 	private FormService formSvc;
-	
-	@Autowired
-	private HttpServletRequest httpServletRequest;
 	
 	@RequestMapping(method = RequestMethod.HEAD)
 	@ResponseStatus(HttpStatus.OK)
@@ -206,7 +201,7 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SpecimenInfo deleteSpecimen(@PathVariable("id") Long specimenId) {
-		SpecimenDeleteCriteria crit = new SpecimenDeleteCriteria();
+		CpEntityDeleteCriteria crit = new CpEntityDeleteCriteria();
 		crit.setId(specimenId);
 		crit.setForceDelete(false);
 
@@ -219,9 +214,9 @@ public class SpecimensController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<SpecimenInfo> deleteSpecimens(@RequestParam(value = "id") Long[] specimenIds) {
-		List<SpecimenDeleteCriteria> criteria = new ArrayList<SpecimenDeleteCriteria>();
+		List<CpEntityDeleteCriteria> criteria = new ArrayList<>();
 		for (Long specimenId : specimenIds) {
-			SpecimenDeleteCriteria criterion = new SpecimenDeleteCriteria();
+			CpEntityDeleteCriteria criterion = new CpEntityDeleteCriteria();
 			criterion.setId(specimenId);
 			criterion.setForceDelete(true);
 			criteria.add(criterion);

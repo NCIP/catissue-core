@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolRegistrationDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
@@ -56,10 +56,6 @@ public class CollectionProtocolRegistrationsController {
 
 	@Autowired
 	private FormService formSvc;
-	
-	@Autowired
-	private HttpServletRequest httpReq;
-	
 	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
@@ -227,8 +223,18 @@ public class CollectionProtocolRegistrationsController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CollectionProtocolRegistrationDetail deleteRegistration(@PathVariable("id") Long cprId) {
-		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.deleteRegistration(getRegQueryReq(cprId));
+	public CollectionProtocolRegistrationDetail deleteRegistration(
+			@PathVariable("id")
+			Long cprId,
+
+			@RequestParam(value = "forceDelete", required = false, defaultValue = "false")
+			boolean forceDelete) {
+
+		CpEntityDeleteCriteria crit = new CpEntityDeleteCriteria();
+		crit.setId(cprId);
+		crit.setForceDelete(forceDelete);
+
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.deleteRegistration(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

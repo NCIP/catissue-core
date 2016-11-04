@@ -42,6 +42,11 @@ public class CollectionProtocolRegistrationDetail extends AttributeModifiedSuppo
 	private String aliquotLabelFmt;
 	
 	private String derivativeLabelFmt;
+
+	//
+	// transient variables specifying action to be performed
+	//
+	private boolean forceDelete;
 	
 	public Long getId() {
 		return id;
@@ -147,6 +152,14 @@ public class CollectionProtocolRegistrationDetail extends AttributeModifiedSuppo
 		this.derivativeLabelFmt = derivativeLabelFmt;
 	}
 	
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
+
 	public static CollectionProtocolRegistrationDetail from(CollectionProtocolRegistration cpr, boolean excludePhi) {
 		return from(cpr, excludePhi, null);
 	}

@@ -28,11 +28,11 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenFactory;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
+import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintSpecimenLabelDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ReceivedEventDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenAliquotsSpec;
-import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenQueryCriteria;
@@ -230,12 +230,12 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<SpecimenInfo>> deleteSpecimens(RequestEvent<List<SpecimenDeleteCriteria>> request) {
+	public ResponseEvent<List<SpecimenInfo>> deleteSpecimens(RequestEvent<List<CpEntityDeleteCriteria>> request) {
 		List<SpecimenInfo> result = new ArrayList<>();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 
-		for (SpecimenDeleteCriteria criteria : request.getPayload()) {
-			Specimen specimen = getSpecimen(criteria.getId(), criteria.getCpShortTitle(), criteria.getLabel(), ose);
+		for (CpEntityDeleteCriteria criteria : request.getPayload()) {
+			Specimen specimen = getSpecimen(criteria.getId(), criteria.getCpShortTitle(), criteria.getName(), ose);
 			if (specimen == null) {
 				continue;
 			}

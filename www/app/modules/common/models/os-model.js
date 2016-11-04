@@ -99,8 +99,9 @@ angular.module('os.common.models', [])
         return $http.put(url + this.$id() + '/status', payload).then(Model.modelRespTransform);
       }
 
-      Model.prototype.$remove = function () {
-        return $http['delete'](url + this.$id()).then(Model.modelRespTransform);
+      Model.prototype.$remove = function (forceDelete) {
+        var params = !!forceDelete ? '?forceDelete=' + forceDelete : '';
+        return $http['delete'](url + this.$id() + params).then(Model.modelRespTransform);
       };
 
       Model.prototype.$patch = function(modifiedProps) {
