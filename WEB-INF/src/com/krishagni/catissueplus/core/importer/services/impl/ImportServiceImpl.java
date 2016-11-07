@@ -41,6 +41,8 @@ import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
+import com.krishagni.catissueplus.core.common.util.EmailUtil;
+import com.krishagni.catissueplus.core.common.util.MessageUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob;
 import com.krishagni.catissueplus.core.importer.domain.ImportJob.CsvType;
@@ -242,7 +244,7 @@ public class ImportServiceImpl implements ImportService {
 	public ResponseEvent<ImportJobDetail> stopJob(RequestEvent<Long> req) {
 		try {
 			ImportJob job = runningJobs.get(req.getPayload());
-			if (job == null || job.isInProgress()) {
+			if (job == null || !job.isInProgress()) {
 				return ResponseEvent.userError(ImportJobErrorCode.NOT_IN_PROGRESS, req.getPayload());
 			}
 
@@ -477,6 +479,7 @@ public class ImportServiceImpl implements ImportService {
 				runningJobs.remove(job.getId());
 				IOUtils.closeQuietly(objReader);
 				closeQuietly(csvWriter);
+				sendJobStatusNotification();
 			}
 		}
 
@@ -696,5 +699,46 @@ public class ImportServiceImpl implements ImportService {
 				callback.fail(t);
 			}
 		}
+
+		private void sendJobStatusNotification() {
+			String entityName = getEntityName();
+			String op = getMsg("bulk_import_ops_" + job.getType());
+			String [] subjParams = new String[] {
+				job.getId().toString(),
+				op,
+				entityName
+			};
+
+			Map<String, Object> props = new HashMap<>();
+			props.put("job", job);
+			props.put("entityName", entityName);
+			props.put("op", op);
+			props.put("status", getMsg("bulk_import_statuses_" + job.getStatus()));
+			props.put("atomic", atomic);
+			props.put("$subject", subjParams);
+
+			String[] rcpts = {job.getCreatedBy().getEmailAddress()};
+			EmailUtil.getInstance().sendEmail(JOB_STATUS_EMAIL_TMPL, rcpts, null, props);
+		}
+
+		private String getEntityName() {
+			String entityName;
+
+			if (job.getName().equals(EXTENSIONS)) {
+				entityName = job.getParams().get("formName") + " (" + job.getParams().get("entityType") + ")";
+			} else {
+				entityName = getMsg("bulk_import_entities_" + job.getName());
+			}
+
+			return entityName;
+		}
+
+		private String getMsg(String key, Object ... params) {
+			return MessageUtil.getInstance().getMessage(key, params);
+		}
+
+		private static final String JOB_STATUS_EMAIL_TMPL = "import_job_status_notif";
+
+		private static final String EXTENSIONS = "extensions";
 	}
 }
