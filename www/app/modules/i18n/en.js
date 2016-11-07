@@ -901,7 +901,6 @@
     "login_name": "Login Name",
     "password": "Password",
     "confirm_password": "Confirm Password",
-    "password_rule": "Tip: Password should contain at least 1 uppercase letter, 1 lowercase letter, 1 number and should be minimum 8 characters long.",
     "sign_in_title": "Sign in to continue to OpenSpecimen",
     "sign_in_failed": "The username or password you entered is incorrect",
     "sign_in": "Sign In",
@@ -1892,7 +1891,9 @@
         "password_pattern": "Password Complexity",
         "password_pattern_desc": "Regular expression specifying complexity requirements that user passwords must meet. For example - pattern for at least one capital letter, one small letter, one number and should be minimum 8 characters long.",
         "account_inactive_days": "Inactive Account",
-        "account_inactive_days_desc": "Number of days of inactivity before user account is locked."
+        "account_inactive_days_desc": "Number of days of inactivity before user account is locked.",
+        "password_rule": "Password Complexity Description",
+        "password_rule_desc": "User friendly description of password complexity requirements."
       },
       
       "administrative": {

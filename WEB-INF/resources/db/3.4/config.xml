@@ -160,4 +160,52 @@
       );
     </sql>
   </changeSet>
+  
+  <changeSet author="mdnasim" id="Bug fix: Update password complexity regular expression" dbms="mysql">
+    <sql>
+      update
+        os_cfg_settings s
+        inner join os_cfg_props p on p.identifier = s.property_id
+        inner join os_modules m on m.identifier = p.module_id
+      set
+        s.value = '((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})'
+      where
+        m.name = 'auth' and
+        p.name = 'password_pattern' and
+        s.activity_status = 'Active';
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Reset password update date of all users">
+    <sql>
+      update
+        catissue_password
+      set
+        update_date = ${now}
+      where
+        identifier in (
+          select
+            t.pid
+          from (
+            select
+              max(p.identifier) as pid
+            from
+              catissue_password p
+            group by
+              p.user_id
+          ) t
+        )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Setting to describe password complexity rules">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_rule',
+        'password_rule', 'password_rule_desc',
+        'STRING', 'Tip: Password should contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 
+         should be minimum 8 characters long.'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

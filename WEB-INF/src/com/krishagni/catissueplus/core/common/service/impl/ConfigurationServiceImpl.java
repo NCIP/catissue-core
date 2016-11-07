@@ -471,6 +471,28 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		
 		return getStrSetting("common", "data_dir", dataDir);
 	}
+	
+	@Override
+	public Map<String, String> getPasswordSettings() {
+		Map<String, ConfigSetting> moduleConfig = configSettings.get("auth");
+		if (moduleConfig == null) {
+			return Collections.emptyMap();
+		}
+		
+		Map<String, String> result = new HashMap<>();
+		
+		ConfigSetting pattern = moduleConfig.get("password_pattern");
+		if (pattern != null) {
+			result.put("pattern", pattern.getValue());
+		}
+		
+		ConfigSetting desc = moduleConfig.get("password_rule");
+		if (desc != null) {
+			result.put("desc", desc.getValue());
+		}
+		
+		return result;
+	}
 				
 	@Override
 	public void afterPropertiesSet() throws Exception {

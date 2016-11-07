@@ -1,6 +1,5 @@
 package com.krishagni.catissueplus.rest.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -123,6 +122,13 @@ public class ConfigurationController {
 		} finally {
 			IOUtils.closeQuietly(in);
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/password")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Map<String, String> getPasswordSettings() {
+		return cfgSvc.getPasswordSettings();
 	}
 
 	public static <T> RequestEvent<T> request(T payload) {
