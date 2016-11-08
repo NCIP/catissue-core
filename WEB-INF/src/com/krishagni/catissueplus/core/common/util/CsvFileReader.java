@@ -127,7 +127,7 @@ public class CsvFileReader implements CsvReader {
 			for (int i = 0; i < line.length; ++i) {
 				if (line[i] == null || line[i].trim().length() == 0) {
 					throw new CsvException(
-							"CSV file column names line has empty/blank column names");
+							"CSV file column names line has empty/blank column names", line);
 				}
 				columnNameIdxMap.put(line[i].trim(), i);
 			}

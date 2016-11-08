@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
+import com.krishagni.catissueplus.core.common.util.CsvException;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvReader;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
@@ -61,6 +62,8 @@ public class ObjectReader implements Closeable {
 			keyColumnIndices = schema.getKeyColumnNames().stream()
 				.map(columnName -> getCsvColumnNames().indexOf(columnName))
 				.collect(Collectors.toList());
+		} catch (CsvException csvEx) {
+			throw csvEx;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

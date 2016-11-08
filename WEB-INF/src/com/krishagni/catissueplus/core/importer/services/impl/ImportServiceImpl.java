@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -38,6 +39,7 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.CsvException;
 import com.krishagni.catissueplus.core.common.util.CsvFileReader;
 import com.krishagni.catissueplus.core.common.util.CsvFileWriter;
 import com.krishagni.catissueplus.core.common.util.CsvWriter;
@@ -234,9 +236,11 @@ public class ImportServiceImpl implements ImportService {
 
 			if (e instanceof OpenSpecimenException) {
 				return ResponseEvent.error((OpenSpecimenException) e);
+			} else if (e instanceof CsvException) {
+				return ResponseEvent.userError(ImportJobErrorCode.RECORD_PARSE_ERROR, e.getLocalizedMessage());
 			}
 
-			return ResponseEvent.serverError(e);			
+			return ResponseEvent.serverError(e);
 		}
 	}
 
@@ -475,6 +479,18 @@ public class ImportServiceImpl implements ImportService {
 				logger.error("Error running import records job", e);
 				saveJob(totalRecords, failedRecords, Status.FAILED);
 				failed(e);
+
+				String[] errorLine = null;
+				if (e instanceof CsvException) {
+					errorLine = ((CsvException) e).getErroneousLine();
+				}
+
+				if (errorLine == null) {
+					errorLine = new String[] { e.getMessage() };
+				}
+
+				csvWriter.writeNext(errorLine);
+				csvWriter.writeNext(new String[] { ExceptionUtils.getFullStackTrace(e) });
 			} finally {
 				runningJobs.remove(job.getId());
 				IOUtils.closeQuietly(objReader);
