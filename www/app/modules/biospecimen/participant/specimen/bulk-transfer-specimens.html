@@ -14,11 +14,14 @@
           <table class="os-table bulk-edit">
             <thead class="os-table-head">
               <tr class="row">
-                <th class="col os-col-30">
+                <th class="col os-col-20">
                   <span translate="specimens.label">Label</span>
                 </th>
-                <th class="col os-col-20">
+                <th class="col os-col-15">
                   <span translate="specimens.cp">Collection Protocol</span>
+                </th>
+                <th class="col os-col-15">
+                  <span translate="specimens.type">Type</span>
                 </th>
                 <th class="col os-col-20">
                   <span translate="specimens.bulk_transfer.current_location">Current Location</span>
@@ -43,6 +46,9 @@
                 </td>
                 <td class="col">
                   <span>{{spmn.cpShortTitle}}</span>
+                </td>
+                <td class="col">
+                  <span>{{spmn.type}}</span>
                 </td>
                 <td class="col">
                   <os-disp-storage-position position="spmn.oldLocation"></os-disp-storage-position>

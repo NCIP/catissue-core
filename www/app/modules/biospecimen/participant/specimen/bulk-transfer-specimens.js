@@ -18,9 +18,10 @@ angular.module('os.biospecimen.specimen')
 
     $scope.copyFirstLocationToAll = function() {
       var location = $scope.specimens[0].storageLocation;
-      angular.forEach($scope.specimens, function(spmn) {
-        angular.extend(spmn.storageLocation, location);
-      });
+      location = !location ? {} : {name: location.name, mode: location.mode};
+      for(var i = 1; i < $scope.specimens.length; i++) {
+        $scope.specimens[i].storageLocation = angular.extend({}, location);
+      }
     }
 
     $scope.transferSpecimens = function() {
