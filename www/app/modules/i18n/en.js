@@ -2068,6 +2068,8 @@
 
       "training": {
         "title": "Training",
+        "bo_help_link": "Bulk Import Records",
+        "bo_help_link_desc": "Link to training materials on how to bulk import records and available templates",
         "bo_datetime_fmt_help_link": "Import Date and Time Formats",
         "bo_datetime_fmt_help_link_desc": "Link to document describing date and time formats that can be used in bulk import input file",
         "cp_help_link": "Collection Protocol",
