@@ -192,14 +192,25 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		try {
 			SpecimenDetail detail = req.getPayload();
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen existing = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getLabel(), ose);
-			if (existing == null) {
-				return ResponseEvent.error(ose);
-			}
-			
-			AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
-			saveOrUpdate(detail, existing, null);
+			Specimen existing = updateSpecimen(detail, ose);
+			ose.checkAndThrow();
 			return ResponseEvent.response(SpecimenDetail.from(existing, false, false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SpecimenInfo>> updateSpecimens(RequestEvent<List<SpecimenDetail>> req) {
+		try {
+			List<Specimen> savedSpmns = new ArrayList<>();
+			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
+			req.getPayload().forEach(spmn -> savedSpmns.add(updateSpecimen(spmn, ose)));
+			ose.checkAndThrow();
+			return ResponseEvent.response(SpecimenDetail.from(savedSpmns));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -558,6 +569,17 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		List<Long> spmnIds = specimens.stream().map(spmn -> spmn.getId()).collect(Collectors.toList());
 		Map<Long, String> distStatuses = daoFactory.getSpecimenDao().getDistributionStatus(spmnIds);
 		specimens.stream().forEach(spmn -> spmn.setDistributionStatus(distStatuses.get(spmn.getId())));
+	}
+
+	private Specimen updateSpecimen(SpecimenDetail detail, OpenSpecimenException ose) {
+		Specimen existing = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getLabel(), ose);
+		if (existing == null) {
+			return null;
+		}
+
+		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing);
+		saveOrUpdate(detail, existing, null);
+		return existing;
 	}
 
 	private List<SpecimenInfo> flattenSpecimenTree(SpecimenDetail specimen) {

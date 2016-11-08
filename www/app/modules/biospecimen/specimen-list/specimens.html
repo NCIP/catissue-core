@@ -85,6 +85,12 @@
               <span translate="specimen_list.add_event">Add Event</span>
             </a>
           </li>
+          <li show-if-allowed="specimenUpdateOpts">
+            <a ng-click="transferSpecimens()">
+              <span class="fa fa-arrows-h"></span>
+              <span translate="specimen_list.transfer_specimens">Transfer Specimens</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>
@@ -157,13 +163,8 @@
           <td class="col">
             <span>{{specimen.cpShortTitle}}</span>
           </td>
-          <td class="col" ng-switch on="!!specimen.storageLocation.name">
-            <span ng-switch-when="true">
-              <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
-            </span>
-            <span ng-switch-when="false">
-              <span translate="specimens.virtually_located">Virtual</span>
-            </span>
+          <td class="col">
+            <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
           </td>
           <td class="col">
             <os-spmn-measure-val value="specimen.availableQty" specimen="specimen"></os-spmn-measure-val>

@@ -150,6 +150,15 @@ public class SpecimensController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public List<SpecimenInfo> updateSpecimens(@RequestBody List<SpecimenDetail> details) {
+		ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.updateSpecimens(getRequest(details));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.PUT, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	

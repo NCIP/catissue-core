@@ -217,6 +217,10 @@ angular.module('os.biospecimen.specimenlist')
       gotoView('bulk-add-event', {}, 'no_specimens_to_add_event');
     }
 
+    $scope.transferSpecimens = function() {
+      gotoView('bulk-transfer-specimens', {}, 'no_specimens_to_transfer');
+    }
+
     $scope.clearFilters = function() {
       $scope.ctx.filterOpts = {};
     }

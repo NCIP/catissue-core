@@ -664,6 +664,12 @@
       "details": "Event Details",
       "copy_first_to_all": "Copy First To All",
       "events_saved": "Event saved successfully"
+    },
+    "bulk_transfer": {
+      "title": "Bulk Transfer Specimens",
+      "current_location": "Current Location",
+      "new_location": "New Location",
+      "success": "Successfully updated locations of {{spmnsCount}} specimens"
     }
   },
 
@@ -1608,8 +1614,10 @@
     "export": "Export Cart",
     "remove_spmns": "Remove from Cart",
     "add_event": "Add Event",
+    "transfer_specimens": "Transfer Specimens",
     "location": "Storage Location",
     "no_specimens_to_add_event": "Please select at least one specimen to add event",
+    "no_specimens_to_transfer": "Please select at least one specimen to transfer",
     "create_aliquots": "Create Aliquots",
     "no_specimens_to_create_aliquots": "Please select at least one parent specimen to create aliquots",
     "create_derivatives": "Create Derivatives",

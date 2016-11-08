@@ -78,6 +78,10 @@ angular.module('os.biospecimen.models.specimen', ['os.common.models', 'os.biospe
       );
     };
 
+    Specimen.bulkUpdate = function(specimens) {
+      return $http.put(Specimen.url(), specimens).then(Specimen.modelArrayRespTransform);
+    };
+
     Specimen.isUniqueLabel = function(cpShortTitle, label) {
       return $http.head(Specimen.url(), {params: {cpShortTitle: cpShortTitle, label: label}}).then(
         function(result) {

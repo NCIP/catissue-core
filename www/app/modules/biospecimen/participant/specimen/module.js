@@ -262,6 +262,12 @@ angular.module('os.biospecimen.specimen',
         },
         controller: 'SpecimenResultsView',
         parent: 'signed-in'
+      })
+      .state('bulk-transfer-specimens', {
+        url: '/bulk-transfer-specimens',
+        templateUrl: 'modules/biospecimen/participant/specimen/bulk-transfer-specimens.html',
+        controller: 'BulkTransferSpecimensCtrl',
+        parent: 'signed-in'
       });
   })
 
