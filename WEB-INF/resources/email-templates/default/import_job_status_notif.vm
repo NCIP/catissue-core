@@ -13,7 +13,7 @@
                 <p style="margin:10px 0 0 0">
                   Hello $job.createdBy.firstName $job.createdBy.lastName,
                   <br><br>
-                  Below is the status of your recent bulk upload run
+                  Below is the status of your recent import CSV job:
                 </p>
               </td>
             </tr>
