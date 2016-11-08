@@ -9,11 +9,10 @@
     <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>  
     <row>
       <numberField>
-        <name>id</name>
-        <udn>id</udn>
-        <caption>#getMessage("participant_identifier")</caption>
-        <column>CPR_ID</column>
-        <recordUrl>#/object-state-params-resolver?stateName=participant-detail.overview&amp;objectName=cpr&amp;key=id&amp;value={{$value}}</recordUrl>
+        <name>participantId</name>
+        <udn>participantId</udn>
+        <caption>#getMessage("participant_id")</caption>
+        <column>PARTICIPANT_ID</column>
       </numberField>
     </row>
     <row>
@@ -177,6 +176,15 @@
         <caption>#getMessage("participant_barcode")</caption>
         <column>BARCODE</column>
       </textField>
+    </row>
+    <row>
+      <numberField>
+        <name>id</name>
+        <udn>id</udn>
+        <caption>#getMessage("cpr_id")</caption>
+        <column>CPR_ID</column>
+        <recordUrl>#/object-state-params-resolver?stateName=participant-detail.overview&amp;objectName=cpr&amp;key=id&amp;value={{$value}}</recordUrl>
+      </numberField>
     </row>
     <row>
       <datePicker>
