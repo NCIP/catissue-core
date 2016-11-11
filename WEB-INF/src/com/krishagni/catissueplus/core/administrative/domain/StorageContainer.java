@@ -434,7 +434,7 @@ public class StorageContainer extends BaseEntity {
 
 		validateRestrictions();
 	}
-	
+
 	public int freePositionsCount() {
 		return noOfColumns * noOfRows - occupiedPositions.size();
 	}
@@ -994,12 +994,12 @@ public class StorageContainer extends BaseEntity {
 				getParentContainer().removePosition(position);
 			}
 			
-			parentContainer = null;
-			position = null;
-			site = otherSite;
+			setParentContainer(null);
+			setPosition(null);
+			setSite(otherSite);
 		} else {
-			parentContainer = otherParentContainer;
-			site = otherParentContainer.getSite();
+			setParentContainer(otherParentContainer);
+			setSite(otherParentContainer.getSite());
 			if (cycleExistsInHierarchy(otherParentContainer)) {
 				throw OpenSpecimenException.userError(StorageContainerErrorCode.HIERARCHY_CONTAINS_CYCLE);
 			}
@@ -1007,7 +1007,7 @@ public class StorageContainer extends BaseEntity {
 			if (position != null) {
 				position.update(otherPos);
 			} else {
-				position = otherPos;
+				setPosition(otherPos);
 			}			
 		}
 		
