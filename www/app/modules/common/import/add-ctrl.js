@@ -43,22 +43,39 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       return qs;
     }
 
+    function handleTxnSizeExceeded(resp, fileId) {
+      if (maxTxnSize == undefined) {
+        SettingUtil.getSetting('common', 'import_max_records_per_txn').then(
+          function(setting) {
+            maxTxnSize = setting.value;
+            warnTxnSizeExceeded(resp, fileId);
+          }
+        );
+      } else {
+        warnTxnSizeExceeded(resp, fileId);
+      }
+    }
+
+    function warnTxnSizeExceeded(resp, fileId) {
+      Util.showConfirm({
+        ok: function () {
+          submitJob(fileId, false);
+        },
+
+        title: "common.warning",
+        isWarning: true,
+        confirmMsg: "bulk_imports.txn_size_exceeded",
+        input: { maxTxnSize: maxTxnSize, inputRecsCount: resp.totalRecords }
+      });
+    }
+
     function submitJob(fileId, atomic) {
       $scope.importJob.inputFileId = fileId;
       $scope.importJob.atomic = atomic;
       $scope.importJob.$saveOrUpdate().then(
         function(resp) {
           if (resp.status == 'TXN_SIZE_EXCEEDED') {
-            Util.showConfirm({
-              ok: function () {
-                submitJob(fileId, false);
-              },
-
-              title: "common.warning",
-              isWarning: true,
-              confirmMsg: "bulk_imports.txn_size_exceeded",
-              input: { maxTxnSize: maxTxnSize, inputRecsCount: resp.totalRecords }
-            });
+            handleTxnSizeExceeded(resp, fileId);
           } else {
             Alerts.success('bulk_imports.job_submitted', resp);
             $state.go(importDetail.onSuccess.state, importDetail.onSuccess.params);
@@ -89,13 +106,5 @@ angular.module('os.common.import.addctrl', ['os.common.import.importjob'])
       $scope.inputFileTmplUrl  = getInputTmplUrl(importJob);
     };
 
-    //
-    // Initialise after the setting value is resolved
-    //
-    SettingUtil.getSetting('common', 'import_max_records_per_txn').then(
-      function(setting) {
-        maxTxnSize = setting.value;
-        init();
-      }
-    );
+    init();
   });
