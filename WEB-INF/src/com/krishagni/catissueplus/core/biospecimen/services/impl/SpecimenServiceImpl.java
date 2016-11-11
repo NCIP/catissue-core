@@ -734,25 +734,31 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		ensureUniqueBarcode(existing, specimen, ose);
 		ose.checkAndThrow();
 
+		//
+		// NOTE OPSMN-3468: setLabelIfEmpty() is strategically placed to ensure it is called late but
+		// before the specimen is associated to session to ensure specimen is not flushed
+		// to database
+		//
 		if (existing != null) {
 			existing.update(specimen);
 			specimen = existing;
+			specimen.setLabelIfEmpty();
 		} else if (specimen.getParentSpecimen() != null) {
 			if (!specimen.getParentSpecimen().isActive()) {
 				throw OpenSpecimenException.userError(SpecimenErrorCode.EDIT_NOT_ALLOWED, specimen.getParentSpecimen().getLabel());
 			}
 
+			specimen.setLabelIfEmpty();
 			specimen.getParentSpecimen().addChildSpecimen(specimen);
 		} else {
-			specimen.occupyPosition();
 			specimen.checkPoolStatusConstraints();
+			specimen.setLabelIfEmpty();
+			specimen.occupyPosition();
 		}
 
 		incrParentFreezeThawCycles(detail, specimen);
 
-		specimen.setLabelIfEmpty();
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
-
 		specimen.addOrUpdateCollRecvEvents();
 		specimen.addOrUpdateExtension();		
 		return specimen;
