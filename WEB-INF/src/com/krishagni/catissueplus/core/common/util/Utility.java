@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.concurrent.TimeUnit;
 
+import javax.activation.FileTypeMap;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -47,12 +48,15 @@ import com.krishagni.catissueplus.core.common.PdfUtil;
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.tika.parser.txt.CharsetDetector;
 import org.apache.tika.parser.txt.CharsetMatch;
+import org.springframework.mail.javamail.ConfigurableMimeFileTypeMap;
 
 public class Utility {
 	private static final String key = "0pEN@eSEncRyPtKy";
 	
 	private static final SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
-	
+
+	private static FileTypeMap fileTypesMap = null;
+
 	public static String getDisabledValue(String value, int maxLength) {
 		if (StringUtils.isBlank(value)) {
 			return value;
@@ -226,9 +230,18 @@ public class Utility {
 		}
 	}
 	
+	public static String getContentType(String filename) {
+		if (fileTypesMap == null) {
+			synchronized (Utility.class) {
+				fileTypesMap = new ConfigurableMimeFileTypeMap();
+			}
+		}
+
+		return fileTypesMap.getContentType(filename);
+	}
+
 	public static String getContentType(File file) {
-		FileNameMap contentTypesMap = URLConnection.getFileNameMap();
-		return contentTypesMap.getContentTypeFor(file.getAbsolutePath());
+		return getContentType(file.getName());
 	}
 	
 	
