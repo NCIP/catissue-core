@@ -260,4 +260,152 @@
       <column name="TIME_FORMAT" type="${text.type}(16)"/>
     </addColumn>
   </changeSet>
+  
+  <!-- PLUGINS-170: Start of change sets to fix large PV identifier values -->
+  <changeSet author="mdnasim" id="PV ID FIX: Drop foreign key on parent of permissible values">
+    <dropForeignKeyConstraint baseTableName="CATISSUE_PERMISSIBLE_VALUE" constraintName="FK57DDCE153B5435E"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop foreign key on permissible value identifiers from properties table">
+    <dropForeignKeyConstraint baseTableName="OS_PV_PROPS" constraintName="FK_PV_PROPS_PV_ID"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Remove auto increment from identifier" dbms="mysql">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="IDENTIFIER" newColumnName="IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop primary key constraint from permissible values table">
+    <dropPrimaryKey tableName="CATISSUE_PERMISSIBLE_VALUE"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add column to store newly generated PV identifier values" dbms="mysql">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add column to store newly generated PV identifier values" dbms="oracle">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated permissible value identifier sequence" dbms="oracle">
+    <dropSequence sequenceName="CATISSUE_PERMI_VALUE_SEQ"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Fresh sequence to generate new permissible value identifier values" dbms="oracle">
+    <createSequence sequenceName="CATISSUE_PERMI_VALUE_SEQ" startValue="1" incrementBy="1" ordered="true"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Generate new permissible value identifier values" dbms="oracle">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        new_identifier = catissue_permi_value_seq.nextval
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add primary key constraint on newly generated PV identifier values" dbms="oracle">
+    <addPrimaryKey tableName="CATISSUE_PERMISSIBLE_VALUE" columnNames="NEW_IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Update permissible value parent identifiers" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ppv on ppv.identifier = pv.parent_identifier
+      set
+        pv.parent_identifier = ppv.new_identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add new parent id column in catissue permissible values table" dbms="oracle">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_PARENT_IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Update permissible value parent identifiers" dbms="oracle">
+    <sql>
+      merge into
+        catissue_permissible_value pv
+      using (
+        select
+          DISTINCT ppv.identifier as old_id, ppv.new_identifier as new_id
+        from
+          catissue_permissible_value pv
+          join catissue_permissible_value ppv on ppv.identifier = pv.parent_identifier
+      ) t on (pv.parent_identifier = t.old_id)
+      when matched
+      then
+        update set pv.new_parent_identifier = t.new_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Updating permissible value properties with newly generated identifier values">
+    <sql>
+      update
+        os_pv_props
+      set
+        pv_id = (
+          select
+            new_identifier
+          from
+            catissue_permissible_value
+          where
+            identifier = pv_id
+        )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated parent identifier column so that newer column can use this name" dbms="oracle">
+    <dropColumn tableName="CATISSUE_PERMISSIBLE_VALUE" columnName="PARENT_IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new parent identifier to parent identifier" dbms="oracle">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="NEW_PARENT_IDENTIFIER" newColumnName="PARENT_IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated identifier column so that newer column can use this name">
+    <dropColumn tableName="CATISSUE_PERMISSIBLE_VALUE" columnName="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new identifier to identifier" dbms="oracle">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="NEW_IDENTIFIER" newColumnName="IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new identifier to identifier" dbms="mysql">
+    <sql>
+      alter table
+        catissue_permissible_value
+      change
+        new_identifier identifier bigint auto_increment;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Foreign key on parent of permissible values">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PARENT_ID"
+      baseTableName="CATISSUE_PERMISSIBLE_VALUE"
+      baseColumnNames="PARENT_IDENTIFIER"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Foreign key on permissible value of PV properties">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PROPS_PV_ID"
+      baseTableName="OS_PV_PROPS"
+      baseColumnNames="PV_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  <!-- PLUGINS-170: End of change sets to fix large PV identifier values -->
 </databaseChangeLog>

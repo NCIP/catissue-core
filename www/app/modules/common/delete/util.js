@@ -43,16 +43,22 @@ angular.module('os.common.delete')
     function confirmDelete(opts) {
       var modalInstance = $modal.open({
         templateUrl: opts.templateUrl,
-        controller: function($scope, $modalInstance) {
+        controller: function($scope, $modalInstance, dependentEntities) {
+          $scope.dependentEntities = dependentEntities;
           $scope.entity = opts.entity;
           $scope.props = opts.props;
-          
+
           $scope.ok = function() {
             $modalInstance.close(true);
           }
 
           $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
+          }
+        },
+        resolve: {
+          dependentEntities: function() {
+            return opts.deleteWithoutCheck || !opts.entity? [] : opts.entity.getDependentEntities();
           }
         }
       });
