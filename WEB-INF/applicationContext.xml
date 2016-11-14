@@ -99,8 +99,12 @@
 
   <aop:aspectj-autoproxy/>
       
-  <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
+  <bean id="localDbParticipantLookup" class="com.krishagni.catissueplus.core.biospecimen.matching.LocalDbParticipantLookupImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
+  </bean>
+
+  <bean id="defaultParticipantLookupFlow" class="com.krishagni.catissueplus.core.biospecimen.matching.DefaultParticipantLookupFlow">
+    <property name="localDbLookup" ref="localDbParticipantLookup"/>
   </bean>
   
   <bean id="rbacSvc" class="com.krishagni.rbac.service.impl.RbacServiceImpl">
@@ -207,7 +211,7 @@
   <bean id="participantSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
-    <property name="participantLookupLogic" ref="participantLookupLogic"/>
+    <property name="defaultParticipantLookupFlow" ref="defaultParticipantLookupFlow"/>
   </bean>
   
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">

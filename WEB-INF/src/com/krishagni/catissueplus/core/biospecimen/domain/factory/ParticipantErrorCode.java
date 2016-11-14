@@ -42,7 +42,9 @@ public enum ParticipantErrorCode implements ErrorCode {
 	
 	CANNOT_UPDATE_PHI,
 
-	LF_UPDATE_NOT_ALLOWED;
+	LF_UPDATE_NOT_ALLOWED,
+
+	INVALID_LOOKUP_FLOW;
 
 	public String code() {
 		return "PARTICIPANT_" + this.name();

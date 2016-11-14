@@ -16,7 +16,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.ParticipantDao;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 
-public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
+public class LocalDbParticipantLookupImpl implements ParticipantLookupLogic {
 
 	private DaoFactory daoFactory;
 
@@ -31,7 +31,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	@Override
 	@PlusTransactional
 	public List<MatchedParticipant> getMatchingParticipants(ParticipantDetail participant) {
-		Map<Participant, List<String>> matchedParticipants = new HashMap<Participant, List<String>>();
+		Map<Participant, List<String>> matchedParticipants = new HashMap<>();
 		
 		ParticipantDao dao = daoFactory.getParticipantDao();
 		if (StringUtils.isNotBlank(participant.getEmpi())) {
@@ -74,7 +74,7 @@ public class ParticipantLookupLogicImpl implements ParticipantLookupLogic {
 	private void addParticipant(Map<Participant, List<String>> matchedParticipants, Participant participant, String matchedAttr) {
 		List<String> matchedAttrs = matchedParticipants.get(participant);
 		if (matchedAttrs == null) {
-			matchedAttrs = new ArrayList<String>();
+			matchedAttrs = new ArrayList<>();
 			matchedParticipants.put(participant, matchedAttrs);
 		}
 		

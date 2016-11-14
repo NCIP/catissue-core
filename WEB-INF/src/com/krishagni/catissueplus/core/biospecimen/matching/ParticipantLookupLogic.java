@@ -6,5 +6,5 @@ import com.krishagni.catissueplus.core.biospecimen.events.MatchedParticipant;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 
 public interface ParticipantLookupLogic {
-	public List<MatchedParticipant> getMatchingParticipants(ParticipantDetail criteria);
+	List<MatchedParticipant> getMatchingParticipants(ParticipantDetail criteria);
 }

@@ -44,4 +44,6 @@ public class ConfigParams {
 	public static final String SYS_RPT_SETTINGS          = "sys_cp_rpt_settings";
 
 	public static final String EXTRACT_SPR_TEXT          = "extract_spr_text";
+
+	public static final String PARTICIPANT_LOOKUP_FLOW   = "participant_lookup_flow";
 }

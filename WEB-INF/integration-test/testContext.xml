@@ -78,7 +78,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
   
-  <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.ParticipantLookupLogicImpl">
+  <bean id="participantLookupLogic" class="com.krishagni.catissueplus.core.biospecimen.matching.LocalDbParticipantLookupImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
   </bean>
 

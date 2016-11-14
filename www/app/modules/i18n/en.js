@@ -1980,7 +1980,9 @@
         "add_patient_on_lookup_fail": "Add Participant on No Match",
         "add_patient_on_lookup_fail_desc": "Allow or disallow users to add new participants when lookup yields no matching participants in two step registration workflow",
         "extract_spr_text": "Extract Text from SPR PDF Docs",
-        "extract_spr_text_desc": "Enable or disable extraction of text content from SPR PDF documents"
+        "extract_spr_text_desc": "Enable or disable extraction of text content from SPR PDF documents",
+        "participant_lookup_flow": "Participants Lookup Workflow",
+        "participant_lookup_flow_desc": "Spring bean name or fully qualified name of class implementing customised matching participants lookup workflow. For example: bean: customisedLookup or class: com.krishagni.openspecimen.plugins.CustomisedLookup"
       },
 
       "common": {

@@ -218,4 +218,14 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="Specify participant lookup work flow implementation to use">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_lookup_flow',
+        'participant_lookup_flow', 'participant_lookup_flow_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>
