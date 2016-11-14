@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -26,10 +27,11 @@ import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
+import com.krishagni.catissueplus.core.common.service.ConfigChangeListener;
+import com.krishagni.catissueplus.core.common.service.ConfigurationService;
 import com.krishagni.catissueplus.core.common.service.MpiGenerator;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
 
-public class ParticipantServiceImpl implements ParticipantService {
+public class ParticipantServiceImpl implements ParticipantService, InitializingBean {
 	private static Log logger = LogFactory.getLog(ParticipantServiceImpl.class);
 
 	private DaoFactory daoFactory;
@@ -37,6 +39,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 	private ParticipantFactory participantFactory;
 
 	private ParticipantLookupLogic defaultParticipantLookupFlow;
+
+	private ParticipantLookupLogic participantLookupLogic;
+
+	private ConfigurationService cfgSvc;
 
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -48,6 +54,10 @@ public class ParticipantServiceImpl implements ParticipantService {
 
 	public void setDefaultParticipantLookupFlow(ParticipantLookupLogic defaultParticipantLookupFlow) {
 		this.defaultParticipantLookupFlow = defaultParticipantLookupFlow;
+	}
+
+	public void setCfgSvc(ConfigurationService cfgSvc) {
+		this.cfgSvc = cfgSvc;
 	}
 
 	@Override
@@ -138,7 +148,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
-		return ResponseEvent.response(getParticipantLookupFlow().getMatchingParticipants(req.getPayload()));
+		return ResponseEvent.response(getParticipantLookupLogic().getMatchingParticipants(req.getPayload()));
 	}
 	
 	public void createParticipant(Participant participant) {
@@ -197,7 +207,17 @@ public class ParticipantServiceImpl implements ParticipantService {
 			return ParticipantDetail.from(existing, false);
 		}
 	}
-	
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		cfgSvc.registerChangeListener(ConfigParams.MODULE, new ConfigChangeListener() {
+			@Override
+			public void onConfigChange(String name, String value) {
+				participantLookupLogic = null;
+			}
+		});
+	}
+
 	private Participant getParticipant(ParticipantDetail detail, boolean forUpdate) {
 		Participant result = null;
 		if (detail.getId() != null) {
@@ -233,11 +253,18 @@ public class ParticipantServiceImpl implements ParticipantService {
 		return result;
 	}
 
-	private ParticipantLookupLogic getParticipantLookupFlow() {
-		String lookupFlow = ConfigUtil.getInstance().getStrSetting(
-			ConfigParams.MODULE, ConfigParams.PARTICIPANT_LOOKUP_FLOW, null);
+	private ParticipantLookupLogic getParticipantLookupLogic() {
+		if (participantLookupLogic == null) {
+			initParticipantLookupFlow(cfgSvc.getStrSetting(ConfigParams.MODULE, ConfigParams.PARTICIPANT_LOOKUP_FLOW));
+		}
+
+		return participantLookupLogic;
+	}
+
+	private void initParticipantLookupFlow(String lookupFlow) {
 		if (StringUtils.isBlank(lookupFlow)) {
-			return defaultParticipantLookupFlow;
+			participantLookupLogic = defaultParticipantLookupFlow;
+			return;
 		}
 
 		ParticipantLookupLogic result = null;
@@ -263,6 +290,6 @@ public class ParticipantServiceImpl implements ParticipantService {
 			throw OpenSpecimenException.userError(ParticipantErrorCode.INVALID_LOOKUP_FLOW, lookupFlow);
 		}
 
-		return result;
+		participantLookupLogic = result;
 	}
 }

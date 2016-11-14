@@ -212,6 +212,7 @@
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="participantFactory" ref="participantFactory"/>
     <property name="defaultParticipantLookupFlow" ref="defaultParticipantLookupFlow"/>
+    <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
   
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
