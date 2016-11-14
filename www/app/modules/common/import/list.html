@@ -77,13 +77,13 @@
           </td>
           <td class="col os-col-5">
             <div class="btn-group btn-group-xs">
-              <button type="button" class="btn btn-default">
+              <div class="btn btn-default" title="{{'bulk_imports.tooltip.download' | translate}}">
                 <a href="{{importJob.outputFileUrl}}" target="_blank">
                   <span class="fa fa-download"></span>
                 </a>
-              </button>
+              </div>
               <button ng-if="importJob.status == 'IN_PROGRESS'" type="button" class="btn btn-default"
-                ng-click="stopJob(importJob)">
+                ng-click="stopJob(importJob)" title="{{'bulk_imports.tooltip.stop' | translate}}">
                 <span class="fa fa-stop-circle-o"></span>
               </button>
             </div>

@@ -1532,7 +1532,7 @@
     "view_jobs": "View Jobs",
     "view_import_jobs": "View Import Jobs",
     "import": "Import",
- 
+
     "object_types": {
       "user": "Users",
       "userRoles": "User Roles",
@@ -1559,7 +1559,12 @@
       "UPDATE": "Update"
     },
 
-    "extension_name": "{{params.formName}} ({{params.entityType}})"
+    "extension_name": "{{params.formName}} ({{params.entityType}})",
+
+    "tooltip": {
+      "download": "Click to download report file",
+      "stop": "Click to stop running job"
+    }
   },
 
   "specimen_list": {
