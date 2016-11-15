@@ -116,7 +116,7 @@ public class ParticipantUtil {
 
 		List<String> lockedFields = Collections.emptyList();
 		CpWorkflowConfig.Workflow workflow = WorkflowUtil.getInstance().getSysWorkflow(LOCKED_FIELDS);
-		if (workflow != null) {
+		if (workflow != null && workflow.getData() != null) {
 			Map<String, Object> participantWfData = (Map<String, Object>)workflow.getData().get("participant");
 			if (participantWfData != null && participantWfData.get(existing.getSource()) instanceof List) {
 				lockedFields = (List<String>)participantWfData.get(existing.getSource());
