@@ -25,10 +25,14 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Audited
 public class Participant extends BaseExtensionEntity {
+	private static final String DEF_SOURCE = "OpenSpecimen";
+
 	private static final String ENTITY_NAME = "participant";
 
 	public static final String EXTN = "ParticipantExtension";
-	
+
+	private String source = DEF_SOURCE;
+
 	private String lastName;
 
 	private String firstName;
@@ -41,7 +45,7 @@ public class Participant extends BaseExtensionEntity {
 
 	private String sexGenotype;
 
-	private Set<String> races = new HashSet<String>();
+	private Set<String> races = new HashSet<>();
 
 	private String ethnicity;
 
@@ -60,6 +64,14 @@ public class Participant extends BaseExtensionEntity {
 	private Set<CollectionProtocolRegistration> cprs = new HashSet<>();
 
 	private transient Long cpId = -1L;
+
+	public String getSource() {
+		return StringUtils.isBlank(source) ? DEF_SOURCE : source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
 
 	public String getLastName() {
 		return lastName;

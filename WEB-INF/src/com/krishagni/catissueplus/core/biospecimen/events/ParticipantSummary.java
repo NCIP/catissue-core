@@ -3,7 +3,9 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 public class ParticipantSummary {
 	private Long id;
-	
+
+	private String source;
+
 	private String firstName = "";
 
 	private String lastName = "";
@@ -19,7 +21,15 @@ public class ParticipantSummary {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

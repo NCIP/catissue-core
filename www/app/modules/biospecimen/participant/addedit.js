@@ -15,7 +15,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.allowIgnoreMatches = true;
 
       $scope.disableFieldOpts = {}
-      if (!!cpr.id) {
+      if (!!cpr.id && cpr.participant.source != 'OpenSpecimen') {
         $scope.disableFieldOpts = {
           fields: getStaticFields(lockedFields),
           disable: !!cpr.id,
@@ -29,7 +29,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.partCtx = {
         obj: {cpr: $scope.cpr},
         inObjs: ['cpr'],
-        twoStepReg: !cpr.id && twoStepReg
+        twoStepReg: !cpr.id && (twoStepReg && $stateParams.twoStep == 'true')
       }
 
       $scope.deFormCtrl = {};
@@ -174,12 +174,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
     $scope.registerUsingSelectedParticipant = function() {
       var selectedPart = $scope.selectedParticipant;
-      if (!!selectedPart.id) {
-        $scope.cpr.participant = new Participant({id: selectedPart.id, pmis: selectedPart.pmis});
-      } else {
-        $scope.cpr.participant = new Participant(selectedPart);
-      }
-
+      $scope.cpr.participant = new Participant(selectedPart);
       registerParticipant();
     };
 

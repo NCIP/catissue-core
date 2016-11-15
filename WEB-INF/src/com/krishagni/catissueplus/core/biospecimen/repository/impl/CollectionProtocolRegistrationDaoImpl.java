@@ -366,7 +366,8 @@ public class CollectionProtocolRegistrationDaoImpl
 				.add(Projections.property("registrationDate"))
 				.add(Projections.property("cp.id"))
 				.add(Projections.property("cp.shortTitle"))
-				.add(Projections.property("participant.id"));
+				.add(Projections.property("participant.id"))
+				.add(Projections.property("participant.source"));
 
 		if (cprCrit.includePhi()) {
 			projs.add(Projections.property("participant.firstName"))
@@ -389,6 +390,7 @@ public class CollectionProtocolRegistrationDaoImpl
 		ParticipantSummary participant = new ParticipantSummary();
 		cpr.setParticipant(participant);
 		participant.setId((Long)row[idx++]);
+		participant.setSource((String)row[idx++]);
 		if (row.length > idx && (allCpsAccess || (phiCps != null && phiCps.contains(cpr.getCpId())))) {
 			participant.setFirstName((String)row[idx++]);
 			participant.setLastName((String) row[idx++]);

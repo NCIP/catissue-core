@@ -141,14 +141,14 @@ angular.module('openspecimen')
         );
       },
 
-      getLockedParticipantFields: function() {
+      getLockedParticipantFields: function(src) {
         return getWorkflowData(-1, 'locked-fields').then(
           function(data) {
             if (!data) {
               return [];
             }
 
-            return data.participant || [];
+            return (data.participant || {})[src || 'OpenSpecimen'] || [];
           }
         );
       }

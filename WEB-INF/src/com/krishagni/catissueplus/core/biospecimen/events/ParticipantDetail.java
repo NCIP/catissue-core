@@ -21,6 +21,8 @@ import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 @ListenAttributeChanges
 public class ParticipantDetail extends AttributeModifiedSupport {
 	private Long id;
+
+	private String source;
 	
 	private String firstName;
 
@@ -71,7 +73,15 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -245,6 +255,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	public static ParticipantDetail from(Participant participant, boolean excludePhi, List<CollectionProtocolRegistration> cprs) {
 		ParticipantDetail result = new ParticipantDetail();
 		result.setId(participant.getId());
+		result.setSource(participant.getSource());
 		result.setFirstName(excludePhi ? "###" : participant.getFirstName());
 		result.setLastName(excludePhi ? "###" : participant.getLastName());
 		result.setMiddleName(excludePhi ? "###" : participant.getMiddleName());
@@ -255,7 +266,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 		result.setGender(participant.getGender());
 		result.setEmpi(excludePhi ? "###" : participant.getEmpi());				
 		result.setPmis(PmiDetail.from(participant.getPmis(), excludePhi)); 
-		result.setRaces(new HashSet<String>(participant.getRaces()));
+		result.setRaces(new HashSet<>(participant.getRaces()));
 		result.setSexGenotype(participant.getSexGenotype());
 		result.setUid(excludePhi ? "###" : participant.getUid());
 		result.setVitalStatus(participant.getVitalStatus());
@@ -266,7 +277,7 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	}
 	
 	public static List<ParticipantDetail> from(List<Participant> participants, boolean excludePhi) {
-		List<ParticipantDetail> result = new ArrayList<ParticipantDetail>();
+		List<ParticipantDetail> result = new ArrayList<>();
 		for (Participant participant : participants) {
 			result.add(ParticipantDetail.from(participant, excludePhi));
 		}

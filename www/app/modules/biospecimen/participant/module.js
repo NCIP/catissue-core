@@ -66,6 +66,14 @@ angular.module('os.biospecimen.participant',
             } else {
               return {value: false};
             }
+          },
+
+          twoStepReg: function(SettingUtil) {
+            return SettingUtil.getSetting('biospecimen', 'two_step_patient_reg').then(
+              function(setting) {
+                return setting.value == 'true';
+              }
+            );
           }
         },
         parent: 'signed-in',
@@ -243,12 +251,13 @@ angular.module('os.biospecimen.participant',
         url: '/participants/:cprId',
         template: '<div ui-view></div>',
         resolve: {
-          cpr: function($stateParams, CollectionProtocolRegistration) {
+          cpr: function($stateParams, Participant, CollectionProtocolRegistration) {
             if (!!$stateParams.cprId && $stateParams.cprId > 0) {
               return CollectionProtocolRegistration.getById($stateParams.cprId);
             } 
 
-            return new CollectionProtocolRegistration({registrationDate: new Date()});
+            var participant = new Participant({source: 'OpenSpecimen'});
+            return new CollectionProtocolRegistration({registrationDate: new Date(), participant: participant});
           },
 
           hasSde: function($injector) {
@@ -295,7 +304,7 @@ angular.module('os.biospecimen.participant',
         abstract: true
       })
       .state('participant-addedit', {
-        url: '/addedit-participant',
+        url: '/addedit-participant?twoStep',
         templateProvider: function($stateParams, $q, CpConfigSvc, PluginReg) {
           return $q.when(CpConfigSvc.getRegParticipantTmpl($stateParams.cpId, $stateParams.cprId)).then(
             function(tmpl) {
@@ -311,13 +320,6 @@ angular.module('os.biospecimen.participant',
           extensionCtxt: function(cp, Participant) {
             return Participant.getExtensionCtxt({cpId: cp.id});
           },
-          twoStepReg: function(SettingUtil) {
-            return SettingUtil.getSetting('biospecimen', 'two_step_patient_reg').then(
-              function(setting) {
-                return setting.value == 'true';
-              }
-            );
-          },
           addPatientOnLookupFail: function(SettingUtil) {
             return SettingUtil.getSetting('biospecimen', 'add_patient_on_lookup_fail').then(
               function(setting) {
@@ -325,8 +327,9 @@ angular.module('os.biospecimen.participant',
               }
             );
           }, 
-          lockedFields: function(CpConfigSvc) {
-            return CpConfigSvc.getLockedParticipantFields();
+          lockedFields: function(cpr, CpConfigSvc) {
+            var participant = cpr.participant || {};
+            return CpConfigSvc.getLockedParticipantFields(participant.source || 'OpenSpecimen');
           }
         },
         parent: 'participant-root'

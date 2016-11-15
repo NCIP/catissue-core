@@ -75,6 +75,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 			participant.setId(detail.getId());
 		}
 
+		setSource(detail, participant, partial, ose);
 		setUid(detail, participant, partial, ose);
 		setEmpi(detail, participant, partial, ose);
 		setName(detail, participant, partial, ose);
@@ -88,6 +89,14 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setEthnicity(detail, participant, partial, ose);
 		setPmi(detail, participant, partial, ose);
 		setExtension(detail, participant, partial, ose);
+	}
+
+	private void setSource(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
+		if (partial && !detail.isAttrModified("source")) {
+			return;
+		}
+
+		participant.setSource(detail.getSource());
 	}
 
 	private void setUid(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {

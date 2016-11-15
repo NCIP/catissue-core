@@ -64,4 +64,11 @@
       <column name="collectionProtocol_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to participant's source">
+    <addColumn tableName="CATISSUE_PARTICIPANT_AUD">
+      <column name="SOURCE" type="${text.type}(16)"/>
+      <column name="source_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

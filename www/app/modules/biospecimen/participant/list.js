@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
   .controller('ParticipantListCtrl', function(
-    $scope, $state, osRightDrawerSvc, cp, participantListCfg,
+    $scope, $state, osRightDrawerSvc, cp, participantListCfg, twoStepReg,
     Util, ListPagerOpts) {
 
     var ctrl = this;
@@ -22,6 +22,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
       };
 
       angular.extend($scope.listViewCtx, {
+        twoStepReg: twoStepReg,
         listName: 'participant.list',
         ctrl: ctrl,
         headerButtonsTmpl: 'modules/biospecimen/participant/register-button.html',

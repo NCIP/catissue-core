@@ -13,6 +13,8 @@
       </generator>
     </id>
 
+    <property name="source" column="SOURCE"/>
+
     <property name="lastName" column="LAST_NAME" />
 
     <property name="firstName" column="FIRST_NAME" />

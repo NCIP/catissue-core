@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen.domain.factory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -105,11 +106,21 @@ public class ParticipantUtil {
 	}
 
 	public static void ensureLockedFieldsAreUntouched(Participant existing, Participant newParticipant) {
-		List<String> lockedFields = Collections.emptyList();
+		if (existing.getSource().equals(newParticipant.getSource())) {
+			//
+			// No locked fields check when both existing and new participant objects
+			// are from same data source
+			//
+			return;
+		}
 
+		List<String> lockedFields = Collections.emptyList();
 		CpWorkflowConfig.Workflow workflow = WorkflowUtil.getInstance().getSysWorkflow(LOCKED_FIELDS);
-		if (workflow != null && workflow.getData().get("participant") instanceof List) {
-			lockedFields = (List<String>)workflow.getData().get("participant");
+		if (workflow != null) {
+			Map<String, Object> participantWfData = (Map<String, Object>)workflow.getData().get("participant");
+			if (participantWfData != null && participantWfData.get(existing.getSource()) instanceof List) {
+				lockedFields = (List<String>)participantWfData.get(existing.getSource());
+			}
 		}
 
 		lockedFields = lockedFields.stream()

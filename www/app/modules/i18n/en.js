@@ -387,6 +387,7 @@
     
     "buttons": {
       "register": "Add Participant",
+      "lookup_add_part": "Lookup and Add Participant",
       "update_registration": "Update",
       "register_selected_participant": "Register Selected Participant",
       "merge_participants": "Merge Participants",

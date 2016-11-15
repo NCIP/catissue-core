@@ -408,4 +408,12 @@
       referencedColumnNames="IDENTIFIER"/>
   </changeSet>
   <!-- PLUGINS-170: End of change sets to fix large PV identifier values -->
+
+  <changeSet author="vpawar" id="Identify source of participant details">
+    <addColumn tableName="CATISSUE_PARTICIPANT">
+      <column name="SOURCE" type="${text.type}(16)" defaultValue="OpenSpecimen">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
