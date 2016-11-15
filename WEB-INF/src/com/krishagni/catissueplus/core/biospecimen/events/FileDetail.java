@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.biospecimen.events;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 public class FileDetail {
 	private Long id;
@@ -15,6 +16,8 @@ public class FileDetail {
 	private InputStream fileIn;
 
 	private String contentType;
+	
+	private Map<String, Object> objectProps;
 
 	public Long getId() {
 		return id;
@@ -63,4 +66,13 @@ public class FileDetail {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
+
+	public Map<String, Object> getObjectProps() {
+		return objectProps;
+	}
+
+	public void setObjectProps(Map<String, Object> objectProps) {
+		this.objectProps = objectProps;
+	}
+	
 }

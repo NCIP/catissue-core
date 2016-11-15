@@ -1,12 +1,14 @@
 package com.krishagni.catissueplus.core.importer.services.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipFile;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -67,6 +71,7 @@ import com.krishagni.catissueplus.core.importer.services.ObjectReader;
 import com.krishagni.catissueplus.core.importer.services.ObjectSchemaFactory;
 
 import edu.common.dynamicextensions.query.cachestore.LinkedEhCacheMap;
+import edu.common.dynamicextensions.util.ZipUtility;
 
 public class ImportServiceImpl implements ImportService {
 	private static final Log logger = LogFactory.getLog(ImportServiceImpl.class);
@@ -193,7 +198,7 @@ public class ImportServiceImpl implements ImportService {
 			out = new FileOutputStream(importDir + File.separator + fileId);
 			IOUtils.copy(in, out);
 			
-			return ResponseEvent.response(fileId);			
+			return ResponseEvent.response(fileId);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		} finally {
@@ -209,6 +214,10 @@ public class ImportServiceImpl implements ImportService {
 			ImportDetail detail = req.getPayload();
 			String inputFile = getFilePath(detail.getInputFileId());
 
+			if (isZipFile(inputFile)) {
+				inputFile = inflateAndGetInputCsvFile(inputFile, detail.getInputFileId());
+			}
+			
 			//
 			// Ensure transaction size is well within configured limits
 			//
@@ -323,6 +332,45 @@ public class ImportServiceImpl implements ImportService {
 		}
 	}
 
+	private boolean isZipFile(String zipFilename) {
+		ZipFile zipFile = null;
+		try {
+			zipFile = new ZipFile(zipFilename);
+			return true;
+		} catch (Exception e) {
+			return false;
+		} finally {
+			IOUtils.closeQuietly(zipFile);
+		}
+	}
+
+	private String inflateAndGetInputCsvFile(String zipFile, String fileId) {
+		FileInputStream in = null;
+		String inputFile = null;
+		try {
+			in = new FileInputStream(zipFile);
+
+			File zipDirFile = new File(getImportDir() + File.separator + "inflated-" + fileId);
+			ZipUtility.extractZipToDestination(in, zipDirFile.getAbsolutePath());
+
+			inputFile = Arrays.stream(zipDirFile.listFiles())
+				.filter(f -> !f.isDirectory() && f.getName().endsWith(".csv"))
+				.map(File::getAbsolutePath)
+				.findFirst()
+				.orElse(null);
+		
+			if (inputFile == null) {
+				throw OpenSpecimenException.userError(ImportJobErrorCode.CSV_NOT_FOUND_IN_ZIP, zipFile);
+			}
+		} catch (Exception e) {
+			throw OpenSpecimenException.serverError(e);
+		} finally {
+			IOUtils.closeQuietly(in);
+		}
+
+		return inputFile;
+	}
+
 	private int getMaxRecsPerTxn() {
 		return ConfigUtil.getInstance().getIntSetting("common", CFG_MAX_TXN_SIZE, MAX_RECS_PER_TXN);
 	}
@@ -369,14 +417,35 @@ public class ImportServiceImpl implements ImportService {
 		return getJobDir(jobId) + File.separator + "output.csv";
 	}
 	
+	private String getFilesDirPath(Long jobId) {
+		return getJobDir(jobId) + File.separator + "files";
+	}
+	
 	private boolean createJobDir(Long jobId) {
 		return new File(getJobDir(jobId)).mkdirs();
 	}
 	
-	private boolean moveToJobDir(String file, Long jobId) {
-		File src = new File(file);
-		File dest = new File(getJobDir(jobId) + File.separator + "input.csv");
-		return src.renameTo(dest);		
+	private void moveToJobDir(String file, Long jobId) {
+		String jobDir = getJobDir(jobId);
+
+		//
+		// Input file and its parent directory
+		//
+		File inputFile = new File(file);
+		File srcDir = inputFile.getParentFile();
+
+		//
+		// Move input CSV file to job dir
+		//
+		inputFile.renameTo(new File(jobDir + File.separator + "input.csv"));
+
+		//
+		// Move other uploaded files to job dir as well
+		//
+		File filesDir = new File(srcDir + File.separator + "files");
+		if (filesDir.exists()) {
+			filesDir.renameTo(new File(getFilesDirPath(jobId)));
+		}
 	}
 	
 	private ImportJob createImportJob(ImportDetail detail) { // TODO: ensure checks are done
@@ -493,8 +562,15 @@ public class ImportServiceImpl implements ImportService {
 				csvWriter.writeNext(new String[] { ExceptionUtils.getFullStackTrace(e) });
 			} finally {
 				runningJobs.remove(job.getId());
+
 				IOUtils.closeQuietly(objReader);
 				closeQuietly(csvWriter);
+
+				//
+				// Delete uploaded files
+				//
+				FileUtils.deleteQuietly(new File(getFilesDirPath(job.getId())));
+
 				sendJobStatusNotification();
 			}
 		}
@@ -638,10 +714,11 @@ public class ImportServiceImpl implements ImportService {
 		
 		private String importObject(final ObjectImporter<Object, Object> importer, Object object, Map<String, String> params) {
 			try {
-				ImportObjectDetail<Object> detail = new ImportObjectDetail<Object>();
+				ImportObjectDetail<Object> detail = new ImportObjectDetail<>();
 				detail.setCreate(job.getType() == Type.CREATE);
 				detail.setObject(object);
 				detail.setParams(params);
+				detail.setUploadedFilesDir(getFilesDirPath(job.getId()));
 				
 				final RequestEvent<ImportObjectDetail<Object>> req = new RequestEvent<ImportObjectDetail<Object>>(detail);
 				ResponseEvent<Object> resp = txTmpl.execute(

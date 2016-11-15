@@ -212,11 +212,15 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		OutputStream outputStream = null;
 		try {
 			FileDetail detail = req.getPayload();
-			CollectionProtocolRegistration existing = daoFactory.getCprDao().getById(detail.getId());
-			if (existing == null) {
-				return ResponseEvent.userError(CprErrorCode.NOT_FOUND);
+
+			Long cprId = detail.getId();
+			String cpShortTitle = null, ppid = null;
+			if (detail.getObjectProps() != null) {
+				cpShortTitle = (String) detail.getObjectProps().get("cpShortTitle");
+				ppid         = (String) detail.getObjectProps().get("ppid");
 			}
-			
+
+			CollectionProtocolRegistration existing = getCpr(cprId, null, cpShortTitle, ppid);
 			AccessCtrlMgr.getInstance().ensureUpdateCprRights(existing);
 			
 			if (existing.getCollectionProtocol().isConsentsWaived()) {

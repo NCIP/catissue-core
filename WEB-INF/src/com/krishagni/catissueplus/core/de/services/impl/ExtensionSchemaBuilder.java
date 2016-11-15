@@ -91,7 +91,7 @@ public class ExtensionSchemaBuilder implements ObjectSchemaBuilder {
 		for (Control ctrl : form.getOrderedControlList()) {
 			if (ctrl instanceof SubFormControl) {
 				subRecords.add(getSubRecord((SubFormControl)ctrl, useUdn));
-			} else if (!(ctrl instanceof FileUploadControl)) {
+			} else {
 				fields.add(getField(ctrl, useUdn));
 			}
 		}

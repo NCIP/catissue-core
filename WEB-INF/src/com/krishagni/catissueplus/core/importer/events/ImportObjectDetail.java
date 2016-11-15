@@ -10,6 +10,8 @@ public class ImportObjectDetail<T> {
 	
 	private Map<String, String> params = new HashMap<>();
 
+	private String uploadedFilesDir;
+
 	public T getObject() {
 		return object;
 	}
@@ -32,5 +34,13 @@ public class ImportObjectDetail<T> {
 	
 	public void setParams(Map<String, String> params) {
 		this.params = params;
+	}
+
+	public String getUploadedFilesDir() {
+		return uploadedFilesDir;
+	}
+
+	public void setUploadedFilesDir(String uploadedFilesDir) {
+		this.uploadedFilesDir = uploadedFilesDir;
 	}
 }

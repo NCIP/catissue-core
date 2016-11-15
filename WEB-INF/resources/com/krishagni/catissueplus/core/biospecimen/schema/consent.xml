@@ -48,5 +48,10 @@
       <caption>#getMessage("participant_consent_tier_response")</caption>
       <attribute>response</attribute>
     </field>
+    
+    <field>
+      <caption>#getMessage("participant_consent_doc_name")</caption>
+      <attribute>consentDocumentName</attribute>
+    </field>
   </record>
 </object-schema>

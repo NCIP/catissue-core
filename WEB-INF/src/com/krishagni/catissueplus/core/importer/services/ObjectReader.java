@@ -235,7 +235,7 @@ public class ObjectReader implements Closeable {
 			return value;
 		}
 	}
-		
+	
 	private List<Map<String, Object>> removeEmptyObjs(List<Map<String, Object>> objs) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		for (Map<String, Object> obj : objs) {

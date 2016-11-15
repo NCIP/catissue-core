@@ -19,7 +19,9 @@ public enum ImportJobErrorCode implements ErrorCode {
 
 	INVALID_DATE_FORMAT,
 
-	INVALID_TIME_FORMAT;
+	INVALID_TIME_FORMAT,
+	
+	CSV_NOT_FOUND_IN_ZIP;
 
 	@Override
 	public String code() {		

@@ -17,6 +17,8 @@ public enum FormErrorCode implements ErrorCode {
 	
 	FILE_NOT_FOUND,
 	
+	UPLOADED_FILE_NOT_FOUND,
+	
 	NO_ASSOCIATION,
 			
 	OP_NOT_ALLOWED,

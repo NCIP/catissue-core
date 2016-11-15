@@ -65,6 +65,11 @@
     <field>
       <caption>#getMessage("visit_surgical_pathology_number")</caption>
       <attribute>surgicalPathologyNumber</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("visit_spr_file_name")</caption>
+      <attribute>sprName</attribute>
     </field>  
 
     <record>

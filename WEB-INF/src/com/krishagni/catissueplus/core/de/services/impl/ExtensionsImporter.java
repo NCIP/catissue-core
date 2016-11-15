@@ -1,8 +1,13 @@
 package com.krishagni.catissueplus.core.de.services.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
@@ -18,6 +23,7 @@ import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.Status;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.domain.FormErrorCode;
 import com.krishagni.catissueplus.core.de.events.FormDataDetail;
 import com.krishagni.catissueplus.core.de.events.FormRecordCriteria;
@@ -27,7 +33,11 @@ import com.krishagni.catissueplus.core.importer.events.ImportObjectDetail;
 import com.krishagni.catissueplus.core.importer.services.ObjectImporter;
 
 import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.Control;
+import edu.common.dynamicextensions.domain.nui.FileUploadControl;
+import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.napi.FormData;
+import edu.common.dynamicextensions.nutility.FileUploadMgr;
 
 public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, Map<String, Object>> {
 	
@@ -60,7 +70,6 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 	public ResponseEvent<Map<String, Object>> importObject(RequestEvent<ImportObjectDetail<Map<String, Object>>> req) {
 		try {
 			ImportObjectDetail<Map<String, Object>> importDetail = req.getPayload();
-			Map<String, String> params = importDetail.getParams();
 			
 			Map<String, Object> extnObj = importDetail.getObject();
 			String recordId = (String)extnObj.get("recordId");
@@ -71,9 +80,9 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 			}
 
 			if (importDetail.isCreate() || !isDelete(extnObj)) {
-				return createOrUpdateRecord(params, extnObj);
+				return createOrUpdateRecord(importDetail);
 			} else {
-				return deleteRecord(params, extnObj);
+				return deleteRecord(importDetail);
 			}
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
@@ -82,7 +91,10 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		}
 	}
 	
-	private ResponseEvent<Map<String, Object>> createOrUpdateRecord(Map<String, String> params, Map<String, Object> extnObj) {
+	private ResponseEvent<Map<String, Object>> createOrUpdateRecord(ImportObjectDetail<Map<String, Object>> importDetail) {
+		Map<String, Object> extnObj = importDetail.getObject();
+
+		Map<String, String> params  = importDetail.getParams();
 		String entityType = params.get("entityType");
 		Long objectId = null;
 		CollectionProtocol cp = null;
@@ -132,6 +144,8 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		
 		Map<String, Object> formValueMap = (Map<String, Object>)extnObj.get("formValueMap");
 		formValueMap.put("appData", appData);
+
+		initFileFields(importDetail.getUploadedFilesDir(), form, formValueMap);
 		
 		String recordId = (String)extnObj.get("recordId");
 		if (StringUtils.isNotBlank(recordId)) {
@@ -150,10 +164,58 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		
 		return ResponseEvent.response(resp.getPayload().getFormData().getFieldNameValueMap(true));
 	}
+
+	private void initFileFields(String filesDir, Container form, Map<String, Object> formValueMap) {
+		for (Control ctrl : form.getControls()) {
+			String fieldName = ctrl.getUserDefinedName();
+
+			if (ctrl instanceof SubFormControl) {
+				SubFormControl sfCtrl = (SubFormControl)ctrl;
+				if (sfCtrl.isOneToOne()) {
+					Map<String, Object> sfValueMap = (HashMap<String, Object>)formValueMap.get(fieldName);
+					initFileFields(filesDir, sfCtrl.getSubContainer(), sfValueMap);
+				} else {
+					List<Map<String, Object>> sfValueMapList = (List<Map<String, Object>>)formValueMap.get(fieldName);
+					if (sfValueMapList != null) {
+						for (Map<String, Object> sfValueMap : sfValueMapList) {
+							initFileFields(filesDir, sfCtrl.getSubContainer(), sfValueMap);
+						}
+					}
+				}
+
+			} else if (ctrl instanceof FileUploadControl) {
+				String filename = (String)formValueMap.get(fieldName);
+				if (StringUtils.isNotBlank(filename)) {
+					Map<String, String> fileDetail = uploadFile(filesDir, filename);
+					formValueMap.put(fieldName, fileDetail);
+				}
+			}
+		}
+	}
+
+	private Map<String, String> uploadFile(String filesDir, String filename) {
+		FileInputStream fin = null;
+		try {
+			File fileToUpload = new File(filesDir + File.separator + filename);
+			fin = new FileInputStream(fileToUpload);
+			String fileId = FileUploadMgr.getInstance().saveFile(fin);
+
+			Map<String, String> fileDetail = new HashMap<>();
+			fileDetail.put("filename", filename);
+			fileDetail.put("fileId", fileId);
+			fileDetail.put("contentType", Utility.getContentType(fileToUpload));
+
+			return fileDetail;
+		} catch (FileNotFoundException fnfe) {
+			throw OpenSpecimenException.userError(FormErrorCode.UPLOADED_FILE_NOT_FOUND, filename);
+		} finally {
+			IOUtils.closeQuietly(fin);
+		}
+	}
 	
-	private ResponseEvent<Map<String, Object>> deleteRecord(Map<String, String> params, Map<String, Object> extnObj) {
-		String recordId = (String)extnObj.get("recordId");
-		String formName = params.get("formName");
+	private ResponseEvent<Map<String, Object>> deleteRecord(ImportObjectDetail<Map<String, Object>> importDetail) {
+		String recordId = (String)importDetail.getObject().get("recordId");
+		String formName = importDetail.getParams().get("formName");
 		
 		Container form = Container.getContainer(formName);
 		if (form == null) {
@@ -166,7 +228,7 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		ResponseEvent<Long> resp = formSvc.deleteRecord(new RequestEvent<FormRecordCriteria>(crit));
 		resp.throwErrorIfUnsuccessful();
 		
-		return ResponseEvent.response(extnObj);
+		return ResponseEvent.response(importDetail.getObject());
 	}
 	
 	private boolean isDelete(Map<String, Object> extnObj) {
