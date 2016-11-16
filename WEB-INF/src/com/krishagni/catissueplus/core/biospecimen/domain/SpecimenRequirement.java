@@ -436,6 +436,7 @@ public class SpecimenRequirement extends BaseEntity implements Comparable<Specim
 	
 	public Specimen getSpecimen() {
 		Specimen specimen = new Specimen();
+		specimen.setCollectionProtocol(getCollectionProtocol());
 		specimen.setLineage(getLineage());
 		specimen.setSpecimenClass(getSpecimenClass());
 		specimen.setSpecimenType(getSpecimenType());

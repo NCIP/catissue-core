@@ -556,10 +556,12 @@ public class Visit extends BaseExtensionEntity {
 	private Specimen createPendingSpecimen(SpecimenRequirement sr, Specimen parent) {
 		Specimen specimen = sr.getSpecimen();
 		specimen.setParentSpecimen(parent);
+		specimen.setVisit(this);
 		specimen.setCollectionStatus(Specimen.PENDING);
-		addSpecimen(specimen);
+
 		specimen.setLabelIfEmpty();
 
+		addSpecimen(specimen);
 		daoFactory.getSpecimenDao().saveOrUpdate(specimen);
 
 		for (SpecimenRequirement poolSr : sr.getOrderedSpecimenPoolReqs()) {
