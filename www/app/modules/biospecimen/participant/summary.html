@@ -59,13 +59,23 @@
     </li>
 
     <li class="item">
-      <strong class="key key-sm" translate="participant.vital_status">Vital Status:</strong>
-      <span class="value value-md"> {{cpr.participant.vitalStatus | osNoValue}} </span>
+      <strong class="key key-sm" translate="participant.ethnicity">Ethnicity:</strong>
+      <span class="value value-md"> {{cpr.participant.ethnicity | osNoValue}} </span>
     </li>
 
     <li class="item">
       <strong class="key key-sm" translate="participant.race">Race:</strong>
       <span class="value value-md"> {{cpr.participant.races | osArrayJoin | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.vital_status">Vital Status:</strong>
+      <span class="value value-md"> {{cpr.participant.vitalStatus | osNoValue}} </span>
+    </li>
+
+    <li class="item" ng-if="!!cpr.participant.deathDate">
+      <strong class="key key-sm" translate="participant.death_date">Death Date:</strong>
+      <span class="value value-md"> {{cpr.participant.deathDate | date: global.dateFmt}} </span>
     </li>
   </ul>
 
