@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -316,8 +317,6 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 	}
 	
 	private List<Site> getAccessibleSites(SiteListCriteria criteria) {
-		List<Site> results = new ArrayList<Site>();
-		
 		Set<Site> accessibleSites = null;
 		if (StringUtils.isNotBlank(criteria.resource()) && StringUtils.isNotBlank(criteria.operation())) {
 			Resource resource = Resource.fromName(criteria.resource());
@@ -334,26 +333,16 @@ public class SiteServiceImpl implements SiteService, ObjectStateParamsResolver {
 		} else {
 			accessibleSites = AccessCtrlMgr.getInstance().getRoleAssignedSites();
 		}
-		
-		String searchTerm = criteria.query();
-		if (StringUtils.isNotBlank(searchTerm)) {
-			for (Site site : accessibleSites) {
-				if (StringUtils.containsIgnoreCase(site.getName(), searchTerm)) {
-					results.add(site);
-				}
-			}
-		} else {
-			results.addAll(accessibleSites);
-		}
-		
-		Collections.sort(results, new Comparator<Site>() {
-			@Override
-			public int compare(Site site1, Site site2) {
-				return site1.getName().compareTo(site2.getName());
-			}			
-		});
-		
-		return results;
+
+		boolean noIncTypes = CollectionUtils.isEmpty(criteria.includeTypes());
+		boolean noExlTypes = CollectionUtils.isEmpty(criteria.excludeTypes());
+		boolean noSearchTerm = StringUtils.isBlank(criteria.query());
+		return accessibleSites.stream()
+			.filter(site -> noIncTypes || criteria.includeTypes().contains(site.getType()))
+			.filter(site -> noExlTypes || !criteria.excludeTypes().contains(site.getType()))
+			.filter(site -> noSearchTerm || StringUtils.containsIgnoreCase(site.getName(), criteria.query()))
+			.sorted((site1, site2) -> site1.getName().compareTo(site2.getName()))
+			.collect(Collectors.toList());
 	}
 	
 	private Site getFromAccessibleSite(SiteQueryCriteria crit) {

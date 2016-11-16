@@ -40,9 +40,6 @@ public class SitesController {
 	@Autowired
 	private FormService formSvc;
 
-	@Autowired
-	private HttpServletRequest httpServletRequest;
-	
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
@@ -71,6 +68,12 @@ public class SitesController {
 			@RequestParam(value = "listAll", required = false, defaultValue = "false")
 			boolean listAll,
 
+			@RequestParam(value = "includeType", required = false)
+			List<String> includeTypes,
+
+			@RequestParam(value = "excludeType", required = false)
+			List<String> excludeTypes,
+
 			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
 			boolean includeStats) {
 		
@@ -83,6 +86,8 @@ public class SitesController {
 			.startAt(startAt)
 			.maxResults(maxResults)
 			.listAll(listAll)
+			.includeTypes(includeTypes)
+			.excludeTypes(excludeTypes)
 			.includeStat(includeStats);
 		
 		RequestEvent<SiteListCriteria> req = new RequestEvent<>(crit);
@@ -121,7 +126,7 @@ public class SitesController {
 		SiteQueryCriteria crit = new SiteQueryCriteria();
 		crit.setId(id);
 		
-		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(crit);
+		RequestEvent<SiteQueryCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<SiteDetail> resp = siteService.getSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -135,7 +140,7 @@ public class SitesController {
 		SiteQueryCriteria crit = new SiteQueryCriteria();
 		crit.setName(name);
 
-		RequestEvent<SiteQueryCriteria> req = new RequestEvent<SiteQueryCriteria>(crit);
+		RequestEvent<SiteQueryCriteria> req = new RequestEvent<>(crit);
 		ResponseEvent<SiteDetail> resp = siteService.getSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -147,7 +152,7 @@ public class SitesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public SiteDetail createSite(@RequestBody SiteDetail siteDetail) {
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
+		RequestEvent<SiteDetail> req = new RequestEvent<>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.createSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -160,7 +165,7 @@ public class SitesController {
 	public SiteDetail updateSite(@PathVariable Long id, @RequestBody SiteDetail siteDetail) {
 		siteDetail.setId(id);
 		
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
+		RequestEvent<SiteDetail> req = new RequestEvent<>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.updateSite(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -173,7 +178,7 @@ public class SitesController {
 	public SiteDetail patchSite(@PathVariable Long id, @RequestBody SiteDetail siteDetail) {
 		siteDetail.setId(id);
 		
-		RequestEvent<SiteDetail> req = new RequestEvent<SiteDetail>(siteDetail);
+		RequestEvent<SiteDetail> req = new RequestEvent<>(siteDetail);
 		ResponseEvent<SiteDetail> resp = siteService.patchSite(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
@@ -183,7 +188,7 @@ public class SitesController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
-		RequestEvent<Long> req = new RequestEvent<Long>(id);
+		RequestEvent<Long> req = new RequestEvent<>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = siteService.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
 		
@@ -196,7 +201,7 @@ public class SitesController {
 	public SiteDetail deleteSite(@PathVariable Long id, 
 			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
 		DeleteEntityOp deleteOp = new DeleteEntityOp(id, close);
-		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(deleteOp);
+		RequestEvent<DeleteEntityOp> req = new RequestEvent<>(deleteOp);
 		ResponseEvent<SiteDetail> resp = siteService.deleteSite(req);
 		resp.throwErrorIfUnsuccessful();
 		

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -96,8 +97,8 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 
 	private Criteria getSitesListQuery(SiteListCriteria crit) {
 		Criteria query = sessionFactory.getCurrentSession()
-				.createCriteria(Site.class)
-				.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()));
+			.createCriteria(Site.class)
+			.add(Restrictions.eq("activityStatus", Status.ACTIVITY_STATUS_ACTIVE.getStatus()));
 
 		return addSearchConditions(query, crit);
 	}
@@ -110,6 +111,14 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		if (StringUtils.isNotBlank(listCrit.institute())) {
 			query.createAlias("institute", "i")
 				.add(Restrictions.eq("i.name", listCrit.institute()));	
+		}
+
+		if (CollectionUtils.isNotEmpty(listCrit.includeTypes())) {
+			query.add(Restrictions.in("type", listCrit.includeTypes()));
+		}
+
+		if (CollectionUtils.isNotEmpty(listCrit.excludeTypes())) {
+			query.add(Restrictions.not(Restrictions.in("type", listCrit.excludeTypes())));
 		}
 
 		return query;

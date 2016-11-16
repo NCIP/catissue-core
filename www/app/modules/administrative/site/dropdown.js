@@ -64,6 +64,8 @@ angular.module('openspecimen')
         opts.operation = attrs.operation.trim();
       }
 
+      opts.excludeType = scope.excludeTypes || [];
+      opts.includeType = scope.includeTypes || [];
       return opts;
     }
 
@@ -75,11 +77,13 @@ angular.module('openspecimen')
       replace : true,
 
       scope   : {
-        ngModel    : '=',
-        institute  : '=',
-        onSelect   : '&',
-        onRemove   : '&',
-        listFn     : '&'
+        ngModel      : '=',
+        institute    : '=',
+        excludeTypes : '=',
+        includeTypes : '=',
+        onSelect     : '&',
+        onRemove     : '&',
+        listFn       : '&'
       },
 
       template:
