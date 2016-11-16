@@ -1,2 +1,2 @@
 
-angular.module('os.common', ['os.common.models', 'os.common.form', 'os.common.delete', 'os.common.search']);
+angular.module('os.common', ['ui.router', 'os.common.models', 'os.common.form', 'os.common.delete', 'os.common.search']);

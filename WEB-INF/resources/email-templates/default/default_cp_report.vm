@@ -6,6 +6,9 @@
   #end
 #end
 
+#set ( $apiUrl = "$appUrl/rest/ng/collection-protocols/$cpId/report?fileId=$dataFile" )
+#set ( $downloadUrl = "$appUrl/#/file-download?downloadUrl=$urlEncoder.encode($apiUrl)" )
+
 <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate;padding: 5px 20px;">
   <tbody>
     <tr>
@@ -13,7 +16,7 @@
         <div style="display:block;font-family:Helvetica,Arial,sans-serif;font-size:24px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;margin: 10px auto;">
           $cpShortTitle Activity Report
         </div>
-        <a style="display: inline-block; text-decoration: none; padding: 10px; border: 1px solid #357ebd; border-radius: 5px; background-color: #428bca; color: #fff; margin: 10px auto;" href=$appUrl/rest/ng/collection-protocols/$cpId/report?fileId=$dataFile>
+        <a style="display: inline-block; text-decoration: none; padding: 10px; border: 1px solid #357ebd; border-radius: 5px; background-color: #428bca; color: #fff; margin: 10px auto;" href="$downloadUrl">
           Download Report
         </a>
       </td>

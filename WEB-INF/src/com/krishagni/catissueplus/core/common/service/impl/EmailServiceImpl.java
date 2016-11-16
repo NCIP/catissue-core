@@ -2,6 +2,7 @@ package com.krishagni.catissueplus.core.common.service.impl;
 
 import java.io.File;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -166,6 +167,7 @@ public class EmailServiceImpl implements EmailService, ConfigChangeListener, Ini
 		props.put("adminEmailAddress", adminEmailId);
 		props.put("adminPhone", "1234567890");//TODO: will be replaced by property file
 		props.put("dateFmt", new SimpleDateFormat(ConfigUtil.getInstance().getDateTimeFmt()));
+		props.put("urlEncoder", URLEncoder.class);
 		String subject = getSubject(tmplKey, (String[]) props.get("$subject"));
 		String content = templateService.render(getBaseTmpl(), props);
 
