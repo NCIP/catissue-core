@@ -44,11 +44,6 @@
     </li>
 
     <li class="item">
-      <strong class="key key-sm" translate="participant.pmis">Medical Identifiers:</strong>
-      <span class="value value-md" os-inline-edit>{{cpr.participant.pmis | osArrayJoin: pmiText | osNoValue}}</span>
-    </li>
-
-    <li class="item">
       <strong class="key key-sm" translate="participant.mpi">Master Patient Index:</strong>
       <span class="value value-md"> {{cpr.participant.empi | osNoValue}} </span>
     </li>
@@ -76,6 +71,41 @@
 
   <div ng-if="!!cpr.participant.extensionDetail">
     <div os-extension-overview ext-object="cpr.participant.extensionDetail" show-column="2">
+    </div>
+  </div>
+
+  <div ng-include="'modules/biospecimen/participant/mrn-details.html'"></div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/mrn-details.html">
+  <div class="os-section" ng-init="mrnCollapsed=false" ng-if="cpr.participant.pmis.length > 0">
+    <button class="os-btn-section-collapse os-btn-transparent" ng-click="mrnCollapsed=!mrnCollapsed">
+      <span class="fa" ng-class="{true: 'fa-chevron-circle-right', false: 'fa-chevron-circle-down'}[mrnCollapsed]"></span>
+    </button>
+    <h3 class="os-sub-section-title" translate="participant.pmis">Medical Identifiers</h3>
+    <div collapse="mrnCollapsed">
+      <table class="os-table os-table-muted-hdr os-border">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col col-xs-6">
+              <span translate="participant.site">Site</span>
+            </th>
+            <th class="col col-xs-6">
+              <span translate="participant.mrn">Medical Record Number</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="pmi in cpr.participant.pmis">
+            <td class="col col-xs-6">
+              <span>{{pmi.siteName}}</span>
+            </td>
+            <td class="col col-xs-6">
+              <span>{{pmi.mrn | osNoValue}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </script>
