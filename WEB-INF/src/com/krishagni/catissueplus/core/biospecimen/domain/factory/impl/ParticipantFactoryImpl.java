@@ -80,8 +80,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		setEmpi(detail, participant, partial, ose);
 		setName(detail, participant, partial, ose);
 		setVitalStatus(detail, participant, partial, ose);
-		setBirthDate(detail, participant, partial, ose);
-		setDeathDate(detail, participant, partial, ose);
+		setBirthAndDeathDate(detail, participant, partial, ose);
 		setActivityStatus(detail, participant, partial, ose);
 		setSexGenotype(detail, participant, partial, ose);
 		setGender(detail, participant, partial, ose);
@@ -175,42 +174,32 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 		participant.setVitalStatus(vitalStatus);
 	}
 
-	private void setBirthDate(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.isAttrModified("birthDate")) {
-			return;
+	private void setBirthAndDeathDate(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
+		if (!partial || detail.isAttrModified("birthDate")) {
+			Date birthDate = detail.getBirthDate();
+			if (birthDate != null && birthDate.after(Calendar.getInstance().getTime())) {
+				oce.addError(ParticipantErrorCode.INVALID_BIRTH_DATE);
+				return;
+			}
+
+			participant.setBirthDate(birthDate);
 		}
-				
-		Date birthDate = detail.getBirthDate();
-		
-		if (birthDate == null) {
-			return;
+
+		if (!partial || detail.isAttrModified("deathDate")) {
+			Date deathDate = detail.getDeathDate();
+
+			if (deathDate != null && deathDate.after(Calendar.getInstance().getTime())) {
+				oce.addError(ParticipantErrorCode.INVALID_DEATH_DATE);
+			}
+
+			// TODO: how do we set vital status to dead now?
+			participant.setDeathDate(deathDate);
 		}
-		
-		if (birthDate.after(Calendar.getInstance().getTime())) {
-			oce.addError(ParticipantErrorCode.INVALID_BIRTH_DATE);
-			return;
-		}
-		
-		participant.setBirthDate(birthDate);
-	}
-	
-	private void setDeathDate(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
-		if (partial && !detail.isAttrModified("deathDate")) {
-			return;
-		}
-				
-		Date deathDate = detail.getDeathDate();		
-		if (deathDate == null) {
-			return;
-		}
-		
-		if (participant.getBirthDate() != null && deathDate.before(participant.getBirthDate())) {
+
+		if (participant.getBirthDate() != null && participant.getDeathDate() != null &&
+			participant.getBirthDate().after(participant.getDeathDate())) {
 			oce.addError(ParticipantErrorCode.INVALID_DEATH_DATE);
 		}
-		
-		// TODO: how do we set vital status to dead now?
-		
-		participant.setDeathDate(deathDate);
 	}
 
 	private void setActivityStatus(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException oce) {
