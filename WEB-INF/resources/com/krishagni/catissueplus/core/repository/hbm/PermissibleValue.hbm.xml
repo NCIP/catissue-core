@@ -59,6 +59,17 @@
         ppv.value in (:specimenClasses)
     </query>
 
+    <query name="getSpecimenClass">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue cpv
+        join cpv.parent pv
+      where
+        pv.attribute = 'specimen_type' and
+        cpv.value = :type
+    </query>
+
     <query name="getByConceptCode">
       from
         com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv

@@ -86,7 +86,16 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 				.setParameterList("specimenClasses", specimenClasses)
 				.list();
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public String getSpecimenClass(String type) {
+		List<String> classes = getCurrentSession().getNamedQuery(GET_SPECIMEN_CLASS)
+			.setString("type", type)
+			.list();
+		return classes.size() == 1 ? classes.get(0) : null;
+	}
+
 	@Override
 	public boolean exists(String attribute, Collection<String> values) {
 		return exists(attribute, values, false);
@@ -186,4 +195,6 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	private static final String GET_SPECIMEN_CLASSES = FQN + ".getSpecimenClasses";
 
 	private static final String GET_SPECIMEN_TYPES = FQN + ".getSpecimenTypes";
+
+	private static final String GET_SPECIMEN_CLASS = FQN + ".getSpecimenClass";
 }

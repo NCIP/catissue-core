@@ -566,16 +566,18 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 				
 		String specimenClass = detail.getSpecimenClass();
 		if (StringUtils.isBlank(specimenClass)) {
-			if (specimen.getSpecimenRequirement() == null) {
+			if (specimen.getSpecimenRequirement() != null) {
+				specimenClass = specimen.getSpecimenRequirement().getSpecimenClass();
+			} else if (StringUtils.isNotBlank(detail.getType())) {
+				specimenClass = daoFactory.getPermissibleValueDao().getSpecimenClass(detail.getType());
+			}
+
+			detail.setSpecimenClass(specimenClass);
+			if (StringUtils.isBlank(specimenClass)) {
 				ose.addError(SpecimenErrorCode.SPECIMEN_CLASS_REQUIRED);
 			}
-			
-			return;
-		}
-		
-		if (!isValid(SPECIMEN_CLASS, specimenClass)) {
+		} else if (!isValid(SPECIMEN_CLASS, specimenClass)) {
 			ose.addError(SpecimenErrorCode.INVALID_SPECIMEN_CLASS);
-			return;
 		}
 		
 		specimen.setSpecimenClass(specimenClass);		
