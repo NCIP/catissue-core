@@ -28,7 +28,29 @@
           <li><a ui-sref="login({logout:true})"  translate="user.logout">Log Out</a></li>
         </ul>
       </li>
-      <os-info></os-info>
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span class="fa fa-question-circle"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li>
+            <a href="{{userCtx.helpUrl}}" target="_blank">
+              <span translate="common.online_help">Online Help</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{userCtx.forumUrl}}" target="_blank">
+              <span translate="common.qa_forums">Q & A Forums</span>
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a ng-controller="AboutOSCtrl" ng-click="showAboutOS()">
+              <span translate="common.about_os">About OpenSpecimen</span>
+            </a>
+          </li>
+        </ul>
+      </li>
       <li ng-if="global.appProps.feedback_enabled">
         <a ng-controller="FeedbackCtrl" ng-click="openFeedbackForm()">
           <span class="fa fa-bullhorn"></span>

@@ -59,6 +59,9 @@
     "update": "Update",
     "loading": "Loading...",
     "help": "Help",
+    "online_help": "Online Help",
+    "qa_forums": "Q & A Forums",
+    "about_os": "About OpenSpecimen",
     "build_info_title": "About OpenSpecimen",
     "build_version": "Version",
     "build_date": "Build date",
@@ -2116,7 +2119,11 @@
         "user_help_link": "User",
         "user_help_link_desc": "Link to training materials on how to manage users",
         "training_url": "Training URL ",
-        "training_url_desc": "Link to used for the training option in the menu"
+        "training_url_desc": "Link to user manual and training videos portal",
+        "help_link": "Online Help",
+        "help_link_desc": "Link to online software help",
+        "forum_link": "Q & A Forums",
+        "forum_link_desc": "Link to Q & A forums site"
       }
     },
 

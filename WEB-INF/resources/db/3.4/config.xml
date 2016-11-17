@@ -228,4 +228,24 @@
       );
     </sql>
   </changeSet>
+  
+  <changeSet author="mdnasim" id="Help link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'help_link',
+        'help_link', 'help_link_desc',
+        'STRING', 'http://help.openspecimen.org'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Forum link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'forum_link',
+        'forum_link', 'forum_link_desc',
+        'STRING', 'http://forums.openspecimen.org'
+      );
+    </sql>
+  </changeSet>
 </databaseChangeLog>

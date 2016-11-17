@@ -1005,6 +1005,15 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
   border-radius: 4px;
 }
 
+.os-about-modal.modal.in {
+  display: flex!important;
+  align-items: center;
+}
+
+.os-about-modal .os-about-po {
+  width: 100%;
+}
+
 .dropdown-menu .os-about-po { /** offset dropdown menu's padding  **/
   margin-top: -5px;
   margin-bottom: -5px;
