@@ -20,11 +20,16 @@ angular.module('openspecimen')
       );
     }
 
+    //
+    // ng-if with replace: true creates new child scope
+    // therefore in order to access link, $parent needs to be used
+    //
     return {
       restrict: 'E',
+      scope: {},
       replace: true,
       link : linker,
-      template: '<a ng-if="link" ng-href="{{link}}" target="_blank">' +
+      template: '<a ng-if="link" ng-href="{{$parent.link}}" target="_blank">' +
                 '  <span class="fa fa-question-circle"></span>' +
                 '  <span translate="common.buttons.help">Help</span>' +
                 '</a>'
