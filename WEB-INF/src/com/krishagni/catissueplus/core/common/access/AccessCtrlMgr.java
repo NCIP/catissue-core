@@ -143,7 +143,7 @@ public class AccessCtrlMgr {
 		}
 
 		if (!allowed) {
-			throw OpenSpecimenException.userError(RbacErrorCode.ADMIN_RIGHTS_REQUIRED);
+			throw OpenSpecimenException.userError(RbacErrorCode.INST_ADMIN_RIGHTS_REQ, site.getInstitute().getName());
 		}
 	}
 	
