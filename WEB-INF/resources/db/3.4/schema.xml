@@ -389,6 +389,17 @@
         new_identifier identifier bigint auto_increment;
     </sql>
   </changeSet>
+
+  <changeSet author="mdnasim" id="PV ID FIX: Update parent identifier for permissible value to null if parent identifier is 0" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        parent_identifier = null
+      where
+        parent_identifier = 0
+    </sql>
+  </changeSet>
   
   <changeSet author="mdnasim" id="PV ID FIX: Foreign key on parent of permissible values">
     <addForeignKeyConstraint
