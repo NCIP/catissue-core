@@ -15,13 +15,9 @@
         <div ng-if="evt.id != event.id">
           <div class="list-group-item" ng-class="{'active': selected.id == evt.id}">
             <div ng-click="selectEvent(evt)">
-              <span ng-if="evt.eventPoint >= 0">
-                T{{evt.eventPoint}}: {{evt.eventLabel}}
-              </span>
-              <span ng-if="evt.eventPoint < 0">
-                -T{{-evt.eventPoint}}: {{evt.eventLabel}}
-              </span>
-              <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span> 
+              <os-event-desc event-point="evt.eventPoint" event-label="evt.eventLabel"
+                event-code="evt.code" coding-enabled="codingEnabled">
+              </os-event-desc>
             </div>
 
             <div class="os-more-options" dropdown show-if-allowed="cpResource.updateOpts">
@@ -37,6 +33,7 @@
                   </a>
                 </li>
                 <li>
+
                   <a ng-click="showCopyEvent(evt)">
                     <i class="fa fa-copy"></i>
                     <span translate="cp.copy_cpe">Copy</span>

@@ -441,8 +441,6 @@
     "surgical_path_no": "Surg Path Number",
     "reason_for_missed_visit": "Reason for Missed Visit",
     "comments": "Comments",
-    "eos": "EOS",
-    "end_of_study": "End of Study",
     "unplanned_visit": "Unplanned Visit",
 
     "names_print_job_created": "Visit names print job {{jobId}} created successfully",

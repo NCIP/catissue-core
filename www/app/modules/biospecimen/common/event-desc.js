@@ -7,7 +7,9 @@ angular.module('os.biospecimen.common.eventdesc', [])
 
       scope: {
         eventPoint: '=',
-        eventLabel: '='
+        eventLabel: '=',
+        eventCode: '=',
+        codingEnabled: '='
       },
 
       template:
@@ -22,11 +24,11 @@ angular.module('os.biospecimen.common.eventdesc', [])
                   '-T{{-eventPoint}}: ' +
                 '</span>' +
               '</span>' +
-              '<span ng-switch-default>' +
-                'T<span translate="visits.eos">EOS</span>: ' +
-              '</span>' +
               '<span>' +
-                '{{eventLabel}}' +
+                '{{eventLabel}} ' +
+              '</span>' +
+              '<span ng-if="codingEnabled && !!eventCode">' +
+                '({{eventCode}})' +
               '</span>' +
             '</span>' +
             '<span ng-switch-when="false" translate="visits.unplanned_visit">' +
