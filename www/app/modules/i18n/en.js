@@ -148,7 +148,7 @@
 
     "cp_def_file": "Collection Protocol Definition File",
   
-    "repositories": "Repositories",
+    "repositories": "Sites",
     "site": "Site", 
     "title": "Title",
     "short_title": "Short Title",
