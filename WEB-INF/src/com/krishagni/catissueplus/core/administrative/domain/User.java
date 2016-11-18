@@ -253,7 +253,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return !Status.ACTIVITY_STATUS_LOCKED.getStatus().equals(getActivityStatus());
+		return !isLocked();
 	}
 
 	@Override
@@ -359,6 +359,18 @@ public class User extends BaseEntity implements UserDetails {
 
 	public boolean isExpired() {
 		return Status.ACTIVITY_STATUS_EXPIRED.getStatus().equals(getActivityStatus());
+	}
+	
+	public boolean isLocked() {
+		return Status.ACTIVITY_STATUS_LOCKED.getStatus().equals(getActivityStatus());
+	}
+
+	public boolean isPending() {
+		return Status.ACTIVITY_STATUS_PENDING.getStatus().equals(getActivityStatus());
+	}
+
+	public boolean isClosed() {
+		return Status.ACTIVITY_STATUS_CLOSED.getStatus().equals(getActivityStatus());
 	}
 
 	private boolean isValidPasswordPattern(String password) {

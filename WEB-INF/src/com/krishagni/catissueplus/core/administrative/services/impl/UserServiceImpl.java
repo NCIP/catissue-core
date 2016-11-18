@@ -28,6 +28,7 @@ import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.administrative.repository.UserListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.UserService;
 import com.krishagni.catissueplus.core.auth.domain.AuthDomain;
+import com.krishagni.catissueplus.core.auth.domain.AuthErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -386,20 +387,22 @@ public class UserServiceImpl implements UserService {
 	@PlusTransactional
 	public ResponseEvent<Boolean> forgotPassword(RequestEvent<String> req) {
 		try {
-			UserDao dao = daoFactory.getUserDao();
-			String loginName = req.getPayload();
-			User user = dao.getUser(loginName, DEFAULT_AUTH_DOMAIN);
-			if (user == null || !(user.isActive() || user.isExpired())) {
+			UserDao userDao = daoFactory.getUserDao();
+
+			User user = userDao.getUser(req.getPayload(), DEFAULT_AUTH_DOMAIN);
+			if (user == null || user.isPending() || user.isClosed()) {
 				return ResponseEvent.userError(UserErrorCode.NOT_FOUND);
+			} else if (user.isLocked()) {
+				return ResponseEvent.userError(AuthErrorCode.USER_LOCKED);
 			}
-			
-			ForgotPasswordToken oldToken = dao.getFpTokenByUser(user.getId());
+
+			ForgotPasswordToken oldToken = userDao.getFpTokenByUser(user.getId());
 			if (oldToken != null) {
-				dao.deleteFpToken(oldToken);
+				userDao.deleteFpToken(oldToken);
 			}
 			
 			ForgotPasswordToken token = new ForgotPasswordToken(user);
-			dao.saveFpToken(token);
+			userDao.saveFpToken(token);
 			sendForgotPasswordLinkEmail(user, token.getToken());
 			return ResponseEvent.response(true);
 		} catch (Exception e) {
@@ -410,7 +413,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SubjectRoleDetail>> getCurrentUserRoles() {
-		return rbacSvc.getSubjectRoles(new RequestEvent<Long>(AuthUtil.getCurrentUser().getId()));
+		return rbacSvc.getSubjectRoles(new RequestEvent<>(AuthUtil.getCurrentUser().getId()));
 	}		
 	
 	@Override
