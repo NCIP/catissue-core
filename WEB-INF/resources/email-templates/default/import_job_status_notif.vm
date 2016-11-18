@@ -35,7 +35,7 @@
                   <tr>
                     <td> Number of records inserted </td>
                     <td> :
-                      #if ( $atomic )
+                      #if ( $atomic && $job.status != 'COMPLETED' )
                         #set($inserted = 0)
                       #else
                         #set($inserted = $job.totalRecords - $job.failedRecords)
