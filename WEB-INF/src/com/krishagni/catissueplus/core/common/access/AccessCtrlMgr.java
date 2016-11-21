@@ -19,7 +19,6 @@ import com.krishagni.catissueplus.core.administrative.domain.Shipment;
 import com.krishagni.catissueplus.core.administrative.domain.Site;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.User;
-import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -51,7 +50,7 @@ public class AccessCtrlMgr {
 	private DaoFactory daoFactory;
 
 	@Autowired
-	private UserDao userDao;
+	private com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory bsDaoFactory;
 
 	private static AccessCtrlMgr instance;
 
@@ -59,7 +58,7 @@ public class AccessCtrlMgr {
 	}
 
 	public static AccessCtrlMgr getInstance() {
-		if (instance == null || instance.daoFactory == null || instance.userDao == null) {
+		if (instance == null || instance.daoFactory == null || instance.bsDaoFactory == null) {
 			instance = new AccessCtrlMgr();
 		}
 
@@ -972,7 +971,7 @@ public class AccessCtrlMgr {
 	}
 
 	private Institute getUserInstitute(Long userId) {
-		User user = userDao.getById(userId);
+		User user = bsDaoFactory.getUserDao().getById(userId);
 		return user.getInstitute();
 	}
 
