@@ -89,7 +89,7 @@
       "import": "Import",
       "validate_and_import": "Validate and Import",
       "cancel": "Cancel",
-      "discard": "Discard",
+      "discard": "Cancel",
       "upload": "Upload",
       "more": "More",
       "next": "Next",
