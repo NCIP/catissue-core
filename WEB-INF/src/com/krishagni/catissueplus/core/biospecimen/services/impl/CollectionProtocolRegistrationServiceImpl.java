@@ -438,7 +438,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		
 		ose.checkAndThrow();
 		
-		if (saveParticipant && !cpr.isForceDelete()) {
+		if (saveParticipant && cpr.isActive()) {
 			saveParticipant(existing, cpr);
 		}
 
