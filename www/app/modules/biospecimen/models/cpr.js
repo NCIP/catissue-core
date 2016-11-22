@@ -2,9 +2,10 @@ angular.module('os.biospecimen.models.cpr',
   [
     'os.common.models', 
     'os.biospecimen.models.participant',
+    'os.biospecimen.models.visit',
     'os.biospecimen.models.form'
   ])
-  .factory('CollectionProtocolRegistration', function($filter, $http, osModel, Participant, Form, Util) {
+  .factory('CollectionProtocolRegistration', function($filter, $http, osModel, Participant, Visit, Form, Util) {
     var CollectionProtocolRegistration = 
       osModel(
         'collection-protocol-registrations',
@@ -85,6 +86,11 @@ angular.module('os.biospecimen.models.cpr',
     CollectionProtocolRegistration.prototype.getConsents = function() {
       var url = CollectionProtocolRegistration.url() + this.$id() + "/consents";
       return $http.get(url).then(function(result) {return result.data;});
+    }
+
+    CollectionProtocolRegistration.prototype.getLatestVisit = function() {
+      var url = CollectionProtocolRegistration.url() + this.$id() + "/latest-visit";
+      return $http.get(url).then(Visit.modelRespTransform);
     }
 
     return CollectionProtocolRegistration;

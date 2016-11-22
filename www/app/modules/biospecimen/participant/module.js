@@ -407,6 +407,12 @@ angular.module('os.biospecimen.participant',
             }
 
             return null;
+          },
+          latestVisit: function($stateParams, cpr) {
+            //
+            // required for lastest visit clinical diagnosis.
+            //
+            return $stateParams.visitId ? null : cpr.getLatestVisit();
           }
         },
         parent: 'participant-root'

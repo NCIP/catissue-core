@@ -29,6 +29,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria
 import com.krishagni.catissueplus.core.biospecimen.events.CprSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.CprListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolService;
@@ -183,6 +184,15 @@ public class CollectionProtocolRegistrationsController {
 		crit.setCprId(cprId);
 		
 		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.getRegistration(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value= "/{cprId}/latest-visit")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public VisitDetail getLatestVisit(@PathVariable("cprId") Long cprId) {
+		ResponseEvent<VisitDetail> resp = cprSvc.getLatestVisit(getRegQueryReq(cprId));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
@@ -349,7 +359,7 @@ public class CollectionProtocolRegistrationsController {
 	private RequestEvent<RegistrationQueryCriteria> getRegQueryReq(Long cprId) {
 		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
 		crit.setCprId(cprId);
-		return new RequestEvent<RegistrationQueryCriteria>(crit);
+		return new RequestEvent<>(crit);
 	}
 	
 	private <T> RequestEvent<T> getRequest(T payload) {

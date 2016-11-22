@@ -44,6 +44,12 @@ angular.module('os.biospecimen.visit', [
         resolve: {
           extensionCtxt: function(cp, Visit) {
             return Visit.getExtensionCtxt({cpId: cp.id});
+          },
+          latestVisit: function(cpr, visit) {
+            //
+            // required for lastest visit CD
+            //
+            return visit.id ? null : cpr.getLatestVisit();
           }
         },
         controller: 'AddEditVisitCtrl',

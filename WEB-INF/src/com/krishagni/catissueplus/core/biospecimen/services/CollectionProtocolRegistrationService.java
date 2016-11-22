@@ -11,6 +11,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
@@ -28,6 +29,8 @@ public interface CollectionProtocolRegistrationService {
 	public ResponseEvent<CollectionProtocolRegistrationDetail> deleteRegistration(RequestEvent<CpEntityDeleteCriteria> req);
 	
 	public ResponseEvent<List<VisitSummary>> getVisits(RequestEvent<VisitsListCriteria> req);
+
+	public ResponseEvent<VisitDetail> getLatestVisit(RequestEvent<RegistrationQueryCriteria> req);
 	
 	public ResponseEvent<List<SpecimenDetail>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req);
 	

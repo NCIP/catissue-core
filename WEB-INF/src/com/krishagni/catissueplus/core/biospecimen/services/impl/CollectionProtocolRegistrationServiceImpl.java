@@ -41,6 +41,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.ParticipantRegistrationsList;
 import com.krishagni.catissueplus.core.biospecimen.events.RegistrationQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail;
+import com.krishagni.catissueplus.core.biospecimen.events.VisitDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -334,7 +335,24 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<VisitDetail> getLatestVisit(RequestEvent<RegistrationQueryCriteria> req) {
+		try {
+			RegistrationQueryCriteria crit = req.getPayload();
+			CollectionProtocolRegistration cpr = getCpr(crit.getCprId(), crit.getCpId(), crit.getPpid());
+			AccessCtrlMgr.getInstance().ensureReadVisitRights(cpr, false);
+
+			Visit visit = daoFactory.getVisitsDao().getLatestVisit(cpr.getId());
+			return ResponseEvent.response(visit != null ? VisitDetail.from(visit) : null);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<SpecimenDetail>> getSpecimens(RequestEvent<VisitSpecimensQueryCriteria> req) {

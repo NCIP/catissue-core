@@ -98,7 +98,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
   .controller('CollectSpecimensCtrl', 
     function(
       $scope, $translate, $state, $document, $q,
-      cpr, visit, 
+      cpr, visit, latestVisit,
       Visit, Specimen, PvManager, 
       CollectSpecimensSvc, Container, Alerts, Util, SpecimenUtil) {
 
@@ -128,6 +128,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
         visit.visitDate = visit.visitDate || visit.anticipatedVisitDate || new Date();
         visit.cprId = cpr.id;
         delete visit.anticipatedVisitDate;
+        if (!!latestVisit) {
+          visit.clinicalDiagnosis = latestVisit.clinicalDiagnosis;
+        }
+
         $scope.visit = visit;
         $scope.autoPosAllocate = !!$scope.cp.containerSelectionStrategy;
         

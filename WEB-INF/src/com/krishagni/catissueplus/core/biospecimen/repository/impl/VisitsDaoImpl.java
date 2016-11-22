@@ -100,9 +100,9 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	@SuppressWarnings("unchecked")
 	public List<Visit> getByName(Collection<String> names) {
 		return sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_VISIT_BY_NAME)
-				.setParameterList("names", names)
-				.list();
+			.getNamedQuery(GET_VISIT_BY_NAME)
+			.setParameterList("names", names)
+			.list();
 	}
 
 	@Override
@@ -148,6 +148,19 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 		ids.put("cpId", row[2]);
 		return ids;
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Visit getLatestVisit(Long cprId) {
+		List<Visit> visits = sessionFactory.getCurrentSession()
+			.getNamedQuery(GET_LATEST_VISIT_BY_CPR_ID)
+			.setLong("cprId", cprId)
+			.setMaxResults(1)
+			.list();
+
+		return visits.isEmpty() ? null :  visits.get(0);
+	}
+
 
 	private String getVisitKey(Long visitId, Long cpeId) {
 		String key = "";
@@ -231,5 +244,7 @@ public class VisitsDaoImpl extends AbstractDao<Visit> implements VisitsDao {
 	private static final String GET_VISIT_BY_NAME = FQN + ".getVisitByName";
 
 	private static final String GET_VISIT_BY_SPR = FQN + ".getVisitBySpr";
+
+	private static final String GET_LATEST_VISIT_BY_CPR_ID = FQN + ".getLatestVisitByCprId";
 }
 

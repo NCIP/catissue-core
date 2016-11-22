@@ -83,6 +83,19 @@
         surgicalPathologyNumber = :sprNumber
     </query>
 
+    <query name="getLatestVisitByCprId">
+      select
+        visit
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit visit
+        join visit.registration cpr
+      where
+        cpr.id = :cprId and
+        visit.status = 'Complete'
+      order by
+        visit.visitDate desc, visit.id desc
+    </query>
+
     <sql-query name="getVisitsSummaryByCprId">
       <return-scalar column="id" type="long"/>
       <return-scalar column="eventId" type="long"/>

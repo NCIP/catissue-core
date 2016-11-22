@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.visit.addedit', [])
   .controller('AddEditVisitCtrl', function(
-    $scope, $state, $stateParams, cpr, visit, extensionCtxt, hasDict,
+    $scope, $state, $stateParams, cpr, visit, latestVisit, extensionCtxt, hasDict,
     PvManager, ExtensionsUtil) {
 
     function loadPvs() {
@@ -18,7 +18,11 @@ angular.module('os.biospecimen.visit.addedit', [])
       }
 
       if (!currVisit.id) {
-        angular.extend(currVisit, {visitDate: currVisit.anticipatedVisitDate || new Date(), status: 'Complete'});
+        angular.extend(currVisit, {
+          visitDate: currVisit.anticipatedVisitDate || new Date(),
+          status: 'Complete',
+          clinicalDiagnosis: latestVisit ? latestVisit.clinicalDiagnosis : currVisit.clinicalDiagnosis
+        });
         delete currVisit.anticipatedVisitDate;
       }
 
