@@ -46,6 +46,7 @@ public class StorageContainer extends BaseEntity {
 	public static final String LOWER_CASE_ROMAN_LABELING_SCHEME = "Roman Lower Case";
 
 	public enum PositionLabelingMode {
+		NONE,
 		LINEAR,
 		TWO_D
 	}
@@ -63,9 +64,9 @@ public class StorageContainer extends BaseEntity {
 	
 	private Double temperature;
 	
-	private int noOfColumns;
+	private Integer noOfColumns;
 	
-	private int noOfRows;
+	private Integer noOfRows;
 
 	private PositionLabelingMode positionLabelingMode = PositionLabelingMode.TWO_D;
 	
@@ -161,20 +162,24 @@ public class StorageContainer extends BaseEntity {
 		this.temperature = temperature;
 	}
 
-	public int getNoOfColumns() {
+	public Integer getNoOfColumns() {
 		return noOfColumns;
 	}
 
-	public void setNoOfColumns(int noOfColumns) {
+	public void setNoOfColumns(Integer noOfColumns) {
 		this.noOfColumns = noOfColumns;
 	}
 
-	public int getNoOfRows() {
+	public Integer getNoOfRows() {
 		return noOfRows;
 	}
 
-	public void setNoOfRows(int noOfRows) {
+	public void setNoOfRows(Integer noOfRows) {
 		this.noOfRows = noOfRows;
+	}
+
+	public boolean isDimensionless() {
+		return noOfRows == null && noOfColumns == null;
 	}
 
 	public PositionLabelingMode getPositionLabelingMode() {
@@ -183,6 +188,10 @@ public class StorageContainer extends BaseEntity {
 
 	public void setPositionLabelingMode(PositionLabelingMode positionLabelingMode) {
 		this.positionLabelingMode = positionLabelingMode;
+	}
+
+	public boolean usesLinearLabelingMode() {
+		return PositionLabelingMode.LINEAR.equals(getPositionLabelingMode());
 	}
 
 	public String getColumnLabelingScheme() {
@@ -421,22 +430,22 @@ public class StorageContainer extends BaseEntity {
 		setBarcode(other.getBarcode());
 		setType(other.getType());
 		setTemperature(other.getTemperature());
-		updateCapacity(other.getNoOfColumns(), other.getNoOfRows(), other.getCapacity());
+		updateCapacity(other);
 		setPositionLabelingMode(other.getPositionLabelingMode());
-		updateLabelingScheme(other.getColumnLabelingScheme(), other.getRowLabelingScheme());
-		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
-		updateActivityStatus(other.getActivityStatus());
+		updateLabelingScheme(other);
+		updateContainerLocation(other);
+		updateActivityStatus(other);
 		setComments(other.getComments());
-		updateAllowedSpecimenClassAndTypes(other.getAllowedSpecimenClasses(), other.getAllowedSpecimenTypes(), hasParentChanged);
-		updateAllowedCps(other.getAllowedCps(), hasParentChanged);
-		updateStoreSpecimenEnabled(other.isStoreSpecimenEnabled());
-		updateCellDisplayProp(other.getCellDisplayProp());
+		updateAllowedSpecimenClassAndTypes(other, hasParentChanged);
+		updateAllowedCps(other, hasParentChanged);
+		updateStoreSpecimenEnabled(other);
+		updateCellDisplayProp(other);
 
 		validateRestrictions();
 	}
 
-	public int freePositionsCount() {
-		return noOfColumns * noOfRows - occupiedPositions.size();
+	public Integer freePositionsCount() {
+		return isDimensionless() ? null : getNoOfColumns() * getNoOfRows() - getOccupiedPositions().size();
 	}
 
 	public boolean hasFreePositionsForReservation() {
@@ -444,7 +453,8 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public boolean hasFreePositionsForReservation(int freePositions) {
-		return (getNoOfColumns() * getNoOfRows() - getOccupiedPositions().size()) > (freePositions - 1);
+		Integer availablePositions = freePositionsCount();
+		return availablePositions == null || availablePositions > (freePositions - 1);
 	}
 
 	public List<StorageContainer> getChildContainersSortedByPosition() {
@@ -454,9 +464,13 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public Set<Integer> occupiedPositionsOrdinals() {
-		return getOccupiedPositions().stream()
-			.map(pos -> (pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal())
-			.collect(Collectors.toSet());
+		if (isDimensionless()) {
+			return Collections.emptySet();
+		} else {
+			return getOccupiedPositions().stream()
+				.map(pos -> (pos.getPosTwoOrdinal() - 1) * getNoOfColumns() + pos.getPosOneOrdinal())
+				.collect(Collectors.toSet());
+		}
 	}
 	
 	public String toColumnLabelingScheme(int ordinal) {
@@ -468,25 +482,35 @@ public class StorageContainer extends BaseEntity {
 	}
 	
 	public boolean areValidPositions(String posOne, String posTwo) {
+		if (isDimensionless()) {
+			return true;
+		}
+
 		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
 		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
-			
 		return areValidPositions(posOneOrdinal, posTwoOrdinal);
 	}
 	
 	public boolean areValidPositions(int posOne, int posTwo) {
-		return posOne >= 1 && posOne <= getNoOfColumns() && 
-				posTwo >= 1 && posTwo <= getNoOfRows();
+		if (isDimensionless()) {
+			return true;
+		}
+
+		return posOne >= 1 && posOne <= getNoOfColumns() && posTwo >= 1 && posTwo <= getNoOfRows();
 	}
 	
 	public StorageContainerPosition createPosition(String posOne, String posTwo) {
+		if (isDimensionless()) {
+			return createPosition(null, null, null, null);
+		}
+
 		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
 		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
 	public StorageContainerPosition createVirtualPosition() {
-		return createPosition(0, null, 0, null);
+		return createPosition(null, null, null, null);
 	}
 
 	public void removePosition(StorageContainerPosition position) {
@@ -510,7 +534,7 @@ public class StorageContainer extends BaseEntity {
 
 	public StorageContainerPosition nextAvailablePosition(boolean fromLastAssignedPos) {
 		String row = null, col = null;
-		if (fromLastAssignedPos && lastAssignedPos != null) {
+		if (!isDimensionless() && fromLastAssignedPos && lastAssignedPos != null) {
 			int startRow = lastAssignedPos.getPosTwoOrdinal();
 			int startCol = lastAssignedPos.getPosOneOrdinal() + 1;
 			if (startCol > getNoOfColumns()) {
@@ -527,7 +551,7 @@ public class StorageContainer extends BaseEntity {
 
 	public StorageContainerPosition nextAvailablePosition(int position) {
 		String row = null, column = null;
-		if (position > 0) {
+		if (!isDimensionless() && position > 0) {
 			row    = fromOrdinal(getRowLabelingScheme(),    (position - 1) / getNoOfColumns() + 1);
 			column = fromOrdinal(getColumnLabelingScheme(), (position - 1) % getNoOfColumns() + 1);
 		}
@@ -536,6 +560,10 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public StorageContainerPosition nextAvailablePosition(String row, String col) {
+		if (isDimensionless()) {
+			return createPosition(null, null, null, null);
+		}
+
 		int startRow = 1, startCol = 1;
 		boolean startPosSpecified = StringUtils.isNotBlank(row) && StringUtils.isNotBlank(col);
 		Set<Integer> occupiedPositionOrdinals = occupiedPositionsOrdinals();
@@ -567,9 +595,12 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public boolean isPositionOccupied(String posOne, String posTwo) {
+		if (isDimensionless()) {
+			return false;
+		}
+
 		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
 		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);
-
 		return getOccupiedPosition(posOneOrdinal, posTwoOrdinal) != null;
 	}
 	
@@ -766,6 +797,8 @@ public class StorageContainer extends BaseEntity {
 	// case #2: Otherwise - Vacate occupant before assigning position to new occupant
 	//
 	public void assignPositions(Collection<StorageContainerPosition> positions, boolean vacateOccupant) {
+		vacateOccupant = isDimensionless() ? false : vacateOccupant;
+
 		Set<Long> specimenIds = Collections.emptySet();
 		if (vacateOccupant) {
 			specimenIds = new HashSet<Long>();
@@ -778,7 +811,7 @@ public class StorageContainer extends BaseEntity {
 
 		for (StorageContainerPosition position : positions) {
 			StorageContainerPosition existing = null;
-			if (position.getPosOneOrdinal() != 0 && position.getPosTwoOrdinal() != 0) {
+			if (!isDimensionless() && position.getPosOneOrdinal() != 0 && position.getPosTwoOrdinal() != 0) {
 				existing = getOccupiedPosition(position.getPosOneOrdinal(), position.getPosTwoOrdinal());
 			}
 
@@ -850,9 +883,12 @@ public class StorageContainer extends BaseEntity {
 			return;
 		}
 
-		int capacity = freezer.getNoOfRows() * freezer.getNoOfColumns();
-		for (StorageContainer container : containers) {
-			capacity *= container.getNoOfRows() * container.getNoOfColumns();
+		Integer capacity = null;
+		if (!freezer.isDimensionless()) {
+			capacity = freezer.getNoOfRows() * freezer.getNoOfColumns();
+			for (StorageContainer container : containers) {
+				capacity *= container.getNoOfRows() * container.getNoOfColumns();
+			}
 		}
 
 		freezer.setCapacity(capacity);
@@ -898,7 +934,7 @@ public class StorageContainer extends BaseEntity {
 		return types;
 	}
 	
-	private StorageContainerPosition createPosition(int posOneOrdinal, String posOne, int posTwoOrdinal, String posTwo) {
+	private StorageContainerPosition createPosition(Integer posOneOrdinal, String posOne, Integer posTwoOrdinal, String posTwo) {
 		StorageContainerPosition position = new StorageContainerPosition();
 		position.setPosOneOrdinal(posOneOrdinal);
 		position.setPosOne(posOne);
@@ -949,43 +985,56 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private void updateCapacity(int newNoOfColumns, int newNoOfRows, Integer newCapacity) {
-		if (newNoOfColumns < getNoOfColumns() || newNoOfRows < getNoOfRows()) {
-			if (arePositionsOccupiedBeyondCapacity(newNoOfColumns, newNoOfRows)) {
-				throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
+	private void updateCapacity(StorageContainer other) {
+		if (isDimensionless() && !other.isDimensionless()) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.DL_TO_REG_NA);
+		} else if (!isDimensionless() && other.isDimensionless()) {
+			throw OpenSpecimenException.userError(StorageContainerErrorCode.REG_TO_DL_NA);
+		} else if (!isDimensionless()) {
+			if (other.getNoOfColumns() < getNoOfColumns() || other.getNoOfRows() < getNoOfRows()) {
+				if (arePositionsOccupiedBeyondCapacity(other.getNoOfColumns(), other.getNoOfRows())) {
+					throw OpenSpecimenException.userError(StorageContainerErrorCode.CANNOT_SHRINK_CONTAINER);
+				}
 			}
-		}
-		
-		setNoOfColumns(newNoOfColumns);
-		setNoOfRows(newNoOfRows);
 
-		if (newCapacity != null && newCapacity > 0) {
-			setCapacity(newCapacity);
+			setNoOfColumns(other.getNoOfColumns());
+			setNoOfRows(other.getNoOfRows());
+		}
+
+		if (other.getCapacity() != null && other.getCapacity() > 0) {
+			setCapacity(other.getCapacity());
 		}
 	}
 
-	private void updateLabelingScheme(String newColumnLabelingScheme, String newRowLabelingScheme) {
-		boolean colSchemeChanged = !getColumnLabelingScheme().equals(newColumnLabelingScheme);
-		boolean rowSchemeChanged = !getRowLabelingScheme().equals(newRowLabelingScheme);
-		
+	private void updateLabelingScheme(StorageContainer other) {
+		if (isDimensionless()) {
+			return;
+		}
+
+		boolean colSchemeChanged = !getColumnLabelingScheme().equals(other.getColumnLabelingScheme());
+		boolean rowSchemeChanged = !getRowLabelingScheme().equals(other.getRowLabelingScheme());
 		if (!colSchemeChanged && !rowSchemeChanged) {
 			return;
 		}
 		
 		for (StorageContainerPosition pos : getOccupiedPositions()) {
 			if (colSchemeChanged) {
-				pos.setPosOne(fromOrdinal(newColumnLabelingScheme, pos.getPosOneOrdinal()));
+				pos.setPosOne(fromOrdinal(other.getColumnLabelingScheme(), pos.getPosOneOrdinal()));
 			}
 			
 			if (rowSchemeChanged) {
-				pos.setPosTwo(fromOrdinal(newRowLabelingScheme, pos.getPosTwoOrdinal()));
+				pos.setPosTwo(fromOrdinal(other.getRowLabelingScheme(), pos.getPosTwoOrdinal()));
 			}
 		}
 		
-		setColumnLabelingScheme(newColumnLabelingScheme);
-		setRowLabelingScheme(newRowLabelingScheme);
+		setColumnLabelingScheme(other.getColumnLabelingScheme());
+		setRowLabelingScheme(other.getRowLabelingScheme());
 	}
 	
+	private void updateContainerLocation(StorageContainer other) {
+		updateContainerLocation(other.getSite(), other.getParentContainer(), other.getPosition());
+	}
+
 	private void updateContainerLocation(Site otherSite, StorageContainer otherParentContainer, StorageContainerPosition otherPos) {
 		Site existing = site;
 		
@@ -1023,13 +1072,13 @@ public class StorageContainer extends BaseEntity {
 		}
 	}
 	
-	private void updateActivityStatus(String newActivityStatus) {
-		if (activityStatus.equals(newActivityStatus)) { 
+	private void updateActivityStatus(StorageContainer other) {
+		if (getActivityStatus().equals(other.getActivityStatus())) {
 			// activity status has not changed
 			return;
 		}
 		
-		if (activityStatus.equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) && hasSpecimen(this)) {
+		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) && hasSpecimen(this)) {
 			//
 			// existing status was active and container has some specimens stored in hierarchy
 			//
@@ -1040,28 +1089,23 @@ public class StorageContainer extends BaseEntity {
 		containers.add(this);
 		while (!containers.isEmpty()) {
 			StorageContainer container = containers.remove(0);
-			container.setActivityStatus(newActivityStatus);
-			
+			container.setActivityStatus(other.getActivityStatus());
 			containers.addAll(container.getChildContainers());
 		}
 	}
 
-	private void updateAllowedSpecimenClassAndTypes(
-			Set<String> newSpecimenClasses, 
-			Set<String> newSpecimenTypes, 
-			boolean updateComputedTypes) {
-		
+	private void updateAllowedSpecimenClassAndTypes(StorageContainer other, boolean updateComputedTypes) {
 		boolean computeTypes = updateComputedTypes;
 		
-		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenClasses(), newSpecimenClasses)) {
+		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenClasses(), other.getAllowedSpecimenClasses())) {
 			getAllowedSpecimenClasses().clear();
-			getAllowedSpecimenClasses().addAll(newSpecimenClasses);
+			getAllowedSpecimenClasses().addAll(other.getAllowedSpecimenClasses());
 			computeTypes = true;			
 		}
 		
-		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenTypes(), newSpecimenTypes)) {
+		if (!CollectionUtils.isEqualCollection(getAllowedSpecimenTypes(), other.getAllowedSpecimenTypes())) {
 			getAllowedSpecimenTypes().clear();
-			getAllowedSpecimenTypes().addAll(newSpecimenTypes);
+			getAllowedSpecimenTypes().addAll(other.getAllowedSpecimenTypes());
 			computeTypes = true;			
 		}
 		
@@ -1083,11 +1127,11 @@ public class StorageContainer extends BaseEntity {
 		}		
 	}
 	
-	private void updateAllowedCps(Set<CollectionProtocol> newCps, boolean updateComputedCps) {
+	private void updateAllowedCps(StorageContainer other, boolean updateComputedCps) {
 		boolean computeCps = updateComputedCps;		
-		if (!CollectionUtils.isEqualCollection(getAllowedCps(), newCps)) {
+		if (!CollectionUtils.isEqualCollection(getAllowedCps(), other.getAllowedCps())) {
 			getAllowedCps().clear();
-			getAllowedCps().addAll(newCps);			
+			getAllowedCps().addAll(other.getAllowedCps());
 			computeCps = true;
 		}
 		
@@ -1105,20 +1149,20 @@ public class StorageContainer extends BaseEntity {
 		}		
 	}
 	
-	private void updateStoreSpecimenEnabled(boolean newStoreSpecimenEnabled) {
-		if (isStoreSpecimenEnabled() != newStoreSpecimenEnabled && newStoreSpecimenEnabled) {
+	private void updateStoreSpecimenEnabled(StorageContainer other) {
+		if (isStoreSpecimenEnabled() != other.isStoreSpecimenEnabled() && other.isStoreSpecimenEnabled()) {
 			setFreezerCapacity();
 		}
 
-		setStoreSpecimenEnabled(newStoreSpecimenEnabled);
+		setStoreSpecimenEnabled(other.isStoreSpecimenEnabled());
 	}
 
-	private void updateCellDisplayProp(CellDisplayProp cellDisplayProp) {
-		if (getCellDisplayProp() == cellDisplayProp || getParentContainer() != null) {
+	private void updateCellDisplayProp(StorageContainer other) {
+		if (getCellDisplayProp() == other.getCellDisplayProp() || getParentContainer() != null) {
 			return;
 		}
 
-		updateCellDisplayProp(this, cellDisplayProp);
+		updateCellDisplayProp(this, other.getCellDisplayProp());
 	}
 
 	private void updateCellDisplayProp(StorageContainer container, CellDisplayProp cellDisplayProp) {

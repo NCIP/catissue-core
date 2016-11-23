@@ -18,15 +18,15 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 public class SpecimenTransferEvent extends SpecimenEvent {
 	private StorageContainer fromContainer;
 	
-	private int fromDimensionOne;
+	private Integer fromDimensionOne;
 	
-	private int fromDimensionTwo;
+	private Integer fromDimensionTwo;
 	
 	private StorageContainer toContainer;
 	
-	private int toDimensionOne;
+	private Integer toDimensionOne;
 	
-	private int toDimensionTwo;
+	private Integer toDimensionTwo;
 	
 	@Autowired
 	private DaoFactory daoFactory;
@@ -44,21 +44,21 @@ public class SpecimenTransferEvent extends SpecimenEvent {
 		this.fromContainer = fromContainer;
 	}
 
-	public int getFromDimensionOne() {		
+	public Integer getFromDimensionOne() {
 		loadRecordIfNotLoaded();
 		return fromDimensionOne;
 	}
 
-	public void setFromDimensionOne(int fromDimensionOne) {
+	public void setFromDimensionOne(Integer fromDimensionOne) {
 		this.fromDimensionOne = fromDimensionOne;
 	}
 
-	public int getFromDimensionTwo() {
+	public Integer getFromDimensionTwo() {
 		loadRecordIfNotLoaded();
 		return fromDimensionTwo;
 	}
 
-	public void setFromDimensionTwo(int fromDimensionTwo) {
+	public void setFromDimensionTwo(Integer fromDimensionTwo) {
 		this.fromDimensionTwo = fromDimensionTwo;
 	}
 	
@@ -77,21 +77,21 @@ public class SpecimenTransferEvent extends SpecimenEvent {
 		this.toContainer = toContainer;
 	}
 
-	public int getToDimensionOne() {
+	public Integer getToDimensionOne() {
 		loadRecordIfNotLoaded();
 		return toDimensionOne;
 	}
 
-	public void setToDimensionOne(int toDimensionOne) {
+	public void setToDimensionOne(Integer toDimensionOne) {
 		this.toDimensionOne = toDimensionOne;
 	}
 
-	public int getToDimensionTwo() {
+	public Integer getToDimensionTwo() {
 		loadRecordIfNotLoaded();
 		return toDimensionTwo;
 	}
 
-	public void setToDimensionTwo(int toDimensionTwo) {
+	public void setToDimensionTwo(Integer toDimensionTwo) {
 		this.toDimensionTwo = toDimensionTwo;
 	}
 	
@@ -161,7 +161,7 @@ public class SpecimenTransferEvent extends SpecimenEvent {
 		return daoFactory.getStorageContainerDao().getById(containerId.longValue());
 	}
 	
-	private int getInt(Object number) {
-		return ((Number)number).intValue();
+	private Integer getInt(Object number) {
+		return number instanceof Number ? ((Number) number).intValue() : null;
 	}
 }

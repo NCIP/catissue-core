@@ -36,9 +36,9 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 
 	private UserSummary createdBy;
 	
-	private int noOfColumns;
+	private Integer noOfColumns;
 	
-	private int noOfRows;
+	private Integer noOfRows;
 
 	private String positionLabelingMode;
 
@@ -46,7 +46,7 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 
 	private String rowLabelingScheme;
 
-	private int freePositions;
+	private Integer freePositions;
 	
 	private Boolean storeSpecimensEnabled;
 
@@ -128,19 +128,19 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		this.createdBy = createdBy;
 	}
 	
-	public int getNoOfColumns() {
+	public Integer getNoOfColumns() {
 		return noOfColumns;
 	}
 
-	public void setNoOfColumns(int noOfColumns) {
+	public void setNoOfColumns(Integer noOfColumns) {
 		this.noOfColumns = noOfColumns;
 	}
 
-	public int getNoOfRows() {
+	public Integer getNoOfRows() {
 		return noOfRows;
 	}
 
-	public void setNoOfRows(int noOfRows) {
+	public void setNoOfRows(Integer noOfRows) {
 		this.noOfRows = noOfRows;
 	}
 
@@ -168,11 +168,11 @@ public class StorageContainerSummary extends AttributeModifiedSupport {
 		this.rowLabelingScheme = rowLabelingScheme;
 	}
 
-	public int getFreePositions() {
+	public Integer getFreePositions() {
 		return freePositions;
 	}
 
-	public void setFreePositions(int freePositions) {
+	public void setFreePositions(Integer freePositions) {
 		this.freePositions = freePositions;
 	}
 

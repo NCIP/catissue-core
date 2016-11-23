@@ -6,11 +6,11 @@ import com.krishagni.catissueplus.core.administrative.events.ContainerHierarchyD
 import com.krishagni.catissueplus.core.administrative.events.StorageContainerDetail;
 
 public interface StorageContainerFactory {
-	public StorageContainer createStorageContainer(StorageContainerDetail detail);
+	StorageContainer createStorageContainer(StorageContainerDetail detail);
 	
-	public StorageContainer createStorageContainer(StorageContainer existing, StorageContainerDetail detail);
+	StorageContainer createStorageContainer(StorageContainer existing, StorageContainerDetail detail);
 	
-	public StorageContainer createStorageContainer(String name, ContainerHierarchyDetail hierarchyDetail);
+	StorageContainer createStorageContainer(String name, ContainerHierarchyDetail hierarchyDetail);
 	
-	public StorageContainer createStorageContainer(String name, ContainerType containerType, StorageContainer parentContainer);
+	StorageContainer createStorageContainer(String name, ContainerType containerType, StorageContainer parentContainer);
 }

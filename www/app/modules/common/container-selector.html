@@ -51,18 +51,28 @@
             </div>
           </div>
         </div>
-        <div class="col col-xs-2">
-          <span>{{container.noOfRows}} x {{container.noOfColumns}}</span>
+        <div class="col col-xs-2" ng-switch on="container.positionLabelingMode == 'NONE'">
+          <span ng-switch-when="true" translate="common.not_applicable">
+            Not Applicable
+          </span>
+          <span ng-switch-when="false">
+            {{container.noOfRows}} x {{container.noOfColumns}}
+          </span>
         </div>
-        <div class="col col-xs-2">
-          <span>{{container.freePositions}}</span>
+        <div class="col col-xs-2" ng-switch on="container.positionLabelingMode == 'NONE'">
+          <span ng-switch-when="true" translate="common.not_applicable">
+            Not Applicable
+          </span>
+          <span ng-switch-when="false">
+            {{container.freePositions}}
+          </span>
         </div>
         <div class="col col-xs-2">
           <button class="btn btn-xs btn-success" ng-click="toggleContainerSelection(container)"
             ng-if="(entityType == 'storage_container' || 
                     (entityType == 'specimen' && container.storeSpecimensEnabled)) && 
                    !container.selected && 
-                   container.freePositions > 0">
+                   (container.freePositions > 0 || container.positionLabelingMode == 'NONE')">
             <span class="fa fa-check"></span>
             <span translate="common.buttons.select">Select</span>
           </button>

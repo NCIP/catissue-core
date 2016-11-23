@@ -90,8 +90,9 @@
           <td class="col">
             <span>{{container.createdBy | osUserDisplayName}}</span>
           </td>
-          <td class="col">
-            <span>{{container.noOfRows}} X {{container.noOfColumns}}</span>
+          <td class="col" ng-switch on="container.positionLabelingMode != 'NONE'">
+            <span ng-switch-when="true">{{container.noOfRows}} X {{container.noOfColumns}}</span>
+            <span ng-switch-when="false" translate="common.not_applicable">Not Applicable</span>
           </td>
           <td class="col">
             <span>{{container.storedSpecimens | number: 0}}</span>

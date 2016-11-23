@@ -11,6 +11,7 @@ angular.module('os.administrative.container.detail', ['os.administrative.models'
       $scope.ctx = {
         viewState      : '',
         container      : container,
+        dimless        : !container.noOfRows && !container.noOfColumns,
         containerTree  : containerTree,
         names          : [container.name],
         showTree       : true

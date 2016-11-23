@@ -58,7 +58,7 @@
           </a>
         </li>
   
-        <li class="item">
+        <li class="item" ng-if="ctx.container.positionLabelingMode != 'NONE'">
           <strong class="key key-sm" translate="container.dimension">Dimension</strong>
           <span class="value value-md">{{ctx.container.noOfRows}} x {{ctx.container.noOfColumns}}</span>
         </li>
@@ -67,8 +67,10 @@
           <strong class="key key-sm" translate="container.stored">Stored</strong>
           <span class="value value-md">
             <span>{{ctx.container.storedSpecimens | number}}</span>
-            <span translate="container.out_of">out of</span>
-            <span>{{ctx.container.capacity | number | osNoValue}}</span>
+            <span ng-if="!!ctx.container.capacity">
+              <span translate="container.out_of">out of</span>
+              <span>{{ctx.container.capacity | number}}</span>
+            </span>
             <span translate="container.specimens">specimens</span>
           </span>
         </li>
@@ -87,14 +89,14 @@
           </span>
         </li>
   
-        <li class="item">
+        <li class="item" ng-if="ctx.container.positionLabelingMode != 'NONE'">
           <strong class="key key-sm" translate="container.position_labeling">Position Labeling</strong>
           <span class="value value-md">
             {{'container.position_labeling_modes.' + ctx.container.positionLabelingMode | translate}}
           </span>
         </li>
 
-        <li class="item" ng-if="ctx.container.positionLabelingMode != 'LINEAR'">
+        <li class="item" ng-if="ctx.container.positionLabelingMode == 'TWO_D'">
           <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labeling Scheme</strong>
           <span class="value value-md">
             {{ctx.container.rowLabelingScheme}} x {{ctx.container.columnLabelingScheme}}

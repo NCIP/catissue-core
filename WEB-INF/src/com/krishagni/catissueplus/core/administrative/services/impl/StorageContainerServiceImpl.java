@@ -261,11 +261,10 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			AssignPositionsOp op = req.getPayload();
 			StorageContainer container = getContainer(op.getContainerId(), op.getContainerName());
 			
-			List<StorageContainerPosition> positions = new ArrayList<StorageContainerPosition>();
-			for (StorageContainerPositionDetail posDetail : op.getPositions()) {
-				positions.add(createPosition(container, posDetail, op.getVacateOccupant()));
-			}
-			
+			List<StorageContainerPosition> positions = op.getPositions().stream()
+				.map(posDetail -> createPosition(container, posDetail, op.getVacateOccupant()))
+				.collect(Collectors.toList());
+
 			container.assignPositions(positions, op.getVacateOccupant());
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerPositionDetail.from(container.getOccupiedPositions()));
@@ -452,9 +451,12 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 						pos.setReservationId(reservationId);
 						pos.setReservationTime(reservationTime);
-						container.addPosition(pos);
 						reservedPositions.add(pos);
 						--numPositions;
+
+						if (!container.isDimensionless()) {
+							container.addPosition(pos);
+						}
 					}
 
 					if (numPositions == 0) {
@@ -523,8 +525,13 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		try {
 			StorageContainer container = getContainer(req.getPayload());
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
-			return ResponseEvent.response(
-				daoFactory.getStorageContainerDao().getChildContainers(container.getId(), container.getNoOfColumns()));
+
+			if (container.isDimensionless()) {
+				return ResponseEvent.response(Collections.emptyList());
+			} else {
+				return ResponseEvent.response(daoFactory.getStorageContainerDao()
+					.getChildContainers(container.getId(), container.getNoOfColumns()));
+			}
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -569,9 +576,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			}
 
 			return ResponseEvent.response(
-				vacantPositions.stream()
-					.map(StorageLocationSummary::from)
-					.collect(Collectors.toList()));
+				vacantPositions.stream().map(StorageLocationSummary::from).collect(Collectors.toList()));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -624,11 +629,11 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 			// TODO: what if cp site IDs is empty because of invalid cp ids
 			// return error
 			//
-			Set<Long> cpSiteIds = new HashSet<Long>(daoFactory.getCollectionProtocolDao().getSiteIdsByCpIds(crit.cpIds()));	
+			Set<Long> cpSiteIds = new HashSet<>(daoFactory.getCollectionProtocolDao().getSiteIdsByCpIds(crit.cpIds()));
 			if (siteIds == null) {
 				siteIds = cpSiteIds;
 			} else {
-				siteIds =new HashSet<Long>(CollectionUtils.intersection(siteIds, cpSiteIds));
+				siteIds = new HashSet<>(CollectionUtils.intersection(siteIds, cpSiteIds));
 			}
 		}
 
@@ -788,9 +793,7 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 
 		if (!container.canContain(specimen)) {
 			throw OpenSpecimenException.userError(
-					StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, 
-					container.getName(), 
-					specimen.getLabelOrDesc());
+				StorageContainerErrorCode.CANNOT_HOLD_SPECIMEN, container.getName(), specimen.getLabelOrDesc());
 		}
 		
 		if (!container.canSpecimenOccupyPosition(specimen.getId(), pos.getPosOne(), pos.getPosTwo(), vacateOccupant)) {

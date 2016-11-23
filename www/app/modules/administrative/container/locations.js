@@ -1,13 +1,19 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, container, Container, ContainerUtil, Alerts, Specimen, SpecimenUtil) {
+    $scope, $state, container, Container, ContainerUtil, Alerts, Specimen, SpecimenUtil, Util) {
 
     function init() {
       $scope.ctx.showTree  = true;
       $scope.ctx.viewState = 'container-detail.locations';
-      $scope.lctx = {mapState: 'loading', entityInfo: {}};
+      $scope.lctx = {
+        mapState: 'loading',
+        input: {labels: '', noFreeLocs: false, vacateOccupants: false},
+        entityInfo: {}
+      };
 
-      loadMap(container);
+      if (container.noOfRows > 0 && container.noOfColumns > 0) {
+        loadMap(container);
+      }
     }
 
     function loadMap(container) {
@@ -16,11 +22,35 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         function(occupancyMap) {
           $scope.lctx.mapState = 'loaded';
           $scope.lctx.pristineMap = $scope.lctx.occupancyMap = occupancyMap;
-          $scope.lctx.input = {labels: '', noFreeLocs: false, vacateOccupants: false};
         },
 
         function() {
           $scope.lctx.mapState = 'error';
+        }
+      );
+    }
+
+    function addSpecimens() {
+      var labels = Util.splitStr($scope.lctx.input.labels,/,|\t|\n/, false)
+      SpecimenUtil.getSpecimens(labels).then(
+        function(specimens) {
+          if (!specimens) {
+            return;
+          }
+
+          var positions = specimens.map(
+            function(specimen) {
+              return {occuypingEntity: 'specimen', occupyingEntityId: specimen.id};
+            }
+          );
+
+          var assignOp = {positions: positions};
+          container.assignPositions(assignOp).then(
+            function() {
+              Alerts.success('container.added_specimens', {spmnsCount: positions.length});
+              $scope.lctx.input.labels = undefined;
+            }
+          );
         }
       );
     }
@@ -62,6 +92,10 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     }
 
     $scope.showUpdatedMap = function() {
+      if ($scope.ctx.dimless) {
+        return;
+      }
+
       var result = ContainerUtil.assignPositions(
         container,
         $scope.lctx.pristineMap,
@@ -77,6 +111,11 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     }
 
     $scope.assignPositions = function() {
+      if ($scope.ctx.dimless) {
+        addSpecimens();
+        return;
+      }
+
       if ($scope.lctx.input.noFreeLocs) {
         Alerts.error("container.no_free_locs");
         return;

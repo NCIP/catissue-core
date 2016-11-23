@@ -12,7 +12,7 @@
           </button>
         </span>
       </div>
-      <div class="os-container-vacate-cb">
+      <div class="os-container-vacate-cb" ng-if="!ctx.dimless">
         <div class="checkbox">
           <os-checkbox ng-model="lctx.input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
         </div>
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="map" ng-switch on='lctx.mapState'>
+    <div class="map" ng-switch on='lctx.mapState' ng-if="!ctx.dimless">
       <div ng-switch-when="loading">
         <div class="os-alert-container inline show">
           <div class="alert alert-info">

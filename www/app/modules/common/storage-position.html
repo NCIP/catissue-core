@@ -8,7 +8,7 @@
       </button>
     </div>
     <div ng-switch-when="false" class="os-storage-position clearfix"> 
-      <div class="os-col-60 pos">
+      <div class="pos" ng-class="{true: 'os-col-60', false: 'os-col-90'}[entity.storageLocation.mode != 'NONE']">
         <os-select ng-model="entity.storageLocation.name" list="containerNames"
           refresh="searchContainer" on-select="onContainerChange()" placeholder="{{'container.container' | translate}}">
         </os-select>

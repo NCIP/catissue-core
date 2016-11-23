@@ -60,6 +60,10 @@ public enum StorageContainerErrorCode implements ErrorCode {
 
 	INVALID_CELL_DISP_PROP,
 
+	DL_TO_REG_NA,
+
+	REG_TO_DL_NA,
+
 	INVALID_CAPACITY;
 
 	@Override

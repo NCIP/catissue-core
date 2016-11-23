@@ -23,7 +23,7 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 	
 	private Integer posTwoOrdinal;
 
-	private int position;
+	private Integer position;
 	
 	private Long containerId;
 	
@@ -87,11 +87,11 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 		this.posTwoOrdinal = posTwoOrdinal;
 	}
 
-	public int getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 
@@ -153,13 +153,18 @@ public class StorageContainerPositionDetail implements Comparable<StorageContain
 
 	@Override
 	public int compareTo(StorageContainerPositionDetail other) {
-		if (posTwoOrdinal < other.posTwoOrdinal) {
-			return -1;
-		} else if (posTwoOrdinal > other.posTwoOrdinal) {
-			return 1;
+		int cmp;
+
+		if (posTwoOrdinal == null || posOneOrdinal == null || other.posTwoOrdinal == null || other.posOneOrdinal == null) {
+			cmp = getId().compareTo(other.getId());
 		} else {
-			return posOneOrdinal - other.posOneOrdinal;
-		}		
+			cmp = posTwoOrdinal.compareTo(other.posTwoOrdinal);
+			if (cmp == 0) {
+				cmp = posOneOrdinal.compareTo(other.posOneOrdinal);
+			}
+		}
+
+		return cmp;
 	}
 	
 	public static StorageContainerPositionDetail from(StorageContainerPosition position) {

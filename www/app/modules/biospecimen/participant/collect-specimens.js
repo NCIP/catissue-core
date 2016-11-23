@@ -372,17 +372,19 @@ angular.module('os.biospecimen.participant.collect-specimens',
       };
 
       $scope.applyFirstLocationToAll = function() {
-        var containerName = undefined;
+        var location = {};
         for (var i = 0; i < $scope.specimens.length; ++i) {
-          if ($scope.specimens[i].isOpened && $scope.specimens[i].existingStatus != 'Collected') {
-            containerName = $scope.specimens[i].storageLocation.name;
+          var spmn = $scope.specimens[i];
+          if (spmn.isOpened && spmn.existingStatus != 'Collected' && spmn.storageType != 'Virtual') {
+            location = {name: spmn.storageLocation.name, mode: spmn.storageLocation.mode};
             break;
           }
         }
 
         for (var i = 1; i < $scope.specimens.length; i++) {
-          if ($scope.specimens[i].existingStatus != 'Collected' && $scope.specimens[i].storageType != 'Virtual') {
-            $scope.specimens[i].storageLocation = {name: containerName};
+          var spmn = $scope.specimens[i];
+          if (spmn.existingStatus != 'Collected' && spmn.storageType != 'Virtual') {
+            angular.extend(spmn.storageLocation, location);
           }
         }
       };

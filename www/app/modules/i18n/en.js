@@ -54,6 +54,7 @@
     "no_file_selected": "No File Selected",
     "digits": "digits",
     "not_specified": "Not Specified",
+    "not_applicable": "Not Applicable",
     "enabled": "Enabled",
     "disabled": "Disabled",
     "update": "Update",
@@ -1042,6 +1043,7 @@
     "container": "Container",
     "one": "One",
     "two": "Two",
+    "dimensionless": "Dimensionless?",
     "dimension": "Dimension",
     "capacity": "Capacity",
     "specimens": "specimens",
@@ -1076,6 +1078,7 @@
     "created_by": "Created By",
     "loading_map": "Loading container map. Please wait for a moment...",
     "error_loading_map": "System encountered an error loading container map. Please report this incident to system administrator.",
+    "added_specimens": "Successfully added {{spmnsCount}} specimens to container",
     "position_labeling": "Position Labeling",
     "position_labeling_modes": {
       "LINEAR": "Linear",

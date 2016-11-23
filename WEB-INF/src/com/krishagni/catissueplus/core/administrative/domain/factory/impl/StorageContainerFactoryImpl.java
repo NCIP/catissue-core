@@ -95,11 +95,11 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 		detail.setAllowedSpecimenTypes(input.getAllowedSpecimenTypes());
 		detail.setAllowedCollectionProtocols(input.getAllowedCollectionProtocols());
 		
-		if (input.getNoOfColumns() > 0) {
+		if (input.getNoOfColumns() != null && input.getNoOfColumns() > 0) {
 			detail.setNoOfColumns(input.getNoOfColumns());
 		}
 
-		if (input.getNoOfRows() > 0) {
+		if (input.getNoOfRows() != null && input.getNoOfRows() > 0) {
 			detail.setNoOfRows(input.getNoOfRows());
 		}
 
@@ -228,6 +228,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			container.setNoOfRows(existing.getNoOfRows());
 		}
 
+		boolean rowDimLess = (container.getNoOfRows() == null);
+		boolean colDimLess = (container.getNoOfColumns() == null);
+		if ((!rowDimLess || !colDimLess) && (rowDimLess || colDimLess)) {
+			ose.addError(StorageContainerErrorCode.INVALID_DIMENSION_CAPACITY);
+		}
+
 		if (detail.isAttrModified("capacity") || existing == null) {
 			setApproxCapacity(detail, container, ose);
 		} else {
@@ -236,8 +242,11 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setNoOfColumns(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		int noOfCols = detail.getNoOfColumns();
+		if (detail.getNoOfColumns() == null) {
+			return;
+		}
 
+		Integer noOfCols = detail.getNoOfColumns();
 		if (noOfCols <= 0 && container.getType() != null) {
 			noOfCols = container.getType().getNoOfColumns();
 		}
@@ -250,8 +259,11 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 	
 	private void setNoOfRows(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		int noOfRows = detail.getNoOfRows();
+		if (detail.getNoOfRows() == null) {
+			return;
+		}
 
+		Integer noOfRows = detail.getNoOfRows();
 		if (noOfRows <= 0 && container.getType() != null) {
 			noOfRows = container.getType().getNoOfRows();
 		}
@@ -282,12 +294,21 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			if (StringUtils.isNotBlank(detail.getPositionLabelingMode())) {
 				container.setPositionLabelingMode(StorageContainer.PositionLabelingMode.valueOf(detail.getPositionLabelingMode()));
 			}
+
+			if (container.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.NONE) {
+				ose.addError(StorageContainerErrorCode.INVALID_POSITION_LABELING_MODE, detail.getPositionLabelingMode());
+			}
 		} catch (Exception e) {
 			ose.addError(StorageContainerErrorCode.INVALID_POSITION_LABELING_MODE, detail.getPositionLabelingMode());
 		}
 	}
 
 	private void setPositionLabelingMode(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
+		if (container.isDimensionless()) {
+			container.setPositionLabelingMode(StorageContainer.PositionLabelingMode.NONE);
+			return;
+		}
+
 		if (detail.isAttrModified("positionLabelingMode") || existing == null) {
 			setPositionLabelingMode(detail, container, ose);
 		} else {
@@ -296,7 +317,7 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	private void setLabelingSchemes(StorageContainerDetail detail, StorageContainer existing, StorageContainer container, OpenSpecimenException ose) {
-		if (container.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR) {
+		if (container.getPositionLabelingMode() != StorageContainer.PositionLabelingMode.TWO_D) {
 			container.setRowLabelingScheme(StorageContainer.NUMBER_LABELING_SCHEME);
 			container.setColumnLabelingScheme(StorageContainer.NUMBER_LABELING_SCHEME);
 			return;
@@ -400,17 +421,20 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 			parentContainer = daoFactory.getStorageContainerDao().getByName(storageLocation.getName());
 			key = storageLocation.getName();
 		}
-		
-		if (parentContainer == null) { 
+
+		if (parentContainer == null) {
 			if (key != null) {
 				ose.addError(StorageContainerErrorCode.PARENT_CONT_NOT_FOUND, key);
 			}
 			
 			return null;
+		} else if (parentContainer.isDimensionless()) {
+			ose.addError(StorageContainerErrorCode.CANNOT_HOLD_CONTAINER, parentContainer.getName(), container.getName());
+			return null;
+		} else {
+			container.setParentContainer(parentContainer);
+			return parentContainer;
 		}
-		
-		container.setParentContainer(parentContainer);
-		return parentContainer;
 	}
 
 	private void setCellDisplayProp(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
@@ -443,12 +467,12 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	private void setPosition(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
 		StorageContainer parentContainer = container.getParentContainer();
 		StorageLocationSummary location = detail.getStorageLocation();
-		if (parentContainer == null || location == null) { // top-level container; therefore no position
+		if (parentContainer == null || parentContainer.isDimensionless() || location == null) { // top-level container; therefore no position
 			return;
 		}
 
 		String posOne = location.getPositionX(), posTwo = location.getPositionY();
-		if (parentContainer.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR && location.getPosition() != 0) {
+		if (parentContainer.usesLinearLabelingMode() && location.getPosition() != 0) {
 			posTwo = String.valueOf((location.getPosition() - 1) / parentContainer.getNoOfColumns() + 1);
 			posOne = String.valueOf((location.getPosition() - 1) % parentContainer.getNoOfColumns() + 1);
 		}
@@ -541,9 +565,14 @@ public class StorageContainerFactoryImpl implements StorageContainerFactory {
 	}
 
 	private void setStoreSpecimenEnabled(StorageContainerDetail detail, StorageContainer container, OpenSpecimenException ose) {
-		boolean storeSpecimensEnabled = detail.isStoreSpecimensEnabled();
-		if (detail.getStoreSpecimensEnabled() == null && container.getType() != null) {
-			storeSpecimensEnabled = container.getType().isStoreSpecimenEnabled();
+		boolean storeSpecimensEnabled;
+		if (container.isDimensionless()) {
+			storeSpecimensEnabled = true;
+		} else {
+			storeSpecimensEnabled = detail.isStoreSpecimensEnabled();
+			if (detail.getStoreSpecimensEnabled() == null && container.getType() != null) {
+				storeSpecimensEnabled = container.getType().isStoreSpecimenEnabled();
+			}
 		}
 
 		container.setStoreSpecimenEnabled(storeSpecimensEnabled);

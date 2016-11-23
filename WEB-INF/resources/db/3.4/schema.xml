@@ -427,4 +427,28 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on row capacity to allow for limitless containers">
+    <dropNotNullConstraint tableName="OS_STORAGE_CONTAINERS" columnName="NO_OF_ROWS" columnDataType="${int.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on column capacity to allow for limitless containers">
+    <dropNotNullConstraint tableName="OS_STORAGE_CONTAINERS" columnName="NO_OF_COLS" columnDataType="${int.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - x - string">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_ONE_STR" columnDataType="${text.type}(8)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - y - string">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_TWO_STR" columnDataType="${text.type}(8)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - x - int">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_ONE" columnDataType="${smallint.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - y - int">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_TWO" columnDataType="${smallint.type}"/>
+  </changeSet>
 </databaseChangeLog>

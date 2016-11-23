@@ -32,7 +32,12 @@ angular.module('openspecimen')
         if (container.selected) {
           $scope.selectedPos = {id: container.id, name: container.name, mode: container.positionLabelingMode};
           $scope.selectedContainer = container;
-          wizard.next(false);
+
+          if (container.positionLabelingMode == 'NONE') {
+            $modalInstance.close($scope.selectedPos);
+          } else {
+            wizard.next(false);
+          }
         } else {
           $scope.selectedPos = {};
           $scope.selectedContainer = {};

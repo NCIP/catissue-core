@@ -11,9 +11,9 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 public class StorageContainerPosition implements Comparable<StorageContainerPosition> {
 	private Long id;
 	
-	private int posOneOrdinal;
+	private Integer posOneOrdinal;
 	
-	private int posTwoOrdinal;
+	private Integer posTwoOrdinal;
 	
 	private String posOne;
 	
@@ -37,19 +37,19 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 		this.id = id;
 	}
 
-	public int getPosOneOrdinal() {
+	public Integer getPosOneOrdinal() {
 		return posOneOrdinal;
 	}
 
-	public void setPosOneOrdinal(int posOneOrdinal) {
+	public void setPosOneOrdinal(Integer posOneOrdinal) {
 		this.posOneOrdinal = posOneOrdinal;
 	}
 
-	public int getPosTwoOrdinal() {
+	public Integer getPosTwoOrdinal() {
 		return posTwoOrdinal;
 	}
 
-	public void setPosTwoOrdinal(int posTwoOrdinal) {
+	public void setPosTwoOrdinal(Integer posTwoOrdinal) {
 		this.posTwoOrdinal = posTwoOrdinal;
 	}
 
@@ -69,8 +69,12 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 		this.posTwo = posTwo;
 	}
 
-	public int getPosition() {
-		return (posTwoOrdinal - 1) * getContainer().getNoOfColumns() + posOneOrdinal;
+	public Integer getPosition() {
+		if (getContainer().isDimensionless()) {
+			return null;
+		}
+
+		return (getPosTwoOrdinal() - 1) * getContainer().getNoOfColumns() + getPosOneOrdinal();
 	}
 
 	public StorageContainer getContainer() {
@@ -151,12 +155,16 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 
 	@Override
 	public int compareTo(StorageContainerPosition other) {
-		if (getPosTwoOrdinal() < other.getPosTwoOrdinal()) {
-			return -1;
-		} else if (getPosTwoOrdinal() == other.getPosTwoOrdinal()) {
-			return getPosOneOrdinal() - other.getPosOneOrdinal();
+		int cmp;
+		if (getContainer().isDimensionless()) {
+			cmp = getId().compareTo(other.getId());
 		} else {
-			return 1;
+			cmp = getPosTwoOrdinal().compareTo(other.getPosTwoOrdinal());
+			if (cmp == 0) {
+				cmp = getPosOneOrdinal().compareTo(other.getPosOneOrdinal());
+			}
 		}
+
+		return cmp;
 	}
 }

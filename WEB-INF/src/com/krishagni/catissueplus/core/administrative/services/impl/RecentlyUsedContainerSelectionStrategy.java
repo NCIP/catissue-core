@@ -149,6 +149,6 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 		}
 
 		return container.canContainSpecimen(cp, crit.getSpecimenClass(), crit.getSpecimenType()) &&
-				container.freePositionsCount() >= freeLocs;
+				container.hasFreePositionsForReservation(freeLocs);
 	}
 }

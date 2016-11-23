@@ -8,6 +8,8 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
     function init() {
       container.storageLocation = container.storageLocation || {};
+      container.$$dimensionless = !!container.id && container.noOfRows == null && container.noOfColumns == null;
+
       $scope.container = container;
 
       $scope.ctx = { mode: 'single', view: '', capacityReq: !!container.capacity};
@@ -274,6 +276,10 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
       attrsToDelete.forEach(function(attr) {
         delete $scope.container[attr];
       });
+
+      if ($scope.ctx.mode == 'hierarchy') {
+        container.$$dimensionless = false;
+      }
     }
 
     //
@@ -324,6 +330,13 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
           $state.go('container-list');
         }
       );
+    }
+
+    $scope.setDimensionless = function() {
+      $scope.container.noOfRows = $scope.container.noOfColumns = null;
+      $scope.container.positionLabelingMode = 'LINEAR';
+      $scope.container.storeSpecimensEnabled = true;
+      $scope.container.rowLabelingScheme = $scope.container.columnLabelingScheme = 'Numbers';
     }
 
     init();
