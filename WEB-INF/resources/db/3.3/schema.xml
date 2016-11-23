@@ -309,6 +309,8 @@
         from
           catissue_user u
           inner join catissue_institution i on u.institute_id = i.identifier
+        where
+          u.activity_status != 'Disabled' and i.activity_status != 'Disabled'
       )
     </sql>
   </changeSet>
