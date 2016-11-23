@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vgaikwad" id="Change older public id 'Specimen_Type_PID' to 'specimen_type' to refer same">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        public_id = 'specimen_type'
+      where
+        public_id = 'Specimen_Type_PID';
+
+      delete from catissue_cde where public_id = 'Specimen_Type_PID';
+    </sql>
+  </changeSet>
+</databaseChangeLog>
