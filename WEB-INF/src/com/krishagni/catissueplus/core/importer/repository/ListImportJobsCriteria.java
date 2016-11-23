@@ -9,6 +9,8 @@ public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsC
 	
 	private Long userId;
 	
+	private Long instituteId;
+
 	private List<String> objectTypes;
 
 	private Map<String, String> params;
@@ -17,13 +19,22 @@ public class ListImportJobsCriteria extends AbstractListCriteria<ListImportJobsC
 	public ListImportJobsCriteria self() {
 		return this;
 	}
-	
+
 	public Long userId() {
 		return userId;
 	}
 	
 	public ListImportJobsCriteria userId(Long userId) {
 		this.userId = userId;
+		return self();
+	}
+
+	public Long instituteId() {
+		return instituteId;
+	}
+
+	public ListImportJobsCriteria instituteId(Long instituteId) {
+		this.instituteId = instituteId;
 		return self();
 	}
 	

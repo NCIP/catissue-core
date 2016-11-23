@@ -133,7 +133,9 @@ public class ImportServiceImpl implements ImportService {
 	public ResponseEvent<List<ImportJobDetail>> getImportJobs(RequestEvent<ListImportJobsCriteria> req) {
 		try {
 			ListImportJobsCriteria crit = req.getPayload();
-			if (!AuthUtil.isAdmin()) {
+			if (AuthUtil.isInstituteAdmin()) {
+				crit.instituteId(AuthUtil.getCurrentUserInstitute().getId());
+			} else if (!AuthUtil.isAdmin()) {
 				crit.userId(AuthUtil.getCurrentUser().getId());
 			}
 			

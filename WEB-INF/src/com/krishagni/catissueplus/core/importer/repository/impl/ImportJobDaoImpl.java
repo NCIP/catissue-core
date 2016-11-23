@@ -30,8 +30,12 @@ public class ImportJobDaoImpl extends AbstractDao<ImportJob> implements ImportJo
 			.setFirstResult(startAt)
 			.setMaxResults(maxResults)
 			.addOrder(Order.desc("id"));
-		
-		if (crit.userId() != null) {
+
+		if (crit.instituteId() != null) {
+			query.createAlias("createdBy", "createdBy")
+				.createAlias("createdBy.institute","institute")
+				.add(Restrictions.eq("institute.id", crit.instituteId()));
+		} else if (crit.userId() != null) {
 			query.createAlias("createdBy", "createdBy")
 				.add(Restrictions.eq("createdBy.id", crit.userId()));
 		}
