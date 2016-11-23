@@ -5,6 +5,7 @@
     <name>Order</name>
     <caption>#getMessage("order")</caption>
     <table>OS_ORDERS</table>
+    <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
 
     <row>
       <numberField>
