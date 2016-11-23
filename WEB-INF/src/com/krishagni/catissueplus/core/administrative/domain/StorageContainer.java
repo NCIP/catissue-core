@@ -872,6 +872,10 @@ public class StorageContainer extends BaseEntity {
 	}
 
 	public void setFreezerCapacity() {
+		if (isDimensionless()) {
+			return;
+		}
+
 		List<StorageContainer> containers = new ArrayList<>();
 		StorageContainer freezer = this;
 		while (freezer.getParentContainer() != null) {
@@ -883,12 +887,9 @@ public class StorageContainer extends BaseEntity {
 			return;
 		}
 
-		Integer capacity = null;
-		if (!freezer.isDimensionless()) {
-			capacity = freezer.getNoOfRows() * freezer.getNoOfColumns();
-			for (StorageContainer container : containers) {
-				capacity *= container.getNoOfRows() * container.getNoOfColumns();
-			}
+		Integer capacity = freezer.getNoOfRows() * freezer.getNoOfColumns();
+		for (StorageContainer container : containers) {
+			capacity *= container.getNoOfRows() * container.getNoOfColumns();
 		}
 
 		freezer.setCapacity(capacity);

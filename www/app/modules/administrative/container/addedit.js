@@ -277,7 +277,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
         delete $scope.container[attr];
       });
 
-      if ($scope.ctx.mode == 'hierarchy') {
+      if ($scope.ctx.mode != 'single') {
         container.$$dimensionless = false;
       }
     }
