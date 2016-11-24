@@ -624,10 +624,14 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 		//
 		// TODO: This is duplicate code. Need to consolidate this with specimen/container objects
 		//
-		String row = location.getPositionY(), column = location.getPositionX();
-		if (container.getPositionLabelingMode() == StorageContainer.PositionLabelingMode.LINEAR && location.getPosition() != 0) {
-			row    = String.valueOf((location.getPosition() - 1) / container.getNoOfColumns() + 1);
-			column = String.valueOf((location.getPosition() - 1) % container.getNoOfColumns() + 1);
+		String row = null, column = null;
+		if (!container.isDimensionless()) {
+			row = location.getPositionY();
+			column = location.getPositionX();
+			if (container.usesLinearLabelingMode() && location.getPosition() != null && location.getPosition() != 0) {
+				row = String.valueOf((location.getPosition() - 1) / container.getNoOfColumns() + 1);
+				column = String.valueOf((location.getPosition() - 1) % container.getNoOfColumns() + 1);
+			}
 		}
 
 		StorageContainerPosition position = null;

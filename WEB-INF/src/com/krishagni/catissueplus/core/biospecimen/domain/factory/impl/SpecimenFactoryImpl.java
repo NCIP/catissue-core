@@ -747,7 +747,7 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (!container.isDimensionless()) {
 			posOne = location.getPositionX();
 			posTwo = location.getPositionY();
-			if (container.usesLinearLabelingMode() && location.getPosition() != 0) {
+			if (container.usesLinearLabelingMode() && location.getPosition() != null && location.getPosition() != 0) {
 				posTwo = String.valueOf((location.getPosition() - 1) / container.getNoOfColumns() + 1);
 				posOne = String.valueOf((location.getPosition() - 1) % container.getNoOfColumns() + 1);
 			}
