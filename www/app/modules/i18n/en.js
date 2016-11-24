@@ -217,6 +217,7 @@
     "deleting_event": "Deleting Event...",
     "confirm_delete_event": "Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?",
 
+    "bulk_import": "Biospecimen Data",
     "bulk_import_biospecimen_obj_jobs": "Import Biospecimen Objects Job List",
 
     "show_site_coding": "Show Site Code Information",
@@ -1535,8 +1536,7 @@
 
     "select_record_type": "Select Records Type",
     "jobs_list": "Bulk Import Jobs",
-    "view_jobs": "View Jobs",
-    "view_import_jobs": "View Import Jobs",
+    "view_jobs": "View Past Imports",
     "import": "Import",
 
     "object_types": {
