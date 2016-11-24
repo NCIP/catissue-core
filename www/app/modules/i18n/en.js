@@ -590,6 +590,7 @@
     "specimens_deleted": "Selected specimens are deleted successfully",
     "delete_specimens_heirarchy": "Are you sure you want to delete selected specimens and all its children ?",
     "delete_specimens":  "Are you sure you want to delete selected specimens ?",
+    "close": "Close Specimen",
     "specimens_closed": "Selected specimens are closed successfully",
     "specimen_closed": "Specimen is closed successfully",
     "create_derivative": "Create Derived Specimen",

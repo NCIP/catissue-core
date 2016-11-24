@@ -2,15 +2,12 @@
 angular.module('os.biospecimen.specimen.overview', ['os.biospecimen.models'])
   .controller('SpecimenOverviewCtrl', function($scope, $rootScope, hasDict, specimen, ExtensionsUtil) {
     function init() {
-      var spmnToDisp = null;
       if (hasDict) {
-        spmnToDisp = angular.copy(specimen);
-        ExtensionsUtil.createExtensionFieldMap(spmnToDisp);
-        delete spmnToDisp.children;
+        ExtensionsUtil.createExtensionFieldMap(specimen);
       }
 
       $scope.spmnCtx = {
-        obj: {specimen: spmnToDisp},
+        obj: {specimen: specimen},
         inObjs: ['specimen'],
         exObjs: ['specimen.events', 'specimen.collectionEvent', 'specimen.receivedEvent']
       }

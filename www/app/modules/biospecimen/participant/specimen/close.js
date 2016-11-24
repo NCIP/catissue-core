@@ -2,7 +2,7 @@
 angular.module('os.biospecimen.specimen.close', ['os.biospecimen.models'])
   .controller('SpecimenCloseCtrl', function($scope, $modalInstance, Specimen, specimens, Alerts) {
     function init() {
-      $scope.specimen = specimens[0];
+      $scope.specimen = specimens.length == 1 ? specimens[0] : null;
       $scope.closeSpec = {
         reason: ''
       };
@@ -17,10 +17,6 @@ angular.module('os.biospecimen.specimen.close', ['os.biospecimen.models'])
 
       Specimen.bulkStatusUpdate(statusSpecs).then(
         function(result) {
-          angular.forEach(specimens, function(specimen) {
-            specimen.activityStatus = 'Closed';
-            specimen.selected = false;
-          });
           Alerts.success('specimens.specimens_closed');
           $modalInstance.close(result);
         }

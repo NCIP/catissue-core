@@ -273,7 +273,7 @@ angular.module('os.biospecimen.participant.specimen-tree',
             return;
           }
 
-          var modalInstance = $modal.open({
+          $modal.open({
             templateUrl: 'modules/biospecimen/participant/specimen/close.html',
             controller: 'SpecimenCloseCtrl',
             resolve: {
@@ -281,8 +281,17 @@ angular.module('os.biospecimen.participant.specimen-tree',
                 return specimensToClose;
               }
             }
-          });
-          scope.selection.all = false;
+          }).result.then(
+            function() {
+              angular.forEach(specimensToClose, function(specimen) {
+                specimen.activityStatus = 'Closed';
+                specimen.selected = false;
+                specimen.storageLocation = {};
+              });
+
+              scope.selection.all = false;
+            }
+          );
         };
 
         scope.addSpecimensToSpecimenList = function(list) {
