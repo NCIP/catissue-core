@@ -76,8 +76,8 @@ public class TransactionalInterceptor {
 			return doWork0(pjp, rollback);
 		} catch (Throwable t) {
 			logger.error("Error doing work inside " + pjp.getSignature(), t);
-			handleServerError(t.getCause(), pjp.getArgs());
-			throw t;
+			Long exceptionId = handleServerError(t.getCause(), pjp.getArgs());
+			throw OpenSpecimenException.serverError(exceptionId, t);
 		}
 	}
 
@@ -97,7 +97,10 @@ public class TransactionalInterceptor {
 							status.setRollbackOnly();
 							if (resp.isSystemError() || resp.isUnknownError()) {
 								logger.error("Error doing work inside " + pjp.getSignature(), resp.getError().getException());
-								handleServerError(resp.getError().getException(), pjp.getArgs());
+
+								OpenSpecimenException ose = resp.getError();
+								Long exceptionId = handleServerError(ose.getException(), pjp.getArgs());
+								ose.setExceptionId(exceptionId);
 							}
 						} else if (resp.isRollback()) {
 							status.setRollbackOnly();
@@ -111,36 +114,38 @@ public class TransactionalInterceptor {
 				} catch (Throwable t) {
 					logger.error("Error doing work inside " + pjp.getSignature(), t);
 					status.setRollbackOnly();
-					handleServerError(t, pjp.getArgs());
 					throw OpenSpecimenException.serverError(t);
 				}
 			}
 		});
 	}
 
-	private void handleServerError(Throwable t, Object[] args) {
+	private Long handleServerError(Throwable t, Object[] args) {
+		Long exceptionId = null;
 		try {
+			StackTraceElement ste = getSte(t);
+			if (seenMaxTimesInLastInterval(ste)) {
+				return exceptionId;
+			}
+
+			exceptionId = saveUnhandledExceptionToDb(t, ste, args);
+			
 			String itAdminEmailId = ConfigUtil.getInstance().getItAdminEmailId();
 			if (StringUtils.isBlank(itAdminEmailId)) {
 				logger.error("No admin or IT admin email ID has been configured to send uncaught system errors");
-				return;
-			}
-
-			StackTraceElement ste = getSte(t);
-			if (seenMaxTimesInLastInterval(ste)) {
-				return;
+				return exceptionId;
 			}
 
 			EmailUtil.getInstance().sendEmail(
 				SERVER_ERROR_TMPL,
 				new String[] {itAdminEmailId},
 				new File[] {getErrorLog(t)},
-				getErrorDetail(t, ste));
-			
-			saveUnhandledExceptionToDb(t, ste, args);
+				getErrorDetail(exceptionId, t, ste));
 		} catch (Exception e) {
 			logger.error("Error notifying uncaught server errors", e);
 		}
+		
+		return exceptionId;
     }
 
 	private File getErrorLog(Throwable t)
@@ -172,7 +177,7 @@ public class TransactionalInterceptor {
 		return null;
 	}
 
-	private Map<String, Object> getErrorDetail(Throwable t, StackTraceElement ste) {
+	private Map<String, Object> getErrorDetail(Long exceptionId, Throwable t, StackTraceElement ste) {
 		Map<String, Object> emailProps = new HashMap<>();
 		emailProps.put("userName", AuthUtil.getCurrentUser().getUsername());
 		emailProps.put("ste", ste);
@@ -189,6 +194,7 @@ public class TransactionalInterceptor {
 		 * "t.getCause()" gives -> null
 		 */
 		emailProps.put("exception", t.getCause() != null ? t.getCause() : t);
+		emailProps.put("exceptionId", exceptionId);
 		return emailProps;
 	}
 
@@ -228,12 +234,12 @@ public class TransactionalInterceptor {
 		return ((t2 - t1) / (60 * 1000)) < interval;
 	}
 	
-	private void saveUnhandledExceptionToDb(Throwable t, StackTraceElement ste, Object[] args) {
-		newTxTmpl.execute(new TransactionCallback<Void>() {
+	private Long saveUnhandledExceptionToDb(Throwable t, StackTraceElement ste, Object[] args) {
+		return newTxTmpl.execute(new TransactionCallback<Long>() {
 			@Override
-			public Void doInTransaction(TransactionStatus status) {
+			public Long doInTransaction(TransactionStatus status) {
 				try {
-					UnhandledExceptionUtil.getInstance().saveUnhandledException(t, ste, args);
+					return UnhandledExceptionUtil.getInstance().saveUnhandledException(t, ste, args);
 				} catch (Throwable t) {
 					status.setRollbackOnly();
 					logger.error("Error saving unhandled exception to DB", t);

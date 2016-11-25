@@ -47,7 +47,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 				logger.error("Error handling request", ose.getException());
 
 				if (CollectionUtils.isEmpty(ose.getErrors())) {
-					errorMsgs.add(getMessage(INTERNAL_ERROR, null));
+					errorMsgs.add(getMessage(INTERNAL_ERROR, getExceptionId(ose)));
 				}
 			}
 
@@ -94,5 +94,10 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 				params,
 				Locale.getDefault());
 		return new ErrorMessage(code, message);
+	}
+	
+	private Object[] getExceptionId(OpenSpecimenException ose) {
+		Long id = ose.getExceptionId();
+		return new Object[] {id != null ? id : ""};
 	}
 }

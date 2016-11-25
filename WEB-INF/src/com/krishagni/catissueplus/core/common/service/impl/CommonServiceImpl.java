@@ -91,7 +91,8 @@ public class CommonServiceImpl implements CommonService {
 	
 	@Override
 	@PlusTransactional
-	public void saveUnhandledException(UnhandledException exception) {
+	public Long saveUnhandledException(UnhandledException exception) {
 		daoFactory.getUnhandledExceptionDao().saveOrUpdate(exception, true);
+		return exception.getId();
 	}
 }

@@ -32,10 +32,10 @@ public class UnhandledExceptionUtil {
 		return instance;
 	}
 	
-	public void saveUnhandledException(Throwable t, StackTraceElement ste, Object[] inputArgs) {
+	public Long saveUnhandledException(Throwable t, StackTraceElement ste, Object[] inputArgs) {
 		if (commonSvc == null) {
 			logger.warn("Unhandled exception sub-system not initialised yet.");
-			return;
+			return null;
 		}
 
 		UnhandledException exception = new UnhandledException();
@@ -62,7 +62,7 @@ public class UnhandledExceptionUtil {
 			}
 		}
 
-		commonSvc.saveUnhandledException(exception);
+		return commonSvc.saveUnhandledException(exception);
 	}
 
 }

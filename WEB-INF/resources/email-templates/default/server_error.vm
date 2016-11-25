@@ -19,6 +19,10 @@
               <td>
                 <table>
                   <tr>
+                    <td width="15%"> Exception ID </td>
+                    <td> : $exceptionId</td>
+                  </tr>
+                  <tr>
                     <td width="15%"> Username </td>
                     <td> : $userName</td>
                   </tr>

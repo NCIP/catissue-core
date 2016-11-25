@@ -18,6 +18,8 @@ public class OpenSpecimenException extends RuntimeException {
 	private List<ParameterizedError> errors = new ArrayList<ParameterizedError>();
 	
 	private Throwable exception;
+
+	private Long exceptionId;
 	
 	public OpenSpecimenException(ErrorType type, ErrorCode error, Object ... params) {
 		this.errorType = type;
@@ -29,6 +31,11 @@ public class OpenSpecimenException extends RuntimeException {
 	}
 	
 	public OpenSpecimenException(Throwable t) {
+		this(null, t);
+	}
+	
+	public OpenSpecimenException(Long exceptionId, Throwable t) {
+		this.exceptionId = exceptionId;
 		this.errorType = ErrorType.SYSTEM_ERROR;
 		this.exception = t;
 
@@ -104,6 +111,14 @@ public class OpenSpecimenException extends RuntimeException {
 		return errorMsg.toString();
 	}
 
+	public Long getExceptionId() {
+		return exceptionId;
+	}
+
+	public void setExceptionId(Long exceptionId) {
+		this.exceptionId = exceptionId;
+	}
+
 	public static OpenSpecimenException userError(ErrorCode error, Object ... params) {		
 		return new OpenSpecimenException(ErrorType.USER_ERROR, error, params);
 	}
@@ -114,6 +129,10 @@ public class OpenSpecimenException extends RuntimeException {
 	
 	public static OpenSpecimenException serverError(Throwable e) {
 		return new OpenSpecimenException(e);
+	}
+	
+	public static OpenSpecimenException serverError(Long exceptionId, Throwable e) {
+		return new OpenSpecimenException(exceptionId, e);
 	}
 
 	private String getMessage(ParameterizedError error) {

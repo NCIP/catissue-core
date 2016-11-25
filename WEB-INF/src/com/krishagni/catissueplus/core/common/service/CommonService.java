@@ -13,5 +13,5 @@ public interface CommonService {
 	
 	ResponseEvent<String> getUnhandledExceptionLog(RequestEvent<Long> req);
 	
-	void saveUnhandledException(UnhandledException exception);
+	Long saveUnhandledException(UnhandledException exception);
 }
