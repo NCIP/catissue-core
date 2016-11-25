@@ -329,8 +329,14 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
       function shallowCopy(spmn) {
         var copy = new Specimen(spmn);
-        copy.storageLocation = !spmn.storageLocation ? {} : {name: spmn.storageLocation.name}
         copy.children = [];
+
+        if (spmn.storageLocation) {
+          copy.storageLocation = {name: spmn.storageLocation.name, mode: spmn.storageLocation.mode};
+        } else {
+          copy.storageLocation = {};
+        }
+
         return copy;
       }
 
@@ -360,7 +366,10 @@ angular.module('os.biospecimen.participant.collect-specimens',
                 return;
               }
 
-              aliquot.storageLocation = {name: specimen.storageLocation.name};
+              aliquot.storageLocation = {
+                name: specimen.storageLocation.name,
+                mode: specimen.storageLocation.mode
+              };
             });
           }
         );
