@@ -21,6 +21,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -74,6 +75,8 @@ public class TransactionalInterceptor {
 	private Object doWork(ProceedingJoinPoint pjp, boolean rollback) {
 		try {
 			return doWork0(pjp, rollback);
+		} catch (DataAccessException dae) {
+			throw OpenSpecimenException.serverError(dae.getCause() != null ? dae.getCause() : dae);
 		} catch (Throwable t) {
 			logger.error("Error doing work inside " + pjp.getSignature(), t);
 			Long exceptionId = handleServerError(t.getCause(), pjp.getArgs());

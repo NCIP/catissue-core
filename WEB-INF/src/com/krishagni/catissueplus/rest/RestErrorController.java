@@ -37,7 +37,7 @@ public class RestErrorController extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleOtherException(Exception exception, WebRequest request) {
 
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-		List<ErrorMessage> errorMsgs = new ArrayList<ErrorMessage>();
+		List<ErrorMessage> errorMsgs = new ArrayList<>();
 
 		if (exception instanceof OpenSpecimenException) {
 			OpenSpecimenException ose = (OpenSpecimenException) exception;
