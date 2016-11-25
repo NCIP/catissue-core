@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.JDBCException;
 
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
 
@@ -32,14 +32,14 @@ public class OpenSpecimenException extends RuntimeException {
 		this.errorType = ErrorType.SYSTEM_ERROR;
 		this.exception = t;
 
-		if (t instanceof ConstraintViolationException) {
-			ConstraintViolationException cve = (ConstraintViolationException)t;
-			String dbMsg = cve.getConstraintName();
+		if (t instanceof JDBCException) {
+			JDBCException je = (JDBCException)t;
+			String dbMsg = je.getCause().getMessage();
 			if (StringUtils.isBlank(dbMsg)) {
-				dbMsg = cve.getSQLException().getMessage();
+				dbMsg = je.getSQLException().getMessage();
 			}
 
-			errors.add(new ParameterizedError(CommonErrorCode.CONSTRAINT_VIOLATION, dbMsg));
+			errors.add(new ParameterizedError(CommonErrorCode.SQL_EXCEPTION, dbMsg));
 		}
 	}
 	
