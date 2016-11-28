@@ -152,6 +152,7 @@ angular.module('os.biospecimen.specimenlist')
     }
 
     $scope.toggleAllSpecimenSelect = function() {
+      $scope.ctx.selection.all = !$scope.ctx.selection.all;
       $scope.ctx.selection.any = $scope.ctx.selection.all;
       if (!$scope.ctx.selection.all) {
         $scope.ctx.selection.specimens = [];
@@ -167,8 +168,9 @@ angular.module('os.biospecimen.specimenlist')
     }
 
     $scope.toggleSpecimenSelect = function (specimen) {
-      var specimens = $scope.ctx.selection.specimens;
+      specimen.selected = !specimen.selected;
 
+      var specimens = $scope.ctx.selection.specimens;
       if (specimen.selected) {
         specimens.push(specimen);
       } else {

@@ -106,15 +106,13 @@
     <table class="os-table os-table-hover" overflow="auto" ng-if="ctx.list.specimens.length > 0">
       <thead class="os-table-head">
         <tr class="row">
-          <th class="col">
-            <div class="clearfix">
-              <div class="pull-left os-select-specimen-cb">
-                <os-checkbox ng-change="toggleAllSpecimenSelect()" ng-model="ctx.selection.all" ></os-checkbox>
-              </div>
-              <div class="pull-left" style="padding-left: 12px;">
-                <span translate="specimen_list.label">Label</span>
-              </div>
+          <th class="col os-click-esc os-pointer-cursor" ng-click="toggleAllSpecimenSelect()">
+            <div class="os-select-specimen-cb">
+              <os-checkbox ng-model="ctx.selection.all"></os-checkbox>
             </div>
+          </th>
+          <th class="col os-no-left-padding">
+            <span translate="specimen_list.label">Label</span>
           </th>
           <th class="col">
             <span translate="specimen_list.type">Type</span>
@@ -139,20 +137,18 @@
       <tbody class="os-table-body">
         <tr class="row" ng-repeat="specimen in ctx.spmnsInView"
           ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
-          <td class="col">
-            <div class="clearfix">
-              <div class="pull-left os-select-specimen-cb os-click-esc">
-                <os-checkbox ng-change="toggleSpecimenSelect(specimen)" ng-model="specimen.selected"></os-checkbox>
-              </div>
-              <div class="pull-left" style="padding-left: 12px;">
-                <a ui-sref="specimen({specimenId: specimen.id})">
-                  <span>{{specimen.label}}</span>
-                  <span ng-if="!!specimen.barcode">
-                    ({{specimen.barcode}})
-                  </span>
-                </a>
-              </div>
+          <td class="col os-click-esc os-pointer-cursor" ng-click="toggleSpecimenSelect(specimen)">
+            <div class="os-select-specimen-cb">
+              <os-checkbox ng-model="specimen.selected"></os-checkbox>
             </div>
+          </td>
+          <td class="col os-no-left-padding">
+            <a ui-sref="specimen({specimenId: specimen.id})">
+              <span>{{specimen.label}}</span>
+              <span ng-if="!!specimen.barcode">
+                ({{specimen.barcode}})
+              </span>
+            </a>
           </td>
           <td class="col">
             <span>{{specimen.type}}</span>

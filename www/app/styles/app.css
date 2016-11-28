@@ -960,7 +960,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 }
 
 .os-no-left-padding {
-  padding-left: 0px;
+  padding-left: 0px!important;
 }
 
 .os-big-dropdown-menu {
