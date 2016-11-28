@@ -192,6 +192,10 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 				container.setFreezerCapacity();
 			}
 
+			if (container.getPosition() != null) {
+				container.getPosition().occupy();
+			}
+
 			daoFactory.getStorageContainerDao().saveOrUpdate(container, true);
 			return ResponseEvent.response(StorageContainerDetail.from(container));
 		} catch (OpenSpecimenException ose) {
