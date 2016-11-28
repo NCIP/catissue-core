@@ -999,7 +999,7 @@ public class Specimen extends BaseExtensionEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition, Date time) {
-		if (newPosition != null && newPosition.getContainer() == null) {
+		if (newPosition != null && !newPosition.isSpecified()) {
 			newPosition = null;
 		}
 

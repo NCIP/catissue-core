@@ -70,7 +70,7 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 	}
 
 	public Integer getPosition() {
-		if (getContainer().isDimensionless()) {
+		if (getContainer().isDimensionless() || !isSpecified()) {
 			return null;
 		}
 
@@ -146,12 +146,11 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 	public boolean equals(String row, String column, String reservationId) {
 		return row.equals(getPosTwo()) && column.equals(getPosOne()) && reservationId.equals(getReservationId());
 	}
-	
-	private static final String[] POS_UPDATE_IGN_PROPS = new String[] {
-		"id", 
-		"occupyingSpecimen", 
-		"occupyingContainer"
-	};
+
+	public boolean isSpecified() {
+		return getPosOneOrdinal() != null && getPosTwoOrdinal() != null &&
+			getPosOneOrdinal() != 0 && getPosTwoOrdinal() != 0;
+	}
 
 	@Override
 	public int compareTo(StorageContainerPosition other) {
@@ -167,4 +166,12 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 
 		return cmp;
 	}
+
+	private static final String[] POS_UPDATE_IGN_PROPS = new String[] {
+			"id",
+			"occupyingSpecimen",
+			"occupyingContainer"
+	};
+
+
 }
