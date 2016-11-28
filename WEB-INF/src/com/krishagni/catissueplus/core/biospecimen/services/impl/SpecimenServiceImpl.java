@@ -884,6 +884,12 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	private Date getDisposalDate(Specimen specimen, Date disposalDate, OpenSpecimenException ose) {
 		if (disposalDate == null) {
 			return Calendar.getInstance().getTime();
+		} else if (specimen == null) {
+			//
+			// Error to have null specimen; therefore return whatever
+			// disposal date was given as input
+			//
+			return disposalDate;
 		}
 
 		if (specimen.isPrimary() && disposalDate.before(specimen.getCollectionEvent().getTime())) {
