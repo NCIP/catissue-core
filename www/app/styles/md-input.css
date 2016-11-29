@@ -166,6 +166,10 @@
   margin-top: 0px!important;
 }
 
+.os-md-form {
+  margin-bottom: 20px;
+}
+
 .os-md-form label {
   color: #666;
 }
@@ -175,7 +179,8 @@
 }
 
 .os-md-form .form-group {
-  margin-bottom: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .os-md-form .os-md-input.read {
