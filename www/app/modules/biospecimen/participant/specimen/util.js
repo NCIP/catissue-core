@@ -56,7 +56,7 @@ angular.module('os.biospecimen.specimen')
 
       var aliquots = [];
       for (var i = 0; i < spec.noOfAliquots; ++i) {
-        var clonedAlqt = angular.copy(aliquot);
+        var clonedAlqt = new Specimen(aliquot);
         clonedAlqt.extensionDetail = extensionDetail;
         aliquots.push(clonedAlqt);
       }

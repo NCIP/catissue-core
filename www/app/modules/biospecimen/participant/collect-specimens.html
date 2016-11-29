@@ -28,7 +28,7 @@
 
   <div class="container">
     <form name="collectionForm" os-form-validator="collectionForm" novalidate>
-      <div ng-include src="'specimen_coll_visit_details.html'"></div>
+      <div ng-include src="'specimen_coll_visit_details.html'" ng-if="showCollVisitDetails"></div>
 
       <table class="os-table os-table-fixed os-table-tree bulk-edit os-border os-table-muted-hdr">
         <thead class="os-table-head">

@@ -63,7 +63,8 @@ angular.module('os.biospecimen.specimen.addaliquots', [])
     $scope.collectAliquots = function() {
       var specimens = SpecimenUtil.collectAliquots($scope);
       if (specimens) {
-        CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, $scope.ignoreQtyWarning);
+        var opts = {ignoreQtyWarning: true, showCollVisitDetails: false};
+        CollectSpecimensSvc.collect(getState(), $scope.visit, specimens, opts);
       }
     }
 

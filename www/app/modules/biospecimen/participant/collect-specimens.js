@@ -4,7 +4,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
     'os.biospecimen.models'
   ])
   .factory('CollectSpecimensSvc', function($state, Container) {
-    var data = {};
+    var data = {opts: {}};
 
     function getReservePositionsOp(cpId, specimens) {
       var aliquots = {}, result = [];
@@ -56,11 +56,14 @@ angular.module('os.biospecimen.participant.collect-specimens',
     }
 
     return {
-      collect: function(stateDetail, visit, specimens, ignoreQtyWarn) {
-        data.specimens = specimens;
+      //
+      // opts: {ignoreQtyWarning: [true | false], showCollVisitDetails: [true | false]}
+      //
+      collect: function(stateDetail, visit, specimens, opts) {
         data.stateDetail = stateDetail;
         data.visit = visit;
-        data.ignoreQtyWarn = ignoreQtyWarn;
+        data.specimens = specimens;
+        data.opts = opts || {};
 
         Container.getReservedPositions(getReservePositionsOp(visit.cpId, specimens)).then(
           function(positions) {
@@ -73,9 +76,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
       },
 
       clear: function() {
-        data.specimens = [];
-        data.visit = undefined;
         data.stateDetail = undefined;
+        data.visit = undefined;
+        data.specimens = [];
       },
 
       getSpecimens: function() {
@@ -90,8 +93,12 @@ angular.module('os.biospecimen.participant.collect-specimens',
         return data.stateDetail;
       },
 
-      isIgnoreQtyWarn: function() {
-        return data.ignoreQtyWarn;
+      ignoreQtyWarning: function() {
+        return data.opts.ignoreQtyWarning || false;
+      },
+
+      showCollVisitDetails: function() {
+        return data.opts.showCollVisitDetails !== false;
       }
     };
   })
@@ -105,7 +112,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
       var ignoreQtyWarning = false;
 
       function init() {
-        ignoreQtyWarning = CollectSpecimensSvc.isIgnoreQtyWarn() || false;
+        ignoreQtyWarning = CollectSpecimensSvc.ignoreQtyWarning();
+        $scope.showCollVisitDetails = CollectSpecimensSvc.showCollVisitDetails();
+
         $scope.specimens = CollectSpecimensSvc.getSpecimens().map(
           function(specimen) {
             specimen.existingStatus = specimen.status;
@@ -755,6 +764,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
       }
 
       $scope.changeQuantity = function(specimen, qty) {
+        ignoreQtyWarning = false;
         if (!specimen.expanded) {
           angular.forEach(specimen.aliquotGrp, function(sibling) {
             sibling.initialQty = qty;
@@ -769,6 +779,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         if (specimen.newAliquotsCnt < grpLen) {
           removeAliquotsFromGrp(specimen, grpLen - specimen.newAliquotsCnt);
         } else {
+          ignoreQtyWarning = false;
           addAliquotsToGrp(specimen, specimen.newAliquotsCnt - grpLen);
         }     
 
