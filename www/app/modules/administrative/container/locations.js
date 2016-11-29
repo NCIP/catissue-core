@@ -56,9 +56,6 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
     }
 
     $scope.showInfo = function(entityType, entityId) {
-      $scope.lctx.entityInfo   = {type: entityType, id: entityId};
-      $scope.ctx.showTree      = false;
-
       var promise;
       if (entityType == 'specimen') {
         promise = Specimen.getById(entityId);
@@ -70,6 +67,8 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
 
       promise.then(
         function(entity) {
+          $scope.ctx.showTree    = false;
+          $scope.lctx.entityInfo = {type: entityType, id: entityId};
           $scope.lctx.entityInfo[entityType] = entity;
         }
       );

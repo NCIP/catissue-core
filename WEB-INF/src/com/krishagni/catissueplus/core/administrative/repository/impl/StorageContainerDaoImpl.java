@@ -35,6 +35,7 @@ import com.krishagni.catissueplus.core.administrative.repository.ContainerRestri
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerDao;
 import com.krishagni.catissueplus.core.administrative.repository.StorageContainerListCriteria;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.repository.AbstractDao;
 import com.krishagni.catissueplus.core.common.util.Status;
 
@@ -366,6 +367,9 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			
 			addParentRestriction();
 			addCanHoldRestriction();
+
+			// permissions check
+			addSiteCpRestriction();
 			
 			String hql = new StringBuilder(select)
 				.append(" ").append(from)
@@ -387,13 +391,12 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		
 		private void prepareQuery(StorageContainerListCriteria crit, boolean countReq) {
 			this.crit = crit;
-				
+
+			select = new StringBuilder(countReq ? "select count(distinct c.id)" : "select distinct c");
 			if (crit.hierarchical()) {
-				select = new  StringBuilder(countReq ? "select count (distinct c.id)" : "select distinct c");
 				from = new StringBuilder("from ").append(getType().getName()).append(" c join c.descendentContainers dc");
 				where = new StringBuilder("where dc.activityStatus = :activityStatus");
 			} else {
-				select = new StringBuilder(countReq ? "select count(c.id)" : "select c");
 				from = new StringBuilder("from ").append(getType().getName()).append(" c");
 				where = new StringBuilder("where c.activityStatus = :activityStatus");						
 			}
@@ -407,8 +410,8 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 				where.append(" and ");
 			}
 		}
-		
-		private void addNameRestriction() {			
+
+		private void addNameRestriction() {
 			if (StringUtils.isBlank(crit.query())) {
 				return;
 			}
@@ -435,26 +438,20 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 		}
 
+		private void addSiteAlias() {
+			from.append(" join c.site site");
+		}
+
 		private void addSiteRestriction() {
-			boolean blankSiteName = StringUtils.isBlank(crit.siteName());
-			boolean emptySiteIds = CollectionUtils.isEmpty(crit.siteIds());			
-			if (blankSiteName && emptySiteIds) {
+			if (StringUtils.isBlank(crit.siteName())) {
 				return;
 			}
 			
-			from.append(" join c.site site");
+			addSiteAlias();
 
-			if (!blankSiteName) {
-				addAnd();
-				where.append("site.name = :siteName");
-				params.put("siteName", crit.siteName());				
-			}
-			
-			if (!emptySiteIds) {
-				addAnd();
-				where.append("site.id in (:siteIds)");
-				params.put("siteIds", crit.siteIds());				
-			}
+			addAnd();
+			where.append("site.name = :siteName");
+			params.put("siteName", crit.siteName());
 		}
 
 		private void addParentRestriction() {
@@ -513,18 +510,22 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			params.put("specimenClass", specimenClass);
 			params.put("specimenType", specimenType);
 		}
-		
-		private void addCpRestriction() {
-			if (CollectionUtils.isEmpty(crit.cpIds()) && CollectionUtils.isEmpty(crit.cpShortTitles())) {
-				return;
-			}
-			
+
+		private void addCpAlias() {
 			if (crit.hierarchical()) {
 				from.append(" left join dc.compAllowedCps cp");
 			} else {
 				from.append(" left join c.compAllowedCps cp");
 			}
-			
+		}
+
+		private void addCpRestriction() {
+			if (CollectionUtils.isEmpty(crit.cpIds()) && CollectionUtils.isEmpty(crit.cpShortTitles())) {
+				return;
+			}
+
+			addCpAlias();
+
 			addAnd();
 
 			if (CollectionUtils.isNotEmpty(crit.cpIds())) {
@@ -549,6 +550,37 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			}
 			
 			params.put("storeSpecimenEnabled", crit.storeSpecimensEnabled());
+		}
+
+		private void addSiteCpRestriction() {
+			if (CollectionUtils.isEmpty(crit.siteCps())) {
+				return;
+			}
+
+			if (StringUtils.isBlank(crit.siteName())) {
+				addSiteAlias();
+			}
+
+			if (CollectionUtils.isEmpty(crit.cpIds()) && CollectionUtils.isEmpty(crit.cpShortTitles())) {
+				addCpAlias();
+			}
+
+			List<String> disjunctions = new ArrayList<>();
+			for (Pair<Long, Long> siteCp : crit.siteCps()) {
+				StringBuilder restriction = new StringBuilder("(site.id = ").append(siteCp.first());
+				if (siteCp.second() != null) {
+					restriction.append(" and (")
+						.append("cp.id is null or ")
+						.append("cp.id = ").append(siteCp.second())
+						.append(")");
+				}
+
+				restriction.append(")");
+				disjunctions.add(restriction.toString());
+			}
+
+			addAnd();
+			where.append("(").append(StringUtils.join(disjunctions, " or ")).append(")");
 		}
 	}
 

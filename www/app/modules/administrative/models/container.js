@@ -85,6 +85,16 @@ angular.module('os.administrative.models.container', ['os.common.models'])
           }
 
           return containers;
+        },
+
+        function() {
+          container.childContainers = [];
+          container.childContainersLoaded = true;
+          container.hasChildren = false;
+
+          var idx = containers.indexOf(container);
+          containers.splice(idx + 1, 1);
+          return containers;
         }
       );
     };

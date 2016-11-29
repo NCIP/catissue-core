@@ -46,6 +46,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.CpErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.SpecimenResolver;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.RollbackTransaction;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
@@ -623,29 +624,16 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	}
 
 	private StorageContainerListCriteria addContainerListCriteria(StorageContainerListCriteria crit) {
-		Set<Long> siteIds = AccessCtrlMgr.getInstance().getReadAccessContainerSites();
-		if (siteIds != null && siteIds.isEmpty()) {
+		Set<Pair<Long, Long>> siteCps = AccessCtrlMgr.getInstance().getReadAccessContainerSiteCps();
+		if (siteCps == null) {
+			return crit;
+		}
+
+		if (siteCps.isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
-		if (CollectionUtils.isNotEmpty(crit.cpIds())) {
-			//
-			// TODO: what if cp site IDs is empty because of invalid cp ids
-			// return error
-			//
-			Set<Long> cpSiteIds = new HashSet<>(daoFactory.getCollectionProtocolDao().getSiteIdsByCpIds(crit.cpIds()));
-			if (siteIds == null) {
-				siteIds = cpSiteIds;
-			} else {
-				siteIds = new HashSet<>(CollectionUtils.intersection(siteIds, cpSiteIds));
-			}
-		}
-
-		if (siteIds != null) {
-			crit.siteIds(siteIds);
-		}
-
-		return crit;
+		return crit.siteCps(siteCps);
 	}
 
 	private void setStoredSpecimensCount(StorageContainerListCriteria crit, List<StorageContainerSummary> containers) {

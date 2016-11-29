@@ -103,17 +103,19 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	public ResponseEvent<SpecimenDetail> getSpecimen(RequestEvent<SpecimenQueryCriteria> req) {
 		try {
 			SpecimenQueryCriteria crit = req.getPayload();
-			
+
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			Specimen specimen = getSpecimen(crit.getId(), crit.getCpShortTitle(), crit.getName(), ose);
 			if (specimen == null) {
 				return ResponseEvent.error(ose);
 			}
-			
+
 			boolean allowPhi = AccessCtrlMgr.getInstance().ensureReadSpecimenRights(specimen);
 			SpecimenDetail detail = SpecimenDetail.from(specimen, false, !allowPhi);
 			setDistributionStatus(detail);
 			return ResponseEvent.response(detail);
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
 		}

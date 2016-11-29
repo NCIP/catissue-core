@@ -652,33 +652,7 @@ public class AccessCtrlMgr {
 	}
 
 	private Set<Pair<Long, Long>> getVisitAndSpecimenSiteCps(Long cpId, String[] ops) {
-		Long userId = AuthUtil.getCurrentUser().getId();
-		String resource = Resource.VISIT_N_SPECIMEN.getName();
-
-		List<SubjectAccess> accessList = null;
-
-		if (cpId != null) {
-			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
-		} else {
-			accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
-		}
-
-		Set<Pair<Long, Long>> siteCpPairs = new HashSet<Pair<Long, Long>>();
-		for (SubjectAccess access : accessList) {
-			Set<Site> sites = null;
-			if (access.getSite() != null) {
-				sites = Collections.singleton(access.getSite());
-			} else {
-				sites = getUserInstituteSites(userId);
-			}
-
-			CollectionProtocol cp = access.getCollectionProtocol();
-			for (Site site : sites) {
-				siteCpPairs.add(Pair.make(site.getId(), (cp != null) ? cp.getId() : null));
-			}
-		}
-
-		return siteCpPairs;
+		return getSiteCps(Resource.VISIT_N_SPECIMEN.getName(), cpId, ops);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -705,26 +679,17 @@ public class AccessCtrlMgr {
 	//          Storage container object access control helper methods                  //
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
-	public Set<Long> getReadAccessContainerSites() {
+	public Set<Pair<Long, Long>> getReadAccessContainerSiteCps() {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 
-		Set<Site> sites = getSites(Resource.STORAGE_CONTAINER, Operation.READ);
-		Set<Long> result = new HashSet<Long>();
-		for (Site site : sites) {
-			result.add(site.getId());
-		}
-
-		return result;
+		String[] ops = {Operation.READ.getName()};
+		return getSiteCps(Resource.STORAGE_CONTAINER.getName(), null, ops);
 	}
 
 	public void ensureCreateContainerRights(StorageContainer container) {
 		ensureStorageContainerObjectRights(container, Operation.CREATE);
-	}
-
-	public void ensureCreateContainerRights(Site containerSite) {
-		ensureStorageContainerObjectRights(containerSite, Operation.CREATE);
 	}
 
 	public void ensureReadContainerRights(StorageContainer container) {
@@ -744,20 +709,25 @@ public class AccessCtrlMgr {
 			return;
 		}
 
-		ensureStorageContainerObjectRights(container.getSite(), op);
-	}
-
-	private void ensureStorageContainerObjectRights(Site containerSite, Operation op) {
-		if (AuthUtil.isAdmin()) {
-			return;
-		}
-
 		Long userId = AuthUtil.getCurrentUser().getId();
 		String resource = Resource.STORAGE_CONTAINER.getName();
 		String[] ops = {op.getName()};
 
+		boolean allowed = false;
+		Set<CollectionProtocol> allowedCps = container.getCompAllowedCps();
 		List<SubjectAccess> accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
-		if (!isAccessAllowedOnAnySite(accessList, Collections.singleton(containerSite), userId)) {
+		for (SubjectAccess access : accessList) {
+			if (isAccessAllowedOnSite(access.getSite(), container.getSite(), userId)) {
+				CollectionProtocol accessCp = access.getCollectionProtocol();
+				allowed = (accessCp == null || CollectionUtils.isEmpty(allowedCps) || allowedCps.contains(accessCp));
+			}
+
+			if (allowed) {
+				break;
+			}
+		}
+
+		if (!allowed) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 	}
@@ -1204,9 +1174,40 @@ public class AccessCtrlMgr {
 	}
 
 
-	//
-	// Utility method
-	//
+	///////////////////////////////////////////////////////////////////////
+	//                                                                   //
+	// Utility methods                                                   //
+	//                                                                   //
+	///////////////////////////////////////////////////////////////////////
+
+	private Set<Pair<Long, Long>> getSiteCps(String resource, Long cpId, String[] ops) {
+		Long userId = AuthUtil.getCurrentUser().getId();
+
+		List<SubjectAccess> accessList = null;
+		if (cpId != null) {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, cpId, resource, ops);
+		} else {
+			accessList = daoFactory.getSubjectDao().getAccessList(userId, resource, ops);
+		}
+
+		Set<Pair<Long, Long>> siteCpPairs = new HashSet<>();
+		for (SubjectAccess access : accessList) {
+			Set<Site> sites = null;
+			if (access.getSite() != null) {
+				sites = Collections.singleton(access.getSite());
+			} else {
+				sites = getUserInstituteSites(userId);
+			}
+
+			CollectionProtocol cp = access.getCollectionProtocol();
+			for (Site site : sites) {
+				siteCpPairs.add(Pair.make(site.getId(), (cp != null) ? cp.getId() : null));
+			}
+		}
+
+		return siteCpPairs;
+	}
+
 	private boolean isAccessAllowedOnAnySite(List<SubjectAccess> accessList, Set<Site> sites, Long userId) {
 		boolean allowed = false;
 		for (SubjectAccess access : accessList) {
@@ -1226,5 +1227,10 @@ public class AccessCtrlMgr {
 		}
 
 		return allowed;
+	}
+
+	private boolean isAccessAllowedOnSite(Site accessSite, Site site, Long userId) {
+		return (accessSite != null && accessSite.equals(site)) ||
+			(accessSite == null && getUserInstituteSites(userId).contains(site));
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.events.AbstractListCriteria;
 
 public class StorageContainerListCriteria extends AbstractListCriteria<StorageContainerListCriteria> {
@@ -32,7 +33,7 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	private Set<String> cpShortTitles;
 
-	private Set<Long> siteIds;
+	private Set<Pair<Long, Long>> siteCps;
 	
 	@Override
 	public StorageContainerListCriteria self() {
@@ -140,7 +141,7 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 	
 	public StorageContainerListCriteria cpIds(Long[] cpIds) {
 		if (cpIds != null && cpIds.length > 0) {
-			this.cpIds = new HashSet<Long>(Arrays.asList(cpIds));
+			this.cpIds = new HashSet<>(Arrays.asList(cpIds));
 		} else {
 			this.cpIds = null;
 		}
@@ -166,12 +167,13 @@ public class StorageContainerListCriteria extends AbstractListCriteria<StorageCo
 
 		return self();
 	}
-	
-	public Set<Long> siteIds() {
-		return siteIds;
+
+	public Set<Pair<Long, Long>> siteCps() {
+		return siteCps;
 	}
-	
-	public void siteIds(Set<Long> siteIds) {
-		this.siteIds = siteIds;
+
+	public StorageContainerListCriteria siteCps(Set<Pair<Long, Long>> siteCps) {
+		this.siteCps = siteCps;
+		return self();
 	}
 }
