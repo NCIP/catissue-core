@@ -273,7 +273,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	@Override
 	public int deleteReservedPositionsOlderThan(Date expireTime) {
 		return getCurrentSession().getNamedQuery(DEL_EXPIRED_RSV_POS)
-			.setDate("expireTime", expireTime)
+			.setTimestamp("expireTime", expireTime)
 			.executeUpdate();
 	}
 
