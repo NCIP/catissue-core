@@ -670,6 +670,19 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		}
 	}
 
+	private void ensureContainerAccess(Specimen existing, Specimen specimen, OpenSpecimenException ose) {
+		if (existing != null) {
+			//
+			// for existing specimens, access rights is checked in transfer event
+			//
+			return;
+		}
+
+		if (specimen.getPosition() != null) {
+			AccessCtrlMgr.getInstance().ensureSpecimenStoreRights(specimen.getPosition().getContainer(), ose);
+		}
+	}
+
 	private Specimen collectSpecimen(SpecimenDetail detail, Specimen parent) {
 		Specimen existing = null;
 		if (detail.getId() != null) {
@@ -734,6 +747,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		ensureValidAndUniqueLabel(existing, specimen, ose);
 		ensureUniqueBarcode(existing, specimen, ose);
+		ensureContainerAccess(existing, specimen, ose);
 		ose.checkAndThrow();
 
 		//

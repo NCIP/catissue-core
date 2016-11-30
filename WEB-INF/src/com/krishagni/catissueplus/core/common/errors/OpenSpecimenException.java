@@ -57,13 +57,17 @@ public class OpenSpecimenException extends RuntimeException {
 	public List<ParameterizedError> getErrors() {
 		return errors;
 	}
-	
+
 	public Throwable getException() {
 		return exception;
 	}
 	
 	public void addError(ErrorCode error, Object ... params) {
 		this.errors.add(new ParameterizedError(error, params));
+	}
+
+	public void addErrors(List<ParameterizedError> errors) {
+		this.errors.addAll(errors);
 	}
 	
 	public boolean hasAnyErrors() {
@@ -75,18 +79,15 @@ public class OpenSpecimenException extends RuntimeException {
 			throw this;
 		}
 	}
-	
+
 	public boolean containsError(ErrorCode error) {
-		boolean containsError = false;
-		for (ParameterizedError parameterizedError : this.getErrors()) {
-			if (parameterizedError.error().equals(error)) {
-				containsError = true;
-				break;
-			}
+		if (CollectionUtils.isEmpty(errors)) {
+			return false;
 		}
-		return containsError;
+
+		return errors.stream().anyMatch(pe -> pe.error().equals(error));
 	}
-	
+
 	public void rethrow(ErrorCode oldError, ErrorCode newError, Object ... params) {
 		if (containsError(oldError)) {
 			throw OpenSpecimenException.userError(newError, params);

@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPos
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenReturnEvent;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
@@ -666,6 +667,7 @@ public class Specimen extends BaseExtensionEntity {
 		setInitialQuantity(specimen.getInitialQuantity());
 		setAvailableQuantity(specimen.getAvailableQuantity());
 
+		updatePosition(specimen.getPosition());
 		updateEvent(getCollectionEvent(), specimen.getCollectionEvent());
 		updateEvent(getReceivedEvent(), specimen.getReceivedEvent());
 		updateCollectionStatus(specimen.getCollectionStatus());
@@ -707,7 +709,6 @@ public class Specimen extends BaseExtensionEntity {
 		setExtension(specimen.getExtension());
 		setPrintLabel(specimen.isPrintLabel());
 		setFreezeThawCycles(specimen.getFreezeThawCycles());
-		updatePosition(specimen.getPosition());
 	}
 	
 	public void updateStatus(String activityStatus, String reason){
@@ -866,10 +867,18 @@ public class Specimen extends BaseExtensionEntity {
 	
 	private void transferTo(StorageContainerPosition newPosition, Date time) {
 		StorageContainerPosition oldPosition = getPosition();
-		if (same(oldPosition, newPosition)) {
+		if (StorageContainerPosition.areSame(oldPosition, newPosition)) {
 			return;
 		}
-		
+
+		if (oldPosition != null) {
+			AccessCtrlMgr.getInstance().ensureSpecimenStoreRights(oldPosition.getContainer());
+		}
+
+		if (newPosition != null) {
+			AccessCtrlMgr.getInstance().ensureSpecimenStoreRights(newPosition.getContainer());
+		}
+
 		SpecimenTransferEvent transferEvent = new SpecimenTransferEvent(this);
 		transferEvent.setUser(AuthUtil.getCurrentUser());
 		transferEvent.setTime(time == null ? Calendar.getInstance().getTime() : time);
@@ -884,7 +893,7 @@ public class Specimen extends BaseExtensionEntity {
 			
 			oldPosition.vacate();
 			setPosition(null);
-		} else if (oldPosition == null && newPosition != null) {
+		} else if (newPosition != null) {
 			transferEvent.setToPosition(newPosition);
 			
 			newPosition.setOccupyingSpecimen(this);
@@ -894,7 +903,7 @@ public class Specimen extends BaseExtensionEntity {
 		
 		transferEvent.saveOrUpdate();		
 	}
-	
+
 	public void addChildSpecimen(Specimen specimen) {
 		specimen.setParentSpecimen(this);				
 		if (specimen.isAliquot()) {
@@ -1224,24 +1233,7 @@ public class Specimen extends BaseExtensionEntity {
 			te.delete();
 		}
 	}
-	
-	private boolean same(StorageContainerPosition p1, StorageContainerPosition p2) {
-		if (p1 == null && p2 == null) {
-			return true;
-		}
-		
-		if (p1 == null || p2 == null) {
-			return false;
-		}
-		
-		if (!p1.getContainer().equals(p2.getContainer())) {
-			return false;
-		}
-		
-		return p1.getPosOneOrdinal() == p2.getPosOneOrdinal() &&
-				p1.getPosTwoOrdinal() == p2.getPosTwoOrdinal();
-	}
-	
+
 	private void adjustParentSpecimenQty(BigDecimal qty) {
 		BigDecimal parentQty = parentSpecimen.getAvailableQuantity();
 		if (parentQty == null || NumUtil.isZero(parentQty)) {

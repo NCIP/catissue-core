@@ -25,6 +25,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
 import com.krishagni.catissueplus.core.common.util.SchemeOrdinalConverterUtil;
@@ -825,6 +826,7 @@ public class StorageContainer extends BaseEntity {
 					// The occupant that is being vacated is not assigned any new position
 					// in this transaction. Therefore virtualise it.
 					//
+					AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(existing.getOccupyingSpecimen(), false);
 					existing.getOccupyingSpecimen().updatePosition(null);
 				}
 

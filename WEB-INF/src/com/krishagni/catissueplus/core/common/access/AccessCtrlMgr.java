@@ -31,6 +31,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErr
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.SpecimenErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.VisitErrorCode;
 import com.krishagni.catissueplus.core.common.Pair;
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.Operation;
 import com.krishagni.catissueplus.core.common.events.Resource;
@@ -694,6 +695,32 @@ public class AccessCtrlMgr {
 
 	public void ensureReadContainerRights(StorageContainer container) {
 		ensureStorageContainerObjectRights(container, Operation.READ);
+	}
+
+	public void ensureSpecimenStoreRights(StorageContainer container) {
+		ensureSpecimenStoreRights(container, null);
+	}
+
+	public void ensureSpecimenStoreRights(StorageContainer container, OpenSpecimenException result) {
+		try {
+			ensureReadContainerRights(container);
+		} catch (OpenSpecimenException ose) {
+			boolean throwError = false;
+			if (result == null) {
+				result = new OpenSpecimenException(ErrorType.USER_ERROR);
+				throwError = true;
+			}
+
+			if (ose.containsError(RbacErrorCode.ACCESS_DENIED)) {
+				result.addError(SpecimenErrorCode.CONTAINER_ACCESS_DENIED, container.getName());
+			} else {
+				result.addErrors(ose.getErrors());
+			}
+
+			if (throwError) {
+				throw result;
+			}
+		}
 	}
 
 	public void ensureUpdateContainerRights(StorageContainer container) {

@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.administrative.domain;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.hibernate.envers.Audited;
 import org.springframework.beans.BeanUtils;
@@ -165,6 +166,19 @@ public class StorageContainerPosition implements Comparable<StorageContainerPosi
 		}
 
 		return cmp;
+	}
+
+	public static boolean areSame(StorageContainerPosition p1, StorageContainerPosition p2) {
+		if (p1 == p2) {
+			return true;
+		} else if (p1 == null || p2 == null) {
+			return false;
+		} else if (!p1.getContainer().equals(p2.getContainer())) {
+			return false;
+		} else {
+			return Objects.equals(p1.getPosOneOrdinal(), p2.getPosOneOrdinal()) &&
+				Objects.equals(p1.getPosTwoOrdinal(), p2.getPosTwoOrdinal());
+		}
 	}
 
 	private static final String[] POS_UPDATE_IGN_PROPS = new String[] {
