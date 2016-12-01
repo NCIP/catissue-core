@@ -23,7 +23,7 @@
         <column>SHORT_TITLE</column>
         <recordUrl>#/object-state-params-resolver?stateName=cp-detail.overview&amp;objectName=cp&amp;key=shortTitle&amp;value={{$value}}</recordUrl>
         <options>
-          <sql>select distinct SHORT_TITLE from CATISSUE_COLLECTION_PROTOCOL</sql>
+          <sql>select distinct SHORT_TITLE from CATISSUE_COLLECTION_PROTOCOL where activity_status != 'Disabled'</sql>
         </options>
       </dropDown>
     </row>

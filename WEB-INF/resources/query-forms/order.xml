@@ -24,7 +24,7 @@
         <caption>#getMessage("order_name")</caption>
         <column>NAME</column>
         <options>
-          <sql>select name from os_orders</sql>
+          <sql>select name from os_orders where activity_status != 'Disabled'</sql>
         </options>
         <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value={{$value}}</recordUrl>
       </dropDown>
@@ -116,7 +116,7 @@
             <caption>#getMessage("order_site_name")</caption>
             <column>NAME</column>
             <options>
-              <sql>select distinct name from CATISSUE_SITE</sql>
+              <sql>select name from CATISSUE_SITE where activity_status != 'Disabled'</sql>
             </options>
             <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value={{$value}}</recordUrl>
           </dropDown>              
