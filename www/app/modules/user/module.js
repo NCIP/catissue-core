@@ -21,7 +21,10 @@ angular.module('openspecimen')
         url: '/?logout',
         templateUrl: 'modules/user/signin.html',
         controller: 'LoginCtrl',
-        parent: 'default-nav-buttons'
+        parent: 'default-nav-buttons',
+        data: {
+          redirect: false
+        }
       })
       .state('forgot-password', {
         url: '/forgot-password',
@@ -33,7 +36,10 @@ angular.module('openspecimen')
         url: '/reset-password',
         templateUrl: 'modules/user/reset-password.html',
         controller: 'ResetPasswordCtrl',
-        parent: 'default-nav-buttons'
+        parent: 'default-nav-buttons',
+        data: {
+          redirect: false
+        }
       })
       .state('sign-up', {
         url: '/sign-up',

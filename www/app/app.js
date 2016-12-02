@@ -236,6 +236,10 @@ osApp.config(function(
     $rootScope, $window, $document, $http, $cookies, $q,  $state, $translate, $translatePartialLoader,
     LocationChangeListener, ApiUtil, Setting, PluginReg, Util) {
 
+    function isRedirectAllowed(st) {
+      return !st.data || st.data.redirect !== false;
+    }
+
     if (!angular.merge) {
       angular.merge = function(dst, src) {
         return Util.merge(src, dst);
@@ -260,7 +264,8 @@ osApp.config(function(
     $rootScope.$on('$stateChangeSuccess',
       function(event, toState, toParams, fromState, fromParams) {
         $rootScope.state = toState;
-      });
+      }
+    );
 
     $rootScope.$on('$stateChangeStart',
       function(event, toState, toParams, fromState, fromParams) {
@@ -271,7 +276,7 @@ osApp.config(function(
             name: toState.name,
             params: toParams
           };
-        } else if ($rootScope.loggedIn && toState.name != "login") {
+        } else if ($rootScope.loggedIn && isRedirectAllowed(toState)) {
           event.preventDefault();
           if ($rootScope.reqState) {
             $state.go($rootScope.reqState.name, $rootScope.reqState.params);
@@ -284,7 +289,8 @@ osApp.config(function(
           toState  : toState,   toParams  : toParams,
           fromState: fromState, fromParams: fromParams
         };
-      });
+      }
+    );
       
     $rootScope.$on('$stateChangeError',
       function(event, toState, toParams, fromState, fromParams) {
