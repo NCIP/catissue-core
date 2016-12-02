@@ -1,4 +1,8 @@
 
+.ui-select-bootstrap.ui-select-container {
+  word-break: break-all;
+}
+
 .ui-select-bootstrap .ui-select-choices-row>a {
   white-space: normal!important;
 }
@@ -12,6 +16,7 @@
 
 .ui-select-bootstrap .ui-select-match .btn span {
   white-space: normal!important;
+  padding-right: 38px;
 }
 
 .ui-select-bootstrap .ui-select-match .btn-link {
