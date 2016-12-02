@@ -64,6 +64,8 @@ public enum StorageContainerErrorCode implements ErrorCode {
 
 	REG_TO_DL_NA,
 
+	DIMLESS_NO_MAP,
+
 	INVALID_CAPACITY;
 
 	@Override

@@ -252,6 +252,11 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		try {
 			StorageContainer container = getContainer(req.getPayload());						
 			AccessCtrlMgr.getInstance().ensureReadContainerRights(container);
+
+			if (container.isDimensionless()) {
+				return ResponseEvent.userError(StorageContainerErrorCode.DIMLESS_NO_MAP, container.getName());
+			}
+
 			File file = mapExporter.exportToFile(container);
 			return ResponseEvent.response(new ExportedFileDetail(container.getName(), file));
 		} catch (Exception e) {
