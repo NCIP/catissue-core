@@ -321,7 +321,7 @@ public class ObjectReader implements Closeable {
 		return value instanceof String && ((String)value).trim().equals(SET_TO_BLANK);
 	}
 	
-	private Date parseDateTime(String value) 
+	private Long parseDateTime(String value)
 	throws ParseException {
 		try {
 			return parseDate(value, dateFmt + " " + timeFmt);
@@ -330,16 +330,16 @@ public class ObjectReader implements Closeable {
 		}		
 	}
 	
-	private Date parseDate(String value) 
+	private Long parseDate(String value)
 	throws ParseException {
 		return parseDate(value, dateFmt);
 	}
 	
-	private Date parseDate(String value, String fmt) 
+	private Long parseDate(String value, String fmt)
 	throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat(fmt);
 		sdf.setLenient(false);
-		return sdf.parse(value);		
+		return sdf.parse(value).getTime();
 	}
 			
 	public static void main(String[] args) 
