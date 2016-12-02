@@ -70,4 +70,8 @@ public class TenantDetail {
 	public void setNumOfAliquots(int numOfAliquots) {
 		this.numOfAliquots = numOfAliquots;
 	}
+
+	public String getKey() {
+		return String.format("%d#%s#%s", cpId, specimenClass, specimenType);
+	}
 }

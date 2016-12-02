@@ -1,7 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.services.impl;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -33,7 +35,7 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 
 	private CollectionProtocol cp;
 
-	private StorageContainer recentlyUsed = null;
+	private Map<String, StorageContainer> recentlyUsed = new HashMap<>();
 
 	@Override
 	public StorageContainer getContainer(TenantDetail criteria, Boolean aliquotsInSameContainer) {
@@ -42,7 +44,7 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 			numFreeLocs = criteria.getNumOfAliquots();
 		}
 
-		StorageContainer container = recentlyUsed;
+		StorageContainer container = recentlyUsed.get(criteria.getKey());
 		if (container == null) {
 			container = getRecentlySelectedContainer(criteria);
 		}
@@ -55,7 +57,11 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 			container = nextContainer(container, criteria, numFreeLocs);
 		}
 
-		return (recentlyUsed = container);
+		if (container != null) {
+			recentlyUsed.put(criteria.getKey(), container);
+		}
+
+		return container;
 	}
 
 	@SuppressWarnings("unchecked")
