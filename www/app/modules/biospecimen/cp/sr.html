@@ -66,12 +66,6 @@
       </div>
     </li>
     <li class="item">
-      <strong class="key key-sm" translate="srs.storage_type">Storage Type</strong>
-      <div class="value value-md">
-        <span>{{childReq.storageType | osNoValue}}</span>
-      </div>
-    </li>
-    <li class="item">
       <strong class="key key-sm" translate="srs.initial_qty">Initial Quantity</strong>
       <div class="value value-md">
         <span>{{childReq.initialQty | osNumberInScientificNotation}}</span>
@@ -86,6 +80,13 @@
         <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type"
           measure="concentration" ng-if="!!childReq.concentration || childReq.concentration == 0">
         </os-specimen-unit>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.storage_type">Storage Type</strong>
+      <div class="value value-md" ng-switch on="childReq.storageType == 'Virtual'">
+        <span ng-switch-when="true" translate="common.no">No</span>
+        <span ng-switch-default translate="common.yes">Yes</span>
       </div>
     </li>
     <li class="item" ng-if="childReq.specimenClass == 'Molecular' ? codingEnabled : !codingEnabled"> 

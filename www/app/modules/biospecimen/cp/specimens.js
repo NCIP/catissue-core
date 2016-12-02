@@ -161,6 +161,8 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
         
       $scope.specimensCount = 0;
       $scope.sr = angular.copy(sr);
+      $scope.sr.$$storedInRepo = (sr.storageType != 'Virtual');
+
       angular.forEach(delAttrs, function(attr) {
         delete $scope.sr[attr];
       });
@@ -205,6 +207,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.createSr = function() {
+      $scope.sr.storageType = ($scope.sr.$$storedInRepo ? 'Manual' : 'Virtual');
       removeUiProps($scope.sr).$saveOrUpdate().then(
         function(result) {
           addToSrList(result);
@@ -214,6 +217,7 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
     };
 
     $scope.updateSr = function() {
+      $scope.sr.storageType = ($scope.sr.$$storedInRepo ? 'Manual' : 'Virtual');
       removeUiProps($scope.sr).$saveOrUpdate().then(
         function(result) {
           updateSrList(result);
@@ -247,6 +251,11 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       if (sr.availableQty() == 0) {
         Alerts.error('srs.errors.insufficient_qty');
         return;
+      }
+
+      $scope.childReq = {
+        $$storedInRepo: true,
+        storageType: 'Manual'
       }
 
       $scope.parentSr = sr;
@@ -291,7 +300,8 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.parentSr = sr;
       $scope.view = 'addedit_derived';
       $scope.childReq = {
-        pathology: sr.pathology
+        pathology: sr.pathology,
+        storageType: 'Virtual'
       };
       loadPvs();
     };

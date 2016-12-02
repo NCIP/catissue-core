@@ -515,7 +515,7 @@
     "parent_type": "Parent Type",
     "storage_location": "Storage Location",
     "position": "Position",
-    "virtually_located": "Virtual",
+    "virtually_located": "Not Stored",
     "no_specimens_to_show": "No Child Specimens to Show",
     "aliquot_cnt": "Aliquots Count",
     "qty_per_aliquot": "Quantity per Aliquot",
@@ -695,7 +695,7 @@
     "code": "Code",
     "type": "Type",
     "pathology": "Pathology",
-    "storage_type": "Storage Type",
+    "storage_type": "Stored in Repository?",
     "label_fmt": "Label Format",
     "when_to_print": "When to Print",
     "label_print_copies": "Label Print Copies",
@@ -1700,7 +1700,7 @@
       "available_qty": "Available",
       "quantity": "Quantity",
       "location": "Location",
-      "virtual": "Virtual"
+      "virtual": "Not Stored"
     },
 
     "statuses": {
@@ -1775,7 +1775,7 @@
       "desc": "Description",
       "quantity": "Quantity",
       "location": "Location",
-      "virtual": "Virtual",
+      "virtual": "Not Stored",
       "quality": "Quality",
       "copy_first_to_all": "Copy First To All"
     },

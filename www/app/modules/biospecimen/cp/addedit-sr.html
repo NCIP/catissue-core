@@ -60,15 +60,6 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-4" translate="srs.storage_type">Storage Type</label>
-        <div class="col-xs-8">
-          <os-select name="storageType" ng-model="sr.storageType" list="storageTypes"
-            placeholder="{{'srs.storage_type' | translate}}" required>
-          </os-select>
-          <div os-field-error field="srForm.storageType"></div>
-        </div>
-      </div>
-      <div class="form-group">
         <label class="control-label col-xs-4" translate="srs.initial_qty">Initial Quantity</label>
         <div class="col-xs-8">
           <os-spmn-measure name="initialQty" specimen="sr" quantity="sr.initialQty"
@@ -84,6 +75,19 @@
             placeholder="{{'srs.concentration' | translate}}">
           </os-spmn-measure>
           <div os-field-error field="srForm.concentration"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-4" translate="srs.storage_type">Stored in Repository?</label>
+        <div class="col-xs-8">
+          <label class="radio-inline">
+            <input type="radio" name="storageType" ng-model="sr.$$storedInRepo" ng-value="true">
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="storageType" ng-model="sr.$$storedInRepo" ng-value="false">
+            <span translate="common.no">No</span>
+          </label>
         </div>
       </div>
       <div class="os-divider"></div>

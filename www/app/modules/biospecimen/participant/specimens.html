@@ -121,11 +121,16 @@
                 <span ng-if="!specimen.reqLabel" translate="pvs.not_specified"></span>
               </span>
             </div>
-            <div class="col col-xs-3" ng-if="specimen.storageLocation.name">
-              <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
-            </div>
-            <div class="col col-xs-3" ng-if="!specimen.storageLocation.name">
-              <span>Virtual</span>
+            <div class="col col-xs-3" ng-switch on="!!specimen.storageLocation.name">
+              <span ng-switch-when="true">
+                <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
+              </span>
+              <span ng-switch-when="false">
+                <span ng-switch on="specimen.storageType != 'Virtual' && (!specimen.status || specimen.status == 'Pending')">
+                  <span ng-switch-when="true">&nbsp;</span>
+                  <span ng-switch-when="false" translate="specimens.virtually_located">Virtual</span>
+                </span>
+              </span>
             </div>
             <div class="col col-xs-1 os-more-options">
               <div dropdown ng-if="!selection.any">

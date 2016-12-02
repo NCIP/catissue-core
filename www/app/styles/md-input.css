@@ -190,3 +190,12 @@
 .os-md-form .input, .os-md-form .read {
   padding-left: 0px;
 }
+
+.os-text-checkbox.md-input .checkbox {
+  margin-bottom: 3px;
+  padding-top: 20px;
+}
+
+.os-text-checkbox.md-input .message {
+  padding-top: 20px;
+}
