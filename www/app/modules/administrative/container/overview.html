@@ -6,7 +6,7 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <a class="btn default" href="{{ctx.downloadUri}}" target="_blank">
+      <a ng-if="!ctx.dimless" class="btn default" href="{{ctx.downloadUri}}" target="_blank">
         <span class="fa fa-download"></span>
         <span translate="common.buttons.export">Export</span>
       </a>
