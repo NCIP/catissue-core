@@ -948,6 +948,7 @@
     <property name="schemaFactory" ref="objectSchemaFactory"/>
     <property name="importerFactory" ref="objectImporterFactory"/>
     <property name="transactionManager" ref="transactionManager"/>
+    <property name="sessionFactory" ref="sessionFactory"/>
   </bean>
   
   <bean id="importDefaultQueries" class="com.krishagni.catissueplus.core.init.ImportDefaultQueries">

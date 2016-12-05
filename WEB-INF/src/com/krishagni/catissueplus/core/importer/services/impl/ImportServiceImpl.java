@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.SessionFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,6 +99,8 @@ public class ImportServiceImpl implements ImportService {
 
 	private TransactionTemplate newTxTmpl;
 
+	private SessionFactory sessionFactory;
+
 	public void setCfgSvc(ConfigurationService cfgSvc) {
 		this.cfgSvc = cfgSvc;
 	}
@@ -126,6 +129,10 @@ public class ImportServiceImpl implements ImportService {
 
 		this.newTxTmpl = new TransactionTemplate(this.transactionManager);
 		this.newTxTmpl.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
@@ -735,12 +742,17 @@ public class ImportServiceImpl implements ImportService {
 								return resp;
 							}
 						});
-				
+
+				if (atomic) {
+					sessionFactory.getCurrentSession().flush();
+					sessionFactory.getCurrentSession().clear();
+				}
+
 				if (resp.isSuccessful()) {
 					return null;
 				} else {
 					return resp.getError().getMessage();
-				}				
+				}
 			} catch (Exception e) {
 				if (StringUtils.isBlank(e.getMessage())) {
 					return "Internal Server Error";
