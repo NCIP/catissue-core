@@ -141,7 +141,7 @@
               </div>
               <div os-field-error field="sform.qty"></div>
             </td>
-            <td class="col os-col-25" style="overflow: visible;" ng-switch on="autoPosAllocate">
+            <td class="col os-col-25" ng-style="!autoPosAllocate && {'overflow': 'visible'}" ng-switch on="autoPosAllocate">
               <span ng-switch-when="true">
                 <os-disp-storage-position position="specimen.storageLocation"></os-disp-storage-position>
               </span>

@@ -9,6 +9,6 @@ angular.module('openspecimen')
       }
 
 
-      return Util.getNumberInScientificNotation(input, 1000000, 6);
+      return Util.getNumberInScientificNotation(input, 1000000);
     }
   });

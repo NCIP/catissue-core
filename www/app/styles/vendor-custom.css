@@ -16,6 +16,9 @@
 
 .ui-select-bootstrap .ui-select-match .btn span {
   white-space: normal!important;
+}
+
+.ui-select-bootstrap .ui-select-match-text.ui-select-allow-clear {
   padding-right: 38px;
 }
 
