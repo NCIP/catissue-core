@@ -510,10 +510,6 @@ public class StorageContainer extends BaseEntity {
 		return createPosition(posOneOrdinal, posOne, posTwoOrdinal, posTwo);
 	}
 	
-	public StorageContainerPosition createVirtualPosition() {
-		return createPosition(null, null, null, null);
-	}
-
 	public void removePosition(StorageContainerPosition position) {
 		Iterator<StorageContainerPosition> iter = getOccupiedPositions().iterator();
 		while (iter.hasNext()) {
@@ -967,6 +963,10 @@ public class StorageContainer extends BaseEntity {
 			String posOne, 
 			String posTwo, 
 			boolean vacateOccupant) {
+
+		if (isDimensionless()) {
+			return isSpecimenEntity;
+		}
 
 		int posOneOrdinal = toOrdinal(getColumnLabelingScheme(), posOne);
 		int posTwoOrdinal = toOrdinal(getRowLabelingScheme(), posTwo);

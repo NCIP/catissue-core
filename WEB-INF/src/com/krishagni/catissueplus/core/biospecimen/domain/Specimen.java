@@ -1008,8 +1008,11 @@ public class Specimen extends BaseExtensionEntity {
 	}
 	
 	public void updatePosition(StorageContainerPosition newPosition, Date time) {
-		if (newPosition != null && !newPosition.isSpecified()) {
-			newPosition = null;
+		if (newPosition != null) {
+			StorageContainer container = newPosition.getContainer();
+			if (container == null || (!container.isDimensionless() && !newPosition.isSpecified())) {
+				newPosition = null;
+			}
 		}
 
 		transferTo(newPosition, time);

@@ -786,8 +786,8 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 		AccessCtrlMgr.getInstance().ensureCreateOrUpdateSpecimenRights(specimen, false);
 		
 		StorageContainerPosition position = null;
-		if (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo())) {
-			position = container.createVirtualPosition();
+		if (!container.isDimensionless() && (StringUtils.isBlank(pos.getPosOne()) || StringUtils.isBlank(pos.getPosTwo()))) {
+			position = new StorageContainerPosition();
 			position.setOccupyingSpecimen(specimen);
 			return position;
 		}
