@@ -72,6 +72,19 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<PermissibleValue> getByPropertyKeyValue(String attribute, String propName, String propValue) {
+		List<PermissibleValue> pvs = getSessionFactory().getCurrentSession()
+				.getNamedQuery(GET_BY_PROP_KEY_VALUE)
+				.setString("attribute", attribute)
+				.setString("key", propName)
+				.setString("value", propValue)
+				.list();
+
+		return pvs;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
 	public List<String> getSpecimenClasses() {
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_SPECIMEN_CLASSES)
@@ -191,6 +204,8 @@ public class PermissibleValueDaoImpl extends AbstractDao<PermissibleValue> imple
 	private static final String GET_BY_CONCEPT_CODE = FQN + ".getByConceptCode";
 
 	private static final String GET_BY_VALUE = FQN + ".getByValue";
+
+	private static final String GET_BY_PROP_KEY_VALUE = FQN + ".getByPropertyKeyValue";
 
 	private static final String GET_SPECIMEN_CLASSES = FQN + ".getSpecimenClasses";
 

@@ -21,6 +21,8 @@ public interface PermissibleValueDao extends Dao<PermissibleValue>{
 	
 	public PermissibleValue getByValue(String attribute, String value);
 	
+	public List<PermissibleValue> getByPropertyKeyValue(String attribute,String propName, String propValue);
+
 	public boolean exists(String attribute, Collection<String> values);
 	
 	public boolean exists(String attribute, String parentValue, Collection<String> values);
