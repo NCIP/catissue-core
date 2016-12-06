@@ -162,7 +162,7 @@
           <tr class="row" ng-repeat="aliquot in ctx.aliquots" ng-form="aform">
             <td class="col">
               <a ui-sref="specimen({specimenId: aliquot.parent.id})">
-                <span>{{aliquot.parent.label}}</span>
+                <span>{{aliquot.parentLabel}}</span>
                 <span>({{aliquot.ppid}})</span>
               </a>
             </td>

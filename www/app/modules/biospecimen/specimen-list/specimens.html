@@ -106,7 +106,7 @@
     <table class="os-table os-table-hover" overflow="auto" ng-if="ctx.list.specimens.length > 0">
       <thead class="os-table-head">
         <tr class="row">
-          <th class="col os-click-esc os-pointer-cursor" ng-click="toggleAllSpecimenSelect()">
+          <th class="col os-click-esc os-pointer-cursor" ng-click="toggleAllSpecimenSelect($event)">
             <div class="os-select-specimen-cb">
               <os-checkbox ng-model="ctx.selection.all"></os-checkbox>
             </div>
@@ -137,7 +137,7 @@
       <tbody class="os-table-body">
         <tr class="row" ng-repeat="specimen in ctx.spmnsInView"
           ng-class="{selected: specimen.selected}" os-row-click="viewSpecimen(specimen)">
-          <td class="col os-click-esc os-pointer-cursor" ng-click="toggleSpecimenSelect(specimen)">
+          <td class="col os-click-esc os-pointer-cursor" ng-click="toggleSpecimenSelect($event, specimen)">
             <div class="os-select-specimen-cb">
               <os-checkbox ng-model="specimen.selected"></os-checkbox>
             </div>

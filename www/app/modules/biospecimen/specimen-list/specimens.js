@@ -151,7 +151,9 @@ angular.module('os.biospecimen.specimenlist')
       $state.go('specimen', {specimenId: specimen.id});
     }
 
-    $scope.toggleAllSpecimenSelect = function() {
+    $scope.toggleAllSpecimenSelect = function(event) {
+      event.preventDefault();
+
       $scope.ctx.selection.all = !$scope.ctx.selection.all;
       $scope.ctx.selection.any = $scope.ctx.selection.all;
       if (!$scope.ctx.selection.all) {
@@ -167,9 +169,10 @@ angular.module('os.biospecimen.specimenlist')
       );
     }
 
-    $scope.toggleSpecimenSelect = function (specimen) {
-      specimen.selected = !specimen.selected;
+    $scope.toggleSpecimenSelect = function (event, specimen) {
+      event.preventDefault();
 
+      specimen.selected = !specimen.selected;
       var specimens = $scope.ctx.selection.specimens;
       if (specimen.selected) {
         specimens.push(specimen);
