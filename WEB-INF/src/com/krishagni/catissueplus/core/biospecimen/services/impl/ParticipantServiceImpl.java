@@ -148,7 +148,13 @@ public class ParticipantServiceImpl implements ParticipantService, InitializingB
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
-		return ResponseEvent.response(getParticipantLookupLogic().getMatchingParticipants(req.getPayload()));
+		try {
+			return ResponseEvent.response(getParticipantLookupLogic().getMatchingParticipants(req.getPayload()));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
 	}
 	
 	public void createParticipant(Participant participant) {
