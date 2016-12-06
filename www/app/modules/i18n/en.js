@@ -60,6 +60,7 @@
     "update": "Update",
     "loading": "Loading...",
     "help": "Help",
+    "search": "Search",
     "online_help": "Online Help",
     "qa_forums": "Q & A Forums",
     "about_os": "About OpenSpecimen",
@@ -1894,7 +1895,11 @@
       "last_updated": "Last Updated",
       "success_message": "Setting updated successfully",
       "invalid_value": "New value must not be same as old value",
-      
+
+      "all": {
+        "title": "All"
+      },
+
       "auth": {
         "title": "Authentication",
         "allowed_failed_logins": "Failed Login Attempts",

@@ -1,7 +1,7 @@
 
 angular.module('os.administrative.setting.list', ['os.administrative.models'])
   .controller('SettingsListCtrl', function(
-    $scope, $state, $stateParams, $sce, Setting, SettingUtil, Alerts) {
+    $scope, $state, $stateParams, $sce, $filter, Setting, SettingUtil, Alerts) {
 
     function init() {
       $scope.isEdit = false;
@@ -12,11 +12,21 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
 
       var moduleName = $stateParams.moduleName;
       if (!moduleName) {
-        $state.go('settings-list', {moduleName: $scope.modules[0].name});
+        $state.go('settings-list', {moduleName: $scope.ctx.dbModuleNames[0]});
         return;
       } 
 
-      $scope.selectedModule = $scope.modulesMap[moduleName];
+      $scope.selectedModule = $scope.ctx.filteredModules[moduleName];
+    }
+
+    function filterSettings(settings, searchText) {
+      searchText = searchText.toLowerCase();
+      return $filter('filter')(settings,
+        function(setting) {
+          return (setting.$$osPropName.toLowerCase().indexOf(searchText) !== -1 ||
+            setting.$$osPropDesc.toLowerCase().indexOf(searchText) !== -1);
+        }
+      );
     }
 
     function saveSetting() {
@@ -58,6 +68,34 @@ angular.module('os.administrative.setting.list', ['os.administrative.models'])
       } else {
         saveSetting();
       }
+    }
+
+    $scope.searchSetting = function(searchText) {
+      var filteredModules     = $scope.ctx.dbModules;
+      var filteredModuleNames = $scope.ctx.dbModuleNames;
+
+      if (searchText) {
+        var allSettings     = {name: 'all', settings: []};
+        filteredModules     = {'all': allSettings};
+        filteredModuleNames = ['all'];
+
+        angular.forEach($scope.ctx.dbModules, function(dbModule) {
+          var filteredSettings = filterSettings(dbModule.settings, searchText);
+          if (filteredSettings.length > 0) {
+            allSettings.settings = allSettings.settings.concat(filteredSettings);
+
+            filteredModules[dbModule.name] = {name: dbModule.name, settings: filteredSettings};
+            filteredModuleNames.push(dbModule.name);
+          }
+        });
+      }
+
+      $scope.ctx.filteredModules     = filteredModules;
+      $scope.ctx.filteredModuleNames = filteredModuleNames;
+
+      var selectedModuleName = $scope.ctx.filteredModuleNames[0];
+      $state.go('settings-list', {moduleName: selectedModuleName});
+      $scope.selectedModule = $scope.ctx.filteredModules[selectedModuleName];
     }
 
     init();

@@ -8,6 +8,15 @@
   </div>
 
   <div class="container">
+    <div class="form-group">
+      <div class="clearfix">
+        <div class="col-xs-12">
+          <input type="text" class="form-control" ng-model="ctx.search" ng-model-options="{debounce: 500}"
+            autofocus placeholder="{{'common.search' | translate}}" ng-change="searchSetting(ctx.search)">
+        </div>
+      </div>
+    </div>
+
     <div class="clearfix">
       <div class="col-xs-3">
         <div class="list-group">
@@ -16,9 +25,9 @@
           </div>
 
           <a class="list-group-item" 
-            ui-sref="settings-list({moduleName: module.name})" ui-sref-active="active"
-            ng-repeat="module in modules">
-            <p>{{'settings.' + module.name + '.title' | translate}}</p>
+            ui-sref="settings-list({moduleName: moduleName})" ui-sref-active="active"
+            ng-repeat="moduleName in ctx.filteredModuleNames">
+            <p>{{'settings.' + moduleName + '.title' | translate}}</p>
           </a>
         </div>
       </div>
@@ -47,10 +56,10 @@
               <div class="os-table-body">
                 <div class="row" ng-repeat="setting in selectedModule.settings" ng-click="updateSetting(setting)">
                   <div class="col os-col-25">
-                    <span>{{'settings.' + setting.module + '.' + setting.name | translate}}</span>
+                    <span>{{setting.$$osPropName}}</span>
                   </div>
                   <div class="col os-col-45">
-                    <span>{{'settings.' + setting.module + '.' + setting.name + '_desc' | translate}}</span>
+                    <span>{{setting.$$osPropDesc}}</span>
                   </div>
                   <div class="col forced-wrap os-col-30" ng-switch on="setting.type">
                     <span ng-switch-when="BOOLEAN">
