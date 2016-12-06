@@ -214,7 +214,12 @@
     <property name="defaultParticipantLookupFlow" ref="defaultParticipantLookupFlow"/>
     <property name="cfgSvc" ref="cfgSvc"/>
   </bean>
-  
+
+  <bean id="participantAnonymizer" class="com.krishagni.catissueplus.core.biospecimen.services.impl.ParticipantAnonymizer">
+    <property name="formDao" ref="formDao"/>
+    <property name="formSvc" ref="formSvc"/>
+  </bean>
+
   <bean id="cprSvc" class="com.krishagni.catissueplus.core.biospecimen.services.impl.CollectionProtocolRegistrationServiceImpl">
     <property name="daoFactory" ref="biospecimenDaoFactory"/>
     <property name="cprFactory" ref="cprFactory"/>
@@ -222,6 +227,7 @@
     <property name="participantService" ref="participantSvc"/>
     <property name="cfgSvc" ref="cfgSvc"/>
     <property name="labelGenerator" ref="ppidGenerator"/>
+    <property name="anonymizer" ref="participantAnonymizer"/>
   </bean>
   
   <bean id="ppidTokensRegistrar" class="com.krishagni.catissueplus.core.common.domain.DefaultLabelTmplTokenRegistrar">

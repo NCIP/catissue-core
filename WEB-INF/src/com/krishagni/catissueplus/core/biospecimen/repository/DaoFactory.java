@@ -27,6 +27,8 @@ public interface DaoFactory {
 
 	public CollectionProtocolRegistrationDao getCprDao();
 
+	public AnonymizeEventDao getAnonymizeEventDao();
+
 	public SiteDao getSiteDao();
 
 	public SpecimenDao getSpecimenDao();

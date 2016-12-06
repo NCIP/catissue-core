@@ -327,7 +327,7 @@ public class Visit extends BaseExtensionEntity {
 		setName(Utility.getDisabledValue(getName(), 255));
 		setActivityStatus(Status.ACTIVITY_STATUS_DISABLED.getStatus());
 	}
-	
+
 	public void update(Visit visit) {
 		updateActivityStatus(visit.getActivityStatus());
 		if (!isActive()) {

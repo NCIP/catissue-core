@@ -705,6 +705,25 @@ public class FormServiceImpl implements FormService {
 		return formDao.getFormsByCpAndEntityType(cpId, entityTypes);
 	}
 
+	//
+	// anonymize. Used by internal code
+	//
+	@Override
+	@PlusTransactional
+	public void anonymizeRecord(Container form, Long recordId) {
+		FormRecordEntryBean recEntry = formDao.getRecordEntry(form.getId(), recordId);
+		if (recEntry == null) {
+			throw OpenSpecimenException.userError(FormErrorCode.REC_NOT_FOUND);
+		}
+
+		FormDataManager formDataMgr = new FormDataManagerImpl(false);
+		formDataMgr.anonymize(null, form, recordId);
+
+		recEntry.setUpdatedBy(AuthUtil.getCurrentUser().getId());
+		recEntry.setUpdatedTime(Calendar.getInstance().getTime());
+		formDao.saveOrUpdateRecordEntry(recEntry);
+	}
+
 	private FormListCriteria addFormsListCriteria(FormListCriteria crit) {
 		User currUser = AuthUtil.getCurrentUser();
 		if (!currUser.isAdmin() && !currUser.getManageForms()) {

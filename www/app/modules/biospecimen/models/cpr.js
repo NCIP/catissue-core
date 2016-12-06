@@ -93,5 +93,10 @@ angular.module('os.biospecimen.models.cpr',
       return $http.get(url).then(Visit.modelRespTransform);
     }
 
+    CollectionProtocolRegistration.prototype.anonymize = function() {
+      var url = CollectionProtocolRegistration.url() + this.$id() + "/anonymize";
+      return $http.put(url).then(CollectionProtocolRegistration.modelRespTransform);
+    }
+
     return CollectionProtocolRegistration;
   });

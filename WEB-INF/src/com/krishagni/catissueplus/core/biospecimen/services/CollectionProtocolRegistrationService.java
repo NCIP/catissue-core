@@ -43,6 +43,8 @@ public interface CollectionProtocolRegistrationService {
 	// 
 	public ResponseEvent<CollectionProtocolRegistrationDetail> updateRegistration(RequestEvent<CollectionProtocolRegistrationDetail> req);
 	
+	public ResponseEvent<CollectionProtocolRegistrationDetail> anonymize(RequestEvent<RegistrationQueryCriteria> req);
+	
 	public ResponseEvent<File> getConsentForm(RequestEvent<RegistrationQueryCriteria> req);
 	
 	public ResponseEvent<String> uploadConsentForm(RequestEvent<FileDetail> req);

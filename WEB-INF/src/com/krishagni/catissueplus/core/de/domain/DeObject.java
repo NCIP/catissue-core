@@ -154,6 +154,19 @@ public abstract class DeObject {
 		return getForm().hasPhiFields();
 	}
 	
+	public void anonymize() {
+		if (!hasPhiFields()) {
+			return;
+		}
+
+		Long recordId = getId();
+		if (recordId == null) {
+			return;
+		}
+
+		formDataMgr.anonymize(getUserCtx(), getForm(), recordId);
+	}
+
 	public void copyAttrsTo(DeObject other) {
 		for (Attr attr : getAttrs()) {
 			other.getAttrs().add(attr.copy());

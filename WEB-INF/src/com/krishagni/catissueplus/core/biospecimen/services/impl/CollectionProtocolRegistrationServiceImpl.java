@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
+import com.krishagni.catissueplus.core.biospecimen.domain.AnonymizeEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
@@ -46,6 +48,7 @@ import com.krishagni.catissueplus.core.biospecimen.events.VisitSpecimensQueryCri
 import com.krishagni.catissueplus.core.biospecimen.events.VisitSummary;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.repository.VisitsListCriteria;
+import com.krishagni.catissueplus.core.biospecimen.services.Anonymizer;
 import com.krishagni.catissueplus.core.biospecimen.services.CollectionProtocolRegistrationService;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -58,10 +61,9 @@ import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.service.LabelGenerator;
 import com.krishagni.catissueplus.core.common.service.ObjectStateParamsResolver;
 import com.krishagni.catissueplus.core.common.service.impl.ConfigurationServiceImpl;
-import com.krishagni.catissueplus.core.common.util.ConfigUtil;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.rbac.common.errors.RbacErrorCode;
-
 
 public class CollectionProtocolRegistrationServiceImpl implements CollectionProtocolRegistrationService, ObjectStateParamsResolver {
 	private DaoFactory daoFactory;
@@ -75,6 +77,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	private ConfigurationServiceImpl cfgSvc;
 	
 	private LabelGenerator labelGenerator;
+
+	private Anonymizer<CollectionProtocolRegistration> anonymizer;
 	
 	public void setDaoFactory(DaoFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -98,6 +102,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 	public void setLabelGenerator(LabelGenerator labelGenerator) {
 		this.labelGenerator = labelGenerator;
+	}
+
+	public void setAnonymizer(Anonymizer<CollectionProtocolRegistration> anonymizer) {
+		this.anonymizer = anonymizer;
 	}
 
 	@Override
@@ -142,7 +150,30 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<CollectionProtocolRegistrationDetail> anonymize(RequestEvent<RegistrationQueryCriteria> req) {
+		try {
+			RegistrationQueryCriteria detail = req.getPayload();
+			CollectionProtocolRegistration cpr = getCpr(detail.getCprId(), detail.getCpId(), null, detail.getPpid());
+			AccessCtrlMgr.getInstance().ensureUpdateCprRights(cpr);
+			anonymizer.anonymize(cpr);
+
+			AnonymizeEvent event = new AnonymizeEvent();
+			event.setCpr(cpr);
+			event.setAnonymizedBy(AuthUtil.getCurrentUser());
+			event.setAnonymizeTime(Calendar.getInstance().getTime());
+			daoFactory.getAnonymizeEventDao().saveOrUpdate(event);
+
+			return ResponseEvent.response(CollectionProtocolRegistrationDetail.from(cpr, false));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	@Override
 	@PlusTransactional
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<RegistrationQueryCriteria> req) {
@@ -194,7 +225,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
 			
-			File file = new File(getConsentDirPath() + fileName);
+			File file = new File(ConfigParams.getConsentsDirPath() + fileName);
 			if (!file.exists()) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
@@ -229,14 +260,14 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			}
 			
 			String newFileName = UUID.randomUUID() + "_" + detail.getFilename();
-			File newFile = new File(getConsentDirPath() + newFileName);
+			File newFile = new File(ConfigParams.getConsentsDirPath() + newFileName);
 			
 			outputStream = new FileOutputStream(newFile);
 			IOUtils.copy(detail.getFileIn(), outputStream);
 			
 			String oldFileName = existing.getSignedConsentDocumentName();
 			if (StringUtils.isNotBlank(oldFileName)) {
-				File oldFile = new File(getConsentDirPath() + oldFileName);
+				File oldFile = new File(ConfigParams.getConsentsDirPath() + oldFileName);
 				if (oldFile.exists()) {
 					oldFile.delete();
 				}
@@ -269,7 +300,7 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
 			
-			File file = new File(getConsentDirPath() + fileName);
+			File file = new File(ConfigParams.getConsentsDirPath() + fileName);
 			if (!file.exists()) {
 				return ResponseEvent.userError(CprErrorCode.CONSENT_FORM_NOT_FOUND);
 			}
@@ -792,15 +823,6 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		return ids;
 	}
 
-	private String getConsentDirPath() {
-		String path = cfgSvc.getStrSetting(ConfigParams.MODULE, "participant_consent_dir");
-		if (path == null) {
-			path = ConfigUtil.getInstance().getDataDir() + File.separator + "participant-consents";
-		}
-		
-		return path + File.separator;
-	}
-	
 	private List<CollectionProtocolRegistration> getOtherCprs(CollectionProtocolRegistration cpr) {
 		Participant participant = cpr.getParticipant();
 		if (participant.getCprs().size() < 2) {

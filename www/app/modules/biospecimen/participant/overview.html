@@ -12,6 +12,10 @@
           Register to Another Protocol
         </span>
       </a>
+      <button show-if-allowed="participantResource.updateOpts" class="default" ng-click="anonymize()">
+        <span class="fa fa-warning"></span>
+        <span translate="participant.buttons.anonymize">Anonymize</span>
+      </button>
       <button show-if-allowed="participantResource.deleteOpts" class="default" ng-click="deleteReg()">
         <span class="fa fa-trash"></span>
         <span translate="common.buttons.delete">Delete</span>

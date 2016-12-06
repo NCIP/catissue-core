@@ -364,6 +364,9 @@
     "specimens_count": "Specimens",
     "generate_report": "Generate CP Report",
     "report_gen_initiated": "Report for \"{{shortTitle}}\" is being prepared and will be emailed shortly to intended recipients",
+    "anonymize": "Erase Participant PHI Data",
+    "confirm_anonymize": "Are you sure you want to erase all PHI data of participant?",
+    "anonymized_successfully": "Successfully erased participant PHI data",
 
     "consent": {
       "signed_form": "Signed Consent Form",
@@ -402,7 +405,8 @@
       "lookup": "Lookup",
       "bulk_register": "Bulk Register",
       "specimen_catalog": "Specimen Catalog",
-      "import": "Import"
+      "import": "Import",
+      "anonymize": "Anonymize"
     },
 
     "menu": {

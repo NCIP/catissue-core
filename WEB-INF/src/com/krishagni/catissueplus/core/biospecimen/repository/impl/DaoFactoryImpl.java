@@ -31,6 +31,7 @@ import com.krishagni.catissueplus.core.audit.repository.AuditDao;
 import com.krishagni.catissueplus.core.audit.repository.impl.AuditDaoImpl;
 import com.krishagni.catissueplus.core.auth.repository.AuthDao;
 import com.krishagni.catissueplus.core.auth.repository.impl.AuthDaoImpl;
+import com.krishagni.catissueplus.core.biospecimen.repository.AnonymizeEventDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CollectionProtocolRegistrationDao;
 import com.krishagni.catissueplus.core.biospecimen.repository.CpReportSettingsDao;
@@ -77,6 +78,13 @@ public class DaoFactoryImpl implements DaoFactory {
 	@Override
 	public CollectionProtocolRegistrationDao getCprDao() {
 		CollectionProtocolRegistrationDaoImpl dao = new CollectionProtocolRegistrationDaoImpl();
+		setSessionFactory(dao);
+		return dao;
+	}
+
+	@Override
+	public AnonymizeEventDao getAnonymizeEventDao() {
+		AnonymizeEventDaoImpl dao = new AnonymizeEventDaoImpl();
 		setSessionFactory(dao);
 		return dao;
 	}

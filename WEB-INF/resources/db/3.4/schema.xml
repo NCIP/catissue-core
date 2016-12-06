@@ -451,4 +451,40 @@
   <changeSet author="vpawar" id="Drop not null constraint on position coordinate - y - int">
     <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_TWO" columnDataType="${smallint.type}"/>
   </changeSet>
+
+  <changeSet author="vpawar" id="Track time and user responsible for anonymizing participants' PHI data">
+    <createTable tableName="OS_PARTICIPANT_ANON_EVENTS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CPR_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ANONYMIZED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ANONYMIZE_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Participant anonymize events identifier sequence" dbms="oracle">
+    <createSequence sequenceName="OS_PART_ANON_EVENTS_SEQ" startValue="1" incrementBy="1" ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on anonymize event's registration">
+    <addForeignKeyConstraint constraintName="FK_PART_ANON_EVENT_CPR_ID"
+      baseTableName="OS_PARTICIPANT_ANON_EVENTS" baseColumnNames="CPR_ID"
+      referencedTableName="CATISSUE_COLL_PROT_REG" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on anonymized by user">
+    <addForeignKeyConstraint constraintName="FK_PART_ANON_EVENT_USER_ID"
+      baseTableName="OS_PARTICIPANT_ANON_EVENTS" baseColumnNames="ANONYMIZED_BY"
+      referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>

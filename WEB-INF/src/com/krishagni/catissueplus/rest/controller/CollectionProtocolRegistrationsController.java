@@ -221,6 +221,18 @@ public class CollectionProtocolRegistrationsController {
 		return resp.getPayload();
 	}
 	
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}/anonymize")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public CollectionProtocolRegistrationDetail anonymize(@PathVariable("id") Long cprId) {
+		RegistrationQueryCriteria crit = new RegistrationQueryCriteria();
+		crit.setCprId(cprId);
+
+		ResponseEvent<CollectionProtocolRegistrationDetail> resp = cprSvc.anonymize(getRequest(crit));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/dependent-entities")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody

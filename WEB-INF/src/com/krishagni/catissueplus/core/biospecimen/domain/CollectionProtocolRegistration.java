@@ -28,11 +28,9 @@ import com.krishagni.catissueplus.core.common.util.Utility;
 
 @Configurable
 @Audited
-public class CollectionProtocolRegistration {
+public class CollectionProtocolRegistration extends BaseEntity {
 	private static final String ENTITY_NAME = "collection_protocol_registration";
 	
-	private Long id;
-
 	private String ppid;
 
 	private Date registrationDate;
@@ -67,14 +65,6 @@ public class CollectionProtocolRegistration {
 		return ENTITY_NAME;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getPpid() {
 		return ppid;
 	}
