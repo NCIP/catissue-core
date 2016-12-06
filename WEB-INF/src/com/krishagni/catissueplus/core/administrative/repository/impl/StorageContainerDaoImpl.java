@@ -430,11 +430,11 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			if (crit.hierarchical()) {
 				where.append("((dc.noOfRows is null and dc.noOfColumns is null)")
 					.append("or")
-					.append("(dc.noOfRows * dc.noOfColumns - size(dc.occupiedPositions) > 0))");
+					.append("(size(dc.occupiedPositions) - dc.noOfRows * dc.noOfColumns < 0))");
 			} else {
 				where.append("((c.noOfRows is null and c.noOfColumns is null)")
 					.append("or")
-					.append("(c.noOfRows * c.noOfColumns - size(c.occupiedPositions) > 0))");
+					.append("(size(c.occupiedPositions) - c.noOfRows * c.noOfColumns < 0))");
 			}
 		}
 
