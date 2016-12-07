@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent;
@@ -12,6 +13,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.ConsentTier;
 import com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig;
 import com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement;
 import com.krishagni.catissueplus.core.biospecimen.events.CollectionProtocolSummary;
+import com.krishagni.catissueplus.core.common.Pair;
 import com.krishagni.catissueplus.core.common.repository.Dao;
 
 public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
@@ -38,7 +40,7 @@ public interface CollectionProtocolDao extends Dao<CollectionProtocol> {
 
 	public Map<String, Object> getCpIds(String key, Object value);
 	
-	public List<Long> getSiteIdsByCpIds(Collection<Long> cpIds);
+	public Set<Pair<Long, Long>> getSiteCps(Collection<Long> cpIds);
 
 	public CollectionProtocolEvent getCpe(Long cpeId);
 	

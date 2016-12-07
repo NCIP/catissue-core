@@ -33,6 +33,7 @@ public class LeastEmptyContainerSelectionStrategy implements ContainerSelectionS
 				.type(criteria.getSpecimenType())
 				.minFreePositions(freePositions)
 				.reservedLaterThan(ignoreReservationsBeforeDate())
+				.siteCps(criteria.getSiteCps())
 				.numContainers(1));
 		if (CollectionUtils.isEmpty(containerIds)) {
 			return null;

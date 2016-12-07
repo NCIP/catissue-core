@@ -681,12 +681,16 @@ public class AccessCtrlMgr {
 	//                                                                                  //
 	//////////////////////////////////////////////////////////////////////////////////////
 	public Set<Pair<Long, Long>> getReadAccessContainerSiteCps() {
+		return getReadAccessContainerSiteCps(null);
+	}
+
+	public Set<Pair<Long, Long>> getReadAccessContainerSiteCps(Long cpId) {
 		if (AuthUtil.isAdmin()) {
 			return null;
 		}
 
 		String[] ops = {Operation.READ.getName()};
-		return getSiteCps(Resource.STORAGE_CONTAINER.getName(), null, ops);
+		return getSiteCps(Resource.STORAGE_CONTAINER.getName(), cpId, ops);
 	}
 
 	public void ensureCreateContainerRights(StorageContainer container) {

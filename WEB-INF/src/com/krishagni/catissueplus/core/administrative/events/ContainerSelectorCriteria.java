@@ -1,6 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
 import java.util.Date;
+import java.util.Set;
+
+import com.krishagni.catissueplus.core.common.Pair;
 
 public class ContainerSelectorCriteria {
 	private String specimenClass;
@@ -14,6 +17,8 @@ public class ContainerSelectorCriteria {
 	private Date reservedLaterThan;
 
 	private int numContainers;
+
+	private Set<Pair<Long, Long>> siteCps;
 
 	public ContainerSelectorCriteria() {
 
@@ -70,6 +75,15 @@ public class ContainerSelectorCriteria {
 
 	public ContainerSelectorCriteria numContainers(int numContainers) {
 		this.numContainers = numContainers;
+		return this;
+	}
+
+	public Set<Pair<Long, Long>> siteCps() {
+		return siteCps;
+	}
+
+	public ContainerSelectorCriteria siteCps(Set<Pair<Long, Long>> siteCps) {
+		this.siteCps = siteCps;
 		return this;
 	}
 }

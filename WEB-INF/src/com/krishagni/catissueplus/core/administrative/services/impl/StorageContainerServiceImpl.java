@@ -434,9 +434,20 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 				throw OpenSpecimenException.userError(CpErrorCode.INV_CONT_SEL_STRATEGY, cp.getContainerSelectionStrategy());
 			}
 
+			Set<Pair<Long, Long>> allowedSiteCps = AccessCtrlMgr.getInstance().getReadAccessContainerSiteCps(cpId);
+			if (allowedSiteCps != null && allowedSiteCps.isEmpty()) {
+				return ResponseEvent.response(Collections.emptyList());
+			}
+
+			Set<Pair<Long, Long>> reqSiteCps = getRequiredSiteCps(allowedSiteCps, Collections.singleton(cpId));
+			if (CollectionUtils.isEmpty(reqSiteCps)) {
+				return ResponseEvent.response(Collections.emptyList());
+			}
+
 			List<StorageContainerPosition> reservedPositions = new ArrayList<>();
 			for (TenantDetail detail : op.getTenants()) {
 				detail.setCpId(cpId);
+				detail.setSiteCps(reqSiteCps);
 
 				boolean allAllocated = false;
 				while (!allAllocated) {
@@ -633,16 +644,49 @@ public class StorageContainerServiceImpl implements StorageContainerService, Obj
 	}
 
 	private StorageContainerListCriteria addContainerListCriteria(StorageContainerListCriteria crit) {
-		Set<Pair<Long, Long>> siteCps = AccessCtrlMgr.getInstance().getReadAccessContainerSiteCps();
-		if (siteCps == null) {
-			return crit;
-		}
-
-		if (siteCps.isEmpty()) {
+		Set<Pair<Long, Long>> allowedSiteCps = AccessCtrlMgr.getInstance().getReadAccessContainerSiteCps();
+		if (allowedSiteCps != null && allowedSiteCps.isEmpty()) {
 			throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 		}
 
-		return crit.siteCps(siteCps);
+		if (CollectionUtils.isNotEmpty(crit.cpIds())) {
+			allowedSiteCps = getRequiredSiteCps(allowedSiteCps, crit.cpIds());
+			if (allowedSiteCps.isEmpty()) {
+				throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
+			}
+		}
+
+		return crit.siteCps(allowedSiteCps);
+	}
+
+	private Set<Pair<Long, Long>> getRequiredSiteCps(Set<Pair<Long, Long>> allowedSiteCps, Set<Long> cpIds) {
+		Set<Pair<Long, Long>> reqSiteCps = daoFactory.getCollectionProtocolDao().getSiteCps(cpIds);
+		if (allowedSiteCps == null) {
+			allowedSiteCps = reqSiteCps;
+		} else {
+			allowedSiteCps = getSiteCps(allowedSiteCps, reqSiteCps);
+		}
+
+		return allowedSiteCps;
+	}
+
+	private Set<Pair<Long, Long>> getSiteCps(Set<Pair<Long, Long>> allowed, Set<Pair<Long, Long>> required) {
+		Set<Pair<Long, Long>> result = new HashSet<>();
+		for (Pair<Long, Long> reqSiteCp : required) {
+			for (Pair<Long, Long> allowedSiteCp : allowed) {
+				if (!allowedSiteCp.first().equals(reqSiteCp.first())) {
+					continue;
+				}
+
+				if (allowedSiteCp.second() != null && !allowedSiteCp.second().equals(reqSiteCp.second())) {
+					continue;
+				}
+
+				result.add(reqSiteCp);
+			}
+		}
+
+		return result;
 	}
 
 	private void setStoredSpecimensCount(StorageContainerListCriteria crit, List<StorageContainerSummary> containers) {

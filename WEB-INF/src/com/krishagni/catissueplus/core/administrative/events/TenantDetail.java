@@ -1,5 +1,9 @@
 package com.krishagni.catissueplus.core.administrative.events;
 
+import java.util.Set;
+
+import com.krishagni.catissueplus.core.common.Pair;
+
 public class TenantDetail {
 	private String containerName;
 	
@@ -14,6 +18,8 @@ public class TenantDetail {
 	private String lineage;
 
 	private int numOfAliquots;
+
+	private Set<Pair<Long, Long>> siteCps;
 
 	public String getContainerName() {
 		return containerName;
@@ -69,6 +75,14 @@ public class TenantDetail {
 
 	public void setNumOfAliquots(int numOfAliquots) {
 		this.numOfAliquots = numOfAliquots;
+	}
+
+	public Set<Pair<Long, Long>> getSiteCps() {
+		return siteCps;
+	}
+
+	public void setSiteCps(Set<Pair<Long, Long>> siteCps) {
+		this.siteCps = siteCps;
 	}
 
 	public String getKey() {

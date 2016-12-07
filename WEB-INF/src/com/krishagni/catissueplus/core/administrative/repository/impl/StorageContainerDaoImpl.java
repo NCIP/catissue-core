@@ -25,6 +25,7 @@ import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.sql.JoinType;
+import org.hibernate.type.LongType;
 
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainer;
 import com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition;
@@ -255,7 +256,26 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 	@SuppressWarnings(value = "unchecked")
 	public List<Long> getLeastEmptyContainerId(ContainerSelectorCriteria crit) {
 		getCurrentSession().flush();
-		return getCurrentSession().getNamedQuery(GET_LEAST_EMPTY_CONTAINER_ID)
+
+		String sql = getCurrentSession().getNamedQuery(GET_LEAST_EMPTY_CONTAINER_ID).getQueryString();
+		int groupByIdx = sql.indexOf("group by");
+		String beforeGroupBySql = sql.substring(0, groupByIdx);
+		String groupByLaterSql  = sql.substring(groupByIdx);
+
+		List<String> accessRestrictions = new ArrayList<>();
+		for (Pair<Long, Long> siteCp : crit.siteCps()) {
+			accessRestrictions.add(new StringBuilder("(c.site_id = ")
+				.append(siteCp.first())
+				.append(" and ")
+				.append("(allowed_cps.cp_id is null or allowed_cps.cp_id = ").append(siteCp.second()).append(")")
+				.append(")")
+				.toString()
+			);
+		}
+
+		sql = beforeGroupBySql + " and (" + StringUtils.join(accessRestrictions, " or ") + ") " + groupByLaterSql;
+		return getCurrentSession().createSQLQuery(sql)
+			.addScalar("containerId", LongType.INSTANCE)
 			.setLong("cpId", crit.cpId())
 			.setString("specimenClass", crit.specimenClass())
 			.setString("specimenType", crit.type())

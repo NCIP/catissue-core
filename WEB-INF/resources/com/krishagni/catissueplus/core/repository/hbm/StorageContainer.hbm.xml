@@ -234,8 +234,6 @@
     </sql-query>
 
     <sql-query name="getLeastEmptyContainerId">
-      <return-scalar column="containerId" type="long"/>
-
       select
         c.identifier as containerId
       from

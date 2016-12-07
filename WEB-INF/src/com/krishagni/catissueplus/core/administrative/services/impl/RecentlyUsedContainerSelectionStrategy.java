@@ -12,8 +12,10 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -22,6 +24,7 @@ import com.krishagni.catissueplus.core.administrative.events.TenantDetail;
 import com.krishagni.catissueplus.core.administrative.services.ContainerSelectionStrategy;
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
+import com.krishagni.catissueplus.core.common.Pair;
 
 @Configurable
 public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectionStrategy {
@@ -94,9 +97,24 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 			.createAlias("spmn.visit", "visit")
 			.createAlias("visit.registration", "reg")
 			.createAlias("reg.collectionProtocol", "cp")
+			.createAlias("site", "site")
+			.createAlias("compAllowedCps", "allowedCp", JoinType.LEFT_OUTER_JOIN)
 			.add(Restrictions.eq("cp.id", criteria.getCpId()))
+			.add(getSiteCpRestriction(criteria.getSiteCps()))
 			.addOrder(Order.desc("pos.id"))
 			.setMaxResults(1);
+	}
+
+	private Disjunction getSiteCpRestriction(Set<Pair<Long, Long>> siteCps) {
+		Disjunction disjunction = Restrictions.disjunction();
+		for (Pair<Long, Long> siteCp : siteCps) {
+			disjunction.add(Restrictions.and(
+					Restrictions.eq("site.id", siteCp.first()),
+					Restrictions.or(Restrictions.isNull("allowedCp.id"), Restrictions.eq("allowedCp.id", siteCp.second()))
+			));
+		}
+
+		return disjunction;
 	}
 
 	private StorageContainer nextContainer(StorageContainer last, TenantDetail crit, int freeLocs) {
@@ -119,7 +137,7 @@ public class RecentlyUsedContainerSelectionStrategy implements ContainerSelectio
 		if (last != null) {
 			for (StorageContainer container : children) {
 				childIdx++;
-				if (container.getPosition().getPosition() == last.getPosition().getPosition()) {
+				if (container.getPosition().getPosition().equals(last.getPosition().getPosition())) {
 					logger.info(String.format("Found container %s at %d", container.getName(), childIdx));
 					break;
 				}
