@@ -1052,7 +1052,7 @@
     "two": "Two",
     "dimensionless": "Dimensionless?",
     "dimension": "Dimension",
-    "capacity": "Capacity",
+    "capacity": "Approximate Capacity",
     "specimens": "specimens",
     "out_of": "out of",
     "stored": "Stored",
