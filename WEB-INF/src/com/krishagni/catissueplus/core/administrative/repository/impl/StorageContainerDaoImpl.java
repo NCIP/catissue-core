@@ -93,6 +93,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 		return getObjectIds("containerId", key, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getNonCompliantContainers(ContainerRestrictionsCriteria crit) {
 		Criteria query = getCurrentSession().createCriteria(StorageContainer.class)
@@ -141,6 +142,7 @@ public class StorageContainerDaoImpl extends AbstractDao<StorageContainer> imple
 			);
 		}
 
+		flush();
 		return query.add(restriction).list();
 	}
 
