@@ -393,7 +393,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
         var location = {};
         for (var i = 0; i < $scope.specimens.length; ++i) {
           var spmn = $scope.specimens[i];
-          if (spmn.isOpened && spmn.existingStatus != 'Collected' && spmn.storageType != 'Virtual') {
+          if (spmn.existingStatus != 'Collected' && !spmn.isVirtual) {
             location = {name: spmn.storageLocation.name, mode: spmn.storageLocation.mode};
             break;
           }
@@ -401,7 +401,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
 
         for (var i = 1; i < $scope.specimens.length; i++) {
           var spmn = $scope.specimens[i];
-          if (spmn.existingStatus != 'Collected' && spmn.storageType != 'Virtual') {
+          if (spmn.existingStatus != 'Collected' && !spmn.isVirtual) {
             angular.extend(spmn.storageLocation, location);
           }
         }
