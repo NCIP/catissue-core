@@ -5,6 +5,8 @@ angular.module('os.biospecimen.specimen')
 
     var ignoreQtyWarning = false, reservationId;
 
+    var watches = [];
+
     function init() {
       var createdOn = new Date().getTime();
 
@@ -151,6 +153,15 @@ angular.module('os.biospecimen.specimen')
     }
 
     function setAliquots(specs, locations) {
+      //
+      // kill all watches before creating new one
+      //
+      angular.forEach(watches,
+        function(watch) {
+          watch();
+        }
+      );
+
       var aliquots = [], locationIdx = 0;
 
       for (var i = 0; i < specs.length; ++i) {
@@ -162,11 +173,43 @@ angular.module('os.biospecimen.specimen')
             aliquot.storageLocation = locations[locationIdx++];
           }
 
+          if (j == 0) {
+            aliquot.$$showInTable = true;
+            aliquot.$$expanded = false;
+            aliquot.$$count = +specs[i].count;
+            if (aliquot.$$count > 1 && locations.length == 0) {
+              listenContainerChanges(aliquot);
+            }
+          }
+
           aliquots.push(aliquot);
         }
       }
 
       $scope.ctx.aliquots = aliquots;
+    }
+
+    function listenContainerChanges(aliquot) {
+      var watch = $scope.$watch(
+        function() {
+          return aliquot.storageLocation;
+        },
+        function(newVal, oldVal) {
+          if (aliquot.$$expanded) {
+            return;
+          }
+
+          var idx = $scope.ctx.aliquots.indexOf(aliquot);
+          for (var i = idx + 1; i < idx + aliquot.$$count; ++i) {
+            $scope.ctx.aliquots[i].storageLocation = {
+              name: aliquot.storageLocation.name,
+              mode: aliquot.storageLocation.mode
+            };
+          }
+        }
+      );
+
+      watches.push(watch);
     }
 
     $scope.copyFirstToAll = function() {
@@ -209,6 +252,15 @@ angular.module('os.biospecimen.specimen')
       }
     }
 
+    $scope.toggleAliquotsGroup = function(aliquot) {
+      aliquot.$$expanded = !aliquot.$$expanded;
+
+      var idx = $scope.ctx.aliquots.indexOf(aliquot);
+      for (var i = idx + 1; i < idx + aliquot.$$count; ++i) {
+        $scope.ctx.aliquots[i].$$showInTable = aliquot.$$expanded;
+      }
+    }
+
     $scope.manuallySelectContainers = function() {
       $q.when(vacateReservedPositions()).then(
         function() {
@@ -217,6 +269,9 @@ angular.module('os.biospecimen.specimen')
           angular.forEach($scope.ctx.aliquots,
             function(aliquot) {
               aliquot.storageLocation = {};
+              if (aliquot.$$count > 1) {
+                listenContainerChanges(aliquot);
+              }
             }
           );
 

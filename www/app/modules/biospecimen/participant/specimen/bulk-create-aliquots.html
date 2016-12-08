@@ -159,12 +159,20 @@
           </tr>
         </thead>
         <tbody class="os-table-body" os-storage-positions>
-          <tr class="row" ng-repeat="aliquot in ctx.aliquots" ng-form="aform">
+          <tr class="row" ng-repeat="aliquot in ctx.aliquots" ng-form="aform" ng-if="aliquot.$$showInTable">
             <td class="col">
-              <a ui-sref="specimen({specimenId: aliquot.parent.id})">
-                <span>{{aliquot.parentLabel}}</span>
-                <span>({{aliquot.ppid}})</span>
-              </a>
+              <div style="display: flex;">
+                <a ui-sref="specimen({specimenId: aliquot.parent.id})">
+                  <span>{{aliquot.parentLabel}}</span>
+                  <span>({{aliquot.ppid}})</span>
+                </a>
+                <span ng-if="aliquot.$$count > 1" style="padding-left: 5px;">
+                  <button class="btn btn-xs btn-default" ng-click="toggleAliquotsGroup(aliquot)">
+                    <span class="fa" ng-class="{true: 'fa-minus', false: 'fa-plus'}[aliquot.$$expanded]"></span>
+                    <span>({{aliquot.$$count}})</span>
+                  </button>
+                </span>
+              </div>
             </td>
             <td class="col">
               <span>{{aliquot.type}}</span>
