@@ -14,6 +14,10 @@ public class DerivedSpecimenRequirement {
 	private String specimenClass;
 	
 	private String type;
+
+	private String anatomicSite;
+
+	private String laterality;
 	
 	private String pathology;
 	
@@ -81,6 +85,22 @@ public class DerivedSpecimenRequirement {
 		this.type = type;
 	}
 	
+	public String getAnatomicSite() {
+		return anatomicSite;
+	}
+
+	public void setAnatomicSite(String anatomicSite) {
+		this.anatomicSite = anatomicSite;
+	}
+
+	public String getLaterality() {
+		return laterality;
+	}
+
+	public void setLaterality(String laterality) {
+		this.laterality = laterality;
+	}
+
 	public String getPathology() {
 		return pathology;
 	}

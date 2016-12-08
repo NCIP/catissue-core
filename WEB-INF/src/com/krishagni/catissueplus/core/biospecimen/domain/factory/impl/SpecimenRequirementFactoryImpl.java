@@ -121,6 +121,8 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setInitialQty(req.getQuantity(), derived, ose);
 		setStorageType(req.getStorageType(), derived, ose);
 		setConcentration(req.getConcentration(), derived, ose);
+		setAnatomicSite(req.getAnatomicSite(), derived, ose);
+		setLaterality(req.getLaterality(), derived, ose);
 		setPathologyStatus(req.getPathology(), derived, ose);
 		setLabelFormat(req.getLabelFmt(), derived, ose);
 		setLabelAutoPrintMode(req.getLabelAutoPrintMode(), derived, ose);
@@ -154,22 +156,20 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 		setLabelAutoPrintMode(req, sr, ose);
 		setCode(req, sr, ose);
 		setConcentration(req, sr, ose);
-		
+
 		if (!lineage.equals(Specimen.ALIQUOT)) {
 			setPathologyStatus(req, sr, ose);
+			setAnatomicSite(req, sr, ose);
+			setLaterality(req, sr, ose);
 		}
 
-		if (!lineage.equals(Specimen.NEW)) {
-			return sr;
+		if (lineage.equals(Specimen.NEW)) {
+			setCollector(req, sr, ose);
+			setCollectionProcedure(req, sr, ose);
+			setCollectionContainer(req, sr, ose);
+			setReceiver(req, sr, ose);
 		}
-		
-		setAnatomicSite(req, sr, ose);
-		setLaterality(req, sr, ose);
-		setCollector(req, sr, ose);
-		setCollectionProcedure(req, sr, ose);
-		setCollectionContainer(req, sr, ose);
-		setReceiver(req, sr, ose);		
-		
+
 		ose.checkAndThrow();	
 		return sr;		
 	}
@@ -336,26 +336,39 @@ public class SpecimenRequirementFactoryImpl implements SpecimenRequirementFactor
 	}
 	
 	private void setAnatomicSite(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String anatomicSite = detail.getAnatomicSite();
-		if (StringUtils.isBlank(anatomicSite)) {
-			ose.addError(ANATOMIC_SITE_REQUIRED);
+		setAnatomicSite(detail.getAnatomicSite(), sr, ose);
+	}
+
+	private void setAnatomicSite(String anatomicSite, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(anatomicSite) && sr.isDerivative()) {
+			//
+			// If anatomic site is not specified for derivative requirement
+			// then its value is picked from parent requirement
+			//
 			return;
 		}
-		
-		if (!isValid(SPECIMEN_ANATOMIC_SITE, anatomicSite, true)) {
-			ose.addError(INVALID_ANATOMIC_SITE, anatomicSite);
-			return;
-		}
-		
+
+		ensureNotEmptyAndValid(SPECIMEN_ANATOMIC_SITE, anatomicSite, ANATOMIC_SITE_REQUIRED, INVALID_ANATOMIC_SITE, ose);
 		sr.setAnatomicSite(anatomicSite);
 	}
 	
 	private void setLaterality(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
-		String laterality = detail.getLaterality();
+		setLaterality(detail.getLaterality(), sr, ose);
+	}
+
+	private void setLaterality(String laterality, SpecimenRequirement sr, OpenSpecimenException ose) {
+		if (StringUtils.isBlank(laterality) && sr.isDerivative()) {
+			//
+			// If laterality is not specified for derivative requirement
+			// then its value is picked from parent requirement
+			//
+			return;
+		}
+
 		ensureNotEmptyAndValid(SPECIMEN_LATERALITY, laterality, LATERALITY_REQUIRED, INVALID_LATERALITY, ose);
 		sr.setLaterality(laterality);
 	}
-	
+
 	private void setPathologyStatus(SpecimenRequirementDetail detail, SpecimenRequirement sr, OpenSpecimenException ose) {
 		setPathologyStatus(detail.getPathology(), sr, ose);
 	}

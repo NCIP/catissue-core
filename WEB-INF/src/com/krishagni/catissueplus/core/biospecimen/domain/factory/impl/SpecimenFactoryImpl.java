@@ -347,7 +347,10 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 			specimen.setCollectionStatus(existing.getCollectionStatus());
 		}
 	}
-	
+
+	//
+	// TODO: VP: This code requires a bit of refactoring, as it is not intuitive
+	//
 	private void setAnatomicSite(SpecimenDetail detail, Specimen specimen, OpenSpecimenException ose) {
 		String anatomicSite = detail.getAnatomicSite();
 
@@ -355,14 +358,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (parent != null) {
 			if (StringUtils.isBlank(anatomicSite) || anatomicSite.equals(parent.getTissueSite())) {
 				specimen.setTissueSite(parent.getTissueSite());
-			} else {
+			} else if (specimen.isAliquot()) {
 				ose.addError(SpecimenErrorCode.ANATOMIC_SITE_NOT_SAME_AS_PARENT, anatomicSite, parent.getTissueSite());
 			}
-
-			return;
 		}
 
-		if (specimen.isAliquot() || specimen.isDerivative()) {
+		if (specimen.isAliquot() || (specimen.isDerivative() && StringUtils.isBlank(anatomicSite))) {
 			return; // invalid parent scenario
 		}
 		
@@ -397,14 +398,12 @@ public class SpecimenFactoryImpl implements SpecimenFactory {
 		if (parent != null) {
 			if (StringUtils.isBlank(laterality) || laterality.equals(parent.getTissueSide())) {
 				specimen.setTissueSide(parent.getTissueSide());
-			} else {
+			} else if (specimen.isAliquot()) {
 				ose.addError(SpecimenErrorCode.LATERALITY_NOT_SAME_AS_PARENT, laterality, parent.getTissueSide());
 			}
-
-			return;
 		}
 
-		if (specimen.isAliquot() || specimen.isDerivative()) {
+		if (specimen.isAliquot() || (StringUtils.isBlank(laterality) && specimen.isDerivative())) {
 			return; // invalid parent scenario
 		}
 		

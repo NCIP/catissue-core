@@ -301,6 +301,8 @@ angular.module('os.biospecimen.cp.specimens', ['os.biospecimen.models'])
       $scope.view = 'addedit_derived';
       $scope.childReq = {
         pathology: sr.pathology,
+        anatomicSite: sr.anatomicSite,
+        laterality: sr.laterality,
         storageType: 'Virtual'
       };
       loadPvs();

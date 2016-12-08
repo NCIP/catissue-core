@@ -13,7 +13,7 @@ angular.module('os.biospecimen.specimen.addedit', [])
       currSpecimen.visitId = visit.id;
       currSpecimen.createdOn = currSpecimen.createdOn || new Date();
 
-      if (currSpecimen.lineage != 'New') {
+      if (currSpecimen.lineage == 'Aliquot') {
         currSpecimen.anatomicSite = currSpecimen.laterality = undefined;
       }
 

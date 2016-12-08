@@ -147,13 +147,11 @@ public class Specimen extends BaseExtensionEntity {
 
 	public void setTissueSite(String tissueSite) {
 		if (StringUtils.isNotBlank(this.tissueSite) && !this.tissueSite.equals(tissueSite)) {
-			for (Specimen child : getChildCollection()) {
-				child.setTissueSite(tissueSite);
-			}
+			getChildCollection().stream()
+				.filter(child -> child.isAliquot() || this.tissueSite.equals(child.getTissueSite()))
+				.forEach(child -> child.setTissueSite(tissueSite));
 			
-			for (Specimen poolSpecimen : getSpecimensPool()) {
-				poolSpecimen.setTissueSite(tissueSite);
-			}
+			getSpecimensPool().forEach(poolSpmn -> poolSpmn.setTissueSite(tissueSite));
 		}
 		
 		this.tissueSite = tissueSite;
@@ -165,13 +163,11 @@ public class Specimen extends BaseExtensionEntity {
 
 	public void setTissueSide(String tissueSide) {
 		if (StringUtils.isNotBlank(this.tissueSide) && !this.tissueSide.equals(tissueSide)) {
-			for (Specimen child : getChildCollection()) {
-				child.setTissueSide(tissueSide);
-			}
+			getChildCollection().stream()
+				.filter(child -> child.isAliquot() || this.tissueSide.equals(child.getTissueSide()))
+				.forEach(child -> child.setTissueSide(tissueSide));
 			
-			for (Specimen poolSpecimen : getSpecimensPool()) {
-				poolSpecimen.setTissueSide(tissueSide);
-			}
+			getSpecimensPool().forEach(poolSpmn -> poolSpmn.setTissueSide(tissueSide));
 		}
 		
 		this.tissueSide = tissueSide;
@@ -684,7 +680,7 @@ public class Specimen extends BaseExtensionEntity {
 
 		// TODO: Specimen class/type should not be allowed to change
 		Specimen spmnToUpdateFrom = null;
-		if (isAliquot() || isDerivative()) {
+		if (isAliquot()) {
 			spmnToUpdateFrom = getParentSpecimen();
 		} else if (isPoolSpecimen()) {
 			spmnToUpdateFrom = getPooledSpecimen();
@@ -694,11 +690,6 @@ public class Specimen extends BaseExtensionEntity {
 
 		setTissueSite(spmnToUpdateFrom.getTissueSite());
 		setTissueSide(spmnToUpdateFrom.getTissueSide());
-		
-		if (isDerivative()) {
-			spmnToUpdateFrom = specimen;
-		}
-		
 		setSpecimenClass(spmnToUpdateFrom.getSpecimenClass());
 		setSpecimenType(spmnToUpdateFrom.getSpecimenType());
 		updateBiohazards(spmnToUpdateFrom.getBiohazards());

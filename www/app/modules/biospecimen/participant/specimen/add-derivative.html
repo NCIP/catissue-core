@@ -172,6 +172,26 @@
     </div>
 
     <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+      <div class="col-xs-6">
+        <os-pvs name="anatomicSite" ng-model="derivative.anatomicSite" attribute="anatomic-site" 
+          show-only-leaf-values="true" required placeholder="{{'specimens.anatomic_site' | translate}}">
+        </os-pvs>
+        <div os-field-error field="derivativeForm.anatomicSite"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.laterality">Laterality</label>
+      <div class="col-xs-6">
+        <os-pvs name="laterality" ng-model="derivative.laterality" attribute="laterality"
+          required placeholder="{{'specimens.laterality' | translate}}">
+        </os-pvs>
+        <div os-field-error field="derivativeForm.laterality"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
       <div class="col-xs-6">
         <div class="os-date-time clearfix">

@@ -139,6 +139,8 @@ angular.module('os.biospecimen.specimen')
         visitId: scope.visit.id,
         cpId: scope.visit.cpId,
         pathology: scope.parentSpecimen.pathology,
+        anatomicSite: scope.parentSpecimen.anatomicSite,
+        laterality: scope.parentSpecimen.laterality, 
         closeParent: false,
         createdOn : new Date(),
         incrParentFreezeThaw: 1,

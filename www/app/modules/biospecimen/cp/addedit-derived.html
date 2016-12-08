@@ -20,6 +20,24 @@
       </div>
 
       <div class="col-xs-3">
+        <div class="form-group">
+          <os-pvs name="anatomicSite" ng-model="childReq.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
+            os-md-input placeholder="{{'srs.anatomic_site' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="derivativeForm.anatomicSite"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-pvs name="laterality" ng-model="childReq.laterality" attribute="laterality"
+            os-md-input placeholder="{{'srs.laterality' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="derivativeForm.laterality"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
         <div class="form-group" ng-switch on="!!childReq.id">
           <os-spmn-measure ng-switch-when="false"
             name="quantity" specimen="childReq" quantity="childReq.quantity" md-input
