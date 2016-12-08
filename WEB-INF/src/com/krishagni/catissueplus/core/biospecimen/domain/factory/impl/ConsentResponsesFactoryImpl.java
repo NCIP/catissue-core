@@ -120,6 +120,10 @@ public class ConsentResponsesFactoryImpl implements ConsentResponsesFactory {
 			ConsentTierResponse response,
 			OpenSpecimenException ose) {
 
+		if (!detail.isAttrModified("response")) {
+			return null;
+		}
+
 		if (response == null) {
 			response = new ConsentTierResponse();
 			response.setCpr(cpr);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.krishagni.catissueplus.core.administrative.events.Mergeable;
@@ -172,6 +173,10 @@ public class ConsentDetail extends AttributeModifiedSupport implements Mergeable
 
 	@Override
 	public void merge(ConsentDetail other) {
+		if (StringUtils.isBlank(other.getStatement())) {
+			return;
+		}
+
 		ConsentTierResponseDetail response = new ConsentTierResponseDetail();
 		response.setStatement(other.getStatement());
 		response.setResponse(other.getResponse());
