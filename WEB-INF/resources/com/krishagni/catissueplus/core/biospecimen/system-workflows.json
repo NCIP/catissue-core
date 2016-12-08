@@ -11,7 +11,7 @@
                     }
                 },
                 {
-                    "expr": "concat(Participant.firstName, \" \", Participant.lastName)",
+                    "expr": "concat_ws(\" \", Participant.firstName, Participant.lastName)",
                     "caption": "Name"
                 },
                 {
@@ -41,7 +41,7 @@
                     "searchType": "contains"
                 },
                 {
-                    "expr": "concat(Participant.firstName, \" \", Participant.lastName)",
+                    "expr": "concat_ws(\" \", Participant.firstName, Participant.lastName)",
                     "caption": "Name",
                     "metainfo": {
                         "phi": "true"
@@ -106,7 +106,7 @@
                     }
                 },
                 {
-                    "expr": "concat(Specimen.specimenPosition.containerName, \" (\", Specimen.specimenPosition.formattedPos, \")\")",
+                    "expr": "concat(Specimen.specimenPosition.containerName, concat_ws(\"\", concat(\" (\", Specimen.specimenPosition.formattedPos, \")\")))",
                     "caption": "Location"
                 }
             ],

@@ -95,6 +95,6 @@ public class Column {
 	}
 
 	public boolean isConcatExpr() {
-		return getExpr().trim().startsWith("concat(");
+		return getExpr().trim().startsWith("concat(") || getExpr().trim().startsWith("concat_ws(");
 	}
 }
