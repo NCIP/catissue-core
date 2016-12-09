@@ -328,7 +328,11 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 				filename = value.substring(value.lastIndexOf(File.separator) + 1);
 				in = this.getClass().getResourceAsStream(value.substring(10));
 			} else {
-				File file = new File(getSettingFilesDir() + value);
+				File file = new File(value); // taking a chance whether setting was a string based before
+				if (!file.exists()) {
+					file = new File(getSettingFilesDir() + value);
+				}
+
 				contentType = Utility.getContentType(file);
 				filename = file.getName().substring(file.getName().indexOf("_") + 1);
 				in = new FileInputStream(file);

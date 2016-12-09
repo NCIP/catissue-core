@@ -1,7 +1,6 @@
 package com.krishagni.catissueplus.core.biospecimen.services.impl;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,10 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.MessageSource;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
@@ -21,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJob;
 import com.krishagni.catissueplus.core.common.domain.LabelPrintJobItem;
@@ -133,31 +131,16 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 	}		
 		
 	private void reloadRules() {
-		String rulesFile = cfgSvc.getStrSetting(
-				ConfigParams.MODULE,
-				ConfigParams.VISIT_LABEL_PRINT_RULES, 
-				(String)null);
-		
-		if (StringUtils.isBlank(rulesFile)) {
+		FileDetail fileDetail = cfgSvc.getFileDetail(ConfigParams.MODULE, ConfigParams.VISIT_LABEL_PRINT_RULES);
+		if (fileDetail == null || fileDetail.getFileIn() == null) {
 			return;
 		}
-		
-		boolean classpath = false;
-		if (rulesFile.startsWith("classpath:")) {
-			rulesFile = rulesFile.substring(10);
-			classpath = true;
-		}
-				
-		List<VisitLabelPrintRule> rules = new ArrayList<VisitLabelPrintRule>();
-		
+
+		List<VisitLabelPrintRule> rules = new ArrayList<>();
 		BufferedReader reader = null;
 		try {
-			if (classpath) {
-				reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(rulesFile)));
-			} else {
-				reader = new BufferedReader(new FileReader(rulesFile));
-			}
-						
+			reader = new BufferedReader(new InputStreamReader(fileDetail.getFileIn()));
+
 			String ruleLine = null;
 			while ((ruleLine = reader.readLine()) != null) {
 				VisitLabelPrintRule rule = parseRule(ruleLine);
@@ -171,8 +154,9 @@ public class DefaultVisitLabelPrinter extends AbstractLabelPrinter<Visit> implem
 			
 			this.rules = rules;
 		} catch (Exception e) {
-			logger.error("Error loading rules from file: " + rulesFile, e);
+			logger.error("Error loading rules from file: " + fileDetail.getFilename(), e);
 		} finally {
+			IOUtils.closeQuietly(fileDetail.getFileIn());
 			IOUtils.closeQuietly(reader);
 		}
 	}

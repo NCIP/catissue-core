@@ -248,4 +248,16 @@
       );
     </sql>
   </changeSet>
+
+  <changeSet author="mdnasim" id="Allow users to upload files for print rule settings">
+    <sql>
+      update
+        os_cfg_props
+      set
+        data_type = 'FILE'
+      where
+        name in ('visit_label_print_rules', 'specimen_label_print_rules') and
+        module_id = (select identifier from os_modules where name = 'biospecimen')
+    </sql>
+  </changeSet>
 </databaseChangeLog>
