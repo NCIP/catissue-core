@@ -6,10 +6,10 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
   
   <changeSet author="mdnasim" id="Delete unused PVs">
-    <validCheckSum>7:2aa8d63072906a2f199d54e9073cb25f</validCheckSum>
+    <validCheckSum>7:d6277aa6e1ced83b4538cfa6510c465f</validCheckSum>
     <sql>
       delete from catissue_permissible_value where public_id in ('2004100', '2003990','4284', '4285', '2004200',
-        '2004000', '2004300', order_status', 'shipping_activity_status');
+        '2004000', '2004300', 'order_status', 'shipping_activity_status');
 
       delete from catissue_cde where public_id in ('2004100', '2003990','4284', '4285', '2004200', '2004000',
         '2004300', 'order_status', 'shipping_activity_status');
