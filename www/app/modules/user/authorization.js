@@ -70,6 +70,10 @@ angular.module('openspecimen')
       },
 
       hasPhiAccess: function() {
+        if (currentUser.admin || currentUser.instituteAdmin) {
+          return true;
+        }
+
         for (var i = 0; i < userRights.length; i++) {
           if (userRights[i].resource == 'ParticipantPhi') {
             return true;
