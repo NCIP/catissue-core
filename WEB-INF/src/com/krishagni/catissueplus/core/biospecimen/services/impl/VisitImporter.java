@@ -30,8 +30,10 @@ public class VisitImporter implements ObjectImporter<VisitDetail, VisitDetail> {
 	public ResponseEvent<VisitDetail> importObject(RequestEvent<ImportObjectDetail<VisitDetail>> req) {
 		try {
 			ImportObjectDetail<VisitDetail> detail = req.getPayload();
-			RequestEvent<VisitDetail> visitReq = new RequestEvent<>(detail.getObject());
-			
+			VisitDetail visitDetail = detail.getObject();
+			visitDetail.setForceDelete(true);
+
+			RequestEvent<VisitDetail> visitReq = new RequestEvent<>(visitDetail);
 			ResponseEvent<VisitDetail> resp;
 			if (detail.isCreate()) {
 				resp = visitSvc.addVisit(visitReq);
@@ -39,7 +41,7 @@ public class VisitImporter implements ObjectImporter<VisitDetail, VisitDetail> {
 				resp = visitSvc.patchVisit(visitReq);
 			}
 
-			uploadSprfile(detail.getUploadedFilesDir(), resp.getPayload().getId(), visitReq.getPayload().getSprName());
+			uploadSprfile(detail.getUploadedFilesDir(), resp.getPayload().getId(), visitDetail.getSprName());
 			return resp;
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);

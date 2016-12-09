@@ -593,7 +593,7 @@
 
     "specimens_hierarchy_deleted": "Selected specimens and their children are deleted successfully",
     "specimens_deleted": "Selected specimens are deleted successfully",
-    "delete_specimens_heirarchy": "Are you sure you want to delete selected specimens and all its children ?",
+    "delete_specimens_heirarchy": "Are you sure you want to delete the selected specimens and all its children ?",
     "delete_specimens":  "Are you sure you want to delete selected specimens ?",
     "close": "Close Specimen",
     "specimens_closed": "Selected specimens are closed successfully",
@@ -1285,12 +1285,12 @@
   "delete_entity": {
     "entity_name": "Entity Name",
     "count": "Count",
-    "title": "Deleting {{entityName}} confirmation",
-    "confirm_delete": "{{entityType}} {{entityName}} will be deleted forever. Are you sure you want to proceed?",
+    "title": "Delete Confirmation",
+    "confirm_delete": "{{entityType}} {{entityName}} and any dependent data will be deleted.",
     "entity_deleted": "{{entityType}} {{entityName}} deleted successfully.",
     "dependents_title": "Error: Cannot delete {{entityName}}",
     "dependents_details": "Cannot delete {{entityType}} {{entityName}} because of following dependent objects",
-    "force_delete": "Type 'DELETE ANYWAY' in below textbox to delete {{entityType}} including its dependent entities.",
+    "force_delete": "Type 'DELETE ANYWAY' to continue.",
     "delete_anyway": "DELETE ANYWAY",
     "delete_pending": "{{entityType}} {{entityName}} deletion taking longer time than anticipated. You'll receive an email when it gets completed"
   },

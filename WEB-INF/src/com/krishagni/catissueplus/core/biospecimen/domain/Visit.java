@@ -101,6 +101,8 @@ public class Visit extends BaseExtensionEntity {
 	@Autowired
 	private DaoFactory daoFactory;
 	
+	private transient boolean forceDelete;
+	
 	public static String getEntityName() {
 		return ENTITY_NAME;
 	}
@@ -273,6 +275,14 @@ public class Visit extends BaseExtensionEntity {
 		this.cohort = cohort;
 	}
 
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
+	}
+
 	public void setActive() {
 		this.setActivityStatus(Status.ACTIVITY_STATUS_ACTIVE.getStatus());
 	}
@@ -312,7 +322,7 @@ public class Visit extends BaseExtensionEntity {
 	}
 	
 	public void delete() {
-		delete(true);
+		delete(!isForceDelete());
 	}
 
 	public void delete(boolean checkDependency) {
@@ -329,6 +339,7 @@ public class Visit extends BaseExtensionEntity {
 	}
 
 	public void update(Visit visit) {
+		setForceDelete(visit.isForceDelete());
 		updateActivityStatus(visit.getActivityStatus());
 		if (!isActive()) {
 			return;

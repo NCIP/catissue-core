@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.SprDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDownloadDetail;
@@ -266,8 +267,18 @@ public class VisitsController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public VisitDetail deleteVisit(@PathVariable("id") Long visitId) {
-		ResponseEvent<VisitDetail> resp = visitService.deleteVisit(getVisitQueryReq(visitId));
+	public VisitDetail deleteVisit(
+			@PathVariable("id")
+			Long visitId,
+
+			@RequestParam(value = "forceDelete", required = false, defaultValue = "false")
+			boolean forceDelete) {
+
+		CpEntityDeleteCriteria crit = new CpEntityDeleteCriteria();
+		crit.setId(visitId);
+		crit.setForceDelete(forceDelete);
+
+		ResponseEvent<VisitDetail> resp = visitService.deleteVisit(getRequest(crit));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}

@@ -31,13 +31,13 @@
         </div>
       </div>
     </div>
-    
-    <div ng-if="entityProps.forceDelete && dependentEntities.length > 0">
-      <span translate='delete_entity.force_delete' translate-values="entityProps">
-        Type 'DELETE ANYWAY' in below textbox to delete entity including its dependent entities.
-      </span>
-      <input type="textbox" class="form-control" name="deleteAnyway" ng-model="entityProps.deleteAnyway">
-    </div>
+  </div>
+
+  <div ng-if="(entityProps.forceDelete && dependentEntities.length > 0) || entityProps.bulkDelete">
+    <span translate='delete_entity.force_delete' translate-values="entityProps">
+      Type 'DELETE ANYWAY' in below textbox to delete entity including its dependent entities.
+    </span>
+    <input type="textbox" class="form-control" name="deleteAnyway" ng-model="entityProps.deleteAnyway">
   </div>
 </div>
 <div class="os-modal-footer">
@@ -47,7 +47,7 @@
         <span translate="common.buttons.cancel">Cancel</span>
       </button>
       <button class="btn btn-danger" ng-click="delete()"
-        ng-disabled="dependentEntities.length > 0 && entityProps.deleteAnyway != ('delete_entity.delete_anyway' | translate)">
+        ng-disabled="(dependentEntities.length > 0 || entityProps.bulkDelete) && entityProps.deleteAnyway != ('delete_entity.delete_anyway' | translate)">
         <span translate="common.yes">Yes</span>
       </button>
     </div>

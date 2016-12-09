@@ -86,7 +86,8 @@ public class VisitFactoryImpl implements VisitFactory {
 		Visit visit = new Visit();
 		OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 		
-		visit.setId(existing.getId());		
+		visit.setId(existing.getId());
+		visit.setForceDelete(detail.isForceDelete());
 		if (detail.isAttrModified("name")) {
 			visit.setName(detail.getName());
 		} else {

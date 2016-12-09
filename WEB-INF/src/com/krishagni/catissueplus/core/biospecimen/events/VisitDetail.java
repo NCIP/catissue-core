@@ -66,6 +66,11 @@ public class VisitDetail extends AttributeModifiedSupport {
 	private String cohort;
 	
 	private ExtensionDetail extensionDetail;
+	
+	//
+	// transient variables specifying action to be performed
+	//
+	private boolean forceDelete;
 
 	public Long getCprId() {
 		return cprId;
@@ -265,6 +270,14 @@ public class VisitDetail extends AttributeModifiedSupport {
 
 	public void setExtensionDetail(ExtensionDetail extensionDetail) {
 		this.extensionDetail = extensionDetail;
+	}
+
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
 	}
 
 	public static VisitDetail from(Visit visit) {

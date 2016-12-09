@@ -58,7 +58,8 @@ angular.module('os.biospecimen.specimen.detail', [])
             } else {
               $state.go('specimen-detail.overview', angular.extend({specimenId: parentId}, params));
             }
-          }     
+          },
+          forceDelete: true
         }
       );
     }

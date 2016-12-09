@@ -217,10 +217,16 @@ public class SpecimensController {
 	@RequestMapping(method = RequestMethod.DELETE, value="/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public SpecimenInfo deleteSpecimen(@PathVariable("id") Long specimenId) {
+	public SpecimenInfo deleteSpecimen(
+			@PathVariable("id")
+			Long specimenId,
+
+			@RequestParam(value = "forceDelete", required = false, defaultValue = "false")
+			boolean forceDelete) {
+
 		CpEntityDeleteCriteria crit = new CpEntityDeleteCriteria();
 		crit.setId(specimenId);
-		crit.setForceDelete(false);
+		crit.setForceDelete(forceDelete);
 
 		ResponseEvent<List<SpecimenInfo>> resp = specimenSvc.deleteSpecimens(getRequest(Collections.singletonList(crit)));
 		resp.throwErrorIfUnsuccessful();

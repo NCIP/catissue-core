@@ -4,6 +4,7 @@ package com.krishagni.catissueplus.core.biospecimen.services;
 import java.util.List;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.events.CpEntityDeleteCriteria;
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.events.LabelPrintJobSummary;
 import com.krishagni.catissueplus.core.biospecimen.events.PrintVisitNameDetail;
@@ -32,7 +33,7 @@ public interface VisitService {
 	
 	public ResponseEvent<List<DependentEntityDetail>> getDependentEntities(RequestEvent<EntityQueryCriteria> req);
 	
-	public ResponseEvent<VisitDetail> deleteVisit(RequestEvent<EntityQueryCriteria> req);	
+	public ResponseEvent<VisitDetail> deleteVisit(RequestEvent<CpEntityDeleteCriteria> req);
 			
 	public ResponseEvent<VisitSpecimenDetail> collectVisitAndSpecimens(RequestEvent<VisitSpecimenDetail> req);
 

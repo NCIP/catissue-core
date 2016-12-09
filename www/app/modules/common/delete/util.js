@@ -82,7 +82,8 @@ angular.module('os.common.delete')
               entity: object,
               entityIds: entityIds,
               confirmDelete: confirmDelete,
-              successMessage: successMessage
+              successMessage: successMessage,
+              bulkDelete: true
             }
           },
           dependentEntities: function() {
