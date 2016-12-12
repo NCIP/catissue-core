@@ -1217,7 +1217,7 @@ edu.common.de.SelectField = function(id, field, args) {
 
     timeout = setTimeout(
       function() { 
-        optionsSvc.getOptions(field.name, qTerm, qCallback); 
+        optionsSvc.getOptions(field.fqn, qTerm, qCallback); 
       }, 
       timeInterval);
   };
