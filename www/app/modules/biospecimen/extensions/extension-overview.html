@@ -46,9 +46,6 @@
       <a href="{{attr.$$fileDownloadUrl}}" ng-if="!!attr.value">{{attr.value.filename}}</a>
       <span ng-if="!attr.value" translate="common.not_specified">Not Specified</span>
     </span>
-    <span ng-switch-when="datePicker">
-      {{attr.value | date: global.dateFmt | osNoValue}}
-    </span>
     <span ng-switch-default>
       <span ng-switch on="!!attr.displayValue">
         <span ng-switch-when="true">{{attr.displayValue | osNoValue}}</span>

@@ -3,6 +3,7 @@ package com.krishagni.catissueplus.core.de.domain;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,12 +20,14 @@ import com.krishagni.catissueplus.core.biospecimen.domain.BaseExtensionEntity;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.MessageUtil;
+import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail.AttrDetail;
 import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
 import edu.common.dynamicextensions.domain.nui.Container;
+import edu.common.dynamicextensions.domain.nui.DatePicker;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
 import edu.common.dynamicextensions.napi.ControlValue;
@@ -492,7 +495,19 @@ public abstract class DeObject {
 		}
 
 		public String getDisplayValue() {
-			return ctrlValue.getControl().toDisplayValue(ctrlValue.getValue());
+			String displayValue = ctrlValue.getControl().toDisplayValue(ctrlValue.getValue());
+
+			//
+			// Hack: DatePicker should have returned display value in required format;
+			// but the UI and backend formats differ
+			//
+			if (StringUtils.isNotBlank(displayValue) && ctrlValue.getControl() instanceof DatePicker) {
+				DatePicker dateCtrl = (DatePicker)ctrlValue.getControl();
+				Date date = dateCtrl.fromString(displayValue);
+				displayValue = dateCtrl.isDateTimeFmt() ? Utility.getDateTimeString(date) : Utility.getDateString(date);
+			}
+
+			return displayValue;
 		}
 
 		public String getDisplayValue(String defValue) {
