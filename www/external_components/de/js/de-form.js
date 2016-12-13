@@ -1193,9 +1193,14 @@ edu.common.de.SelectField = function(id, field, args) {
 
   this.control = null;
   
-  this.isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox')
+  this.isMultiSelect = (field.type == 'listbox' || field.type == 'multiSelectListbox');
 
-  this.value = this.isMultiSelect ? [] : "";
+  this.defaultValue = field.defaultValue ? field.defaultValue.value : '';
+
+  this.value = this.defaultValue;
+  if (this.isMultiSelect) {
+    this.value = this.defaultValue ? [this.defaultValue] : [];
+  }
 
   this.validator;
 
@@ -1217,7 +1222,7 @@ edu.common.de.SelectField = function(id, field, args) {
 
     timeout = setTimeout(
       function() { 
-        optionsSvc.getOptions(field.fqn, qTerm, qCallback); 
+        optionsSvc.getOptions(field.fqn, qTerm, qCallback);
       }, 
       timeInterval);
   };
