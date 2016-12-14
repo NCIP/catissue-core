@@ -87,7 +87,9 @@ public enum CpErrorCode implements ErrorCode {
 
 	RPT_FILE_NOT_FOUND,
 
-	INV_CONT_SEL_STRATEGY;
+	INV_CONT_SEL_STRATEGY,
+
+	CANNOT_ENABLE_BARCODING;
 	
 	@Override
 	public String code() {

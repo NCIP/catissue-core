@@ -121,8 +121,9 @@ public class ExtensionsImporter implements ObjectImporter<Map<String, Object>, M
 		} else if (entityType.equals("Specimen") || entityType.equals("SpecimenEvent")) {
 			String label = (String)extnObj.get("specimenLabel");
 			String cpShortTitle = (String)extnObj.get("cpShortTitle");
+			String barcode = (String)extnObj.get("barcode");
 
-			Specimen specimen = specimenResolver.getSpecimen(cpShortTitle, label);
+			Specimen specimen = specimenResolver.getSpecimen(null, cpShortTitle, label, barcode);
 			objectId = specimen.getId();
 			cp = specimen.getCollectionProtocol();
 		}

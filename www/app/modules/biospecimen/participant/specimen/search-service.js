@@ -1,10 +1,12 @@
 angular.module('os.biospecimen.specimen.search', ['os.biospecimen.models'])
-  .factory('SpecimenSearchSvc', function($state, Specimen, Alerts) {
+  .factory('SpecimenSearchSvc', function($state, $q, Specimen, Alerts, CollectionProtocol) {
     var matchingSpecimens = [];
     var searchKey = undefined;
+    var barcodingEnabled = undefined;
 
     function search(searchData) {
-      Specimen.listByLabels(searchData.label).then(
+      var opts = {label: searchData.label, barcode: searchData.label};
+      Specimen.query(opts).then(
         function(specimens) {
           if (specimens == undefined || specimens.length == 0) {
             Alerts.error('search.error', {entity: 'Specimen', key: searchData.label});
@@ -28,6 +30,21 @@ angular.module('os.biospecimen.specimen.search', ['os.biospecimen.models'])
       return searchKey;
     }
 
+    function isBarcodingEnabled() {
+      if (barcodingEnabled != undefined) {
+        var deferred = $q.defer();
+        deferred.resolve(barcodingEnabled);
+        return deferred.promise;
+      }
+
+      return CollectionProtocol.getBarcodingEnabled().then(
+        function(setting) {
+          barcodingEnabled = setting;
+          return barcodingEnabled;
+        }
+      );
+    }
+
     function showSpecimenDetail(specimen) {
       var params = {
         cpId: specimen.cpId,
@@ -45,13 +62,22 @@ angular.module('os.biospecimen.specimen.search', ['os.biospecimen.models'])
 
       search: search,
 
-      showSpecimenDetail: showSpecimenDetail
+      showSpecimenDetail: showSpecimenDetail,
+
+      isBarcodingEnabled: isBarcodingEnabled
     };
   })
   .controller('SpecimenResultsView', function($scope, specimens, searchKey, SpecimenSearchSvc) {
     function init() {
       $scope.specimens = specimens;
       $scope.searchKey = searchKey;
+      $scope.barcodingEnabled = false;
+
+      SpecimenSearchSvc.isBarcodingEnabled().then(
+        function(barcodingEnabled) {
+          $scope.barcodingEnabled = barcodingEnabled;
+        }
+      );
     }
 
     $scope.showSpecimenDetail = SpecimenSearchSvc.showSpecimenDetail

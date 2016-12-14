@@ -49,8 +49,10 @@ angular.module('os.administrative.models.order', ['os.common.models'])
       ];
     }
 
-    DistributionOrder.getDistributionDetails = function(labels) {
-      return $http.get(DistributionOrder.url() + 'specimens', {params: {label: labels}}).then(
+    DistributionOrder.getDistributionDetails = function(labels, filterOpts) {
+      filterOpts = filterOpts || {};
+      filterOpts.label = labels;
+      return $http.get(DistributionOrder.url() + 'specimens', {params: filterOpts}).then(
         function(resp) {
           return resp.data.map(
             function(item) {

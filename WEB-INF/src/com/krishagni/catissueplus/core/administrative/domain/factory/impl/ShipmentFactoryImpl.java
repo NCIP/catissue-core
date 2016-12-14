@@ -395,7 +395,7 @@ public class ShipmentFactoryImpl implements ShipmentFactory {
 	}
 	
 	private Specimen getSpecimen(SpecimenInfo info, ShipmentItem.ReceivedQuality receivedQuality, OpenSpecimenException ose) {
-		Specimen existing = specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), ose);
+		Specimen existing = specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), info.getBarcode(), ose);
 		if (existing == null) {
 			return null;
 		}

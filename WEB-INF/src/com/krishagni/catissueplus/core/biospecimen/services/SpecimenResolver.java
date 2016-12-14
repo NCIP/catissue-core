@@ -9,4 +9,8 @@ public interface SpecimenResolver {
 	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label);
 
 	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, OpenSpecimenException ose);
+
+	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, String barcode);
+
+	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, String barcode, OpenSpecimenException ose);
 }

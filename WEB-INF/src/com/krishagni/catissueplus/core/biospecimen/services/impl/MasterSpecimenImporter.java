@@ -159,6 +159,7 @@ public class MasterSpecimenImporter implements ObjectImporter<MasterSpecimenDeta
 		specimenDetail.setVisitId(detail.getVisitId());
 		specimenDetail.setReqCode(detail.getReqCode());
 		specimenDetail.setLabel(detail.getLabel());
+		specimenDetail.setBarcode(detail.getBarcode());
 		specimenDetail.setSpecimenClass(detail.getSpecimenClass());
 		specimenDetail.setType(detail.getType());
 		specimenDetail.setLineage(detail.getLineage());

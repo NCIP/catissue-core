@@ -63,4 +63,6 @@ public class ConfigParams {
 
 		return path + File.separator;
 	}
+
+	public static final String ENABLE_SPMN_BARCODING     = "enable_spmn_barcoding";
 }

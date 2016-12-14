@@ -15,6 +15,8 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	private List<Pair<Long, Long>> siteCps;
 	
 	private List<String> labels;
+
+	private List<String> barcodes;
 	
 	private Long specimenListId;
 	
@@ -73,6 +75,15 @@ public class SpecimenListCriteria extends AbstractListCriteria<SpecimenListCrite
 	
 	public SpecimenListCriteria labels(List<String> labels) {
 		this.labels = labels;
+		return self();
+	}
+
+	public List<String> barcodes() {
+		return barcodes;
+	}
+
+	public SpecimenListCriteria barcodes(List<String> barcodes) {
+		this.barcodes = barcodes;
 		return self();
 	}
 

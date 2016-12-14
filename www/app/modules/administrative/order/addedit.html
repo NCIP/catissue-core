@@ -158,11 +158,11 @@
       </span>
     </div>
 
-    <span ng-if="!order.request">
-      <os-add-items item-list="order.orderItems" on-add="addSpecimens(itemLabels)"
+    <div ng-if="!order.request">
+      <os-add-specimens on-add="addSpecimens(specimens)"
         placeholder="{{'orders.enter_specimen_label' | translate}}">
-      </os-add-items>
-    </span>
+      </os-add-specimens>
+    </div>
 
     <table class="os-table os-dist-spmns-table bulk-edit os-border os-table-muted-hdr"
       ng-if="order.orderItems && order.orderItems.length > 0">
@@ -216,6 +216,7 @@
               <div class="pull-left" style="padding-left: 12px;">
                 <a ui-sref="specimen({specimenId: specimen.id})">
                   <span>{{specimen.label}}</span>
+                  <span ng-if="!!specimen.barcode">({{specimen.barcode}})</span>
                 </a>
               </div>
             </div>

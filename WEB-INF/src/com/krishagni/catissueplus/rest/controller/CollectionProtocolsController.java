@@ -390,6 +390,15 @@ public class CollectionProtocolsController {
 		return resp.getPayload();
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/barcoding-enabled")
+	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
+	public Boolean isSpecimenBarcodingEnabled() {
+		ResponseEvent<Boolean> resp = cpSvc.isSpecimenBarcodingEnabled();
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value="/{id}/workflows")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody		

@@ -30,7 +30,7 @@ angular.module('os.biospecimen.cp')
       key: 'cp.reporting.title',
       caption: ''
     });
-    
+
     return {
       getSettings: settings.getItems,
 

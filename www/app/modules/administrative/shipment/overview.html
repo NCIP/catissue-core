@@ -130,6 +130,9 @@
                 <td class="col">
                   <a ui-sref="specimen({specimenId: specimen.id})">
                     <span>{{specimen.label}}</span>
+                    <span ng-if="!!specimen.barcode">
+                      ({{specimen.barcode}})
+                    </span>
                   </a>
                 </td>
                 <td class="col">

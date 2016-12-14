@@ -66,6 +66,8 @@ public interface CollectionProtocolService {
 
 	public ResponseEvent<String> uploadSopDocument(RequestEvent<FileDetail> req);
 
+	public ResponseEvent<Boolean> isSpecimenBarcodingEnabled();
+
 	//
 	// Consent Tier APIs
 	//

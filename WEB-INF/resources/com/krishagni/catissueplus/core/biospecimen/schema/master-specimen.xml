@@ -78,7 +78,12 @@
     <field>
       <caption>#getMessage("specimen_label")</caption>
       <attribute>label</attribute>
-    </field>  
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_barcode")</caption>
+      <attribute>barcode</attribute>
+    </field>
 
     <field>
       <caption>#getMessage("specimen_class")</caption>

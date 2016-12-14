@@ -71,4 +71,11 @@
       <column name="source_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit and track changes to specimen barcode setting">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="BARCODING_ENABLED" type="${boolean.type}"/>
+      <column name="barcodingEnabled_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

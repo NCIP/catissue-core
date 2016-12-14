@@ -1,6 +1,6 @@
 angular.module('os.administrative.container.locations', ['os.administrative.models'])
   .controller('ContainerLocationsCtrl', function(
-    $scope, $state, container, Container, ContainerUtil, Alerts, Specimen, SpecimenUtil, Util) {
+    $scope, $state, container, barcodingEnabled, Container, ContainerUtil, Alerts, Specimen, SpecimenUtil, Util) {
 
     function init() {
       $scope.ctx.showTree  = true;
@@ -8,7 +8,8 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       $scope.lctx = {
         mapState: 'loading',
         input: {labels: '', noFreeLocs: false, vacateOccupants: false},
-        entityInfo: {}
+        entityInfo: {},
+        barcodingEnabled: barcodingEnabled
       };
 
       if (container.noOfRows > 0 && container.noOfColumns > 0) {
@@ -145,7 +146,13 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         }
       );
 
-      SpecimenUtil.getSpecimens(labels).then(
+      var filterOpts = {};
+      if (!!$scope.lctx.input.useBarcode) {
+        filterOpts.barcode = labels;
+        labels = undefined;
+      }
+
+      SpecimenUtil.getSpecimens(labels, filterOpts).then(
         function(specimens) {
           if (!specimens) {
             return;

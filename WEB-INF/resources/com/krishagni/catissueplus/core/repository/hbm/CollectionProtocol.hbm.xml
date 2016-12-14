@@ -57,6 +57,8 @@
 
     <property name="manualSpecLabelEnabled" column="MANUAL_SPEC_LABEL_ALLOWED"/>
 
+    <property name="barcodingEnabled" column="BARCODING_ENABLED"/>
+
     <property name="unsignedConsentDocumentURL" column="UNSIGNED_CONSENT_DOC_URL"/>
 
     <property name="containerSelectionStrategy" column="CONTAINER_SEL_STRATEGY"/>
@@ -297,6 +299,15 @@
         cp.endDate is not null and
         cp.endDate between :fromDate and :toDate and
         cp.activityStatus = 'Active'
+    </query>
+
+    <query name="getBarcodingEnabledCpIds">
+      select
+        cp.id
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol cp
+      where
+        cp.barcodingEnabled = true
     </query>
   </class>
 </hibernate-mapping>

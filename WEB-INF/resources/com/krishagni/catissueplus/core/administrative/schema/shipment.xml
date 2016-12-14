@@ -107,6 +107,11 @@
           <attribute>label</attribute>
         </field>
 
+        <field>
+          <caption>#getMessage("specimen_barcode")</caption>
+          <attribute>barcode</attribute>
+        </field>
+
         <record>
           <caption>#getMessage("specimen_location")</caption>
           <attribute>storageLocation</attribute>

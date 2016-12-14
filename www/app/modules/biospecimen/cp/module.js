@@ -270,6 +270,6 @@ angular.module('os.biospecimen.cp',
           }
         },
         controller: 'CpReportSettingsCtrl'
-      })
+      });
     });
   

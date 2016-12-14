@@ -17,6 +17,11 @@
     </field>
 
     <field>
+      <caption>#getMessage("specimen_barcode")</caption>
+      <attribute>barcode</attribute>
+    </field>
+
+    <field>
       <caption>#getMessage("specimen_activity_status")</caption>
       <attribute>status</attribute>
     </field>

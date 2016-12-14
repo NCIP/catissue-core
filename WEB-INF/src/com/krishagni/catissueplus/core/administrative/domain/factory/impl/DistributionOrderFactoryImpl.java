@@ -359,7 +359,7 @@ public class DistributionOrderFactoryImpl implements DistributionOrderFactory {
 	}
 	
 	private Specimen getSpecimen(SpecimenInfo info, OpenSpecimenException ose) {
-		return specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), ose);
+		return specimenResolver.getSpecimen(info.getId(), info.getCpShortTitle(), info.getLabel(), info.getBarcode(), ose);
 	}
 
 	private void setOrderItemStatus(DistributionOrderItemDetail detail, DistributionOrderItem item, OpenSpecimenException ose) {

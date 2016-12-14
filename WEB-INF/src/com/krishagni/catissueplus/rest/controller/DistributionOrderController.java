@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.krishagni.catissueplus.core.administrative.events.DistributionOrderSu
 import com.krishagni.catissueplus.core.administrative.events.ReturnedSpecimenDetail;
 import com.krishagni.catissueplus.core.administrative.services.DistributionOrderService;
 import com.krishagni.catissueplus.core.biospecimen.events.SpecimenInfo;
+import com.krishagni.catissueplus.core.biospecimen.repository.SpecimenListCriteria;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.de.events.QueryDataExportResult;
@@ -198,10 +200,21 @@ public class DistributionOrderController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<DistributionOrderItemDetail> getDistributedSpecimens(
-		@RequestParam(value = "label", required = true)
-		List<String> specimenLabels) {
+		@RequestParam(value = "label", required = false)
+		List<String> labels,
 
-		RequestEvent<List<String>> req = getRequest(specimenLabels);
+		@RequestParam(value = "barcode", required = false)
+		List<String> barcodes) {
+
+		if (CollectionUtils.isEmpty(labels) && CollectionUtils.isEmpty(barcodes)) {
+			return Collections.emptyList();
+		}
+
+		SpecimenListCriteria crit = new SpecimenListCriteria()
+			.labels(labels)
+			.barcodes(barcodes);
+
+		RequestEvent<SpecimenListCriteria> req = getRequest(crit);
 		ResponseEvent<List<DistributionOrderItemDetail>> resp = distributionService.getDistributedSpecimens(req);
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

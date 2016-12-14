@@ -33,9 +33,8 @@
       </span>
     </div>
 
-    <os-add-items item-list="specimens" on-add="addSpecimens(itemLabels)"
-      placeholder="{{'specimens.bulk_events.enter_specimen_label' | translate}}">
-    </os-add-items>
+    <os-add-specimens on-add="addSpecimens(specimens)" placeholder="{{'specimens.bulk_events.enter_specimen_label' | translate}}">
+    </os-add-specimens>
 
     <table class="os-table bulk-edit os-border os-table-muted-hdr" ng-if="specimens && specimens.length > 0">
       <thead class="os-table-head">
@@ -53,6 +52,9 @@
           <td class="col">
             <a ui-sref="specimen({specimenId: spec.id})">
               <span>{{spec.label}}</span>
+              <span ng-if="!!spec.barcode">
+                ({{spec.barcode}})
+              </span>
             </a>
           </td>
           

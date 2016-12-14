@@ -221,18 +221,14 @@ angular.module('os.administrative.order.addedit', ['os.administrative.models', '
       $scope.order.requester = '';
     }
 
-    $scope.addSpecimens = function(labels) {
-      return SpecimenUtil.getSpecimens(labels).then(
-        function (specimens) {
-          if (!specimens) {
-            return false;
-          }
+    $scope.addSpecimens = function(specimens) {
+      if (!specimens) {
+        return false;
+      }
 
-          ignoreQtyWarning = false;
-          Util.addIfAbsent($scope.order.orderItems, getOrderItems(specimens), 'specimen.id');
-          return true;
-        }
-      );
+      ignoreQtyWarning = false;
+      Util.addIfAbsent($scope.order.orderItems, getOrderItems(specimens), 'specimen.id');
+      return true;
     }
 
     $scope.removeOrderItem = function(orderItem) {

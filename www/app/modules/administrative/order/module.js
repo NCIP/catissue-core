@@ -121,6 +121,11 @@ angular.module('os.administrative.order',
         url: '/return-specimens',
         templateUrl: 'modules/administrative/order/return-specimens.html',
         controller: 'OrderReturnSpecimensCtrl',
+        resolve: {
+          barcodingEnabled: function(CollectionProtocol) {
+            return CollectionProtocol.getBarcodingEnabled();
+          }
+        },
         parent: 'order-root'
       });
   });

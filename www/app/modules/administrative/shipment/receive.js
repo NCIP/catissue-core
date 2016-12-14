@@ -22,6 +22,14 @@ angular.module('os.administrative.shipment.receive', ['os.administrative.models'
       return true;
     }
 
+    //
+    // initSpmnOpts is used during shipment to allow users select 
+    // specimens that are suitable for shipment. No such thing exists
+    // during receive; therefore it is assigned to behave same way
+    // as pass through.
+    //
+    $scope.initSpmnOpts = $scope.passThrough;
+
     $scope.receive = function() {
       var shipment = angular.copy($scope.shipment);
       shipment.status = "Received";

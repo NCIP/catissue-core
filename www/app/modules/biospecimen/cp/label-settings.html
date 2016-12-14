@@ -55,6 +55,13 @@
         <strong class="key key-sm" translate="cp.label_format.manual">User Inputs Allowed for</strong>
         <span class="value value-md">{{settingCtx.userInputLabels | osNoValue}}</span>
       </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.barcoding">Specimen Barcoding</strong>
+        <span class="value value-md">
+          {{settingCtx.cp.barcodingEnabled | osBoolValue: 'common.enabled': 'common.disabled': 'common.not_specified'}}
+        </span>
+      </li>
     </ul>
 
     <div class="os-section os-line-section">
@@ -150,8 +157,9 @@
         <span translate="cp.label_format.specimen">Specimen</span>
       </label>
       <div class="col-xs-6">
-        <input type="text" ng-model="settingCtx.cp.specimenLabelFmt" class="form-control" 
-          placeholder="{{'cp.specimen_label_fmt' | translate}}">
+        <input name="specimenLabelFmt" type="text" ng-model="settingCtx.cp.specimenLabelFmt" class="form-control"
+          placeholder="{{'cp.specimen_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.specimenLabelFmt"></div>
       </div>
     </div>
     
@@ -160,8 +168,9 @@
         <span translate="cp.label_format.derivative">Derivative</span>
       </label>
       <div class="col-xs-6">
-        <input type="text" ng-model="settingCtx.cp.derivativeLabelFmt" class="form-control" 
-          placeholder="{{'cp.derivative_label_fmt' | translate}}">
+        <input name="derivativeLabelFmt" type="text" ng-model="settingCtx.cp.derivativeLabelFmt" class="form-control"
+          placeholder="{{'cp.derivative_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.derivativeLabelFmt"></div>
       </div>
     </div>
 
@@ -170,8 +179,9 @@
         <span translate="cp.label_format.aliquot">Aliquot</span>
       </label>
       <div class="col-xs-6">
-        <input type="text" ng-model="settingCtx.cp.aliquotLabelFmt" class="form-control" 
-          placeholder="{{'cp.aliquot_label_fmt' | translate}}">
+        <input name="aliquotLabelFmt" type="text" ng-model="settingCtx.cp.aliquotLabelFmt" class="form-control"
+          placeholder="{{'cp.aliquot_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.aliquotLabelFmt"></div>
       </div>
     </div>
 
@@ -192,6 +202,20 @@
           <input type="checkbox" ng-model="settingCtx.cp.manualSpecLabelEnabled">
           <span translate="cp.spec_labels">Specimen Labels</span>
         </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.barcoding">Specimen Barcoding</span>
+      </label>
+      <div class="col-xs-6">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" name="barcoding" ng-model="settingCtx.cp.barcodingEnabled"
+            btn-radio="true" required translate="common.enabled">Enabled</button>
+          <button type="button" class="btn btn-default" name="barcoding" ng-model="settingCtx.cp.barcodingEnabled"
+            btn-radio="false" required translate="common.disabled">Disabled</button>
+        </div>
       </div>
     </div>
 

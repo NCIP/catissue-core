@@ -1,6 +1,6 @@
 angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
   .controller('AddEditSpecimenListCtrl', function(
-    $scope, $state, list, SpecimenList, SpecimensHolder, DeleteUtil, SpecimenUtil, Util) {
+    $scope, $state, list, barcodingEnabled, SpecimenList, SpecimensHolder, DeleteUtil, SpecimenUtil, Util) {
  
     function init() { 
       $scope.list = list;
@@ -8,7 +8,11 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
       $scope.list.isAllowedToDeleteList = isAllowedToDeleteList(); 
       $scope.isQueryOrSpecimenPage =  SpecimensHolder.getSpecimens() != undefined;
       SpecimensHolder.setSpecimens(undefined);
-      $scope.input = {labelText: ''};
+      $scope.input = {
+        labelText: '',
+        barcodingEnabled: barcodingEnabled,
+        useBarcode: false
+      };
     }
 
     function isAllowedToDeleteList() {
@@ -43,7 +47,13 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
     }
 
     function updateSpecimenList(specimenList, labels, status) {
-      return SpecimenUtil.getSpecimens(labels).then(
+      var filterOpts = {};
+      if (!!$scope.input.useBarcode) {
+        filterOpts.barcode = labels;
+        labels = undefined;
+      }
+
+      return SpecimenUtil.getSpecimens(labels, filterOpts).then(
         function(specimens) {
           if (!specimens) {
             return undefined;

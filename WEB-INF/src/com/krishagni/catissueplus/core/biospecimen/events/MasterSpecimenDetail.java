@@ -63,6 +63,8 @@ public class MasterSpecimenDetail {
 	private String reqCode;
 	
 	private String label;
+
+	private String barcode;
 	
 	private String specimenClass;
 	
@@ -332,6 +334,14 @@ public class MasterSpecimenDetail {
 
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 
 	public String getSpecimenClass() {

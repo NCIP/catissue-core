@@ -34,7 +34,9 @@
         <thead class="os-table-head">
           <tr class="row">
             <th class="col os-col-30" translate="specimens.description">Description</th>
-            <th class="col os-col-15" translate="specimens.label">Label</th>
+            <th class="col os-col-15">
+              <span>{{(barcodingEnabled ? 'specimens.barcode' : 'specimens.label') | translate}}</span>
+            </th>
             <th class="col os-col-10" translate="specimens.qty">Quantity</th>
             <th class="col os-col-25">
               <div class="os-col-60 os-no-left-padding">
@@ -104,27 +106,43 @@
                 </span>
               </div>
             </td>
-            <td class="col os-col-15"
-              ng-switch="!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt"> 
-              <div ng-switch-when="true">
-                <span translate="specimens.auto">Auto</span>
-              </div>
-              <div ng-switch-default>
-                <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
+            <td class="col os-col-15" ng-switch="barcodingEnabled">
+              <div ng-switch-when="true" os-unique-items>
+                <div ng-switch="!!specimen.aliquotGrp && !specimen.expanded">
                   <span ng-switch-when="true">
-                    <textarea os-md-input rows="1" name="label" 
-                      ng-model="specimen.aliquotLabels" edit-when="!specimen.pLabel"
-                      ng-blur="assignLabels(specimen, specimen.aliquotLabels)" required>
+                    <textarea os-md-input rows="1" name="barcode"
+                      ng-model="specimen.aliquotBarcodes" edit-when="!specimen.pBarcode"
+                      ng-blur="assignBarcodes(specimen, specimen.aliquotBarcodes)">
                     </textarea>
                   </span>
+
                   <span ng-switch-default>
-                    <input type="text" os-md-input edit-when="!specimen.pLabel"
-                      name="label" ng-model="specimen.label"
-                      ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
-                      ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                    <input type="text" os-md-input edit-when="!specimen.pBarcode"
+                      name="barcode" ng-model="specimen.barcode" os-unique-item>
                   </span>
-                </span>
-                <div os-field-error field="sform.label"></div>
+                </div>
+              </div>
+              <div ng-switch-default ng-switch="!cp.manualSpecLabelEnabled && !specimen.label && !!specimen.labelFmt">
+                <div ng-switch-when="true">
+                  <span translate="specimens.auto">Auto</span>
+                </div>
+                <div ng-switch-default>
+                  <span ng-switch on="!!specimen.aliquotGrp && !specimen.expanded">
+                    <span ng-switch-when="true">
+                      <textarea os-md-input rows="1" name="label"
+                        ng-model="specimen.aliquotLabels" edit-when="!specimen.pLabel"
+                        ng-blur="assignLabels(specimen, specimen.aliquotLabels)" required>
+                      </textarea>
+                    </span>
+                    <span ng-switch-default>
+                      <input type="text" os-md-input edit-when="!specimen.pLabel"
+                        name="label" ng-model="specimen.label"
+                        ng-required="!specimen.labelFmt || cp.manualSpecLabelEnabled"
+                        ng-model-options="{updateOn: 'blur', allowInvalid: 'true'}" os-unique-specimen-label>
+                    </span>
+                  </span>
+                  <div os-field-error field="sform.label"></div>
+                </div>
               </div>
             </td>
             <td class="col os-col-10">

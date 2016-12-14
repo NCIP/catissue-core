@@ -11,7 +11,7 @@ angular.module('openspecimen')
       },
 
       controller: function($scope) {
-        $scope.addSpecimens = function() {
+        $scope.addItems = function() {
           var labels =
             $scope.input.labelText.split(/,|\t|\n/)
               .map(function(label) { return label.trim(); })
@@ -60,7 +60,7 @@ angular.module('openspecimen')
                '    placeholder="' + tAttrs.placeholder + '" os-enable-tab rows="2"> ' +
                '  </textarea> '+
                '  <span class="input-group-btn"> ' +
-               '    <button class="btn btn-primary" ng-click="addSpecimens()" ng-disabled="!input.labelText"> ' +
+               '    <button class="btn btn-primary" ng-click="addItems()" ng-disabled="!input.labelText"> ' +
                '      <span translate="common.buttons.add">Add</span> ' +
                '    </button> ' +
                '  </span> ' +

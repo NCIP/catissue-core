@@ -90,6 +90,11 @@
           <caption>#getMessage("order_item_spec_label")</caption>
           <attribute>label</attribute>
         </field>
+
+        <field>
+          <caption>#getMessage("specimen_barcode")</caption>
+          <attribute>barcode</attribute>
+        </field>
       </record>
 
       <field>

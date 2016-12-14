@@ -21,6 +21,14 @@
     <div class="col-xs-12">
       <form name="returnForm" class="form-horizontal" os-form-validator="returnForm" novalidate>
         <div class="form-group">
+          <div class="os-text-checkbox" ng-if="input.barcodingEnabled">
+            <div class="checkbox">
+              <os-checkbox ng-model="input.useBarcode"></os-checkbox>
+            </div>
+            <div class="message os-ctrl-padding-top">
+              <span translate="specimens.use_barcode">Use Barcode</span>
+            </div>
+          </div>
           <div class="input-group" os-textarea-input-group>
             <textarea class="form-control" style="resize: none;" ng-model="input.labels" rows="2"
               placeholder="{{'orders.paste_return_specimen_labels' | translate}}" os-enable-tab>
@@ -75,6 +83,9 @@
                 <td class="col" colspan="8">
                   <a ui-sref="specimen({specimenId: item.specimen.id})">
                     <span>{{item.specimen.label}}</span>
+                    <span ng-if="!!item.specimen.barcode">
+                      ({{item.specimen.barcode}})
+                    </span>
                   </a>
                 </td>
               </tr>

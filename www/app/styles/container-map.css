@@ -36,6 +36,7 @@
 .os-container-vacate-cb .message {
   float: left;
   color: #707070;
+  padding-right: 15px;
 }
 
 .os-container-map-wrapper {

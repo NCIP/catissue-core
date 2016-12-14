@@ -6,6 +6,7 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
     function init() {
       $scope.shipment = shipment;
+      $scope.spmnOpts = {filters: {}, error: {}};
 
       shipment.request = spmnRequest;
       if (!!spmnRequest) {
@@ -199,10 +200,6 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
 
     $scope.loadRecvSites = loadRecvSites;
 
-    $scope.passThrough = function() {
-      return true;
-    }
-
     $scope.onInstituteSelect = function(instituteName) {
       $scope.shipment.receivingSite = undefined;
       $scope.shipment.notifyUsers = [];
@@ -218,23 +215,29 @@ angular.module('os.administrative.shipment.addedit', ['os.administrative.models'
       );
     }
 
-    $scope.addSpecimens = function(labels) {
-      var filterOpts = {storageLocationSite: $scope.shipment.sendingSite};
-      var errorOpts  = {
-        code  : 'specimens.specimen_not_found_at_send_site',
-        params: {sendingSite: $scope.shipment.sendingSite}
-      };
-
-      return SpecimenUtil.getSpecimens(labels, filterOpts, errorOpts).then(
-        function (specimens) {
-          if (!specimens) {
-            return false;
+    $scope.initSpmnOpts = function(forward) {
+      if (forward) {
+        $scope.spmnOpts = {
+          filters: {
+            storageLocationSite: $scope.shipment.sendingSite
+          },
+          error: {
+            code: 'specimens.specimen_not_found_at_send_site',
+            params: {sendingSite: $scope.shipment.sendingSite}
           }
-
-          Util.addIfAbsent($scope.shipment.shipmentItems, getShipmentItems(specimens), 'specimen.id');
-          return true;
         }
-      );
+      }
+
+      return true;
+    }
+
+    $scope.addSpecimens = function(specimens) {
+      if (!specimens) {
+        return false;
+      }
+
+      Util.addIfAbsent($scope.shipment.shipmentItems, getShipmentItems(specimens), 'specimen.id');
+      return true;
     }
 
     $scope.removeShipmentItem = function(shipmentItem) {

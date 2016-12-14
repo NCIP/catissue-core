@@ -44,17 +44,13 @@ angular.module('os.biospecimen.specimen.bulkaddevent', ['os.biospecimen.models']
       return true;
     }
 
-    $scope.addSpecimens = function(labels) {
-      return SpecimenUtil.getSpecimens(labels).then(
-        function (specimens) {
-          if (!specimens) {
-            return false;
-          }
+    $scope.addSpecimens = function(specimens) {
+      if (!specimens) {
+        return false;
+      }
 
-          Util.addIfAbsent($scope.specimens, specimens, 'id');
-          return true;
-        }
-      );
+      Util.addIfAbsent($scope.specimens, specimens, 'id');
+      return true;
     }
     
     $scope.removeSpecimen = function(index) {

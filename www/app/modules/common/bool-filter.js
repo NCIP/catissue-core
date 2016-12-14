@@ -4,9 +4,9 @@ angular.module('openspecimen')
     return function(input, trueValue, falseValue, notSpecified) {
       var key = 'common.not_specified';
 
-      if (input == 'true') {
+      if (input == true || input == 'true') {
         key = trueValue;
-      } else if (input == 'false' || !notSpecified) {
+      } else if (input == false || input == 'false' || !notSpecified) {
         key = falseValue;
       } else {
         key = notSpecified;

@@ -193,7 +193,7 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 		
 		return events != null && !events.isEmpty() ? events.iterator().next() : null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public CollectionProtocolEvent getCpeByEventLabel(String title, String label) {
@@ -313,6 +313,16 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 				.getNamedQuery(GET_CONSENT_RESP_COUNT)
 				.setLong("consentId", consentId)
 				.uniqueResult()).intValue();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean anyBarcodingEnabledCpExists() {
+		List<Object> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_BARCODING_ENABLED_CP_IDS)
+				.setMaxResults(1)
+				.list();
+		return CollectionUtils.isNotEmpty(result);
 	}
 		
 	@Override
@@ -458,4 +468,6 @@ public class CollectionProtocolDaoImpl extends AbstractDao<CollectionProtocol> i
 	private static final String SR_FQN = SpecimenRequirement.class.getName();
 	
 	private static final String GET_SR_BY_CODE = SR_FQN + ".getByCode";
+
+	private static final String GET_BARCODING_ENABLED_CP_IDS = FQN + ".getBarcodingEnabledCpIds";
 }

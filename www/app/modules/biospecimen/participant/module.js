@@ -297,6 +297,18 @@ angular.module('os.biospecimen.participant',
 
           pendingSpmnsDispInterval: function(SettingUtil) {
             return SettingUtil.getSetting('biospecimen', 'pending_spmns_disp_interval');
+          },
+
+          barcodingEnabled: function(cp, SettingUtil) {
+            if (cp.barcodingEnabled) {
+              return true;
+            }
+
+            return SettingUtil.getSetting('biospecimen', 'enable_spmn_barcoding').then(
+              function(setting) {
+                return setting.value.toLowerCase() == 'true';
+              }
+            );
           }
         },
         controller: 'ParticipantRootCtrl',

@@ -103,6 +103,10 @@ angular.module('os.administrative.container',
         resolve: {
           containerViewState: function(ContainerViewState) {
             return new ContainerViewState();
+          },
+
+          barcodingEnabled: function(CollectionProtocol) {
+            return CollectionProtocol.getBarcodingEnabled();
           }
         },
         abstract: true,

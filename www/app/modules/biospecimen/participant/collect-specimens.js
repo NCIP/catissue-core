@@ -106,7 +106,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
     function(
       $scope, $translate, $state, $document, $q,
       cpr, visit, latestVisit,
-      Visit, Specimen, PvManager, 
+      Visit, Specimen, PvManager,
       CollectSpecimensSvc, Container, Alerts, Util, SpecimenUtil) {
 
       var ignoreQtyWarning = false;
@@ -130,6 +130,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
             }
 
             specimen.pLabel = !!specimen.label;
+            specimen.pBarcode = !!specimen.barcode;
             return specimen;
           }
         );
@@ -193,7 +194,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
           }
 
           initAliquotGrpPrintLabel(specimen);
-          specimen.aliquotLabels = getAliquotGrpLabels(specimen);
+          specimen.aliquotLabels = getAliquotGrpInputs(specimen, 'label');
+          specimen.aliquotBarcodes = getAliquotGrpInputs(specimen, 'barcode');
         });
       }
 
@@ -232,7 +234,8 @@ angular.module('os.biospecimen.participant.collect-specimens',
         setShowInTree(aliquot, expandOrCollapse)
         aliquot.expanded = expandOrCollapse;
         if (!aliquot.expanded) {
-          aliquot.aliquotLabels = getAliquotGrpLabels(aliquot);
+          aliquot.aliquotLabels = getAliquotGrpInputs(aliquot, 'label');
+          aliquot.aliquotBarcodes = getAliquotGrpInputs(aliquot, 'barcode');
         }
       }
 
@@ -265,14 +268,14 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
-      function getAliquotGrpLabels(specimen) {
+      function getAliquotGrpInputs(specimen, prop) {
         return specimen.aliquotGrp.filter(
           function(s) {
-            return !!s.label;
+            return !!s[prop];
           }
         ).map(
           function(s) {
-            return s.label;
+            return s[prop];
           }
         ).join(",");
       }
@@ -527,8 +530,9 @@ angular.module('os.biospecimen.participant.collect-specimens',
       $scope.togglePrintLabels = setAliquotGrpPrintLabel;
         
       $scope.saveSpecimens = function() {
-        if (areDuplicateLabelsPresent($scope.specimens)) {
-          Alerts.error('specimens.errors.duplicate_labels');
+        var prop = $scope.barcodingEnabled ? 'barcode' : 'label';
+        if (areDupInputsPresent($scope.specimens, prop)) {
+          Alerts.error('specimens.errors.duplicate_' + prop + 's');
           return;
         }
 
@@ -600,18 +604,18 @@ angular.module('os.biospecimen.participant.collect-specimens',
         );
       };
 
-      function areDuplicateLabelsPresent(input) {
-        var labels = [];
+      function areDupInputsPresent(input, prop) {
+        var values = [];
         for (var i = 0; i < input.length; ++i) {
-          if (!!input[i].label && labels.indexOf(input[i].label) != -1) {
+          if (!!input[i][prop] && values.indexOf(input[i][prop]) != -1) {
             return true;
           }
 
-          labels.push(input[i].label);
+          values.push(input[i][prop]);
         }
 
         return false;
-      };
+      }
 
       function getSpecimensToSave(cp, uiSpecimens, visited) {
         var result = [];
@@ -653,6 +657,7 @@ angular.module('os.biospecimen.participant.collect-specimens',
           id: uiSpecimen.id,
           initialQty: uiSpecimen.initialQty,
           label: uiSpecimen.label,
+          barcode: uiSpecimen.barcode,
           printLabel: uiSpecimen.printLabel,
           reqId: uiSpecimen.reqId,
           visitId: $scope.visit.id,
@@ -739,20 +744,28 @@ angular.module('os.biospecimen.participant.collect-specimens',
         });
       }
 
-      $scope.assignLabels = function(aliquot, labels) {
-        var labels = Util.splitStr(labels, /,|\t|\n/);
-        var newSpmnsCnt = labels.length - aliquot.aliquotGrp.length;
+      function assignInputs(aliquot, inputs, prop) {
+        var inputs = Util.splitStr(inputs, /,|\t|\n/);
+        var newSpmnsCnt = inputs.length - aliquot.aliquotGrp.length;
         if (newSpmnsCnt > 0) {
           addAliquotsToGrp(aliquot, newSpmnsCnt);
         }
 
         angular.forEach(aliquot.aliquotGrp, function(spmn, $index) {
-          if ($index < labels.length) {
-            spmn.label = labels[$index];
+          if ($index < inputs.length) {
+            spmn[prop] = inputs[$index];
             spmn.selected = true;
             spmn.removed = false;
-          } 
+          }
         });
+      }
+
+      $scope.assignBarcodes = function(aliquot, barcodes) {
+        assignInputs(aliquot, barcodes, 'barcode');
+      }
+
+      $scope.assignLabels = function(aliquot, labels) {
+        assignInputs(aliquot, labels, 'label');
       }
 
       $scope.expandAliquotsGroup = function(aliquot) {

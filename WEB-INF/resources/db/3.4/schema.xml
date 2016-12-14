@@ -487,4 +487,21 @@
       baseTableName="OS_PARTICIPANT_ANON_EVENTS" baseColumnNames="ANONYMIZED_BY"
       referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
   </changeSet>
+
+  <changeSet author="ckhilosiya" id="Enable/disable specimen barcoding">
+    <sql>
+      call add_cfg_prop(
+      'biospecimen', 'enable_spmn_barcoding',
+      'enable_spmn_barcoding', 'enable_spmn_barcoding_desc',
+      'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="CP level setting to enable/disable specimen barcoding">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="BARCODING_ENABLED" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

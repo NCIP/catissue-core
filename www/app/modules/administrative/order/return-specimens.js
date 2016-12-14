@@ -1,6 +1,6 @@
 angular.module('os.administrative.order.returnspecimens', [])
   .controller('OrderReturnSpecimensCtrl', function(
-    $rootScope, $scope, $state, DistributionOrder, Util, Alerts, SpecimenUtil) {
+    $rootScope, $scope, $state, barcodingEnabled, DistributionOrder, Util, Alerts, SpecimenUtil) {
 
     function init() {
       $scope.containerListCache = {};
@@ -8,7 +8,9 @@ angular.module('os.administrative.order.returnspecimens', [])
       $scope.input = {
         labels: '',
         returnItems: {},
-        orderedLabels: []
+        orderedLabels: [],
+        barcodingEnabled: barcodingEnabled,
+        useBarcode: false
       }
     }
 
@@ -80,17 +82,23 @@ angular.module('os.administrative.order.returnspecimens', [])
 
     $scope.getSpecimenDetails = function() {
       var labels = Util.splitStr($scope.input.labels, /,|\t|\n/);
+      var filterOpts = {};
+      if (!!$scope.input.useBarcode) {
+        filterOpts.barcode = labels;
+        labels = [];
+      }
+
       labels = labels.filter(
         function(label) {
           return !$scope.input.returnItems[label.toLowerCase()];
         }
       );
 
-      if (labels.length == 0) {
+      if (labels.length == 0 && (!filterOpts.barcode || filterOpts.barcode.length == 0)) {
         return;
       }
 
-      DistributionOrder.getDistributionDetails(labels).then(
+      DistributionOrder.getDistributionDetails(labels, filterOpts).then(
         function(distItems) {
           resolveDistItems(labels, distItems).then(addReturnItems);
         }

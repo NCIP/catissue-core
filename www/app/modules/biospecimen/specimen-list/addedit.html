@@ -57,6 +57,14 @@
             placeholder="{{'specimen_list.enter_specimen_label' | translate}}">
           </textarea>
           <div os-field-error field="listForm.specimens"></div>
+          <div class="os-text-checkbox" ng-if="input.barcodingEnabled">
+            <div class="checkbox">
+              <os-checkbox ng-model="input.useBarcode"></os-checkbox>
+            </div>
+            <div class="message os-ctrl-padding-top">
+              <span translate="specimens.use_barcode">Use Barcode</span>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -41,6 +41,18 @@ public class SpecimenResolverImpl implements SpecimenResolver {
 	@Override
 	@PlusTransactional
 	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label) {
+		return getSpecimen(specimenId, cpShortTitle, label, (String)null);
+	}
+
+	@Override
+	@PlusTransactional
+	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, OpenSpecimenException ose) {
+		return getSpecimen(specimenId, cpShortTitle, label, null, ose);
+	}
+
+	@Override
+	@PlusTransactional
+	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, String barcode) {
 		Specimen specimen = null;
 		Object key = null;
 
@@ -50,6 +62,9 @@ public class SpecimenResolverImpl implements SpecimenResolver {
 		} else if (StringUtils.isNotBlank(label)) {
 			key = label;
 			specimen = getSpecimen(cpShortTitle, label);
+		} else if (StringUtils.isNotBlank(barcode)) {
+			key = barcode;
+			specimen = daoFactory.getSpecimenDao().getByBarcode(barcode);
 		}
 
 		if (key == null) {
@@ -63,9 +78,9 @@ public class SpecimenResolverImpl implements SpecimenResolver {
 
 	@Override
 	@PlusTransactional
-	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, OpenSpecimenException ose) {
+	public Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, String barcode, OpenSpecimenException ose) {
 		try {
-			return getSpecimen(specimenId, cpShortTitle, label);
+			return getSpecimen(specimenId, cpShortTitle, label, barcode);
 		} catch (OpenSpecimenException e) {
 			e.getErrors().forEach(pe -> ose.addError(pe.error(), pe.params()));
 		}

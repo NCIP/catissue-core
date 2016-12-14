@@ -42,6 +42,14 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       return CollectionProtocol.url() + "sop-documents";
     }
 
+    CollectionProtocol.getBarcodingEnabled = function() {
+      return $http.get(CollectionProtocol.url() + 'barcoding-enabled').then(
+        function(resp) {
+          return resp.data;
+        }
+      );
+    }
+
     CollectionProtocol.getWorkflows = function(cpId) {
       return $http.get(CollectionProtocol.url() + cpId + '/workflows').then(
         function(result) {

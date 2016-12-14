@@ -282,7 +282,7 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			if (!existingCp.isConsentsWaived().equals(cp.isConsentsWaived())) {
 			  ensureConsentTierIsEmpty(existingCp, ose);
 			}
-		
+
 			ose.checkAndThrow();
 			
 			User oldPi = existingCp.getPrincipalInvestigator();
@@ -493,6 +493,25 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 			importEvents(cpDetail.getTitle(), cpDetail.getEvents());
 			
 			return resp;
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
+	@PlusTransactional
+	public ResponseEvent<Boolean> isSpecimenBarcodingEnabled() {
+		try {
+			boolean isEnabled = ConfigUtil.getInstance().getBoolSetting(
+					ConfigParams.MODULE, ConfigParams.ENABLE_SPMN_BARCODING, false);
+
+			if (!isEnabled) {
+				isEnabled = daoFactory.getCollectionProtocolDao().anyBarcodingEnabledCpExists();
+			}
+
+			return ResponseEvent.response(isEnabled);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {

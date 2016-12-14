@@ -105,7 +105,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 			SpecimenQueryCriteria crit = req.getPayload();
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen specimen = getSpecimen(crit.getId(), crit.getCpShortTitle(), crit.getName(), ose);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getCpShortTitle(), crit.getName(), crit.getBarcode(), ose);
 			if (specimen == null) {
 				return ResponseEvent.error(ose);
 			}
@@ -228,7 +228,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
 			for (SpecimenStatusDetail detail : req.getPayload()) {
-				Specimen specimen = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getName(), ose);
+				Specimen specimen = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getName(), detail.getBarcode(), ose);
 				User user = getUser(detail.getUser(), ose);
 				Date date = getDisposalDate(specimen, detail.getDate(), ose);
 				ose.checkAndThrow();
@@ -272,7 +272,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		try {
 			SpecimenQueryCriteria crit = req.getPayload();
 			OpenSpecimenException ose = new OpenSpecimenException(ErrorType.USER_ERROR);
-			Specimen specimen = getSpecimen(crit.getId(), crit.getCpShortTitle(), crit.getName(), ose);
+			Specimen specimen = getSpecimen(crit.getId(), crit.getCpShortTitle(), crit.getName(), crit.getBarcode(), ose);
 			if (specimen == null) {
 				return ResponseEvent.error(ose);
 			}
@@ -574,7 +574,7 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 	}
 
 	private Specimen updateSpecimen(SpecimenDetail detail, OpenSpecimenException ose) {
-		Specimen existing = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getLabel(), ose);
+		Specimen existing = getSpecimen(detail.getId(), detail.getCpShortTitle(), detail.getLabel(), detail.getBarcode(), ose);
 		if (existing == null) {
 			return null;
 		}
@@ -851,6 +851,10 @@ public class SpecimenServiceImpl implements SpecimenService, ObjectStateParamsRe
 		}
 
 		return result;
+	}
+
+	private Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, String barcode, OpenSpecimenException ose) {
+		return specimenResolver.getSpecimen(specimenId, cpShortTitle, label, barcode, ose);
 	}
 
 	private Specimen getSpecimen(Long specimenId, String cpShortTitle, String label, OpenSpecimenException ose) {

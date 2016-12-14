@@ -267,9 +267,9 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 	
 	@Override
 	@PlusTransactional
-	public ResponseEvent<List<DistributionOrderItemDetail>> getDistributedSpecimens(RequestEvent<List<String>> req) {
+	public ResponseEvent<List<DistributionOrderItemDetail>> getDistributedSpecimens(RequestEvent<SpecimenListCriteria> req) {
 		try {
-			List<Specimen> specimens = getReadAccessSpecimensByLabels(req.getPayload());
+			List<Specimen> specimens = getReadAccessSpecimens(req.getPayload());
 			if (CollectionUtils.isEmpty(specimens)) {
 				return ResponseEvent.response(Collections.EMPTY_LIST);
 			}
@@ -358,10 +358,6 @@ public class DistributionOrderServiceImpl implements DistributionOrderService, O
 
 	private List<Specimen> getReadAccessSpecimensByIds(List<Long> specimenIds) {
 		return getReadAccessSpecimens(new SpecimenListCriteria().ids(specimenIds));
-	}
-
-	private List<Specimen> getReadAccessSpecimensByLabels(List<String> specimenLabels) {
-		return getReadAccessSpecimens(new SpecimenListCriteria().labels(specimenLabels));
 	}
 
 	private List<Specimen> getReadAccessSpecimens(SpecimenListCriteria crit) {

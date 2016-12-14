@@ -265,7 +265,8 @@
       "aliquot": "Aliquot",
       "derivative": "Derivative",
       "manual": "User Inputs Allowed",
-      "ppid": "PPID"
+      "ppid": "PPID",
+      "barcoding": "Specimen Barcoding"
     },
 
     "catalog": {
@@ -506,6 +507,9 @@
     "id": "Identifier",
     "lineage": "Lineage",
     "label": "Label",
+    "barcode": "Barcode",
+    "label_barcode": "Label / Barcode",
+    "use_barcode": "Use Barcode",
     "type": "Type",
     "pathology": "Pathology",
     "pathology_status": "Pathology Status",
@@ -654,6 +658,7 @@
 
     "errors": {
       "duplicate_labels": "One or more specimens using same label",
+      "duplicate_barcodes": "One or more specimens using same barcode",
       "insufficient_qty": "Total quantity of aliquots is more than the parent's quantity. Do you want to proceed?",
       "created_on_lt_parent": "Created on time of specimen less than that of parent specimen",
       "created_on_gt_curr_time": "Created on time of specimen greater than current time",
@@ -671,7 +676,7 @@
       "add_event_details": "Add Event Details",
       "select_event": "Select Event",
       "no_specimens_in_list": "No specimens in list to add event. Add at least one specimen",
-      "enter_specimen_label": "To add specimens to list, enter labels separated by a comma, tab or newline and click add",
+      "enter_specimen_label": "To add specimens to list, enter labels or barcodes separated by a comma, tab or newline and click add",
       "details": "Event Details",
       "copy_first_to_all": "Copy First To All",
       "events_saved": "Event saved successfully"
@@ -847,6 +852,7 @@
     "confirm_close": "Are you sure you want to close the distribution protocol {{shortTitle}} ?",
     "add_requirement": "Add Specimen Requirement",
     "dist_spmns_count": "Distributed Specimens",
+    "all_sites": "All current and future sites",
 
     "tooltip": {
       "view_details": "Click to view Distribution Protocol details",
@@ -1077,7 +1083,7 @@
     "assign_positions": "Assign Positions",
     "vacate_positions": "Vacate existing specimens",
     "no_dimless_map": "The map view is not available for dimensionless container",
-    "paste_specimen_labels": "Paste or input specimen labels separated by comma, tab, or newline",
+    "paste_specimen_labels": "Paste or input specimen labels or barcodes separated by comma, tab, or newline",
     "no_free_locs": "Container does not have enough free locations to accommodate input specimen labels",
     "replicated_successfully": "Container {{name}} replicated successfully",
     "multiple_containers_created": "Successfully created {{count}} containers",
@@ -1649,7 +1655,7 @@
     "add_child_specimens": "Add Child Specimens",
     "child_specimens_added": "Successfully added {{count}} child specimens",
     "available_spmns": "Available Specimens",
-    "enter_specimen_label": "Enter specimen labels separated by a comma, tab or newline"
+    "enter_specimen_label": "Enter specimen labels or barcodes separated by a comma, tab or newline"
   },
 
   "orders": {
@@ -1676,7 +1682,7 @@
     "sender_comments": "Sender Comments",
     "details": "Order Details",
     "no_specimens_in_list": "No specimens in order list to distribute. Add at least one specimen",
-    "enter_specimen_label": "To add specimens to distribution list, enter labels separated by a comma, tab or newline and click add",
+    "enter_specimen_label": "To add specimens to distribution list, enter labels or barcodes separated by a comma, tab or newline and click add",
 
     "report_gen_initiated": "Generating distribution order report...",
     "downloading_report": "Downloading distribution order report...",
@@ -1688,7 +1694,7 @@
 
     "return_specimens": "Return Specimens",
     "get_dist_details": "Get Details",
-    "paste_return_specimen_labels": "Paste or scan labels of specimens to be returned",
+    "paste_return_specimen_labels": "Paste or scan labels or barcodes of specimens to be returned",
     "specimens_returned": "{{count}} specimens returned successfully",
     "return_qty": "Return Quantity",
     "freeze_thaw_on_return": "Freeze/Thaw",
@@ -1761,7 +1767,7 @@
     "receiver_comments": "Receiver Comments",
     "details": "Shipment Details",
     "no_specimens_in_list": "No specimens in shipment. Add at least one specimen",
-    "enter_specimen_label": "To add specimens to shipment, enter labels separated by a comma, tab or newline and click add",
+    "enter_specimen_label": "To add specimens to shipment, enter labels or barcodes separated by a comma, tab or newline and click add",
     "multi_site_specimens": "Can't ship specimens from multiple storage sites",
 
     "filters": "Filters",
@@ -1999,7 +2005,9 @@
         "extract_spr_text": "Extract Text from SPR PDF Docs",
         "extract_spr_text_desc": "Enable or disable extraction of text content from SPR PDF documents",
         "participant_lookup_flow": "Participants Lookup Workflow",
-        "participant_lookup_flow_desc": "Spring bean name or fully qualified name of class implementing customised matching participants lookup workflow. For example: bean: customisedLookup or class: com.krishagni.openspecimen.plugins.CustomisedLookup"
+        "participant_lookup_flow_desc": "Spring bean name or fully qualified name of class implementing customised matching participants lookup workflow. For example: bean: customisedLookup or class: com.krishagni.openspecimen.plugins.CustomisedLookup",
+        "enable_spmn_barcoding": "Specimen Barcoding",
+        "enable_spmn_barcoding_desc": "Enable or disable barcoding support for Specimen"
       },
 
       "common": {

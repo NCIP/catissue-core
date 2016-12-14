@@ -61,6 +61,11 @@ angular.module('os.biospecimen.specimenlist',
         url: '/specimen-list/:listId/addedit',
         templateUrl: 'modules/biospecimen/specimen-list/addedit.html',
         controller: 'AddEditSpecimenListCtrl',
+        resolve: {
+          barcodingEnabled: function(CollectionProtocol) {
+            return CollectionProtocol.getBarcodingEnabled();
+          }
+        },
         parent: 'specimen-list-root'
       });
   });
