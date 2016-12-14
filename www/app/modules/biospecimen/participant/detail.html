@@ -15,6 +15,9 @@
       </ul>
       <h3>
         <span translate="{{cpr.ppid}}"></span>
+        <span ng-if="userCtx.hasPhiAccess && (cpr.participant.firstName || cpr.participant.lastName)">
+         ( {{cpr.participant.firstName}} {{cpr.participant.lastName}} )
+        </span>
       </h3>
     </div>
 
