@@ -30,6 +30,7 @@ import edu.common.dynamicextensions.domain.nui.Container;
 import edu.common.dynamicextensions.domain.nui.DatePicker;
 import edu.common.dynamicextensions.domain.nui.SubFormControl;
 import edu.common.dynamicextensions.domain.nui.UserContext;
+import edu.common.dynamicextensions.domain.nui.ValidationErrors;
 import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
@@ -113,6 +114,10 @@ public abstract class DeObject {
 			
 			attrs.clear();
 			attrs.addAll(getAttrs(formData));
+		} catch (ValidationErrors ve) {
+			throw OpenSpecimenException.userError(FormErrorCode.INVALID_DATA, ve.getMessage());
+		} catch(IllegalArgumentException ex) {
+			throw OpenSpecimenException.userError(FormErrorCode.INVALID_DATA, ex.getMessage());
 		} catch (Exception e) {
 			throw OpenSpecimenException.serverError(e);
 		}
@@ -351,6 +356,8 @@ public abstract class DeObject {
 	private FormData prepareFormData(Container container) {
 		FormData formData = FormData.getFormData(container, getAttrValues(), useUdn, null);
 		formData.setRecordId(this.id);
+
+		formData.validate();
 		return formData;		
 	}
 	
