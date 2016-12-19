@@ -13,7 +13,7 @@
         </span>
       </div>
 
-      <div class="os-container-vacate-cb" ng-if="!ctx.dimless">
+      <div class="os-container-vacate-cb">
         <div ng-if="lctx.barcodingEnabled">
           <div class="checkbox">
             <os-checkbox ng-model="lctx.input.useBarcode"></os-checkbox>
@@ -22,11 +22,13 @@
             <span translate="specimens.use_barcode">Use Barcode</span>
           </div>
         </div>
-        <div class="checkbox">
-          <os-checkbox ng-model="lctx.input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
-        </div>
-        <div class="message">
-          <span translate="container.vacate_positions">Vacate existing specimens</span>
+        <div ng-if="!ctx.dimless">
+          <div class="checkbox">
+            <os-checkbox ng-model="lctx.input.vacateOccupants" ng-change="showUpdatedMap()"></os-checkbox>
+          </div>
+          <div class="message">
+            <span translate="container.vacate_positions">Vacate existing specimens</span>
+          </div>
         </div>
       </div>
     </div>

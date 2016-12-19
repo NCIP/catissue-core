@@ -33,7 +33,12 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
 
     function addSpecimens() {
       var labels = Util.splitStr($scope.lctx.input.labels,/,|\t|\n/, false)
-      SpecimenUtil.getSpecimens(labels).then(
+      var filterOpts = {};
+      if (!!$scope.lctx.input.useBarcode) {
+        filterOpts.barcode = labels;
+        labels = undefined;
+      }
+      SpecimenUtil.getSpecimens(labels, filterOpts).then(
         function(specimens) {
           if (!specimens) {
             return;

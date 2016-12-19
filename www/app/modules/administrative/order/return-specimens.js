@@ -30,13 +30,14 @@ angular.module('os.administrative.order.returnspecimens', [])
       }
     }
 
-    function resolveDistItems(labels, distItems) {
-      return SpecimenUtil.resolveSpecimens(labels, getUqSpecimens(distItems)).then(
+    function resolveDistItems(labels, barcodes, distItems) {
+      return SpecimenUtil.resolveSpecimens(labels, barcodes, getUqSpecimens(distItems)).then(
         function(specimens) {
           if (!specimens) {
             return;
           }
 
+          $scope.input.labels = '';
           var spmnsMap = specimens.reduce(function(map, spmn) {
             map[spmn.id] = spmn;
             return map;
@@ -100,7 +101,7 @@ angular.module('os.administrative.order.returnspecimens', [])
 
       DistributionOrder.getDistributionDetails(labels, filterOpts).then(
         function(distItems) {
-          resolveDistItems(labels, distItems).then(addReturnItems);
+          resolveDistItems(labels, filterOpts.barcode, distItems).then(addReturnItems);
         }
       );
     }
