@@ -50,6 +50,9 @@ angular.module('os.administrative.container',
             }
             
             return null;
+          },
+          barcodingEnabled: function(CollectionProtocol) {
+            return CollectionProtocol.getBarcodingEnabled();
           }
         },
         controller: 'ContainerAddEditCtrl',

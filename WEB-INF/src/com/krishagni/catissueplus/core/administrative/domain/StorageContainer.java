@@ -54,7 +54,8 @@ public class StorageContainer extends BaseEntity {
 
 	public enum CellDisplayProp {
 		SPECIMEN_PPID,
-		SPECIMEN_LABEL
+		SPECIMEN_LABEL,
+		SPECIMEN_BARCODE
 	}
 
 	private String name;

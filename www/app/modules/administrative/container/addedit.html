@@ -238,6 +238,10 @@
           <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_LABEL'">
           <span translate="container.cell_display_props.SPECIMEN_LABEL">Specimen Labels</span>
         </label>
+        <label class="radio-inline" ng-if="ctx.barcodingEnabled">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_BARCODE'">
+          <span translate="container.cell_display_props.SPECIMEN_BARCODE">Specimen Barcode</span>
+        </label>
         <label class="radio-inline">
           <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_PPID'">
           <span translate="container.cell_display_props.SPECIMEN_PPID">PPIDs</span>

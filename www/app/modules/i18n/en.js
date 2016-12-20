@@ -1101,6 +1101,7 @@
     "cell_display_prop": "Display in Map",
     "cell_display_props": {
       "SPECIMEN_LABEL": "Specimen Label",
+      "SPECIMEN_BARCODE": "Specimen Barcode",
       "SPECIMEN_PPID" : "PPID"
     },
 

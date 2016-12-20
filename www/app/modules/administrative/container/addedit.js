@@ -1,6 +1,6 @@
 angular.module('os.administrative.container.addedit', ['os.administrative.models'])
   .controller('ContainerAddEditCtrl', function(
-    $scope, $state, $stateParams, $q, container, containerType,
+    $scope, $state, $stateParams, $q, container, containerType, barcodingEnabled,
     Container, ContainerType, CollectionProtocol, PvManager, Util, Alerts) {
 
     var allSpecimenTypes = undefined;
@@ -12,7 +12,7 @@ angular.module('os.administrative.container.addedit', ['os.administrative.models
 
       $scope.container = container;
 
-      $scope.ctx = { mode: 'single', view: '', capacityReq: !!container.capacity};
+      $scope.ctx = {mode: 'single', view: '', capacityReq: !!container.capacity, barcodingEnabled: barcodingEnabled};
       if ($stateParams.mode == 'createHierarchy') {
         $scope.ctx.mode = 'hierarchy';
       }

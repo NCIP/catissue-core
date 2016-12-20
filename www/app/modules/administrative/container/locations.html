@@ -113,6 +113,13 @@
         </a>
       </span>
     </li>
+
+    <li class="item" ng-if="!!lctx.entityInfo.specimen.barcode">
+      <strong class="key key-sm" translate="specimens.barcode">Barcode</strong>
+      <span class="value value-md">
+        {{lctx.entityInfo.specimen.barcode | osNoValue}}
+      </span>
+    </li>
     <li class="item">
       <strong class="key key-sm" translate="specimens.ppid">PPID</strong>
       <span class="value value-md">
