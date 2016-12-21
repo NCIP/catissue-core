@@ -1145,3 +1145,7 @@ h4.os-sub-section-title, h5.os-sub-section-title, h6.os-sub-section-title {
 .form-horizontal .control-text {
   padding-top: 7px;
 }
+
+.os-clear-4 > div:nth-child(4n + 1) {
+  clear: both;
+}
