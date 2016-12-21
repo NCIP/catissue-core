@@ -147,7 +147,7 @@ angular.module('openspecimen')
       fractionDigits = fractionDigits || undefined;
       
       if (angular.isNumber(input) && input >= minRange) {
-        input = input.toExponential(fractionDigits);
+        input = fractionDigits != undefined ? input.toExponential(fractionDigits) : input.toExponential();
       }
 
       return input;
