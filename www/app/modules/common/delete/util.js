@@ -57,8 +57,13 @@ angular.module('os.common.delete')
           }
         },
         resolve: {
+          //
+          // Default behaviour is to delete record without checks for
+          // dependent records. In order to check for dependent records
+          // before deleting, set opts.deleteWithoutCheck = false.
+          //
           dependentEntities: function() {
-            return opts.deleteWithoutCheck || !opts.entity? [] : opts.entity.getDependentEntities();
+            return opts.deleteWithoutCheck === false && opts.entity ? opts.entity.getDependentEntities() : [];
           }
         }
       });
