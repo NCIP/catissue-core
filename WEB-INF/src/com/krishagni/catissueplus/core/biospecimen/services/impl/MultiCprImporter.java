@@ -19,6 +19,7 @@ public class MultiCprImporter implements ObjectImporter<ParticipantRegistrations
 	public ResponseEvent<ParticipantRegistrationsList> importObject(RequestEvent<ImportObjectDetail<ParticipantRegistrationsList>> req) {
 		try {
 			ImportObjectDetail<ParticipantRegistrationsList> detail = req.getPayload();
+			detail.getObject().setForceDelete(true);
 			RequestEvent<ParticipantRegistrationsList> cprReq = new RequestEvent<>(detail.getObject());
 
 			if (detail.isCreate()) {

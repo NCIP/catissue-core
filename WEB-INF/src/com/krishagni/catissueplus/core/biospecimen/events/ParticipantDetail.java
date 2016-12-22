@@ -66,6 +66,11 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 	// Used for CP based custom fields
 	private Long cpId = -1L;
 	
+	//
+	// transient variables specifying action to be performed
+	//
+	private boolean forceDelete;
+
 	public Long getId() {
 		return id;
 	}
@@ -246,6 +251,14 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 
 	public void setCpId(Long cpId) {
 		this.cpId = cpId;
+	}
+
+	public boolean isForceDelete() {
+		return forceDelete;
+	}
+
+	public void setForceDelete(boolean forceDelete) {
+		this.forceDelete = forceDelete;
 	}
 
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {

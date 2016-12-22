@@ -23,4 +23,11 @@ public class ParticipantRegistrationsList {
 	public void setRegistrations(List<CollectionProtocolRegistrationDetail> registrations) {
 		this.registrations = registrations;
 	}
+
+	public void setForceDelete(boolean forceDelete) {
+		if (participant != null) {
+			participant.setForceDelete(forceDelete);
+		}
+		getRegistrations().forEach(cpr -> cpr.setForceDelete(forceDelete));
+	}
 }

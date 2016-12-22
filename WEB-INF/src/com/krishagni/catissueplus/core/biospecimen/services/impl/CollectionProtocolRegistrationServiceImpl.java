@@ -491,8 +491,8 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 
 		if (update) {
 			Participant existing = getParticipant(input);
-			if (Status.isDisabledStatus(existing.getActivityStatus())) {
-				return deleteParticipant(existing);
+			if (Status.isDisabledStatus(inputParticipant.getActivityStatus())) {
+				return deleteParticipant(existing, inputParticipant.isForceDelete());
 			}
 
 			AccessCtrlMgr.getInstance().ensureUpdateParticipantRights(existing);
@@ -661,11 +661,11 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 	//
 	// Deletes all registrations of participant
 	//
-	private ParticipantRegistrationsList deleteParticipant(Participant participant) {
+	private ParticipantRegistrationsList deleteParticipant(Participant participant, boolean forceDelete) {
 		List<CollectionProtocolRegistrationDetail> registrations = new ArrayList<>();
 		for (CollectionProtocolRegistration cpr : participant.getCprs()) {
 			AccessCtrlMgr.getInstance().ensureDeleteCprRights(cpr);
-			cpr.delete();
+			cpr.delete(!forceDelete);
 			registrations.add(CollectionProtocolRegistrationDetail.from(cpr, true));
 		}
 
