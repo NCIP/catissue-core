@@ -41,7 +41,10 @@ public class VisitImporter implements ObjectImporter<VisitDetail, VisitDetail> {
 				resp = visitSvc.patchVisit(visitReq);
 			}
 
-			uploadSprfile(detail.getUploadedFilesDir(), resp.getPayload().getId(), visitDetail.getSprName());
+			if (resp.isSuccessful()) {
+				uploadSprfile(detail.getUploadedFilesDir(), resp.getPayload().getId(), visitDetail.getSprName());
+			}
+
 			return resp;
 		} catch (Exception e) {
 			return ResponseEvent.serverError(e);
