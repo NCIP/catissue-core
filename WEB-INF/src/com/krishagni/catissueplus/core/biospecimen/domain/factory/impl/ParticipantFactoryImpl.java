@@ -71,7 +71,7 @@ public class ParticipantFactoryImpl implements ParticipantFactory {
 	}
 	
 	private void setParticipantAttrs(ParticipantDetail detail, Participant participant, boolean partial, OpenSpecimenException ose) {
-		if (participant.getId() == null && detail.getId() != null) {
+		if (participant.getId() == null && detail.getId() != null && detail.getId() != -1L) {
 			participant.setId(detail.getId());
 		}
 

@@ -587,9 +587,14 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		//
 		//
 		
-		Participant tgtParticipant = daoFactory.getParticipantDao().getById(inputCpr.getParticipant().getId());
 		Participant srcParticipant = existingCpr.getParticipant();
-		
+		Participant tgtParticipant = null;
+		if (inputCpr.getParticipant().getId() != null && inputCpr.getParticipant().getId() != -1L) {
+			tgtParticipant = daoFactory.getParticipantDao().getById(inputCpr.getParticipant().getId());
+		} else {
+			tgtParticipant = inputCpr.getParticipant();
+		}
+
 		Set<CollectionProtocolRegistration> tgtCprs = tgtParticipant.getCprs();
 		for (CollectionProtocolRegistration srcCpr : srcParticipant.getCprs()) {
 			CollectionProtocolRegistration mergedCpr = mergeCpr(srcCpr, tgtCprs);

@@ -195,7 +195,11 @@ public class CollectionProtocolRegistrationFactoryImpl implements CollectionProt
 		}
 
 		Participant participant;
-		if (participantDetail.getId() == null) {
+		if (participantDetail.getId() == null || participantDetail.getId() == -1L) {
+			//
+			// -1L is typically used when participant is sourced from an external database
+			// using lookup or matching services
+			//
 			participant = participantFactory.createParticipant(participantDetail);			
 			if (participant == null) {
 				ose.addError(CprErrorCode.PARTICIPANT_DETAIL_REQUIRED);

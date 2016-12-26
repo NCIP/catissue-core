@@ -155,15 +155,21 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
             }
 
             $scope.allowIgnoreMatches = true;
-            for (var i = 0; i < result.length; ++i) {
-              var matchedAttrs = result[i].matchedAttrs;
-              if (matchedAttrs.length > 1 || (matchedAttrs[0] != 'lnameAndDob')) {
-                $scope.allowIgnoreMatches = false;
-                break;
-              }
-            } 
+            angular.forEach(result,
+              function(match) {
+                if (!match.participant.id && match.participant.source != 'OpenSpecimen') {
+                  //
+                  // Ask API to not use existing participant ID
+                  //
+                  match.participant.id = -1;
+                }
 
-            $scope.allowIgnoreMatches = participant.id || $scope.allowIgnoreMatches;
+                if (match.matchedAttrs.length > 1 || match.matchedAttrs[0] != 'lnameAndDob') {
+                  $scope.allowIgnoreMatches = false;
+                }
+              }
+            );
+
             $scope.matchedParticipants = result;
             inputParticipant = $scope.cpr.participant;
           }
@@ -228,9 +234,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
               Alerts.error('participant.no_matching_participant');
             }
           } else {
-            if (!$scope.cpr.id) {
-              checkPreRegParticipants(result);
-            }
+            checkPreRegParticipants(result);
 
             $scope.allowIgnoreMatches = false;
             $scope.matchedParticipants = result;
