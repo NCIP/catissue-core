@@ -59,13 +59,15 @@ angular.module('os.biospecimen.models.participant', ['os.common.models'])
       };
     };
 
-    Participant.prototype.getMatchingParticipants = function() {
+    Participant.prototype.getMatchingParticipants = function(opts) {
+      opts = opts || {};
+
       var that = this;
       var criteria = this.getMatchingCriteria();
       return $http.post(Participant.url() + '/match', criteria)
         .then(function(result) {
           var response = result.data.filter(function(matched) {
-            return !that.id || matched.participant.id != that.id;
+            return !that.id || !!opts.returnThis || matched.participant.id != that.id;
           });
           
           angular.forEach(response, function(matched) {
