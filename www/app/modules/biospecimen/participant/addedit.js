@@ -100,6 +100,20 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       );
     };
 
+    function checkPreRegParticipants(matchedParticipants) {
+      $scope.partCtx.hasPreRegParticipants = false;
+
+      var matchingCp = function(cpr) { return cpr.cpId == $scope.cpId };
+      angular.forEach(matchedParticipants,
+        function(matchedPart) {
+          matchedPart.preReg = (matchedPart.participant.registeredCps || []).find(matchingCp) != null;
+          if (matchedPart.preReg) {
+            $scope.partCtx.hasPreRegParticipants = true;
+          }
+        }
+      );
+    }
+
     $scope.pmiText = function(pmi) {
       return pmi.siteName + (pmi.mrn ? " (" + pmi.mrn + ")" : "");
     }
@@ -134,6 +148,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
             if (!result || result.length == 0) {
               registerParticipant();
               return;
+            }
+
+            if (!$scope.cpr.id) {
+              checkPreRegParticipants(result);
             }
 
             $scope.allowIgnoreMatches = true;
@@ -210,6 +228,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
               Alerts.error('participant.no_matching_participant');
             }
           } else {
+            if (!$scope.cpr.id) {
+              checkPreRegParticipants(result);
+            }
+
             $scope.allowIgnoreMatches = false;
             $scope.matchedParticipants = result;
 

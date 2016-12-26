@@ -62,7 +62,7 @@ public class LocalDbParticipantLookupImpl implements ParticipantLookupLogic {
 			}
 		}
 		
-		return MatchedParticipant.from(matchedParticipants);		
+		return MatchedParticipant.from(matchedParticipants);
 	}
 	
 	private void addParticipant(Map<Participant, List<String>> matchedParticipants, List<Participant> participants, String matchedAttr) {

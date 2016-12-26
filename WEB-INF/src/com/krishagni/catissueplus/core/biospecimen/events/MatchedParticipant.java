@@ -24,11 +24,9 @@ public class MatchedParticipant {
 		this.matchedAttrs = matchedAttrs;
 	}
 
-
 	public ParticipantDetail getParticipant() {
 		return participant;
 	}
-
 	
 	public void setParticipant(ParticipantDetail participant) {
 		this.participant = participant;

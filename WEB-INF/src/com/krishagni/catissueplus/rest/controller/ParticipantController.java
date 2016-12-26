@@ -80,6 +80,7 @@ public class ParticipantController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public List<MatchedParticipant> getMatchedParticipants(@RequestBody ParticipantDetail criteria) {
+		criteria.setReqRegInfo(true);
 		ResponseEvent<List<MatchedParticipant>> resp = participantSvc.getMatchingParticipants(getRequest(criteria));
 		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();

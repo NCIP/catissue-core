@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
@@ -18,6 +19,7 @@ import com.krishagni.catissueplus.core.common.AttributeModifiedSupport;
 import com.krishagni.catissueplus.core.common.ListenAttributeChanges;
 import com.krishagni.catissueplus.core.de.events.ExtensionDetail;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @ListenAttributeChanges
 public class ParticipantDetail extends AttributeModifiedSupport {
 	private Long id;
@@ -65,6 +67,12 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 
 	// Used for CP based custom fields
 	private Long cpId = -1L;
+
+	//
+	// Used in matching API to decide whether to populate registration
+	// info or not
+	//
+	private boolean reqRegInfo;
 	
 	//
 	// transient variables specifying action to be performed
@@ -259,6 +267,14 @@ public class ParticipantDetail extends AttributeModifiedSupport {
 
 	public void setForceDelete(boolean forceDelete) {
 		this.forceDelete = forceDelete;
+	}
+
+	public boolean isReqRegInfo() {
+		return reqRegInfo;
+	}
+
+	public void setReqRegInfo(boolean reqRegInfo) {
+		this.reqRegInfo = reqRegInfo;
 	}
 
 	public static ParticipantDetail from(Participant participant, boolean excludePhi) {

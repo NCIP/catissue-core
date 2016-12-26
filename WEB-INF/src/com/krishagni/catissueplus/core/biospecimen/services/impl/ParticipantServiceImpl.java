@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.krishagni.catissueplus.core.biospecimen.ConfigParams;
+import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantErrorCode;
 import com.krishagni.catissueplus.core.biospecimen.domain.factory.ParticipantFactory;
@@ -23,6 +24,7 @@ import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.biospecimen.services.ParticipantService;
 import com.krishagni.catissueplus.core.common.OpenSpecimenAppCtxProvider;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
+import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.RequestEvent;
@@ -149,7 +151,12 @@ public class ParticipantServiceImpl implements ParticipantService, InitializingB
 	@PlusTransactional
 	public ResponseEvent<List<MatchedParticipant>> getMatchingParticipants(RequestEvent<ParticipantDetail> req) {
 		try {
-			return ResponseEvent.response(getParticipantLookupLogic().getMatchingParticipants(req.getPayload()));
+			List<MatchedParticipant> matchedParticipants = getParticipantLookupLogic().getMatchingParticipants(req.getPayload());
+			if (req.getPayload().isReqRegInfo()) {
+				addRegInfo(matchedParticipants);
+			}
+
+			return ResponseEvent.response(matchedParticipants);
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
 		} catch (Exception e) {
@@ -297,5 +304,28 @@ public class ParticipantServiceImpl implements ParticipantService, InitializingB
 		}
 
 		participantLookupLogic = result;
+	}
+
+	//
+	// TODO: We are assuming there won't be many matched participants;
+	// If this is slow then we need to issue a single query to obtain
+	// reg info of all matched participants at one go
+	//
+	private void addRegInfo(List<MatchedParticipant> matchedParticipants) {
+		matchedParticipants.forEach(this::addRegInfo);
+	}
+
+	private void addRegInfo(MatchedParticipant matchedParticipant) {
+		ParticipantDetail detail = matchedParticipant.getParticipant();
+		if (detail.getId() == null) {
+			return;
+		}
+
+		Participant participant = daoFactory.getParticipantDao().getById(detail.getId());
+		detail.setRegisteredCps(ParticipantDetail.getCprSummaries(getCprs(participant)));
+	}
+
+	private List<CollectionProtocolRegistration> getCprs(Participant participant) {
+		return AccessCtrlMgr.getInstance().getAccessibleCprs(participant.getCprs());
 	}
 }

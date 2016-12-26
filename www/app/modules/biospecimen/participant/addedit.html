@@ -352,35 +352,43 @@
   </div>
 
   <div class="os-participant-matching-tbl" ng-if="!partCtx.twoStepReg || matchedParticipants.length > 1">
-    <div class="os-table os-table-muted-hdr os-border">
-      <div class="os-table-head">
-        <div class="row">
-          <div class="col os-col-5">&nbsp;</div>
-          <div class="col os-col-15" translate="participant.first_name">First Name</div>
-          <div class="col os-col-15" translate="participant.last_name">Last Name</div>
-          <div class="col os-col-15" translate="participant.birth_date">Birth Date</div>
-          <div class="col os-col-10" translate="participant.uid_short">SSN</div>
-          <div class="col os-col-20" translate="participant.pmis">Medical Identifiers</div>
-          <div class="col os-col-20" translate="participant.matched_attrs">Matched Attributes</div>
-        </div>
-      </div>
-      <div class="os-table-body">
-        <div class="row" ng-repeat="matchedPart in matchedParticipants" 
+    <table class="os-table os-table-muted-hdr os-border">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">&nbsp;</th>
+          <th class="col" translate="participant.first_name">First Name</th>
+          <th class="col" translate="participant.last_name">Last Name</th>
+          <th class="col" translate="participant.birth_date">Birth Date</th>
+          <th class="col" translate="participant.uid_short">SSN</th>
+          <th class="col" translate="participant.pmis">Medical Identifiers</th>
+          <th class="col" translate="participant.matched_attrs">Matched Attributes</th>
+          <th class="col" ng-if="partCtx.hasPreRegParticipants" translate="participant.already_reg">Already Registered?</th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="matchedPart in matchedParticipants" 
           ng-class="{'bg-info': selectedParticipant == matchedPart.participant}">
 
-          <div class="col os-col-5">
+          <td class="col">
             <input type="radio" name="selectedParticipant" ng-checked="selectedParticipant == matchedPart.participant"
-              ng-click="selectParticipant(matchedPart.participant)" value="{{matchedPart.participant.id}}">
-          </div>
-          <div class="col os-col-15">{{matchedPart.participant.firstName | osNoValue}}</div>
-          <div class="col os-col-15">{{matchedPart.participant.lastName | osNoValue}}</div>
-          <div class="col os-col-15">{{matchedPart.participant.birthDate | date: global.dateFmt | osNoValue}}</div>
-          <div class="col os-col-10">{{matchedPart.participant.uid | osNoValue}}</div>
-          <div class="col os-col-20">{{matchedPart.participant.pmis | osArrayJoin: pmiText | osNoValue}}</div>
-          <div class="col os-col-20">{{matchedPart.matchedAttrs | osArrayJoin: matchedAttrText}}</div>
-        </div>
-      </div>
-    </div>
+              ng-click="selectParticipant(matchedPart.participant)" value="{{matchedPart.participant.id}}"
+              ng-if="!matchedPart.preReg">
+          </td>
+          <td class="col">{{matchedPart.participant.firstName | osNoValue}}</td>
+          <td class="col">{{matchedPart.participant.lastName | osNoValue}}</td>
+          <td class="col"> 
+            {{matchedPart.participant.birthDate | date: global.dateFmt | osNoValue}}
+          </td>
+          <td class="col">{{matchedPart.participant.uid | osNoValue}}</td>
+          <td class="col">{{matchedPart.participant.pmis | osArrayJoin: pmiText | osNoValue}}</td>
+          <td class="col">{{matchedPart.matchedAttrs | osArrayJoin: matchedAttrText}}</td>
+          <td class="col" ng-if="partCtx.hasPreRegParticipants" ng-switch on="matchedPart.preReg">
+            <span ng-switch-when="true" translate="common.yes">Yes</span>
+            <span ng-switch-when="false" translate="common.no">No</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <div ng-if="partCtx.twoStepReg">

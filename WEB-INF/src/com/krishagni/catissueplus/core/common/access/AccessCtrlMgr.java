@@ -421,6 +421,22 @@ public class AccessCtrlMgr {
 		throw OpenSpecimenException.userError(RbacErrorCode.ACCESS_DENIED);
 	}
 
+	public List<CollectionProtocolRegistration> getAccessibleCprs(Collection<CollectionProtocolRegistration> cprs) {
+		return getAccessibleCprs(cprs, Operation.READ);
+	}
+
+	public List<CollectionProtocolRegistration> getAccessibleCprs(Collection<CollectionProtocolRegistration> cprs, Operation op) {
+		return cprs.stream().filter(cpr -> {
+				try {
+					ensureCprObjectRights(cpr, op);
+					return true;
+				} catch (OpenSpecimenException e) {
+					return false;
+				}
+			}
+		).collect(Collectors.toList());
+	}
+
 	public boolean ensureCreateCprRights(Long cprId) {
 		return ensureCprObjectRights(cprId, Operation.CREATE);
 	}

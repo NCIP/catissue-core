@@ -382,6 +382,7 @@
 
     "similar_participants": "Following matching participant(s) found",
     "no_matching_participant": "No matching participant found",
+    "already_reg": "Already Registered?",
     "matched_attrs": "Matched Attributes",
     "matching_attr": {
       "empi": "EMPI",

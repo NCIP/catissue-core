@@ -829,19 +829,10 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 			return Collections.emptyList();
 		}
 
-		return participant.getCprs().stream()
-			.filter(otherCpr -> {
-				if (otherCpr.equals(cpr)) {
-					return true;
-				}
-
-				try {
-					AccessCtrlMgr.getInstance().ensureReadCprRights(otherCpr);
-					return true;
-				} catch (OpenSpecimenException e) {
-					return false;
-				}
-			})
-			.collect(Collectors.toList());
+		return AccessCtrlMgr.getInstance().getAccessibleCprs(
+			participant.getCprs().stream()
+				.filter(otherCpr -> !otherCpr.equals(cpr))
+				.collect(Collectors.toList())
+		);
 	}
 }
