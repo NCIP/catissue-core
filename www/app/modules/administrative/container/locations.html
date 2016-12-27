@@ -16,7 +16,7 @@
       <div class="os-container-vacate-cb">
         <div ng-if="lctx.barcodingEnabled">
           <div class="checkbox">
-            <os-checkbox ng-model="lctx.input.useBarcode"></os-checkbox>
+            <os-checkbox ng-model="lctx.input.useBarcode" ng-change="showUpdatedMap()"></os-checkbox>
           </div>
           <div class="message">
             <span translate="specimens.use_barcode">Use Barcode</span>

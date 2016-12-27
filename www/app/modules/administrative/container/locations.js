@@ -7,7 +7,7 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
       $scope.ctx.viewState = 'container-detail.locations';
       $scope.lctx = {
         mapState: 'loading',
-        input: {labels: '', noFreeLocs: false, vacateOccupants: false},
+        input: {labels: '', noFreeLocs: false, vacateOccupants: false, useBarcode: false},
         entityInfo: {},
         barcodingEnabled: barcodingEnabled
       };
@@ -101,11 +101,16 @@ angular.module('os.administrative.container.locations', ['os.administrative.mode
         return;
       }
 
+      var userOpts = {
+        vacateOccupants: $scope.lctx.input.vacateOccupants,
+        useBarcode: $scope.lctx.input.useBarcode
+      };
+
       var result = ContainerUtil.assignPositions(
         container,
         $scope.lctx.pristineMap,
         $scope.lctx.input.labels,
-        $scope.lctx.input.vacateOccupants);
+        userOpts);
 
       $scope.lctx.occupancyMap = result.map;
 
