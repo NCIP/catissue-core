@@ -64,6 +64,18 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
+	public boolean isSystemForm(Long formId) {
+		List<FormContextBean> result = sessionFactory.getCurrentSession()
+				.getNamedQuery(GET_SYSTEM_FORM_CTXTS)
+				.setLong("formId", formId)
+				.setMaxResults(1)
+				.list();
+
+		return !result.isEmpty();
+	}
+
+	@SuppressWarnings("unchecked")
  	@Override
   	public List<FormSummary> getFormsByEntityType(String entityType) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
@@ -549,6 +561,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			}
 		}
 		
+		if (crit.excludeSysForm() != null) {
+			query.setParameter("sysForm", !crit.excludeSysForm());
+		}
+
 		return query;
 	}
 
@@ -576,9 +592,10 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private String getListFormsSql(FormListCriteria crit, boolean countReq) {
 		boolean joinCps = CollectionUtils.isNotEmpty(crit.cpIds());
 		String proj = String.format(countReq ? GET_FORMS_COUNT_PROJ : GET_FORMS_LIST_PROJ, joinCps ? " distinct " : "");
+		String whereClause = crit.excludeSysForm() != null ? SYS_FORM_COND : "";
 		String cpFormsSql =  joinCps ? CP_FORMS_JOIN : "";
 
-		StringBuilder sqlBuilder = new StringBuilder(String.format(GET_ALL_FORMS, proj, cpFormsSql));
+		StringBuilder sqlBuilder = new StringBuilder(String.format(GET_ALL_FORMS, proj, whereClause, cpFormsSql));
 		if (StringUtils.isNotBlank(crit.query())) {
 			sqlBuilder.append(" and c.caption like :caption ");
 		}
@@ -592,7 +609,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
 			sqlBuilder.append(")");
 		}
-		
+
 		if (!countReq) {
 			sqlBuilder.append(" order by modificationTime desc ");
 		}
@@ -788,6 +805,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	
 	private static final String GET_FORM_CTXT = FQN + ".getFormContext";
 	
+	private static final String GET_SYSTEM_FORM_CTXTS = FQN + ".getSysFormContexts";
+
 	private static final String GET_FORM_CTXTS_BY_ID = FQN + ".getFormContextsById";
 	
 	private static final String GET_CPR_FORMS = FQN + ".getCprForms";
@@ -877,6 +896,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"      ic.deleted_on is null and " +
 			"      (ctxt.entity_type is null or ctxt.entity_type != 'Query') and " +
 			"      (cp.identifier is null or cp.activity_status != 'Disabled') " +
+			"      %s " +
 			"    group by " +
 			"      ic.identifier " +
 			"  ) derived on derived.formId = c.identifier " +
@@ -897,4 +917,6 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"  on ctxt.container_id = c.identifier and ctxt.deleted_on is null " +
 			"left join catissue_collection_protocol cp " +
 			"  on ctxt.cp_id = cp.identifier and cp.activity_status != 'Disabled' ";
+
+	private static final String SYS_FORM_COND = " and ctxt.is_sys_form = :sysForm ";
 }

@@ -17,14 +17,13 @@ import com.krishagni.catissueplus.core.de.events.FormRecordSummary;
 import com.krishagni.catissueplus.core.de.events.FormSummary;
 import com.krishagni.catissueplus.core.de.events.ObjectCpDetail;
 
-import krishagni.catissueplus.beans.FormContextBean;
-import krishagni.catissueplus.beans.FormRecordEntryBean;
-
 public interface FormDao extends Dao<FormContextBean>{	
 	public List<FormSummary> getAllFormsSummary(FormListCriteria crit);
 	
 	public Long getAllFormsCount(FormListCriteria crit);
 	
+	public boolean isSystemForm(Long formId);
+
 	public List<FormSummary> getQueryForms();
 			
 	public List<FormSummary> getFormsByEntityType(String entityType);

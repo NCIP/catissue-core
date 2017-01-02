@@ -40,6 +40,11 @@ public class ImportEntityForms extends ImportForms {
 	}
 
 	@Override
+	protected boolean isSysForm(String formFile) {
+		return false;
+	}
+
+	@Override
 	protected FormContextBean getFormContext(String formFile, Long formId) {
 		String entityType = entityMap.get(formFile);
 		FormContextBean formCtx = getDaoFactory().getFormDao().getFormContext(formId, -1L, entityType);
@@ -52,7 +57,7 @@ public class ImportEntityForms extends ImportForms {
 		formCtx.setEntityType(entityType);
 		formCtx.setMultiRecord(false);
 		formCtx.setSortOrder(null);
-		formCtx.setSysForm(true);
+		formCtx.setSysForm(isSysForm(formFile));
 		return formCtx;
 	}
 

@@ -504,4 +504,18 @@
     </addColumn>
   </changeSet>
 
+  <changeSet author="vlonushte" id="Custom field forms are non-system forms">
+    <sql>
+      update 
+        catissue_form_context
+      set 
+        is_sys_form = 0
+      where
+        entity_type in (
+          'CollectionProtocolExtension', 'ParticipantExtension', 'VisitExtension',
+          'SpecimenExtension', 'SiteExtension'
+        ) and
+        deleted_on is null;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

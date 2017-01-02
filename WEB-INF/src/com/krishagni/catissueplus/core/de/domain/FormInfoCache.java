@@ -137,6 +137,10 @@ class FormInfoCache implements FormContextProcessor, FormEventsListener {
 	}
 
 	@Override
+	public void preUpdate(Container form) {
+	}
+
+	@Override
 	public void onUpdate(Container container) {
 		formsCache.remove(container.getName());
 	}

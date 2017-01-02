@@ -9,6 +9,8 @@ public class FormListCriteria extends AbstractListCriteria<FormListCriteria> {
 
 	private Long userId;
 
+	private Boolean excludeSysForm;
+
 	private Set<Long> cpIds;
 	
 	@Override
@@ -31,6 +33,15 @@ public class FormListCriteria extends AbstractListCriteria<FormListCriteria> {
 
 	public FormListCriteria userId(Long userId) {
 		this.userId = userId;
+		return self();
+	}
+
+	public Boolean excludeSysForm() {
+		return excludeSysForm;
+	}
+
+	public FormListCriteria excludeSysForm(Boolean excludeSysForm) {
+		this.excludeSysForm = excludeSysForm;
 		return self();
 	}
 

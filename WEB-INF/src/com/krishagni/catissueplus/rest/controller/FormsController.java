@@ -72,10 +72,14 @@ public class FormsController {
 			int maxResults,
 			
 			@RequestParam(value="formType", required=false, defaultValue="DataEntry")
-			String formType) {
+			String formType,
+
+			@RequestParam(value="excludeSysForms", required=false)
+			Boolean excludeSysForms) {
 		FormListCriteria crit = new FormListCriteria()
 				.query(name)
 				.formType(formType)
+				.excludeSysForm(excludeSysForms)
 				.startAt(startAt)
 				.maxResults(maxResults);
 		

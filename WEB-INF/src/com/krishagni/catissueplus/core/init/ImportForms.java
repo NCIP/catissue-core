@@ -19,6 +19,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.krishagni.catissueplus.core.administrative.domain.User;
 import com.krishagni.catissueplus.core.administrative.repository.UserDao;
 import com.krishagni.catissueplus.core.common.service.TemplateService;
+import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Utility;
 import com.krishagni.catissueplus.core.de.repository.DaoFactory;
 
@@ -97,18 +98,23 @@ public abstract class ImportForms implements InitializingBean {
 			@Override
 			public Void doInTransaction(TransactionStatus status) {
 				try {
+					AuthUtil.setCurrentUser(getSystemUser());
 					importForms(formFiles);
 					return null;
 				} catch (Exception e) {
 					status.setRollbackOnly();
-					throw new RuntimeException(e);					
-				}				
+					throw new RuntimeException(e);
+				} finally {
+					AuthUtil.clearCurrentUser();
+				}
 			}
 		});
 	}
 	
 	protected abstract Collection<String> listFormFiles() throws IOException;
 	
+	protected abstract boolean isSysForm(String formFile);
+
 	protected abstract FormContextBean getFormContext(String formFile, Long formId);
 
 	protected void saveOrUpdateFormCtx(String formFile, Long formId) {
@@ -123,8 +129,7 @@ public abstract class ImportForms implements InitializingBean {
 
 	private void importForms(Collection<String> formFiles)
 	throws Exception {
-		User sysUser = userDao.getSystemUser();
-		UserContext userCtx = getUserContext(sysUser);
+		UserContext userCtx = getUserContext(getSystemUser());
 
 		for (String formFile : formFiles) {
 			InputStream in = null;
@@ -132,7 +137,12 @@ public abstract class ImportForms implements InitializingBean {
 				in = preprocessForms(formFile);
 				String existingDigest = daoFactory.getFormDao().getFormChangeLogDigest(formFile);
 				String newDigest = Utility.getInputStreamDigest(in);
-				if (existingDigest != null && existingDigest.equals(newDigest)) {
+				if (existingDigest != null && (existingDigest.equals(newDigest) || !isSysForm(formFile))) {
+					//
+					// Do not do anything if the form has not changed or is not a system form.
+					// We do not update non-system forms, as they could have been edited by the
+					// users through form designer.
+					//
 					continue;
 				}
 
@@ -163,6 +173,10 @@ public abstract class ImportForms implements InitializingBean {
 				return null;
 			}
 		};
+	}
+
+	private User getSystemUser() {
+		return userDao.getSystemUser();
 	}
 
 	private InputStream preprocessForms(String formFile) {

@@ -31,6 +31,8 @@ public enum FormErrorCode implements ErrorCode {
 	
 	REC_ID_SPECIFIED_FOR_CREATE,
 	
+	SYS_FORM_UPDATE_NOT_ALLOWED,
+
 	SYS_FORM_DEL_NOT_ALLOWED,
 	
 	SYS_REC_DEL_NOT_ALLOWED,

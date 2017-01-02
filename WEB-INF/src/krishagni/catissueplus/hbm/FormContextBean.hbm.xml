@@ -179,6 +179,15 @@
         f.entityType = :entityType and
         f.deletedOn is null
     </query>
+    
+    <query name="getSysFormContexts">
+      from
+        FormContextBean as f
+      where
+        f.containerId = :formId and
+        f.sysForm = true and
+        f.deletedOn is null
+    </query>
                 
     <query name="getFormContextsById"> <!-- TODO used in data entry-->
       from

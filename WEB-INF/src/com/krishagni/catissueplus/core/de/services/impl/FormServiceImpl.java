@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.krishagni.catissueplus.core.administrative.domain.User;
@@ -21,6 +22,7 @@ import com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol;
 import com.krishagni.catissueplus.core.biospecimen.domain.Participant;
 import com.krishagni.catissueplus.core.biospecimen.domain.Specimen;
 import com.krishagni.catissueplus.core.biospecimen.domain.Visit;
+import com.krishagni.catissueplus.core.biospecimen.services.impl.SystemFormUpdatePreventer;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
 import com.krishagni.catissueplus.core.common.access.AccessCtrlMgr;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
@@ -69,13 +71,14 @@ import edu.common.dynamicextensions.napi.ControlValue;
 import edu.common.dynamicextensions.napi.FileControlValue;
 import edu.common.dynamicextensions.napi.FormData;
 import edu.common.dynamicextensions.napi.FormDataManager;
+import edu.common.dynamicextensions.napi.FormEventsNotifier;
 import edu.common.dynamicextensions.napi.impl.FormDataManagerImpl;
 import edu.common.dynamicextensions.nutility.FileUploadMgr;
 import krishagni.catissueplus.beans.FormContextBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean;
 import krishagni.catissueplus.beans.FormRecordEntryBean.Status;
 
-public class FormServiceImpl implements FormService {
+public class FormServiceImpl implements FormService, InitializingBean {
 	private static final String CP_FORM = "CollectionProtocol";
 
 	private static final String PARTICIPANT_FORM = "Participant";
@@ -111,6 +114,11 @@ public class FormServiceImpl implements FormService {
 
 	public void setCtxtProcs(Map<String, List<FormContextProcessor>> ctxtProcs) {
 		this.ctxtProcs = ctxtProcs;
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		FormEventsNotifier.getInstance().addListener(new SystemFormUpdatePreventer(formDao));
 	}
 
 	@Override

@@ -53,6 +53,11 @@ public class ImportSpecimenEventForms extends ImportForms {
 	}
 
 	@Override
+	protected boolean isSysForm(String formFile) {
+		return eventFormsInfo.get(formFile)[0];
+	}
+
+	@Override
 	protected FormContextBean getFormContext(String formFile, Long formId) {
 		FormContextBean formCtx = getDaoFactory().getFormDao().getFormContext(formId, -1L, "SpecimenEvent");
 		if (formCtx == null) {
