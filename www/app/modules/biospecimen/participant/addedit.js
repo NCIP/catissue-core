@@ -106,7 +106,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       var matchingCp = function(cpr) { return cpr.cpId == $scope.cpId };
       angular.forEach(matchedParticipants,
         function(matchedPart) {
-          matchedPart.preReg = (matchedPart.participant.registeredCps || []).find(matchingCp) != null;
+          matchedPart.preReg = (matchedPart.participant.registeredCps || []).filter(matchingCp).length > 0;
           if (matchedPart.preReg) {
             $scope.partCtx.hasPreRegParticipants = true;
           }
