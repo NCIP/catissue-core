@@ -23,19 +23,19 @@
     <ul>
       <li ui-sref-active="active">
         <a ui-sref="dp-detail.overview"> 
-          <i class="fa fa-eye"></i>
+          <span class="fa fa-eye"></span>
           <span class="os-title" translate="dp.menu.overview">Overview</span>
         </a>
       </li>
       <li ui-sref-active="active">
         <a ui-sref="dp-detail.history">
-          <i class="fa fa-history"></i>
+          <span class="fa fa-history"></span>
           <span class="os-title" translate="dp.menu.history">History</span>
         </a>
       </li>
-      <li ng-class="{'active': includesState('req-root')}">
+      <li ng-class="{'active': includesState('req-root')}" ng-if="isEditAllowed">
         <a ui-sref="req-list">
-          <i class="fa fa-list-ol"></i>
+          <span class="fa fa-list-ol"></span>
           <span class="os-title" translate="dp.menu.requirements">Requirements</span>
         </a>
       </li>

@@ -6,17 +6,17 @@
         <span class="fa fa-pencil"></span>
         <span translate="common.buttons.edit">Edit</span>
       </button>
-      <button show-if-admin="institute" ng-if="distributionProtocol.activityStatus != 'Closed'"
+      <button ng-if="isEditAllowed && distributionProtocol.activityStatus != 'Closed'"
         class="default" ng-click="closeDp()">
         <span class="fa fa-remove"></span>
         <span translate="dp.menu_options.close">Close</span>
       </button>
-      <button show-if-admin="institute" ng-if="distributionProtocol.activityStatus == 'Closed'"
+      <button ng-if="isEditAllowed && distributionProtocol.activityStatus == 'Closed'"
         class="default" ng-click="reopenDp()">
         <span class="fa fa-check"></span>
         <span translate="dp.menu_options.reopen">Reopen</span>
       </button>
-      <button show-if-admin="institute" class="default" class="default" ng-click="deleteDp()">
+      <button ng-if="isEditAllowed" class="default" class="default" ng-click="deleteDp()">
         <span class="fa fa-trash"></span>
         <span translate="dp.menu_options.delete">Delete</span>
       </button>
@@ -94,23 +94,49 @@
         </li>
         
         <li class="item">
-          <strong class="key key-sm" translate="dp.distributing_sites">Distributing Sites</strong>
-          <span class="value value-md" title="{{distributingSites}}">
-            {{distributingSites}}
-          </span>
-        </li>
-
-        <li class="item">
           <strong class="key key-sm" translate="dp.order_report_query">Order Report Query</strong>
           <span class="value value-md" title="{{distributionProtocol.report.title | osNoValue}}">
             {{distributionProtocol.report.title | osNoValue}}
           </span>
         </li>
       </ul>
-    </div>
   
-    <div class="col-xs-8" ng-if="!!distributionProtocol.extensionDetail">
-      <div os-extension-overview ext-object="distributionProtocol.extensionDetail" show-column="2"></div>
+      <div ng-if="!!distributionProtocol.extensionDetail">
+        <div os-extension-overview ext-object="distributionProtocol.extensionDetail" show-column="2"></div>
+      </div>
+
+      <div class="os-section" ng-init="sitesCollapsed=false" ng-if="!!distributionProtocol.distributingSites">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="sitesCollapsed=!sitesCollapsed">
+          <span class="fa" ng-class="{true: 'fa-chevron-circle-right', false: 'fa-chevron-circle-down'}[sitesCollapsed]">
+          </span>
+        </button>
+        <h3 class="os-sub-section-title" translate="dp.distributing_sites">Distributing Sites</h3>
+        <div collapse="sitesCollapsed">
+          <table class="os-table os-table-muted-hdr os-border">
+            <thead class="os-table-head">
+              <tr class="row">
+                <th class="col">
+                  <span translate="dp.institute">Institute</span>
+                </th>
+                <th class="col">
+                  <span translate="dp.sites">Sites</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="os-table-body">
+              <tr class="row" ng-repeat="(institute, sites) in distributionProtocol.distributingSites">
+                <td class="col">
+                  <span>{{institute}}</span>
+                </td>
+                <td class="col">
+                  <span ng-if="!sites || sites.length == 0" translate="dp.all_sites">All current and future sites</span>
+                  <span ng-if="sites.length > 0">{{sites | osArrayJoin}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>

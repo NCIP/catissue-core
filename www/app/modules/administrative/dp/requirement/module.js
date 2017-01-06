@@ -17,7 +17,12 @@ angular.module('os.administrative.dp.requirement',
         url: '/list',
         templateUrl: 'modules/administrative/dp/requirement/list.html',
         controller: 'DprListCtrl',
-        parent: 'req-root'
+        parent: 'req-root',
+        resolve: {
+          requirements: function(distributionProtocol, DistributionProtocolRequirement) {
+            return DistributionProtocolRequirement.query({dpId: distributionProtocol.$id()});
+          }
+        }
       })
       .state('req-addedit', {
         url: '/addedit/:reqId',

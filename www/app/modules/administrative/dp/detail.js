@@ -2,7 +2,6 @@
 angular.module('os.administrative.dp.detail', ['os.administrative.models'])
   .controller('DpDetailCtrl', function($scope, $q, $modal, $translate, currentUser, distributionProtocol, DeleteUtil) {
     $scope.distributionProtocol = distributionProtocol;
-    $scope.distributingSites = '';
     
     function init() {
       $scope.isEditAllowed = isEditAllowed()
@@ -10,8 +9,7 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
     
     function isEditAllowed() {
       var sites = distributionProtocol.distributingSites; // {institute: [sites]}
-      return currentUser.admin ||
-        (currentUser.instituteAdmin && Object.keys(sites).length == 1);
+      return currentUser.admin || (currentUser.instituteAdmin && Object.keys(sites).length == 1);
     }
 
 
@@ -23,26 +21,6 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
 
     $scope.deleteDp = function() {
       DeleteUtil.delete($scope.distributionProtocol, {onDeleteState: 'dp-list'});
-    }
-    
-    function getDistSiteText(distSites) {
-      var str = '';
-      var allSites = [];
-      angular.forEach(distSites,
-        function(sites, inst) {
-          str = '('+ inst +': ';
-          if (sites.length > 0) {
-            str += sites.join(', ');
-          } else {
-            str += $translate.instant('dp.all_sites');
-          }
-          
-          str += ')';
-          allSites.push(str);
-        }
-      );
-      
-      $scope.distributingSites = allSites.join(', ');
     }
     
     $scope.closeDp = function () {
@@ -63,8 +41,5 @@ angular.module('os.administrative.dp.detail', ['os.administrative.models'])
       });
     }
     
-    getDistSiteText($scope.distributionProtocol.distributingSites);
-    
     init();
-    
   });

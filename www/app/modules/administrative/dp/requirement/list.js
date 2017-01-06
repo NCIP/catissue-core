@@ -1,21 +1,10 @@
 angular.module('os.administrative.dp.requirement.list', ['os.administrative.models'])
-  .controller('DprListCtrl', function($scope, distributionProtocol, DistributionProtocolRequirement, DeleteUtil) {
+  .controller('DprListCtrl', function($scope, requirements, DeleteUtil) {
   
     function init() {
-      loadRequirements();
+      $scope.dprs = requirements;
     }
   
-    function loadRequirements() {
-      var params = {
-        dpId : distributionProtocol.$id()
-      };
-      DistributionProtocolRequirement.query(params).then(
-        function(data) {
-          $scope.dprs = data;
-        }
-      );
-    }
-    
     $scope.deleteDpr = function(dpr) {
       DeleteUtil.confirmDelete({
         entity: dpr,

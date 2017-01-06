@@ -337,12 +337,13 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<List<DpRequirementDetail>> getRequirements(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			Long dpId = req.getPayload();
 			DistributionProtocol dp = daoFactory.getDistributionProtocolDao().getById(dpId);
 			if (dp == null) {
 				return ResponseEvent.userError(DistributionProtocolErrorCode.NOT_FOUND);
 			}
+
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(dp);
 			
 			List<DpRequirementDetail> reqDetails = DpRequirementDetail.from(dp.getRequirements());
 			Map<Long, DprStat> distributionStat = getDprDao().getDistributionStatByDp(dpId);
@@ -369,12 +370,12 @@ public class DistributionProtocolServiceImpl implements DistributionProtocolServ
 	@PlusTransactional
 	public ResponseEvent<DpRequirementDetail> getRequirement(RequestEvent<Long> req) {
 		try {
-			AccessCtrlMgr.getInstance().ensureUserIsAdmin();
 			DpRequirement existing = getDprDao().getById(req.getPayload());
 			if (existing == null) {
 				return ResponseEvent.userError(DpRequirementErrorCode.NOT_FOUND);
 			}
-			
+
+			AccessCtrlMgr.getInstance().ensureCreateUpdateDeleteDpRights(existing.getDistributionProtocol());
 			return ResponseEvent.response(DpRequirementDetail.from(existing));
 		} catch (OpenSpecimenException ose) {
 			return ResponseEvent.error(ose);
