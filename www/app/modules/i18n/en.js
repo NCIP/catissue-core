@@ -368,6 +368,7 @@
     "anonymize": "Erase Participant PHI Data",
     "confirm_anonymize": "Are you sure you want to erase all PHI data of participant?",
     "anonymized_successfully": "Successfully erased participant PHI data",
+    "other_cps": "Other Registered Protocols",
 
     "consent": {
       "signed_form": "Signed Consent Form",
