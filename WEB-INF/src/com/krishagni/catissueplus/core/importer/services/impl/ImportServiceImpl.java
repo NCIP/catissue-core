@@ -681,7 +681,7 @@ public class ImportServiceImpl implements ImportService {
 				mergedObj.merge(parsedObj);
 				if (errMsg != null) {
 					//
-					// mark the object as processed whenever an error message is encountered.
+					// mark the object as processed whenever an error is encountered.
 					//
 					mergedObj.addErrMsg(errMsg);
 					mergedObj.setProcessed(true);
