@@ -664,6 +664,9 @@ public class ImportServiceImpl implements ImportService {
 					}
 				} catch (Exception e) {
 					errMsg = e.getMessage();
+					if (errMsg == null) {
+						errMsg = e.getClass().getName();
+					}
 				}
 				
 				String key = objReader.getRowKey();
@@ -673,10 +676,16 @@ public class ImportServiceImpl implements ImportService {
 					mergedObj.setKey(key);
 					mergedObj.setObject(parsedObj);
 				}
-				
-				mergedObj.addErrMsg(errMsg);
+
 				mergedObj.addRow(objReader.getCsvRow());
 				mergedObj.merge(parsedObj);
+				if (errMsg != null) {
+					//
+					// mark the object as processed whenever an error message is encountered.
+					//
+					mergedObj.addErrMsg(errMsg);
+					mergedObj.setProcessed(true);
+				}
 
 				objectsMap.put(key, mergedObj);
 			}
