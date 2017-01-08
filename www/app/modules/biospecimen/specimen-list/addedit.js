@@ -92,9 +92,25 @@ angular.module('os.biospecimen.specimenlist.addedit', ['os.biospecimen.models'])
 
       var status = {patched: false};
       var promise = undefined;
-      if (labels.length == 0 && !!specimenList.id) {
-        promise = specimenList.$patch(specimenList);
-        status.patched = true;
+      if (labels.length == 0) {
+        //
+        // No labels / barcodes inputted by user
+        //
+        if (!!specimenList.id) {
+          //
+          // an existing specimen list; therefore we patch
+          //
+          promise = specimenList.$patch(specimenList);
+          status.patched = true;
+        } else {
+          //
+          // a new specimen list; perhaps being created from other
+          // views like specimen tree or query results view
+          //
+          specimenList.specimens = $scope.list.specimens || [];
+          promise = specimenList.$saveOrUpdate();
+          status.patched = false;
+        }
       } else {
         promise = updateSpecimenList(specimenList, labels, status);
       }

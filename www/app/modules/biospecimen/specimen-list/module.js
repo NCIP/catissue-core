@@ -27,7 +27,7 @@ angular.module('os.biospecimen.specimenlist',
         template: '<div ui-view></div>',
         resolve: {
           list: function($stateParams, SpecimenList) {
-            if (!!$stateParams.listId || $stateParams.listId == 0) {
+            if (!!$stateParams.listId || $stateParams.listId === 0) {
               return SpecimenList.getById($stateParams.listId);
             }
 
