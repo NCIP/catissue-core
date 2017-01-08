@@ -61,6 +61,11 @@ public class ConfigParams {
 			path = ConfigUtil.getInstance().getDataDir() + File.separator + "participant-consents";
 		}
 
+		File consentDir = new File(path);
+		if (!consentDir.exists()) {
+			consentDir.mkdirs();
+		}
+
 		return path + File.separator;
 	}
 
