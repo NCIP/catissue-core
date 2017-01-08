@@ -591,9 +591,12 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
 	private String getListFormsSql(FormListCriteria crit, boolean countReq) {
 		boolean joinCps = CollectionUtils.isNotEmpty(crit.cpIds());
-		String proj = String.format(countReq ? GET_FORMS_COUNT_PROJ : GET_FORMS_LIST_PROJ, joinCps ? " distinct " : "");
-		String whereClause = crit.excludeSysForm() != null ? SYS_FORM_COND : "";
 		String cpFormsSql =  joinCps ? CP_FORMS_JOIN : "";
+		String proj = String.format(countReq ? GET_FORMS_COUNT_PROJ : GET_FORMS_LIST_PROJ, joinCps ? " distinct " : "");
+		String whereClause = "";
+		if (crit.excludeSysForm() != null) {
+			whereClause = crit.excludeSysForm() ? NON_SYS_FORM_COND : SYS_FORM_COND;
+		}
 
 		StringBuilder sqlBuilder = new StringBuilder(String.format(GET_ALL_FORMS, proj, whereClause, cpFormsSql));
 		if (StringUtils.isNotBlank(crit.query())) {
@@ -918,5 +921,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			"left join catissue_collection_protocol cp " +
 			"  on ctxt.cp_id = cp.identifier and cp.activity_status != 'Disabled' ";
 
-	private static final String SYS_FORM_COND = " and ctxt.is_sys_form = :sysForm ";
+	private static final String SYS_FORM_COND = " and ctxt.is_sys_form = :sysForm";
+
+	private static final String NON_SYS_FORM_COND = " and (ctxt.is_sys_form is null or ctxt.is_sys_form = :sysForm) ";
 }
