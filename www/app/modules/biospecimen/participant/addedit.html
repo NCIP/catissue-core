@@ -351,7 +351,7 @@
     </span>
   </div>
 
-  <div class="os-participant-matching-tbl" ng-if="!partCtx.twoStepReg || matchedParticipants.length > 1">
+  <div class="os-participant-matching-tbl">
     <table class="os-table os-table-muted-hdr os-border">
       <thead class="os-table-head">
         <tr class="row">
@@ -391,7 +391,7 @@
     </table>
   </div>
 
-  <div ng-if="partCtx.twoStepReg">
+  <div ng-if="partCtx.twoStepReg && selectedParticipant">
     <div ng-include="'modules/biospecimen/participant/summary.html'"></div>
   </div>
 

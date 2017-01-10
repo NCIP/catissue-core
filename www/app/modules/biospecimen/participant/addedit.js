@@ -240,7 +240,10 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
             $scope.matchedParticipants = result;
 
             inputParticipant = $scope.cpr.participant;
-            $scope.selectParticipant(result[0].participant);
+
+            if (result.length == 1 && !result[0].preReg) {
+              $scope.selectParticipant(result[0].participant);
+            }
           }
         }
       );
