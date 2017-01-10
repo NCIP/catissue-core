@@ -612,7 +612,14 @@ public class CollectionProtocolRegistrationServiceImpl implements CollectionProt
 		if (srcParticipant.isActive()) {
 			srcParticipant.delete();
 		}
-		
+
+		if (tgtParticipant.getId() == null) {
+			//
+			// participant might be sourced from external repository
+			//
+			daoFactory.getParticipantDao().saveOrUpdate(tgtParticipant);
+		}
+
 		return tgtParticipant;
 	}
 	
