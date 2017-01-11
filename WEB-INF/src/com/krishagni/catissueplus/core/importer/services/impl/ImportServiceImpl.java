@@ -753,8 +753,10 @@ public class ImportServiceImpl implements ImportService {
 						});
 
 				if (atomic) {
-					sessionFactory.getCurrentSession().flush();
-					sessionFactory.getCurrentSession().clear();
+					//
+					// Let's give a clean session for every object to be imported
+					//
+					clearSession();
 				}
 
 				if (resp.isSuccessful()) {
@@ -847,6 +849,28 @@ public class ImportServiceImpl implements ImportService {
 			}
 
 			return entityName;
+		}
+
+		private void clearSession() {
+			try {
+				sessionFactory.getCurrentSession().flush();
+			} catch (Exception e) {
+				//
+				// Oops, we encountered error. This happens when we've received database errors
+				// like data truncation error, unique constraint etc ... We can't do much except
+				// log and move forward
+				//
+				logger.info("Error flushing the database session", e);
+			} finally {
+				try {
+					sessionFactory.getCurrentSession().clear();
+				} catch (Exception e) {
+					//
+					// Something severely wrong...
+					//
+					logger.error("Error cleaning the database session", e);
+				}
+			}
 		}
 
 		private String getMsg(String key, Object ... params) {
