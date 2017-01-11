@@ -28,6 +28,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.krishagni.catissueplus.core.common.errors.ErrorType;
 import com.krishagni.catissueplus.core.common.errors.OpenSpecimenException;
 import com.krishagni.catissueplus.core.common.events.ResponseEvent;
 import com.krishagni.catissueplus.core.common.util.AuthUtil;
@@ -78,6 +79,13 @@ public class TransactionalInterceptor {
 		} catch (DataAccessException dae) {
 			throw OpenSpecimenException.serverError(dae.getCause() != null ? dae.getCause() : dae);
 		} catch (Throwable t) {
+			if (t instanceof OpenSpecimenException) {
+				OpenSpecimenException ose = (OpenSpecimenException) t;
+				if (ose.getErrorType() == ErrorType.USER_ERROR) {
+					throw ose;
+				}
+			}
+
 			logger.error("Error doing work inside " + pjp.getSignature(), t);
 			Long exceptionId = handleServerError(t.getCause(), pjp.getArgs());
 			throw OpenSpecimenException.serverError(exceptionId, t);
