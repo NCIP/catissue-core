@@ -677,8 +677,6 @@ public class ImportServiceImpl implements ImportService {
 					mergedObj.setObject(parsedObj);
 				}
 
-				mergedObj.addRow(objReader.getCsvRow());
-				mergedObj.merge(parsedObj);
 				if (errMsg != null) {
 					//
 					// mark the object as processed whenever an error is encountered.
@@ -687,6 +685,8 @@ public class ImportServiceImpl implements ImportService {
 					mergedObj.setProcessed(true);
 				}
 
+				mergedObj.addRow(objReader.getCsvRow());
+				mergedObj.merge(parsedObj);
 				objectsMap.put(key, mergedObj);
 			}
 

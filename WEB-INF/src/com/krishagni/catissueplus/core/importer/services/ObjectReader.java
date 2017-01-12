@@ -89,7 +89,7 @@ public class ObjectReader implements Closeable {
 	
 	public String getRowKey() {
 		return keyColumnIndices.stream()
-			.map(index -> currentRow[index])
+			.map(index -> index < currentRow.length ? currentRow[index] : StringUtils.EMPTY)
 			.collect(Collectors.joining("_"));
 	}
 	
