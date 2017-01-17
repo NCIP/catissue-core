@@ -98,7 +98,7 @@ angular.module('openspecimen')
                   }
                 );
               } else if (scope.options.showSectionValuePct == true) {
-                scope.options.events = false;
+                // scope.options.events = false;
                 total = sumOf(scope.data.values);
                 scope.options.animation = getAnimationOpts(function(value) { return pct(value, total, true); });
               }
