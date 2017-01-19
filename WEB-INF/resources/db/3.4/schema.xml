@@ -518,4 +518,40 @@
         deleted_on is null;
     </sql>
   </changeSet>
+
+  <changeSet author="vpawar" id="PVs hierarchy table">
+    <createTable tableName="OS_PVS_HIERARCHY">
+      <column name="ANCESTOR_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DESCENDANT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique constraint on ancestor, descendant tuple of PVs hierarchy">
+    <createIndex tableName="OS_PVS_HIERARCHY" indexName="OS_PV_HIERARCHY_IDX" unique="true">
+      <column name="ANCESTOR_ID"/>
+      <column name="DESCENDANT_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on PV hierarchy ancestor">
+    <addForeignKeyConstraint constraintName="FK_PV_HIERARCHY_ANCESTOR"
+      baseTableName="OS_PVS_HIERARCHY" baseColumnNames="ANCESTOR_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on PV hierarchy descendant">
+    <addForeignKeyConstraint constraintName="FK_PV_HIERARCHY_DESCENDANT"
+      baseTableName="OS_PVS_HIERARCHY" baseColumnNames="DESCENDANT_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on specimen anatomic site">
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_SPMN_ANATOMIC_SITE_IDX">
+      <column name="TISSUE_SITE"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
