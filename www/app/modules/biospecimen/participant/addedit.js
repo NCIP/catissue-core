@@ -27,7 +27,7 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.cpr = angular.copy(cpr);
 
       $scope.partCtx = {
-        obj: {cpr: $scope.cpr},
+        obj: {cpr: $scope.cpr, cp: cp},
         inObjs: ['cpr'],
         twoStepReg: !cpr.id && (twoStepReg && $stateParams.twoStep == 'true')
       }
