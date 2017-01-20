@@ -24,7 +24,9 @@ import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.krishagni.catissueplus.core.biospecimen.events.FileDetail;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
@@ -46,12 +48,13 @@ import com.krishagni.catissueplus.core.common.util.AuthUtil;
 import com.krishagni.catissueplus.core.common.util.Status;
 import com.krishagni.catissueplus.core.common.util.Utility;
 
-public class ConfigurationServiceImpl implements ConfigurationService, InitializingBean {
+public class ConfigurationServiceImpl implements ConfigurationService, InitializingBean, ApplicationListener<ContextRefreshedEvent> {
 	
-	private Map<String, List<ConfigChangeListener>> changeListeners = 
-			new ConcurrentHashMap<String, List<ConfigChangeListener>>();
+	private Map<String, List<ConfigChangeListener>> changeListeners = new ConcurrentHashMap<>();
 	
 	private Map<String, Map<String, ConfigSetting>> configSettings;
+
+	private Long maxSettingId;
 	
 	private DaoFactory daoFactory;
 	
@@ -355,24 +358,10 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	@Override
 	@PlusTransactional
 	public void reload() {
-		Map<String, Map<String, ConfigSetting>> settingsMap = new ConcurrentHashMap<String, Map<String, ConfigSetting>>();
+		Map<String, Map<String, ConfigSetting>> settingsMap = new ConcurrentHashMap<>();
 		
 		List<ConfigSetting> settings = daoFactory.getConfigSettingDao().getAllSettings();
-		for (ConfigSetting setting : settings) {
-			ConfigProperty prop = setting.getProperty();			
-			Hibernate.initialize(prop.getAllowedValues()); // pre-init
-						
-			Module module = prop.getModule();
-			
-			Map<String, ConfigSetting> moduleSettings = settingsMap.get(module.getName());
-			if (moduleSettings == null) {
-				moduleSettings = new ConcurrentHashMap<String, ConfigSetting>();
-				settingsMap.put(module.getName(), moduleSettings);
-			}
-			
-			moduleSettings.put(prop.getName(), setting);			
-		}
-		
+		addToSettingsMap(settings, settingsMap);
 		this.configSettings = settingsMap;
 		
 		for (List<ConfigChangeListener> listeners : changeListeners.values()) {
@@ -386,7 +375,7 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 	public void registerChangeListener(String module, ConfigChangeListener callback) {
 		List<ConfigChangeListener> listeners = changeListeners.get(module);
 		if (listeners == null) {
-			listeners = new ArrayList<ConfigChangeListener>();
+			listeners = new ArrayList<>();
 			changeListeners.put(module, listeners);
 		}
 		
@@ -512,7 +501,14 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 			}
 		});
 	}
-	
+
+	@Override
+	@PlusTransactional
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		List<ConfigSetting> settings = daoFactory.getConfigSettingDao().getSettingsLaterThan(maxSettingId);
+		addToSettingsMap(settings, configSettings);
+	}
+
 	private boolean isValidSetting(ConfigProperty property, String setting) {
 		if (StringUtils.isBlank(setting)) {
 			return true;
@@ -610,6 +606,27 @@ public class ConfigurationServiceImpl implements ConfigurationService, Initializ
 		File file = new File(getSettingFilesDir() + oldSetting.getValue());
 		if (file.exists()) {
 			file.delete(); // Very dangerous to do! Should we just rename the file?
+		}
+	}
+
+	private void addToSettingsMap(List<ConfigSetting> settings, Map<String, Map<String, ConfigSetting>> settingsMap) {
+		for (ConfigSetting setting : settings) {
+			if (maxSettingId == null || setting.getId() > maxSettingId) {
+				maxSettingId = setting.getId();
+			}
+
+			ConfigProperty prop = setting.getProperty();
+			Hibernate.initialize(prop.getAllowedValues()); // pre-init
+
+			Module module = prop.getModule();
+
+			Map<String, ConfigSetting> moduleSettings = settingsMap.get(module.getName());
+			if (moduleSettings == null) {
+				moduleSettings = new ConcurrentHashMap<>();
+				settingsMap.put(module.getName(), moduleSettings);
+			}
+
+			moduleSettings.put(prop.getName(), setting);
 		}
 	}
 }

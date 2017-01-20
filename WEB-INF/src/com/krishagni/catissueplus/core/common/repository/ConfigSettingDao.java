@@ -6,8 +6,9 @@ import com.krishagni.catissueplus.core.common.domain.ConfigSetting;
 
 public interface ConfigSettingDao extends Dao<ConfigSetting> {
 	
-	public List<ConfigSetting> getAllSettings();
+	List<ConfigSetting> getAllSettings();
 	
-	public List<ConfigSetting> getAllSettingsByModule(String moduleName);
-	
+	List<ConfigSetting> getAllSettingsByModule(String moduleName);
+
+	List<ConfigSetting> getSettingsLaterThan(Long settingId);
 }
