@@ -107,10 +107,10 @@ public class SiteDaoImpl extends AbstractDao<Site> implements SiteDao {
 		if (StringUtils.isNotBlank(listCrit.query())) {
 			query.add(Restrictions.ilike("name", listCrit.query(), listCrit.matchMode()));
 		}
-		
+
 		if (StringUtils.isNotBlank(listCrit.institute())) {
 			query.createAlias("institute", "i")
-				.add(Restrictions.eq("i.name", listCrit.institute()));	
+				.add(Restrictions.eq("i.name", listCrit.institute()));
 		}
 
 		if (CollectionUtils.isNotEmpty(listCrit.includeTypes())) {

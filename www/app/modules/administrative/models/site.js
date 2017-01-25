@@ -43,7 +43,7 @@ angular.module('os.administrative.models.site', ['os.common.models'])
        var opts = {institute: instituteName, listAll: listAll || false, name: searchTerm};
        return getSites(opts);
     }
-    
+
     Site.list = function(opts) {
       return getSites(opts);
     }

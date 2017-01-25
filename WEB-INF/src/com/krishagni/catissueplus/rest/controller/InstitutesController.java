@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.common.events.DeleteEntityOp;
 import com.krishagni.catissueplus.core.common.events.DependentEntityDetail;
@@ -35,37 +37,37 @@ public class InstitutesController {
 
 	@Autowired
 	private HttpServletRequest httpServletRequest;
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public List<InstituteDetail> getInstitutes(
-			@RequestParam(value = "startAt", required = false, defaultValue = "0")
-			int startAt,
-			
-			@RequestParam(value = "maxResults", required = false, defaultValue = "100") 
-			int maxResults,
-			
-			@RequestParam(value = "name", required = false)
-			String name,
-			
-			@RequestParam(value = "exactMatch", required = false, defaultValue = "false")
-			boolean exactMatch,
+		@RequestParam(value = "startAt", required = false, defaultValue = "0")
+		int startAt,
 
-			@RequestParam(value = "includeStats", required = false, defaultValue = "false")
-			boolean includeStats) {
-		
-		InstituteListCriteria crit  = new InstituteListCriteria()
+		@RequestParam(value = "maxResults", required = false, defaultValue = "100")
+		int maxResults,
+
+		@RequestParam(value = "name", required = false)
+		String name,
+
+		@RequestParam(value = "exactMatch", required = false, defaultValue = "false")
+		boolean exactMatch,
+
+		@RequestParam(value = "includeStats", required = false, defaultValue = "false")
+		boolean includeStats) {
+
+		InstituteListCriteria crit = new InstituteListCriteria()
 				.query(name)
 				.exactMatch(exactMatch)
 				.startAt(startAt)
 				.maxResults(maxResults)
 				.includeStat(includeStats);
-		
+
 		RequestEvent<InstituteListCriteria> req = new RequestEvent<InstituteListCriteria>(crit);
 		ResponseEvent<List<InstituteDetail>> resp = instituteSvc.getInstitutes(req);
 		resp.throwErrorIfUnsuccessful();
-		
+
 		return resp.getPayload();
 	}
 
@@ -73,8 +75,8 @@ public class InstitutesController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public Map<String, Long> getInstitutesCount(
-			@RequestParam(value = "name", required = false)
-			String name) {
+		@RequestParam(value = "name", required = false)
+		String name) {
 
 		RequestEvent<InstituteListCriteria> req = new RequestEvent<>(new InstituteListCriteria().query(name));
 		ResponseEvent<Long> resp = instituteSvc.getInstitutesCount(req);
@@ -83,24 +85,24 @@ public class InstitutesController {
 		return Collections.singletonMap("count", resp.getPayload());
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	public InstituteDetail getInstitute(@PathVariable Long id) {
-		InstituteQueryCriteria crit = new InstituteQueryCriteria(); 
+		InstituteQueryCriteria crit = new InstituteQueryCriteria();
 		crit.setId(id);
-		
-		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(crit);		
+
+		RequestEvent<InstituteQueryCriteria> req = new RequestEvent<InstituteQueryCriteria>(crit);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.getInstitute(req);
 		resp.throwErrorIfUnsuccessful();
-		
+
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/byname")
+	@RequestMapping(method = RequestMethod.GET, value = "/byname")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public InstituteDetail getInstituteByName(@RequestParam(value = "name", required = true) String name) {		
+	public InstituteDetail getInstituteByName(@RequestParam(value = "name") String name) {
 		InstituteQueryCriteria crit = new InstituteQueryCriteria();
 		crit.setName(name);
 
@@ -114,47 +116,79 @@ public class InstitutesController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public InstituteDetail createInstitute(@RequestBody InstituteDetail detail) {
-		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(detail);		
+		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(detail);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.createInstitute(req);
 		resp.throwErrorIfUnsuccessful();
-		
+
 		return resp.getPayload();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/{instituteId}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public InstituteDetail updateInstitute(@PathVariable Long instituteId, @RequestBody InstituteDetail instituteDetail) {
+	public InstituteDetail updateInstitute(
+		@PathVariable("id")
+		Long instituteId,
+
+		@RequestBody
+		InstituteDetail instituteDetail) {
+
 		instituteDetail.setId(instituteId);
-		
+
 		RequestEvent<InstituteDetail> req = new RequestEvent<InstituteDetail>(instituteDetail);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.updateInstitute(req);
 		resp.throwErrorIfUnsuccessful();
-		
+
 		return resp.getPayload();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/dependent-entities")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public List<DependentEntityDetail> getDependentEntities(@PathVariable Long id) {
+	public List<DependentEntityDetail> getDependentEntities(@PathVariable("id") Long id) {
 		RequestEvent<Long> req = new RequestEvent<Long>(id);
 		ResponseEvent<List<DependentEntityDetail>> resp = instituteSvc.getDependentEntities(req);
 		resp.throwErrorIfUnsuccessful();
-		
+
 		return resp.getPayload();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	public InstituteDetail deleteInstitute(@PathVariable Long id,
-			@RequestParam(value="close", required=false, defaultValue="false") boolean close) {
+	public InstituteDetail deleteInstitute(
+		@PathVariable("id")
+		Long id,
+
+		@RequestParam(value = "close", required = false, defaultValue = "false")
+		boolean close) {
+
 		DeleteEntityOp deleteEntityOp = new DeleteEntityOp(id, close);
 		RequestEvent<DeleteEntityOp> req = new RequestEvent<DeleteEntityOp>(deleteEntityOp);
 		ResponseEvent<InstituteDetail> resp = instituteSvc.deleteInstitute(req);
 		resp.throwErrorIfUnsuccessful();
-		
+		return resp.getPayload();
+	}
+
+	//
+	// Endpoint added to get list of sites without any authentication context
+	//
+	@RequestMapping(method = RequestMethod.GET, value = "/sites")
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public List<SiteSummary> getSites(
+		@RequestParam(value = "name")
+		String instituteName,
+
+		@RequestParam(value = "siteName", required = false, defaultValue = "")
+		String siteName) {
+
+		SiteListCriteria listCriteria = new SiteListCriteria()
+			.institute(instituteName)
+			.query(siteName);
+
+		ResponseEvent<List<SiteSummary>> resp = instituteSvc.getSites(new RequestEvent<>(listCriteria));
+		resp.throwErrorIfUnsuccessful();
 		return resp.getPayload();
 	}
 }

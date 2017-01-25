@@ -78,4 +78,11 @@
       <column name="barcodingEnabled_MOD" type="${bit.type}"/>
     </addColumn>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit and track changes to user's primary site">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="PRIMARY_SITE_ID" type="${int.type}"/>
+      <column name="primarySite_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

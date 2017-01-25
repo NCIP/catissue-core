@@ -1,6 +1,8 @@
 angular.module('os.administrative.user.addedit', ['os.administrative.models'])
   .controller('UserAddEditCtrl', function($scope, $rootScope, $state, $stateParams,
     user, User, Institute, AuthDomain) {
+
+    var instituteSites = {};
  
     function init() {
       $scope.user = user;
@@ -19,19 +21,46 @@ angular.module('os.administrative.user.addedit', ['os.administrative.models'])
         }
       );
 
-      $scope.institutes = [];
       Institute.query().then(
-        function(result) {
-          angular.forEach(result, function(institute) {
-            $scope.institutes.push(institute.name);
-          });
+        function(institutes) {
+          $scope.institutes = institutes.map(function(institute) { return institute.name });
 
           if (!$scope.user.id && $scope.institutes.length == 1) {
             $scope.user.instituteName = $scope.institutes[0];
+            loadSites($scope.user.instituteName);
           }
-
         }
       );
+    }
+
+    function loadSites(instituteName, siteName) {
+      var sites = instituteSites[instituteName];
+      if (sites && sites.length < 100) {
+        $scope.sites = sites;
+        return;
+      }
+
+      Institute.getSites(instituteName, siteName).then(
+        function(sites) {
+          $scope.sites = sites.map(function(site) { return site.name });
+          if (!siteName) {
+            instituteSites[instituteName] = $scope.sites;
+          }
+        }
+      );
+    }
+
+    $scope.onInstituteSelect = function(instituteName) {
+      $scope.user.primarySite = undefined;
+      loadSites(instituteName);
+    }
+
+    $scope.searchSites = function(siteName) {
+      if (!$scope.user.instituteName) {
+        return;
+      }
+
+      loadSites($scope.user.instituteName, siteName);
     }
 
     $scope.createUser = function() {

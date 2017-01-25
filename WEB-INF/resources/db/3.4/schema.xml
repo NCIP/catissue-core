@@ -554,4 +554,17 @@
       <column name="TISSUE_SITE"/>
     </createIndex>
   </changeSet>
+
+  <changeSet author="vgaikwad" id="Primary site of a user">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="PRIMARY_SITE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on user's primary site">
+    <addForeignKeyConstraint
+      constraintName="FK_USER_PRIMARY_SITE_ID"
+      baseTableName="CATISSUE_USER" baseColumnNames="PRIMARY_SITE_ID"
+      referencedTableName="CATISSUE_SITE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
 </databaseChangeLog>

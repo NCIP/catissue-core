@@ -52,11 +52,16 @@
         </div>
       
         <div class="form-group">
-          <div class="col-xs-12">
-            <os-select ng-model="user.instituteName" list="institutes" 
+          <div class="col-xs-6">
+            <os-select ng-model="user.instituteName" list="institutes" on-select="onInstituteSelect($item)"
               name="institute" placeholder="{{'user.institute' | translate}}" required>
             </os-select>
             <div os-field-error field="userForm.institute"></div>
+          </div>
+          <div class="col-xs-6">
+            <os-select ng-model="user.primarySite" list="sites" refresh="searchSites($select.search)"
+              name="primarySite" placeholder="{{'user.primary_site' | translate}}">
+            </os-select>
           </div>
         </div>
 

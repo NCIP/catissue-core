@@ -26,6 +26,19 @@ angular.module('os.administrative.models.institute', ['os.common.models'])
       );
     };
 
+    Institute.getSites = function (instituteName, siteName) {
+      var params = {name: instituteName};
+      if (siteName) {
+        params.siteName = siteName;
+      }
+
+      return $http.get(Institute.url() + 'sites', {params: params}).then(
+        function(result) {
+          return result.data;
+        }
+      );
+    }
+
     return Institute;
   });
 

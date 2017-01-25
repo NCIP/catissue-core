@@ -9,7 +9,9 @@ import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteEr
 import com.krishagni.catissueplus.core.administrative.domain.factory.InstituteFactory;
 import com.krishagni.catissueplus.core.administrative.events.InstituteDetail;
 import com.krishagni.catissueplus.core.administrative.events.InstituteQueryCriteria;
+import com.krishagni.catissueplus.core.administrative.events.SiteSummary;
 import com.krishagni.catissueplus.core.administrative.repository.InstituteListCriteria;
+import com.krishagni.catissueplus.core.administrative.repository.SiteListCriteria;
 import com.krishagni.catissueplus.core.administrative.services.InstituteService;
 import com.krishagni.catissueplus.core.biospecimen.repository.DaoFactory;
 import com.krishagni.catissueplus.core.common.PlusTransactional;
@@ -185,7 +187,28 @@ public class InstituteServiceImpl implements InstituteService {
 			return ResponseEvent.serverError(e);
 		}
 	}
-	
+
+	//
+	// Returns list of sites for a given institute without any authentication
+	//
+	@Override
+	@PlusTransactional
+	public ResponseEvent<List<SiteSummary>> getSites(RequestEvent<SiteListCriteria> req) {
+		try {
+			SiteListCriteria input = req.getPayload();
+			if (StringUtils.isBlank(input.institute())) {
+				return ResponseEvent.userError(InstituteErrorCode.NAME_REQUIRED);
+			}
+
+			SiteListCriteria curated = new SiteListCriteria().institute(input.institute()).query(input.query());
+			return ResponseEvent.response(SiteSummary.from(daoFactory.getSiteDao().getSites(curated)));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
 	private void ensureUniqueName(String name, OpenSpecimenException ose) {
 		Institute institute = daoFactory.getInstituteDao().getInstituteByName(name);
 		if (institute != null) {

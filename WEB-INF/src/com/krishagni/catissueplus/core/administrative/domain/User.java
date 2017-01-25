@@ -53,8 +53,6 @@ public class User extends BaseEntity implements UserDetails {
 
 	private AuthDomain authDomain;
 
-	private Set<Site> sites = new HashSet<Site>();
-
 	private String emailAddress;
 
 	private String phoneNumber;
@@ -66,6 +64,8 @@ public class User extends BaseEntity implements UserDetails {
 	private String activityStatus;
 
 	private Institute institute;
+
+	private Site primarySite;
 
 	private String address;
 
@@ -126,15 +126,6 @@ public class User extends BaseEntity implements UserDetails {
 		return authDomain;
 	}
 
-	@NotAudited
-	public Set<Site> getSites() {
-		return sites;
-	}
-
-	public void setSites(Set<Site> sites) {
-		this.sites = sites;
-	}
-
 	public void setAuthDomain(AuthDomain authDomain) {
 		this.authDomain = authDomain;
 	}
@@ -169,6 +160,14 @@ public class User extends BaseEntity implements UserDetails {
 	
 	public void setInstitute(Institute institute) {
 		this.institute = institute;
+	}
+
+	public Site getPrimarySite() {
+		return primarySite;
+	}
+
+	public void setPrimarySite(Site primarySite) {
+		this.primarySite = primarySite;
 	}
 
 	@NotAudited
@@ -273,6 +272,7 @@ public class User extends BaseEntity implements UserDetails {
 		setActivityStatus(user.getActivityStatus());
 		setAddress(user.getAddress());
 		setInstitute(user.getInstitute());
+		setPrimarySite(user.getPrimarySite());
 		setEmailAddress(user.getEmailAddress());
 		setLoginName(user.getLoginName());
 		setPhoneNumber(user.getPhoneNumber());

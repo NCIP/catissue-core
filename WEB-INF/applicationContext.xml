@@ -574,6 +574,7 @@
           <list>
             <value>/institutes/</value>
             <value>/institutes/byname</value>
+            <value>/institutes/sites</value>
             <value>/config-settings/locale</value>
             <value>/config-settings/app-props</value>
             <value>/config-settings/welcome-video</value>

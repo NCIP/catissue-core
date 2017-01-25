@@ -10,9 +10,9 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 	private String resource;
 	
 	private String operation;
-	
+
 	private String institute;
-	
+
 	private boolean listAll;
 
 	private List<String> includeTypes;
@@ -50,7 +50,7 @@ public class SiteListCriteria extends AbstractListCriteria<SiteListCriteria> {
 		this.institute = institute;
 		return self();
 	}
-	
+
 	public boolean listAll() {
 		return listAll;
 	}
