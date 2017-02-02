@@ -189,11 +189,34 @@
     </sql>
   </changeSet>
 
-  <changeSet author="vlonushte" id="Unique specimen label per collection protocol">
+  <changeSet author="vlonushte" id="Unique specimen label per collection protocol" dbms="mysql">
     <addUniqueConstraint
       constraintName="CAT_SPEC_CP_ID_LABEL_UQ"
       tableName="CATISSUE_SPECIMEN"
       columnNames="COLLECTION_PROTOCOL_ID, LABEL"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop non functional unique constraint index" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <indexExists indexName="CAT_SPEC_CP_ID_LABEL_UQ"/>
+    </preConditions>
+
+    <dropUniqueConstraint
+      constraintName="CAT_SPEC_CP_ID_LABEL_UQ"
+      tableName="CATISSUE_SPECIMEN"
+      uniqueColumns="COLLECTION_PROTOCOL_ID, LABEL"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique specimen label per collection protocol" dbms="oracle">
+    <sql>
+      create unique index CAT_SPEC_CP_ID_LABEL_UQ on catissue_specimen(
+        case when
+          collection_protocol_id is not null and label is not null
+        then
+          collection_protocol_id || '-' || label
+        end
+      );
+    </sql>
   </changeSet>
 
   <changeSet author="vlonushte" id="Add not null constraint on collection protocol id of specimen table">
