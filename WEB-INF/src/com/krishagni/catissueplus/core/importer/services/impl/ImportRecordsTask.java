@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -141,7 +142,7 @@ public class ImportRecordsTask implements ScheduledTask {
 	}
 
 	private ImportDetail getImportDetail(File file, String fileId) {
-		String filename = file.getName();
+		String filename = FilenameUtils.getBaseName(file.getName());
 		String[] tokens = filename.split("_");
 
 		int i = 0;
