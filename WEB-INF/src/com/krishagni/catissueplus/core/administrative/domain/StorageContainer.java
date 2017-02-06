@@ -420,7 +420,16 @@ public class StorageContainer extends BaseEntity {
 		this.compAllowedCps = compAllowedCps;
 	}
 
+	public boolean isActive() {
+		return Status.ACTIVITY_STATUS_ACTIVE.getStatus().equals(getActivityStatus());
+	}
+
 	public void update(StorageContainer other) {
+		updateActivityStatus(other);
+		if (!isActive()) {
+			return;
+		}
+
 		boolean hasParentChanged = false;
 		if (getParentContainer() == null && other.getParentContainer() != null) {
 			hasParentChanged = true;
@@ -436,13 +445,11 @@ public class StorageContainer extends BaseEntity {
 		setPositionLabelingMode(other.getPositionLabelingMode());
 		updateLabelingScheme(other);
 		updateContainerLocation(other);
-		updateActivityStatus(other);
 		setComments(other.getComments());
 		updateAllowedSpecimenClassAndTypes(other, hasParentChanged);
 		updateAllowedCps(other, hasParentChanged);
 		updateStoreSpecimenEnabled(other);
 		updateCellDisplayProp(other);
-
 		validateRestrictions();
 	}
 
@@ -1081,20 +1088,17 @@ public class StorageContainer extends BaseEntity {
 			// activity status has not changed
 			return;
 		}
-		
-		if (getActivityStatus().equals(Status.ACTIVITY_STATUS_ACTIVE.getStatus()) && hasSpecimen(this)) {
-			//
-			// existing status was active and container has some specimens stored in hierarchy
-			//
-			throw OpenSpecimenException.userError(StorageContainerErrorCode.REF_ENTITY_FOUND);
-		}
 
-		List<StorageContainer> containers = new ArrayList<StorageContainer>();
-		containers.add(this);
-		while (!containers.isEmpty()) {
-			StorageContainer container = containers.remove(0);
-			container.setActivityStatus(other.getActivityStatus());
-			containers.addAll(container.getChildContainers());
+		if (Status.ACTIVITY_STATUS_DISABLED.getStatus().equals(other.getActivityStatus())) {
+			delete();
+		} else {
+			List<StorageContainer> containers = new ArrayList<>();
+			containers.add(this);
+			while (!containers.isEmpty()) {
+				StorageContainer container = containers.remove(0);
+				container.setActivityStatus(other.getActivityStatus());
+				containers.addAll(container.getChildContainers());
+			}
 		}
 	}
 
