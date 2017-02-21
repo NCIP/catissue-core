@@ -74,6 +74,14 @@ angular.module('os.biospecimen.participant',
                 return setting.value == 'true';
               }
             );
+          },
+
+          mrnAccessRestriction: function(SettingUtil) {
+            return SettingUtil.getSetting('biospecimen', 'mrn_restriction_enabled').then(
+              function(setting) {
+                return setting.value == 'true';
+              }
+            );
           }
         },
         parent: 'signed-in',

@@ -1,7 +1,7 @@
 
 angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
   .controller('ParticipantDetailCtrl', function(
-    $scope, $q, cpr, visits, 
+    $scope, $q, mrnAccessRestriction, cpr, visits,
     CollectionProtocol, SpecimenLabelPrinter, RegisterToNewCpsHolder, DeleteUtil) {
 
     function init() {
@@ -10,13 +10,17 @@ angular.module('os.biospecimen.participant.detail', ['os.biospecimen.models'])
     }
 
     function loadPvs() {
-      var registeredCps = [];
-      angular.forEach(cpr.participant.registeredCps, function(cp) {
-        registeredCps.push(cp.cpShortTitle);
-      });
+      var registeredCps = (cpr.participant.registeredCps || []).map(
+        function(cp) {
+          return cp.cpShortTitle;
+        }
+      );
+
+      registeredCps.push(cpr.cpShortTitle);
 
       $scope.cpsForReg = [];
-      CollectionProtocol.listForRegistrations(cpr.getMrnSites()).then(
+      var regSites = (!!mrnAccessRestriction ? cpr.getMrnSites() : []);
+      CollectionProtocol.listForRegistrations(regSites).then(
         function(cps) {
           for (var i = 0; i < cps.length; ++i) {
             if (registeredCps.indexOf(cps[i].shortTitle) == -1) {

@@ -220,11 +220,21 @@
         <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
           <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator">
             <fieldset record-name="cpr.participant.pmis">
-              <div class="col-xs-3 col-xs-offset-3">
-                <os-sites name="siteName" ng-model="pmi.siteName" placeholder="{{'participant.select_site' | translate}}"
-                  ng-required="!!pmi.mrn" ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
-                  exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
-                </os-sites>
+              <div class="col-xs-3 col-xs-offset-3" ng-switch on="!!partCtx.mrnAccessRestriction">
+                <span ng-switch-when="true">
+                  <os-sites name="siteName" ng-model="pmi.siteName"
+                    placeholder="{{'participant.select_site' | translate}}" ng-required="!!pmi.mrn"
+                    ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
+                    exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
+                  </os-sites>
+                </span>
+                <span ng-switch-when="false">
+                  <os-sites name="siteName" ng-model="pmi.siteName"
+                    placeholder="{{'participant.select_site' | translate}}" ng-required="!!pmi.mrn"
+                    ng-click="addPmiIfLast($index)" list-all="true"
+                    exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
+                  </os-sites>
+                </span>
                 <div os-field-error field="pmiForm.siteName"></div>
               </div>
 

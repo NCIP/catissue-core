@@ -2,7 +2,8 @@
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
     $scope, $state, $stateParams, $translate, $modal,
-    cp, cpr, extensionCtxt, hasDict, twoStepReg, addPatientOnLookupFail, lockedFields,
+    cp, cpr, extensionCtxt, hasDict, twoStepReg,
+    mrnAccessRestriction, addPatientOnLookupFail, lockedFields,
     CollectionProtocolRegistration, Participant,
     Site, PvManager, ExtensionsUtil, Alerts) {
 
@@ -29,7 +30,8 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       $scope.partCtx = {
         obj: {cpr: $scope.cpr, cp: cp},
         inObjs: ['cpr'],
-        twoStepReg: !cpr.id && (twoStepReg && $stateParams.twoStep == 'true')
+        twoStepReg: !cpr.id && (twoStepReg && $stateParams.twoStep == 'true'),
+        mrnAccessRestriction: mrnAccessRestriction
       }
 
       $scope.deFormCtrl = {};
