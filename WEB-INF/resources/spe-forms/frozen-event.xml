@@ -11,7 +11,7 @@
       <dropDown>
         <name>frozenMethod</name>
         <udn>frozenMethod</udn>
-        <caption>Method of freezing -- </caption>
+        <caption>#getMessage("frozen_event_frozen_method")</caption>
         <column>METHOD</column>
         <options>
           <sql>
