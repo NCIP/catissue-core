@@ -576,5 +576,16 @@
         re.activity_status = 'ACTIVE' and
         fc.deleted_on is null
     </sql-query>
+    
+    <sql-query name="getUpdateTime">
+      <return-scalar column="lastModifyTime" type="date"/>
+
+      select
+        f.last_modify_time as lastModifyTime
+      from
+        dyextn_containers f
+      where
+        f.identifier = :formId
+    </sql-query>
   </class>
 </hibernate-mapping>

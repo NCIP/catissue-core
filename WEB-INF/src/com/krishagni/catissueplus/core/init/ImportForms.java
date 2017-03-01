@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,7 +125,7 @@ public abstract class ImportForms implements InitializingBean {
 	protected abstract void cleanup();
 
 	protected Map<String, Object> getTemplateProps() {
-		return new HashMap<String, Object>();
+		return new HashMap<>();
 	}
 
 	private void importForms(Collection<String> formFiles)
@@ -135,19 +136,28 @@ public abstract class ImportForms implements InitializingBean {
 			InputStream in = null;
 			try {
 				in = preprocessForms(formFile);
-				String existingDigest = daoFactory.getFormDao().getFormChangeLogDigest(formFile);
+
+				Object[] changeLog = daoFactory.getFormDao().getLatestFormChangeLog(formFile);
+				String existingDigest  = (changeLog != null) ? (String) changeLog[2] : null;
 				String newDigest = Utility.getInputStreamDigest(in);
-				if (existingDigest != null && (existingDigest.equals(newDigest) || !isSysForm(formFile))) {
+				if (existingDigest != null && existingDigest.equals(newDigest)) {
+					continue; // form XML has not got modified since last import
+				}
+
+				Long formId     = (changeLog != null) ? (Long) changeLog[1] : null;
+				Date importDate = (changeLog != null) ? (Date) changeLog[3] : null;
+				if (!isSysForm(formFile) && formId != null && importDate != null) {
 					//
-					// Do not do anything if the form has not changed or is not a system form.
-					// We do not update non-system forms, as they could have been edited by the
-					// users through form designer.
+					// Non system form. Need to check whether the form got modified since last import
 					//
-					continue;
+					Date updateDate = daoFactory.getFormDao().getUpdateTime(formId);
+					if (updateDate != null && updateDate.after(importDate)) {
+						continue;
+					}
 				}
 
 				in.reset();
-				Long formId = Container.createContainer(userCtx, in, isCreateTable());
+				formId = Container.createContainer(userCtx, in, isCreateTable());
 				saveOrUpdateFormCtx(formFile, formId);
 				daoFactory.getFormDao().insertFormChangeLog(formFile, newDigest, formId);
 			} finally {

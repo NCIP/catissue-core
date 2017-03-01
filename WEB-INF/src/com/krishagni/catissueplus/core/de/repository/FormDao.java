@@ -1,6 +1,7 @@
 package com.krishagni.catissueplus.core.de.repository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public Long getAllFormsCount(FormListCriteria crit);
 	
 	public boolean isSystemForm(Long formId);
+
+	public Date getUpdateTime(Long formId);
 
 	public List<FormSummary> getQueryForms();
 			
@@ -79,6 +82,8 @@ public interface FormDao extends Dao<FormContextBean>{
 	public List<DependentEntityDetail> getDependentEntities(Long formId);
 	
 	public String getFormChangeLogDigest(String file);
+
+	public Object[] getLatestFormChangeLog(String file);
 	
 	public void insertFormChangeLog(String file, String digest, Long formId);
 	

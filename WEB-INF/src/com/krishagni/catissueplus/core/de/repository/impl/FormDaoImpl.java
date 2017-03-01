@@ -76,6 +76,14 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
+	public Date getUpdateTime(Long formId) {
+		return (Date) getCurrentSession().getNamedQuery(GET_FORM_UPDATE_TIME)
+				.setParameter("formId", formId)
+				.uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
  	@Override
   	public List<FormSummary> getFormsByEntityType(String entityType) {
 		List<Object[]> rows = sessionFactory.getCurrentSession()
@@ -496,8 +504,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<DependentEntityDetail> getDependentEntities(Long formId) {
-		List<Object[]> rows = sessionFactory.getCurrentSession()
-				.getNamedQuery(GET_DEPENDENT_ENTITIES)
+		List<Object[]> rows = getCurrentSession().getNamedQuery(GET_DEPENDENT_ENTITIES)
 				.setLong("formId", formId)
 				.list();
 		
@@ -507,8 +514,7 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	@SuppressWarnings("unchecked")
 	@Override
 	public String getFormChangeLogDigest(String file) {
-		List<Object> rows = sessionFactory.getCurrentSession()
-				.createSQLQuery(GET_CHANGE_LOG_DIGEST_SQL)
+		List<Object> rows = getCurrentSession().createSQLQuery(GET_CHANGE_LOG_DIGEST_SQL)
 				.setString("filename", file)
 				.list();
 		
@@ -516,6 +522,24 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 			return null;
 		}		
 		return (String)rows.iterator().next();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object[] getLatestFormChangeLog(String file) {
+		List<Object[]> rows = getCurrentSession().createSQLQuery(GET_LATEST_CHANGE_LOG_SQL)
+				.addScalar("filename", StringType.INSTANCE) //fl.filename, fl.form_id, fl.md5_digest, fl.executed_on
+				.addScalar("form_id", LongType.INSTANCE)
+				.addScalar("md5_digest", StringType.INSTANCE)
+				.addScalar("executed_on", TimestampType.INSTANCE)
+				.setParameter("filename", file)
+				.list();
+
+		if (rows == null || rows.isEmpty()) {
+			return null;
+		}
+
+		return rows.iterator().next();
 	}
 
 	@Override
@@ -832,6 +856,8 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 
 	private static final String GET_FORM_NAME_CTXT_ID = FQN + ".getFormNameContextId";
 
+	private static final String GET_FORM_UPDATE_TIME = FQN + ".getUpdateTime";
+
 	private static final String RE_FQN = FormRecordEntryBean.class.getName();
 	
 	private static final String GET_RECORD_ENTRY = RE_FQN + ".getRecordEntry";
@@ -855,6 +881,20 @@ public class FormDaoImpl extends AbstractDao<FormContextBean> implements FormDao
 	private static final String GET_CHANGE_LOG_DIGEST_SQL =
 			"select " +
 			"  md5_digest " +
+			"from " +
+			"  os_import_forms_log fl " +
+			"where " +
+			"  fl.filename = :filename and fl.executed_on in (" +
+			"    select " +
+			"      max(executed_on) " +
+			"    from " +
+			"      os_import_forms_log " +
+			"    where " +
+			"      filename = :filename )";
+
+	private static final String GET_LATEST_CHANGE_LOG_SQL =
+			"select " +
+			"  fl.filename, fl.form_id, fl.md5_digest, fl.executed_on " +
 			"from " +
 			"  os_import_forms_log fl " +
 			"where " +
