@@ -213,7 +213,7 @@ public class Utility {
 			}
 
 			if (StringUtils.isNotBlank(filename)) {
-				httpResp.setHeader("Content-Disposition", "attachment;filename=" + filename);
+				httpResp.setHeader("Content-Disposition", "attachment;filename=\"" + filename + "\"");
 			}
 
 			IOUtils.copy(in, httpResp.getOutputStream());
