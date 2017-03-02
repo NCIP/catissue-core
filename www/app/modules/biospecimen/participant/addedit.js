@@ -207,13 +207,24 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
     $scope.confirmMerge = function() {
       var modalInstance = $modal.open({
         templateUrl: "modules/biospecimen/participant/confirm-merge.html",
-        controller: function($scope, $modalInstance) {
+        controller: function($scope, $state, $modalInstance, cpr) {
+          $scope.cpr = cpr;
+          $scope.params = {
+            cpr: cpr,
+            url: $state.href('participant-detail.overview', {cpId: cpr.cpId, cprId: cpr.id})
+          };
+
           $scope.ok = function() {
             $modalInstance.close(true);
           }
 
           $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
+          }
+        },
+        resolve: {
+          cpr: function() {
+            return cpr;
           }
         }
       });

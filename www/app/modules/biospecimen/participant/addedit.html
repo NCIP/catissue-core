@@ -416,11 +416,14 @@
         </span>
       </span>
     </button>
-    <button class="btn btn-primary" ng-if="!!cpr.id && selectedParticipant" ng-click="confirmMerge()"> 
-      <span translate="participant.buttons.merge_participants"> 
-        Merge Participants 
-      </span>
-    </button>
+    <span ng-if="!!cpr.id && selectedParticipant">
+      <button class="btn btn-primary" ng-if="selectedParticipant.id == -1" ng-click="registerUsingSelectedParticipant()">
+        <span translate="participant.buttons.update_registration"> Update </span>
+      </button>
+      <button class="btn btn-primary" ng-if="selectedParticipant.id != -1" ng-click="confirmMerge()">
+        <span translate="participant.buttons.merge_participants"> Merge Participants </span>
+      </button>
+    </span>
     <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()">
       <span translate="participant.buttons.ignore_matches"> 
         Ignore Matches and Proceed 
