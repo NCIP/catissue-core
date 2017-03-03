@@ -1,10 +1,10 @@
 
 angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', 'os.administrative.models'])
   .controller('ParticipantAddEditCtrl', function(
-    $scope, $state, $stateParams, $translate, $modal,
+    $scope, $state, $stateParams, $translate, $modal, $q,
     cp, cpr, extensionCtxt, hasDict, twoStepReg,
     mrnAccessRestriction, addPatientOnLookupFail, lockedFields,
-    CollectionProtocolRegistration, Participant,
+    CpConfigSvc, CollectionProtocolRegistration, Participant,
     Site, PvManager, ExtensionsUtil, Alerts) {
 
     var availableSites = [];
@@ -116,6 +116,46 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
       );
     }
 
+    function copyStaticField(src, dest, lockedFields, field, isArray) {
+      var fqn = 'cpr.participant.' + field;
+      if (lockedFields.indexOf(fqn) != -1) {
+        return; // field is locked. Cannot overwrite its value.
+      }
+
+      if (isArray) {
+        if (!src[field] || src[field].length == 0) {
+          return; // source array is either empty or undefined.
+        }
+
+        if (!!dest[field] && dest[field].length > 0) {
+          return; // destination array is non-empty.
+        }
+      } else if (!src[field] || !!dest[field]) {
+        return;   // either source field value is empty or destination field value is non-empty.
+      }
+
+      dest[field] = src[field]; // copy
+    }
+
+    function copyStaticFields(src, dest, lockedFields) {
+      var primitiveFields = [
+        'firstName', 'lastName', 'middleName', 'birthDate', 'deathDate',
+        'gender', 'vitalStatus', 'ethnicity', 'uid', 'empi'
+      ];
+      angular.forEach(primitiveFields,
+        function(field) {
+          copyStaticField(src, dest, lockedFields, field, false);
+        }
+      );
+
+      var arrayFields = ['races', 'pmis'];
+      angular.forEach(arrayFields,
+        function(field) {
+          copyStaticField(src, dest, lockedFields, field, true);
+        }
+      );
+    }
+
     $scope.pmiText = function(pmi) {
       return pmi.siteName + (pmi.mrn ? " (" + pmi.mrn + ")" : "");
     }
@@ -200,8 +240,23 @@ angular.module('os.biospecimen.participant.addedit', ['os.biospecimen.models', '
 
     $scope.registerUsingSelectedParticipant = function() {
       var selectedPart = $scope.selectedParticipant;
-      $scope.cpr.participant = new Participant(selectedPart);
-      registerParticipant();
+
+      var promise;
+      if (inputParticipant.source != selectedPart.source) {
+        promise = CpConfigSvc.getLockedParticipantFields(selectedPart.source);
+      } else {
+        var q = $q.defer();
+        q.resolve(lockedFields);
+        promise = q.promise;
+      }
+
+      promise.then(
+        function(lockedFields) {
+          copyStaticFields(inputParticipant, selectedPart, lockedFields);
+          $scope.cpr.participant = new Participant(selectedPart);
+          registerParticipant();
+        }
+      );
     };
 
     $scope.confirmMerge = function() {
