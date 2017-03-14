@@ -136,8 +136,10 @@
       from
         com.krishagni.catissueplus.core.administrative.domain.Password passwd
         join passwd.user user
+        join user.authDomain domain
       where
-        user.activityStatus = 'Active'
+        user.activityStatus = 'Active' and
+        domain.name = 'openspecimen'
       group by
         user.id, user.firstName, user.lastName, user.emailAddress
       having
