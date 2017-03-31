@@ -75,7 +75,8 @@
       from 
         com.krishagni.catissueplus.core.biospecimen.domain.Participant p
       where 
-        p.lastName = :lname and birthDate = :dob
+        p.lastName = :lname and
+        birthDate between :dobStart and :dobEnd
     </query>
 
     <query name="getParticipantIdByUid">

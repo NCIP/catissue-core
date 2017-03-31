@@ -1,6 +1,9 @@
 
 package com.krishagni.catissueplus.core.biospecimen.repository.impl;
 
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -43,10 +46,15 @@ public class ParticipantDaoImpl extends AbstractDao<Participant> implements Part
 	@Override
 	@SuppressWarnings("unchecked")	
 	public List<Participant> getByLastNameAndBirthDate(String lname, Date dob) {
+		ZonedDateTime zdt = ZonedDateTime.ofInstant(dob.toInstant(), ZoneId.systemDefault());
+		Date dobStart     = Date.from(zdt.with(LocalTime.MIN).toInstant());
+		Date dobEnd       = Date.from(zdt.with(LocalTime.MAX).toInstant());
+
 		return sessionFactory.getCurrentSession()
 				.getNamedQuery(GET_BY_LNAME_AND_DOB)
 				.setString("lname", lname)
-				.setDate("dob", dob)
+				.setTimestamp("dobStart", dobStart)
+				.setTimestamp("dobEnd", dobEnd)
 				.list();
 	}
 
