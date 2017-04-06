@@ -1198,6 +1198,32 @@ public class CollectionProtocolServiceImpl implements CollectionProtocolService,
 	}
 
 	@Override
+	@PlusTransactional
+	public ResponseEvent<Collection<Object>> getListExprValues(RequestEvent<Map<String, Object>> req) {
+		try {
+			Map<String, Object> listReq = req.getPayload();
+			String listName = (String)listReq.get("listName");
+			Function<Map<String, Object>, ListConfig> configFn = listConfigFns.get(listName);
+			if (configFn == null) {
+				return ResponseEvent.response(null);
+			}
+
+			ListConfig cfg = configFn.apply(listReq);
+			if (cfg == null) {
+				return ResponseEvent.response(null);
+			}
+
+			String expr = (String)listReq.get("expr");
+			String searchTerm = (String)listReq.get("searchTerm");
+			return ResponseEvent.response(listGenerator.getExpressionValues(cfg, expr, searchTerm));
+		} catch (OpenSpecimenException ose) {
+			return ResponseEvent.error(ose);
+		} catch (Exception e) {
+			return ResponseEvent.serverError(e);
+		}
+	}
+
+	@Override
 	public String getObjectName() {
 		return "cp";
 	}

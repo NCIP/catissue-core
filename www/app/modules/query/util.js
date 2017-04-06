@@ -639,6 +639,8 @@ angular.module('os.query.util', [])
 
       getDataAql:          getDataAql,
 
+      getCriteriaAql:      getWhereExpr,
+
       getDefSelectedFields: getDefSelectedFields,
 
       getForm:             getForm,

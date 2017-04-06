@@ -46,7 +46,7 @@ public class QueryController {
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody	
 	public QueryExecResult executeQuery(@RequestBody ExecuteQueryEventOp opDetail) {
-		return response(querySvc.executeQuery(getRequest(opDetail)));
+		return response(querySvc.executeQuery(request(opDetail)));
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value="/{queryId}")
@@ -60,14 +60,14 @@ public class QueryController {
 			ExecuteSavedQueryOp opDetail) {
 
 		opDetail.setSavedQueryId(queryId);
-		return response(querySvc.executeSavedQuery(getRequest(opDetail)));
+		return response(querySvc.executeSavedQuery(request(opDetail)));
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value="/export")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public QueryDataExportResult exportQueryData(@RequestBody ExecuteQueryEventOp opDetail) {
-		return response(querySvc.exportQueryData(getRequest(opDetail)));
+		return response(querySvc.exportQueryData(request(opDetail)));
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value="/export")
@@ -81,7 +81,7 @@ public class QueryController {
 			
 			HttpServletResponse response) {
 		
-		File file = response(querySvc.getExportDataFile(getRequest(fileId)));
+		File file = response(querySvc.getExportDataFile(request(fileId)));
 
 		response.setContentType("text/csv;");
 		response.setHeader("Content-Disposition", "attachment;filename=" + filename);
@@ -97,27 +97,11 @@ public class QueryController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value="/facet-values")
+	@RequestMapping(method = RequestMethod.POST, value="/facet-values")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<FacetDetail> getFacetValues(
-			@RequestParam(value = "facet", required = true)
-			List<String> facets,
-
-			@RequestParam(value = "cpId", required = false, defaultValue = "-1")
-			Long cpId,
-
-			@RequestParam(value = "searchTerm", required = false, defaultValue = "")
-			String searchTerm) {
-
-		GetFacetValuesOp op = new GetFacetValuesOp();
-		op.setFacets(facets);
-		op.setCpId(cpId);
-		op.setSearchTerm(searchTerm);
-
-		ResponseEvent<List<FacetDetail>> resp = querySvc.getFacetValues(getRequest(op));
-		resp.throwErrorIfUnsuccessful();
-		return resp.getPayload();
+	public List<FacetDetail> getFacetValues(@RequestBody GetFacetValuesOp op) {
+		return response(querySvc.getFacetValues(request(op)));
 	}
 
 	private <T> T response(ResponseEvent<T> resp) {
@@ -125,7 +109,7 @@ public class QueryController {
 		return resp.getPayload();
 	}
 
-	private <T> RequestEvent<T> getRequest(T payload) {
+	private <T> RequestEvent<T> request(T payload) {
 		return new RequestEvent<T>(payload);				
 	}
 }

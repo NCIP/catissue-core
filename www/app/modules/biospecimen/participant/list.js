@@ -78,7 +78,7 @@ angular.module('os.biospecimen.participant.list', ['os.biospecimen.models'])
     };
 
     $scope.loadFilterValues = function(expr) {
-      return cp.getExpressionValues(expr);
+      return cp.getExpressionValues(listParams.listName, expr);
     }
 
     $scope.setListCtrl = function($list) {

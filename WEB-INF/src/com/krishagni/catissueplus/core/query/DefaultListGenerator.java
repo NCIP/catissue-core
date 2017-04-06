@@ -67,9 +67,9 @@ public class DefaultListGenerator implements ListGenerator {
 
 	@Override
 	@PlusTransactional
-	public Collection<Object> getExpressionValues(Long cpId, String expr, String searchTerm) {
+	public Collection<Object> getExpressionValues(ListConfig cfg, String expr, String searchTerm) {
 		GetFacetValuesOp op = new GetFacetValuesOp();
-		op.setCpId(cpId);
+		op.setCpId(cfg.getCpId());
 		op.setFacets(Collections.singletonList(expr));
 		op.setSearchTerm(searchTerm);
 

@@ -25,6 +25,8 @@ angular.module('os.query.results', ['os.query.models'])
 
     var currResults = {};
 
+    var criteria = undefined;
+
     function isNumber(val) {
       return !isNaN(val) && angular.isNumber(val);
     }
@@ -55,6 +57,7 @@ angular.module('os.query.results', ['os.query.models'])
     };
 
     function init() {
+      criteria = QueryUtil.getCriteriaAql(queryCtx.filtersMap, queryCtx.exprNodes);
       $scope.queryCtx = queryCtx;
       $scope.cps = cps;
       $scope.selectedRows = [];
@@ -271,14 +274,14 @@ angular.module('os.query.results', ['os.query.models'])
 
       var q = undefined;
       if (!!searchTerm) {
-        q = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr], searchTerm);
+        q = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr], searchTerm, criteria);
       }
 
       if (!q) {
         if (facet.valuesQ) {
           q = facet.valuesQ;
         } else {
-          q = facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr]);
+          q = facet.valuesQ = QueryExecutor.getFacetValues($scope.queryCtx.selectedCp.id, [facet.expr], undefined, criteria);
         }
       }
 

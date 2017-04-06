@@ -14,5 +14,5 @@ public interface ListGenerator {
 
 	List<Column> getFilters(ListConfig cfg);
 
-	Collection<Object> getExpressionValues(Long cpId, String expr, String searchTerm);
+	Collection<Object> getExpressionValues(ListConfig cfg, String expr, String searchTerm);
 }

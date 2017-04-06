@@ -187,8 +187,8 @@ angular.module('os.biospecimen.models.cp', ['os.common.models'])
       );
     }
 
-    CollectionProtocol.prototype.getExpressionValues = function(expr) {
-      var params = {expr: expr};
+    CollectionProtocol.prototype.getExpressionValues = function(listName, expr) {
+      var params = {listName: listName, expr: expr};
       return $http.get(CollectionProtocol.url() + this.$id() + '/expression-values', {params: params}).then(
         function(resp) {
           return resp.data;

@@ -886,7 +886,7 @@ public class QueryServiceImpl implements QueryService {
 		try {
 			GetFacetValuesOp op = req.getPayload();
 			List<FacetDetail> result = op.getFacets().stream()
-				.map(facet -> getFacetDetail(op.getCpId(), facet, op.getSearchTerm()))
+				.map(facet -> getFacetDetail(op.getCpId(), facet, op.getRestriction(), op.getSearchTerm()))
 				.collect(Collectors.toList());
 			return ResponseEvent.response(result);
 		} catch (OpenSpecimenException ose) {
@@ -1199,8 +1199,9 @@ public class QueryServiceImpl implements QueryService {
 		}		
 	}
 
-	private FacetDetail getFacetDetail(Long cpId, String facet, String searchTerm) {
+	private FacetDetail getFacetDetail(Long cpId, String facet, String restriction, String searchTerm) {
 		String[] fieldParts = facet.split("\\.");
+		String rootForm = fieldParts[0];
 
 		String formName = null, fieldName = null;
 		if (fieldParts[1].equals("extensions") || fieldParts[1].equals("customFields")) {
@@ -1226,7 +1227,7 @@ public class QueryServiceImpl implements QueryService {
 		}
 
 		String aqlFmt = "select distinct %s %s where %s %s limit 0, 500";
-		List<Object> aqlFmtArgs = new ArrayList<Object>();
+		List<Object> aqlFmtArgs = new ArrayList<>();
 
 		QueryResultScreener screener = null;
 		if (!AuthUtil.isAdmin() && field.isPhi()) {
@@ -1237,18 +1238,26 @@ public class QueryServiceImpl implements QueryService {
 		}
 
 		aqlFmtArgs.add(facet);
-		aqlFmtArgs.add(facet);
 
+		String searchTermCond = facet;
 		if (StringUtils.isNotBlank(searchTerm)) {
-			aqlFmtArgs.add("contains \"" + searchTerm.trim() + "\"");
+			searchTermCond += " contains \"" + searchTerm.trim() + "\"";
 		} else {
-			aqlFmtArgs.add("exists");
+			searchTermCond += " exists";
 		}
+		aqlFmtArgs.add(searchTermCond);
+
+		String restrictionCond = "";
+		if (StringUtils.isNotBlank(restriction)) {
+			restrictionCond = " and (" + restriction + ")";
+			rootForm = cprForm;
+		}
+		aqlFmtArgs.add(restrictionCond);
 
 		String aql = String.format(aqlFmt, aqlFmtArgs.toArray());
 		Query query = Query.createQuery();
 		query.wideRowMode(WideRowMode.OFF)
-			.compile(fieldParts[0], aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
+			.compile(rootForm, aql, getRestriction(AuthUtil.getCurrentUser(), cpId));
 		QueryResponse queryResp = query.getData();
 
 		QueryResultData queryResult = queryResp.getResultData();

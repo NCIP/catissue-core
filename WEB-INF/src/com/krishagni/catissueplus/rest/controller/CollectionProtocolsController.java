@@ -668,13 +668,24 @@ public class CollectionProtocolsController {
 			@PathVariable("id")
 			Long cpId,
 
-			@RequestParam(value = "expr", required = true)
+			@RequestParam(value = "listName")
+			String listName,
+
+			@RequestParam(value = "expr")
 			String expr,
 
 			@RequestParam(value = "searchTerm", required = false, defaultValue = "")
 			String searchTerm) {
 
-		return listGenerator.getExpressionValues(cpId, expr, searchTerm);
+		Map<String, Object> listReq = new HashMap<>();
+		listReq.put("cpId", cpId);
+		listReq.put("listName", listName);
+		listReq.put("expr", expr);
+		listReq.put("searchTerm", searchTerm);
+
+		ResponseEvent<Collection<Object>> resp = cpSvc.getListExprValues(new RequestEvent<>(listReq));
+		resp.throwErrorIfUnsuccessful();
+		return resp.getPayload();
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/list-detail")
@@ -684,7 +695,7 @@ public class CollectionProtocolsController {
 			@PathVariable("id")
 			Long cpId,
 
-			@RequestParam(value = "listName", required = true)
+			@RequestParam(value = "listName")
 			String listName,
 
 			@RequestParam(value = "startAt", required = false, defaultValue = "0")

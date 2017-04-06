@@ -52,11 +52,20 @@ public class AqlBuilder {
 			
 			whereClause += ")";
 		}
-		
-		return "select " + selectClause + " where " + whereClause;		
+
+		String query = "";
+		if (StringUtils.isNotBlank(selectClause)) {
+			query = "select " + selectClause + " where ";
+		}
+
+		return query + whereClause;
 	}
 	
 	private String buildSelectClause(Map<Integer, Filter> filterMap, Object[] selectList) {
+		if (selectList == null || selectList.length == 0) {
+			return "";
+		}
+
 		StringBuilder select = new StringBuilder();
 		for (Object field : selectList) {
 			SelectField aggField = null;

@@ -2,6 +2,7 @@
 package com.krishagni.catissueplus.core.biospecimen.services;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +174,7 @@ public interface CollectionProtocolService {
 
 	public ResponseEvent<Integer> getListSize(RequestEvent<Map<String, Object>> req);
 
+	public ResponseEvent<Collection<Object>> getListExprValues(RequestEvent<Map<String, Object>> req);
 
 	interface DataSource {
 		public Object getMetric(CollectionProtocol cp, Map<String, Object> input);

@@ -9,6 +9,8 @@ public class GetFacetValuesOp {
 
 	private String searchTerm;
 
+	private String restriction;
+
 	public Long getCpId() {
 		return cpId;
 	}
@@ -31,5 +33,13 @@ public class GetFacetValuesOp {
 
 	public void setSearchTerm(String searchTerm) {
 		this.searchTerm = searchTerm;
+	}
+
+	public String getRestriction() {
+		return restriction;
+	}
+
+	public void setRestriction(String restriction) {
+		this.restriction = restriction;
 	}
 }
