@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    
+	<changeSet author="nitesh" id="disable foreign key check" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=0;</sql>
+    </changeSet>
+    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-4">
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003988"/>
+            <column name="LONG_NAME" value="Clinical Status"/>
+            <column name="DEFINITION" value="Clinical status of the participant."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003989"/>
+            <column name="LONG_NAME" value="Gender"/>
+            <column name="DEFINITION" value="Gender of the participant."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003990"/>
+            <column name="LONG_NAME" value="Genotype"/>
+            <column name="DEFINITION" value="Genotype of the participant."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003991"/>
+            <column name="LONG_NAME" value="Specimen"/>
+            <column name="DEFINITION" value="Specimen Class"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003992"/>
+            <column name="LONG_NAME" value="Tissue Side"/>
+            <column name="DEFINITION" value="Tissue Side"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003993"/>
+            <column name="LONG_NAME" value="Pathological Status"/>
+            <column name="DEFINITION" value="Pathological Status"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003994"/>
+            <column name="LONG_NAME" value="Received Quality"/>
+            <column name="DEFINITION" value="Received Quality"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003995"/>
+            <column name="LONG_NAME" value="Fixation Type"/>
+            <column name="DEFINITION" value="Fixation Type"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003996"/>
+            <column name="LONG_NAME" value="Collection Procedure"/>
+            <column name="DEFINITION" value="Collection Procedure"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003997"/>
+            <column name="LONG_NAME" value="Container"/>
+            <column name="DEFINITION" value="Container"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003998"/>
+            <column name="LONG_NAME" value="Method"/>
+            <column name="DEFINITION" value="Method"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2003999"/>
+            <column name="LONG_NAME" value="Embedding Medium"/>
+            <column name="DEFINITION" value="Embedding Medium"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2004000"/>
+            <column name="LONG_NAME" value="Biohazard"/>
+            <column name="DEFINITION" value="Biohazard"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2004001"/>
+            <column name="LONG_NAME" value="VitalStatus"/>
+            <column name="DEFINITION" value="Vital status of the participant."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2004100"/>
+            <column name="LONG_NAME" value="Countries"/>
+            <column name="DEFINITION" value="List of Countries."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2004200"/>
+            <column name="LONG_NAME" value="States"/>
+            <column name="DEFINITION" value="List of States."/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="2004300"/>
+            <column name="LONG_NAME" value="Collection Status"/>
+            <column name="DEFINITION" value="Collection Status"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="4284"/>
+            <column name="LONG_NAME" value="Request Status"/>
+            <column name="DEFINITION" value="Statuses for the ordered requests"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="4285"/>
+            <column name="LONG_NAME" value="Requested Items Status"/>
+            <column name="DEFINITION" value="Statuses for the individual elements in the ordered request"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Clinical_Diagnosis_PID"/>
+            <column name="LONG_NAME" value="Clinical Diagnosis"/>
+            <column name="DEFINITION" value="Clinical Diagnosis"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Ethnicity_PID"/>
+            <column name="LONG_NAME" value="Ethnicity"/>
+            <column name="DEFINITION" value="Ethnicity"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Hist_Quality"/>
+            <column name="LONG_NAME" value="Histological Quality"/>
+            <column name="DEFINITION" value="Histological Quality"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Morphological_Abnormalitiy_PID"/>
+            <column name="LONG_NAME" value="Morphological Abnormalitiy PID"/>
+            <column name="DEFINITION" value="Morphological Abnormalitiy PID"/>
+            <column name="VERSION" value="1.1"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="order_status"/>
+            <column name="LONG_NAME" value="Order Status"/>
+            <column name="DEFINITION" value="Order Status"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Race_PID"/>
+            <column name="LONG_NAME" value="Race"/>
+            <column name="DEFINITION" value="Race"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="scg_collection_status"/>
+            <column name="LONG_NAME" value="Collection Status"/>
+            <column name="DEFINITION" value="Collection Status"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="shipping_activity_status"/>
+            <column name="LONG_NAME" value="Shipping Activity Status"/>
+            <column name="DEFINITION" value="Shipping Activity Status"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Site_Type_PID"/>
+            <column name="LONG_NAME" value="Site Type"/>
+            <column name="DEFINITION" value="Site Type"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Specimen_Type_PID"/>
+            <column name="LONG_NAME" value="Specimen Type"/>
+            <column name="DEFINITION" value="Specimen Type"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+        <insert tableName="catissue_cde">
+            <column name="PUBLIC_ID" value="Tissue_Site_PID"/>
+            <column name="LONG_NAME" value="Tissue Site"/>
+            <column name="DEFINITION" value="Tissue Site"/>
+            <column name="VERSION" value="1.0"/>
+            <column name="LAST_UPDATED"/>
+        </insert>
+    </changeSet>
+    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-5">
+        <insert tableName="catissue_query_folders">
+            <column name="IDENTIFIER" valueNumeric="1"/>
+            <column name="NAME" value="Default Queries"/>
+            <column name="OWNER" valueNumeric="1"/>
+            <column name="SHARED_WITH_ALL" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-14">
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="1"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="2"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="3"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="4"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="5"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="6"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="7"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="8"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="9"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="10"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="11"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="12"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="13"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="14"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="15"/>
+        </insert>
+        <insert tableName="catissue_query_folder_queries">
+            <column name="FOLDER_ID" valueNumeric="1"/>
+            <column name="QUERY_ID" valueNumeric="16"/>
+        </insert>
+    </changeSet>
+    <changeSet dbms="mysql" author="home (generated)" id="1427184466112-17">
+        <insert tableName="catissue_address">
+            <column name="IDENTIFIER" valueNumeric="1"/>
+            <column name="STREET"/>
+            <column name="CITY" value="Not Specified"/>
+            <column name="STATE"/>
+            <column name="COUNTRY" value="United States"/>
+            <column name="ZIPCODE"/>
+            <column name="PHONE_NUMBER"/>
+            <column name="FAX_NUMBER"/>
+        </insert>
+    </changeSet>
+	<changeSet author="nitesh" id="enables foreign key check" failOnError="false" dbms="mysql">
+        <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+    </changeSet>
+</databaseChangeLog>

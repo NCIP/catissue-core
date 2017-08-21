@@ -1,0 +1,43 @@
+<div>
+  <div class="container">
+    <os-list data="ctx.specimens" item-sref="specimen({specimenId: row.hidden.specimenId})"
+      cell-template="modules/biospecimen/participant/specimens-list-cell.html"
+      enable-selection="true" show-item="showSpecimen(row)" init-ctrl="setListCtrl($list)">
+    </os-list>
+  </div>
+
+  <div os-right-drawer>
+    <os-list-filters filters-cfg="ctx.filtersCfg" filters="ctx.filters"
+      load-values="loadFilterValues(expr)" init-ctrl="setFiltersCtrl($listFilters)">
+    </os-list-filters>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimens-list-cell.html">
+  <span ng-switch on="data.columns[$index].metainfo.showUnit == 'true'">
+    <span ng-switch-when="true">
+      <span>{{col | number | osNoValue}}</span>
+      <span ng-if="!!col">
+        <os-specimen-unit specimen-class="row.hidden.specimenClass" type="row.hidden.specimenType"
+          measure="{{data.columns[$index].metainfo.measure}}">
+        </os-specimen-unit>
+      </span>
+    </span>
+    <span ng-switch-when="false">
+      <span ng-switch on="data.columns[$index].metainfo.type">
+        <span ng-switch-when="'number'">
+          {{col | number | osNoValue}}
+        </span>
+        <span ng-switch-default>
+          {{col | osNoValue}}
+        </span>
+      </span>
+    </span>
+  </span>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimens-list-pager.html">
+  <div>
+   <os-list-pager opts="listViewCtx.ctrl.pagerOpts()"></os-list-pager>
+ </div>
+</script>

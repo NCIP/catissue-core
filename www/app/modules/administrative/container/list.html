@@ -1,0 +1,120 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3> 
+        <span translate="container.list">Storage Containers</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="containerResource.createOpts" class="default"
+        title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" ui-sref="container-type-list">
+        <span class="fa fa-cubes"></span>
+        <span translate="container_type.list">Container Types</span>
+      </button>
+      <div dropdown os-show-if-menu-items-present class="os-inline-btn">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li show-if-allowed="containerResource.createOpts">
+            <a ui-sref="container-import">
+              <span class="fa fa-dropbox"></span>
+              <span translate="container.list">Containers</span>
+            </a>
+          </li>
+          <li show-if-allowed="containerResource.createOpts">
+            <a ui-sref="container-import-jobs">
+              <span class="fa fa-list-alt"></span>
+              <span translate="bulk_imports.view_jobs">View Past Imports</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <os-help class="os-btns btn default" link="container_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'container.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="container.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="container.site">Site</span>
+          </th>
+          <th class="col">
+            <span translate="container.created_by">Created By</span>
+          </th>
+          <th class="col">
+            <span translate="container.dimension">Dimension</span>
+          </th>
+          <th class="col">
+            <span translate="container.stored_spmns">Stored Specimens</span>
+          </th>
+          <th class="col">
+            <span translate="container.capacity">Capacity</span>
+          </th>
+          <th class="col">
+            <span translate="container.utilisation">Utilisation</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="container in containerList" os-row-click="showContainerDetail(container)">
+          <td class="col">
+            <a ui-sref="container-detail.locations({containerId: container.id})">
+              <span>{{container.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{container.siteName}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.createdBy | osUserDisplayName}}</span>
+          </td>
+          <td class="col" ng-switch on="container.positionLabelingMode != 'NONE'">
+            <span ng-switch-when="true">{{container.noOfRows}} X {{container.noOfColumns}}</span>
+            <span ng-switch-when="false" translate="common.not_applicable">Not Applicable</span>
+          </td>
+          <td class="col">
+            <span>{{container.storedSpecimens | number: 0}}</span>
+          </td>
+          <td class="col">
+            <span>{{container.capacity | number: 0 | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <progress class="progress" max="100">
+              <bar value="container.utilisation" type="danger">
+                <span><b>{{container.utilisation}}%</b></span>
+              </bar>
+              <bar value="100 - container.utilisation" type="success">
+                <span><b>{{100 - container.utilisation}}%</b></span>
+              </bar>
+            </progress>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/container/search.html'"></div>
+
+</div>

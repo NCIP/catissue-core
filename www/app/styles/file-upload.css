@@ -1,0 +1,28 @@
+.os-file-upload {
+  position: relative;
+}
+
+.os-file-upload input.form-control {
+  height: auto!important;
+}
+
+.os-file-upload .name {
+  position: absolute; 
+  top: 10px; 
+  left: 108px; 
+  min-width: 150px; 
+  background: #fff;
+}
+
+.os-file-upload .form-control[disabled] + span {
+  background-color: #eee;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .os-file-upload .name {
+    position: absolute;
+    top: 7px;
+    left: 17px;
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,10 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Neutral Buffered Formalin,2003995,null
+getNextPvId(),,,null,Not Specified,2003995,null
+getNextPvId(),,,null,Formaldehyde,2003995,null
+getNextPvId(),,,null,"Ethanol, 70%",2003995,null
+getNextPvId(),,,null,Methacarn,2003995,null
+getNextPvId(),,,null,Bouin's,2003995,null
+getNextPvId(),,,null,RNALater,2003995,null
+getNextPvId(),,,null,Methanol,2003995,null
+getNextPvId(),,,null,UM-Fix,2003995,null

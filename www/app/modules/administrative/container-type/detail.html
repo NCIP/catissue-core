@@ -1,0 +1,29 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="container-type-list">
+            <span translate="container_type.list">Container Types</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span>{{containerType.name}}</span>
+      </h3>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref=".overview">
+          <span class="fa fa-eye"></span>
+          <span class="os-title" translate="container_type.menu.overview">Overview</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

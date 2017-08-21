@@ -1,2 +1,0 @@
-SCG name,Label,Barcode,Created On,Activity Status,Comment,Is Available,Collection Status,Specimen Class,Type,Tissue Site,Tissue Side,Initial Quantity,Available Quantity,Lineage,Pathological Status,Container name,Position one,Position two,EventComments#1,reasonDeviation#1,Date (MM-DD-YYYY HH:MM)#1,SPPID,UserID#1,durationInMinutes#1#1,gravityForce#1#1,activity_Entry#1
-TestCP_31_37,55,,10/10/2011,Active,,TRUE,Collected,Tissue,Fresh Tissue,Not Specified,Not Specified,5,5,New,Not Specified,,,,spp_spun_test,spp_spun_test comments,10/10/2011 12:12,2,1,10,120,Active

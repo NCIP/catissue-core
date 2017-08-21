@@ -1,0 +1,104 @@
+<div class="clearfix">
+  <div class="col-xs-8" ng-if="!spr.name">
+    <ul class="os-key-values os-one-col">
+      <li class="item">
+        <strong class="key key-sm" translate="visits.upload_spr">Upload Surgical Pathology Report</strong>
+        <div class="value value-md">
+          <form action="{{sprUrl}}" class="form-inline">
+            <div class="form-group">
+              <div os-file-upload ctrl="sprUploader.ctrl"></div>
+            </div>
+            <div class="form-group clearfix">
+              <div class="col-xs-6">
+                <button type="button" class="btn btn-success" ng-click="upload()" translate="common.buttons.upload">
+                  Upload
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div ng-if="!!spr.name">
+    <div class="os-command-bar">
+      <div class="os-btns">
+        <div ng-if="spr.isTextSpr" class="dropdown pull-left">
+          <button class="default dropdown-toggle">
+            <span class="fa fa-download"></span>
+            <span translate="common.buttons.download">Download</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-left" role="menu">
+            <li>
+              <a ng-href="{{sprPdfFileUrl}}" target="_blank">
+                <span class="fa fa-file-pdf-o"></span>
+                <span translate="visits.spr_pdf">PDF</span>
+              </a>
+            </li>
+            <li>
+             <a ng-href="{{sprUrl}}" target="_blank">
+               <span class="fa fa-file-text-o"></span>
+               <span translate="visits.spr_text">Text</span>
+             </a>
+            </li>
+          </ul>
+        </div>
+
+        <div ng-if="!spr.isTextSpr" class="pull-left">
+          <button class="default" ng-click="downloadSpr()">
+            <span class="fa fa-download"></span>
+            <span translate="common.buttons.download">Download</span>
+          </button>
+        </div>
+
+        <div os-show-if-menu-items-present class="dropdown pull-left">
+          <button class="default dropdown-toggle">
+            <span translate="common.buttons.more">More</span>
+            <span class="fa fa-caret-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-left" role="menu">
+            <li show-if-allowed="sprResource.deleteOpts" ng-if="!spr.locked">
+              <a ng-click="confirmDeleteSpr()">
+                <span class="fa fa-trash"></span>
+                <span translate="common.buttons.delete">Delete</span>
+              </a>
+            </li>
+            <li show-if-allowed="sprResource.lockOpts" ng-if="!spr.locked && spr.isTextSpr">
+              <a ng-click="toggleSprLock(true)">
+                <span class="fa fa-lock"></span>
+                <span translate="role.lock">Lock</span>
+              </a>
+            </li>
+            <li show-if-allowed="sprResource.unlockOpts" ng-if="spr.locked && spr.isTextSpr">
+              <a ng-click="toggleSprLock(false)">
+                <span class="fa fa-unlock"></span>
+                <span translate="role.unlock">Unlock</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-8 os-line-section os-spr">
+      <strong class="key" translate="visits.spr">Surgical Pathology Report</strong>
+      <div class="clearfix">
+        <div ng-if="!spr.locked && spr.isTextSpr" class="os-inline-edit-activated os-inline-editable-lg">
+          <div os-inline-editors on-save="saveSpr">
+            <div class="item">
+              <os-inline-edit editor="sprEditor" name="status" class="value value-md" value="spr.text">
+                <span ng-if="sprEditor.isDisplayMode()" class="os-pre-line">{{spr.text}}</span>
+                <textarea ng-if="sprEditor.isEditMode()" ng-model="sprEditor.editValue" class="form-control os-textarea-lg"></textarea>
+              </os-inline-edit>
+            </div>
+          </div>
+        </div>
+        <span ng-if="spr.locked && spr.isTextSpr" class="os-pre-line">{{spr.text}}</span>
+        <span ng-if="!spr.isTextSpr" class="os-pre-line" translate="visits.non_text_spr">
+          Cannot display this report since it is not in text format.
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

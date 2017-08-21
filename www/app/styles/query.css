@@ -1,0 +1,447 @@
+
+.os-query-select-cb {
+  height: 16px;
+  margin-left: -8px;
+  margin-top: 4px;
+  margin-right: 8px;
+  position: absolute;
+}
+
+.os-query-selected-folder:before {
+  content: ' ';
+  display: block;
+  border-left: 3px solid #DD4B39;
+  position: absolute;
+  height: 20px;
+}
+
+.os-query-selected-folder {
+  color: #DD4B39;
+}
+
+.os-query-folders {
+  max-height: 150px; 
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.os-query-folders .folder {
+  padding: 2px 8px;
+}
+
+.os-query-folders .folder div:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 83%;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.os-query-folders .folder:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.os-query-folders .folder .btn {
+  border: 0px;
+}
+
+.os-query-folders-dd > li > input { 
+  width: 260px;
+  margin: 3px 20px;
+}
+
+.os-query-folders-dd .dropdown-menu-subgroup {
+  max-height: 150px;
+  overflow: auto;
+}
+
+.os-folder-queries-section {
+  height: 180px; 
+  margin-bottom: 20px; 
+  width: 100%; 
+  overflow:auto;
+}
+
+.os-folder-users-section {
+  height: 100px;
+}
+
+.os-folder-users-section .users-select-container {
+  height: 80px;
+}
+
+.os-folder-share-with-all-cb {
+  margin-top: 4px;
+  margin-right: 8px;
+}
+
+/** Add edit query **/
+.os-query-container {
+  position: absolute;
+  top: 161px;
+  bottom: 0px;
+  height: auto;
+  width: 100%;
+  padding-top: 0px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+}
+
+.os-query-cp-forms {
+  order: 0;
+  flex: 2;
+  align-self: auto; 
+  display: flex;
+  flex-direction: column;
+  padding: 0px 5px;
+  height: 100%;
+  overflow: auto;
+}
+
+.os-query-exprs-filters {
+  order: 0;
+  flex: 7;
+  align-self: auto;
+  padding: 0px 5px;
+  height: 100%;
+  overflow: auto;
+}
+
+.os-query-exprs-filters .panel {
+  margin-bottom: 0px;
+}
+
+.os-query-block-margin {
+  margin-bottom: 5px!important; 
+}
+
+.os-query-extn-form {
+  cursor: pointer; 
+  color: #666666; 
+  font-size: 14px; 
+  font-weight: bold;
+}
+  
+.os-query-form-field {
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+  padding: 2px;
+}
+
+.os-query-form-field.selected,
+.os-query-form-field:hover {
+  background: #e5e5e5;
+}
+
+.os-query-search-field {
+  margin: 0 -5px 5px;
+}
+
+.os-query-extn-form-fields {
+  border-bottom: 1px solid #ddd;
+}
+
+.os-query-addedit-filter-po {
+  width: 300px;
+  min-height: 220px;
+}
+
+.os-query-range-value input {
+  width: 42%;
+  float: left;
+}
+
+.os-query-range-value span {
+  width: 15%;
+  text-align: center;
+  padding: 4px;
+  float: left;
+}
+
+.os-query-expr-nodes {
+  padding: 10px 15px;
+  display: block;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  min-height: 4em;
+}
+
+.os-query-expr-error {
+  border: 1px solid red;
+}
+
+.os-query-expr-toolbar {
+  position: absolute;
+  top: 3px;
+  right: 50%;
+}
+
+.os-query-filter-node {
+  height: 35px;
+  padding-top: 8px;
+  background-color: #cccccc;
+  width: 35px;
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  text-align: center;
+  margin: 5px;
+  position: relative;
+}
+
+.os-query-filter-node .pq {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  border-radius: 50%;
+  background: #428bca;
+  height: 12px;
+  width: 12px;
+  font-size: 10px;
+  color: white;
+}
+
+.os-query-op-node {
+  background-color: #f5f5f5;
+  width: 35px;
+  border: 1px solid #cccccc;
+  text-align: center;
+  cursor: pointer;
+  height: 35px;
+  padding-top: 8px;
+  margin: 5px;
+  position: relative;
+}
+
+.os-query-paren-node {
+  background-color: #ffffff;
+  width: 24px;
+  border: 1px solid #cccccc;
+  text-align: center;
+  height: 35px;
+  padding-top: 8px;
+  margin: 5px;
+  position: relative;
+}
+
+.os-query-op-node .remove,
+.os-query-paren-node .remove {
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  cursor: pointer;
+  font-size: 8px;
+  color: #cccccc;
+}
+
+.os-query-filter {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+
+.os-query-filter > div:nth-child(1) {
+  flex: 1;
+}
+  
+.os-query-filter > div:nth-child(2) {
+  flex: 12;
+}
+
+.os-query-filter > div:nth-child(3) {
+  flex: 2;
+}
+
+.os-query-expr-node-placeholder {
+  float: left;
+  width: 40px;
+  height: 40px;
+}
+
+.os-query-count-po {
+  width: 200px;
+}
+
+.os-query-count-po .btn.btn-success {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.os-query-count-po table.table {
+  margin-bottom: 0px;
+}
+
+.os-query-results-grid {
+  width: 100%;
+  height: 100%;
+}
+
+.os-query-dv-select-fields {
+  margin-top: 10px;
+  margin-right: -20px;
+  height: 380px;
+  overflow: auto;
+}
+
+.os-query-dv-aggregates {
+  margin-top: 20px;
+}
+
+.os-query-dv-aggregates .list-group {
+  border-radius: 4px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.os-query-dv-pivot-table {
+  margin-top: 10px; 
+  height: 380px; 
+  overflow: auto;
+}
+
+.os-query-pv-table-container {
+  max-height: 380px; 
+  overflow: auto;
+}
+
+.os-query-btn .btn-default {
+  color: #666666;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+}
+
+.os-query-btn  .btn-default:hover {
+  background: #ddd;
+  border: 1px solid #a5a5a5;
+}
+
+/** Results view **/
+.os-query-container.os-no-padding {
+  padding: 0px!important;
+}
+
+.os-query-results-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+/** Facets panel **/
+.os-query-facets-panel .facet a {
+  text-decoration: none;
+}
+
+.os-query-facets-panel .facet .toggle {
+  font-size: 16px;
+  color: #707070;
+}
+
+.os-query-facets-panel .facet .name {
+  color: #333;
+  text-decoration: none;
+}
+
+.os-query-facets-panel .facet .clear {
+  color: #707070;
+  text-decoration: none;
+}
+
+.os-query-facets-panel .facet.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  padding: 0px!important;
+}
+
+.os-query-facets-panel .facet .values {
+  padding: 15px;
+  max-height: 215px;
+  overflow-y: auto;
+}
+
+.os-query-facets-panel .facet .values ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
+.os-query-facets-panel .facet .values .value {
+  padding: 5px 0px;
+}
+
+.os-query-facets-panel .facet .values .value:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.os-query-facets-panel .facet .values .value .select-cb {
+  float: left;
+  height: 16px;
+  margin-top: 4px;
+  margin-right: 8px;
+}
+
+.os-query-facets-panel .facet .values .value .text {
+  margin-left: 21px;
+  padding-right: 5px;
+}
+
+.os-query-facets-panel .facet .os-md-input input {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+/** Results view grid customisation **/
+.os-query-results-grid.ngGrid {
+  background: #fff;
+}
+
+.os-query-results-grid .ngRow.even,
+.os-query-results-grid .ngRow.odd {
+  background: transparent;
+}
+
+.os-query-results-grid .ngRow:first-child {
+  border-top: 1px solid #d4d4d4;
+}
+
+.os-query-results-grid .ngRow.selected {
+  background: #ffc!important;
+}
+
+.os-query-results-grid .ngRow:hover {
+  background: #f7f7f7;
+}
+
+.os-query-results-grid .ngFooterPanel, .os-query-results-grid .ngTopPanel {
+  /*background: #f5f5f5;*/
+  background: transparent;
+}
+
+.os-query-results-grid .ngTopPanel {
+  border-bottom: 1px solid #ddd;
+}
+
+.os-query-results-grid .ngFooterPanel {
+  border-top: 1px solid #ddd;
+}
+
+.os-query-results-grid .ngCellText {
+  padding: 8px;
+}
+
+.os-query-results-grid .ngHeaderText {
+  padding: 10px 8px;
+}
+
+.os-query-results-grid .ngVerticalBarVisible {
+  background: transparent;
+}
+
+.os-query-results-grid .ngHeaderCell:hover .ngVerticalBarVisible {
+  background: #ddd!important;
+}

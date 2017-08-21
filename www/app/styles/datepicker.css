@@ -1,0 +1,32 @@
+
+.os-date-picker > input:focus ~ span.input-group-btn button.btn-default {
+  /* these properties picked from bootstrap.css */
+  border-color: #66AFE9;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px  rgba(102, 175, 233, .6);
+}
+
+/*os-date-picker fixes for md-input*/
+.os-md-input .os-date-picker {
+  margin-top: 15px;
+}
+
+.os-md-input .os-date-picker > input {
+  margin-top: 0px;
+}
+
+.os-md-input .os-date-picker span.input-group-btn button.btn-default {
+  height: 26px!important;
+  padding-top: 2px;
+  border-width: 0px 0px 2px 0px;
+  border-color: #dddddd;
+  border-radius: 0px;
+  margin: 0px;
+  background-color: transparent;
+}
+
+.os-md-input .os-date-picker > input:focus ~ span.input-group-btn button.btn-default {
+  /* to clear default button property */
+  box-shadow: none;
+  border-bottom-color: #66AFE9;
+}
+

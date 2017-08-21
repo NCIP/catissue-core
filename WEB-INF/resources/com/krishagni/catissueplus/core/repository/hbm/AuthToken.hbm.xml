@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.auth.domain.AuthToken"
+    table="OS_AUTH_TOKENS">
+
+    <id name="token" column="TOKEN"/>
+
+    <many-to-one name="user" column="USER_ID"/>
+
+    <property name="ipAddress" not-null="true" column="IP_ADDRESS"/>
+    
+    <many-to-one name="loginAuditLog" not-null="true" column="LOGIN_AUDIT_LOG_ID" unique-key="true"/>
+    
+    <query name="getByKey">
+        from com.krishagni.catissueplus.core.auth.domain.AuthToken t where t.token = :token
+    </query>
+    
+    <sql-query name="deleteInactiveAuthTokens">
+      <![CDATA[ 
+        delete 
+        from 
+          os_auth_tokens 
+        where token in (
+          select
+            auth_token
+          from
+            os_user_api_calls_log l
+          where
+            l.auth_token = os_auth_tokens.token
+          group by
+            auth_token
+          having
+            max(call_start_time) < :latestCallTime
+        )
+      ]]>    
+    </sql-query>
+    
+    <query name="deleteAuthTokensByUserId">
+      delete
+      from
+        com.krishagni.catissueplus.core.auth.domain.AuthToken t
+      where
+        t.user.id in (:ids)
+    </query>
+  </class>
+</hibernate-mapping>

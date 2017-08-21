@@ -1,0 +1,20 @@
+#form file, is sys form, is multi-record
+collection-event.xml, true, false
+disposal-event.xml, true, true
+distributed-event.xml, true, true
+received-event.xml, true, false
+transfer-event.xml, true, true
+cell-review-event.xml, false, true
+checkin-checkout-event.xml, false, true
+embedded-event.xml, false, true
+fixed-event.xml, false, true
+fluid-event.xml, false, true
+frozen-event.xml, false, true
+molecular-review-event.xml, false, true
+procedure-event.xml, false, true
+spun-event.xml, false, true
+thaw-event.xml, false, true
+tissue-review-event.xml, false, true
+shipped-event.xml, true, true
+shipment-received-event.xml, true, true
+return-event.xml, true, true

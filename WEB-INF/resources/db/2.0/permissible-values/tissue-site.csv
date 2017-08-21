@@ -1,0 +1,334 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,"Rectum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Esophagus, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Middle third of esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Lower third of esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Abdominal esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Upper third of esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Thoracic esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Cervical esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of esophagus,Tissue_Site_PID,null
+getNextPvId(),,,null,Hepatic flexure of colon,Tissue_Site_PID,null
+getNextPvId(),,,null,"Colon, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Descending colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Cecum,Tissue_Site_PID,null
+getNextPvId(),,,null,Sigmoid colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Splenic flexure of colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Ascending colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Transverse colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of colon,Tissue_Site_PID,null
+getNextPvId(),,,null,Appendix,Tissue_Site_PID,null
+getNextPvId(),,,null,Gallbladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Ampulla of Vater,Tissue_Site_PID,null
+getNextPvId(),,,null,"Biliary tract, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of biliary tract,Tissue_Site_PID,null
+getNextPvId(),,,null,Extrahepatic bile duct,Tissue_Site_PID,null
+getNextPvId(),,,null,Intrahepatic bile duct,Tissue_Site_PID,null
+getNextPvId(),,,null,Liver,Tissue_Site_PID,null
+getNextPvId(),,,null,Rectosigmoid junction,Tissue_Site_PID,null
+getNextPvId(),,,null,Pancreatic duct,Tissue_Site_PID,null
+getNextPvId(),,,null,Tail of pancreas,Tissue_Site_PID,null
+getNextPvId(),,,null,"Pancreas, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Other specified parts of pancreas,Tissue_Site_PID,null
+getNextPvId(),,,null,Islets of Langerhans,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of pancreas,Tissue_Site_PID,null
+getNextPvId(),,,null,Body of pancreas,Tissue_Site_PID,null
+getNextPvId(),,,null,Head of pancreas,Tissue_Site_PID,null
+getNextPvId(),,,null,"Gastrointestinal tract, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of digestive system,Tissue_Site_PID,null
+getNextPvId(),,,null,"Intestinal tract, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Small intestine, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Duodenum,Tissue_Site_PID,null
+getNextPvId(),,,null,Meckel's diverticulum,Tissue_Site_PID,null
+getNextPvId(),,,null,Jejunum,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of small intestine,Tissue_Site_PID,null
+getNextPvId(),,,null,Ileum,Tissue_Site_PID,null
+getNextPvId(),,,null,"Anus, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Anal canal,Tissue_Site_PID,null
+getNextPvId(),,,null,Cloacogenic zone,Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of rectum, anus and anal canal",Tissue_Site_PID,null
+getNextPvId(),,,null,"Stomach, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Greater curvature of stomach, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Fundus of stomach,Tissue_Site_PID,null
+getNextPvId(),,,null,Pylorus,Tissue_Site_PID,null
+getNextPvId(),,,null,"Cardia, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of stomach,Tissue_Site_PID,null
+getNextPvId(),,,null,"Lesser curvature of stomach, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Gastric antrum,Tissue_Site_PID,null
+getNextPvId(),,,null,Body of stomach,Tissue_Site_PID,null
+getNextPvId(),,,null,Skin of other and unspecified parts of face,Tissue_Site_PID,null
+getNextPvId(),,,null,"Skin, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Skin of upper limb and shoulder,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of skin,Tissue_Site_PID,null
+getNextPvId(),,,null,Skin of lower limb and hip,Tissue_Site_PID,null
+getNextPvId(),,,null,External ear,Tissue_Site_PID,null
+getNextPvId(),,,null,Eyelid,Tissue_Site_PID,null
+getNextPvId(),,,null,"Skin of lip, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Skin of trunk,Tissue_Site_PID,null
+getNextPvId(),,,null,Skin of scalp and neck,Tissue_Site_PID,null
+getNextPvId(),,,null,"Scrotum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Male genital organs, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of male genital organs,Tissue_Site_PID,null
+getNextPvId(),,,null,Epididymis,Tissue_Site_PID,null
+getNextPvId(),,,null,Spermatic cord,Tissue_Site_PID,null
+getNextPvId(),,,null,Other specified parts of male genital organs,Tissue_Site_PID,null
+getNextPvId(),,,null,"Testis, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Undescended testis,Tissue_Site_PID,null
+getNextPvId(),,,null,Descended testis,Tissue_Site_PID,null
+getNextPvId(),,,null,Prostate gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Body of penis,Tissue_Site_PID,null
+getNextPvId(),,,null,"Penis, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Prepuce,Tissue_Site_PID,null
+getNextPvId(),,,null,Glans penis,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of penis,Tissue_Site_PID,null
+getNextPvId(),,,null,UNKNOWN PRIMARY SITE,Tissue_Site_PID,null
+getNextPvId(),,,null,Peripheral nerves and Autonomic nervous system of upper limb and shoulder,Tissue_Site_PID,null
+getNextPvId(),,,null,"Autonomic nervous system, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of peripheral nerves and autonomic nervous system,Tissue_Site_PID,null
+getNextPvId(),,,null,Peripheral nerves and Autonomic nervous system of thorax,Tissue_Site_PID,null
+getNextPvId(),,,null,"Peripheral nerves and Autonomic nervous system of trunk, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Peripheral nerves and Autonomic nervous system of lower limb and hip,Tissue_Site_PID,null
+getNextPvId(),,,null,"Peripheral nerves and Autonomic nervous system of head, face, and neck",Tissue_Site_PID,null
+getNextPvId(),,,null,Peripheral nerves and Autonomic nervous system of abdomen,Tissue_Site_PID,null
+getNextPvId(),,,null,Peripheral nerves and Autonomic nervous system of pelvis,Tissue_Site_PID,null
+getNextPvId(),,,null,Corpus uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of corpus uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Myometrium,Tissue_Site_PID,null
+getNextPvId(),,,null,Endometrium,Tissue_Site_PID,null
+getNextPvId(),,,null,Fundus uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Isthmus uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Labium majus,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of vulva,Tissue_Site_PID,null
+getNextPvId(),,,null,Labium minus,Tissue_Site_PID,null
+getNextPvId(),,,null,Clitoris,Tissue_Site_PID,null
+getNextPvId(),,,null,"Vulva, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Ovary,Tissue_Site_PID,null
+getNextPvId(),,,null,"Uterus, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Exocervix,Tissue_Site_PID,null
+getNextPvId(),,,null,Endocervix,Tissue_Site_PID,null
+getNextPvId(),,,null,Cervix uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of cervix uteri,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of female genital organs,Tissue_Site_PID,null
+getNextPvId(),,,null,Fallopian tube,Tissue_Site_PID,null
+getNextPvId(),,,null,Broad ligament,Tissue_Site_PID,null
+getNextPvId(),,,null,Parametrium,Tissue_Site_PID,null
+getNextPvId(),,,null,Round ligament,Tissue_Site_PID,null
+getNextPvId(),,,null,Uterine adnexa,Tissue_Site_PID,null
+getNextPvId(),,,null,"Female genital tract, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Other specified parts of female genital organs,Tissue_Site_PID,null
+getNextPvId(),,,null,"Vagina, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Placenta,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of ill-defined sites,Tissue_Site_PID,null
+getNextPvId(),,,null,Other ill-defined sites,Tissue_Site_PID,null
+getNextPvId(),,,null,"Lower limb, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Head, face or neck, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Abdomen, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Upper limb, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Pelvis, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Thorax, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Spleen,Tissue_Site_PID,null
+getNextPvId(),,,null,Bone marrow,Tissue_Site_PID,null
+getNextPvId(),,,null,Blood,Tissue_Site_PID,null
+getNextPvId(),,,null,"Reticuloendothelial system, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Hematopoietic system, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Specified parts of peritoneum,Tissue_Site_PID,null
+getNextPvId(),,,null,Retroperitoneum,Tissue_Site_PID,null
+getNextPvId(),,,null,"Peritoneum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of retroperitoneum and peritoneum,Tissue_Site_PID,null
+getNextPvId(),,,null,Trachea,Tissue_Site_PID,null
+getNextPvId(),,,null,Maxillary sinus,Tissue_Site_PID,null
+getNextPvId(),,,null,"Accessory sinus, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of accessory sinuses,Tissue_Site_PID,null
+getNextPvId(),,,null,Frontal sinus,Tissue_Site_PID,null
+getNextPvId(),,,null,Ethmoid sinus,Tissue_Site_PID,null
+getNextPvId(),,,null,Sphenoid sinus,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of larynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Subglottis,Tissue_Site_PID,null
+getNextPvId(),,,null,"Larynx, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Glottis,Tissue_Site_PID,null
+getNextPvId(),,,null,Supraglottis,Tissue_Site_PID,null
+getNextPvId(),,,null,Laryngeal cartilage,Tissue_Site_PID,null
+getNextPvId(),,,null,Middle ear,Tissue_Site_PID,null
+getNextPvId(),,,null,Nasal cavity,Tissue_Site_PID,null
+getNextPvId(),,,null,"Pleura, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Anterior mediastinum,Tissue_Site_PID,null
+getNextPvId(),,,null,Heart,Tissue_Site_PID,null
+getNextPvId(),,,null,Posterior mediastinum,Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of heart, mediastinum and pleura",Tissue_Site_PID,null
+getNextPvId(),,,null,"Mediastinum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Lower lobe, lung",Tissue_Site_PID,null
+getNextPvId(),,,null,Main bronchus,Tissue_Site_PID,null
+getNextPvId(),,,null,"Middle lobe, lung",Tissue_Site_PID,null
+getNextPvId(),,,null,"Upper lobe, lung",Tissue_Site_PID,null
+getNextPvId(),,,null,"Lung, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of lung,Tissue_Site_PID,null
+getNextPvId(),,,null,Thymus,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of respiratory system and intrathoracic organs,Tissue_Site_PID,null
+getNextPvId(),,,null,Ill-defined sites within respiratory system,Tissue_Site_PID,null
+getNextPvId(),,,null,"Upper respiratory tract, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Long bones of upper limb, scapula and associated joints",Tissue_Site_PID,null
+getNextPvId(),,,null,Short bones of upper limb and associated joints,Tissue_Site_PID,null
+getNextPvId(),,,null,"Bone of limb, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Short bones of lower limb and associated joints,Tissue_Site_PID,null
+getNextPvId(),,,null,Long bones of lower limb and associated joints,Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of bones, joints and articular cartilage of limbs",Tissue_Site_PID,null
+getNextPvId(),,,null,Bones of skull and face and associated joints,Tissue_Site_PID,null
+getNextPvId(),,,null,"Pelvic bones, Sacrum, Coccyx and associated joints",Tissue_Site_PID,null
+getNextPvId(),,,null,Mandible,Tissue_Site_PID,null
+getNextPvId(),,,null,"Rib, Sternum, Clavicle and associated joints",Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of bones, joints and articular cartilage",Tissue_Site_PID,null
+getNextPvId(),,,null,"Bone, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Vertebral column,Tissue_Site_PID,null
+getNextPvId(),,,null,Aortic body and other paraganglia,Tissue_Site_PID,null
+getNextPvId(),,,null,Pineal gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Pituitary gland,Tissue_Site_PID,null
+getNextPvId(),,,null,"Endocrine gland, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Parathyroid gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Craniopharyngeal duct,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of endocrine glands and related structures,Tissue_Site_PID,null
+getNextPvId(),,,null,Carotid body,Tissue_Site_PID,null
+getNextPvId(),,,null,Medulla of adrenal gland,Tissue_Site_PID,null
+getNextPvId(),,,null,"Adrenal gland, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Cortex of adrenal gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Thyroid gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Cerebral meninges,Tissue_Site_PID,null
+getNextPvId(),,,null,Spinal meninges,Tissue_Site_PID,null
+getNextPvId(),,,null,"Meninges, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of thorax",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of upper limb and shoulder",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of lower limb and hip",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of trunk, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of abdomen",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of head, face, and neck",Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of connective, subcutaneous and other soft tissues",Tissue_Site_PID,null
+getNextPvId(),,,null,"Connective, Subcutaneous and other Soft tissues of pelvis",Tissue_Site_PID,null
+getNextPvId(),,,null,Upper-outer quadrant of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Central portion of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Axillary tail of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Lower-outer quadrant of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,"Breast, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Lower-inner quadrant of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Upper-inner quadrant of breast,Tissue_Site_PID,null
+getNextPvId(),,,null,Nipple,Tissue_Site_PID,null
+getNextPvId(),,,null,Waldeyer's ring,Tissue_Site_PID,null
+getNextPvId(),,,null,Laryngopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,"Pharynx, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Overlapping lesion of lip, oral cavity and pharynx",Tissue_Site_PID,null
+getNextPvId(),,,null,"Tonsil, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Tonsillar pillar,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of tonsil,Tissue_Site_PID,null
+getNextPvId(),,,null,Tonsillar fossa,Tissue_Site_PID,null
+getNextPvId(),,,null,Pyriform sinus,Tissue_Site_PID,null
+getNextPvId(),,,null,"Gum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Upper gum,Tissue_Site_PID,null
+getNextPvId(),,,null,Lower gum,Tissue_Site_PID,null
+getNextPvId(),,,null,"Dorsal surface of tongue, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Ventral surface of tongue, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of tongue,Tissue_Site_PID,null
+getNextPvId(),,,null,"Tongue, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Border of tongue,Tissue_Site_PID,null
+getNextPvId(),,,null,Lingual tonsil,Tissue_Site_PID,null
+getNextPvId(),,,null,"Anterior 2/3 of tongue, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Palate, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of palate,Tissue_Site_PID,null
+getNextPvId(),,,null,"Soft palate, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Uvula,Tissue_Site_PID,null
+getNextPvId(),,,null,Hard palate,Tissue_Site_PID,null
+getNextPvId(),,,null,Submandibular gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of major salivary glands,Tissue_Site_PID,null
+getNextPvId(),,,null,"Major salivary gland, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Sublingual gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of hypopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Posterior wall of hypopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,"Hypopharynx, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Postcricoid region,Tissue_Site_PID,null
+getNextPvId(),,,null,Hypopharyngeal aspect of aryepiglottic fold,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of oropharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Branchial cleft,Tissue_Site_PID,null
+getNextPvId(),,,null,Posterior wall of oropharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Anterior surface of epiglottis,Tissue_Site_PID,null
+getNextPvId(),,,null,"Oropharynx, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Vallecula,Tissue_Site_PID,null
+getNextPvId(),,,null,Lateral wall of oropharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,"Lip, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Mucosa of upper lip,Tissue_Site_PID,null
+getNextPvId(),,,null,Mucosa of lower lip,Tissue_Site_PID,null
+getNextPvId(),,,null,Commissure of lip,Tissue_Site_PID,null
+getNextPvId(),,,null,External upper lip,Tissue_Site_PID,null
+getNextPvId(),,,null,"Mucosa of lip, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of lip,Tissue_Site_PID,null
+getNextPvId(),,,null,"External lip, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,External lower lip,Tissue_Site_PID,null
+getNextPvId(),,,null,Parotid gland,Tissue_Site_PID,null
+getNextPvId(),,,null,"Base of tongue, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Lateral floor of mouth,Tissue_Site_PID,null
+getNextPvId(),,,null,Anterior floor of mouth,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of floor of mouth,Tissue_Site_PID,null
+getNextPvId(),,,null,"Floor of mouth, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Posterior wall of nasopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Superior wall of nasopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,"Nasopharynx, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Lateral wall of nasopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of nasopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Anterior wall of nasopharynx,Tissue_Site_PID,null
+getNextPvId(),,,null,Vestibule of mouth,Tissue_Site_PID,null
+getNextPvId(),,,null,Retromolar area,Tissue_Site_PID,null
+getNextPvId(),,,null,Cheek mucosa,Tissue_Site_PID,null
+getNextPvId(),,,null,"Mouth, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of other and unspecified parts of mouth,Tissue_Site_PID,null
+getNextPvId(),,,null,"Lymph nodes of head, face and neck",Tissue_Site_PID,null
+getNextPvId(),,,null,Lymph nodes of axilla or arm,Tissue_Site_PID,null
+getNextPvId(),,,null,Intrathoracic lymph nodes,Tissue_Site_PID,null
+getNextPvId(),,,null,Lymph nodes of inguinal region or leg,Tissue_Site_PID,null
+getNextPvId(),,,null,Pelvic lymph nodes,Tissue_Site_PID,null
+getNextPvId(),,,null,"Lymph node, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Lymph nodes of multiple regions,Tissue_Site_PID,null
+getNextPvId(),,,null,Intra-abdominal lymph nodes,Tissue_Site_PID,null
+getNextPvId(),,,null,Ureter,Tissue_Site_PID,null
+getNextPvId(),,,null,Renal pelvis,Tissue_Site_PID,null
+getNextPvId(),,,null,"Kidney, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Urinary system, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of urinary organs,Tissue_Site_PID,null
+getNextPvId(),,,null,Paraurethral gland,Tissue_Site_PID,null
+getNextPvId(),,,null,Urethra,Tissue_Site_PID,null
+getNextPvId(),,,null,Lateral wall of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,"Bladder, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Dome of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Anterior wall of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Ureteric orifice,Tissue_Site_PID,null
+getNextPvId(),,,null,Posterior wall of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Bladder neck,Tissue_Site_PID,null
+getNextPvId(),,,null,Trigone of bladder,Tissue_Site_PID,null
+getNextPvId(),,,null,Urachus,Tissue_Site_PID,null
+getNextPvId(),,,null,"Brain, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Brain stem,Tissue_Site_PID,null
+getNextPvId(),,,null,Occipital lobe,Tissue_Site_PID,null
+getNextPvId(),,,null,Cerebrum,Tissue_Site_PID,null
+getNextPvId(),,,null,Parietal lobe,Tissue_Site_PID,null
+getNextPvId(),,,null,"Cerebellum, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,"Ventricle, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Frontal lobe,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of brain,Tissue_Site_PID,null
+getNextPvId(),,,null,Temporal lobe,Tissue_Site_PID,null
+getNextPvId(),,,null,"Nervous system, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Acoustic nerve,Tissue_Site_PID,null
+getNextPvId(),,,null,"Cranial nerve, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Cauda equina,Tissue_Site_PID,null
+getNextPvId(),,,null,Spinal cord,Tissue_Site_PID,null
+getNextPvId(),,,null,Optic nerve,Tissue_Site_PID,null
+getNextPvId(),,,null,Olfactory nerve,Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of brain and central nervous system,Tissue_Site_PID,null
+getNextPvId(),,,null,Conjunctiva,Tissue_Site_PID,null
+getNextPvId(),,,null,"Eye, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Overlapping lesion of eye and adnexa,Tissue_Site_PID,null
+getNextPvId(),,,null,Choroid,Tissue_Site_PID,null
+getNextPvId(),,,null,Retina,Tissue_Site_PID,null
+getNextPvId(),,,null,"Cornea, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Ciliary body,Tissue_Site_PID,null
+getNextPvId(),,,null,Lacrimal gland,Tissue_Site_PID,null
+getNextPvId(),,,null,EYE AND ADNEXA,Tissue_Site_PID,null
+getNextPvId(),,,null,"Orbit, NOS",Tissue_Site_PID,null
+getNextPvId(),,,null,Not Specified,Tissue_Site_PID,null

@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_audit_event_details ELEMENT_NAME="MEDICAL_RECORD_NUMBER" CURRENT_VALUE="23233"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

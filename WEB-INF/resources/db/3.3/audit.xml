@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Audit CP SOP document and URL values">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="SOP_DOCUMENT_URL" type="${text.type}(255)"/>
+      <column name="sopDocumentUrl_MOD" type="${bit.type}"/>
+      <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
+      <column name="sopDocumentName_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update user audit table for institute">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+      <column name="INSTITUTE_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop audit column as available removed from specimen table">
+    <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="AVAILABLE"/>
+    <dropColumn tableName="CATISSUE_SPECIMEN_AUD" columnName="isAvailable_MOD"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Modify length of comments column in visit audit table">
+    <modifyDataType tableName="CAT_SPECIMEN_COLL_GROUP_AUD" columnName="COMMENTS" newDataType="${text.type}(2000)" />
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Audit values of user's type status">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="TYPE" type="${text.type}(16)"/>
+      <column name="type_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Audit table for DP coordinators">
+    <createTable tableName="OS_DP_COORDINATORS_AUD">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Track changes in DP coordinators collection">
+    <addColumn tableName="CAT_DISTRIBUTION_PROTOCOL_AUD">
+      <column name="COORDINATORS_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
+</databaseChangeLog>

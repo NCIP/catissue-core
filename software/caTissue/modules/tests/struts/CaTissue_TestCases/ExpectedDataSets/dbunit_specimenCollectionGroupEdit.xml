@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_abs_speci_coll_group CLINICAL_DIAGNOSIS="Anxiety disorder of childhood OR adolescence (disorder)" CLINICAL_STATUS="Operative"/>
-  <catissue_audit_event_details ELEMENT_NAME="CLINICAL_STATUS" CURRENT_VALUE="Operative"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

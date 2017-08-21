@@ -1,0 +1,32 @@
+<div>
+  <form name="poolSpmnForm" os-form-validator="poolSpmnForm" novalidate>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <os-spmn-measure name="quantity" specimen="parentSr" quantity="pooledReq.spmn.initialQty" md-input
+          placeholder="{{'srs.qty' | translate}}" required> 
+        </os-spmn-measure>
+        <div os-field-error field="poolSpmnForm.quantity"></div>
+      </div>
+    </div>
+    <div class="col-xs-3" ng-if="codingEnabled">
+      <div class="form-group">
+        <input name="code" ng-model="pooledReq.spmn.code" os-md-input class="form-control" type="text"
+          placeholder="{{'srs.code' | translate}}">
+        <div os-field-error field="poolSpmnForm.code"></div>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="addToSpmnPool()" ng-if="!pooledReq.spmn.id">
+          <span>Add</span>
+        </button>
+        <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!pooledReq.spmn.id">
+          <span>Update</span>
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,13 @@
+<div class="popover {{placement}}" ng-class="{ in: isOpen(), fade: animation() }">
+  <div class="arrow"></div>
+ 
+  <div class="popover-inner">
+    <div class="popover-title clearfix">
+       <span class="pull-left" ng-bind="title" ng-show="title"></span>
+       <a href="{{infoLink}}" target="_blank" ng-if="infoLink">
+         <span class="glyphicon glyphicon-info-sign pull-right"></span>
+       </a>
+    </div>
+    <div class="popover-content"></div>
+  </div>
+</div>

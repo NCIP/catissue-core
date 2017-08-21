@@ -1,4 +1,0 @@
-catissue_specimen_coll_group;select BARCODE,COMMENTS,SURGICAL_PATHOLOGY_NUMBER from catissue_specimen_coll_group where IDENTIFIER=962
-catissue_abs_speci_coll_group;select CLINICAL_DIAGNOSIS,CLINICAL_STATUS from catissue_abs_speci_coll_group where IDENTIFIER=962
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='RECEIVED_QUALITY'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event

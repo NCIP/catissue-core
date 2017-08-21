@@ -1,0 +1,6 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,HIV,specimen_biohazard,null
+getNextPvId(),,,null,Hepatitis A,specimen_biohazard,null
+getNextPvId(),,,null,Hepatitis B,specimen_biohazard,null
+getNextPvId(),,,null,Hepatitis C,specimen_biohazard,null
+getNextPvId(),,,null,Tuberculosis,specimen_biohazard,null

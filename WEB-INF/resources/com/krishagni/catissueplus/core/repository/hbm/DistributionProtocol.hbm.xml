@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol" table="CATISSUE_DISTRIBUTION_PROTOCOL">
+    <id name="id" column="IDENTIFIER" type="long" unsaved-value="null">
+      <generator class="native">
+        <param name="sequence">CATISSUE_DISTRI_PROT_SEQ</param>
+      </generator>	
+    </id>
+    
+    <property name="title" column="TITLE"/>
+
+    <property name="shortTitle"  column="SHORT_TITLE"/>
+
+    <property name="irbId" column="IRB_IDENTIFIER"/>
+
+    <property name="startDate" column="START_DATE"/>
+
+    <property name="endDate" column="END_DATE"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <many-to-one
+      name="institute"
+      class="com.krishagni.catissueplus.core.administrative.domain.Institute"
+      column="INSTITUTE_ID"/>
+
+    <many-to-one
+      name="defReceivingSite"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="DEF_RECEIVING_SITE_ID"/>
+
+    <many-to-one
+      name="principalInvestigator"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="PRINCIPAL_INVESTIGATOR_ID"/>
+      
+    <set name="coordinators" table="OS_DP_COORDINATORS" inverse="false" cascade="none">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+    </set>
+    
+    <many-to-one
+      name="report"
+      class="com.krishagni.catissueplus.core.de.domain.SavedQuery"
+      column="REPORT_ID"/>
+
+    <set name="distributionOrders" inverse="false" cascade="none">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <set name="distributingSites" inverse="true" cascade="all-delete-orphan">
+      <key column="DISTRIBUTION_PROTOCOL_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpDistributionSite"/>
+    </set>
+    
+    <set name="requirements" inverse="true" cascade="all-delete-orphan">
+      <key column="DP_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DpRequirement"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <filter name="activeEntity"/>
+
+    <query name="getDistributionProtocolByTitle">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        title=:title 
+    </query>
+      
+    <query name="getDistributionProtocolByShortTitle">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        shortTitle=:shortTitle 
+    </query>
+      
+    <query name="getAllDistributionProtocols">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol 
+      where 
+        activityStatus != 'Disabled' 
+      order by 
+        title 
+    </query>
+
+    <query name="getSpmnCountByDps">
+      select
+        dp.id, count(orderItem.id)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol dp
+        join dp.distributionOrders do
+        join do.orderItems orderItem
+      where
+        dp.id in (:dpIds) and
+        do.status = 'EXECUTED'
+      group by
+        dp.id
+    </query>
+    
+    <query name="getExpiringDps">
+      select 
+        dp
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionProtocol dp
+      where
+        dp.endDate is not null and
+        dp.endDate between :fromDate and :toDate and
+        dp.activityStatus = 'Active'
+    </query>
+  </class>
+</hibernate-mapping>

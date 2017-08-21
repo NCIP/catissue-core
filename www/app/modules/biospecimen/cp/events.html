@@ -1,0 +1,167 @@
+<div class="clearfix">
+  <div class="col-xs-12">
+    <div class="alert alert-warning" ng-if="!events || events.length == 0">
+      <span translate="cp.no_cpes">There are no collection protocol events. Please add an event</span>
+    </div>
+  </div>
+
+  <div class="col-xs-3">
+    <div class="list-group">
+      <div class="list-group-item os-section-hdr">
+        <span translate="cp.cpe_list">Events</span>
+      </div>
+
+      <div ng-repeat="evt in events | orderBy:['eventPoint', 'id']" class="os-cpe-item">
+        <div ng-if="evt.id != event.id">
+          <div class="list-group-item" ng-class="{'active': selected.id == evt.id}">
+            <div ng-click="selectEvent(evt)">
+              <os-event-desc event-point="evt.eventPoint" event-label="evt.eventLabel"
+                event-code="evt.code" coding-enabled="codingEnabled">
+              </os-event-desc>
+            </div>
+
+            <div class="os-more-options" dropdown show-if-allowed="cpResource.updateOpts">
+              <div class="dropdown-toggle">
+                <span class="fa fa-ellipsis-v"></span>
+              </div>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <a ng-click="showEditEvent(evt)">
+                    <i class="fa fa-pencil"></i>
+                    <span translate="cp.edit_cpe">Edit</span>
+                  </a>
+                </li>
+                <li>
+
+                  <a ng-click="showCopyEvent(evt)">
+                    <i class="fa fa-copy"></i>
+                    <span translate="cp.copy_cpe">Copy</span>
+                  </a>
+                </li>
+                <li>
+                  <a ng-click="deleteEvent(evt)">
+                    <i class="fa fa-trash"></i>
+                    <span translate="cp.remove_cpe">Remove</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div ng-if="evt.id == event.id" class="os-inplace-form-edit-po"> 
+          <div class="list-group-item">
+            <div class="title">
+              T{{evt.eventPoint}}: {{evt.eventLabel}} 
+              <span ng-if="codingEnabled && !!evt.code">({{evt.code}})</span>
+            </div>
+            <div class="content" ng-include="'event-add-edit.html'"></div>
+          </div>
+        </div>
+      </div>
+
+      <a ng-if="mode != 'add' && mode != 'copy'" show-if-allowed="cpResource.updateOpts" class="list-group-item"
+        translate="cp.add_cpe" ng-click="showAddEvent()">
+        Add Event ...
+      </a>
+      <div ng-if="mode == 'add' || mode == 'copy'" class="os-inplace-form-edit-po">
+        <div class="list-group-item">
+          <div class="title">
+            <span ng-if="mode == 'add'">New Event</span>
+            <span ng-if="mode == 'copy'">Copy Event</span>
+          </div>
+          <div class="content" ng-include="'event-add-edit.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-9" ng-if="events.length > 0">
+    <div ui-view></div>
+  </div>
+
+</div>
+
+<script type="text/ng-template" id="event-add-edit.html">
+  <form name="eventForm" os-form-validator="eventForm" novalidate>
+    <div class="form-group clearfix" ng-if="codingEnabled ">
+      <input os-md-input autofocus type="text" class="form-control" maxlength="16"
+        placeholder="{{'cp.cpe_code' | translate}}" name="eventCode" ng-model="event.code">
+      <div os-field-error field="eventForm.eventCode"></div>
+    </div>
+    <div class="form-group clearfix">
+      <input os-md-input autofocus type="text" class="form-control" placeholder="{{'cp.cpe_point' | translate}}" 
+        name="eventPoint" ng-model="event.eventPoint" ng-model-options="{allowInvalid: true}" ng-pattern="/^-?\d+$/">
+      <div os-field-error field="eventForm.eventPoint"></div>
+    </div>
+
+    <div class="form-group clearfix">
+      <input os-md-input type="text" class="form-control" placeholder="{{'cp.cpe_point_label' | translate}}"
+        name="eventLabel" ng-model="event.eventLabel" required>
+      <div os-field-error field="eventForm.eventLabel"></div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div os-md-input ng-model="event.clinicalDiagnosis" placeholder="{{'cp.clinical_diagnosis' | translate}}">
+        <os-pvs name="clinicalDiagnosis" ng-model="event.clinicalDiagnosis" attribute="clinical-diagnosis"
+          os-md-input placeholder="{{'cp.clinical_diagnosis' | translate}}" required>
+        </os-pvs>
+      </div>
+      <div os-field-error field="eventForm.clinicalDiagnosis"></div>
+    </div>
+
+    <div class="form-group clearfix">
+      <os-pvs os-md-input name="clinicalStatus" ng-model="event.clinicalStatus" attribute="clinical-status" 
+        placeholder="{{'cp.clinical_status' | translate}}" required>
+      </os-pvs>
+      <div os-field-error field="eventForm.clinicalStatus"></div>
+    </div>
+
+    <div class="form-group clearfix">
+      <os-sites name="defaultSite" md-type="true" ng-model="event.defaultSite"
+        placeholder="{{'cp.default_site' | translate}}">
+      </os-sites>
+    </div>
+
+    <div class="form-group clearfix">
+      <os-select os-md-input name="visitNamePrintMode" ng-model="event.visitNamePrintMode" list="visitNamePrintModes"
+        display-prop="displayName" select-prop="name" placeholder="{{'cp.when_to_print' | translate}}">
+      </os-select>
+    </div>
+
+    <div class="form-group clearfix">
+      <input os-md-input type="text" class="form-control" placeholder="{{'cp.copies' | translate}}"
+        name="visitNamePrintCopies" ng-model="event.visitNamePrintCopies"
+        ng-model-options="{allowInvalid: true}" ng-pattern="/^[0-9]+$/">
+      <div os-field-error field="eventForm.visitNamePrintCopies"></div>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-success" os-form-submit="addEvent()" ng-if="!event.id">
+        <span translate="common.buttons.add">Add</span>
+      </button>
+      <button type="submit" class="btn btn-success" os-form-submit="editEvent()" ng-if="event.id">
+        <span translate="common.buttons.save">Save</span>
+      </button>
+      <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+        <span translate="common.buttons.cancel">Cancel</span>
+      </a>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="cp_event_delete.html">
+  <div class="os-modal-header">
+    <span translate="cp.deleting_event">Deleting Event</span>
+  </div>
+  <div class="os-modal-body">
+    <span translate="cp.confirm_delete_event">
+      Collection Protocol Event and its specimen requirements will be deleted. Are you sure you want to proceed?
+    </span>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="no()" translate="common.buttons.cancel">Cancel</button>
+    <button class="btn btn-danger" ng-click="yes()" translate="common.yes">Yes</button>
+  </div>
+</script>

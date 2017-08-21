@@ -1,0 +1,46 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Hello $user.firstName $user.lastName,
+                  <br><br>
+                  Your OpenSpecimen registration request is now under review by the administrator. You will get an email once your request is processed.
+                  <br><br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Until then, you can do the following to kill any extra time you might have:
+                <ul>
+                  <li>
+                    <a href="http://help.openspecimen.org/">Watch OpenSpecimen training videos</a>
+                  </li>
+                  <li>
+                    <a href="http://forums.openspecimen.org/">Enroll to OpenSpecimen Community forums</a>
+                  </li>
+                  <li>
+                    <a href="https://www.youtube.com/results?search_query=best+way+to+kill+time">Watch some YouTube videos on how to kill time</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

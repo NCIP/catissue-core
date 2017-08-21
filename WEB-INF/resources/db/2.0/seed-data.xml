@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
+  <changeSet author="vgaikwad" id="Add operations" dbms="mysql">
+    <sql>
+      insert into RBAC_OPERATIONS(NAME) values ('Create');
+      insert into RBAC_OPERATIONS(NAME) values ('Read');
+      insert into RBAC_OPERATIONS(NAME) values ('Update');
+      insert into RBAC_OPERATIONS(NAME) values ('Delete');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add operations" dbms="oracle">
+    <sql>
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Create');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Read');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Update');
+      insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Delete');
+    </sql>
+  </changeSet>     
+        
+  <changeSet author="vgaikwad" id="Add resources" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('CollectionProtocol');
+      insert into RBAC_RESOURCES(NAME) values('Order');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantPhi');
+      insert into RBAC_RESOURCES(NAME) values('ParticipantDeid');
+      insert into RBAC_RESOURCES(NAME) values('VisitAndSpecimen');
+      insert into RBAC_RESOURCES(NAME) values('StorageContainer');
+      insert into RBAC_RESOURCES(NAME) values('User');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add resources" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'CollectionProtocol');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'Order');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantPhi');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'ParticipantDeid');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'VisitAndSpecimen');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'StorageContainer');
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'User');
+    </sql>
+  </changeSet>  
+
+  <changeSet author="nmarwaha" id="Insert default system user" dbms="mysql">
+    <validCheckSum>7:4ff43753720efddae30844e02324d842</validCheckSum>
+    <validCheckSum>7:c0899557d2ba8e128914a848388a660b</validCheckSum>
+    <validCheckSum>7:f2d36378a001d6b67ac813a1adfe457a</validCheckSum>
+    <sql>
+      insert into catissue_user
+        (identifier, email_address, first_name, login_name, activity_status, first_time_login, domain_name, is_admin)
+      values
+        (default, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
+    </sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Insert default system user" dbms="oracle">
+    <validCheckSum>7:4ff43753720efddae30844e02324d842</validCheckSum>
+    <validCheckSum>7:c0899557d2ba8e128914a848388a660b</validCheckSum>
+    <validCheckSum>7:f2d36378a001d6b67ac813a1adfe457a</validCheckSum>
+    <sql>
+      insert into catissue_user
+        (identifier, email_address, first_name, login_name, activity_status, first_time_login, domain_name, is_admin)
+      values
+        (CATISSUE_USER_SEQ.nextval, '$system', 'System', '$system', 'Locked', 0, 'openspecimen', 1);
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Coordinator role">
+    <validCheckSum>7:8c2c94775aff59d9038d4d52606a0351</validCheckSum>
+    <sql>call create_role('Coordinator', 'User can perform all operations within the assigned protocols.');</sql>
+    <sql>call assign_to_role('Coordinator', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Coordinator', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Coordinator', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Coordinator', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Coordinator', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert PI role" >
+    <validCheckSum>7:3096c21b6d45aba184be4cdd9cd50f04</validCheckSum>
+    <sql>call create_role('Principal Investigator', 'User has read access to all data within the assigned protocols.');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'ParticipantPhi', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'VisitAndSpecimen', 'Read');</sql>
+    <sql>call assign_to_role('Principal Investigator', 'Order', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Researcher role">
+    <validCheckSum>7:73d54f2a49088384271054ec76df40c1</validCheckSum>
+    <sql>call create_role('Researcher', 'User has read access to non PHI data within the assigned protocols.');</sql>
+    <sql>call assign_to_role('Researcher', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'ParticipantDeid', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'VisitAndSpecimen', 'Read');</sql>
+    <sql>call assign_to_role('Researcher', 'Order', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Technician role">
+    <validCheckSum>7:1fe32474226d9782c00fc58a70d87c03</validCheckSum>
+    <sql>call create_role('Technician', 'User can perform specimen operations without access to PHI data within the assigned protocols.');</sql>
+    <sql>call assign_to_role('Technician', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'ParticipantDeid', 'Read');</sql>
+    <sql>call assign_to_role('Technician', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Technician', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Tissue Banker role" >
+    <validCheckSum>7:eaa20888d67184352c3abe59b391bdfa</validCheckSum>
+    <sql>call create_role('Tissue Banker', 'User can perform all operations within the assigned protocols.');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'StorageContainer', 'Read');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'CollectionProtocol', 'Read');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Tissue Banker', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Insert Administrator role" >
+    <validCheckSum>7:2c11e4a3560e4566db5f01500d0613e0</validCheckSum>
+    <sql>call create_role('Administrator', 'User can perform all operations within the assigned sites.');</sql>
+    <sql>call assign_to_role('Administrator', 'User', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'StorageContainer', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'CollectionProtocol', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'ParticipantPhi', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'VisitAndSpecimen', 'Read,Create,Update,Delete');</sql>
+    <sql>call assign_to_role('Administrator', 'Order', 'Read,Create,Update,Delete');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add default specimen quantity units" dbms="mysql">
+    <sql>
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Cell', null, 'Cells', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Fluid', null, 'ml', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Molecular', null, 'microgram', '&#181;g', 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (default, 'Tissue', null, 'gm', null, 'Active');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add default specimen quantity units" dbms="oracle">
+    <sql>
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Cell', null, 'Cells', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Fluid', null, 'ml', null, 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Molecular', null, 'microgram', '&#181;g', 'Active');
+
+      insert into os_specimen_qty_units
+        (identifier, specimen_class, specimen_type, unit, html_display_code, activity_status) 
+      values
+        (os_specimen_qty_units_seq.nextval, 'Tissue', null, 'gm', null, 'Active');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen biohazard PV category">
+    <sql> 
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ('specimen_biohazard', 'Specimen Biohazard', 'Specimen Biohazard', '2.0', ${now})
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Lock, Unlock operations" dbms="mysql">
+    <sql>
+	  insert into RBAC_OPERATIONS(NAME) values ('Lock');
+	  insert into RBAC_OPERATIONS(NAME) values ('Unlock');      
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Lock, Unlock operations" dbms="oracle">
+    <sql>
+	  insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Lock');
+	  insert into RBAC_OPERATIONS(IDENTIFIER, NAME) values (RBAC_OPERATIONS_SEQ.nextval, 'Unlock');      
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Surgical Pathology Report resource" dbms="mysql">
+    <sql>
+      insert into RBAC_RESOURCES(NAME) values('SurgicalPathologyReport');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add Surgical Pathology Report resource" dbms="oracle">
+    <sql>
+      insert into RBAC_RESOURCES(IDENTIFIER, NAME) values(RBAC_RESOURCES_SEQ.nextval, 'SurgicalPathologyReport');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Surgical Pathology Report resource and all its operations to Administrator role">
+    <sql>
+      call assign_to_role('Administrator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete,Lock,Unlock');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Delete 'None' and 'Withdrawn' consent response PVs">
+    <sql>
+      delete from catissue_permissible_value where public_id = 'consent_response' and value in ('Withdrawn', 'None');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Add sort order to consent response PVs">
+    <sql>
+      update catissue_permissible_value set sortorder = 1 where public_id = 'consent_response' and value = 'Yes';
+      
+      update catissue_permissible_value set sortorder = 2 where public_id = 'consent_response' and value = 'No';
+      
+      update catissue_permissible_value set sortorder = 3 where public_id = 'consent_response' and value = 'Not Specified';
+    </sql>
+  </changeSet>
+</databaseChangeLog>

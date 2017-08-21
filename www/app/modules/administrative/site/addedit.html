@@ -1,0 +1,90 @@
+
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="site-list">
+            <span translate="site.list">Sites</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!site.id" translate="site.create_site">Create Site</span>
+        <span ng-if="!!site.id">{{site.name}}</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="sform" class="form-horizontal" os-form-validator="sform" validator="sformValidator" novalidate>
+      <div class="form-group" show-if-admin>
+        <label class="col-xs-3 control-label" translate="site.institute">Institute</label>
+        <div class="col-xs-6">
+          <os-select ng-model="site.instituteName" list="institutes" name="institute" on-select="onInstituteSelect()"
+            placeholder="{{'site.institute' | translate}}" required>
+          </os-select>
+          <div os-field-error field="sform.institute"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.name">Name</label>
+        <div class="col-xs-6">
+          <input type="text" name="siteName" ng-model="site.name" class="form-control"
+            required placeholder="{{'site.name' | translate}}" ng-maxlength="255">
+          <div os-field-error field="sform.siteName"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.code">Code</label>
+        <div class="col-xs-6">
+          <input type="text" name="siteCode" ng-model="site.code" class="form-control"
+            placeholder="{{'site.code' | translate}}" ng-maxlength="255">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.coordinators">Coordinators</label>
+        <div class="col-xs-6">
+          <os-users multiple ng-model="site.coordinators" filter-opts="coordFilterOpts" 
+            placeholder="{{'site.coordinators' | translate}}">
+          </os-users>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.type">Type</label>
+        <div class="col-xs-6">
+          <os-pvs name="type" ng-model="site.type" attribute="site-type" placeholder="{{'site.type' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="sform.type"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="site.address">Address</label>
+        <div class="col-xs-6">
+          <textarea name="address" ng-model="site.address" class="form-control" placeholder="{{'site.address' | translate}}" ng-maxlength="1000"></textarea>
+        </div>
+      </div>
+
+      <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+        <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="site"></div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="save()">
+            <span ng-if="!site.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!site.id"  translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

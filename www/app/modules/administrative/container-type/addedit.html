@@ -1,0 +1,147 @@
+
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="container-type-list">
+            <span translate="container_type.list">Container Types</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!containerType.id" translate="container_type.create_container_type">Create Container Type</span>
+        <span ng-if="!!containerType.id">{{containerType.name}}</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="ctform" class="form-horizontal" os-form-validator="ctform" validator="ctformValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container.name">Name</span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="name" ng-model="containerType.name" class="form-control"
+            placeholder="{{'container.name' | translate}}" ng-maxlength="64" required>
+          <div os-field-error field="ctform.name"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container_type.name_format">Name Format</span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="nameFormat" ng-model="containerType.nameFormat" class="form-control"
+            placeholder="{{'container_type.name_format' | translate}}" ng-maxlength="255" required>
+          <div os-field-error field="ctform.nameFormat"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container.dimension">Dimension</span>
+        </label>
+        <div class="col-xs-3">
+          <input type="text" name="noOfRows" ng-model="containerType.noOfRows" class="form-control"
+            placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
+          <div os-field-error field="ctform.noOfRows"></div>
+        </div>
+        <div class="col-xs-3">
+          <input type="text" name="noOfColumns" ng-model="containerType.noOfColumns" class="form-control"
+            placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
+          <div os-field-error field="ctform.noOfColumns"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container.position_labeling">Position Labeling</span>
+        </label>
+        <div class="col-xs-9">
+          <label class="radio-inline">
+            <input type="radio" name="posLabelingMode" ng-model="containerType.positionLabelingMode" ng-value="'LINEAR'">
+            <span translate="container.position_labeling_modes.LINEAR">Linear</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="posLabelingMode" ng-model="containerType.positionLabelingMode" ng-value="'TWO_D'">
+            <span translate="container.position_labeling_modes.TWO_D">Row and Column</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="containerType.positionLabelingMode == 'TWO_D'">
+        <label class="col-xs-3 control-label">
+          <span translate="container.labeling_scheme">Labeling Scheme</span>
+        </label>
+        <div class="col-xs-3">
+          <os-select ng-model="containerType.rowLabelingScheme" list="positionLabelingSchemes"
+            name="rowLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
+          </os-select>
+          <div os-field-error field="ctform.rowLabelingScheme"></div>
+        </div>
+        <div class="col-xs-3">
+          <os-select ng-model="containerType.columnLabelingScheme" list="positionLabelingSchemes"
+            name="columnLabelingScheme" placeholder="{{'container.horizontal_labeling_scheme' | translate}}" required>
+          </os-select>
+          <div os-field-error field="ctform.columnLabelingScheme"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container.temperature">Temperature (Celsius)</span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="temperature" ng-model="containerType.temperature" class="form-control"
+            placeholder="{{'container.temperature' | translate}}" ng-pattern="/^[-]?[0-9]*$/">
+          <div os-field-error field="ctform.temperature"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="container.stores_specimens">Stores Specimens</span>
+        </label>
+        <div class="col-xs-9">
+          <label class="radio-inline">
+            <input type="radio" name="storesSpecimen" ng-model="containerType.storeSpecimenEnabled" ng-value="true" 
+              ng-change="onStoreSpecimenEnabled()"> 
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="storesSpecimen" ng-model="containerType.storeSpecimenEnabled" ng-value="false"> 
+            <span translate="common.no">No</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!containerType.storeSpecimenEnabled">
+        <label class="col-xs-3 control-label">
+          <span translate="container_type.can_hold">Can Hold</span>
+        </label>
+        <div class="col-xs-6">
+          <os-select ng-model="containerType.canHold" list="containerTypes" name="canHold" display-prop="name"
+            placeholder="{{'container_type.can_hold' | translate}}">
+          </os-select>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="save()">
+            <span ng-if="!containerType.id"  translate="common.buttons.create">Create</span>
+            <span ng-if="!!containerType.id" translate="common.buttons.update">Update</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,988 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+  <changeSet author="slakhani" id="1429178687139-1">
+    <createTable tableName="cat_collection_protocol_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="TITLE" type="VARCHAR(255)"/>
+      <column name="title_MOD" type="BIT"/>
+      <column name="SHORT_TITLE" type="VARCHAR(255)"/>
+      <column name="shortTitle_MOD" type="BIT"/>
+      <column name="START_DATE" type="DATETIME"/>
+      <column name="startDate_MOD" type="BIT"/>
+      <column name="END_DATE" type="DATETIME"/>
+      <column name="endDate_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="IRB_IDENTIFIER" type="VARCHAR(255)"/>
+      <column name="irbIdentifier_MOD" type="BIT"/>
+      <column name="ENROLLMENT" type="BIGINT"/>
+      <column name="enrollment_MOD" type="BIT"/>
+      <column name="DESCRIPTION_URL" type="VARCHAR(255)"/>
+      <column name="descriptionURL_MOD" type="BIT"/>
+      <column name="LABEL_FORMAT" type="VARCHAR(255)"/>
+      <column name="specimenLabelFormat_MOD" type="BIT"/>
+      <column name="DERIV_LABEL_FORMAT" type="VARCHAR(255)"/>
+      <column name="derivativeLabelFormat_MOD" type="BIT"/>
+      <column name="ALIQUOT_LABEL_FORMAT" type="VARCHAR(255)"/>
+      <column name="aliquotLabelFormat_MOD" type="BIT"/>
+      <column name="PPID_FORMAT" type="VARCHAR(255)"/>
+      <column name="ppidFormat_MOD" type="BIT"/>
+      <column name="UNSIGNED_CONSENT_DOC_URL" type="VARCHAR(255)"/>
+      <column name="unsignedConsentDocumentURL_MOD" type="BIT"/>
+      <column name="PRINCIPAL_INVESTIGATOR_ID" type="BIGINT"/>
+      <column name="principalInvestigator_MOD" type="BIT"/>
+      <column name="coordinators_MOD" type="BIT"/>
+      <column name="repositories_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-2">
+    <createTable tableName="cat_consent_tier_response_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="RESPONSE" type="VARCHAR(255)"/>
+      <column name="response_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-3">
+    <createTable tableName="cat_specimen_coll_group_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR(255)"/>
+      <column name="clinicalDiagnosis_MOD" type="BIT"/>
+      <column name="CLINICAL_STATUS" type="VARCHAR(255)"/>
+      <column name="clinicalStatus_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="NAME" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+      <column name="COLLECTION_STATUS" type="VARCHAR(255)"/>
+      <column name="status_MOD" type="BIT"/>
+      <column name="IDENTIFIED_REPORT" type="VARCHAR(255)"/>
+      <column name="identifiedReport_MOD" type="BIT"/>
+      <column name="DEIDENTIFIED_REPORT" type="VARCHAR(255)"/>
+      <column name="deIdentifiedReport_MOD" type="BIT"/>
+      <column name="COMMENTS" type="VARCHAR(255)"/>
+      <column name="comments_MOD" type="BIT"/>
+      <column name="SURGICAL_PATHOLOGY_NUMBER" type="VARCHAR(255)"/>
+      <column name="surgicalPathologyNumber_MOD" type="BIT"/>
+      <column name="COLLECTION_TIMESTAMP" type="DATETIME"/>
+      <column name="visitDate_MOD" type="BIT"/>
+      <column name="COLLECTION_PROTOCOL_REG_ID" type="BIGINT"/>
+      <column name="registration_MOD" type="BIT"/>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID" type="BIGINT"/>
+      <column name="cpEvent_MOD" type="BIT"/>
+      <column name="SITE_ID" type="BIGINT"/>
+      <column name="site_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-5">
+    <createTable tableName="catissue_coll_coordinators_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-6">
+    <createTable tableName="catissue_coll_prot_event_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="COLLECTION_POINT_LABEL" type="VARCHAR(255)"/>
+      <column name="eventLabel_MOD" type="BIT"/>
+      <column name="STUDY_CALENDAR_EVENT_POINT" type="DOUBLE"/>
+      <column name="eventPoint_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(50)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="CLINICAL_DIAGNOSIS" type="VARCHAR(150)"/>
+      <column name="clinicalDiagnosis_MOD" type="BIT"/>
+      <column name="CLINICAL_STATUS" type="VARCHAR(50)"/>
+      <column name="clinicalStatus_MOD" type="BIT"/>
+      <column name="DEFAULT_SITE_ID" type="BIGINT"/>
+      <column name="defaultSite_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-7">
+    <createTable tableName="catissue_coll_prot_reg_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="CONSENT_SIGN_DATE" type="DATETIME"/>
+      <column name="consentSignDate_MOD" type="BIT"/>
+      <column name="CONSENT_DOC_URL" type="VARCHAR(255)"/>
+      <column name="signedConsentDocumentUrl_MOD" type="BIT"/>
+      <column name="PROTOCOL_PARTICIPANT_ID" type="VARCHAR(255)"/>
+      <column name="ppid_MOD" type="BIT"/>
+      <column name="BARCODE" type="VARCHAR(255)"/>
+      <column name="barcode_MOD" type="BIT"/>
+      <column name="REGISTRATION_DATE" type="DATETIME"/>
+      <column name="registrationDate_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="CONSENT_WITNESS" type="BIGINT"/>
+      <column name="consentWitness_MOD" type="BIT"/>
+      <column name="PARTICIPANT_ID" type="BIGINT"/>
+      <column name="participant_MOD" type="BIT"/>
+      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT"/>
+      <column name="collectionProtocol_MOD" type="BIT"/>
+      <column name="consentResponses_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-8">
+    <createTable tableName="catissue_consent_tier_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="STATEMENT" type="LONGTEXT"/>
+      <column name="statement_MOD" type="BIT"/>
+      <column name="COLL_PROTOCOL_ID" type="BIGINT"/>
+      <column name="collectionProtocol_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-9">
+    <createTable tableName="catissue_cp_req_specimen_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="SPEC_REQ_LABEL" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+      <column name="LINEAGE" type="VARCHAR(50)"/>
+      <column name="lineage_MOD" type="BIT"/>
+      <column name="SPECIMEN_CLASS" type="VARCHAR(50)"/>
+      <column name="specimenClass_MOD" type="BIT"/>
+      <column name="SPECIMEN_TYPE" type="VARCHAR(50)"/>
+      <column name="specimenType_MOD" type="BIT"/>
+      <column name="TISSUE_SITE" type="VARCHAR(50)"/>
+      <column name="anatomicSite_MOD" type="BIT"/>
+      <column name="TISSUE_SIDE" type="VARCHAR(50)"/>
+      <column name="laterality_MOD" type="BIT"/>
+      <column name="PATHOLOGICAL_STATUS" type="VARCHAR(50)"/>
+      <column name="pathologyStatus_MOD" type="BIT"/>
+      <column name="STORAGE_TYPE" type="VARCHAR(50)"/>
+      <column name="storageType_MOD" type="BIT"/>
+      <column name="INITIAL_QUANTITY" type="DOUBLE"/>
+      <column name="initialQuantity_MOD" type="BIT"/>
+      <column name="CONCENTRATION" type="DOUBLE"/>
+      <column name="concentration_MOD" type="BIT"/>
+      <column name="COLLECTION_PROCEDURE" type="VARCHAR(50)"/>
+      <column name="collectionProcedure_MOD" type="BIT"/>
+      <column name="COLLECTION_CONTAINER" type="VARCHAR(50)"/>
+      <column name="collectionContainer_MOD" type="BIT"/>
+      <column name="LABELFORMAT" type="VARCHAR(255)"/>
+      <column name="labelFormat_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(50)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="COLLECTOR_ID" type="BIGINT"/>
+      <column name="collector_MOD" type="BIT"/>
+      <column name="RECEIVER_ID" type="BIGINT"/>
+      <column name="receiver_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-10">
+    <createTable tableName="catissue_institution_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="NAME" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="departments_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-11">
+    <createTable tableName="catissue_part_medical_id_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="MEDICAL_RECORD_NUMBER" type="VARCHAR(50)"/>
+      <column name="medicalRecordNumber_MOD" type="BIT"/>
+      <column name="SITE_ID" type="BIGINT"/>
+      <column name="site_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-12">
+    <createTable tableName="catissue_participant_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="LAST_NAME" type="VARCHAR(255)"/>
+      <column name="lastName_MOD" type="BIT"/>
+      <column name="FIRST_NAME" type="VARCHAR(255)"/>
+      <column name="firstName_MOD" type="BIT"/>
+      <column name="MIDDLE_NAME" type="VARCHAR(255)"/>
+      <column name="middleName_MOD" type="BIT"/>
+      <column name="BIRTH_DATE" type="DATETIME"/>
+      <column name="birthDate_MOD" type="BIT"/>
+      <column name="GENDER" type="VARCHAR(255)"/>
+      <column name="gender_MOD" type="BIT"/>
+      <column name="GENOTYPE" type="VARCHAR(255)"/>
+      <column name="sexGenotype_MOD" type="BIT"/>
+      <column name="ETHNICITY" type="VARCHAR(255)"/>
+      <column name="ethnicity_MOD" type="BIT"/>
+      <column name="SOCIAL_SECURITY_NUMBER" type="VARCHAR(255)"/>
+      <column name="socialSecurityNumber_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="DEATH_DATE" type="DATETIME"/>
+      <column name="deathDate_MOD" type="BIT"/>
+      <column name="VITAL_STATUS" type="VARCHAR(255)"/>
+      <column name="vitalStatus_MOD" type="BIT"/>
+      <column name="EMPI_ID" type="VARCHAR(255)"/>
+      <column name="empi_MOD" type="BIT"/>
+      <column name="pmis_MOD" type="BIT"/>
+      <column name="races_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-13">
+    <createTable tableName="catissue_race_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PARTICIPANT_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="RACE_NAME" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-14">
+    <createTable tableName="catissue_site_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="NAME" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+      <column name="CODE" type="VARCHAR(255)"/>
+      <column name="code_MOD" type="BIT"/>
+      <column name="TYPE" type="VARCHAR(255)"/>
+      <column name="type_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="INSTITUTE_ID" type="BIGINT"/>
+      <column name="institute_MOD" type="BIT"/>
+      <column name="coordinators_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-15">
+    <createTable tableName="catissue_site_coordinators_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SITE_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-16">
+    <createTable tableName="catissue_site_cp_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="COLLECTION_PROTOCOL_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SITE_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-18">
+    <createTable tableName="catissue_specimen_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="INITIAL_QUANTITY" type="DOUBLE"/>
+      <column name="initialQuantity_MOD" type="BIT"/>
+      <column name="PATHOLOGICAL_STATUS" type="VARCHAR(255)"/>
+      <column name="pathologicalStatus_MOD" type="BIT"/>
+      <column name="LINEAGE" type="VARCHAR(255)"/>
+      <column name="lineage_MOD" type="BIT"/>
+      <column name="SPECIMEN_CLASS" type="VARCHAR(255)"/>
+      <column name="specimenClass_MOD" type="BIT"/>
+      <column name="SPECIMEN_TYPE" type="VARCHAR(255)"/>
+      <column name="specimenType_MOD" type="BIT"/>
+      <column name="LABEL" type="VARCHAR(255)"/>
+      <column name="label_MOD" type="BIT"/>
+      <column name="AVAILABLE" type="BIT"/>
+      <column name="isAvailable_MOD" type="BIT"/>
+      <column name="COMMENTS" type="VARCHAR(255)"/>
+      <column name="comment_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="COLLECTION_STATUS" type="VARCHAR(255)"/>
+      <column name="collectionStatus_MOD" type="BIT"/>
+      <column name="BARCODE" type="VARCHAR(255)"/>
+      <column name="barcode_MOD" type="BIT"/>
+      <column name="CREATED_ON_DATE" type="DATETIME"/>
+      <column name="createdOn_MOD" type="BIT"/>
+      <column name="AVAILABLE_QUANTITY" type="DOUBLE"/>
+      <column name="availableQuantity_MOD" type="BIT"/>
+      <column name="TISSUE_SIDE" type="VARCHAR(255)"/>
+      <column name="tissueSide_MOD" type="BIT"/>
+      <column name="TISSUE_SITE" type="VARCHAR(255)"/>
+      <column name="tissueSite_MOD" type="BIT"/>
+      <column name="position_MOD" type="BIT"/>
+      <column name="PARENT_SPECIMEN_ID" type="BIGINT"/>
+      <column name="parentSpecimen_MOD" type="BIT"/>
+      <column name="SPECIMEN_COLLECTION_GROUP_ID" type="BIGINT"/>
+      <column name="visit_MOD" type="BIT"/>
+      <column name="REQ_SPECIMEN_ID" type="BIGINT"/>
+      <column name="specimenRequirement_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-19">
+    <createTable tableName="catissue_user_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="EMAIL_ADDRESS" type="VARCHAR(255)"/>
+      <column name="emailAddress_MOD" type="BIT"/>
+      <column name="FIRST_NAME" type="VARCHAR(255)"/>
+      <column name="firstName_MOD" type="BIT"/>
+      <column name="LAST_NAME" type="VARCHAR(255)"/>
+      <column name="lastName_MOD" type="BIT"/>
+      <column name="LOGIN_NAME" type="VARCHAR(255)"/>
+      <column name="loginName_MOD" type="BIT"/>
+      <column name="START_DATE" type="DATETIME"/>
+      <column name="creationDate_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="STATUS_COMMENT" type="VARCHAR(255)"/>
+      <column name="comments_MOD" type="BIT"/>
+      <column name="IS_ADMIN" type="BIT"/>
+      <column name="admin_MOD" type="BIT"/>
+      <column name="DEPARTMENT_ID" type="BIGINT"/>
+      <column name="department_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-21">
+    <createTable tableName="os_container_positions_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="POS_ONE" type="INT"/>
+      <column name="posOneOrdinal_MOD" type="BIT"/>
+      <column name="POS_TWO" type="INT"/>
+      <column name="posTwoOrdinal_MOD" type="BIT"/>
+      <column name="POS_ONE_STR" type="VARCHAR(255)"/>
+      <column name="posOne_MOD" type="BIT"/>
+      <column name="POS_TWO_STR" type="VARCHAR(255)"/>
+      <column name="posTwo_MOD" type="BIT"/>
+      <column name="STORAGE_CONTAINER_ID" type="BIGINT"/>
+      <column name="container_MOD" type="BIT"/>
+      <column name="OCCUPYING_SPECIMEN_ID" type="BIGINT"/>
+      <column name="occupyingSpecimen_MOD" type="BIT"/>
+      <column name="OCCUPYING_CONTAINER_ID" type="BIGINT"/>
+      <column name="occupyingContainer_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-22">
+    <createTable tableName="os_departments_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="NAME" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-23">
+    <createTable tableName="os_stor_cont_spec_classes_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_CLASS" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-24">
+    <createTable tableName="os_stor_cont_spec_types_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_TYPE" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-25">
+    <createTable tableName="os_stor_container_cps_aud">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="STORAGE_CONTAINER_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CP_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-26">
+    <createTable tableName="os_storage_containers_aud">
+      <column name="IDENTIFIER" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+      <column name="NAME" type="VARCHAR(255)"/>
+      <column name="name_MOD" type="BIT"/>
+      <column name="BARCODE" type="VARCHAR(255)"/>
+      <column name="barcode_MOD" type="BIT"/>
+      <column name="TEMPERATURE" type="DOUBLE"/>
+      <column name="temperature_MOD" type="BIT"/>
+      <column name="NO_OF_COLS" type="INT"/>
+      <column name="noOfColumns_MOD" type="BIT"/>
+      <column name="NO_OF_ROWS" type="INT"/>
+      <column name="noOfRows_MOD" type="BIT"/>
+      <column name="COLUMN_LABELING_SCHEME" type="VARCHAR(255)"/>
+      <column name="columnLabelingScheme_MOD" type="BIT"/>
+      <column name="ROW_LABELING_SCHEME" type="VARCHAR(255)"/>
+      <column name="rowLabelingScheme_MOD" type="BIT"/>
+      <column name="STORE_SPECIMENS" type="BIT"/>
+      <column name="storeSpecimenEnabled_MOD" type="BIT"/>
+      <column name="ACTIVITY_STATUS" type="VARCHAR(255)"/>
+      <column name="activityStatus_MOD" type="BIT"/>
+      <column name="COMMENTS" type="VARCHAR(255)"/>
+      <column name="comments_MOD" type="BIT"/>
+      <column name="SITE_ID" type="BIGINT"/>
+      <column name="site_MOD" type="BIT"/>
+      <column name="PARENT_CONTAINER_ID" type="BIGINT"/>
+      <column name="parentContainer_MOD" type="BIT"/>
+      <column name="CREATED_BY" type="BIGINT"/>
+      <column name="createdBy_MOD" type="BIT"/>
+      <column name="allowedSpecimenClasses_MOD" type="BIT"/>
+      <column name="allowedSpecimenTypes_MOD" type="BIT"/>
+      <column name="allowedCps_MOD" type="BIT"/>
+      <column name="position_MOD" type="BIT"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-27">
+    <createTable tableName="OS_REVISION_ENTITIES">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ENTITYNAME" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-28">
+    <createTable tableName="OS_REVISIONS">
+      <column autoIncrement="true" name="REV" type="BIGINT">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="REVTSTMP" type="DATETIME"/>
+      <column name="USER_ID" type="BIGINT"/>
+      <column name="IP_ADDRESS" type="VARCHAR(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-29">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="cat_collection_protocol_aud"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-30">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="cat_consent_tier_response_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-31">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="cat_specimen_coll_group_aud"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-33">
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, USER_ID" tableName="catissue_coll_coordinators_aud"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-34">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_coll_prot_event_aud"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-35">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_coll_prot_reg_aud"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="1429178687139-36">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_consent_tier_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-37">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_cp_req_specimen_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-38">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_institution_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-39">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_part_medical_id_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-40">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_participant_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-41">
+    <addPrimaryKey columnNames="REV, PARTICIPANT_ID, RACE_NAME" tableName="catissue_race_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-42">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_site_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-43">
+    <addPrimaryKey columnNames="REV, SITE_ID, USER_ID" tableName="catissue_site_coordinators_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-44">
+    <addPrimaryKey columnNames="REV, COLLECTION_PROTOCOL_ID, SITE_ID" tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-46">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_specimen_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-47">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_user_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-49">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="os_container_positions_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-50">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="os_departments_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-51">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_CLASS" tableName="os_stor_cont_spec_classes_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-52">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, SPECIMEN_TYPE" tableName="os_stor_cont_spec_types_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-53">
+    <addPrimaryKey columnNames="REV, STORAGE_CONTAINER_ID, CP_ID" tableName="os_stor_container_cps_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-54">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="os_storage_containers_aud"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-55">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_collection_protocol_aud"  constraintName="FK_dyoqily0s2m061bxvxik0wou5" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-56">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_consent_tier_response_aud"  constraintName="FK_7crokk0uhxa3aqqh626nasp9q" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-57">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="cat_specimen_coll_group_aud"  constraintName="FK_7nmb9yn4uq0fojtbh2nl7stv2" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-59">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_coordinators_aud"  constraintName="FK_cx3wxvecf9prg0ulwaw3bwb2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-60">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_event_aud"  constraintName="FK_9xhryw88q1uv2s2oxcn53rsdh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-61">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_coll_prot_reg_aud"  constraintName="FK_4rwywid6his5vawygbbok91h7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-62">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_consent_tier_aud"  constraintName="FK_hmdofymkui8jf2mhk2a4ub8qm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-63">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_cp_req_specimen_aud"  constraintName="FK_r51pe9nboapngjjh34hbm3i2s" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-64">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_institution_aud"  constraintName="FK_c4n30y077ycht0hl58ri6fko7" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-65">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_part_medical_id_aud"  constraintName="FK_pkjkhvgsgjkgpwjrg65viug05" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-66">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_participant_aud"  constraintName="FK_hs8crr2d3nwca17qqfli82ym" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-67">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_race_aud"  constraintName="FK_qaypykblepjftrcv2xe056rvh" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-68">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_aud"  constraintName="FK_isb8mltbk8qaa3q4epkoy9ell" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-69">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_coordinators_aud"  constraintName="FK_w3jps5e5byvocjpg18nuyffy" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-70">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_site_cp_aud"  constraintName="FK_8bytnb90kr6dd9hr194p9ei57" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-72">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_specimen_aud"  constraintName="FK_ctda38ykfjtwuljy7pb6y753d" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-73">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="catissue_user_aud"  constraintName="FK_m9slxw75ecrvrk31nwwamd7ng" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-75">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_container_positions_aud"  constraintName="FK_8qr9yjmig276s5njj5q9s5kvm" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-76">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_departments_aud"  constraintName="FK_fhlbe4ciavool7n6hrydsxm0a" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-77">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_classes_aud"  constraintName="FK_lguqtanqxx49uiynh9ihcbjhc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-78">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_cont_spec_types_aud"  constraintName="FK_h1dxr1mk3lbojld9cpgcjos2e" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-79">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_stor_container_cps_aud"  constraintName="FK_itwt8wch7fujeieknvgju804w" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-80">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="os_storage_containers_aud"  constraintName="FK_i34f99d4j0u2hcato9dww1mxw" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="1429178687139-81">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_REVISION_ENTITIES"  constraintName="FK_t69kea3hasj6uc6ddn5ck5r9y" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="1429178687139-82">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="CONSENT_DOCUMENT_NAME" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="1429178687139-83">
+    <addColumn tableName="CATISSUE_COLL_PROT_REG_AUD">
+      <column name="signedConsentDocumentName_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Column to indicate whether specimen biohazards got modified">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="biohazards_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen biohazards audit table">
+    <createTable tableName="OS_SPECIMEN_BIOHAZARDS_AUD">
+      <column name="REV" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SPECIMEN_ID" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BIOHAZARD" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REVTYPE" type="TINYINT"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="PK of specimen biohazards table">
+    <addPrimaryKey columnNames="REV, SPECIMEN_ID, BIOHAZARD" tableName="OS_SPECIMEN_BIOHAZARDS_AUD"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on specimen biohazards revision number">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="OS_SPECIMEN_BIOHAZARDS_AUD"  constraintName="FK_SPEC_BIOHAZARD_AUD_REV" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="REV" referencedTableName="OS_REVISIONS" referencesUniqueColumn="false"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-84">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="SPR_NAME" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-85">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="sprName_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>  
+  
+  <changeSet author="vgaikwad" id="1429178687139-86">
+    <dropColumn columnName="DEIDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-87">  
+    <dropColumn columnName="deidentifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+   
+  <changeSet author="vgaikwad" id="1429178687139-88">  
+    <dropColumn columnName="IDENTIFIED_REPORT" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="1429178687139-89">  
+    <dropColumn columnName="identifiedReport_MOD" tableName="CAT_SPECIMEN_COLL_GROUP_AUD"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added a new column in visits audit table to store SPR lock status">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="SPR_LOCKED" type="BIT"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added a column in visits audit table to store modification status of SPR lock">
+    <addColumn tableName="CAT_SPECIMEN_COLL_GROUP_AUD">
+      <column name="sprLocked_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>   
+
+  <changeSet author="vpawar" id="Rename SSN mod column to UID mod">
+    <renameColumn tableName="catissue_participant_aud" 
+      oldColumnName="socialSecurityNumber_MOD" 
+      newColumnName="uid_MOD" 
+      columnDataType="BIT"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add visit name format column to CP">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="VISIT_NAME_FORMAT" type="VARCHAR(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Visit name format modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="visitNameFormat_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of PPID is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_PPID_ALLOWED" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of ppid enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualPpidEnabled_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of visit name is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_VISIT_NAME_ALLOWED" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of visit name enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualVisitNameEnabled_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to specify whether manual input of specimen labels is allowed">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="MANUAL_SPEC_LABEL_ALLOWED" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Manual input of specimen label enabled modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="manualSpecLabelEnabled_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue site audit table">
+    <addColumn tableName="catissue_site_aud">
+      <column name="ADDRESS" type="text"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue site audit modified">
+    <addColumn tableName="catissue_site_aud">
+      <column name="address_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue user audit table">
+    <addColumn tableName="catissue_user_aud">
+      <column name="ADDRESS" type="text"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Address column for catissue user audit modified">
+    <addColumn tableName="catissue_user_aud">
+      <column name="address_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Added column to specify order of specimen requirements">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="SORT_ORDER" type="INT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Column to track whether order column got modified">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="sortOrder_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit table">
+    <addColumn tableName="catissue_user_aud">
+      <column name="PHONE_NUMBER" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Phone Number column for catissue user audit modified">
+    <addColumn tableName="catissue_user_aud">
+      <column name="phonenumber_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Molecular specimen concentration">
+    <addColumn tableName="catissue_specimen_aud">
+      <column name="CONCENTRATION" type="DOUBLE"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Molecular specimen concentration modified">
+    <addColumn tableName="catissue_specimen_aud">
+      <column name="concentration_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Added column to specify activity status of consent in audit table">
+    <addColumn tableName="catissue_consent_tier_aud">
+      <column name="ACTIVITY_STATUS" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Column to track whether consent activity status column got modified">
+    <addColumn tableName="catissue_consent_tier_aud">
+      <column name="activityStatus_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

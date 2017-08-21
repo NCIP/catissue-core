@@ -1,5 +1,0 @@
-catissue_specimen_array;select CREATED_BY_ID,SPECIMEN_ARRAY_TYPE_ID from catissue_specimen_array where IDENTIFIER='801'
-catissue_speci_array_content;select POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO,SPECIMEN_ID from catissue_speci_array_content where SPECIMEN_ARRAY_ID='801'
-catissue_container;select NAME from catissue_container where IDENTIFIER='801'
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='NAME'
-catissue_audit_event;SELECT EVENT_TYPE FROM catissue_audit_event WHERE COMMENTS IS NULL OR COMMENTS NOT LIKE 'QueryLog'

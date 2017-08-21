@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem" table="OS_ORDER_ITEMS">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_ORDER_ITEMS_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="order" column="ORDER_ID"/>
+
+    <property name="quantity" column="QUANTITY"/>
+      
+    <many-to-one name="specimen" column="SPECIMEN_ID"/>
+    
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass"> 
+          com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem$Status
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="returnedQuantity" column="RETURNED_QUANTITY"/>
+    
+    <many-to-one name="returningContainer" column="RETURNING_CONTAINER"/>
+
+    <property name="returningRow" column="RETURNING_ROW"/>
+
+    <property name="returningColumn" column="RETURNING_COLUMN"/>
+
+    <many-to-one name="returnedBy" column="RETURNED_BY"/>
+
+    <property name="returnDate" column="RETURN_DATE"/>
+
+    <property name="freezeThawIncrOnReturn" column="FREEZE_THAW_INCR_ON_RETURN"/>
+
+    <property name="returnComments" column="RETURN_COMMENTS"/>
+  </class>
+</hibernate-mapping>

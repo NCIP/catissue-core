@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_reported_problem AFFILIATION="Intern" NAME_OF_REPORTER="Admin1, Admin1" REPORTERS_EMAIL_ID="admin1@admin1.com" MESSAGE_BODY="Error in DB connection" SUBJECT="Error in DB connection"/>
-  <catissue_audit_event_details ELEMENT_NAME="SUBJECT" CURRENT_VALUE="Error in DB connection"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

@@ -1,0 +1,23 @@
+.os-permissions .os-status {
+  font-weight: bold;
+  color: white;
+  background: #ab9364;
+  padding: 3px 5px;
+  float: left;
+  margin-right: 5px;
+}
+
+.os-permissions-checkbox {
+  text-align: center;
+  margin-top: 11px;
+}
+
+.os-permissions-checkbox .os-checkbox input[type="checkbox"] ~ span.box {
+  height: 13px;
+  width: 13px;
+}
+
+.os-permissions-checkbox .os-checkbox input[type="checkbox"]:checked ~ span.tick {
+  height: 7px;
+  width: 13px;
+}

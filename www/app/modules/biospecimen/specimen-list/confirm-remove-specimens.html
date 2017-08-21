@@ -1,0 +1,21 @@
+<div>
+  <div class="os-modal-header">
+    <span>
+      <span translate="specimen_list.remove_specimens">Remove specimens from cart</span>
+      <os-spmn-list-name list="entity"></os-spmn-list-name>
+    </span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <span translate="{{props.messageKey}}" translate-values="entity"></span>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
+      Cancel
+    </button>
+    <button class="btn btn-danger" ng-click="ok()" translate="common.yes">
+      Yes
+    </button>
+  </div>
+</div>
+

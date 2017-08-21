@@ -1,2 +1,0 @@
-SCG name,Label,Barcode,Created On,Activity Status,Comment,Is Available,Collection Status,Specimen Class,Type,Tissue Site,Tissue Side,Initial Quantity,Available Quantity,Lineage,Pathological Status,Container name,Position one,Position two,EventComments#1,reasonDeviation#1,UserID#1,durationInMinutes#1#1,gravityForce#1#1,activity_Entry#1
-test_2_3,1spunspc11,1321121,1/8/2012,Active,comments,TRUE,Collected,Fluid,Bile,Not Specified,Not Specified,2,2,New,Not Specified,Container_1,99,1,test,test comments,1,1,12,Active

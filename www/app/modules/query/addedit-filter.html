@@ -1,0 +1,100 @@
+<div ng-controller="QueryAddEditFilterCtrl">
+  <div class="os-query-addedit-filter-po">
+    <div class="form-group">
+      <label for="operator" translate="queries.operator">
+        Operator
+      </label>
+      <os-select ng-model="queryLocal.currFilter.op"
+        list="queryLocal.currFilter.ops" display-prop="desc"
+        placeholder="{{'queries.select_op' | translate}}"
+        on-change="onOpSelect">
+      </os-select>
+    </div>
+
+    <div class="form-group" ng-hide="queryLocal.currFilter.unaryOp">
+      <label for="value" translate="queries.cond_value">
+        Condition Value
+      </label>
+      <div id="value" ng-switch="queryLocal.currFilter.valueType">
+        <div ng-switch-when="select">
+          <os-select ng-model="queryLocal.currFilter.value"
+            list="queryLocal.currFilter.field.pvs"
+            placeholder="{{'queries.select_cond_value' | translate}}">
+          </os-select>
+        </div>
+        <div ng-switch-when="multiSelect">
+          <os-select multiple
+            ng-model="queryLocal.currFilter.value"
+            list="queryLocal.currFilter.field.pvs"
+            placeholder="{{'queries.select_cond_values' | translate}}">
+          </os-select>
+        </div>
+        <div ng-switch-when="tagsSelect">
+          <textarea class="form-control" placeholder="{{'queries.specify_multiple_cond' | translate}}" rows="2"
+            ng-model="queryLocal.currFilter.value" os-enable-tab>
+          </textarea>
+        </div>
+        <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
+          <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 
+            type="text" os-query-date-picker="{{global.queryDateFmt}}"
+            ng-model="queryLocal.currFilter.value[0]">
+          <span>and</span>
+          <input class="form-control" placeholder="{{'queries.range_max' | translate}}" 
+            type="text" os-query-date-picker="{{global.queryDateFmt}}"
+            ng-model="queryLocal.currFilter.value[1]">
+        </div>
+        <div ng-switch-when="betweenNumeric" class="clearfix os-query-range-value">
+          <input class="form-control" placeholder="{{'queries.range_min' | translate}}" 
+            type="text" ng-model="queryLocal.currFilter.value[0]">
+          <span>and</span>
+          <input class="form-control" placeholder="{{'queries.range_max' | translate}}" 
+            type="text" ng-model="queryLocal.currFilter.value[1]">
+        </div>
+        <div ng-switch-when="lookupSingle">
+          <input type="hidden" 
+            os-lookup opts="queryLocal.currFilter.field.lookupProps" 
+            placeholder="{{'queries.select_cond_value' | translate}}"
+            ng-model="queryLocal.currFilter.value">
+          </input>
+        </div>
+        <div ng-switch-when="lookupMultiple">
+          <input type="hidden" 
+            os-lookup opts="queryLocal.currFilter.field.lookupProps" multiple
+            placeholder="{{'queries.select_cond_values' | translate}}"
+            ng-model="queryLocal.currFilter.value">
+          </input>
+        </div>
+        <input ng-switch-when="datePicker" class="form-control"
+          placeholder="{{'queries.select_date' | translate}}"
+          type="text" os-query-date-picker="{{global.queryDateFmt}}"
+          ng-model="queryLocal.currFilter.value"></input>
+        <input ng-switch-default class="form-control"
+          placeholder="{{'queries.specify_cond' | translate}}"
+          type="text" ng-model="queryLocal.currFilter.value">
+        </input>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-inline">
+        <input type="checkbox" ng-model="queryLocal.currFilter.parameterized" 
+          ng-checked="queryLocal.currFilter.parameterized">
+          <span translate="queries.parameterized_filter">Parameterized Filter</span>
+      </label>
+    </div>
+
+    <div class="form-group"> 
+      <button class="btn btn-success" ng-disabled="disableAddEditFilterBtn()" 
+        ng-click="addFilter()" ng-if="!queryLocal.currFilter.id" translate="common.buttons.add">
+        Add
+      </button>
+      <button class="btn btn-success" ng-disabled="disableAddEditFilterBtn()" 
+        ng-click="editFilter()" ng-if="queryLocal.currFilter.id" translate="common.buttons.edit">
+        Edit
+      </button>
+      <button class="btn btn-default" ng-click="cancelFilter()" translate="common.buttons.cancel">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

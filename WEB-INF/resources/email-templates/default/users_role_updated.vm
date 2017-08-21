@@ -1,0 +1,136 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="border-collapse:collapse;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Hello $user.firstName $user.lastName,
+                  <br><br>
+                  
+                  #if( $sr.collectionProtocol )
+                    #set( $cp = $sr.collectionProtocol.shortTitle )
+                    #set( $cpText = "collection protocol" )
+                  #else
+                    #set( $cp = "All current and future" )
+                    #set( $cpText = "collection protocols" )
+                  #end
+                  
+                  #if( $sr.site )
+                    #set( $site = $sr.site.name )
+                    #set( $siteText = "site" )
+                  #else
+                    #set( $site = "All sites" )
+                    #set( $siteText = "sites" )
+                  #end
+
+                  #if( $oldSr )
+                    #if( $oldSr.collectionProtocol )
+                      #set( $oldCP = $oldSr.collectionProtocol.shortTitle )
+                      #set ( $oldCPText = "collection protocol" )
+                    #else
+                      #set( $oldCP = "All current and future" )
+                      #set( $oldCPText = "collection protocols" )
+                    #end
+
+                    #if( $oldSr.site )
+                      #set( $oldSite = $oldSr.site.name )
+                      #set( $oldSiteText = "site" )
+                    #else
+                      #set( $oldSite = "All sites")
+                      #set( $oldSiteText = "sites" )
+                    #end
+                  #end
+
+                  #if( $operation == 'ADD' )
+                    You have been assigned <b> $sr.role.name </b> role on <b> $cp </b> $cpText for $siteText <b> $site </b>
+                  #end
+
+                  #if( $operation == 'UPDATE' )
+                    There is change in your role.
+                    Your <b> $oldSr.role.name </b> role on <b> $oldCP </b> $oldCPText for $oldSiteText <b> $oldSite </b>
+                    has been updated.<br><br>
+                    Your new role is <b> $sr.role.name </b> on <b>$cp</b> $cpText for $siteText <b> $site </b>
+                  #end
+
+                  #if( $operation == 'REMOVE' )
+                    Your <b>$sr.role.name</b> role on <b>$cp</b> $cpText for $siteText <b>$site</b> has been removed.
+                    <br><br>
+                    Kindly contact administrator in case of any queries.
+                  #end
+
+                  #if( $operation != 'REMOVE')
+                    <br><br>
+                    A brief description of your role is mentioned below:
+                    <br><br>
+                    Role Description: $sr.role.description
+                  #end
+                </p>
+              </td>
+            </tr>
+            #if( $operation != 'REMOVE' )
+              <tr>
+                <td style="border-collapse:collapse;padding:0px;padding-bottom:10px">
+	          <table width="80%" style="border-collapse: collapse" cellpadding="5">
+		    <tr>
+		      <th align="left" style="border-bottom:1px solid #e3e3e3;">Resource</th>
+		      <th align="left" style="border-bottom:1px solid #e3e3e3;">Permissions</th>
+		    </tr>
+              
+		    #set($prefix = "rbac_resource_")
+	            #foreach( $ac in $sr.role.acl )
+		      <tr style="padding-top: 10px; padding-bottom: 10px;">
+		        #set($resourceKey = "$prefix$ac.resource.name")
+	                <td>$messageSource.getMessage($resourceKey.toLowerCase(), null, $locale)</td>
+	                <td>
+		          #set( $operations = [] )
+		          #foreach( $resourceInstantOp in $ac.operations )
+			    #set( $result = $operations.add($resourceInstantOp.operation.name) )
+			  #end
+			           
+			  #if( $operations.contains("Read") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Read</span>
+			    </div>
+		 	  #end
+			           
+			  #if( $operations.contains("Create") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Create</span>
+			    </div>
+			  #end
+			           
+			  #if( $operations.contains("Update") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Update</span>
+		            </div>
+			  #end
+			           
+			  #if( $operations.contains("Delete") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Delete</span>
+			    </div>
+		          #end
+                        </td>
+		      </tr>
+		    #end
+		  </table>
+                </td>
+              </tr>
+            #end
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+  <changeSet author="vpawar" id="Audit CP code">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="CODE" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in CP code">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="code_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit CP event code">
+    <addColumn tableName="catissue_coll_prot_event_aud">
+      <column name="CODE" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in CP event code">
+    <addColumn tableName="catissue_coll_prot_event_aud">
+      <column name="code_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit SR code">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="CODE" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in SR code">
+    <addColumn tableName="catissue_cp_req_specimen_aud">
+      <column name="code_MOD" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding consents waived column to collection protocol table">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="CONSENTS_WAIVED" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Collection protocol consents waived modified">
+    <addColumn tableName="cat_collection_protocol_aud">
+      <column name="consentsWaived_mod" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding cohort column to visit table">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="COHORT" type="VARCHAR(64)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Visit cohort modified">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="cohort_mod" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop foreign key on rev column of CP-site relation">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP_AUD"
+      constraintName="FK_8bytnb90kr6dd9hr194p9ei57"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop primary key of CP-site relation">
+    <dropPrimaryKey tableName="CATISSUE_SITE_CP_AUD"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop not null constraint on cpId column of CP-site relation">
+    <dropNotNullConstraint
+      columnDataType="BIGINT"
+      columnName="COLLECTION_PROTOCOL_ID"
+      tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop not null constraint on siteId column of CP-site relation">
+    <dropNotNullConstraint
+      columnDataType="BIGINT"
+      columnName="SITE_ID"
+      tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation">
+    <addColumn tableName="catissue_site_cp_aud">
+      <column name="IDENTIFIER" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Update identifier column with default values of CP-site relation">
+    <sql>
+      set @pos := 0;
+      update catissue_site_cp_aud set identifier= ( select @pos := @pos + 1) order by rev;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding pk for CP-site relation">
+    <addPrimaryKey columnNames="IDENTIFIER, REV" tableName="catissue_site_cp_aud"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on rev column of CP-site relation">
+    <addForeignKeyConstraint
+      constraintName="FK_8bytnb90kr6dd9hr194p9ei57"
+      onDelete="NO ACTION" 
+      onUpdate="NO ACTION" 
+      baseTableName="CATISSUE_SITE_CP_AUD"
+      baseColumnNames="REV"
+      referencedTableName="os_revisions"
+      referencedColumnNames="REV"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Column to track site modification of CP-site relation">
+    <addColumn tableName="catissue_site_cp_aud">
+      <column name="site_mod" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Column to track CP modification of CP-site relation">
+    <addColumn tableName="catissue_site_cp_aud">
+      <column name="collectionProtocol_mod" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding code to identify CP-site relation">
+    <addColumn tableName="catissue_site_cp_aud">
+      <column name="CODE" type="VARCHAR(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Column to track code modification of CP-site relation">
+    <addColumn tableName="catissue_site_cp_aud">
+      <column name="code_mod" type="BIT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify concentration from double to big decimal in specimen audit table">
+    <modifyDataType tableName="catissue_specimen_aud" columnName="CONCENTRATION" newDataType="decimal(24,8)" />
+  </changeSet>
+
+</databaseChangeLog>

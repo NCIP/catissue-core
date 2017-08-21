@@ -1,0 +1,130 @@
+<div>
+  <div class="os-navbar os-navbar-default os-navbar-docked">
+    <div class="logo">
+      <a ui-sref="home">
+        <img src="images/os_logo.png"></img>
+      </a>
+      <div class="deploy-env" ng-if="!!global.appProps.deploy_env">
+        <span>{{global.appProps.deploy_env | uppercase | limitTo: 10}}</span>
+      </div>
+    </div>
+    <div class="search">
+      <div ng-include src="'modules/common/search/search.html'"></div>
+    </div>
+    <ul class="menu">
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span class="fa fa-user"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li><a>{{currentUser | osUserDisplayName}}</a></li>
+          <li class="divider"></li>
+          <li ng-if="currentUser.domain == global.defaultDomain">
+            <a ui-sref="user-password({userId: currentUser.id})">
+              <span translate="user.change_password.change_password">Change Password</span>
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li><a ui-sref="login({logout:true})"  translate="user.logout">Log Out</a></li>
+        </ul>
+      </li>
+      <li class="dropdown">
+        <a class="dropdown-toggle">
+          <span class="fa fa-question-circle"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li>
+            <a href="{{userCtx.helpUrl}}" target="_blank">
+              <span translate="common.online_help">Online Help</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{userCtx.forumUrl}}" target="_blank">
+              <span translate="common.qa_forums">Q & A Forums</span>
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a ng-controller="AboutOSCtrl" ng-click="showAboutOS()">
+              <span translate="common.about_os">About OpenSpecimen</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li ng-if="global.appProps.feedback_enabled">
+        <a ng-controller="FeedbackCtrl" ng-click="openFeedbackForm()">
+          <span class="fa fa-bullhorn"></span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <div class="os-alert-container" ng-class="{'show': alerts.length > 0}">
+      <alert type="{{alert.type}}" ng-repeat="alert in alerts">
+        <span ng-bind-html="alert.text"></span>
+      </alert>
+    </div>
+    <div>
+      <div os-nav-drawer>
+        <ul role="menu">
+          <li>
+            <a ui-sref="home" translate="menu.home">Home</a>
+          </li>
+          <li show-if-allowed="cpReadOpts">
+            <a ui-sref="cp-list" translate="menu.collection_protocols">Collection Protocols</a>
+          </li>
+          <li ng-if="rdeAllowed">
+            <a ui-sref="rde-sessions" translate="menu.rde">Specimen Collection</a>
+          </li>
+          <li show-if-admin>
+            <a ui-sref="institute-list" translate="menu.institutes">Institutes</a>
+          </li>
+          <li show-if-allowed="userCreateUpdateOpts">
+            <a ui-sref="user-list" translate="menu.users">Users</a>
+          </li>
+          <li show-if-allowed="userCreateUpdateOpts">
+            <a ui-sref="role-list" translate="menu.roles">Roles</a>
+          </li>
+          <li show-if-admin="institute">
+            <a ui-sref="site-list" translate="menu.sites">Sites</a>
+          </li>
+          <li show-if-allowed="containerReadOpts">
+            <a ui-sref="container-list" translate="menu.containers">Containers</a>
+          </li>
+          <li>
+            <a ui-sref="query-list" translate="menu.queries">Queries</a>
+          </li>
+          <li>
+            <a ui-sref="specimen-lists"  translate="menu.specimen_lists">Specimen Lists</a>
+          </li>
+          <li ng-if="currentUser.admin || currentUser.manageForms">
+            <a ui-sref="form-list" translate="menu.forms">Forms</a>
+          </li>
+          <li show-if-admin="institute">
+            <a ui-sref="dp-list" translate="menu.distribution_protocols">Distribution Protocols</a>
+          </li>
+          <li show-if-allowed="orderReadOpts">
+            <a ui-sref="order-list" translate="menu.distribution_orders">Distribution Orders</a>
+          </li>
+          <li show-if-allowed="shipmentReadOpts">
+            <a ui-sref="shipment-list" translate="menu.shipping_and_tracking">Shipping and Tracking</a>
+          </li>
+          <li show-if-allowed="scheduledJobReadOpts">
+            <a ui-sref="job-list" translate="menu.jobs">Jobs</a>
+          </li>
+          <li>
+            <a href="{{userCtx.trainingUrl}}" target="_blank" translate="menu.training">Training</a>
+          </li>
+          <li show-if-admin>
+            <a ui-sref="settings-list" translate="menu.settings">Settings</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div ui-view></div>
+      </div>
+    </div>
+  </div>
+</div>
+

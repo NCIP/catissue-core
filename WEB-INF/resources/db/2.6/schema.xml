@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vgaikwad" id="Column to specify specimen label pre print mode">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="SPMN_LABEL_PRE_PRINT_MODE" type="${text.type}(32)">
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Column to specify specimen label auto print mode">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="LABEL_AUTO_PRINT_MODE" type="${text.type}(32)">
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Rename date to migration_date in os_migraitons table">
+    <renameColumn
+      columnDataType="${timestamp.type}"
+      oldColumnName="DATE"
+      newColumnName="MIGRATION_DATE"
+      tableName="OS_MIGRATIONS"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Added temporary column tmp_description in specimen list tag table" dbms="oracle">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="TMP_DESCRIPTION" type="${text.type}(1000)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Moving data from clob to newly created varchar column" dbms="oracle">
+    <sql>
+      update 
+        catissue_specimenlist_tags
+      set 
+        tmp_description = DBMS_LOB.SUBSTR (description, 1000);
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Delete the original description column" dbms="oracle">
+    <dropColumn tableName="CATISSUE_SPECIMENLIST_TAGS" columnName="DESCRIPTION"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Convert clob to varchar: Rename to temporary column to the actual one" dbms="oracle">
+    <renameColumn
+      columnDataType="${text.type}(1000)"
+      oldColumnName="TMP_DESCRIPTION"
+      newColumnName="DESCRIPTION"
+      tableName="CATISSUE_SPECIMENLIST_TAGS"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop distribution orders view if exists">
+    <preConditions onFail="MARK_RAN">
+      <viewExists viewName="specimen_distribution_orders_view"/>
+    </preConditions>
+    <dropView viewName="specimen_distribution_orders_view"/>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Creating specimen distribution orders view" runOnChange="true">
+    <createView viewName="os_spmn_distributions_view">
+      select
+        item.identifier as identifier, item.specimen_id as specimen_id, item.quantity as quantity, item.status as status,
+        ord.name as name, ord.requester_id as requester_id, ord.distributor_id as distributor_id, 
+        ord.execution_date as execution_date, ord.comments as comments, dp.short_title as dp_short_title
+      from
+        os_order_items item
+        inner join os_orders ord on item.order_id = ord.identifier
+        inner join catissue_distribution_protocol dp on ord.distribution_protocol_id = dp.identifier
+      where
+        ord.status != 'PENDING'
+    </createView>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Migrating distributed event data">
+    <validCheckSum>7:9ca0a9e0815d23e54b995596f4b875b7</validCheckSum>
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="1">
+        select
+          count(identifier)
+        from 
+          dyextn_containers
+        where
+          name = 'SpecimenDistributedEvent'
+      </sqlCheck>
+    </preConditions>
+    <sql dbms="mysql">
+      select 
+        fc.identifier into @form_ctxt_id 
+      from 
+        catissue_form_context fc 
+        inner join dyextn_containers dc on dc.identifier = fc.container_id 
+      where 
+        dc.name = 'SpecimenDistributedEvent';
+
+      delete from catissue_form_record_entry where form_ctxt_id = @form_ctxt_id;
+
+      insert into catissue_form_record_entry
+        (form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status)
+      (select 
+         @form_ctxt_id, do.specimen_id, do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
+       from 
+         os_spmn_distributions_view do)
+    </sql> 
+
+    <sql dbms="oracle" endDelimiter="//">
+      declare 
+        ctxt_id number;
+      begin 
+        select 
+          fc.identifier into ctxt_id 
+        from 
+          catissue_form_context fc 
+          inner join dyextn_containers dc on dc.identifier = fc.container_id 
+        where 
+          dc.name = 'SpecimenDistributedEvent';
+
+        delete from catissue_form_record_entry where form_ctxt_id = ctxt_id;
+
+        insert into catissue_form_record_entry
+          (identifier, form_ctxt_id, object_id, record_id, updated_by, update_time, activity_status)
+        (select 
+           catissue_form_rec_entry_seq.nextval, ctxt_id, do.specimen_id, 
+           do.identifier, do.distributor_id, do.execution_date, 'ACTIVE'
+         from 
+           os_spmn_distributions_view do);
+      end;
+      //     
+    </sql>
+
+    <dropTable tableName="CATISSUE_DISTRI_EVENT_PARAM"/>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Table to track OpenSpecimen upgrades">
+    <createTable tableName="OS_UPGRADE_LOG">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="VERSION" type="${text.type}(64)">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="UPGRADE_DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="UPGRADED_BY" type="${text.type}(128)">
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="OS_UPGRADE_LOG table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_UPGRADE_LOG_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Add covering index for use in cpr specimen stat view" dbms="mysql">
+    <createIndex indexName="OS_CPR_SPMN_STAT_VIEW_IDX" tableName="CATISSUE_SPECIMEN">
+      <column name="SPECIMEN_COLLECTION_GROUP_ID"/>
+      <column name="REQ_SPECIMEN_ID"/>
+      <column name="COLLECTION_STATUS"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Add covering index for use in cpr visit stat view" dbms="mysql">
+    <createIndex indexName="OS_CPR_VISIT_STAT_VIEW_IDX" tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="COLLECTION_PROTOCOL_REG_ID"/>
+      <column name="COLLECTION_PROTOCOL_EVENT_ID"/>
+      <column name="COLLECTION_STATUS"/>
+      <column name="IDENTIFIER"/>
+    </createIndex>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating CPR_VISIT_STAT view" runOnChange="true">
+    <createView viewName="OS_CPR_VISIT_STATS_VIEW">
+      select 
+        cpr.identifier as identifier,
+        sum(case when visit.collection_status = 'Complete' then 1 else 0 end) as visits_completed,
+        sum(case when visit.collection_status = 'Missed Collection' then 1 else 0 end) as visits_missed,
+        sum(case when (visit.collection_status = 'Pending' or visit.identifier is null) then 1 else 0 end) as visits_pending 
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_coll_prot_event cpe 
+          on cpe.collection_protocol_id = cpr.collection_protocol_id and 
+             cpe.activity_status!= 'Disabled' 
+        left join catissue_specimen_coll_group visit 
+          on visit.collection_protocol_event_id = cpe.identifier and 
+             visit.collection_protocol_reg_id = cpr.identifier and 
+             visit.activity_status!= 'Disabled'
+      group by 
+        cpr.identifier
+    </createView>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating CPR_SPECIMEN_STAT view" runOnChange="true">
+    <createView viewName="OS_CPR_SPMN_STATS_VIEW">
+      select 
+        cpr.identifier as identifier,
+        sum(case when spmn.collection_status = 'Collected' then 1 else 0 end) as specimens_collected,
+        sum(case when spmn.collection_status = 'Missed Collection' then 1 else 0 end) as specimens_missed,
+        sum(case when (spmn.identifier is null or spmn.collection_status = 'Pending') then 1 else 0 end) as specimens_pending 
+      from 
+        catissue_coll_prot_reg cpr 
+        inner join catissue_coll_prot_event cpe on cpe.collection_protocol_id = cpr.collection_protocol_id 
+        inner join catissue_cp_req_specimen sr 
+          on sr.collection_protocol_event_id = cpe.identifier and
+             sr.activity_status != 'Disabled'
+        left join catissue_specimen_coll_group visit 
+          on visit.collection_protocol_event_id = cpe.identifier and 
+             visit.collection_protocol_reg_id = cpr.identifier and
+             visit.activity_status != 'Disabled'
+        left join catissue_specimen spmn 
+          on spmn.req_specimen_id = sr.identifier and
+             spmn.specimen_collection_group_id = visit.identifier and
+             spmn.activity_status != 'Disabled' 
+      group by
+        cpr.identifier
+    </createView>
+  </changeSet>
+</databaseChangeLog>

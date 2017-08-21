@@ -1,0 +1,168 @@
+#macro(getNumber $result)
+  #if ($result && $result.getRows() && $result.getRows().size() > 0 && $result.getRows().get(0).size() > 0)
+    $result.getRows().get(0)[0]
+  #else
+    N/A
+  #end
+#end
+
+#set ( $apiUrl = "$appUrl/rest/ng/collection-protocols/$cpId/report?fileId=$dataFile" )
+#set ( $downloadUrl = "$appUrl/#/file-download?downloadUrl=$urlEncoder.encode($apiUrl)" )
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate;padding: 5px 20px;">
+  <tbody>
+    <tr>
+      <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif">
+        <div style="display:block;font-family:Helvetica,Arial,sans-serif;font-size:24px;font-style:normal;font-weight:bold;line-height:100%;letter-spacing:normal;margin: 10px auto;">
+          $cpShortTitle Activity Report
+        </div>
+        <a style="display: inline-block; text-decoration: none; padding: 10px; border: 1px solid #357ebd; border-radius: 5px; background-color: #428bca; color: #fff; margin: 10px auto;" href="$downloadUrl">
+          Download Report
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table border="0" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse; margin: 10px auto;">
+          <tbody>
+            <tr>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($participants)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    New Participants
+                  </span>
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color: #666;">
+                    (#getNumber($totalParticipants))
+                  </span>
+                </div>
+              </td>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($consentedParticipants)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    New Consents 
+                  </span> 
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color: #666;">
+                    (#getNumber($totalConsentedParticipants))
+                  </span> 
+                </div>
+              </td>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($visits)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    New Visits
+                  </span> 
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color: #666;">
+                    (#getNumber($totalVisits))
+                  </span> 
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($primarySpmns)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    Collected Samples
+                  </span> 
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color: #666;">
+                    (#getNumber($totalPrimarySpmns))
+                  </span> 
+                </div>
+              </td>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($aliquots)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    Processed Samples
+                  </span> 
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color:#666;">
+                    (#getNumber($totalAliquots))
+                  </span> 
+                </div>
+              </td>
+              <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;width:33.33%;padding-bottom:25px">
+                <div style="margin: 0px 10px; border: 1px solid #ddd; border-radius: 5px; padding: 5px;">
+                  <span style="font-size:48px;font-weight:normal;color:#148ac0">
+                    #getNumber($distributedSpmns)
+                  </span>
+                  <br>
+                  <span style="font-size:14px;font-weight:bold;color:#414141">
+                    Distributed Samples
+                  </span> 
+                  <br>
+                  <span style="font-size:12px; font-weight:bold; color:#666;">
+                    (#getNumber($totalDistributedSpmns))
+                  </span> 
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 0px 10px 10px; font-weight:bold;">
+        <span>Top 5 Specimen Types</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">
+        <table style="border: 1px solid #ddd; border-collapse: collapse; width: 100%">
+          <thead>
+            <tr>
+              #foreach ($caption in $top5Spmns.getColumnLabels())
+                <th style="background: #f5f5f5; color: #666; padding: 5px 10px; text-align: left; border-bottom: 1px solid #ddd">
+                  $caption
+                </th>
+              #end
+            </tr>
+          </thead>
+          <tbody>
+            #foreach ($row in $top5Spmns.getRows())
+              <tr>
+                #foreach ($column in $row)
+                  <td style="padding: 5px 10px; border-bottom: 1px solid #ddd">$column</td>
+                #end
+              </tr>
+            #end
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px;">
+        <a href="https://openspecimen.atlassian.net/wiki/x/LQAwAw" target="_blank">
+          <span>Learn how to customise or disable this report</span>
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

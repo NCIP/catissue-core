@@ -1,0 +1,10 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Liquid Nitrogen Vapor,2003998,null
+getNextPvId(),,,null,Liquid Nitrogen / Isopentane,2003998,null
+getNextPvId(),,,null,Liquid Nitrogen,2003998,null
+getNextPvId(),,,null,Dry Ice / Hydrocarbon Slurry,2003998,null
+getNextPvId(),,,null,Not Specified,2003998,null
+getNextPvId(),,,null,Aerosol Spray,2003998,null
+getNextPvId(),,,null,Cryostat,2003998,null
+getNextPvId(),,,null,Dry Ice,2003998,null
+getNextPvId(),,,null,Cryobath,2003998,null

@@ -1,0 +1,25 @@
+<div> 
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="shipment-list" translate="shipments.list">Shipments</a>
+        </li>
+      </ul>
+      <h3>{{shipment.name}}</h3>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="shipment-detail.overview"> 
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="shipments.menu.overview">Overview</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

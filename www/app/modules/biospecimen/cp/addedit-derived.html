@@ -1,0 +1,128 @@
+<div>
+  <form name="derivativeForm" os-form-validator="derivativeForm" novalidate>
+    <div class="clearfix os-clear-4">
+      <div class="col-xs-3" ng-if="codingEnabled">
+        <div class="form-group">
+          <input name="code" ng-model="childReq.code" os-md-input class="form-control" type="text" 
+            ng-model-options="{allowInvalid: true}" ng-maxlength="16" placeholder="{{'srs.code' | translate}}">
+          <div os-field-error field="derivativeForm.code"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-specimen-types name="specimenType" specimen="childReq" md-input placeholder="{{'srs.specimen_type' | translate}}"
+            required ng-disabled="specimensCount > 0"
+            title="{{(specimensCount > 0 ? 'srs.cannot_change_class_or_type' : '') | translate}}">
+          </os-specimen-types>
+          <div os-field-error field="derivativeForm.specimenType"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-pvs name="anatomicSite" ng-model="childReq.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
+            os-md-input placeholder="{{'srs.anatomic_site' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="derivativeForm.anatomicSite"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-pvs name="laterality" ng-model="childReq.laterality" attribute="laterality"
+            os-md-input placeholder="{{'srs.laterality' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="derivativeForm.laterality"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group" ng-switch on="!!childReq.id">
+          <os-spmn-measure ng-switch-when="false"
+            name="quantity" specimen="childReq" quantity="childReq.quantity" md-input
+            placeholder="{{'srs.qty' | translate}}" required>
+          </os-spmn-measure>
+          <os-spmn-measure ng-switch-when="true"
+            name="quantity" specimen="childReq" quantity="childReq.initialQty" md-input
+            placeholder="{{'srs.qty' | translate}}" required>
+          </os-spmn-measure>
+          <div os-field-error field="derivativeForm.quantity"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-spmn-measure name="concentration" specimen="childReq" quantity="childReq.concentration" measure="concentration"
+            md-input placeholder="{{'srs.concentration' | translate}}">
+          </os-spmn-measure>
+          <div os-field-error field="derivativeForm.concentration"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-pvs name="pathology" ng-model="childReq.pathology" attribute="pathology-status"
+            os-md-input placeholder="{{'srs.pathology' | translate}}" required>
+          </os-pvs>
+          <div os-field-error field="derivativeForm.pathology"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.name" os-md-input class="form-control" type="text" 
+            placeholder="{{'srs.name' | translate}}">
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input ng-model="childReq.labelFmt" os-md-input class="form-control" type="text"
+            ng-change="ensureLabelFmtSpecified(childReq, 'Derivative')" placeholder="{{'srs.label_fmt' | translate}}">
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <os-select name="labelAutoPrintMode" ng-model="childReq.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
+            display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(childReq, 'Derivative')"
+            os-md-input placeholder="{{'srs.when_to_print' | translate}}">
+          </os-select>
+          <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!childReq.labelFmtSpecified"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3">
+        <div class="form-group">
+          <input name="labelPrintCopies" ng-model="childReq.labelPrintCopies" os-md-input class="form-control" type="text"
+            placeholder="{{'srs.label_print_copies' | translate}}" ng-pattern="/^[0-9]+$/">
+          <div os-field-error field="derivativeForm.labelPrintCopies"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-3 os-text-checkbox md-input">
+        <div class="checkbox">
+          <os-checkbox ng-model="childReq.$$storedInRepo"></os-checkbox>
+        </div>
+        <div class="message">
+          <span translate="srs.storage_type">Stored in Repository?</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="createDerivative()" ng-if="!childReq.id">
+          <span translate="srs.buttons.create_derivative">Create Derivative</span>
+        </button>
+        <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!childReq.id">
+          <span translate="srs.buttons.update_derivative">Update Derivative</span>
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

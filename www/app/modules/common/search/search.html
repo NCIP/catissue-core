@@ -1,0 +1,40 @@
+<div ng-controller = "QuickSearchCtrl">
+  <div class="input-search">
+    <input type="text" class="form-control" placeholder="{{'search.quick_search' | translate}}"
+      ng-click="initSearch($event)" readonly>
+    </input>
+
+    <button class="btn btn-primary" ng-click="initSearch($event)">
+      <span class="fa fa-search"></span>
+    </button>
+  </div>
+
+  <div class="os-quick-search" ng-if="quickSearch.show">
+    <form name="searchForm" os-form-validator="searchForm" validator="searchFormValidator" class="form-horizontal" novalidate>
+      <div class="form-group">
+        <div>
+          <os-select name ="searchFor" list="ctx.entities" display-prop="caption" select-prop="name"
+            ng-model="ctx.selectedEntity"
+            on-select="onEntitySelect()"
+            placeholder="{{'search.search_for' | translate}}"
+            os-md-input required>
+          </os-select>
+          <div os-field-error field="searchForm.searchFor"></div>
+        </div>
+      </div>
+
+      <div ng-include src="ctx.tmpl"></div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div>
+          <button class="btn btn-primary"  os-form-submit=" search()" local-form="true">
+            <span class="fa fa-search"></span>
+            <span translate="common.buttons.search"></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

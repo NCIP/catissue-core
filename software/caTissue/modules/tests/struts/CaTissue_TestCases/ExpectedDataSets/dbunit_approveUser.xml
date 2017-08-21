@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_user ACTIVITY_STATUS="Reject" />
-	<catissue_site_users SITE_ID="81" />
-	<catissue_audit_event_details ELEMENT_NAME="ACTIVITY_STATUS" CURRENT_VALUE="Reject"/>
-	<catissue_audit_event EVENT_TYPE="UPDATE"/>
-	<catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

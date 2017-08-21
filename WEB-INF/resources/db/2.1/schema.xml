@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="ahegade" id="Column to identify user who executed the job">
+    <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="RUN_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Flag to indicate whether args provided at time of job run">
+    <addColumn tableName="OS_SCHEDULED_JOBS">
+      <column name="RT_ARGS_PROVIDED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Help text to display at time of collecting job runtime args">
+    <addColumn tableName="OS_SCHEDULED_JOBS">
+      <column name="RT_ARGS_HELP_TEXT" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Job runtime arguments">
+    <addColumn tableName="OS_SCHEDULED_JOB_RUNS">
+      <column name="RT_ARGS" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit reason column in visit table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_REASON" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Renaming specimen created on column">
+    <renameColumn tableName="CATISSUE_SPECIMEN"
+      oldColumnName="CREATED_ON_DATE"
+      newColumnName="CREATED_ON"
+      columnDataType="${nullable.ts.type}"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Table to maintain migration status">
+    <createTable tableName="OS_MIGRATIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VERSION_FROM" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VERSION_TO" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATE" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Migrations table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_MIGRATION_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in catissue_specimen table" dbms="mysql">
+    <validCheckSum>7:ff0fa5028cf6472252cc5abdb49b9597</validCheckSum>
+    <validCheckSum>7:5d9850a7d64a8b5253d7529bb5a1eb7e</validCheckSum>
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify available quantity from double to big decimal in catissue_specimen table" dbms="mysql">
+    <validCheckSum>7:1f012a0c182e8ea1354684d3eda47ceb</validCheckSum>
+    <validCheckSum>7:d47348a821355dfe3e9d2eb4ea486f73</validCheckSum>
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE_QUANTITY" newDataType="${decimal.type}(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in os_order_items table" dbms="mysql">
+    <validCheckSum>7:0f5b826dd54303a145a68941ba09f861</validCheckSum>
+    <validCheckSum>7:c0838b43757fb8b2879f04cbd5495e3a</validCheckSum>
+    <modifyDataType tableName="OS_ORDER_ITEMS" columnName="QUANTITY" newDataType="${decimal.type}(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in catissue_cp_req_specimen table" dbms="mysql">
+    <validCheckSum>7:ecbb35ad1bc1dc02ee26f4883e5c6e10</validCheckSum>
+    <validCheckSum>7:1d78eb7f01bab7688f06e5cd65db036f</validCheckSum>
+    <modifyDataType tableName="CATISSUE_CP_REQ_SPECIMEN" columnName="INITIAL_QUANTITY" newDataType="${decimal.type}(24,8)" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Add covering index to record entry table for use in views">
+    <createIndex indexName="OS_EXTN_VIEW_IDX" tableName="CATISSUE_FORM_RECORD_ENTRY">
+      <column name="FORM_CTXT_ID"/>
+      <column name="OBJECT_ID"/>
+      <column name="RECORD_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="MISSED_BY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updating the CPR view to include the EMPI_ID">
+    <createView viewName="cpr_view" replaceIfExists="true"> 
+      select 
+        cpr.IDENTIFIER AS CPR_ID, cpr.COLLECTION_PROTOCOL_ID AS CP_ID,
+        cpr.PARTICIPANT_ID AS PARTICIPANT_ID, p.FIRST_NAME AS FIRST_NAME,
+        p.MIDDLE_NAME AS MIDDLE_NAME, p.LAST_NAME AS LAST_NAME,
+        p.BIRTH_DATE AS DOB, p.SOCIAL_SECURITY_NUMBER AS SSN,
+        cpr.ACTIVITY_STATUS AS ACTIVITY_STATUS, p.GENDER AS GENDER,
+        p.GENOTYPE AS GENOTYPE, cpr.REGISTRATION_DATE AS REGISTRATION_DATE,
+        cpr.PROTOCOL_PARTICIPANT_ID AS PPID, p.VITAL_STATUS AS VITAL_STATUS,
+        p.DEATH_DATE AS DEATH_DATE, p.ETHNICITY AS ETHNICITY,
+        p.EMPI_ID AS EMPI_ID, cpr.BARCODE AS BARCODE,
+        cpr.CONSENT_SIGN_DATE AS CONSENT_SIGN_DATE, cpr.CONSENT_WITNESS AS CONSENT_WITNESS,
+        cpr.CONSENT_DOC_URL AS CONSENT_DOC_URL 
+      from 
+        catissue_coll_prot_reg cpr 
+        join catissue_participant p on cpr.PARTICIPANT_ID = p.IDENTIFIER
+    </createView>
+  </changeSet>
+
+</databaseChangeLog>

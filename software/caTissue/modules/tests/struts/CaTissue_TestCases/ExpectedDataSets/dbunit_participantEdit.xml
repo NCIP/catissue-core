@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_participant LAST_NAME="Sinha" FIRST_NAME="gaurav" MIDDLE_NAME="vijay"/>
-  <catissue_audit_event_details ELEMENT_NAME="RACE_NAME" CURRENT_VALUE="Asian"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  </dataset>
-

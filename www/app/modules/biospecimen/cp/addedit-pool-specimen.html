@@ -1,0 +1,48 @@
+<div>
+  <form name="poolSpmnForm" os-form-validator="poolSpmnForm" novalidate>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <os-spmn-measure name="quantity" specimen="poolReq" quantity="poolReq.initialQty"
+          md-input placeholder="{{'srs.qty' | translate}}" required>
+        </os-spmn-measure>
+        <div os-field-error field="poolSpmnForm.quantity"></div>
+      </div>
+    </div>
+    <div class="col-xs-3" ng-if="codingEnabled">
+      <div class="form-group">
+        <input name="code" ng-model="poolReq.code" os-md-input class="form-control" type="text"
+          placeholder="{{'srs.code' | translate}}">
+        <div os-field-error field="poolSpmnForm.code"></div>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <os-select name="printLabelEvent" ng-model="poolReq.labelAutoPrintMode" list="spmnLabelAutoPrintModes"
+          display-prop="displayName" select-prop="name" on-change="ensureLabelFmtSpecified(poolReq, 'Primary')"
+          os-md-input placeholder="{{'srs.when_to_print' | translate}}">
+        </os-select>
+        <div os-field-warn="'srs.lbl_fmt_required_for_auto_print'" ng-if="!poolReq.labelFmtSpecified"></div>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <input name="labelPrintCopies" ng-model="poolReq.labelPrintCopies" os-md-input class="form-control" type="text"
+          placeholder="{{'srs.label_print_copies' | translate}}" ng-pattern="/^[0-9]+$/">
+        <div os-field-error field="poolSpmnForm.labelPrintCopies"></div>
+      </div>
+    </div>
+    <div class="form-group clearfix">
+      <div class="col-xs-12">
+        <button type="submit" class="btn btn-success" os-form-submit="addToSpmnPool()" ng-if="!poolReq.id">
+          <span>Add</span>
+        </button>
+        <button type="submit" class="btn btn-success" os-form-submit="updateSr()" ng-if="!!poolReq.id">
+          <span>Update</span>
+        </button>
+        <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </a>
+      </div>
+    </div>
+  </form>
+</div>

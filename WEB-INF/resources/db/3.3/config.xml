@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="ckhilosiya" id="Enabling or Disabling unique specimen label per CP">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'unique_spmn_label_per_cp',
+        'unique_spmn_label_per_cp', 'unique_spmn_label_per_cp_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Specifiy directory to store collection protocol SOP documents">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'cp_sop_doc_dir',
+        'cp_sop_doc_dir', 'cp_sop_doc_dir_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="pjoshi" id="Number of days of last login before user is considered as inactive">
+    <sql>
+      call add_cfg_prop(
+        'administrative', 'active_users_login_days',
+        'active_users_login_days', 'active_users_login_days_desc',
+        'INT', '90'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="System level CP SOP document URL">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'cp_sop_doc_url',
+        'cp_sop_doc_url', 'cp_sop_doc_url_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="System level CP SOP document">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'cp_sop_doc',
+        'cp_sop_doc', 'cp_sop_doc_desc',
+        'FILE', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default system level workflows">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'sys_workflows',
+        'sys_workflows', 'sys_workflows_desc',
+        'FILE', 'classpath:/com/krishagni/catissueplus/core/biospecimen/system-workflows.json'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Pending specimens display interval setting">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'pending_spmns_disp_interval',
+        'pending_spmns_disp_interval', 'pending_spmns_disp_int_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Update training card url">
+    <sql>
+      update
+        os_cfg_settings
+      set
+        value = 'http://training.openspecimen.org'
+      where
+        property_id = (
+          select
+            p.identifier
+          from
+            os_cfg_props p
+            inner join os_modules m
+          on
+            p.module_id = m.identifier
+          where
+            m.name = 'common' and
+            p.name = 'training_url'
+        ) and
+        activity_status = 'Active';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default system level CP report settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'sys_cp_rpt_settings',
+        'sys_cp_rpt_settings', 'sys_cp_rpt_settings_desc',
+        'FILE', 'classpath:/com/krishagni/catissueplus/core/biospecimen/cp-report-settings.json'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Creating scheduled job to generate CP reports on monthly basis" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn,
+         rt_args_provided, rt_args_help_text)
+      values
+        (default, 'CP Reports Generator', @userId, now(), null, 10, 1, null,
+         1, 'Active', 'MONTHLY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpReportTask',
+         0, null)
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Creating scheduled job to generate CP reports on monthly basis" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        userId number;
+      begin
+        select identifier into userId from catissue_user where login_name like '$system';
+
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn,
+           rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'CP Reports Generator', userId, SYSDATE, null, 10, 1, null,
+           1, 'Active', 'MONTHLY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpReportTask',
+           0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="IT admin email address">
+    <sql>
+      call add_cfg_prop(
+        'email', 'it_admin_email_id',
+        'it_admin_email_id', 'it_admin_email_id_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Adding training module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'training', 'Training Link');
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Adding training module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (OS_MODULES_SEQ.nextval, 'training', 'Training Link');
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Adding training config properties">
+    <sql>
+      call add_cfg_prop(
+        'training', 'cp_help_link',
+        'cp_help_link', 'cp_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/collection'
+      );
+
+      call add_cfg_prop(
+        'training', 'institute_help_link',
+        'institute_help_link', 'institute_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/institute'
+      );
+
+      call add_cfg_prop(
+        'training', 'user_help_link',
+        'user_help_link', 'user_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/user'
+      );
+
+      call add_cfg_prop(
+        'training', 'role_help_link',
+        'role_help_link', 'role_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/roles'
+      );
+
+      call add_cfg_prop(
+        'training', 'site_help_link',
+        'site_help_link', 'site_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/sites'
+      );
+
+      call add_cfg_prop(
+        'training', 'container_help_link',
+        'container_help_link', 'container_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/containers'
+      );
+
+      call add_cfg_prop(
+        'training', 'query_help_link',
+        'query_help_link', 'query_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/query'
+      );
+
+      call add_cfg_prop(
+        'training', 'specimen_list_help_link',
+        'specimen_list_help_link', 'specimen_list_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/specimen-list'
+      );
+
+      call add_cfg_prop(
+        'training', 'form_help_link',
+        'form_help_link', 'form_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/forms'
+      );
+
+      call add_cfg_prop(
+        'training', 'dp_help_link',
+        'dp_help_link', 'dp_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/distribution'
+      );
+
+      call add_cfg_prop(
+        'training', 'order_help_link',
+        'order_help_link', 'order_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/orders'
+      );
+
+      call add_cfg_prop(
+        'training', 'shipment_help_link',
+        'shipment_help_link', 'shipment_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/shipment'
+      );
+
+      call add_cfg_prop(
+        'training', 'job_help_link',
+        'job_help_link', 'job_help_link_desc',
+        'STRING', 'http://help.openspecimen.org/jobs'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Move training url">
+    <sql>
+      update
+        os_cfg_props
+      set
+        module_id = (
+          select
+            identifier
+          from
+            os_modules
+          where
+            name = 'training'
+        )
+      where
+        name = 'training_url' and
+        module_id = (
+          select 
+            identifier 
+          from 
+            os_modules 
+          where 
+            name = 'common'
+        );
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Id of default query to use for distribution report">
+    <sql>
+      call add_cfg_prop(
+      'common', 'distribution_report_query',
+      'distribution_report_query', 'distribution_report_query_desc',
+      'INT', ''
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

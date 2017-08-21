@@ -1,5 +1,0 @@
-8.0
-3
-1 SQLCHAR 0 0 "\"" 0 x Latin1_General_CI_AS
-2 SQLCHAR 0 0 "\",\"" 1 ASSOCIATION_ID Latin1_General_CI_AS
-3 SQLCHAR 0 0 "\"\n" 2 ASSOCIATION_TYPE Latin1_General_CI_AS

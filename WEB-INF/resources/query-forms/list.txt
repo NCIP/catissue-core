@@ -1,0 +1,6 @@
+cp.xml
+cpr.xml
+scg.xml
+specimen.xml
+order.xml
+shipment.xml

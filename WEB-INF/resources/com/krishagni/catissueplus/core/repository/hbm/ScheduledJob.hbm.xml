@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.ScheduledJob" table="OS_SCHEDULED_JOBS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SCHEDULED_JOBS_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME"/>
+    
+    <many-to-one
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="CREATED_BY"/>
+
+    <property name="startDate" column="START_DATE"/>
+
+    <property name="endDate" column="END_DATE"/>
+    
+    <property name="scheduledHour" column="SCHEDULED_HOUR"/>
+    
+    <property name="scheduledMinute" column="SCHEDULED_MINUTE"/>
+    
+    <property name="scheduledDayOfWeek" column="SCHEDULED_DAY_OF_WEEK">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJob$DayOfWeek</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+    
+    <property name="scheduledDayOfMonth" column="SCHEDULED_DAY_OF_MONTH"/>
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+    
+    <property name="repeatSchedule" column="REPEAT_SCHEDULE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJob$RepeatSchedule</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+    
+    <property name="type" column="TYPE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJob$Type</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="command" column="COMMAND"/>
+    
+    <property name="taskImplfqn" column="TASK_IMPL_FQN"/>
+    
+    <set name="recipients" table="OS_SCHEDULED_JOBS_NOTIF_RCPTS" cascade="none">
+      <key column="SCHEDULED_JOB_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+    </set>
+
+    <property name="rtArgsProvided" column="RT_ARGS_PROVIDED"/>
+    
+    <property name="rtArgsHelpText" column="RT_ARGS_HELP_TEXT"/>
+        
+    <query name="getJobByName">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.ScheduledJob
+      where 
+        name = :name and activityStatus = 'Active'
+    </query>
+  </class>
+</hibernate-mapping>

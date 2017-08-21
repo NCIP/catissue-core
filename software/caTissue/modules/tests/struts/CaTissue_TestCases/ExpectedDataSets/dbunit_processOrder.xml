@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_order NAME="Order_201" STATUS="Completed" />
-	<catissue_distribution TO_SITE_ID="2" DISTRIBUTION_PROTOCOL_ID="2"/>
-	<catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="Order_201"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

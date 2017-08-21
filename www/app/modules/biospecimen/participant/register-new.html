@@ -1,0 +1,45 @@
+<div> 
+  <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.collection_protocol">Collection Protocol</label>
+      <div class="col-xs-6">
+        <os-select name="cp" ng-model="newCpr.cp" list="cpList" display-prop="shortTitle"
+          placeholder="{{'participant.collection_protocol' | translate}}" required>
+        </os-select>
+        <div os-field-error field="pform.cp"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
+      <div class="col-xs-6">
+        <os-date-picker name="regDate" date="newCpr.registrationDate" required
+          placeholder="{{'participant.regDate' | translate}}">
+        </os-date-picker>
+        <div os-field-error field="pform.regDate"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="newCpr.cp && (newCpr.cp.manualPpidEnabled || !newCpr.cp.ppidFmt)">
+      <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
+      <div class="col-xs-6">
+        <input type="text" name="ppid" ng-model="newCpr.ppid" class="form-control" 
+          placeholder="{{'participant.ppid' | translate}}" required="true">
+        <div os-field-error field="pform.ppid"></div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <button class="btn btn-primary" os-form-submit="register()">
+          <span translate="participant.buttons.register"> Register </span>
+        </button>
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.discard">Discard</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

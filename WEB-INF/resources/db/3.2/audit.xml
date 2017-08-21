@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  
+  <changeSet author="slakhani" id="Audit manage forms field">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="MANAGE_FORMS" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Track changes of manage forms field">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="manageForms_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Audit distribution order">
+    <createTable tableName="OS_ORDERS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="NAME" type="${text.type}(255)"/>
+      <column name="name_MOD" type="${bit.type}"/>
+
+      <column name="REQUESTER_ID" type="${int.type}"/>
+      <column name="requester_MOD" type="${bit.type}"/>
+
+      <column name="CREATION_DATE" type="${nullable.ts.type}"/>
+      <column name="creationDate_MOD" type="${bit.type}"/>
+
+      <column name="EXECUTION_DATE" type="${nullable.ts.type}"/>
+      <column name="executionDate_MOD" type="${bit.type}"/>
+
+      <column name="STATUS" type="${text.type}(64)"/>
+      <column name="status_MOD" type="${bit.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+
+      <column name="SITE_ID" type="${int.type}"/>
+      <column name="site_MOD" type="${bit.type}"/>
+
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}"/>
+      <column name="distributionProtocol_MOD" type="${bit.type}"/>
+
+      <column name="DISTRIBUTOR_ID" type="${int.type}"/>
+      <column name="distributor_MOD" type="${bit.type}"/>
+
+      <column name="TRACKING_URL" type="${text.type}(128)"/>
+      <column name="trackingUrl_MOD" type="${bit.type}"/>
+
+      <column name="COMMENTS" type="${text.type}(255)"/>
+      <column name="comments_MOD" type="${bit.type}"/>
+
+      <column name="REQUEST_ID" type="${int.type}"/>
+      <column name="request_MOD" type="${bit.type}"/>
+
+      <column name="orderItems_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit distribution order items">
+    <createTable tableName="OS_ORDER_ITEMS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="ORDER_ID" type="${int.type}"/>
+      <column name="order_MOD" type="${bit.type}"/>
+      
+      <column name="QUANTITY" type="${double.type}"/>
+      <column name="quantity_MOD" type="${bit.type}"/>
+
+      <column name="SPECIMEN_ID" type="${int.type}"/>
+      <column name="specimen_MOD" type="${bit.type}"/>
+
+      <column name="STATUS" type="${text.type}(32)"/>
+      <column name="status_MOD" type="${bit.type}"/>
+
+      <column name="RETURNED_QUANTITY" type="${double.type}"></column>
+      <column name="returnedQuantity_MOD" type="${bit.type}"/>
+
+      <column name="RETURNING_CONTAINER" type="${int.type}"></column>
+      <column name="returningContainer_MOD" type="${bit.type}"/>
+
+      <column name="RETURNING_ROW" type="${text.type}(8)"></column>
+      <column name="returningRow_MOD" type="${bit.type}"/>
+
+      <column name="RETURNING_COLUMN" type="${text.type}(8)"></column>
+      <column name="returningColumn_MOD" type="${bit.type}"/>
+
+      <column name="RETURNED_BY" type="${int.type}"></column>
+      <column name="returnedBy_MOD" type="${bit.type}"/>
+
+      <column name="RETURN_DATE" type="${nullable.ts.type}"></column>
+      <column name="returnDate_MOD" type="${bit.type}"/>
+
+      <column name="RETURN_COMMENTS" type="${text.type}(255)"></column>
+      <column name="returnComments_MOD" type="${bit.type}"/>
+
+      <column name="FREEZE_THAW_INCR_ON_RETURN" type="${smallint.type}"></column>
+      <column name="freezeThawIncrOnReturn_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit distribution protocol">
+    <createTable tableName="CAT_DISTRIBUTION_PROTOCOL_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="PRINCIPAL_INVESTIGATOR_ID" type="${int.type}"/>
+      <column name="principalInvestigator_MOD" type="${bit.type}"/>
+
+      <column name="TITLE" type="${text.type}(255)"/>
+      <column name="title_MOD" type="${bit.type}"/>
+
+      <column name="SHORT_TITLE" type="${text.type}(50)"/>
+      <column name="shortTitle_MOD" type="${bit.type}"/>
+
+      <column name="IRB_IDENTIFIER" type="${text.type}(255)"/>
+      <column name="irbId_MOD" type="${bit.type}"/>
+
+      <column name="START_DATE" type="${nullable.ts.type}"/>
+      <column name="startDate_MOD" type="${bit.type}"/>
+
+      <column name="END_DATE" type="${nullable.ts.type}"/>
+      <column name="endDate_MOD" type="${bit.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(50)"/>
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+      <column name="institute_MOD" type="${bit.type}"/>
+
+      <column name="REPORT_ID" type="${int.type}"/>
+      <column name="report_MOD" type="${bit.type}"/>
+
+      <column name="DEF_RECEIVING_SITE_ID" type="${int.type}"></column>
+      <column name="defReceivingSite_MOD" type="${bit.type}"/>
+
+      <column name="distributionOrders_MOD" type="${bit.type}"/>
+      <column name="distributingSites_MOD" type="${bit.type}"/>
+      <column name="requirements_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Audit distribution protocol distributing sites">
+    <createTable tableName="OS_DIST_PROTOCOL_SITES_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}"/>
+      <column name="distributionProtocol_MOD" type="${bit.type}"/>
+
+      <column name="SITE_ID" type="${int.type}"/>
+      <column name="site_MOD" type="${bit.type}"/>
+
+      <column name="INSTITUTE_ID" type="${int.type}" />
+      <column name="institute_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit distribution protocol requirements">
+    <createTable tableName="OS_DP_REQUIREMENTS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="DP_ID" type="${int.type}"/>
+      <column name="distributionProtocol_MOD" type="${bit.type}"/>
+
+      <column name="SPECIMEN_TYPE" type="${text.type}(50)"/>
+      <column name="specimenType_MOD" type="${bit.type}"/>
+
+      <column name="ANATOMIC_SITE" type="${text.type}(150)"/>
+      <column name="anatomicSite_MOD" type="${bit.type}"/>
+
+      <column name="SPECIMEN_COUNT" type="${int.type}"/>
+      <column name="specimenCount_MOD" type="${bit.type}"/>
+
+      <column name="QUANTITY" type="${decimal.type}(24,8)"/>
+      <column name="quantity_MOD" type="${bit.type}"/>
+
+      <column name="COMMENTS" type="${text.type}(255)"/>
+      <column name="comments_MOD" type="${bit.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+
+      <column name="CLINICAL_DAIGNOSIS" type="${text.type}(255)"></column>
+      <column name="clinicalDiagnosis_MOD" type="${bit.type}"/>
+
+      <column name="pathologyStatuses_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit distribution protocol requirements pathology statuses">
+    <createTable tableName="OS_DPR_PATHOLOGY_STATUSES_AUD">
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="DPR_ID" type="${int.type}"></column>
+
+      <column name="PATHOLOGY_STATUS" type="${text.type}(50)"></column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit specimen request">
+    <createTable tableName="OS_SPECIMEN_REQUESTS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="CP_ID" type="${int.type}"/>
+      <column name="cp_MOD" type="${bit.type}"/>
+
+      <column name="REQUESTOR_ID" type="${int.type}"/>
+      <column name="requestor_MOD" type="${bit.type}"/>
+
+      <column name="REQUEST_DATE" type="${timestamp.type}"/>
+      <column name="dateOfRequest_MOD" type="${bit.type}"/>
+
+      <column name="PROCESSOR_ID" type="${int.type}"/>
+      <column name="processedBy_MOD" type="${bit.type}"/>
+
+      <column name="PROCESSING_DATE" type="${nullable.ts.type}"/>
+      <column name="dateOfProcessing_MOD" type="${bit.type}"/>
+
+      <column name="COMMENTS" type="${text.type}(255)"/>
+      <column name="comments_MOD" type="${bit.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+
+      <column name="items_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Audit specimen request items">
+    <createTable tableName="OS_SPECIMEN_REQUEST_ITEMS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="REQUEST_ID" type="${int.type}"/>
+      <column name="request_MOD" type="${bit.type}"/>
+
+      <column name="SPECIMEN_ID" type="${int.type}"/>
+      <column name="specimen_MOD" type="${bit.type}"/>
+
+      <column name="STATUS" type="${text.type}(32)"/>
+      <column name="status_MOD" type="${bit.type}"/>
+
+      <column name="DISTRIBUTION_ID" type="${int.type}"/>
+      <column name="distribution_MOD" type="${bit.type}"/>
+
+      <column name="SHIPMENT_ID" type="${int.type}"/>
+      <column name="shipment_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit shipment">
+    <createTable tableName="OS_SHIPMENTS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="NAME" type="${text.type}(255)"/>
+      <column name="name_MOD" type="${bit.type}"/>
+
+      <column name="COURIER_NAME" type="${text.type}(255)"/>
+      <column name="courierName_MOD" type="${bit.type}"/>
+
+      <column name="TRACKING_NUMBER" type="${text.type}(255)"/>
+      <column name="trackingNumber_MOD" type="${bit.type}"/>
+
+      <column name="TRACKING_URL" type="${text.type}(255)"/>
+      <column name="trackingUrl_MOD" type="${bit.type}"/>
+
+      <column name="SENDING_SITE_ID" type="${int.type}"/>
+      <column name="sendingSite_MOD" type="${bit.type}"/>
+
+      <column name="RECEIVING_SITE_ID" type="${int.type}"/>
+      <column name="receivingSite_MOD" type="${bit.type}"/>
+
+      <column name="SHIPPED_DATE" type="${nullable.ts.type}"/>
+      <column name="shippedDate_MOD" type="${bit.type}"/>
+
+      <column name="SENDER_ID" type="${int.type}"/>
+      <column name="sender_MOD" type="${bit.type}"/>
+
+      <column name="SENDER_COMMENTS" type="${text.type}(255)"/>
+      <column name="senderComments_MOD" type="${bit.type}"/>
+
+      <column name="RECEIVED_DATE" type="${nullable.ts.type}"/>
+      <column name="receivedDate_MOD" type="${bit.type}"/>
+
+      <column name="RECEIVER_ID" type="${int.type}"/>
+      <column name="receiver_MOD" type="${bit.type}"/>
+
+      <column name="RECEIVER_COMMENTS" type="${text.type}(255)"/>
+      <column name="receiverComments_MOD" type="${bit.type}"/>
+
+      <column name="STATUS" type="${text.type}(16)"/>
+      <column name="status_MOD" type="${bit.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+      <column name="activityStatus_MOD" type="${bit.type}"/>
+
+      <column name="REQUEST_ID" type="${int.type}"/>
+      <column name="request_MOD" type="${bit.type}"/>
+
+      <column name="shipmentItems_MOD" type="${bit.type}"/>
+      <column name="notifyUsers_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Audit shipment items">
+    <createTable tableName="OS_SHIPMENT_ITEMS_AUD">
+      <column name="IDENTIFIER" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="SHIPMENT_ID" type="${int.type}"/>
+      <column name="shipment_MOD" type="${bit.type}"/>
+
+      <column name="SPECIMEN_ID" type="${int.type}"/>
+      <column name="specimen_MOD" type="${bit.type}"/>
+
+      <column name="RECEIVED_QUALITY" type="${text.type}(32)"/>
+      <column name="receivedQuality_MOD" type="${bit.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit notify users">
+    <createTable tableName="OS_SHIPMENT_NOTIFY_USERS_AUD">
+      <column name="REV" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="REVTYPE" type="${smallint.type}"/>
+
+      <column name="SHIPMENT_ID" type="${int.type}"/>
+
+      <column name="USER_ID" type="${int.type}"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit visit name print mode and copies to print, specified at CP level">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="VISIT_NAME_PRINT_MODE" type="${text.type}(32)"/>
+      <column name="visitNamePrintMode_MOD" type="${bit.type}"/>
+      <column name="VISIT_NAME_PRINT_COPIES" type="${int.type}"/>
+      <column name="visitNamePrintCopies_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit visit name print mode and copies to print, specified at event level">
+    <addColumn tableName="CATISSUE_COLL_PROT_EVENT_AUD">
+      <column name="VISIT_NAME_PRINT_MODE" type="${text.type}(32)"/>
+      <column name="visitNamePrintMode_MOD" type="${bit.type}"/>
+      <column name="VISIT_NAME_PRINT_COPIES" type="${int.type}"/>
+      <column name="visitNamePrintCopies_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_specimen LABEL="Label1" AVAILABLE="1" BARCODE="Barcode1" ACTIVITY_STATUS="Active" SPECIMEN_COLLECTION_GROUP_ID="581" COLLECTION_STATUS="Collected"/>
-  <catissue_abstract_specimen SPECIMEN_CLASS="Cell" SPECIMEN_TYPE="Frozen Cell Block" PATHOLOGICAL_STATUS="Malignant" INITIAL_QUANTITY="10"/>
-  <catissue_specimen_char TISSUE_SITE="Abdomen, NOS" TISSUE_SIDE="Left"/>
-  <catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="Label1"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

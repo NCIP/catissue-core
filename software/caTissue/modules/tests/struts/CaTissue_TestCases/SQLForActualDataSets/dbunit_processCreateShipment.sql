@@ -1,1 +1,0 @@
-catissue_base_shipment;select LABEL,ACTIVITY_STATUS from catissue_base_shipment where IDENTIFIER='101'

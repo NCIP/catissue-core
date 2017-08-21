@@ -1,0 +1,22 @@
+<div class="os-list-pager">
+  <span translate="list_pager.showing">Showing</span>
+
+  <span>{{pagerCtx.viewSize}}</span>
+
+  <span ng-if="pagerCtx.showMore" ng-switch on="pagerCtx.showListSize">
+    <span translate="list_pager.of">of</span>
+
+    <span ng-switch-when="true" ng-switch on="pagerCtx.listSize == -1">
+      <span ng-switch-when="true">...</span>
+      <span ng-switch-when="false">{{pagerCtx.listSize}}</span>
+    </span>
+
+    <span ng-switch-when="false">
+      <a ng-click="showListSize()">
+        <span translate="list_pager.many_more">many more</span>
+      </a>
+    </span>
+  </span>
+
+  <span translate="list_pager.records">records</span>
+</div>

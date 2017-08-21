@@ -1,0 +1,114 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
+          <a ui-sref="{{breadcrumb.state}}({{breadcrumb.params}})">
+            <span translate="{{breadcrumb.title}}"></span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span translate="{{importDetail.title}}"></span>
+      </h3> 
+    </div>
+  </div>
+
+  <div class="container">
+    <form class="form-horizontal" ng-if="importDetail.types.length > 0">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.select_record_type">
+          Select Record Type
+        </label>
+        <div class="col-xs-5">
+          <ui-select name="objectType" ng-model="importDetail.objectType" on-select="onTypeSelect($select.selected)">
+            <ui-select-match placeholder="{{'bulk_imports.select_record_type' | translate}}">
+              {{$select.selected.title | translate}}
+            </ui-select-match>
+            <ui-select-choices group-by="'group'"
+              repeat="type.type as type in importDetail.types | filter: $select.search">
+              <span ng-bind-html="type.title | translate | highlight: $select.search"></span>
+            </ui-select-choices>
+          </ui-select>
+        </div>
+      </div>
+    </form>
+  
+    <form class="form-horizontal" action="{{importJobsFileUrl}}">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.input_file">
+          Input File
+        </label>
+        <div class="col-xs-5">
+          <div os-file-upload ctrl="fileImporter"></div>
+        </div>
+        <div class="col-xs-1">
+          <div class="os-btns">
+            <os-help class="btn default" link="bo_help_link"></os-help>
+          </div>
+        </div>
+        <div class="clearfix">
+          <div class="col-xs-offset-3 col-xs-4">
+            <a href="{{inputFileTmplUrl}}" target="_blank">
+              <span translate="bulk_imports.download_input_file_tmpl">
+                Download Input File Template
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <form class="form-horizontal">
+      <div class="form-group" ng-hide="importDetail.showImportType == false">
+        <label class="col-xs-3 control-label" translate="bulk_imports.import_type">
+          Import Type
+        </label>
+        <div class="col-xs-6 clearfix">
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'CREATE'">
+            <span translate="bulk_imports.create"></span>
+          </label>
+          <label class="radio-inline col-xs-3">
+            <input type="radio" name="importType" ng-model="importJob.importType" ng-value="'UPDATE'">
+            <span translate="bulk_imports.update"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="bulk_imports.date_time_format">
+          Date and Time Format
+        </label>
+        <div class="col-xs-3">
+          <os-pvs name="dateFormat" ng-model="importJob.dateFormat" attribute="date_format"
+            placeholder="{{'bulk_imports.date_format' | translate}}" required>
+          </os-pvs>
+        </div>
+        <div class="col-xs-2">
+          <os-pvs name="timeFormat" ng-model="importJob.timeFormat" attribute="time_format"
+            placeholder="{{'bulk_imports.time_format' | translate}}" required>
+          </os-pvs>
+        </div>
+        <div class="col-xs-1">
+          <div class="os-btns">
+            <os-help class="btn default" link="bo_datetime_fmt_help_link"></os-help>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <button class="btn btn-primary" ng-click="import()">
+          <span translate="common.buttons.validate_and_import">Validate and Import</span>
+        </button>
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.discard">Discard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

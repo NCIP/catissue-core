@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+
+  <changeSet author="nmarwaha" id="Specimen collection status migration">
+    <sql>
+      update 
+        catissue_specimen 
+      set 
+        collection_status = 'Missed Collection' 
+      where 
+        collection_status not in ('Collected', 'Pending')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="mysql">
+    <sql>
+      update 
+        catissue_site site 
+        join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+        join catissue_user usr on usr.identifier = siteCrd.user_id
+        join os_departments dep on dep.identifier = usr.department_id
+      set 
+        site.institute_id = dep.institute_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the Site's default insititute from coordinator" dbms="oracle">
+    <sql>
+      merge into catissue_site site using (
+        select 
+          site.identifier as site_id, dep.institute_id as inst_id
+        from 
+          catissue_site site 
+          join catissue_site_coordinators siteCrd on siteCrd.site_id = site.identifier
+          join catissue_user usr on usr.identifier = siteCrd.user_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (site.identifier = t.site_id) 
+      when matched then update set site.institute_id = t.inst_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="mysql">
+    <sql>
+      update 
+        catissue_distribution_protocol dp 
+        join catissue_user u on u.identifier = dp.principal_investigator_id
+        join os_departments dep on dep.identifier = u.department_id
+        join catissue_institution inst on inst.identifier = dep.institute_id
+      set 
+        dp.institute_id = inst.identifier 
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the DP's default institute ID from the PI" dbms="oracle">
+    <sql>
+      merge into catissue_distribution_protocol dp using (
+        select 
+          dp.identifier as dp_id, dep.institute_id as inst_id
+        from 
+          catissue_distribution_protocol dp 
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+          join os_departments dep on dep.identifier = usr.department_id
+      ) t on (dp.identifier = t.dp_id) 
+      when matched then update set dp.institute_id = t.inst_id 
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="mysql">
+    <sql>
+      update 
+        catissue_order ordr
+        join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
+        join catissue_user u on u.identifier = dp.principal_investigator_id
+      set 
+        ordr.requester_id = u.identifier 
+      where 
+        ordr.requester_id is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Update the requestor ID to PI if not specified" dbms="oracle">
+    <validCheckSum>7:8ef3e17aa5772eaa5bba974d98844110</validCheckSum>
+    <sql>
+      merge into catissue_order ordr using (
+        select 
+          ordr.identifier as order_id, usr.identifier as user_id
+        from 
+          catissue_order ordr
+          join catissue_distribution_protocol dp on ordr.distribution_protocol_id = dp.identifier
+          join catissue_user usr on usr.identifier = dp.principal_investigator_id
+      ) t on (ordr.identifier = t.order_id) 
+      when matched then update set ordr.requester_id = t.user_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vratnaparkhi" id="Migrate specimen order data">
+    <validCheckSum>7:8cbf21d8893ab1fb6d923047bc336e71</validCheckSum>
+    <sql>
+      insert into os_orders (
+        identifier, 
+        name, 
+        requester_id, 
+        creation_date, 
+        execution_date, 
+        status, 
+        activity_status, 
+        site_id, 
+        distribution_protocol_id, 
+        distributor_id, 
+        comments)
+      
+      select 
+        distribution.identifier as identifier, 
+        case when orders.name is null
+          then concat('',distribution.event_timestamp)
+          else substr(orders.name, 1, 255)
+        end as name,
+        case when orders.requester_id is null
+          then distribution.user_id
+          else orders.requester_id
+        end as requester_id,
+        case when orders.requested_date is null
+          then distribution.event_timestamp
+          else orders.requested_date
+        end as requested_date,
+        distribution.event_timestamp as execution_date,
+        case when orders.status in ('Completed')
+          then 'EXECUTED'
+          else 'PENDING'
+        end as status,
+        distribution.activity_status as activity_status, 
+        distribution.to_site_id as site_id,
+        case when distribution.distribution_protocol_id is null
+          then (select min(identifier) from catissue_distribution_protocol where activity_status != 'Disabled')
+          else distribution.distribution_protocol_id
+        end as distribution_protocol_id,
+        distribution.user_id as distributor_id,
+        substr(orders.comments, 1, 255) as comments
+      from 
+        catissue_distribution distribution
+        left join catissue_order orders on distribution.order_id = orders.identifier
+    </sql>
+    <sql>
+      insert into os_order_items (
+        identifier, 
+        order_id, 
+        quantity, 
+        specimen_id, 
+        status)
+      
+      select 
+        dep.identifier as identifier,
+        dep.distribution_id as order_id,
+        dep.distributed_quantity as quantity,
+        fre.object_id as specimen_id,
+        'DISTRIBUTED' as status
+      from 
+        catissue_distri_event_param dep
+        inner join catissue_distribution distribution on distribution.identifier = dep.distribution_id
+        inner join catissue_order ordr on ordr.identifier = distribution.order_id
+        inner join catissue_form_record_entry fre on fre.record_id = dep.identifier
+        inner join catissue_form_context fctxt on fre.form_ctxt_id = fctxt.identifier
+        inner join dyextn_containers dc on fctxt.container_id = dc.identifier
+        where dc.name = 'SpecimenDistributedEvent'
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+          select count(*) from catissue_permissible_value where value = 'Missed Collection'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (default, "Missed Collection", "scg_collection_status")
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding missed visit status in permissible value" dbms="oracle">
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, value, public_id)
+      values
+        (catissue_permi_value_seq.nextval, 'Missed Collection', 'scg_collection_status')
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

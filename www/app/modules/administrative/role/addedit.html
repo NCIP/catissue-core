@@ -1,0 +1,112 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="role-list">
+            <span translate="role.list">Roles</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span ng-if="!role.id" translate="role.create_role">Create Role</span>
+        <span ng-if="!!role.id">{{role.name}}</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="roleForm" class="form-horizontal" os-form-validator="roleForm" validator="roleFormValidator" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="role.name">Name</label>
+        <div class="col-xs-6">
+          <input type="text" name="name" ng-model="role.name" class="form-control"
+            placeholder="{{'role.name' | translate}}" required/>
+          <div os-field-error field="roleForm.name"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="role.description">Description</label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'role.description' | translate}}" ng-model="role.description"
+            class="form-control"></textarea>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-3 col-xs-offset-3">
+          <label class="control-label" translate="role.resource">Resource</label>
+        </div>
+        <div ng-class="{'col-xs-4': sprExists, 'col-xs-3': !sprExists}">
+          <div ng-class="{'col-xs-2': sprExists, 'col-xs-3': !sprExists}">
+            <label class="control-label" translate="role.read">Read</label>
+          </div>
+          <div ng-class="{'col-xs-2': sprExists, 'col-xs-3': !sprExists}">
+            <label class="control-label" translate="role.create">Create</label>
+          </div>
+          <div ng-class="{'col-xs-2': sprExists, 'col-xs-3': !sprExists}">
+            <label class="control-label" translate="role.update">Update</label>
+          </div>
+          <div ng-class="{'col-xs-2': sprExists, 'col-xs-3': !sprExists}">
+            <label class="control-label" translate="role.delete">Delete</label>
+          </div>
+          <div class="col-xs-2" ng-if="sprExists">
+            <label class="control-label" translate="role.lock">Lock</label>
+          </div>
+          <div class="col-xs-2" ng-if="sprExists">
+            <label class="control-label" translate="role.unlock">Unlock</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix" ng-repeat="ac in role.acl">
+        <ng-form name="roleResourceForm" os-form-validator="roleResourceForm" parent-validator="roleFormValidator">
+          <div class="col-xs-3 col-xs-offset-3">
+            <os-select ng-model="ac.resourceName" on-change="onResourceSelect(ac)" display-prop="displayName" list="resources" select-prop="name"
+              placeholder="{{'role.resource' | translate}}" name="resource" required>
+            </os-select>
+            <div os-field-error field="roleResourceForm.resource"></div>
+          </div>
+
+          <div ng-class="{'col-xs-4': sprExists, 'col-xs-3': !sprExists}">
+            <div class="os-permissions-checkbox" ng-class="{'col-xs-2': sprExists,'col-xs-3': !sprExists}" ng-repeat="operation in ac.operations">
+              <os-checkbox ng-model="operation.selected" ng-change="setOperations(operation, ac.operations)"
+                ng-show="operation.show" ng-disabled="operation.disabled"></os-checkbox>
+            </div>
+          </div>
+
+          <div class="col-xs-1">
+            <button class="btn btn-default" ng-click="removeResource($index)">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-4 col-xs-offset-3">
+          <a ng-click="addResource()">
+            <span class="glyphicon glyphicon-plus"></span>
+          </a>
+          <span translate="role.add_resource">Add Resource</span>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="save()">
+            <span ng-if="!role.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!role.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()" translate="common.buttons.discard">Discard</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

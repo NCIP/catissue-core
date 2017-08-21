@@ -1,0 +1,10 @@
+angular.module('os.biospecimen', 
+  [
+    'os.biospecimen.models',
+    'os.biospecimen.extensions',
+    'os.biospecimen.participant',
+    'os.biospecimen.cp',
+    'os.biospecimen.specimenlist',
+    'os.biospecimen.common'
+  ]
+);

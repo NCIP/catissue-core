@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vpawar" id="Setting specifying how container positions are labeled">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="POS_LABELING_MODE" type="${text.type}(16)" defaultValue="TWO_D">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Setting specifying how containers positions of a given type are labeled">
+    <addColumn tableName="OS_CONTAINER_TYPES">
+      <column name="POS_LABELING_MODE" type="${text.type}(16)" defaultValue="TWO_D">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen positions view" runOnChange="true">
+    <createView replaceIfExists="true" viewName="os_specimen_positions_view">
+      select
+        c.identifier as container_identifier, c.name as container_name,
+        p.identifier as position_identifier, p.pos_one_str, p.pos_two_str,
+        case when c.pos_labeling_mode = 'LINEAR'
+        then
+          concat('', (p.pos_two - 1) * c.no_of_cols + p.pos_one)
+        else
+          concat(p.pos_two_str, concat(', ', p.pos_one_str))
+        end as formatted_position,
+        p.occupying_specimen_id as specimen_id
+      from
+        os_storage_containers c
+        inner join os_container_positions p on p.storage_container_id = c.identifier
+      where
+        c.activity_status != 'Disabled' and
+        p.occupying_specimen_id is not null
+    </createView>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Request ID and time when the position was reserved">
+    <addColumn tableName="OS_CONTAINER_POSITIONS">
+      <column name="RESERVATION_ID" type="${text.type}(40)"/>
+      <column name="RESERVATION_TIME" type="${nullable.ts.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP based container auto selection strategy">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CONTAINER_SEL_STRATEGY" type="${text.type}(32)"/>
+      <column name="ALIQUOTS_IN_SAME_CONT" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique PPID per collection protocol">
+    <addUniqueConstraint
+      constraintName="CAT_CPR_CP_ID_PPID_UQ"
+      tableName="CATISSUE_COLL_PROT_REG"
+      columnNames="COLLECTION_PROTOCOL_ID, PROTOCOL_PARTICIPANT_ID"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Setting specifying occupant property value to be displayed in container map">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track approx. freezer capacity which can be used for computing utilisation">
+    <addColumn tableName="OS_STORAGE_CONTAINERS">
+      <column name="CAPACITY" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Approximate capacity of existing freezers" dbms="mysql">
+    <sql>
+      update
+        os_storage_containers cu
+        inner join (
+          select
+            t.freezer_id as freezer_id, round(exp(sum(log(a.no_of_rows * a.no_of_cols)))) as capacity
+          from
+            os_storage_containers a
+            inner join os_containers_hierarchy h on h.ancestor_id = a.identifier
+            inner join (
+              select
+                f.identifier as freezer_id, min(b.identifier) as box_id
+              from
+                os_storage_containers f
+                inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+                inner join os_storage_containers b on b.identifier = h.descendent_id
+              where
+                f.parent_container_id is null and
+                f.activity_status != 'Disabled' and
+                b.store_specimens = 1 and
+                b.activity_status != 'Disabled'
+              group by
+                f.identifier
+            ) t on t.box_id = h.descendent_id
+          group by
+            t.freezer_id
+        ) c_capacity on cu.identifier = c_capacity.freezer_id
+      set
+        cu.capacity = c_capacity.capacity
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Approximate capacity of existing freezers" dbms="oracle">
+    <sql>
+      merge into os_storage_containers cu using (
+        select
+          t.freezer_id as freezer_id, round(exp(sum(ln(a.no_of_rows * a.no_of_cols)))) as capacity
+        from
+          os_storage_containers a
+          inner join os_containers_hierarchy h on h.ancestor_id = a.identifier
+          inner join (
+            select
+              f.identifier as freezer_id, min(b.identifier) as box_id
+            from
+              os_storage_containers f
+              inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+              inner join os_storage_containers b on b.identifier = h.descendent_id
+            where
+              f.parent_container_id is null and
+              f.activity_status != 'Disabled' and
+              b.store_specimens = 1 and
+              b.activity_status != 'Disabled'
+            group by
+              f.identifier
+          ) t on t.box_id = h.descendent_id
+        group by
+          t.freezer_id
+      ) c_capacity on (cu.identifier = c_capacity.freezer_id)
+      when
+        matched
+      then
+        update set cu.capacity = c_capacity.capacity
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="CP level configuration to enable or disable extraction of text from SPR PDF docs">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="EXTRACT_SPR_TEXT" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Collection protocol to which the specimen belongs">
+    <addColumn tableName="CATISSUE_SPECIMEN">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"/> 
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Foreign key on CP ID of specimen table">
+    <addForeignKeyConstraint
+      constraintName="FK_SPEC_CP_ID"
+      baseTableName="CATISSUE_SPECIMEN"
+      baseColumnNames="COLLECTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Updating collection protocol id of specimen table" dbms="mysql">
+    <sql>
+      update 
+        catissue_specimen spec 
+        inner join catissue_specimen_coll_group visit on visit.identifier = spec.specimen_collection_group_id 
+        inner join catissue_coll_prot_reg cpr on cpr.identifier = visit.collection_protocol_reg_id 
+      set
+        spec.collection_protocol_id = cpr.collection_protocol_id;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Updating collection protocol id of specimen table" dbms="oracle">
+    <sql>
+      merge into catissue_specimen spec using (
+        select
+          visit.identifier as visitId, cpr.collection_protocol_id as cpId
+        from
+          catissue_specimen_coll_group visit
+          inner join catissue_coll_prot_reg cpr on cpr.identifier = visit.collection_protocol_reg_id
+      ) t0 on (t0.visitId = spec.specimen_collection_group_id)
+      when
+        matched
+      then
+        update set spec.collection_protocol_id = t0.cpId;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique specimen label per collection protocol" dbms="mysql">
+    <addUniqueConstraint
+      constraintName="CAT_SPEC_CP_ID_LABEL_UQ"
+      tableName="CATISSUE_SPECIMEN"
+      columnNames="COLLECTION_PROTOCOL_ID, LABEL"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop non functional unique constraint index" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <indexExists indexName="CAT_SPEC_CP_ID_LABEL_UQ"/>
+    </preConditions>
+
+    <dropUniqueConstraint
+      constraintName="CAT_SPEC_CP_ID_LABEL_UQ"
+      tableName="CATISSUE_SPECIMEN"
+      uniqueColumns="COLLECTION_PROTOCOL_ID, LABEL"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique specimen label per collection protocol" dbms="oracle">
+    <sql>
+      create unique index CAT_SPEC_CP_ID_LABEL_UQ on catissue_specimen(
+        case when
+          collection_protocol_id is not null and label is not null
+        then
+          collection_protocol_id || '-' || label
+        end
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add not null constraint on collection protocol id of specimen table">
+    <addNotNullConstraint
+      tableName="CATISSUE_SPECIMEN"
+      columnName="COLLECTION_PROTOCOL_ID"
+      columnDataType="${int.type}" />
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Track unhandled exceptions">
+    <createTable tableName="OS_UNHANDLED_EXCEPTIONS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="CLASS_NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="METHOD_NAME" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="TIMESTAMP" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="EXCEPTION" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="STACK_TRACE" type="${clob.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="INPUT_ARGS" type="${clob.type}"/>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Unhandled exception sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_UNHANDLED_EXCEPTIONS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="FK on user who got unhandled exception">
+    <addForeignKeyConstraint
+      constraintName="FK_UNHANDLED_EXCEPTION_USER_ID"
+      baseTableName="OS_UNHANDLED_EXCEPTIONS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>		
+
+  <changeSet author="vgaikwad" id="Bulk import input file date and time format">
+    <addColumn tableName="OS_BULK_IMPORT_JOBS">
+      <column name="DATE_FORMAT" type="${text.type}(16)"/>
+      <column name="TIME_FORMAT" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+  
+  <!-- PLUGINS-170: Start of change sets to fix large PV identifier values -->
+  <changeSet author="mdnasim" id="PV ID FIX: Drop foreign key on parent of permissible values">
+    <dropForeignKeyConstraint baseTableName="CATISSUE_PERMISSIBLE_VALUE" constraintName="FK57DDCE153B5435E"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop foreign key on permissible value identifiers from properties table">
+    <dropForeignKeyConstraint baseTableName="OS_PV_PROPS" constraintName="FK_PV_PROPS_PV_ID"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Remove auto increment from identifier" dbms="mysql">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="IDENTIFIER" newColumnName="IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop primary key constraint from permissible values table">
+    <dropPrimaryKey tableName="CATISSUE_PERMISSIBLE_VALUE"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add column to store newly generated PV identifier values" dbms="mysql">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add column to store newly generated PV identifier values" dbms="oracle">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated permissible value identifier sequence" dbms="oracle">
+    <dropSequence sequenceName="CATISSUE_PERMI_VALUE_SEQ"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Fresh sequence to generate new permissible value identifier values" dbms="oracle">
+    <createSequence sequenceName="CATISSUE_PERMI_VALUE_SEQ" startValue="1" incrementBy="1" ordered="true"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Generate new permissible value identifier values" dbms="oracle">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        new_identifier = catissue_permi_value_seq.nextval
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add primary key constraint on newly generated PV identifier values" dbms="oracle">
+    <addPrimaryKey tableName="CATISSUE_PERMISSIBLE_VALUE" columnNames="NEW_IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Update permissible value parent identifiers" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ppv on ppv.identifier = pv.parent_identifier
+      set
+        pv.parent_identifier = ppv.new_identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Add new parent id column in catissue permissible values table" dbms="oracle">
+    <addColumn tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="NEW_PARENT_IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Update permissible value parent identifiers" dbms="oracle">
+    <sql>
+      merge into
+        catissue_permissible_value pv
+      using (
+        select
+          DISTINCT ppv.identifier as old_id, ppv.new_identifier as new_id
+        from
+          catissue_permissible_value pv
+          join catissue_permissible_value ppv on ppv.identifier = pv.parent_identifier
+      ) t on (pv.parent_identifier = t.old_id)
+      when matched
+      then
+        update set pv.new_parent_identifier = t.new_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Updating permissible value properties with newly generated identifier values">
+    <sql>
+      update
+        os_pv_props
+      set
+        pv_id = (
+          select
+            new_identifier
+          from
+            catissue_permissible_value
+          where
+            identifier = pv_id
+        )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated parent identifier column so that newer column can use this name" dbms="oracle">
+    <dropColumn tableName="CATISSUE_PERMISSIBLE_VALUE" columnName="PARENT_IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new parent identifier to parent identifier" dbms="oracle">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="NEW_PARENT_IDENTIFIER" newColumnName="PARENT_IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Drop outdated identifier column so that newer column can use this name">
+    <dropColumn tableName="CATISSUE_PERMISSIBLE_VALUE" columnName="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new identifier to identifier" dbms="oracle">
+    <renameColumn tableName="CATISSUE_PERMISSIBLE_VALUE"
+      oldColumnName="NEW_IDENTIFIER" newColumnName="IDENTIFIER" columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Rename column new identifier to identifier" dbms="mysql">
+    <sql>
+      alter table
+        catissue_permissible_value
+      change
+        new_identifier identifier bigint auto_increment;
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="PV ID FIX: Update parent identifier for permissible value to null if parent identifier is 0" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        parent_identifier = null
+      where
+        parent_identifier = 0
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Foreign key on parent of permissible values">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PARENT_ID"
+      baseTableName="CATISSUE_PERMISSIBLE_VALUE"
+      baseColumnNames="PARENT_IDENTIFIER"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="PV ID FIX: Foreign key on permissible value of PV properties">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PROPS_PV_ID"
+      baseTableName="OS_PV_PROPS"
+      baseColumnNames="PV_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  <!-- PLUGINS-170: End of change sets to fix large PV identifier values -->
+
+  <changeSet author="vpawar" id="Identify source of participant details">
+    <addColumn tableName="CATISSUE_PARTICIPANT">
+      <column name="SOURCE" type="${text.type}(16)" defaultValue="OpenSpecimen">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on row capacity to allow for limitless containers">
+    <dropNotNullConstraint tableName="OS_STORAGE_CONTAINERS" columnName="NO_OF_ROWS" columnDataType="${int.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on column capacity to allow for limitless containers">
+    <dropNotNullConstraint tableName="OS_STORAGE_CONTAINERS" columnName="NO_OF_COLS" columnDataType="${int.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - x - string">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_ONE_STR" columnDataType="${text.type}(8)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - y - string">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_TWO_STR" columnDataType="${text.type}(8)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - x - int">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_ONE" columnDataType="${smallint.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop not null constraint on position coordinate - y - int">
+    <dropNotNullConstraint tableName="OS_CONTAINER_POSITIONS" columnName="POS_TWO" columnDataType="${smallint.type}"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track time and user responsible for anonymizing participants' PHI data">
+    <createTable tableName="OS_PARTICIPANT_ANON_EVENTS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CPR_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ANONYMIZED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ANONYMIZE_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Participant anonymize events identifier sequence" dbms="oracle">
+    <createSequence sequenceName="OS_PART_ANON_EVENTS_SEQ" startValue="1" incrementBy="1" ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on anonymize event's registration">
+    <addForeignKeyConstraint constraintName="FK_PART_ANON_EVENT_CPR_ID"
+      baseTableName="OS_PARTICIPANT_ANON_EVENTS" baseColumnNames="CPR_ID"
+      referencedTableName="CATISSUE_COLL_PROT_REG" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on anonymized by user">
+    <addForeignKeyConstraint constraintName="FK_PART_ANON_EVENT_USER_ID"
+      baseTableName="OS_PARTICIPANT_ANON_EVENTS" baseColumnNames="ANONYMIZED_BY"
+      referencedTableName="CATISSUE_USER" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Enable/disable specimen barcoding">
+    <sql>
+      call add_cfg_prop(
+      'biospecimen', 'enable_spmn_barcoding',
+      'enable_spmn_barcoding', 'enable_spmn_barcoding_desc',
+      'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="CP level setting to enable/disable specimen barcoding">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="BARCODING_ENABLED" type="${boolean.type}" defaultValueBoolean="false"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Custom field forms are non-system forms">
+    <sql>
+      update 
+        catissue_form_context
+      set 
+        is_sys_form = 0
+      where
+        entity_type in (
+          'CollectionProtocolExtension', 'ParticipantExtension', 'VisitExtension',
+          'SpecimenExtension', 'SiteExtension'
+        ) and
+        deleted_on is null;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="PVs hierarchy table">
+    <createTable tableName="OS_PVS_HIERARCHY">
+      <column name="ANCESTOR_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DESCENDANT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Unique constraint on ancestor, descendant tuple of PVs hierarchy">
+    <createIndex tableName="OS_PVS_HIERARCHY" indexName="OS_PV_HIERARCHY_IDX" unique="true">
+      <column name="ANCESTOR_ID"/>
+      <column name="DESCENDANT_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on PV hierarchy ancestor">
+    <addForeignKeyConstraint constraintName="FK_PV_HIERARCHY_ANCESTOR"
+      baseTableName="OS_PVS_HIERARCHY" baseColumnNames="ANCESTOR_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Foreign key on PV hierarchy descendant">
+    <addForeignKeyConstraint constraintName="FK_PV_HIERARCHY_DESCENDANT"
+      baseTableName="OS_PVS_HIERARCHY" baseColumnNames="DESCENDANT_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Index on specimen anatomic site">
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_SPMN_ANATOMIC_SITE_IDX">
+      <column name="TISSUE_SITE"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Primary site of a user">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="PRIMARY_SITE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on user's primary site">
+    <addForeignKeyConstraint
+      constraintName="FK_USER_PRIMARY_SITE_ID"
+      baseTableName="CATISSUE_USER" baseColumnNames="PRIMARY_SITE_ID"
+      referencedTableName="CATISSUE_SITE" referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Migrate user's department to primary site" dbms="mysql">
+    <sql>
+      update
+        catissue_user user
+        inner join os_departments dept on user.department_id = dept.identifier
+        inner join catissue_site site on site.institute_id = dept.institute_id
+      set
+        user.primary_site_id = site.identifier
+      where
+        site.name = dept.name
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Migrate user's department to primary site" dbms="oracle">
+    <sql>
+      merge into
+        catissue_user usr
+      using (
+        select
+          dept.identifier as deptId, site.identifier as siteId
+        from
+          os_departments dept
+          inner join catissue_site site on dept.institute_id = site.institute_id
+        where
+          site.name = dept.name
+      ) t on (t.deptId = usr.department_id)
+      when matched
+      then
+        update set usr.primary_site_id = t.siteId
+    </sql>
+  </changeSet>
+</databaseChangeLog>

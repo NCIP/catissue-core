@@ -1,1 +1,0 @@
-catissue_audit_event;select COMMENTS from catissue_audit_event

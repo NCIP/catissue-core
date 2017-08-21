@@ -1,0 +1,90 @@
+<div>
+  <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control" 
+        ng-model="filterOpts.name" placeholder="{{'container.search' | translate}}">
+      <span class="input-group-addon">
+        <span class="fa fa-search"></span>
+      </span>
+    </div>
+  </div>
+
+  <div ng-if="initList && (!containers || containers.length == 0)">
+    <div class="alert alert-warning">
+      <span translate="container.no_containers_match_search">
+        No containers match search criteria to store specimen/s
+      </span>
+    </div>
+  </div>
+
+  <div class="os-table os-table-fixed os-table-tree os-border os-table-muted-hdr" ng-if="containers.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-6">
+          <span translate="container.name">Name</span>
+        </div>
+        <div class="col col-xs-2">
+          <span translate="container.dimension">Dimension</span>
+        </div>
+        <div class="col col-xs-2">
+          <span translate="container.free_locations">Free Locations</span>
+        </div>
+        <div class="col col-xs-2">
+          <span>&nbsp;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-table-body">
+      <div class="row" ng-repeat="container in containers | openedTreeNodes" ng-class="{'selected': container.selected}">
+        <div class="col col-xs-6">
+          <div class="clearfix">
+            <div class="pull-left">
+              <div ng-style="{'padding-left': (container.hasChildren ? container.depth * 16 : container.depth * 16 + 16) + 'px'}">
+                <a ng-if="container.hasChildren" class="fa" 
+                  ng-class="{'fa-chevron-circle-down': container.isOpened, 
+                             'fa-chevron-circle-right': !container.isOpened}"
+                  ng-click="container.isOpened=!container.isOpened; loadChildren(container, $index)">
+                </a>
+                <span> {{container.name}} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-xs-2" ng-switch on="container.positionLabelingMode == 'NONE'">
+          <span ng-switch-when="true" translate="common.not_applicable">
+            Not Applicable
+          </span>
+          <span ng-switch-when="false">
+            {{container.noOfRows}} x {{container.noOfColumns}}
+          </span>
+        </div>
+        <div class="col col-xs-2" ng-switch on="container.positionLabelingMode == 'NONE'">
+          <span ng-switch-when="true" translate="common.not_applicable">
+            Not Applicable
+          </span>
+          <span ng-switch-when="false">
+            {{container.freePositions}}
+          </span>
+        </div>
+        <div class="col col-xs-2">
+          <button class="btn btn-xs btn-success" ng-click="toggleContainerSelection(container)"
+            ng-if="(entityType == 'storage_container' || 
+                    (entityType == 'specimen' && container.storeSpecimensEnabled)) && 
+                   !container.selected && 
+                   (container.freePositions > 0 || container.positionLabelingMode == 'NONE')">
+            <span class="fa fa-check"></span>
+            <span translate="common.buttons.select">Select</span>
+          </button>
+          <button class="btn btn-xs btn-danger" ng-click="toggleContainerSelection(container)"
+            ng-if="(entityType == 'storage_container' || 
+                    (entityType == 'specimen' && container.storeSpecimensEnabled)) && 
+                   container.selected">
+            <span class="fa fa-remove"></span>
+            <span translate="common.buttons.unselect">Unselect</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

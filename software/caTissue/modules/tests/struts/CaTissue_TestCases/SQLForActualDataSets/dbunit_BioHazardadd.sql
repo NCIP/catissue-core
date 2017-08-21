@@ -1,1 +1,0 @@
-CATISSUE_BIOHAZARD;select name from CATISSUE_BIOHAZARD where name='liquid_toxic'

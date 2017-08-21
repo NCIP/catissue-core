@@ -1,0 +1,64 @@
+<div> 
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cp.shortTitle}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-list({cpId: cpr.cpId})">
+            <span translate="participant.list">Participants</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span translate="{{cpr.ppid}}"></span>
+        <span ng-if="userCtx.hasPhiAccess && (cpr.participant.firstName || cpr.participant.lastName)">
+         ( {{cpr.participant.firstName}} {{cpr.participant.lastName}} )
+        </span>
+      </h3>
+    </div>
+
+    <div class="os-page-header-actions">
+      <ng-include ng-if="!!listViewCtx.headerActionsTmpl" src="listViewCtx.headerActionsTmpl"></ng-include>
+    </div>
+
+    <h3>
+      <span>{{cpr.ppid}}</span>
+    </h3>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active"> 
+        <a ui-sref=".overview"> 
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="participant.menu.overview">Overview</span>
+        </a>
+      </li>
+      <li ui-sref-active="active" ng-if="!cp.consentsWaived">
+        <a ui-sref=".consents">
+          <i class="fa fa-pencil-square-o"></i>
+          <span class="os-title" translate="participant.menu.consents">Consents</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref=".visits">
+          <i class="fa fa-list-alt"></i>
+          <span class="os-title" translate="participant.menu.visits">Visits</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref=".extensions.list">
+          <i class="fa fa-files-o"></i>
+          <span class="os-title" translate="participant.menu.extensions">Forms</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>
+

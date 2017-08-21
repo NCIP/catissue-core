@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="krishagni.catissueplus.beans.FormRecordEntryBean"
+        table="CATISSUE_FORM_RECORD_ENTRY"
+        dynamic-update="false"
+        dynamic-insert="false"
+		lazy="true"
+    >
+    
+        <id
+            name="identifier"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+              <param name="sequence">CATISSUE_FORM_REC_ENTRY_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="formCtxtId"
+            column="FORM_CTXT_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+        <property
+            name="objectId"
+            column="OBJECT_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+
+         <property
+            name="recordId"
+            column="RECORD_ID"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+         
+          <property
+            name="updatedBy"
+            column="UPDATED_BY"
+            type="long"
+            update="true"
+            insert="true"
+            length="30"
+        />
+
+         <property
+            name="updatedTime"
+            column="UPDATE_TIME"
+            type="timestamp"
+            update="true"
+            insert="true"
+            length="30"
+        />
+         
+        <property
+            name="activityStatusStr"
+            column="ACTIVITY_STATUS"
+            type="string"
+            update="true"
+            insert="true"
+            length="16"
+        />
+        
+        <sql-query name="getRecordEntry">
+          <return-scalar column="id"              type="long"/>
+          <return-scalar column="ctx_id"          type="long"/>
+          <return-scalar column="object_id"       type="long"/>
+          <return-scalar column="record_id"       type="long"/>
+          <return-scalar column="updated_by"      type="long"/>
+          <return-scalar column="update_time"     type="timestamp"/>
+          <return-scalar column="status"          type="string"/>
+          <return-scalar column="entity_type"     type="string"/>
+ 
+          select
+            re.identifier as id, re.form_ctxt_id as ctx_id,
+            re.object_id as object_id, re.record_id as record_id,
+            re.updated_by as updated_by, re.update_time as update_time,
+            re.activity_status as status, ctx.entity_type as entity_type
+          from
+            catissue_form_record_entry re
+            inner join catissue_form_context ctx on ctx.identifier = re.form_ctxt_id
+          where
+            re.form_ctxt_id = :formCtxtId and 
+            re.record_id = :recordId and
+            re.object_id = :objectId and
+            re.activity_status = 'ACTIVE' and
+            ctx.deleted_on is null
+        </sql-query>
+
+        <sql-query name="getRecordEntryByFormAndRecId">
+          <return-scalar column="id"              type="long"/>
+          <return-scalar column="ctx_id"          type="long"/>
+          <return-scalar column="object_id"       type="long"/>
+          <return-scalar column="record_id"       type="long"/>
+          <return-scalar column="updated_by"      type="long"/>
+          <return-scalar column="update_time"     type="timestamp"/>
+          <return-scalar column="status"          type="string"/>
+          <return-scalar column="entity_type"     type="string"/>
+ 
+          select
+            re.identifier as id, re.form_ctxt_id as ctx_id,
+            re.object_id as object_id, re.record_id as record_id,
+            re.updated_by as updated_by, re.update_time as update_time,
+            re.activity_status as status, ctx.entity_type as entity_type
+          from
+            catissue_form_record_entry re
+            inner join catissue_form_context ctx on ctx.identifier = re.form_ctxt_id
+          where
+            ctx.container_id = :formId and
+            re.record_id = :recordId and
+            re.activity_status = 'ACTIVE' and
+            ctx.deleted_on is null
+        </sql-query>
+
+        <query name="getRecordEntries">
+          from
+            krishagni.catissueplus.beans.FormRecordEntryBean re
+          where
+            re.formCtxtId = :formCtxtId and
+            re.objectId = :objectId and
+            re.activityStatusStr = 'ACTIVE'
+        </query>
+    </class>
+</hibernate-mapping>

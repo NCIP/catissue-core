@@ -1,0 +1,101 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenReturnEvent</name>
+    <caption>#getMessage("return_event")</caption>
+    <table>OS_SPMN_DISTRIBUTIONS_VIEW</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>order</name>
+        <udn>order</udn>
+        <caption>#getMessage("return_event_order")</caption>
+        <column>NAME</column>
+        <mandatory>true</mandatory>
+      </textField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>quantity</name>
+        <udn>quantity</udn>
+        <caption>#getMessage("order_items_quantity")</caption>
+        <column>RETURNED_QUANTITY</column>
+        <mandatory>true</mandatory>
+        <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
+      </numberField>
+    </row>
+
+    <row>
+      <storageContainer>
+        <name>container</name>
+        <udn>container</udn>
+        <caption>#getMessage("return_event_container")</caption>
+        <column>RETURNING_CONTAINER</column>
+      </storageContainer>
+    </row>
+
+    <row>
+      <textField>
+        <name>row</name>
+        <udn>row</udn>
+        <caption>#getMessage("return_event_container_row")</caption>
+        <column>RETURNING_ROW</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>column</name>
+        <udn>column</udn>
+        <caption>#getMessage("return_event_container_column")</caption>
+        <column>RETURNING_COLUMN</column>
+      </textField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("return_event_user")</caption>
+        <column>RETURNED_BY</column>
+        <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("return_event_date")</caption>
+        <column>RETURN_DATE</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <numberField>
+        <name>incrementFreezeThaw</name>
+        <udn>incrementFreezeThaw</udn>
+        <caption>#getMessage("specimen_increment_freeze_thaw")</caption>
+        <column>FREEZE_THAW_INCR_ON_RETURN</column>
+      </numberField>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("order_comments")</caption>
+        <column>RETURN_COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

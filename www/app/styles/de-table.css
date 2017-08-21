@@ -1,0 +1,60 @@
+#data-table thead th {
+  color: #707070;
+  background: #f5f5f5;
+  border-bottom: 1px solid #dddddd;
+}
+
+#data-table tbody td {
+  background-color: #ffffff;
+}
+
+#data-table tbody td[title] {
+  padding-top: 20px;
+}
+
+#data-table tbody td input,
+#data-table tbody td textarea,
+#data-table tbody td .de-date-picker input,
+#data-table tbody td .de-time-picker input {
+  background-color: transparent;
+}
+
+#data-table tbody td input:focus,
+#data-table tbody td textarea:focus {
+  border-bottom-color: #66afe9;
+}
+
+#data-table tbody td textarea {
+  border-left: 1px solid #DDDDDD;
+  border-right: 1px solid #DDDDDD;
+  border-top: 1px solid #DDDDDD;
+}
+
+#data-table tbody td .de-date-picker .glyphicon,
+#data-table tbody td .de-time-picker .glyphicon {
+  padding-top: 20px;
+  padding-right: 5px;
+}
+
+#data-table tbody td div.select2-container,
+#data-table tbody td div.select2-container a.select2-choice {
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+  background: transparent;
+  outline: none;
+}
+
+#data-table tbody td div.select2-container {
+  border-bottom: 2px solid #DDDDDD !important;
+  margin-top: 7px;
+}
+
+#data-table tbody td div.de-select {
+  height: 34px;
+}
+
+#data-table tbody td input.de-input-error,
+#data-table tbody td div.select2-container.de-input-error {
+  border-bottom-color: #CC0000 !important;
+}

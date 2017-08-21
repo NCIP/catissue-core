@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Factory>
-<BizLogicFactory name ="bizLogicFactory" className = "edu.wustl.catissuecore.bizlogic.BizLogicFactory"/>
-<ForwardToFactory name = "forwardToFactory" className = "edu.wustl.catissuecore.util.ForwardToFactory"/>
-<DomainObjectFactory name = "domainObjectFactory" className = "edu.wustl.catissuecore.domain.DomainObjectFactory"/>
-<UIObjectFactory name="uiObjectFactory" className="edu.wustl.catissuecore.uiobject.UIObjectFactory"/>
-</Factory>

@@ -1,0 +1,161 @@
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="containerResource.updateOpts" class="default"
+        title="{{'container.tooltip.edit' | translate}}" ui-sref="container-addedit({containerId: ctx.container.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <a ng-if="!ctx.dimless" class="btn default" href="{{ctx.downloadUri}}" target="_blank">
+        <span class="fa fa-download"></span>
+        <span translate="common.buttons.export">Export</span>
+      </a>
+      <!-- button show-if-allowed="containerResource.createOpts" class="default"
+        ui-sref="container-replicate({containerId: ctx.container.id})">
+        <span class="fa fa-copy"></span>
+        <span translate="container.replicate">Replicate</span>
+      </button -->
+      <button show-if-allowed="containerResource.deleteOpts" class="default" ng-click="deleteContainer()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div ng-class="{true: 'col-xs-6', false: 'col-xs-12'}[!ctx.container.storageLocation.name && ctx.container.storedSpecimens > 0]">
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="container.type">Type</strong>
+          <a ng-if="ctx.container.typeId"
+            ui-sref="container-type-detail.overview({containerTypeId: ctx.container.typeId})">
+            <span class="value value-md">{{ctx.container.typeName}}</span>
+          </a>
+          <span ng-if="!ctx.container.typeId" class="value value-md" translate="common.not_specified">
+            Not Specified
+          </span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="container.barcode">Barcode</strong>
+          <span class="value value-md">{{ctx.container.barcode | osNoValue}}</span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="container.temperature">Temperature (In Celsius)</strong>
+          <span class="value value-md">{{ctx.container.temperature | osNoValue}}</span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="container.parent_site">Parent Site</strong>
+          <span class="value value-md">{{ctx.container.siteName}}</span>
+        </li>
+  
+        <li class="item" ng-if="!!ctx.container.storageLocation">
+          <strong class="key key-sm" translate="container.parent_container">Parent Container</strong>
+          <a class="value value-md" ui-sref="container-detail.overview({containerId: ctx.container.storageLocation.id})">
+            <os-disp-storage-position position="ctx.container.storageLocation"></os-disp-storage-position>
+          </a>
+        </li>
+  
+        <li class="item" ng-if="ctx.container.positionLabelingMode != 'NONE'">
+          <strong class="key key-sm" translate="container.dimension">Dimension</strong>
+          <span class="value value-md">{{ctx.container.noOfRows}} x {{ctx.container.noOfColumns}}</span>
+        </li>
+
+        <li class="item" ng-if="!ctx.container.storageLocation.name">
+          <strong class="key key-sm" translate="container.stored">Stored</strong>
+          <span class="value value-md">
+            <span>{{ctx.container.storedSpecimens | number}}</span>
+            <span ng-if="!!ctx.container.capacity">
+              <span translate="container.out_of">out of</span>
+              <span>{{ctx.container.capacity | number}}</span>
+            </span>
+            <span translate="container.specimens">specimens</span>
+          </span>
+        </li>
+
+        <li class="item" ng-if="!ctx.container.storageLocation.name">
+          <strong class="key key-sm" translate="container.utilisation">Utilisation</strong>
+          <span class="value value-md" style="max-width: 275px;">
+            <progress class="progress" max="100" style="margin-bottom: 0px;">
+              <bar value="ctx.container.utilisation" type="danger">
+                <span><b>{{ctx.container.utilisation}}%</b></span>
+              </bar>
+              <bar value="100 - ctx.container.utilisation" type="success">
+                <span><b>{{100 - ctx.container.utilisation}}%</b></span>
+              </bar>
+            </progress>
+          </span>
+        </li>
+  
+        <li class="item" ng-if="ctx.container.positionLabelingMode != 'NONE'">
+          <strong class="key key-sm" translate="container.position_labeling">Position Labeling</strong>
+          <span class="value value-md">
+            {{'container.position_labeling_modes.' + ctx.container.positionLabelingMode | translate}}
+          </span>
+        </li>
+
+        <li class="item" ng-if="ctx.container.positionLabelingMode == 'TWO_D'">
+          <strong class="key key-sm" translate="container.labeling_scheme">Dimension Labeling Scheme</strong>
+          <span class="value value-md">
+            {{ctx.container.rowLabelingScheme}} x {{ctx.container.columnLabelingScheme}}
+          </span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="container.stores_specimens">Stores Specimens</strong>
+          <span class="value value-md" ng-switch on="ctx.container.storeSpecimensEnabled">
+            <span ng-switch-when="true" translate="common.yes">Yes</span>
+            <span ng-switch-default translate="common.no">No</span>
+          </span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="container.collection_protocol">Collection Protocols</strong>
+          <span class="value value-md" ng-switch on="ctx.container.calcAllowedCollectionProtocols.length > 0">
+            <span ng-switch-when="true">{{ctx.container.calcAllowedCollectionProtocols | osArrayJoin}}</span>
+            <span ng-switch-default translate="container.all">All</span>
+          </span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="container.specimen_types">Specimen Types</strong>
+          <div class="value value-md">
+            <span ng-if="ctx.container.calcAllowedSpecimenClasses.length > 0">
+              {{ctx.container.calcAllowedSpecimenClasses | osArrayJoin}}
+              <span ng-if="ctx.container.calcAllowedSpecimenTypes.length > 0">,</span>
+            </span>
+            <span ng-if="ctx.container.calcAllowedSpecimenTypes.length > 0">
+              {{ctx.container.calcAllowedSpecimenTypes | osArrayJoin}}
+            </span>
+            <span ng-if="ctx.container.calcAllowedSpecimenClasses.length == 0 &&
+              ctx.container.calcAllowedSpecimenTypes.length == 0">
+              <span translate="common.not_specified">Not Specified</span>
+            </span>
+          </div>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="container.cell_display_prop">Display in Map</strong>
+          <span class="value value-md" ng-switch="!!ctx.container.cellDisplayProp">
+            <span ng-switch-when="true">{{'container.cell_display_props.' + ctx.container.cellDisplayProp | translate}}</span>
+            <span ng-switch-default>{{'container.cell_display_props.SPECIMEN_LABEL' | translate}}</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-6" ng-if="!ctx.container.storageLocation.name && ctx.container.storedSpecimens > 0">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span translate="container.chart.top_5_spmn_types">Top 5 specimen types</span>
+        </div>
+        <div class="panel-body">
+          <div>
+            <os-chart data="ctx.charts.spmnType.data" options="ctx.charts.spmnType.options"></os-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

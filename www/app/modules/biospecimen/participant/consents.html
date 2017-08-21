@@ -1,0 +1,152 @@
+<div class="clearfix">
+  <div class="col-xs-8">
+    <ul class="os-key-values os-one-col">
+      <li class="item">
+        <strong class="key key-sm" translate="participant.consent.signed_form">Signed Consent Form</strong>
+        <div class="value value-md" ng-if="!uploadMode">
+          <div class="pull-left" ng-switch on="!!consent.consentDocumentName"> 
+            <span ng-switch-when="true">
+              <span ng-switch on="userCtx.hasPhiAccess">
+                <a ng-switch-when="true" ng-href="{{consentFormUrl}}" target="_blank">
+                  <span>{{consent.consentDocumentName}}</span>
+                </a>
+                <span ng-switch-when="false">
+                  {{consent.consentDocumentName}}
+                </span>
+              </span>
+            </span>
+            <span ng-switch-when="false" translate="common.not_specified">Not Specified</span>
+          </div>
+          <div class="col-xs-2" ng-switch on="!!consent.consentDocumentName" ng-if="userCtx.hasPhiAccess"
+            show-if-allowed="participantResource.updateOpts">
+            <div class="btn btn-default btn-xs" ng-switch-when="false" ng-click="showUploadMode()">
+              <span class="fa fa-wrench"></span>
+            </div>
+            <div class="btn-group" ng-switch-when="true">
+              <div class="btn btn-default btn-xs" ng-click="showUploadMode()">
+                <span class="fa fa-pencil"></span>
+              </div>
+              <div class="btn btn-default btn-xs" ng-click="confirmDeleteConsentForm()">
+                <span class="fa fa-trash"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="value value-md" ng-if="uploadMode">
+          <form action="{{consentFormUrl}}" class="form-inline">
+            <div class="form-group">
+              <div os-file-upload ctrl="consentFormUploader.ctrl"></div>
+            </div>
+            <div class="form-group clearfix">
+              <div class="col-xs-6">
+                <button type="button" class="btn btn-success" ng-click="uploadConsentForm()" translate="common.buttons.upload">
+                  Upload
+                </button>
+                <a class="btn os-btn-text-secondary" ng-click="cancel()" translate="common.buttons.cancel">
+                  Cancel
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="col-xs-8 os-consents">
+    <div class="list-group">
+      <div class="list-group-item clearfix os-section-hdr">
+        <span translate="participant.consent.responses">Consent Responses</span>
+        <div show-if-allowed="participantResource.updateOpts" class="btn-group os-btns right">
+          <button class="btn btn-primary" ng-if="!editMode" ng-click="showEditConsents()">
+            <span class="fa fa-pencil"></span>
+            <span translate="common.buttons.edit">Edit</span>
+          </button>
+          <button class="btn btn-primary" ng-if="editMode" ng-click="saveConsents()">
+            <span translate="common.buttons.save">Save</span>
+          </button>
+        </div>
+      </div>
+      <div class="list-group-item clearfix">
+        <div class="row">
+          <div ng-switch on="editMode">
+            <div ng-switch-when="true">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <os-date-picker name="consentDate" date="consent.consentSignatureDate" md-type="true"
+                    placeholder="{{'participant.consent.signature_date' | translate}}">
+                  </os-date-picker>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <div os-md-input ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
+                    <os-users ng-model="consent.witness" placeholder="{{'participant.consent.witness'|translate}}">
+                    </os-users>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <textarea os-md-input ng-model="consent.comments"
+                    placeholder="{{'participant.consent.comments' | translate}}" rows="1">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <div ng-switch-when="false">
+              <div class="col-xs-6">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.signature_date">Consent Signature Date</span>
+                  </label>
+                  <span>{{consent.consentSignatureDate | date: global.dateFmt | osNoValue}}</span>
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.witness">Consent Witness</span>
+                  </label>
+                  <span ng-if="consent.witness">{{consent.witness | osUserDisplayName}}</span>
+                  <span ng-if="!consent.witness" translate="common.not_specified">Not Specified</span>
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <div class="form-group os-md-input read">
+                  <label class="os-md-input-label">
+                    <span translate="participant.consent.comments">Comments</span>
+                  </label>
+                  <span>{{consent.comments | osNoValue}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="list-group-item clearfix" 
+        ng-repeat="consentTierResponse in consent.consentTierResponses" ng-init="consentTierResponseIdx = $index">
+        <div>
+          <div class="os-consent-stmt">
+            <span title="{{consentTierResponse.statement}}">{{consentTierResponse.statement}}</span>
+          </div>
+          <div ng-if="!editMode">
+            <span>{{consentTierResponse.response | osNoValue:'common.none'| translate}}</span>
+          </div>
+          <div class="os-consent-response" ng-if="editMode">
+            <label class="radio-inline" ng-repeat="response in consentResponses">
+              <input type="radio" name="consentTierResponse{{consentTierResponseIdx}}"
+                ng-model="consentTierResponse.response" ng-value="response">
+              <span>{{response}}</span>
+            </label>
+
+            <button class="btn btn-default btn-xs" ng-click="clearResponseSelection(consentTierResponse)">
+              <span class="fa fa-remove" title="{{'participant.consent.clear' | translate}}"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

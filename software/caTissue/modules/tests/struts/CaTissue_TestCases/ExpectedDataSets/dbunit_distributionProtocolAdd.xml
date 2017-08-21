@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_specimen_protocol PRINCIPAL_INVESTIGATOR_ID="1" TITLE="Blood Distribution Protocol" SHORT_TITLE="Blood Distribution" START_DATE ="2011-04-04"/>
-	<catissue_distribution_spec_req SPECIMEN_CLASS="Tissue" SPECIMEN_TYPE="Fixed Tissue" TISSUE_SITE="Blood" PATHOLOGY_STATUS="Malignant" QUANTITY="10"/>
-	<catissue_audit_event_details ELEMENT_NAME="TITLE" CURRENT_VALUE="Blood Distribution Protocol"/> 
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

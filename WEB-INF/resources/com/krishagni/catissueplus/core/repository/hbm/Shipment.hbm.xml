@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.Shipment" table="OS_SHIPMENTS">
+    
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SHIPMENTS_SEQ</param>
+      </generator>
+    </id>
+    
+    <property name="name" column="NAME"/>
+    
+    <property name="courierName" column="COURIER_NAME"/>
+    
+    <property name="trackingNumber" column="TRACKING_NUMBER"/>
+    
+    <property name="trackingUrl" column="TRACKING_URL"/>
+    
+    <many-to-one name="sendingSite" column="SENDING_SITE_ID"/>
+    
+    <many-to-one name="receivingSite" column="RECEIVING_SITE_ID"/>
+    
+    <property name="shippedDate" column="SHIPPED_DATE"/>
+      
+    <many-to-one name="sender" column="SENDER_ID"/>
+    
+    <property name="senderComments" column="SENDER_COMMENTS"/>
+    
+    <property name="receivedDate" column="RECEIVED_DATE"/>
+    
+    <many-to-one name="receiver" column="RECEIVER_ID"/>
+    
+    <property name="receiverComments" column="RECEIVER_COMMENTS"/>
+    
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.Shipment$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+    
+    <set name="shipmentItems" cascade="all-delete-orphan" inverse="true">
+      <key column="SHIPMENT_ID" />
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.ShipmentItem"/>
+    </set>
+    
+    <set name="notifyUsers" table="OS_SHIPMENT_NOTIFY_USERS">
+      <key column="SHIPMENT_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+    </set>
+
+    <many-to-one name="request" column="REQUEST_ID"/>
+    
+    <filter name="activeEntity"/>
+    
+    <query name="getShipmentByName">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Shipment
+      where
+        name = :name
+    </query>
+    
+    <query name="getShippedSpecimensByIds">
+      select
+        spec
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Shipment s
+        join s.shipmentItems item
+        join item.specimen spec
+      where
+        s.status = 'SHIPPED' and
+        spec.id in (:ids)
+    </query>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,68 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span translate="cp.container.title">
+      Container settings
+    </span>
+    <span class="os-btns" show-if-allowed="cpResource.updateOpts" ng-if="contSettingsCtx.view != 'edit_settings'">
+      <button class="default" ng-click="showEditForm()">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+    </span>
+  </div>
+  <div class="panel-body" ng-switch on="contSettingsCtx.view">
+    <div ng-switch-when="edit_settings">
+      <form name="contSettingsForm" os-form-validator="contSettingsForm" class="form-horizontal" novalidate>
+        <div class="form-group">
+          <label class="control-label col-xs-3">
+            <span translate="cp.container.auto_alloc">Auto Allocation</span>
+          </label>
+          <div class="col-xs-6">
+            <os-select class="form-control" ng-model="contSettingsCtx.cp.containerSelectionStrategy"
+              list="contSettingsCtx.allocStrategies" select-prop="name" display-prop="caption"
+              placeholder="{{'cp.container.auto_alloc' | translate}}" on-select="clearStoreAliquots()">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group clearfix">
+          <div class="col-xs-offset-3 col-xs-6 os-text-checkbox">
+            <div class="checkbox">
+              <os-checkbox ng-model="contSettingsCtx.cp.aliquotsInSameContainer"></os-checkbox>
+            </div>
+            <div class="message os-ctrl-padding-top">
+              <span translate="cp.container.store_aliquots_same_box">Store aliquots in same box</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="os-divider"></div>
+
+        <div class="form-group">
+          <div class="col-xs-offset-3 col-xs-6">
+            <button class="btn btn-primary" os-form-submit="save()">
+              <span translate="common.buttons.save">Save</span>
+            </button>
+            <button class="btn os-btn-text" ng-click="revertEdit()">
+              <span translate="common.buttons.cancel">Cancel</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div ng-switch-default>
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.container.auto_alloc">Auto Allocation</strong>
+          <span class="value value-md">
+            <span>{{contSettingsCtx.strategy}}</span>
+            <span ng-if="contSettingsCtx.cp.aliquotsInSameContainer">
+              (<span translate="cp.container.store_aliquots_same_box">Store aliquots in same box</span>)
+            </span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

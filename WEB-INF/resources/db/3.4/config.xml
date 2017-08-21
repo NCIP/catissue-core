@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Setting to enable or disable 2 step patient registration workflow">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'two_step_patient_reg',
+        'two_step_patient_reg', 'two_step_patient_reg_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of days after which the password is considered as old and user account is locked">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_expiry_days',
+        'password_expiry_days', 'password_expiry_days_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of previous passwords that needs to be examined to ensure password is not same as previous passwords">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'passwords_to_examine',
+        'passwords_to_examine', 'passwords_to_examine_desc',
+        'INT', '5'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Password complexity regular expression">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_pattern',
+        'password_pattern', 'password_pattern_desc',
+        'STRING', '((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="No. of days of inactivity after which the user account will be automatically locked">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'account_inactive_days',
+        'account_inactive_days', 'account_inactive_days_desc',
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Scheduled job for notifying/locking users with old passwords" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+      
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+        scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+      values
+        (default, 'Password Expiry Notification', @userId, now(), null, 40, 01, null,
+        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.auth.services.impl.OldPasswordNotification', 0, null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for notifying/locking users with old passwords" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        userId number;
+      begin 
+        select identifier into userId from catissue_user where login_name like '$system';
+        
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Password Expiry Notification', userId, SYSDATE, null, 40, 01, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.auth.services.impl.OldPasswordNotification', 0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for locking inactive user accounts" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+         scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided,
+         rt_args_help_text)
+      values
+        (default, 'Inactive User Accounts Notification', @userId, now(), null, 30, 01, null,
+         null, 'Active', 'DAILY', 'INTERNAL', null,
+         'com.krishagni.catissueplus.core.auth.services.impl.InactiveUserAccountsNotification', 0, null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Scheduled job for locking inactive user accounts" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        userId number;
+      begin
+        select identifier into userId from catissue_user where login_name like '$system';
+
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided,
+           rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Inactive User Accounts Notification', userId, SYSDATE, null, 30, 01, null,
+           null, 'Active', 'DAILY', 'INTERNAL', null,
+           'com.krishagni.catissueplus.core.auth.services.impl.InactiveUserAccountsNotification', 0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Setting to allow or disallow adding patients on lookup fail">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'add_patient_on_lookup_fail',
+        'add_patient_on_lookup_fail', 'add_patient_on_lookup_fail_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Setting to enable or disable extraction of text from SPR PDF documents">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'extract_spr_text',
+        'extract_spr_text', 'extract_spr_text_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Maximum no. of records that can be accommodated in single transaction">
+    <sql>
+      call add_cfg_prop(
+        'common', 'import_max_records_per_txn',
+        'import_max_records_per_txn', 'import_max_records_per_txn_desc',
+        'INT', '10000'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Date and time formats help link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'bo_datetime_fmt_help_link',
+        'bo_datetime_fmt_help_link', 'bo_datetime_fmt_help_link_desc',
+        'STRING', 'https://openspecimen.atlassian.net/wiki/x/MoAcB'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Bug fix: Update password complexity regular expression" dbms="mysql">
+    <sql>
+      update
+        os_cfg_settings s
+        inner join os_cfg_props p on p.identifier = s.property_id
+        inner join os_modules m on m.identifier = p.module_id
+      set
+        s.value = '((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20})'
+      where
+        m.name = 'auth' and
+        p.name = 'password_pattern' and
+        s.activity_status = 'Active';
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Reset password update date of all users">
+    <sql>
+      update
+        catissue_password
+      set
+        update_date = ${now}
+      where
+        identifier in (
+          select
+            t.pid
+          from (
+            select
+              max(p.identifier) as pid
+            from
+              catissue_password p
+            group by
+              p.user_id
+          ) t
+        )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Setting to describe password complexity rules">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'password_rule',
+        'password_rule', 'password_rule_desc',
+        'STRING', 'Tip: Password should contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 
+         should be minimum 8 characters long.'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Bulk operation help link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'bo_help_link',
+        'bo_help_link', 'bo_help_link_desc',
+        'STRING', 'https://openspecimen.atlassian.net/wiki/x/SIAcB'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specify participant lookup work flow implementation to use">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_lookup_flow',
+        'participant_lookup_flow', 'participant_lookup_flow_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Help link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'help_link',
+        'help_link', 'help_link_desc',
+        'STRING', 'http://help.openspecimen.org'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Forum link config property">
+    <sql>
+      call add_cfg_prop(
+        'training', 'forum_link',
+        'forum_link', 'forum_link_desc',
+        'STRING', 'http://forums.openspecimen.org'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Allow users to upload files for print rule settings">
+    <sql>
+      update
+        os_cfg_props
+      set
+        data_type = 'FILE'
+      where
+        name in ('visit_label_print_rules', 'specimen_label_print_rules') and
+        module_id = (select identifier from os_modules where name = 'biospecimen')
+    </sql>
+  </changeSet>
+</databaseChangeLog>

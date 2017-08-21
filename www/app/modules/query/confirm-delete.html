@@ -1,0 +1,17 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="queries.delete_query">Delete Query</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <p> {{'queries.confirm_delete_query' | translate: query}} </p>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
+      Cancel
+    </button>
+    <button class="btn btn-danger" ng-click="ok()" translate="common.yes">
+      Yes
+    </button>
+  </div>
+</div>

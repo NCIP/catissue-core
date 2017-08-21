@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class 
+    name="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue" 
+    table="CATISSUE_PERMISSIBLE_VALUE">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_PERMI_VALUE_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="attribute" column="PUBLIC_ID"/>
+
+    <property name="value" column="VALUE"/>
+
+    <property name="conceptCode" column="CONCEPT_CODE"/>
+    
+    <property name="sortOrder" column="SORTORDER"/>
+
+    <many-to-one
+      name="parent"
+      class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"
+      column="PARENT_IDENTIFIER"/>
+
+    <set name="children" inverse="true" cascade="all-delete-orphan">
+      <key column="PARENT_IDENTIFIER"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.PermissibleValue"/>
+    </set>
+    
+    <map name="props" table="OS_PV_PROPS" lazy="false">
+      <key column="PV_ID"/>
+      <map-key column="NAME" type="string"/>
+      <element column="VALUE" type="string" not-null="true"/>
+    </map>
+
+    <query name="getSpecimenClasses">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+      where
+        pv.attribute = 'specimen_type' and
+        pv.parent is null
+    </query>
+
+    <query name="getSpecimenTypes">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+        join pv.parent ppv
+      where
+        ppv.attribute = 'specimen_type' and
+        ppv.value in (:specimenClasses)
+    </query>
+
+    <query name="getSpecimenClass">
+      select
+        pv.value
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue cpv
+        join cpv.parent pv
+      where
+        pv.attribute = 'specimen_type' and
+        cpv.value = :type
+    </query>
+
+    <query name="getByConceptCode">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+      where
+        pv.attribute = :attribute and
+        pv.conceptCode = :conceptCode
+    </query>
+
+    <query name="getByValue">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+      where
+        pv.attribute = :attribute and
+        pv.value = :value
+    </query>
+
+    <query name="getByPropertyKeyValue">
+      from
+        com.krishagni.catissueplus.core.administrative.domain.PermissibleValue pv
+        join pv.props props
+      where
+        pv.attribute = :attribute and
+        index(props) = :key and
+        :value in elements(props)
+    </query>
+  </class>
+</hibernate-mapping>

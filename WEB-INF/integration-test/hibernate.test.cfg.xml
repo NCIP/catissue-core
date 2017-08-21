@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">@@hibernate.dialect@@</property>
+    <property name="hibernate.connection.driver_class">@@db.driver@@</property>
+    <property name="show_sql">@@hibernate.show_sql@@</property>
+    <property name="hibernate.connection.url">@@hibernate.connection.url@@</property>
+    <property name="hibernate.connection.username">@@db.username@@</property>
+    <property name="hibernate.connection.password">@@db.password@@</property>
+    <property name="hibernate.connection.pool_size">1</property>
+    <property name="hibernate.hbm2ddl.auto">@@hibernate.hbm2ddl.auto@@</property>
+    <property name="hibernate.cache.provider_class">@@hibernate.cache.provider_class@@</property>
+    <property name="hibernate.cache.use_second_level_cache">@@hibernate.cache.use_second_level_cache@@</property>
+
+    <!--  Form Context and Record Entry -->
+	<mapping resource="krishagni/catissueplus/hbm/FormContextBean.hbm.xml" />
+	<mapping resource="krishagni/catissueplus/hbm/FormRecordEntryBean.hbm.xml" />
+	
+	<!-- mapping for new domain objects added -->
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolRegistration.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Participant.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ParticipantMedicalIdentifier.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Specimen.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenList.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Visit.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTierResponse.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Department.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/User.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ForgotPasswordToken.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Address.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Password.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalApplication.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExtAppNotificationStatus.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolStudyMapping.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SavedQuery.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryAuditLog.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/QueryFolder.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Site.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocol.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthDomain.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthProvider.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/AuthToken.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/LoginAuditLog.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ExternalIdentifier.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Audit.hbm.xml" />
+	
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/Institute.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/KeySequence.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainer.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerStats.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/StorageContainerPosition.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionProtocol.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/PermissibleValue.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ClinicalDiagnosis.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConsentTier.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/CollectionProtocolEvent.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/SpecimenRequirement.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrder.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/DistributionOrderItem.hbm.xml"/>
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJob.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/core/repository/hbm/ScheduledJobRun.hbm.xml" />
+    <mapping resource="com/krishagni/catissueplus/core/repository/hbm/Module.hbm.xml"/>
+    <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigProperty.hbm.xml"/>
+    <mapping resource="com/krishagni/catissueplus/core/repository/hbm/ConfigSetting.hbm.xml"/>
+
+	<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperationJob.hbm.xml" />
+	<mapping resource="com/krishagni/catissueplus/bulkoperator/BulkOperation.hbm.xml" />
+
+	<mapping resource="com/krishagni/rbac/resources/Group.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/GroupRole.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/Operation.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/Permission.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/Role.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/Resource.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/ResourceInstanceOp.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/RoleAccessControl.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/Subject.hbm.xml"/>
+	<mapping resource="com/krishagni/rbac/resources/SubjectRole.hbm.xml"/>
+		
+  </session-factory>
+
+</hibernate-configuration>

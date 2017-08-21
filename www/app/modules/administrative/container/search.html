@@ -1,0 +1,17 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title" translate="container.filter.title">Container Filter</h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="containerFilterOpts.name" class="form-control"
+        placeholder="{{'container.name' | translate}}">
+    </div>
+    <div class="form-group">
+      <os-sites md-type="true" ng-model="containerFilterOpts.site" resource="StorageContainer"
+        placeholder="{{'container.site' | translate}}">
+      </os-sites>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+#Specimen_path_status,Abbreviations
+Malignant,T
+"Malignant, Invasive",T
+"Malignant, Pre-Invasive",T
+"Non-Malignant, Diseased",T
+Metastatic,T
+Pre-Malignant,T
+Non-Malignant,N
+Not Specified,

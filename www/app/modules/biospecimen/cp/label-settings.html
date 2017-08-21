@@ -1,0 +1,310 @@
+<div>
+  <div class="panel panel-default" ng-switch on="settingCtx.view">
+    <div class="panel-heading">
+      <span translate="cp.label_format.title">
+        Label Format and Print Settings
+      </span>
+      <span class="os-btns" ng-switch-when = 'view_setting' show-if-allowed="cpResource.updateOpts">
+        <button class="default" ng-click="showEditForm()">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </button>
+      </span>
+    </div>
+    <div class="panel-body">
+      <div ng-switch-when = 'view_setting'>
+        <div ng-include="'modules/biospecimen/cp/label-settings-overview.html'"></div>
+      </div>
+
+      <div ng-switch-default>
+        <div ng-include="'modules/biospecimen/cp/label-settings-addedit.html'"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/cp/label-settings-overview.html">
+  <div>
+    <ul class="os-key-values os-one-col">
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.ppid">PPID Format</strong>
+        <span class="value value-md">{{settingCtx.cp.ppidFmt | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.visit">Visit</strong>
+        <span class="value value-md">{{settingCtx.cp.visitNameFmt | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.specimen">Specimen</strong>
+        <span class="value value-md">{{settingCtx.cp.specimenLabelFmt | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.derivative">Derivative</strong>
+        <span class="value value-md">{{settingCtx.cp.derivativeLabelFmt | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.aliquot">Aliquot</strong>
+        <span class="value value-md">{{settingCtx.cp.aliquotLabelFmt | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.manual">User Inputs Allowed for</strong>
+        <span class="value value-md">{{settingCtx.userInputLabels | osNoValue}}</span>
+      </li>
+
+      <li class="item">
+        <strong class="key key-sm" translate="cp.label_format.barcoding">Specimen Barcoding</strong>
+        <span class="value value-md">
+          {{settingCtx.cp.barcodingEnabled | osBoolValue: 'common.enabled': 'common.disabled': 'common.not_specified'}}
+        </span>
+      </li>
+    </ul>
+
+    <div class="os-section os-line-section">
+      <strong class="key key-sm" translate="cp.visit_print_settings">Visit Print Settings</strong>
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.when_to_print">When to Print</strong>
+          <span class="value value-md">
+            {{'cp.visit_name_print_modes.' + settingCtx.cp.visitNamePrintMode | translate}}
+          </span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.copies">Copies</strong>
+          <span class="value value-md">{{settingCtx.cp.visitNamePrintCopies | osNoValue}}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="os-section os-line-section">
+      <strong class="key key-sm" translate="cp.spmn_print_settings">Specimen Print Settings</strong>
+      <ul class="os-key-values os-one-col">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.pre_print_spmn_labels">Pre-print Labels</strong>
+          <span class="value value-md">
+            {{'cp.spmn_label_pre_print_modes.' + settingCtx.cp.spmnLabelPrePrintMode | translate}}
+          </span>
+        </li>
+      </ul>
+      <span ng-if="settingCtx.cp.spmnLabelPrintSettings.length > 0">
+        <table class="os-table os-table-muted-hdr os-border">
+          <thead class="os-table-head">
+            <tr class="row">
+              <td class="col os-col-40">
+                <span translate="cp.lineage">Lineage</span>
+              </td>
+              <td class="col os-col-30">
+                <span translate="cp.when_to_print">When to Print</span>
+              </td>
+              <td class="col os-col-30">
+                <span translate="cp.copies">Copies</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody class="os-table-body">
+            <tr class="row" ng-repeat="setting in settingCtx.cp.spmnLabelPrintSettings">
+              <td class="col">
+                <span>{{'cp.spmn_lineages.' + setting.lineage | translate}}</span>
+              </td>
+              <td class="col" ng-switch on="!!setting.printMode">
+                <span ng-switch-when="true">
+                  {{'srs.spmn_label_auto_print_modes.' + setting.printMode | translate}}
+                </span>
+                <span ng-switch-default translate="common.not_specified">
+                  Not Specified
+                </span>
+              </td>
+              <td class="col">
+                <span>{{setting.copies | osNoValue}}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </span>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/cp/label-settings-addedit.html">
+  <form name="lsForm" os-form-validator="lsForm" class="form-horizontal" novalidate>
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.ppid">PPID Format</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" ng-model="settingCtx.cp.ppidFmt" class="form-control"
+          placeholder="{{'cp.ppid_fmt' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.visit">Visit</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" ng-model="settingCtx.cp.visitNameFmt" class="form-control" 
+          placeholder="{{'cp.visit_name_fmt' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.specimen">Specimen</span>
+      </label>
+      <div class="col-xs-6">
+        <input name="specimenLabelFmt" type="text" ng-model="settingCtx.cp.specimenLabelFmt" class="form-control"
+          placeholder="{{'cp.specimen_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.specimenLabelFmt"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.derivative">Derivative</span>
+      </label>
+      <div class="col-xs-6">
+        <input name="derivativeLabelFmt" type="text" ng-model="settingCtx.cp.derivativeLabelFmt" class="form-control"
+          placeholder="{{'cp.derivative_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.derivativeLabelFmt"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.aliquot">Aliquot</span>
+      </label>
+      <div class="col-xs-6">
+        <input name="aliquotLabelFmt" type="text" ng-model="settingCtx.cp.aliquotLabelFmt" class="form-control"
+          placeholder="{{'cp.aliquot_label_fmt' | translate}}" ng-required="settingCtx.cp.barcodingEnabled">
+        <div os-field-error field="lsForm.aliquotLabelFmt"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.manual">User Inputs Allowed for</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="checkbox-inline">
+          <input type="checkbox" ng-model="settingCtx.cp.manualPpidEnabled">
+          <span translate="cp.ppids">Participant Protocol IDs</span>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" ng-model="settingCtx.cp.manualVisitNameEnabled">
+          <span translate="cp.visit_names">Visit Names</span>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" ng-model="settingCtx.cp.manualSpecLabelEnabled">
+          <span translate="cp.spec_labels">Specimen Labels</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.label_format.barcoding">Specimen Barcoding</span>
+      </label>
+      <div class="col-xs-6">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" name="barcoding" ng-model="settingCtx.cp.barcodingEnabled"
+            btn-radio="true" required translate="common.enabled">Enabled</button>
+          <button type="button" class="btn btn-default" name="barcoding" ng-model="settingCtx.cp.barcodingEnabled"
+            btn-radio="false" required translate="common.disabled">Disabled</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-section-divider">
+      <span translate="cp.visit_print_settings">Visit Print Settings</span>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.when_to_print">When to Print</span>
+      </label>
+      <div class="col-xs-6">
+        <os-select name="visitNameprintMode" ng-model="settingCtx.cp.visitNamePrintMode" list="settingCtx.visitNamePrintModes"
+          display-prop="displayName" select-prop="name" placeholder="{{'cp.when_to_print' | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.copies">Copies</span>
+      </label>
+      <div class="col-xs-6">
+        <input name="visitNamePrintCopies" type="text" ng-model="settingCtx.cp.visitNamePrintCopies" class="form-control"
+          placeholder="{{'cp.copies' | translate}}" ng-pattern="/^[0-9]+$/">
+        <div os-field-error field="lsForm.visitNamePrintCopies"></div>
+      </div>
+    </div>
+
+    <div class="os-section-divider">
+      <span translate="cp.spmn_print_settings">Specimen Print Settings</span>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.pre_print_spmn_labels">Pre-print Labels</span>
+      </label>
+      <div class="col-xs-6">
+        <label class="radio-inline" ng-repeat="prePrintMode in settingCtx.spmnLabelPrePrintModes">
+          <input type="radio" name="spmnLblPrePrintMode" ng-model="settingCtx.cp.spmnLabelPrePrintMode"
+            ng-value="prePrintMode.name" ng-change="onPrePrintModeChange()">
+          <span>{{prePrintMode.displayName}}</span>
+        </label>
+        <div os-field-warn="'cp.disable_pre_print_warning'" ng-if="settingCtx.prePrintDisabled"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-xs-3">
+        <span translate="cp.lineage">Lineage</span>
+      </label>
+      <div class="col-xs-3">
+        <label class="control-label">
+          <span translate="cp.when_to_print">When To Print</span>
+        </label>
+      </div>
+      <div class="col-xs-3">
+        <label class="control-label">
+          <span translate="cp.copies">Copies</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group clearfix" ng-form="psForm" ng-repeat="setting in settingCtx.cp.spmnLabelPrintSettings">
+      <label class="col-xs-3 control-label">
+        <span>{{'cp.spmn_lineages.' + setting.lineage | translate}}</span>
+      </label>
+      <div class="col-xs-3">
+        <os-select ng-model="setting.printMode" list="settingCtx.spmnLabelAutoPrintModes"
+          display-prop="displayName" select-prop="name">
+        </os-select>
+      </div>
+      <div class="col-xs-3">
+        <input name="copies" type="text" ng-model="setting.copies" class="form-control" ng-pattern="/^[0-9]+$/">
+        <div os-field-error field="psForm.copies"></div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <button class="btn btn-primary" os-form-submit="save()">
+          <span translate="common.buttons.save">Save</span>
+        </button>
+        <button class="btn os-btn-text" ng-click="revertEdit()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>

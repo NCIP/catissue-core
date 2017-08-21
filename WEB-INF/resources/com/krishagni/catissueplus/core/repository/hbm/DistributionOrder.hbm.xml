@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.DistributionOrder" table="OS_ORDERS">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_ORDERS_SEQ</param>
+      </generator>
+    </id>
+    
+    <property name="name" column="NAME"/>
+
+    <many-to-one name="requester" column="REQUESTER_ID"/>
+      
+    <property name="creationDate" column="CREATION_DATE"/>
+    
+    <property name="executionDate" column="EXECUTION_DATE"/>
+      
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.DistributionOrder$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property> 
+    
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
+    
+    <property name="trackingUrl" column="TRACKING_URL"/>
+
+    <property name="comments" column="COMMENTS"/>
+    
+    <set name="orderItems" table="OS_ORDER_ITEMS" cascade="all-delete-orphan" inverse="true">
+      <key column="ORDER_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.DistributionOrderItem"/>
+    </set>     
+    
+    <many-to-one name="site" column="SITE_ID"/>
+    
+    <many-to-one name="distributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"/>
+        
+    <many-to-one name="distributor" column="DISTRIBUTOR_ID"/>
+
+    <many-to-one name="request" column="REQUEST_ID"/>
+      
+    <filter name="activeEntity"/>
+        
+    <query name="getOrdersByName">
+      from 
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder
+      where
+        name in (:names)
+    </query>
+
+    <query name="getDistributedItemsBySpmnIds">
+      select
+        oi
+      from
+        com.krishagni.catissueplus.core.administrative.domain.DistributionOrder o
+        inner join o.orderItems oi
+        inner join oi.specimen spmn
+      where
+        spmn.id in (:ids) and
+        o.status = 'EXECUTED' and
+        (oi.status = 'DISTRIBUTED' or oi.status = 'DISTRIBUTED_AND_CLOSED')
+    </query>
+
+    <sql-query name="getSpecimenCountByOrder">
+      <return-scalar column="ordId"       type="long"/>
+      <return-scalar column="specimenCnt" type="long"/>
+      
+      select
+        ord.identifier as ordId, count(orderItem.identifier) as specimenCnt
+      from
+        os_orders ord
+        inner join os_order_items orderItem on orderItem.order_id = ord.identifier
+      where
+        ord.identifier in (:orderIds) and
+        ord.activity_status != 'Disabled'
+      group by
+        ord.identifier
+    </sql-query>
+  </class>
+</hibernate-mapping>

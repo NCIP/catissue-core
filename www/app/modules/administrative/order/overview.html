@@ -1,0 +1,140 @@
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="orderResource.updateOpts" class="default"
+        ui-sref="order-addedit({orderId: order.id})" ng-if="order.status == 'PENDING'">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+
+      <button ng-if="order.status == 'EXECUTED' && rptTmplConfigured" class="default"
+        ng-click="downloadReport()">
+        <span class="fa fa-download"></span>
+        <span translate="orders.buttons.download_report">Download Report</span>
+      </button>
+
+      <button class="default" show-if-allowed="orderResource.deleteOpts" ng-click="deleteOrder()"
+        ng-if="order.status == 'PENDING'">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+
+      <os-plugin-hooks view-name="'order-detail'" sec-name="'more-menu'"></os-plugin-hooks>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div class="col-xs-10">
+      <ul class="os-key-values os-two-cols">
+        <li class="item" ng-if="!!order.request">
+          <strong class="key key-sm" translate="orders.request">Request</strong>
+          <span class="value value-md">
+            <a ui-sref="specimen-request-detail.overview({requestId: order.request.id})">
+              <span>#{{order.request.id}}</span>
+            </a>
+          </span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="orders.requestor">Requestor</strong>
+          <span class="value value-md">{{order.requester.firstName}} {{order.requester.lastName}}</span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="orders.receiving_site">Receiving Site</strong>
+          <span class="value value-md">{{order.siteName | osNoValue}}</span>
+        </li>
+          
+        <li class="item">
+          <strong class="key key-sm" translate="orders.dp">Distribution Protocol</strong>
+          <span class="value value-md">
+            <a ui-sref="dp-detail.overview({dpId: order.distributionProtocol.id})">
+              {{order.distributionProtocol.shortTitle}}
+            </a>
+          </span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="orders.distributor">Distributor</strong>
+          <span class="value value-md">{{order.distributor.firstName}} {{order.distributor.lastName}}</span>
+        </li>
+          
+        <li class="item">
+          <strong class="key key-sm" translate="orders.status">Status</strong>
+          <span class="value value-md">{{'orders.statuses.' + order.status | translate}}</span>
+        </li>
+          
+        <li class="item">
+          <strong class="key key-sm" translate="orders.dist_date">Distribution Date</strong>
+          <span class="value value-md">
+            {{order.executionDate | date: global.dateFmt | osNoValue}}
+          </span>
+        </li>
+          
+        <li class="item">
+          <strong class="key key-sm" translate="orders.creation_date">Creation Date</strong>
+          <span class="value value-md">{{order.creationDate | date: global.dateFmt}}</span>
+        </li>
+  
+        <li class="item">
+          <strong class="key key-sm" translate="orders.tracking_url">Tracking URL</strong>
+          <span class="value value-md" ng-switch on="!order.trackingUrl">
+            <span ng-switch-when="true" translate="common.not_specified">Not Specified</span>
+            <a ng-switch-default href="{{order.trackingUrl | osHttpPrefixer}}" target="_blank">
+              {{order.trackingUrl}}
+            </a>
+          </span>
+        </li>
+      </ul>
+  
+      <div class="os-section" ng-init="specSect=false">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="specSect=!specSect">
+          <span ng-if="!specSect" class="fa fa-chevron-circle-down"></span>
+          <span ng-if="specSect" class="fa fa-chevron-circle-right"></span>
+        </button>
+        <h3 class="os-sub-section-title" translate="orders.specimens">Specimens</h3>
+        <div collapse="specSect">
+          <div class="os-table os-table-fixed os-table-muted-hdr os-border">
+            <div class="os-table-head">
+              <div class="row">
+                <div class="col os-col-20" translate="orders.spec.label">Label</div>
+                <div class="col os-col-30" translate="orders.spec.desc">Description</div>
+                <div class="col os-col-20" translate="orders.spec.cp">Collection Protocol</div>
+                <div class="col os-col-15" translate="orders.spec.quantity">Quantity</div>
+                <div class="col os-col-15" translate="orders.status">Status</div>
+              </div>
+            </div>
+            <div class="os-table-body">
+              <div class="row" ng-repeat="item in order.orderItems" ng-init="specimen = item.specimen">
+                <div class="col os-col-20">
+                  <a ui-sref="specimen({specimenId: specimen.id})">
+                    <span>{{specimen.label}}</span>
+                    <span ng-if="!!specimen.barcode">
+                      ({{specimen.barcode}})
+                    </span>
+                  </a>
+                </div>
+                <div class="col os-col-30">
+                  <a ui-sref="specimen({specimenId: specimen.id})">
+                    <os-specimen-desc specimen="specimen" detailed="true"></os-specimen-desc>
+                  </a>
+                </div>
+                <div class="col os-col-20">
+                  <span>{{specimen.cpShortTitle}}</span>
+                </div>
+                <div class="col os-col-15">
+                  <span>{{item.quantity}}</span>
+                  <os-specimen-unit specimen-class="specimen.specimenClass" type="specimen.type">
+                  </os-specimen-unit>
+                </div>
+                <div class="col os-col-15">
+                  <span>{{'orders.item_statuses.' + item.status | translate}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

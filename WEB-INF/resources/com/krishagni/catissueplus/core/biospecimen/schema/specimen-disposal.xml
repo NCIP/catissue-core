@@ -1,0 +1,50 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>specimenDisposal</name>
+
+  <record>
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenStatusDetail</name>
+
+    <field>
+      <caption>#getMessage("specimen_cp_short")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_label")</caption>
+      <attribute>name</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_barcode")</caption>
+      <attribute>barcode</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_activity_status")</caption>
+      <attribute>status</attribute>
+    </field>
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("specimen_disposal_date")</caption>
+      <attribute>date</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("specimen_disposal_reason")</caption>
+      <attribute>reason</attribute>
+    </field>
+
+    <record>
+      <caption>#getMessage("specimen_event_user")</caption>
+      <attribute>user</attribute>
+
+      <field>
+        <caption>#getMessage("specimen_event_user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

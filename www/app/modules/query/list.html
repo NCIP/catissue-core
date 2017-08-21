@@ -1,0 +1,271 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="queries.list">Queries</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button class="default" ui-sref="query-addedit({queryId: undefined})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <button class="default" ng-click="importQuery()">
+        <span class="fa fa-upload"></span>
+        <span translate="common.buttons.import">Import</span>
+      </button>
+      <div dropdown ng-if="selectedQueries.length > 0" class="os-inline-btn">
+        <button class="default dropdown-toggle">
+          <span class="fa fa-folder"></span>
+          <span translate="queries.assign">Assign</span>
+        </button>
+        <ul class="dropdown-menu os-query-folders-dd">
+          <li>
+            <input ng-model="searchQueryFolder" type="text" class="form-control" 
+              placeholder="{{'queries.search_folder' | translate}}" 
+              ng-click="$event.stopPropagation()">
+          </li>
+          <li>
+            <ul class="dropdown-menu-subgroup">
+              <li ng-repeat="folder in folders.myFolders | filter: searchQueryFolder"
+                ng-click="addSelectedQueriesToFolder(folder)">
+                <a><span>{{folder.name}}</span></a>
+              </li>
+            </ul>
+          </li>
+          <li class="divider"></li>
+          <li ng-click="createNewFolder()">
+            <a translate="queries.create_new_folder">Create New Folder</a>
+          </li>
+        </ul>
+      </div>
+      <os-help class="os-btns btn default" link="query_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button os-right-drawer-toggle class="default">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container os-list-container">
+    <div class="row">
+      <div class="os-col-20">
+        <div ng-include src="'query_folders.html'"></div>
+      </div>
+      <div class="os-col-80">
+        <div ng-include src="'query_list.html'"></div>
+      </div>
+    </div>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/query/search.html'"></div>
+</div>
+
+<script type="text/ng-template" id="query_list.html">
+  <div class="os-table os-table-hover" overflow="auto" ng-if="queryList.queries.length > 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-6" style="padding-left: 20px;" translate="queries.title">
+          Title
+        </div>
+        <div class="col col-xs-3" translate="queries.created_by">
+          Created By
+        </div>
+        <div class="col col-xs-2" translate="queries.last_updated">
+          Last Updated
+        </div>
+        <div class="col col-xs-1">&nbsp;</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="query in queryList.queries"
+        ng-class="{selected: query.selected}" os-row-click="viewResults(query)">
+        <div class="col col-xs-6">
+          <div class="clearfix">
+            <div class="pull-left os-query-select-cb os-click-esc">
+              <os-checkbox ng-change="toggleQuerySelect(query)" ng-model="query.selected"></os-checkbox>
+            </div>
+            <div class="pull-left" style="padding-left: 12px;">
+              <a ui-sref="query-results({queryId: query.id})" title="{{'queries.tooltip.view_records' | translate}}">
+                #{{query.id}} {{query.title}}
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col col-xs-3">{{query.createdBy.firstName}} {{query.createdBy.lastName}}</div>
+        <div class="col col-xs-2"> {{query.lastModifiedOn | date: global.dateFmt}}</div>
+        <div class="col col-xs-1 os-click-esc os-more-options">
+          <div dropdown>
+            <button class="btn btn-xs btn-default dropdown-toggle">
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li>
+                <a ui-sref="query-addedit({queryId: query.id})">
+                  <i class="fa fa-pencil"></i>
+                  <span translate="queries.edit"></span>
+                </a>
+              </li>
+              <li>
+                <a href="{{query.getQueryDefUrl()}}" target="_blank">
+                  <i class="fa fa-download"></i>
+                  <span translate="queries.download_def"></span>
+                </a>
+              </li>
+              <!--<li>
+                <a>
+                  <i class="fa fa-list"></i>
+                  <span translate="queries.view_query_run_log"></span>
+                </a>
+              </li>-->
+              <li ng-click="deleteQuery(query)">
+                <a>
+                  <i class="fa fa-trash"></i>
+                  <span translate="queries.delete"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="os-table" ng-if="!queryList.queries || queryList.queries.length == 0">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-10" translate="queries.info">Information</div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row">
+        <div class="col col-xs-10" translate="queries.no_queries">
+          There are no queries to show in selected folder
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="queryData.totalQueries > queryData.pageSize">
+    <pagination class="pagination-sm"
+      total-items="queryData.totalQueries" 
+      items-per-page="queryData.pageSize"  
+      max-size="5" 
+      ng-model="queryData.currentPage" 
+      ng-change="changeQueriesPage(false)">
+    </pagination>
+  </div>
+</script>
+
+<script type="text/ng-template" id="query_folders.html">
+  <div class="os-table" style="margin-bottom: 0px;">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-12" translate="queries.folders">Folders</div>
+      </div>
+    </div>
+    <div class="os-table-body os-query-folders">
+      <div class="row">
+        <div class="col col-xs-12 folder" ng-class="{'os-query-selected-folder': !folders.selectedFolder}">
+          <div ng-click="selectFolder(undefined)" translate="queries.all">All</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="os-table os-table-condensed" style="margin-top: 5px; margin-bottom: 0px;">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-12" translate="queries.my_folders">My Folders</div>
+      </div>
+    </div>
+  </div>
+  <div class="os-query-folders">
+    <div class="os-table os-table-condensed os-table-borderless" ng-if="folders.myFolders.length != 0">
+      <div class="os-table-body">
+        <div class="row" ng-repeat="folder in folders.myFolders"> 
+          <div class="col col-xs-12 clearfix folder" 
+            ng-class="{'os-query-selected-folder': folders.selectedFolder == folder}"> 
+            <div class="pull-left" ng-click="selectFolder(folder)" title="{{folder.name}}">
+              {{folder.name}}
+            </div>
+
+            <div class="pull-right">
+              <button type="button" class="btn btn-xs btn-default" ng-click="editFolder(folder)">
+                <span class="fa fa-pencil"></span>
+              </button> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="os-table os-table-condensed os-table-borderless" ng-if="folders.myFolders.length == 0">
+      <div class="os-table-body">
+        <div class="row">
+          <div class="col col-xs-12" translate="common.none">
+            None
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="os-table os-table-condensed" style="margin-top: 5px; margin-bottom: 0px;">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col col-xs-12" translate="queries.shared_folders">Shared Folders</div>
+      </div>
+    </div>
+  </div>
+  <div class="os-query-folders">
+    <div class="os-table os-table-condensed os-table-borderless" ng-if="folders.sharedFolders.length != 0">
+      <div class="os-table-body">
+        <div class="row" ng-repeat="folder in folders.sharedFolders">
+          <div class="col col-xs-12 clearfix folder"
+            ng-class="{'os-query-selected-folder': folders.selectedFolder == folder}">
+            <div class="pull-left" ng-click="selectFolder(folder)" title="{{folder.name}}">
+              {{folder.name}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table table-condensed borderless" ng-if="folders.sharedFolders.length == 0">
+      <div class="os-table-body">
+        <div class="row">
+          <div class="col col-xs-12" translate="common.none">
+            None
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table" style="margin-top: 5px; margin-bottom: 0px;" ng-if="currentUser.isAdmin">
+    <div>
+      <div>
+        <div translate="queries.audit_logs">Audit Logs</th>
+      </div>
+    </div>
+  </div>
+  <div style="max-height: 150px; overflow: auto" ng-if="currentUser.isAdmin">
+    <div class="table table-condensed borderless">
+      <div>
+        <div>
+          <div class="item clearfix">
+            <span ng-click="viewAllAuditLogs('LAST_24')" translate="queries.audit_last24hrs">
+              Last 24 Hrs
+            </span>
+          </div>
+        </div>
+        <div>
+          <div class="item clearfix">
+            <span ng-click="viewAllAuditLogs('ALL')" translate="queries.audit_all">
+              ALL
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>

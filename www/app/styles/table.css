@@ -1,0 +1,111 @@
+
+.os-table {
+  width: 100%;
+  margin-bottom: 20px;
+  display: table;
+  border-collapse: separate;
+}
+
+.os-table .row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.os-table .os-table-head .row .col,
+.os-table .os-table-body .row .col {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+
+.os-table .os-table-head .row .col {
+  vertical-align: bottom;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.os-table .os-table-head .row:first-child .col {
+  border-top: 0;
+}
+
+.os-table.os-no-border .os-table-head .row .col,
+.os-table.os-no-border .os-table-body .row .col {
+  border: 0px;
+}
+
+.os-table.os-alt-border .row:nth-child(even) .col {
+  border-top: 0px;
+  padding-top: 0px;
+}
+
+.os-table-muted-hdr > .os-table-head > .row > .col {
+  color: #707070;
+  font-size: 12px;
+  border-bottom: 0px;
+  background: #f5f5f5;
+}
+
+.os-table-hover .os-table-body .row:hover {
+  background: #f7f7f7;
+}
+
+.os-table .col .progress {
+  margin-bottom: 0px;
+}
+
+.os-table-fixed {
+  table-layout: fixed;
+}
+
+.os-table-fixed td,
+.os-table-fixed .col {
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+}
+
+.os-table-tree a.fa-chevron-circle-down, 
+.os-table-tree a.fa-chevron-down, 
+.os-table-tree a.fa-caret-down, 
+.os-table-tree a.fa-chevron-circle-right,
+.os-table-tree a.fa-chevron-right,
+.os-table-tree a.fa-caret-right,
+.os-table-tree a.fa-minus-square-o, 
+.os-table-tree a.fa-plus-square-o {
+  text-decoration: none;
+  color: #707070;
+}
+
+.os-table .row.selected {
+  background: #ffc;
+}
+
+.os-table-fixed td .alert, 
+.os-table-fixed .col .alert {
+  padding: 4px 1px;
+  white-space: normal;
+}
+
+.os-table-condensed .os-table-head .row .col, 
+.os-table-condensed .os-table-body .row .col {
+  padding: 5px!important;
+}
+
+.os-table-borderless .os-table-body .row .col {
+  border: 0px!important;
+}
+
+.os-desc-column {
+  width: 375px;
+}
+
+.os-table-body .row .col.error {
+  background: #d9534f;
+  color: #fff;
+}
+
+.os-table.os-error-header > .os-table-head > .row > .col {
+  background: #d9534f!important;
+  color: #fff!important;
+}

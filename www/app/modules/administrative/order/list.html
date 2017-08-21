@@ -1,0 +1,113 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="orders.list">Distribution Orders</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="orderResource.createOpts"
+        class="default" title="{{'orders.tooltip.create' | translate}}" ui-sref="order-addedit({orderId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <div show-if-allowed="orderResource.createOpts" dropdown class="os-inline-btn">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ui-sref="order-import">
+              <span class="fa fa-share"></span>
+              <span translate="orders.list">Distribution Orders</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="order-import-jobs">
+              <span class="fa fa-list-alt"></span>
+              <span translate="bulk_imports.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <button show-if-allowed="orderResource.updateOpts" class="default" ui-sref="order-return-specimens">
+        <span class="fa fa-undo"></span>
+        <span translate="orders.buttons.return_specimens">Return Specimens</span>
+      </button>
+      <os-help class="os-btns btn default" link="order_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'orders.tooltip.search' | translate}}"
+        ng-click="loadSearchPvs()">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col os-desc-column">
+            <span translate="orders.name">Title</span>
+          </th>
+          <th class="col">
+            <span translate="orders.requestor">Requestor</span>
+          </th>
+          <th class="col">
+            <span translate="orders.site">Site</span>
+          </th>
+          <th class="col">
+            <span translate="orders.dp">Distribution Protocol</span>
+          </th>
+          <th class="col">
+            <span translate="orders.date">Date</span>
+          </th>
+          <th class="col">
+            <span translate="orders.status">Status</span>
+          </th>
+          <th class="col">
+            <span translate="orders.specimens">Specimens</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="order in orders" os-row-click="showOrderOverview(order)">
+          <td class="col">
+            <a ui-sref="order-detail.overview({orderId: order.id})">
+              #{{order.id}} {{order.name}}
+            </a>
+          </td>
+          <td class="col">
+            <span>{{order.requester.firstName}} {{order.requester.lastName}}</span>
+          </td>
+          <td class="col">
+            <span>{{order.siteName | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{order.distributionProtocol.shortTitle}}</span>
+          </td>
+          <td class="col">
+            <span>{{order.executionDate | date: global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{'orders.statuses.' + order.status | translate}}</span>
+          </td>
+          <td class="col">
+            <span>{{order.specimenCnt}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/order/search.html'"> </div>
+</div>

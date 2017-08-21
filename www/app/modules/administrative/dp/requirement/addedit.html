@@ -1,0 +1,81 @@
+<div>
+  <form name="dprForm" class="form-horizontal" os-form-validator="dprForm" novalidate>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_type">Specimen Type</label>
+      <div class="col-xs-6">
+        <os-select ng-model="dpr.specimenType" list="specimenTypes"
+          placeholder="{{'dp.distribution_order.specimen_type' | translate}}">
+        </os-select>
+      </div>
+    </div>
+     
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.anatomic_site">Anatomic Site</label>
+      <div class="col-xs-6">
+        <os-pvs ng-model="dpr.anatomicSite" attribute="anatomic-site" show-only-leaf-values="true"
+          placeholder="{{'dp.distribution_order.anatomic_site' | translate}}">
+        </os-pvs>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.pathology_status">Pathology Status</label>
+      <div class="col-xs-6">
+        <os-pvs ng-model="dpr.pathologyStatuses" attribute="pathology-status" multiple
+          placeholder="{{'dp.distribution_order.pathology_status' | translate}}">
+        </os-pvs>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.clinical_diagnosis">Clinical Diagnosis</label>
+      <div class="col-xs-6">
+        <os-pvs ng-model="dpr.clinicalDiagnosis" attribute="clinical-diagnosis"
+          placeholder="{{'dp.distribution_order.clinical_diagnosis' | translate}}">
+        </os-pvs>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.specimen_cnt">Specimen Count</label>
+      <div class="col-xs-6">
+        <input type="number" name="count" class="form-control" ng-model="dpr.specimenCount" required
+          placeholder="{{'dp.distribution_order.specimen_cnt' | translate}}" ng-pattern="/^[1-9][0-9]*$/">
+        <div os-field-error field="dprForm.count"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.quantity_specimen">Quantity</label>
+      <div class="col-xs-6">
+        <input type="number" name="quantity" class="form-control" ng-model="dpr.quantity" required
+          placeholder="{{'dp.distribution_order.quantity_specimen' | translate}}"
+          ng-pattern="/^([0-9]+|[0-9]*\.[0-9]+)$/">
+        <div os-field-error field="dprForm.quantity"></div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="dp.distribution_order.comments">Comments</label>
+      <div class="col-xs-6">
+        <textarea rows="2" class="form-control" ng-model="dpr.comments" 
+          placeholder="{{'dp.distribution_order.comments' | translate}}">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+    
+    <div class="form-group">
+      <div class="col-xs-6 col-xs-offset-3">
+        <button type="submit" class="btn btn-primary" os-form-submit="save()">
+          <span ng-if="!dpr.id" translate="common.buttons.create">Create</span>
+          <span ng-if="dpr.id" translate="common.buttons.update">Update</span>
+        </button>
+        <button class="btn os-btn-text" os-form-cancel="cancel()">
+          <span translate="common.buttons.discard">Discard</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,74 @@
+{
+  "dataQueryAql": "select SpecimenCollectionGroup.site.name, count(distinct Participant.id) as \"Participants \", count(distinct Specimen.id) as \"Specimens \", Specimen.type where  Specimen.collectionStatus = \"Collected\" and  Specimen.specimenPosition.containerName exists and date_range(Specimen.createdOn, last_cal_month) crosstab((1), 4, (-2,3))",
+
+  "metricsCfg": {
+    "participants": {
+      "type": "AQL",
+      "aql": "select count(Participant.id) where date_range(Participant.regDate, last_cal_month)"
+    },
+
+    "totalParticipants": {
+      "type": "AQL",
+      "aql": "select count(Participant.id) where Participant.id exists"
+    },
+
+    "consentedParticipants": {
+      "type": "AQL",
+      "aql": "select count(Participant.id) where date_range(Participant.consentSignDate, last_cal_month)"
+    },
+
+    "totalConsentedParticipants": {
+      "type": "AQL",
+      "aql": "select count(Participant.id) where Participant.consentSignDate exists"
+    },
+
+    "visits": {
+      "type": "AQL",
+      "aql": "select count(SpecimenCollectionGroup.id) where SpecimenCollectionGroup.collectionStatus = \"Complete\" and date_range(SpecimenCollectionGroup.collectionDate, last_cal_month)"
+    },
+
+    "totalVisits": {
+      "type": "AQL",
+      "aql": "select count(SpecimenCollectionGroup.id) where SpecimenCollectionGroup.collectionStatus = \"Complete\""
+    },
+
+    "primarySpmns": {
+      "type": "AQL",
+      "aql": "select count(Specimen.id) where Specimen.lineage = \"New\" and Specimen.collectionStatus = \"Collected\" and date_range(Specimen.createdOn, last_cal_month)"
+    },
+
+    "totalPrimarySpmns": {
+      "type": "AQL",
+      "aql": "select count(Specimen.id) where Specimen.lineage = \"New\" and Specimen.collectionStatus = \"Collected\""
+    },
+
+    "aliquots": {
+      "type": "AQL",
+      "aql": "select count(Specimen.id) where Specimen.lineage = \"Aliquot\" and Specimen.collectionStatus = \"Collected\" and date_range(Specimen.createdOn, last_cal_month)"
+    },
+
+    "totalAliquots": {
+      "type": "AQL",
+      "aql": "select count(Specimen.id) where Specimen.lineage = \"Aliquot\" and Specimen.collectionStatus = \"Collected\""
+    },
+
+    "distributedSpmns": {
+      "type": "AQL",
+      "drivingForm": "Order",
+      "aql": "select count(Order.orderItems.specimen.label) where date_range(Order.requestedDate, last_cal_month) and Order.orderStatus = \"EXECUTED\" and Order.orderItems.status in (\"DISTRIBUTED\", \"DISTRIBUTED_AND_CLOSED\")"
+    },
+
+    "totalDistributedSpmns": {
+      "type": "AQL",
+      "drivingForm": "Order",
+      "aql": "select count(Order.orderItems.specimen.label) where Order.orderStatus = \"EXECUTED\" and Order.orderItems.status in (\"DISTRIBUTED\", \"DISTRIBUTED_AND_CLOSED\")"
+    },
+
+    "top5Spmns": {
+      "type": "AQL",
+      "aql": "select Specimen.type as \"Specimen Type\", count(Specimen.id) as \"Specimens\" where Specimen.lineage = \"Aliquot\" and Specimen.collectionStatus = \"Collected\" order by count(Specimen.id) desc limit 0, 5"
+    }
+  },
+
+  "emailTmplKey": "default_cp_report"
+}

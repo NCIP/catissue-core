@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vpawar" id="CP catalog settings">
+    <createTable tableName="OS_CP_CATALOG_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+     
+      <column name="QUERY_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATED_BY" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="CREATION_TIME" type="${timestamp.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="LAST_UPDATED_BY" type="${int.type}">
+      </column>
+
+      <column name="LAST_UPDATE_TIME" type="${nullable.ts.type}">
+      </column>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="CP catalog settings sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_CP_CATALOG_SETTINGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on catalog settings CP">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_CP_ID"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings query">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_QUERY"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="QUERY_ID"
+      referencedTableName="CATISSUE_SAVED_QUERIES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings creator">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_CREATOR"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="CREATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="FK on catalog settings updater">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_CAT_SETTINGS_UPDATER"
+      baseTableName="OS_CP_CATALOG_SETTINGS"
+      baseColumnNames="LAST_UPDATED_BY"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Table for shipments">
+    <createTable tableName="OS_SHIPMENTS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      
+      <column name="NAME" type="${text.type}(255)">
+        <constraints unique="true" nullable="false" />
+      </column>
+      
+      <column name="COURIER_NAME" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
+      <column name="TRACKING_NUMBER" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
+      <column name="TRACKING_URL" type="${text.type}(255)">
+        <constraints nullable="true"/>
+      </column>
+      
+      <column name="SENDING_SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="RECEIVING_SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="SHIPPED_DATE" type="${nullable.ts.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="SENDER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="SENDER_COMMENTS" type="${text.type}(255)">
+      </column>
+      
+      <column name="RECEIVED_DATE" type="${nullable.ts.type}">
+        <constraints nullable="true"/>
+      </column>
+      
+      <column name="RECEIVER_ID" type="${int.type}">
+        <constraints nullable="true"/>
+      </column>
+
+      <column name="RECEIVER_COMMENTS" type="${text.type}(255)">
+      </column>
+
+      <column name="STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Shipments table sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_SHIPMENTS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK to shipments sending site">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_SENDING_SITE_ID"
+      baseTableName="OS_SHIPMENTS"
+      baseColumnNames="SENDING_SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK to shipments receiving site">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_RECV_SITE_ID"
+      baseTableName="OS_SHIPMENTS"
+      baseColumnNames="RECEIVING_SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK to shipments sender">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_SENDER_ID"
+      baseTableName="OS_SHIPMENTS"
+      baseColumnNames="SENDER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Add FK to shipments receiver">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_RECEIVER_ID"
+      baseTableName="OS_SHIPMENTS"
+      baseColumnNames="RECEIVER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Table for shipment items">
+    <createTable tableName="OS_SHIPMENT_ITEMS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      
+      <column name="SHIPMENT_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="SPECIMEN_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="RECEIVED_QUALITY" type="${text.type}(32)">
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Shipment items table sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_SHIPMENT_ITEMS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK on shipment items shipment id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_ITEMS_SHIP_ID"
+      baseTableName="OS_SHIPMENT_ITEMS"
+      baseColumnNames="SHIPMENT_ID"
+      referencedTableName="OS_SHIPMENTS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add FK on shipment items specimen id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_ITEMS_SPEC_ID"
+      baseTableName="OS_SHIPMENT_ITEMS"
+      baseColumnNames="SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Table for shipment notify users">
+    <createTable tableName="OS_SHIPMENT_NOTIFY_USERS">
+      <column name="SHIPMENT_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK on shipment notify users shipment id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_NOTIFY_SHIP_ID"
+      baseTableName="OS_SHIPMENT_NOTIFY_USERS"
+      baseColumnNames="SHIPMENT_ID"
+      referencedTableName="OS_SHIPMENTS"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Add FK on shipment notify users user id">
+    <addForeignKeyConstraint
+      constraintName="OS_FK_SHIP_NOTIFY_USER_ID"
+      baseTableName="OS_SHIPMENT_NOTIFY_USERS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update names of deleted specimens" dbms="oracle">
+    <sql>
+      update 
+        catissue_specimenlist_tags 
+      set 
+        tag_label = 
+          concat(
+            substr(tag_label, 1, 242), 
+            concat(
+              '_', 
+              to_char((trunc(deleted_on) - to_date('1970-01-01', 'YYYY-MM-DD')) * 86400000)
+            )
+          ) 
+      where 
+        deleted_on is not null;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update names of deleted specimens" dbms="mysql">
+    <sql>
+      update 
+        catissue_specimenlist_tags 
+      set 
+        tag_label = 
+          concat(
+            substring(tag_label, 1, 242), 
+            '_', 
+            unix_timestamp(deleted_on)
+          ) 
+      where 
+        deleted_on is not null;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop unique constraint on event code">
+    <preConditions onFail="MARK_RAN">
+      <changeSetExecuted 
+        changeLogFile="db/2.4/schema.xml" 
+        author="vpawar" 
+        id="Add unique constraint on event code"/>
+    </preConditions>
+    <dropUniqueConstraint 
+      tableName="CATISSUE_COLL_PROT_EVENT" 
+      constraintName="OS_CP_EVENT_CODE_UQ"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop foreign key constraint on cp_event_id of CATISSUE_CP_REQ_SPECIMEN table">
+    <dropForeignKeyConstraint 
+      baseTableName="CATISSUE_CP_REQ_SPECIMEN" 
+      constraintName="FK111110456906F39"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Drop unique constraint on SR code">
+    <preConditions onFail="MARK_RAN">
+      <changeSetExecuted 
+        changeLogFile="db/2.4/schema.xml" 
+        author="vpawar" 
+        id="Add unique constraint on SR code"/>
+    </preConditions>
+    <dropUniqueConstraint 
+      tableName="CATISSUE_CP_REQ_SPECIMEN" 
+      constraintName="OS_EVENT_SR_CODE_UQ"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Regenrate foreign key on cp_event_id of CATISSUE_CP_REQ_SPECIMEN">
+    <addForeignKeyConstraint 
+      constraintName="FK111110456906F39"
+      baseTableName="CATISSUE_CP_REQ_SPECIMEN"
+      baseColumnNames="COLLECTION_PROTOCOL_EVENT_ID" 
+      referencedTableName="CATISSUE_COLL_PROT_EVENT" 
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing collection protocol registration extension view">
+    <createView viewName="cpr_extension_records_view" replaceIfExists="true">
+       select 
+         re.object_id as cpr_id, re.record_id as record_id, fc.container_id as form_id 
+       from 
+         catissue_form_record_entry re 
+         join catissue_form_context fc on re.form_ctxt_id = fc.identifier 
+       where 
+         fc.entity_type = 'Participant' 
+         and fc.deleted_on is null
+         and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing visit extension view">
+    <createView viewName="scg_extn_records_view" replaceIfExists="true">
+      select 
+        re.object_id as scg_id, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id 
+      where 
+        fc.entity_type = 'SpecimenCollectionGroup' 
+        and fc.deleted_on is null
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating or replacing specimen extension view"> 
+    <createView viewName="specimen_extn_records_view" replaceIfExists="true">
+      select 
+        re.object_id as specimen_id, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id 
+      where 
+        (fc.entity_type = 'Specimen' or fc.entity_type = 'SpecimenEvent')
+        and fc.deleted_on is null
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating specimen shipments view">
+    <createView viewName="specimen_shipments_view">
+      select 
+        item.identifier as identifier, item.specimen_id as specimen_id, item.received_quality as received_quality,
+        ship.name as name, ship.shipped_date as shipped_date, ship.sending_site_id as sending_site_id, 
+        ship.sender_id as sender_id, ship.sender_comments as sender_comments, ship.received_date as received_date,
+        ship.receiving_site_id as receiving_site_id, ship.receiver_id as receiver_id, ship.receiver_comments as receiver_comments
+      from
+        os_shipment_items item
+        join os_shipments ship on item.shipment_id = ship.identifier
+      where
+        ship.status != 'PENDING'
+    </createView>
+  </changeSet>
+
+</databaseChangeLog>

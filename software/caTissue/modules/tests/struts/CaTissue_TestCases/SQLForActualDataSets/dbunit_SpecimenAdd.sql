@@ -1,5 +1,0 @@
-catissue_specimen;select LABEL,AVAILABLE,BARCODE,ACTIVITY_STATUS,SPECIMEN_COLLECTION_GROUP_ID,COLLECTION_STATUS from catissue_specimen where LABEL='Label1'
-catissue_abstract_specimen;select SPECIMEN_CLASS,SPECIMEN_TYPE,PATHOLOGICAL_STATUS,INITIAL_QUANTITY from catissue_abstract_specimen where IDENTIFIER IN(select IDENTIFIER from catissue_specimen where LABEL='Label1')
-catissue_specimen_char;select TISSUE_SITE,TISSUE_SIDE from catissue_specimen_char where IDENTIFIER IN(select SPECIMEN_CHARACTERISTICS_ID from catissue_abstract_specimen where IDENTIFIER IN(select IDENTIFIER from catissue_specimen where LABEL='Label1'))
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='LABEL'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event

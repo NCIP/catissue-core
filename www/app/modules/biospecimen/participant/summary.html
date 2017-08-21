@@ -1,0 +1,121 @@
+
+<div ng-switch on="fieldsCtx.hasDict">
+  <div ng-switch-when="true">
+    <sde-fields-overview base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+      obj="partCtx.obj" in-objs="partCtx.inObjs">
+    </sde-fields-overview>
+  </div>
+  <div ng-switch-default>
+    <div ng-include="'modules/biospecimen/participant/static-fields.html'">
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/static-fields.html">
+  <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCpr">
+    <li class="item">
+      <strong class="key key-sm" translate="participant.reg_date">Registration Date:</strong>
+      <span class="value value-md"> {{cpr.registrationDate | date: global.dateFmt | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.protocol_id">PPID:</strong>
+      <span class="value value-md"> {{cpr.ppid}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.first_name">First Name</strong>
+      <span class="value value-md"> {{cpr.participant.firstName | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.last_name">Last Name</strong>
+      <span class="value value-md"> {{cpr.participant.lastName | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.middle_name">Middle Name</strong>
+      <span class="value value-md">{{cpr.participant.middleName | osNoValue}}</span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.birth_date">Birth Date:</strong>
+      <span class="value value-md"> {{cpr.participant.birthDate | date: global.dateFmt | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.mpi">Master Patient Index:</strong>
+      <span class="value value-md"> {{cpr.participant.empi | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.uid">Social Security No:</strong>
+      <span class="value value-md"> {{cpr.participant.uid | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.gender">Gender:</strong>
+      <span class="value value-md"> {{cpr.participant.gender | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.ethnicity">Ethnicity:</strong>
+      <span class="value value-md"> {{cpr.participant.ethnicity | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.race">Race:</strong>
+      <span class="value value-md"> {{cpr.participant.races | osArrayJoin | osNoValue}} </span>
+    </li>
+
+    <li class="item">
+      <strong class="key key-sm" translate="participant.vital_status">Vital Status:</strong>
+      <span class="value value-md"> {{cpr.participant.vitalStatus | osNoValue}} </span>
+    </li>
+
+    <li class="item" ng-if="!!cpr.participant.deathDate">
+      <strong class="key key-sm" translate="participant.death_date">Death Date:</strong>
+      <span class="value value-md"> {{cpr.participant.deathDate | date: global.dateFmt}} </span>
+    </li>
+  </ul>
+
+  <div ng-if="!!cpr.participant.extensionDetail">
+    <div os-extension-overview ext-object="cpr.participant.extensionDetail" show-column="2">
+    </div>
+  </div>
+
+  <div ng-include="'modules/biospecimen/participant/mrn-details.html'"></div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/mrn-details.html">
+  <div class="os-section" ng-init="mrnCollapsed=false" ng-if="cpr.participant.pmis.length > 0">
+    <button class="os-btn-section-collapse os-btn-transparent" ng-click="mrnCollapsed=!mrnCollapsed">
+      <span class="fa" ng-class="{true: 'fa-chevron-circle-right', false: 'fa-chevron-circle-down'}[mrnCollapsed]"></span>
+    </button>
+    <h3 class="os-sub-section-title" translate="participant.pmis">Medical Identifiers</h3>
+    <div collapse="mrnCollapsed">
+      <table class="os-table os-table-muted-hdr os-border">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col col-xs-6">
+              <span translate="participant.site">Site</span>
+            </th>
+            <th class="col col-xs-6">
+              <span translate="participant.mrn">Medical Record Number</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="pmi in cpr.participant.pmis">
+            <td class="col col-xs-6">
+              <span>{{pmi.siteName}}</span>
+            </td>
+            <td class="col col-xs-6">
+              <span>{{pmi.mrn | osNoValue}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</script>

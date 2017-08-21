@@ -1,0 +1,183 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3 translate="common.home">Home</h3>
+    </div>
+  </div>
+
+  <ul class="os-home-items-container">
+    <li show-if-allowed="cpReadOpts" class="os-home-item">
+      <a ui-sref="cp-list">
+        <span class="os-home-item-icon"> 
+          <span class="fa fa-calendar"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.collection_protocols">Collection Protocols</h3>
+          <span translate="menu.cp_desc">Create, update SOP of visits and specimens</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-admin class="os-home-item">
+      <a ui-sref="institute-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-institution"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.institutes">Institutes</h3>
+          <span translate="menu.institutes_desc">Update information about institutions</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-allowed="userCreateUpdateOpts" class="os-home-item">
+      <a ui-sref="user-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-user"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.users">Users</h3>
+          <span translate="menu.users_desc">Add, rename and manage users</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-allowed="userCreateUpdateOpts" class="os-home-item">
+      <a ui-sref="role-list">
+        <span class="os-home-item-icon"> 
+          <span class="fa fa-lock"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.roles">Roles</h3>
+          <span translate="menu.roles_desc">Create, update user access controls</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-admin="institute" class="os-home-item">
+      <a ui-sref="site-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-hospital-o"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.sites">Sites</h3>
+          <span translate="menu.sites_desc">Add and update sites</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-allowed="containerReadOpts" class="os-home-item">
+      <a ui-sref="container-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-dropbox"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.containers">Containers</h3>
+          <span translate="menu.containers_desc">Manage containers and their restrictions</span>
+        </span>
+      </a>
+    </li>
+    <li class="os-home-item">
+      <a ui-sref="query-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-dashboard"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.queries">Queries</h3>
+          <span translate="menu.queries_desc">Create, share and schedule queries</span>
+        </span>
+      </a>
+    </li>
+    <li class="os-home-item">
+      <a ui-sref="specimen-lists">
+        <span class="os-home-item-icon">
+          <span class="fa fa-shopping-cart"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.specimen_lists">Specimen Lists</h3>
+          <span translate="menu.specimen_lists_desc">Create and manage specimen lists</span>
+        </span>
+      </a>
+    </li>
+    <li ng-if="currentUser.admin || currentUser.instituteAdmin || currentUser.manageForms" class="os-home-item">
+      <a ui-sref="form-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-copy"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.forms">Forms</h3>
+          <span translate="menu.forms_desc">Create and manage custom forms</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-admin="institute" class="os-home-item">
+      <a ui-sref="dp-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-truck"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.distribution_protocols">Distribution Protocols</h3>
+          <span translate="menu.dp_desc">Create, update procedures for distributing specimens</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-allowed="orderReadOpts" class="os-home-item">
+      <a ui-sref="order-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-share"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.distribution_orders">Distribution Orders</h3>
+          <span translate="menu.distribution_orders_desc">
+            Create, execute request orders for distributing specimens
+          </span>
+        </span>
+      </a>
+    </li>
+    <li show-if-allowed="shipmentReadOpts" class="os-home-item">
+      <a ui-sref="shipment-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-paper-plane-o"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.shipping_and_tracking">Shipping and Tracking</h3>
+          <span translate="menu.shipping_and_tracking_desc">
+            Create, receive shipments for shipping specimens
+          </span>
+        </span>
+      </a>
+    </li>
+
+    <li show-if-allowed="scheduledJobReadOpts" class="os-home-item">
+      <a ui-sref="job-list">
+        <span class="os-home-item-icon">
+          <span class="fa fa-gears"></span>
+        </span>
+        <span class="os-home-item-info">
+          <h3 translate="menu.jobs">Jobs</h3>
+          <span translate="menu.jobs_desc">Create, execute, schedule jobs</span>
+        </span>
+      </a>
+    </li>
+    <li class="os-home-item">
+      <a href="{{userCtx.trainingUrl}}" target="_blank">
+        <span class="os-home-item-icon">
+          <span class="fa fa-graduation-cap"></span>
+        </span>
+        <span class="os-home-item-info">
+          <h3 translate="menu.training">Training</h3>
+          <span translate="menu.training_desc">User manual and training videos portal</span>
+        </span>
+      </a>
+    </li>
+    <li show-if-admin class="os-home-item">
+      <a ui-sref="settings-list"> 
+        <span class="os-home-item-icon">
+          <span class="fa fa-wrench"></span>
+        </span>
+        <span class="os-home-item-info"> 
+          <h3 translate="menu.settings">Settings</h3>
+          <span translate="menu.settings_desc">Manage application configuration settings</span>
+        </span>
+      </a>
+    </li>
+
+    <os-plugin-hooks view-name="'home'" sec-name="'page-body'"></os-plugin-hooks>
+    
+  </ul>
+</div>

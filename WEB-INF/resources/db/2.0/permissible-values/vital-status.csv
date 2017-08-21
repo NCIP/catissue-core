@@ -1,0 +1,5 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Dead,2004001,null
+getNextPvId(),,,null,Alive,2004001,null
+getNextPvId(),,,null,Unknown,2004001,null
+getNextPvId(),,,null,Unspecified,2004001,null

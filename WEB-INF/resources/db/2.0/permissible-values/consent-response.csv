@@ -1,0 +1,6 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Yes,consent_response,1
+getNextPvId(),,,null,No,consent_response,2
+getNextPvId(),,,null,Not Specified,consent_response,3
+getNextPvId(),,,null,Withdrawn,consent_response,4
+getNextPvId(),,,null,None,consent_response,5

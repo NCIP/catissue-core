@@ -1,0 +1,24 @@
+<div class="os-home">
+  <div class="os-navbar os-navbar-default os-navbar-docked">
+    <div class="logo">
+      <a href="http://www.openspecimen.org">
+        <img src="images/os_logo.png"></img>
+      </a>
+      <div class="deploy-env" ng-if="!!global.appProps.deploy_env">
+        <span>{{global.appProps.deploy_env | uppercase | limitTo: 10}}</span>
+      </div>
+    </div>
+
+    <ul class="menu" ui-view="nav-buttons"></ul>
+  </div>
+
+  <div os-content="os-navbar">
+    <div class="os-alert-container" ng-class="{'show': alerts.length > 0}">
+      <alert type="{{alert.type}}" ng-repeat="alert in alerts">{{alert.text}}</alert>
+    </div>
+    <div ui-view="app-body"></div>
+    <div class="os-signin-footer">
+      <span translate="common.footer_note">OpenSpecimen - powered by Krishagni</span>
+    </div>
+  </div>
+</div>

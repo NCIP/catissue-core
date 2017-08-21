@@ -1,0 +1,102 @@
+[
+  {
+    "name"   : "SpecimenCollectionEvent",
+    "form"   : "spe-forms/collection-event.xml",
+    "dbTable": "CATISSUE_COLL_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenDisposalEvent",
+    "form"   : "spe-forms/disposal-event.xml",
+    "dbTable": "CATISSUE_DISPOSAL_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenDistributedEvent",
+    "form"   : "spe-forms/distributed-event.xml",
+    "dbTable": "CATISSUE_DISTRI_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenReceivedEvent",
+    "form"   : "spe-forms/received-event.xml",
+    "dbTable": "CATISSUE_RECEIVED_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenTransferEvent",
+    "form"   : "spe-forms/transfer-event.xml",
+    "dbTable": "CATISSUE_TRANSFER_EVENT_PARAM",
+    "systemEvent": "true"
+  },
+
+  {
+    "name"   : "SpecimenCellReviewEvent",
+    "form"   : "spe-forms/cell-review-event.xml",
+    "dbTable": "CATISSUE_CELL_SPE_REVIEW_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenCheckInCheckOutEvent",
+    "form"   : "spe-forms/checkin-checkout-event.xml",
+    "dbTable": "CATISSUE_IN_OUT_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenEmbeddedEvent",
+    "form"   : "spe-forms/embedded-event.xml",
+    "dbTable": "CATISSUE_EMBEDDED_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenFixedEvent",
+    "form"   : "spe-forms/fixed-event.xml",
+    "dbTable": "CATISSUE_FIXED_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenFluidEvent",
+    "form"   : "spe-forms/fluid-event.xml",
+    "dbTable": "CATISSUE_FLUID_SPE_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenFrozenEvent",
+    "form"   : "spe-forms/frozen-event.xml",
+    "dbTable": "CATISSUE_FROZEN_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenMolecularReviewEvent",
+    "form"   : "spe-forms/molecular-review-event.xml",
+    "dbTable": "CATISSUE_MOL_SPE_REVIEW_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenProcedureEvent",
+    "form"   : "spe-forms/procedure-event.xml",
+    "dbTable": "CATISSUE_PROCEDURE_EVENT_PARAM"
+  },
+
+  {
+    "name"   : "SpecimenSpunEvent",
+    "form"   : "spe-forms/spun-event.xml",
+    "dbTable": "CATISSUE_SPUN_EVENT_PARAMETERS"
+  },
+
+  {
+    "name"   : "SpecimenThawEvent",
+    "form"   : "spe-forms/thaw-event.xml",
+    "dbTable": "CATISSUE_THAW_EVENT_PARAMETERS"
+  },
+
+  {
+    "name"   : "SpecimenTissueReviewEvent",
+    "form"   : "spe-forms/tissue-review-event.xml",
+    "dbTable": "CATISSUE_TIS_SPE_EVENT_PARAM"
+  }
+]

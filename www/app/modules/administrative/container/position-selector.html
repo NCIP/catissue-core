@@ -1,0 +1,32 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="container.pos_selector">Container Position Selector</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+
+  <div class="os-modal-body">
+    <div class="os-container-pos-selector-wrapper">
+      <os-container-position-selector container="container" selected-pos="position">
+      </os-container-position-selector>
+    </div>
+    <div>
+      <span translate="container.selected_pos">Selected Position: </span>
+      <span ng-if="!position.positionX" translate="common.none">None</span>
+      <span ng-if="!!position.positionX">
+        <span ng-switch on="container.positionLabelingMode == 'TWO_D'">
+          <span ng-switch-when="true">({{position.positionY}}, {{position.positionX}})</span>
+          <span ng-switch-when="false">{{position.position}}</span>
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()"> 
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+      <span translate="common.buttons.done">Done</span>
+    </button>
+  </div>
+</div>

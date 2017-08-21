@@ -1,0 +1,50 @@
+<div>
+  <div class="os-modal-header">
+    <span ng-if="entityType == 'specimen'" translate="specimens.pos_selector">Specimen Position Selector</span>
+    <span ng-if="entityType == 'storage_container'" translate="container.pos_selector">Container Position Selector</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+
+
+  <div class="os-modal-body">
+    <div os-wizard="posWizard">
+      <os-wizard-step title="Select Container" on-finish="getOccupancyMap()">
+        <div class="os-select-container-tab">
+          <os-container-selector type="listOpts.type" name="listOpts.name" criteria="listOpts.criteria"
+            on-toggle-selection="toggleContainerSelection(posWizard, container)">
+          </os-container-selector>
+        </div>
+      </os-wizard-step>
+      <os-wizard-step title="Select Position" on-finish="passThrough()">
+        <div ng-if="showGrid" class="os-container-pos-selector-wrapper">
+          <os-container-position-selector container="selectedContainer" assigned-pos="assignedPositions"
+            selected-pos="selectedPos">
+          </os-container-position-selector>
+        </div>
+        <div>
+          <span translate="container.selected_pos">Selected Position: </span>
+          <span ng-if="!selectedPos.positionX" translate="common.none">None</span>
+          <span ng-if="!!selectedPos.positionX">
+            <span ng-switch on="selectedContainer.positionLabelingMode == 'TWO_D'">
+              <span ng-switch-when="true">({{selectedPos.positionY}}, {{selectedPos.positionX}})</span>
+              <span ng-switch-when="false">{{selectedPos.position}}</span>
+            </span>
+          </span>
+        </div>
+      </os-wizard-step>
+
+      <div class="os-modal-footer">
+        <button class="btn os-btn-text" ng-click="cancel()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+        <button class="btn os-btn-secondary" ng-if="!posWizard.isFirstStep()" 
+          ng-click="posWizard.previous(false)">
+          <span translate="common.buttons.previous">Previous</span>
+        </button>
+        <button class="btn btn-primary" ng-click="ok()">
+          <span translate="common.buttons.done">Done</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

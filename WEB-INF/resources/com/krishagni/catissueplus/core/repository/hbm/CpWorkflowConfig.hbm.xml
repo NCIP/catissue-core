@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CpWorkflowConfig" table="OS_CP_WORKFLOWS">
+    <id name="id" column="CP_ID">
+      <generator class="foreign">
+        <param name="property">cp</param>
+      </generator>
+    </id>
+	
+    <one-to-one name="cp" constrained="true"/>
+    
+    <property name="workflowsJson" column="WORKFLOWS"/>
+  </class>
+</hibernate-mapping>

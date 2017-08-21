@@ -1,0 +1,153 @@
+[
+    {
+        "name": "participant-list-view",
+        "data": {
+            "columns": [
+                {
+                    "expr": "Participant.ppid",
+                    "caption": "Participant Protocol ID",
+                    "metainfo": {
+                        "showLink": "true"
+                    }
+                },
+                {
+                    "expr": "concat_ws(\" \", Participant.firstName, Participant.lastName)",
+                    "caption": "Name"
+                },
+                {
+                    "expr": "Participant.empi",
+                    "caption": "Master Patient Index"
+                },
+                {
+                    "expr": "Participant.regDate",
+                    "caption": "Registration Date"
+                },
+                {
+                    "expr": "concat(years_between(current_date(), Participant.dateOfBirth), \" yrs\")",
+                    "caption": "Age"
+                }
+            ],
+            "criteria": "Participant.id exists",
+            "orderBy": [
+                {
+                    "expr": "Participant.regDate",
+                    "direction": "desc"
+                }
+            ],
+            "filters": [
+                {
+                    "expr": "Participant.ppid",
+                    "caption": "Participant Protocol ID",
+                    "searchType": "contains"
+                },
+                {
+                    "expr": "concat_ws(\" \", Participant.firstName, Participant.lastName)",
+                    "caption": "Name",
+                    "metainfo": {
+                        "phi": "true"
+                    }
+                },
+                {
+                    "expr": "Participant.empi",
+                    "caption": "Master Patient Index",
+                    "searchType": "contains",
+                    "metainfo": {
+                        "phi": "true"
+                    }
+                },
+                {
+                    "expr": "Participant.regDate",
+                    "caption": "Registration Date"
+                },
+                {
+                    "expr": "years_between(current_date(), Participant.dateOfBirth)",
+                    "caption": "Age",
+                    "temporal": "true",
+                    "metainfo": {
+                        "phi": "true"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "name": "specimen-list-view",
+        "data": {
+            "columns": [
+                {
+                    "expr": "Specimen.label",
+                    "caption": "Label",
+                    "metainfo": {
+                        "showLink": "true"
+                    }
+                },
+                {
+                    "expr": "Specimen.createdOn",
+                    "caption": "Created On"
+                },
+                {
+                    "expr": "Specimen.type",
+                    "caption": "Type"
+                },
+                {
+                    "expr": "Specimen.tissueSite",
+                    "caption": "Anatomic Site"
+                },
+                {
+                    "expr": "Specimen.pathologicalStatus",
+                    "caption": "Pathology Status"
+                },
+                {
+                    "expr": "Specimen.availableQty",
+                    "caption": "Quantity",
+                    "metainfo": {
+                        "showUnit": "true",
+                        "measure": "quantity"
+                    }
+                },
+                {
+                    "expr": "concat(Specimen.specimenPosition.containerName, concat_ws(\"\", concat(\" (\", Specimen.specimenPosition.formattedPos, \")\")))",
+                    "caption": "Location"
+                }
+            ],
+            "criteria": "Specimen.availableQty > 0 and Specimen.collectionStatus = \"Collected\"",
+            "orderBy": [
+                {
+                    "expr": "Specimen.createdOn",
+                    "direction": "desc"
+                }
+            ],
+            "filters": [
+                {
+                    "expr": "Specimen.label",
+                    "caption": "Label",
+                    "searchType": "contains"
+                },
+                {
+                    "expr": "Specimen.lineage",
+                    "caption": "Lineage"
+                },
+                {
+                    "expr": "Specimen.createdOn",
+                    "caption": "Created On"
+                },
+                {
+                    "expr": "Specimen.type",
+                    "caption": "Type"
+                },
+                {
+                    "expr": "Specimen.tissueSite",
+                    "caption": "Anatomic Site"
+                },
+                {
+                    "expr": "Specimen.pathologicalStatus",
+                    "caption": "Pathology Status"
+                },
+                {
+                    "expr": "Specimen.availableQty",
+                    "caption": "Quantity"
+                }
+            ]
+        }
+    }
+]

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="TestCounter" targetNamespace="http://www.globus.org/test/counter/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://www.globus.org/test/counter/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://www.globus.org/test/counter/bindings" location="test_counter_bindings.wsdl"/>
-  <wsdl:service name="TestCounterService">
-    <wsdl:port name="TestCounterPort" binding="binding:TestCounterSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

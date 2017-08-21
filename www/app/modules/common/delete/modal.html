@@ -1,0 +1,60 @@
+<div class="os-modal-header"  ng-switch on="!showDependents">
+  <span ng-switch-when="true">
+    {{'delete_entity.title' | translate: entityProps }}
+  </span>
+  <span class="text-danger" ng-switch-default>
+    {{'delete_entity.dependents_title' | translate: entityProps }}
+  </span>
+</div>
+<div class="os-modal-body">
+  <div ng-if="!showDependents">
+    {{ entityProps.confirmDelete | translate: entityProps }}
+  </div>
+  
+  <div ng-if="dependentEntities.length > 0">
+    <h5 ng-if="!entityProps.forceDelete">
+      {{'delete_entity.dependents_details' | translate: entityProps }}
+    </h5>
+    <div class="os-section">
+      <div class="os-table os-table-muted-hdr os-border">
+        <div class="os-table-head">
+          <div class="row">
+            <div class="col col-xs-6" translate="delete_entity.entity_name">Entity Name</div>
+            <div class="col col-xs-6" translate="delete_entity.count">Count</div>
+          </div>
+        </div>
+        <div class="os-table-body">
+          <div class="row" ng-repeat="dependentEntity in dependentEntities">
+            <div class="col col-xs-6">{{'entities.' +  dependentEntity.name | translate}}</div>
+            <div class="col col-xs-6">{{dependentEntity.count}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="(entityProps.forceDelete && dependentEntities.length > 0) || entityProps.bulkDelete">
+    <span translate='delete_entity.force_delete' translate-values="entityProps">
+      Type 'DELETE ANYWAY' in below textbox to delete entity including its dependent entities.
+    </span>
+    <input type="textbox" class="form-control" name="deleteAnyway" ng-model="entityProps.deleteAnyway">
+  </div>
+</div>
+<div class="os-modal-footer">
+  <div ng-switch on="!showDependents">
+    <div ng-switch-when="true">
+      <button class="btn os-btn-text" ng-click="cancel()">
+        <span translate="common.buttons.cancel">Cancel</span>
+      </button>
+      <button class="btn btn-danger" ng-click="delete()"
+        ng-disabled="(dependentEntities.length > 0 || entityProps.bulkDelete) && entityProps.deleteAnyway != ('delete_entity.delete_anyway' | translate)">
+        <span translate="common.yes">Yes</span>
+      </button>
+    </div>
+    <div ng-switch-default>
+      <button class="btn btn-primary" ng-click="cancel()">
+        <span translate="common.buttons.ok">Ok</span>
+      </button>
+    </div>
+  </div>
+</div>

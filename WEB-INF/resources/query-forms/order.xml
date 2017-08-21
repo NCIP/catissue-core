@@ -1,0 +1,263 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>Order</name>
+    <caption>#getMessage("order")</caption>
+    <table>OS_ORDERS</table>
+    <activeCondition>ACTIVITY_STATUS != 'Disabled'</activeCondition>
+
+    <row>
+      <numberField>
+        <name>id</name>
+        <udn>id</udn>
+        <caption>#getMessage("order_identifier")</caption>
+        <column>IDENTIFIER</column>
+        <recordUrl>#/orders/{{$value}}/overview</recordUrl>
+      </numberField>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>orderName</name>
+        <udn>orderName</udn>
+        <caption>#getMessage("order_name")</caption>
+        <column>NAME</column>
+        <options>
+          <sql>select name from os_orders where activity_status != 'Disabled'</sql>
+        </options>
+        <recordUrl>#/object-state-params-resolver?stateName=order-detail.overview&amp;objectName=order&amp;key=name&amp;value={{$value}}</recordUrl>
+      </dropDown>
+    </row>
+
+    <row>
+      <subForm>
+        <name>distributionProtocol</name>
+        <udn>distributionProtocol</udn>
+        <caption>#getMessage("order_dp")</caption>
+        <table>CATISSUE_DISTRIBUTION_PROTOCOL</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>DISTRIBUTION_PROTOCOL_ID</parentKey>
+
+        <row>          
+          <dropDown>
+            <name>distributionProtocolTitle</name>
+            <udn>distributionProtocolTitle</udn>
+            <caption>#getMessage("order_dp")</caption>
+            <column>TITLE</column>
+            <options>
+              <sql>select title from catissue_distribution_protocol where activity_status = 'Active'</sql>
+            </options>
+            <recordUrl>#/object-state-params-resolver?stateName=dp-detail.overview&amp;objectName=distributionProtocol&amp;key=title&amp;value={{$value}}</recordUrl>
+          </dropDown>
+        </row>
+
+        <row>
+          <numberField>
+            <name>irbId</name>
+            <udn>irbId</udn>
+            <caption>#getMessage("order_dp_irb_id")</caption>
+            <column>IRB_IDENTIFIER</column>
+          </numberField>
+        </row>
+
+        <row>	
+          <subForm>
+            <name>principalInvestigator</name>
+            <udn>principalInvestigator</udn>
+            <caption>#getMessage("order_dp_pi")</caption>
+            <table>USER_VIEW</table>
+            <foreignKey>IDENTIFIER</foreignKey>
+            <parentKey>PRINCIPAL_INVESTIGATOR_ID</parentKey>
+            <row>     
+              <userField>
+                <name>investigatorName</name>
+                <udn>investigatorName</udn>
+                <caption>#getMessage("order_dp_pi_name")</caption>
+                <column>IDENTIFIER</column>
+              </userField>
+            </row>
+            <row>      
+              <textField>
+                <name>email</name>
+                <udn>email</udn>
+                <caption>#getMessage("order_dp_pi_email")</caption>
+                <column>EMAIL_ADDRESS</column>
+              </textField>
+            </row>
+            <row>
+              <dropDown>
+                <name>institute</name>
+                <udn>institute</udn>
+                <caption>#getMessage("order_dp_pi_institute")</caption>
+                <column>INSTITUTE_NAME</column>
+                <options>
+                  <sql>select distinct INSTITUTE_NAME from USER_VIEW</sql>
+                </options>
+              </dropDown>
+            </row>
+          </subForm>
+        </row>
+      </subForm>
+    </row>
+
+    <row>
+      <subForm>
+        <name>distributionSite</name>
+        <udn>distributionSite</udn>
+        <caption>#getMessage("order_site")</caption>
+        <table>CATISSUE_SITE</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>SITE_ID</parentKey>
+        <row>
+          <dropDown>
+            <name>distributionSiteName</name>
+            <udn>distributionSiteName</udn>
+            <caption>#getMessage("order_site_name")</caption>
+            <column>NAME</column>
+            <options>
+              <sql>select name from CATISSUE_SITE where activity_status != 'Disabled'</sql>
+            </options>
+            <recordUrl>#/object-state-params-resolver?stateName=site-detail.overview&amp;objectName=site&amp;key=name&amp;value={{$value}}</recordUrl>
+          </dropDown>              
+        </row>
+      </subForm>
+    </row>
+
+    <row>
+      <textField>
+        <name>trackingUrl</name>
+        <udn>trackingUrl</udn>
+        <caption>#getMessage("order_tracking_url")</caption>
+        <column>TRACKING_URL</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("order_comments")</caption>
+        <column>COMMENTS</column>
+      </textField>
+    </row>
+
+    <row>
+      <subForm>
+        <name>requester</name>
+        <udn>requester</udn>
+        <caption>#getMessage("order_requester")</caption>
+        <table>USER_VIEW</table>
+        <foreignKey>IDENTIFIER</foreignKey>
+        <parentKey>REQUESTER_ID</parentKey>
+        <row>          
+          <userField>
+            <name>requesterName</name>
+            <udn>requesterName</udn>
+            <caption>#getMessage("order_requester_name")</caption>
+            <column>IDENTIFIER</column>
+          </userField>  
+        </row>
+      </subForm>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>requestedDate</name>
+        <udn>requestedDate</udn>
+        <caption>#getMessage("order_execution_date")</caption>
+        <column>EXECUTION_DATE</column>
+        <format>MM-dd-yyyy</format>
+      </datePicker>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>orderStatus</name>
+        <udn>orderStatus</udn>
+        <caption>#getMessage("order_status")</caption>
+        <column>STATUS</column>
+        <options>
+          <option><value>EXECUTED</value></option>
+          <option><value>PENDING</value></option>
+        </options>
+      </dropDown>
+    </row>
+
+    <row>
+      <subForm>
+        <name>orderItems</name>
+        <udn>orderItems</udn>
+        <caption>#getMessage("order_items")</caption>
+        <table>OS_ORDER_ITEMS</table>
+        <foreignKey>ORDER_ID</foreignKey>
+        <parentKey>IDENTIFIER</parentKey>
+        
+        <row>
+          <subForm>
+            <name>specimen</name>
+            <udn>specimen</udn>
+            <caption>#getMessage("specimen")</caption>
+            <table>CATISSUE_SPECIMEN</table>
+            <foreignKey>IDENTIFIER</foreignKey>
+            <parentKey>SPECIMEN_ID</parentKey>
+
+            <row>
+              <textField>
+                <name>label</name>
+                <udn>label</udn>
+                <caption>#getMessage("specimen_label")</caption>
+                <column>LABEL</column>
+              </textField>
+            </row> 
+
+            <row>
+              <subForm>
+                <name>scg</name>
+                <udn>scg</udn>
+                <caption>#getMessage("participant_visits")</caption>
+                <table>CATISSUE_SPECIMEN_COLL_GROUP</table>
+                <foreignKey>IDENTIFIER</foreignKey>
+                <parentKey>SPECIMEN_COLLECTION_GROUP_ID</parentKey>
+                <pathLink>true</pathLink>
+                <row>
+                  <subForm>
+                    <name>participant</name>
+                    <udn>participant</udn>
+                    <caption>#getMessage("participant")</caption>
+                    <table>CPR_VIEW</table>
+                    <foreignKey>CPR_ID</foreignKey>
+                    <parentKey>COLLECTION_PROTOCOL_REG_ID</parentKey>
+                    <pathLink>true</pathLink>
+                  </subForm>
+                </row>
+              </subForm>
+            </row>
+          </subForm>
+        </row>
+
+        <row>
+          <numberField>
+            <name>quantity</name>
+            <udn>quantity</udn>
+            <caption>#getMessage("order_items_quantity")</caption>
+            <column>QUANTITY</column>
+          </numberField>
+        </row>
+
+        <row>
+          <dropDown>
+            <name>status</name>
+            <udn>status</udn>
+            <caption>#getMessage("order_items_status")</caption>
+            <column>STATUS</column>
+            <options>
+              <option><value>DISTRIBUTED</value></option>
+              <option><value>DISTRIBUTED_AND_CLOSED</value></option>
+            </options>
+          </dropDown>
+        </row>
+      </subForm>
+    </row>
+  </view>
+</form>

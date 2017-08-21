@@ -1,0 +1,55 @@
+<div>
+  <div class="list-group">
+    <div class="list-group-item os-section-hdr">
+      <span>{{listTitle}}</span>
+    </div>
+
+    <div class="list-group-item clearfix" ng-repeat="item in items track by $index">
+      <div ng-if="$index != editItemIdx">
+        <div class="col-xs-10" style="padding: 0px; word-wrap: break-word;">
+          <span>{{item[textAttr]}}</span>
+        </div>
+        <div class="col-xs-2" ng-if="allowEdit">
+          <div class="btn-group pull-right">
+            <button class="btn btn-xs btn-default" ng-click="openForEdit($index)">
+              <span class="fa fa-pencil"></span>
+            </button>
+            <button class="btn btn-xs btn-default" ng-click="removeItem($index)">
+              <span class="fa fa-trash"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div ng-if="$index == editItemIdx">
+        <fieldset ng-disabled="saving">
+          <div class="form-group">
+            <textarea ui-keyup="{'esc': 'revertEdit()', 'enter': 'updateItem()'}" 
+              os-focus="$index == editItemIdx" class="form-control" 
+              ng-model="editItem.text">
+            </textarea>
+          </div>
+          <div>
+            <input type="submit" class="btn btn-success" value="Save" ng-click="updateItem()">
+            <a class="btn os-btn-text-secondary" ng-click="revertEdit()" translate="common.buttons.cancel"></a>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <a class="list-group-item" ng-if="!addMode && allowEdit" ng-click="showAddItem()">
+      {{addCaption}}
+    </a>
+    <div class="list-group-item" ng-if="addMode">
+      <fieldset ng-disabled="saving">
+        <div class="form-group">
+          <textarea os-focus="true" class="form-control" ng-model="newItem.text" 
+            ui-keyup="{'enter': 'addItem()', 'esc': 'revertAdd()'}">
+          </textarea> 
+        </div>
+        <div>
+          <input type="submit" class="btn btn-success" value="Add" ng-click="addItem()">
+          <a class="btn os-btn-text-secondary" ng-click="revertAdd()" translate="common.buttons.cancel"></a>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

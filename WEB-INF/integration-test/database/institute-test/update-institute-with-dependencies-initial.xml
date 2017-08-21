@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CATISSUE_INSTITUTION  IDENTIFIER="1" NAME="default-institute" ACTIVITY_STATUS="Active" />
+  <CATISSUE_INSTITUTION  IDENTIFIER="2" NAME="duplicate-institute" ACTIVITY_STATUS="Active" />
+  
+  <OS_DEPARTMENTS IDENTIFIER="1" NAME="default-department" INSTITUTE_ID="1"/>
+  <OS_DEPARTMENTS IDENTIFIER="2" NAME="default-department" INSTITUTE_ID="2"/>
+  
+  <OS_AUTH_DOMAINS IDENTIFIER="1" DOMAIN_NAME="default"/>
+ 
+  <CATISSUE_USER IDENTIFIER="1" FIRST_NAME="ADMIN" LAST_NAME="ADMIN" LOGIN_NAME="admin@admin.com" EMAIL_ADDRESS="admin@admin.com" 
+    ACTIVITY_STATUS="Active" DOMAIN_NAME="default" DEPARTMENT_ID="1"/>
+    
+</dataset>

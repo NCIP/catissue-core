@@ -1,0 +1,53 @@
+<div class="os-section" ng-controller="QueryAddEditFilterCtrl">
+  <h4 class="os-sub-section-title" translate="queries.filters"> 
+    Filters 
+  </h4>
+  <div>
+    <div class="os-query-filter" ng-repeat="filter in queryLocal.filters">
+      <div>
+        <div class="os-query-filter-node">
+          <span><b>{{filter.id}}</b></span>
+          <div class="pq" ng-if="filter.parameterized"
+            tooltip="Parameterized Filter" tooltip-placement="bottom" tooltip-append-to-body="true">
+            <span>P</span>
+          </div>
+        </div>
+      </div>
+      <div ng-switch on="!filter.expr">
+        <div ng-switch-when="true"> 
+          <i>{{filter.form.caption}} &gt;&gt; </i>
+          <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i>
+          <i>{{filter.field.caption}} </i>
+          <b>{{filter.op.desc}}</b> 
+
+          <ng-switch on="filter.op.name">
+            <i ng-switch-when="between">{{filter.value[0]}} and {{filter.value[1]}}</i>
+            <i ng-switch-when="qin">["{{filter.value.join('", "')}}"]</i>
+            <i ng-switch-when="not_in">["{{filter.value.join('", "')}}"]</i>
+            <i ng-switch-default>{{filter.value}}</i>
+          </ng-switch>
+        </div>
+        <div ng-switch-when="false"> 
+          <i>{{filter.desc}}</i>
+        </div>
+      </div>
+      <div>
+        <div class="btn-group btn-group-sm pull-right">
+          <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="!filter.expr"
+            title="{{'queries.edit_filter' | translate}}" data-placement="left" 
+            content-template="modules/query/addedit-filter.html" bs-popover>
+            <span class="fa fa-pencil"></span>
+          </button>
+          <button class="btn btn-default" ng-click="displayFilter(filter)" ng-if="filter.expr"
+            title="{{'queries.edit_filter' | translate}}" data-placement="left" data-container="body"
+            content-template="modules/query/addedit-temporal-filter.html" bs-popover>
+            <span class="fa fa-pencil"></span>
+          </button>
+          <button class="btn btn-default" ng-click="deleteFilter(filter)">
+            <span class="fa fa-trash"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

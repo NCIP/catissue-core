@@ -1,3 +1,0 @@
-catissue_specimen;select LABEL,AVAILABLE,ACTIVITY_STATUS,SPECIMEN_COLLECTION_GROUP_ID,COLLECTION_STATUS from catissue_specimen where LABEL='labe_1'
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='LABEL'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event

@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" table="OS_STORAGE_CONTAINERS" batch-size="25">
+    <id name="id" column="IDENTIFIER" type="long" unsaved-value="null">
+      <generator class="native">
+        <param name="sequence">OS_STORAGE_CONTAINERS_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME"/>
+
+    <property name="barcode" column="BARCODE"/>
+
+    <property name="temperature" column="TEMPERATURE"/>
+
+    <property name="noOfColumns" column="NO_OF_COLS"/>
+
+    <property name="noOfRows" column="NO_OF_ROWS"/>
+
+    <property name="positionLabelingMode" column="POS_LABELING_MODE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainer$PositionLabelingMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="columnLabelingScheme" column="COLUMN_LABELING_SCHEME"/>
+
+    <property name="rowLabelingScheme" column="ROW_LABELING_SCHEME"/>
+
+    <property name="storeSpecimenEnabled" column="STORE_SPECIMENS"/>
+
+    <many-to-one
+      name="type"
+      class="com.krishagni.catissueplus.core.administrative.domain.ContainerType"
+      column="TYPE_ID"/>
+
+    <many-to-one
+      name="site"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="SITE_ID"/>
+
+    <many-to-one
+      name="parentContainer"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer"
+      column="PARENT_CONTAINER_ID"/>
+
+    <property name="cellDisplayProp" column="CELL_DISPLAY_PROP">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainer$CellDisplayProp
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <many-to-one
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="CREATED_BY"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <property name="comments" column="COMMENTS"/>
+
+    <property name="capacity" column="CAPACITY"/>
+
+    <set name="childContainers" table="OS_STORAGE_CONTAINERS" inverse="true" cascade="all-delete-orphan">
+      <key column="PARENT_CONTAINER_ID"/>
+      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" />
+      <filter name="activeEntity"/>
+    </set>
+
+    <set name="ancestorContainers" table="OS_CONTAINERS_HIERARCHY">
+      <key column="DESCENDENT_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="ANCESTOR_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
+    </set>
+
+    <set name="descendentContainers" table="OS_CONTAINERS_HIERARCHY">
+      <key column="ANCESTOR_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainer" column="DESCENDENT_ID">
+        <filter name="activeEntity"/>
+      </many-to-many>
+    </set>
+
+    <set name="allowedSpecimenClasses" table="OS_STOR_CONT_SPEC_CLASSES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_CLASS" type="string"/>
+    </set>
+
+    <set name="allowedSpecimenTypes" table="OS_STOR_CONT_SPEC_TYPES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_TYPE" type="string"/>
+    </set>
+            
+    <set name="allowedCps" table="OS_STOR_CONTAINER_CPS" inverse="false">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID"/>
+    </set>
+
+    <set name="compAllowedSpecimenClasses" table="OS_STOR_CONT_COMP_SPEC_CLASSES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_CLASS" type="string"/>
+    </set>
+
+    <set name="compAllowedSpecimenTypes" table="OS_STOR_CONT_COMP_SPEC_TYPES" cascade="all-delete-orphan">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <element column="SPECIMEN_TYPE" type="string"/>
+    </set>
+            
+    <set name="compAllowedCps" table="OS_STOR_CONTAINER_COMP_CPS" inverse="false">
+      <key column="STORAGE_CONTAINER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" column="CP_ID"/>
+    </set>
+
+    <one-to-one
+      name="position"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"
+      property-ref="occupyingContainer"
+      cascade="save-update"
+      fetch="join"/>
+
+    <set name="occupiedPositions" table="OS_CONTAINER_POSITIONS" cascade="all-delete-orphan" inverse="true">
+      <key column="STORAGE_CONTAINER_ID" not-null="true"/>
+      <one-to-many class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition"/>
+    </set>
+
+    <many-to-one
+      name="stats"
+      column="IDENTIFIER"
+      class="com.krishagni.catissueplus.core.administrative.domain.StorageContainerStats"
+      update="false" insert="false"/>
+
+    <filter name="activeEntity"/>
+
+    <query name="getSpecimensCount">
+      select
+        count(pos)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.StorageContainer c
+        join c.descendentContainers d
+        join d.occupiedPositions pos
+      where
+        c.id = :containerId
+        and pos.occupyingSpecimen is not null
+    </query>
+
+    <query name="deletePositionsByReservationIds">
+      delete from
+        com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition p
+      where
+        p.reservationId in (:reservationIds)
+    </query>
+
+    <query name="deleteReservationsOlderThanTime">
+      <![CDATA[
+        delete from
+          com.krishagni.catissueplus.core.administrative.domain.StorageContainerPosition p
+        where
+          p.reservationTime < :expireTime
+      ]]>
+    </query>
+
+    <sql-query name="getAncestors">
+      <return-scalar column="ancestorId" type="long"/>
+      <return-scalar column="parentId"   type="long"/>
+
+      select
+        h.ancestor_id as ancestorId, s.parent_container_id as parentId
+      from
+        os_containers_hierarchy h
+        inner join os_storage_containers s on s.identifier = h.ancestor_id
+      where
+        h.descendent_id = :containerId and h.ancestor_id != h.descendent_id
+    </sql-query>
+
+    <sql-query name="getRootAndChildContainers">
+      <return-scalar column="containerId"   type="long"/>
+      <return-scalar column="containerName" type="string"/>
+      <return-scalar column="noOfRows"      type="int"/>
+      <return-scalar column="noOfColumns"   type="int"/>
+      <return-scalar column="parentId"      type="long"/>
+      <return-scalar column="rowNo"         type="int"/>
+      <return-scalar column="colNo"         type="int"/>
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        s.parent_container_id as parentId, p.pos_two as rowNo, p.pos_one as colNo
+      from
+        os_storage_containers s
+        inner join os_container_positions p on p.occupying_container_id = s.identifier
+      where
+        s.parent_container_id in (:parentIds) and s.activity_status != 'Disabled'
+
+      union all
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        null as parentId, null as rowNo, null as colNo
+      from
+        os_storage_containers s
+      where
+        s.identifier = :rootId and s.activity_status != 'Disabled'
+    </sql-query>
+
+    <sql-query name="getChildContainers">
+      <return-scalar column="containerId"   type="long"/>
+      <return-scalar column="containerName" type="string"/>
+      <return-scalar column="noOfRows"      type="int"/>
+      <return-scalar column="noOfColumns"   type="int"/>
+      <return-scalar column="parentId"      type="long"/>
+      <return-scalar column="rowNo"         type="int"/>
+      <return-scalar column="colNo"         type="int"/>
+
+      select
+        s.identifier as containerId, s.name as containerName,
+        s.no_of_rows as noOfRows, s.no_of_cols as noOfColumns,
+        s.parent_container_id as parentId, p.pos_two as rowNo, p.pos_one as colNo
+      from
+        os_storage_containers s
+        inner join os_container_positions p on p.occupying_container_id = s.identifier
+      where
+        s.parent_container_id = :parentId and s.activity_status != 'Disabled'
+    </sql-query>
+
+    <sql-query name="getLeastEmptyContainerId">
+      select
+        c.identifier as containerId
+      from
+        os_storage_containers c
+        left join os_container_positions p on p.storage_container_id = c.identifier
+        left join os_stor_container_comp_cps allowed_cps on allowed_cps.storage_container_id = c.identifier
+      where
+        c.store_specimens = 1 and
+        c.activity_status = 'Active' and
+        (p.reservation_time is null or p.reservation_time > :reservedLaterThan) and
+        (
+          allowed_cps.cp_id = :cpId or
+          (allowed_cps.cp_id is null and
+            (
+              select
+                count(*)
+              from
+                catissue_site_cp cp_site
+              where
+                cp_site.site_id = c.site_id and
+                cp_site.collection_protocol_id = :cpId
+            ) > 0
+          )
+        ) and
+        (
+          (
+            select
+              count(*)
+            from
+              os_stor_cont_comp_spec_classes
+            where
+              specimen_class = :specimenClass and
+              storage_container_id = c.identifier
+          ) > 0
+          or
+          (
+            select
+              count(*)
+            from
+              os_stor_cont_comp_spec_types
+            where
+              specimen_type = :specimenType and
+              storage_container_id = c.identifier
+          ) > 0
+        )
+      group by
+        c.identifier, c.no_of_rows, c.no_of_cols
+      having
+        (c.no_of_rows * c.no_of_cols - count(p.identifier)) > (:minFreeLocs - 1)
+      order by
+        (c.no_of_rows * c.no_of_cols - count(p.identifier)), c.identifier
+    </sql-query>
+
+    <sql-query name="getRootContainerSpecimensCount">
+      <return-scalar column="containerId" type="long"/>
+      <return-scalar column="storedSpecimens" type="integer"/>
+
+      select
+        f.identifier as containerId, count(p.occupying_specimen_id) as storedSpecimens
+      from
+        os_storage_containers f
+        inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+        left join os_container_positions p on p.storage_container_id = h.descendent_id
+      where
+        f.identifier in (:containerIds) and
+        f.parent_container_id is null and
+        f.activity_status != 'Disabled'
+      group by
+        f.identifier
+    </sql-query>
+
+    <sql-query name="getSpecimenCountsByType">
+      <return-scalar column="type" type="string"/>
+      <return-scalar column="specimens" type="integer"/>
+
+      select
+        s.specimen_type as type, count(s.identifier) as specimens
+      from
+        os_storage_containers f
+        inner join os_containers_hierarchy h on h.ancestor_id = f.identifier
+        inner join os_container_positions p on p.storage_container_id = h.descendent_id
+        inner join catissue_specimen s on s.identifier = p.occupying_specimen_id
+      where
+        f.activity_status != 'Disabled' and
+        f.identifier = :containerId
+      group by
+        s.specimen_type
+    </sql-query>
+  </class>
+</hibernate-mapping>

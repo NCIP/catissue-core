@@ -1,0 +1,18 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+        <p style="margin:10px 0 0 0">
+         - OpenSpecimen Administrator
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="font-size: 12px;font-family: arial,sans-serif;color: #777777;border:none; text-align: center;">
+       <p style="margin:10px 0 0 0"> 
+         <a href="http://www.openspecimen.org/">OpenSpecimen</a> | $adminEmailAddress | $adminPhone 
+       </p>
+      </td>
+    </tr>
+  </tbody>
+</table>

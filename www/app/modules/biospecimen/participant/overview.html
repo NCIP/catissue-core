@@ -1,0 +1,298 @@
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button ng-if="partCtx.showEdit" show-if-allowed="participantResource.updateOpts" class="default"
+        ui-sref="participant-addedit({cprId: cpr.id, cpId: cpr.cpId})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <a ng-if="cpsForReg.length > 0" class="btn default" ui-sref="participant-newreg">
+        <span class="fa fa-plus"></span>
+        <span translate="participant.reg_another_protocol">
+          Register to Another Protocol
+        </span>
+      </a>
+      <button show-if-allowed="participantResource.updateOpts" class="default" ng-click="anonymize()">
+        <span class="fa fa-warning"></span>
+        <span translate="participant.buttons.anonymize">Anonymize</span>
+      </button>
+      <button show-if-allowed="participantResource.deleteOpts" class="default" ng-click="deleteReg()">
+        <span class="fa fa-trash"></span>
+        <span translate="common.buttons.delete">Delete</span>
+      </button>
+
+      <os-plugin-hooks view-name="'participant-detail'" sec-name="'page-commands'">
+      </os-plugin-hooks>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <os-plugin-hooks view-name="'participant-detail'" sec-name="'summary'" 
+        default-tmpl="'modules/biospecimen/participant/summary.html'">
+      </os-plugin-hooks>
+
+      <div class="os-section" ng-init="opCollapsed=false" ng-if="cpr.participant.registeredCps.length >= 1">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="opCollapsed=!opCollapsed">
+          <span ng-if="!opCollapsed" class="fa fa-chevron-circle-down"></span>
+          <span ng-if="opCollapsed" class="fa fa-chevron-circle-right"></span>
+        </button>
+        <h3 class="os-sub-section-title" translate="participant.other_cps">Other Protocols</h3>
+        <div collapse="opCollapsed">
+          <span ng-repeat="cp in cpr.participant.registeredCps | filter: isOtherProtocol">
+            <a ui-sref="participant-detail.overview({cpId: cp.cpId, cprId: cp.cprId})">{{cp.cpShortTitle}}</a>
+            {{$last ? '' : ','}}
+          </span>
+        </div>
+      </div>
+
+      <div class="os-section" ng-init="ovCollapsed=false">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
+          <span ng-if="!ovCollapsed" class="fa fa-chevron-circle-down"></span>
+          <span ng-if="ovCollapsed" class="fa fa-chevron-circle-right"></span>
+        </button>
+        <h3 class="os-sub-section-title" translate="visits.occurred_visits">Occurred Visits</h3>
+        <div collapse="ovCollapsed">
+          <span ng-if="occurredVisits.length == 0" translate="common.none">None</span>
+          <div class="os-table os-table-muted-hdr os-border" ng-if="occurredVisits.length > 0">
+            <div class="os-table-head">
+              <div class="row">
+                <div class="col os-col-25" translate="visits.event_label">Event Label</div>
+                <div class="col os-col-25" translate="visits.name">Name</div>
+                <div class="col os-col-15" translate="common.date">Date</div>
+                <div class="col os-col-30" translate="visits.collection_status">Collection Status</div>
+                <div class="col os-col-5">&nbsp;</div>
+              </div>
+            </div>
+            <div class="os-table-body">
+              <div ng-repeat="visit in occurredVisits"
+                ng-class="{'os-inplace-form-edit-po': rptVisitIdx == $index}">
+                <div class="row title">
+                  <div class="col os-col-25">
+                    <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+                      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+                    </a>
+                  </div>
+                  <div class="col os-col-25">
+                    {{visit.name}}
+                  </div>
+                  <div class="col os-col-15">
+                    {{visit.visitDate | date: global.dateFmt}} 
+                  </div>
+                  <div class="col os-col-30">
+                    <progress class="progress" max="visit.totalSpecimens"
+                      bs-popover trigger="hover" placement="bottom" content-template="specimen-count.html">
+                      <bar value="visit.collectedSpecimens" type="success">
+                        <span><b> {{visit.collectedSpecimens}} </b> </span>
+                      </bar>
+                      <bar value="visit.pendingSpecimens" type="warning">
+                        <span><b> {{visit.pendingSpecimens}} </b> </span>
+                      </bar>
+                      <bar value="visit.uncollectedSpecimens" type="missed">
+                        <span><b> {{visit.uncollectedSpecimens}} </b> </span>
+                      </bar>
+                      <bar value="visit.unplannedSpecimens" type="unplanned">
+                        <span><b> {{visit.unplannedSpecimens}} </b> </span>
+                      </bar>
+                    </progress>
+                  </div>
+                  <div class="col os-col-5 os-more-options">
+                    <div dropdown>
+                      <button class="dropdown-toggle">
+                        <span class="fa fa-ellipsis-v"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+                          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+                            <i class="fa fa-eye"></i>
+                            <span translate="visits.ctx_menu.view_visit">View Visit</span>
+                          </a>
+                        </li>
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true})"> 
+                            <i class="fa fa-repeat"></i>
+                            <span translate="visits.ctx_menu.new_visit">New Visit</span>
+                          </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ui-sref="specimen-addedit({visitId: visit.id})">
+                            <i class="fa fa-plus"></i>
+                            <span translate="visits.ctx_menu.collect_unplanned_specimens">
+                              Collect Unplanned Specimens
+                            </span>
+                          </a>
+                        </li>
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ng-click="printSpecimenLabels({visitId: visit.id})">
+                            <i class="fa fa-print"></i>
+                            <span translate="visits.ctx_menu.print_specimen_labels">
+                              Print Specimen Labels
+                            </span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="os-section" ng-init="ovCollapsed=false" ng-if="missedVisits.length > 0">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="ovCollapsed=!ovCollapsed">
+          <span ng-if="!ovCollapsed" class="fa fa-chevron-circle-down"></span>
+          <span ng-if="ovCollapsed" class="fa fa-chevron-circle-right"></span>
+        </button>
+        <h3 class="os-sub-section-title" translate="visits.missed_visits">Missed Visits</h3>
+        <div collapse="ovCollapsed">
+          <div class="os-table os-table-muted-hdr os-border" ng-if="missedVisits.length > 0">
+            <div class="os-table-head">
+              <div class="row">
+                <div class="col col-xs-4" translate="visits.title">Visit</div>
+                <div class="col col-xs-3" translate="common.date">Date</div>
+                <div class="col col-xs-4" translate="visits.reason">Reason</div>
+                <div class="col col-xs-1">&nbsp;</div>
+              </div>
+            </div>
+            <div class="os-table-body">
+              <div ng-repeat="visit in missedVisits">
+                <div class="row title">
+                  <div class="col col-xs-4">
+                    <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+                      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+                    </a>
+                  </div>
+                  <div class="col col-xs-3">
+                    {{visit.visitDate | date: global.dateFmt}}
+                  </div>
+                  <div class="col col-xs-4">
+                    {{visit.missedReason | osNoValue}}
+                  </div>
+                  <div class="col col-xs-1 os-more-options">
+                    <div dropdown>
+                      <button class="dropdown-toggle">
+                        <span class="fa fa-ellipsis-v"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li>
+                          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+                            <i class="fa fa-eye"></i>
+                            <span translate="visits.ctx_menu.view_visit">View Visit</span>
+                          </a>
+                        </li>
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, newVisit: true})"> 
+                            <i class="fa fa-repeat"></i>
+                            <span translate="visits.ctx_menu.new_visit">New Visit</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="os-section" ng-init="avCollapsed=false">
+        <button class="os-btn-section-collapse os-btn-transparent" ng-click="avCollapsed=!avCollapsed">
+          <span ng-if="!avCollapsed" class="fa fa-chevron-circle-down"></span>
+          <span ng-if="avCollapsed" class="fa fa-chevron-circle-right"></span>
+        </button>
+        <h3 class="os-sub-section-title" translate="visits.anticipated_visits">Anticipated Visits</h3>
+        <div collapse="avCollapsed">
+          <span ng-if="anticipatedVisits.length == 0" translate="common.none">None</span>
+          <div class="os-table os-table-muted-hdr os-border" ng-if="anticipatedVisits.length > 0">
+            <div class="os-table-head">
+              <div class="row">
+                <div class="col col-xs-5" translate="visits.title">Visit</div>
+                <div class="col col-xs-3" translate="common.date">Date</div>
+                <div class="col col-xs-3" translate="visits.anticipated_specimens">Anticipated Specimens</div>
+                <div class="col col-xs-1">&nbsp;</div>
+              </div>
+            </div>
+            <div class="os-table-body">
+              <div ng-repeat="visit in anticipatedVisits"
+                ng-class="{'os-inplace-form-edit-po': addVisitIdx == $index}">
+                <div class="row title">
+                  <div class="col col-xs-5">
+                    <a ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})">
+                      <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+                    </a>
+                  </div>
+                  <div class="col col-xs-3">
+                    <span>{{visit.anticipatedVisitDate | date: global.dateFmt | osNoValue}}</span>
+                  </div>
+                  <div class="col col-xs-3">{{visit.anticipatedSpecimens}}</div>
+                  <div class="col col-xs-1 os-more-options">
+                    <div dropdown>
+                      <button class="dropdown-toggle">
+                        <span class="fa fa-ellipsis-v"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId})">
+                            <i class="fa fa-plus"></i>
+                            <span translate="visits.ctx_menu.add_visit">Add Visit</span>
+                          </a> 
+                        </li>
+                        <li show-if-allowed="specimenResource.updateOpts">
+                          <a ui-sref="visit-addedit({visitId: visit.id, eventId: visit.eventId, missedVisit: true})">
+                            <i class="fa fa-ban"></i>
+                            <span translate="visits.ctx_menu.missed_visit">Missed Visit</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+                            <i class="fa fa-eye"></i>
+                            <span translate="visits.ctx_menu.view_visit">View Visit</span>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script id="specimen-count.html" type="text/ng-template">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th translate="visits.collection_status">Collection Status</th>
+        <th translate="common.count">Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td translate="specimens.status.collected">Collected</td>
+        <td>{{visit.collectedSpecimens}}</td>
+      </tr>
+      <tr>
+        <td translate="specimens.status.pending">Pending</td>
+        <td>{{visit.pendingSpecimens}}</td>
+      </tr>
+      <tr>
+        <td translate="specimens.status.not_collected">Not Collected</td>
+        <td>{{visit.uncollectedSpecimens}}</td>
+      </tr>
+      <tr>
+        <td translate="specimens.unplanned">Unplanned</td>
+        <td>{{visit.unplannedSpecimens}}</td>
+      </tr>
+    </tbody>
+  </table>
+</script>

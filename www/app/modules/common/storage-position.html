@@ -1,0 +1,45 @@
+<div>
+  <div ng-switch="!!virtual">
+    <div ng-switch-when="true" class="control-text">
+      <span translate="specimens.virtually_located">Virtual</span> 
+      <button class="btn btn-default btn-xs" title="{{'container.tooltip.select' | translate}}"
+        ng-click="showStorageContainers()">
+        <span class="fa fa-dropbox"></span>
+      </button>
+    </div>
+    <div ng-switch-when="false" class="os-storage-position clearfix"> 
+      <div class="pos" ng-class="{true: 'os-col-60', false: 'os-col-90'}[entity.storageLocation.mode != 'NONE']">
+        <os-select ng-model="entity.storageLocation.name" list="containerNames"
+          refresh="searchContainer" on-select="onContainerChange()" placeholder="{{'container.container' | translate}}">
+        </os-select>
+      </div>
+
+      <span ng-if="!entity.storageLocation.mode || entity.storageLocation.mode == 'TWO_D'">
+        <div class="os-col-15 pos">
+          <input type="text" ng-model="entity.storageLocation.positionY" class="form-control"
+            placeholder="{{'container.row' | translate}}" title="{{'container.row' | translate}}">
+        </div>
+
+        <div class="os-col-15 pos">
+          <input type="text" ng-model="entity.storageLocation.positionX" class="form-control"
+            placeholder="{{'container.column' | translate}}" title="{{'container.column' | translate}}">
+        </div>
+      </span>
+
+      <span ng-if="entity.storageLocation.mode == 'LINEAR'">
+        <div class="os-col-30 pos">
+          <input type="text" ng-model="entity.storageLocation.position" class="form-control"
+            placeholder="{{'container.position' | translate}}" title="{{'container.position' | translate}}">
+        </div>
+      </span>
+
+      <div class="os-col-10 pos">
+        <button class="btn btn-default" ng-click="openPositionSelector()"
+          ng-disabled="(entityType == 'specimen' && (!entity.specimenClass || !entity.type || !cpId)) ||
+            (entityType == 'storage_container' && !entity.siteName)">
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

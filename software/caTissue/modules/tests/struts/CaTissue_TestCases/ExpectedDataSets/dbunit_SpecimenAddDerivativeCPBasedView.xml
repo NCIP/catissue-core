@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_specimen LABEL="labe_1" AVAILABLE="1" ACTIVITY_STATUS="Active" SPECIMEN_COLLECTION_GROUP_ID="1121" COLLECTION_STATUS="Collected"/>
-  <catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="labe_1"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

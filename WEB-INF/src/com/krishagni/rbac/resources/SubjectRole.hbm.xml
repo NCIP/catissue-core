@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="com.krishagni.rbac.domain.SubjectRole" table="RBAC_SUBJECT_ROLES">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">RBAC_SUBJECT_ROLES_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one
+      name="subject"
+      class="com.krishagni.rbac.domain.Subject"
+      cascade="none"
+      column="SUBJECT_ID"/>
+          
+    <many-to-one
+      name="role"
+      class="com.krishagni.rbac.domain.Role"
+      cascade="none"
+      column="ROLE_ID"/>
+    
+    <many-to-one
+      name="site"
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      cascade="none"
+      column="SITE_ID"/>
+      
+    <many-to-one
+      name="collectionProtocol"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol"
+      cascade="none"
+      column="CP_ID"/>
+      
+    <property name="systemRole" column="SYSTEM_ROLE"/>
+        
+  </class> 
+</hibernate-mapping>

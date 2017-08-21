@@ -1,0 +1,21 @@
+<div class="os-tube-wizard clearfix">
+  <div class='os-tube-wizard-steps'>
+    <div class='os-tube-wizard-step-titles'> 
+      <div class='os-tube-wizard-step-title' 
+        ng-class='{"os-tube-wizard-step-selected": step.selected, "os-tube-wizard-step-finished": step.finished}'
+        ng-repeat='step in steps'>
+        {{step.title}}
+      </div>
+    </div>
+    <div class='os-tube-wizard-step-progs'>
+       <div class='os-tube-wizard-step-prog' 
+         ng-class='{"os-tube-wizard-first-step": $index == 0, "os-tube-wizard-last-step": $index == steps.length - 1, 
+                    "os-tube-wizard-step-finished": step.finished, "os-tube-wizard-step-selected": step.selected}'
+         ng-repeat='step in steps'> 
+         <div ng-click='gotoStep($index)'></div> 
+       </div>
+    </div> 
+  </div>
+
+  <div ng-transclude/>
+</div>

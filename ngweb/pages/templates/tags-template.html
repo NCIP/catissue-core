@@ -1,0 +1,11 @@
+<div class="ka-tags-container">
+  <ul class="clearfix ka-tags">
+    <li class="ka-tag" ng-repeat="tag in tags"> 
+      <div>{{tag}}</div> 
+      <a href="#" ng-click="removeTag($index)" class="ka-tags-remove"></a>
+    </li>
+    <li class="ka-tag-input">
+      <input ng-keypress="keyPress($event)" type="text" ng-model="newTag" placeholder="{{placeholder}}">
+    </li>
+  </ul>
+</div>

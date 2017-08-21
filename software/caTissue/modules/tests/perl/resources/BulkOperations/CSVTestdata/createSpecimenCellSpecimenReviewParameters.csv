@@ -1,2 +1,0 @@
-SCG name,Label,Barcode,Created On,Activity Status,Comment,Is Available,Collection Status,Specimen Class,Type,Tissue Site,Tissue Side,Initial Quantity,Available Quantity,Lineage,Pathological Status,Container name,Position one,Position two,Event Comments#1,Reason Deviation#1,User ID#1,Neoplastic Cellularity Percentage#1#1,Viable Cell Percentage#1#1,Activity Entry#1
-WashuCP_21_25,cellspec123,cell213,1/8/2012,Active,comment,TRUE,Collected,Fluid,Bile,Not Specified,Not Specified,2,2,New,Not Specified,,,,test,no reason,1,2,21,Active

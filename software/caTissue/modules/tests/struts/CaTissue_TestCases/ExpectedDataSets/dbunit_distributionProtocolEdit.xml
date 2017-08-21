@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_specimen_protocol PRINCIPAL_INVESTIGATOR_ID="1" TITLE="Tissue Distribution Protocol" SHORT_TITLE="Tissue Distribution" IRB_IDENTIFIER="2" START_DATE ="2011-02-05" ENROLLMENT="2" DESCRIPTION_URL="www.TissueDistribution.com" ACTIVITY_STATUS="Closed"/>
-	<catissue_audit_event_details ELEMENT_NAME="TITLE" CURRENT_VALUE="Tissue Distribution Protocol"/>	
-	<catissue_audit_event EVENT_TYPE="UPDATE"/>
-	<catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>
-

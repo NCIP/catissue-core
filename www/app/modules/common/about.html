@@ -1,0 +1,27 @@
+<div class="os-about-po">
+  <div class="title">
+    <span translate="common.build_info_title">About OpenSpecimen</span>
+  </div>
+  <div class="content">
+    <div>
+      <ul class="os-one-col os-key-values">
+        <li class="item">
+          <span class="key key-sm" translate="common.build_version">Version</span>
+          <span class="value value-md">{{global.appProps.build_version}}</span>
+        </li>
+        <li class="item">
+          <span class="key key-sm" translate="common.build_date">Build date</span>
+          <span class="value value-md">{{global.appProps.build_date | date: global.dateFmt}}</span>
+        </li>
+        <li class="item">
+          <span class="key key-sm" translate="common.build_commit_revision">Revision</span>
+          <span class="value value-md">{{global.appProps.build_commit_revision}}</span>
+        </li>
+      </ul>
+      <div class="os-divider"></div>
+      <div class="footer">
+        <span translate="common.footer_note">OpenSpecimen - powered by Krishagni</span>
+      </div>
+    </div>
+  </div>
+</div>

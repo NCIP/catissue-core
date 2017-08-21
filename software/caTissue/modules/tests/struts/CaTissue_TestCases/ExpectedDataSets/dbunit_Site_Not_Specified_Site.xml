@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_site 		name="Not Specified Site" 	 	type="Not Specified" 	user_id="1"	/>
-	<catissue_address  street="abc"  	city="NY" 	state="Alaska"		country="United States"		zipcode="23456"	phone_number="9881123456"   />
-</dataset>

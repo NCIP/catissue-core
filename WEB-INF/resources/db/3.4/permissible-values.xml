@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vgaikwad" id="Date and time format PV category">
+    <sql>
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ('date_format', 'Date Format', 'Date Format', '3.4', ${now});
+
+      insert into catissue_cde
+        (public_id, long_name, definition, version, last_updated)
+      values
+        ('time_format', 'Time Format', 'Time Format', '3.4', ${now});
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Loading permissible values for date and time format">
+    <loadData file="db/3.4/permissible-values/date-format.csv" tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="identifier" type="NUMERIC"/>
+    </loadData>
+
+    <loadData file="db/3.4/permissible-values/time-format.csv" tableName="CATISSUE_PERMISSIBLE_VALUE">
+      <column name="identifier" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+</databaseChangeLog>

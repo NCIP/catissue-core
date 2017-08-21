@@ -1,0 +1,50 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="visits.search_results" translate-value-key="{{searchKey}}" >Visit Search Results</span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <div class="os-table">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-3">
+            <span translate="participant.collection_protocol">Collection Protocol</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="participant.protocol_id">PPID</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="visits.event_label">Event Label</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="visits.name">Name</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="visits.visit_date">Visit Date</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row os-pointer-cursor" ng-repeat="visit in visits" ng-click="sprDetail(visit)">
+          <div class="col col-xs-3">
+            <span>{{visit.cpShortTitle}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{visit.ppid}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{visit.eventLabel}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{visit.name}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{visit.visitDate | date: global.dateFmt}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

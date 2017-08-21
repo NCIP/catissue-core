@@ -1,0 +1,77 @@
+
+.os-cards {
+  padding: 0px 20px;
+}
+
+.os-cards:after {
+  content:'';
+  display: block;
+  clear: both;
+}
+
+.os-card {
+  height: 180px;
+  width: 350px;
+  background: #fff;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  padding: 10px 20px;
+  margin: 15px 30px 15px 0px;
+  float: left;
+  position: relative;
+}
+
+.os-card a {
+  color: black!important;
+  cursor: pointer;
+}
+
+.os-card:hover {
+  cursor: pointer;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+}
+
+.os-card .stats {
+  position: absolute;
+  bottom: 15px;
+  font-size: 22px;
+  width: 310px;
+  color: #666666;
+}
+
+.os-card h5 {
+  color: #999;
+  font-weight: bold;
+}
+
+.os-card p {
+  color: #999;
+}
+
+.os-card h4, .os-card h5, .os-card p {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.os-card .stats .stat {
+  display: inline-block;
+}
+
+.os-card .stats .stat .glyphicon {
+  font-size: 20px;
+}
+
+.os-side-menu-page-content .os-card {
+  height: 165px;
+  width: 325px;
+}
+
+.os-side-menu-page-content .os-cards {
+  padding: 5px 15px;
+}
+
+.os-side-menu-page-content .os-card .stats {
+  width: 285px;
+}

@@ -1,0 +1,18 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="participant.consent.deleting_form" translate-values="entity">Deleting Signed Consent Form</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <p> {{'participant.consent.confirm_delete_form' | translate : entity}} </p>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()" translate="common.buttons.cancel">
+      Cancel
+    </button>
+    <button class="btn btn-danger" ng-click="ok()" translate="common.yes">
+      Yes
+    </button>
+  </div>
+</div>
+

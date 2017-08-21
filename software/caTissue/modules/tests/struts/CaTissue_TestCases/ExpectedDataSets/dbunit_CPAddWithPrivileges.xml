@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_specimen_protocol TITLE="Specimen_1" SHORT_TITLE="Specimen_2" START_DATE="2011-04-26"/>
-  <catissue_coll_prot_event COLLECTION_POINT_LABEL="Label_1" STUDY_CALENDAR_EVENT_POINT="10.0"/>
-  <catissue_audit_event_details ELEMENT_NAME="TITLE" CURRENT_VALUE="Specimen_1"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

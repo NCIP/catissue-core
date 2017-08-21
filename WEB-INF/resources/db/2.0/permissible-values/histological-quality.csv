@@ -1,0 +1,6 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Fair- Definable Tissue Architecture,Hist_Quality,null
+getNextPvId(),,,null,Not Specified,Hist_Quality,null
+getNextPvId(),,,null,Good- Definable Cellular Detail,Hist_Quality,null
+getNextPvId(),,,null,Excellent- Definable Nuclear Detail,Hist_Quality,null
+getNextPvId(),,,null,Poor- No Definable Features,Hist_Quality,null

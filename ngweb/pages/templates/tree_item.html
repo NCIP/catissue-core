@@ -1,0 +1,21 @@
+<div>
+  <div class="fa pull-left" 
+       ng-class="{closed:'fa-plus-square-o', opened:'fa-minus-square-o'}[data.state]" 
+       ng-click="onNodeToggle(data)">
+  </div>
+
+  <div class="black_ar" ng-click="displayNode(data)" ng-class="{'active': (data.id == selectedNode.id)}">
+    <div class="tooltip-data" tooltip-placement="right" data-tooltip-html-unsafe="{{data.tooltip}}" 
+      tooltip-append-to-body="true">
+        <i class="pull-left {{data.collectionStatus}}"/>
+        <div class="tree-data black_ar">
+          {{data.name}}
+        </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<ul  ng-model="data.nodes" ng-show="data.state == 'opened'" role="group">
+  <li ng-repeat="data in data.nodes" ng-include="'ngweb/pages/templates/tree_item.html'"></li>
+</ul>

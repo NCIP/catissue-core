@@ -1,1 +1,0 @@
-catissue_institution;select name from catissue_institution where identifier=1

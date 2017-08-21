@@ -1,0 +1,94 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenTissueReviewEvent</name>
+    <caption>#getMessage("tissue_review_event")</caption>
+    <table>CATISSUE_TIS_SPE_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <numberField>
+        <name>neoPlasticCellularityPct</name>
+        <udn>neoPlasticCellularityPct</udn>
+        <caption>#getMessage("tissue_rev_event_neo_plastic_cellularity_pct")</caption>
+        <column>NEOPLASTIC_CELLULARITY_PER</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>necrosisPct</name>
+        <udn>necrosisPct</udn>
+        <caption>#getMessage("tissue_rev_event_necrosis_pct")</caption>
+        <column>NECROSIS_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>lymphocyticPct</name>
+        <udn>lymphocyticPct</udn>
+        <caption>#getMessage("tissue_rev_event_lymphocytic_pct")</caption>
+        <column>LYMPHOCYTIC_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>totalCellularityPct</name>
+        <udn>totalCellularityPct</udn>
+        <caption>#getMessage("tissue_rev_event_total_cellularity_pct")</caption>
+        <column>TOTAL_CELLULARITY_PERCENTAGE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <dropDown>
+        <name>histologicalQuality</name>
+        <udn>histologicalQuality</udn>
+        <caption>#getMessage("tissue_rev_event_histological_quality")</caption>
+        <column>HISTOLOGICAL_QUALITY</column>
+        <options>
+          <sql>select value from catissue_permissible_value where public_id = 'histological_quality' order by value</sql>
+        </options>
+      </dropDown>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("specimen_event_user")</caption>
+        <column>USER_ID</column>
+        <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("specimen_event_date_time")</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("specimen_event_comments")</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>
+

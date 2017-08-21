@@ -1,0 +1,52 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="participant.search_results" translate-value-key="{{searchKey}}">Participant Search Result</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="os-table">
+      <div class="os-table-head">
+        <div class="row">
+          <div class="col col-xs-3">
+            <span translate="participant.collection_protocol">Collection Protocol</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="participant.protocol_id">PPID</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="participant.uid">UID</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="user.first_name">First Name</span>
+          </div>
+          <div class="col col-xs-2">
+            <span translate="user.last_name">Last Name</span>
+          </div>
+        </div>
+      </div>
+      <div class="os-table-body">
+        <div class="row os-pointer-cursor" ng-repeat="cpr in cprs" ng-click="participantDetail(cpr)">
+          <div class="col col-xs-3">
+            <span>{{cpr.cpShortTitle}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{cpr.ppid}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{cpr.participant.uid}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{cpr.participant.firstName | osNoValue}}</span>
+          </div>
+          <div class="col col-xs-2">
+            <span>{{cpr.participant.lastName | osNoValue}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>userRoles</name>
+  <record> 
+    <name>com.krishagni.rbac.events.SubjectRolesList</name>
+    
+    <field>
+      <caption>#getMessage("user_roles_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("user_roles_email")</caption>
+      <attribute>emailAddress</attribute>
+    </field>
+
+    <record>
+      <attribute>roles</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("user_roles_role")</caption>
+      
+      <field>
+        <caption>#getMessage("user_roles_role_name")</caption>
+        <attribute>roleName</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("user_roles_role_site")</caption>
+        <attribute>siteName</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("user_roles_role_cp_short_title")</caption>
+        <attribute>cpShortTitle</attribute>
+      </field>
+    </record>
+  </record>
+</object-schema>

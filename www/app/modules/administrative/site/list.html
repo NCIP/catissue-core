@@ -1,0 +1,97 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="site.list">Sites</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-admin="institute" class="default" title="{{'site.tooltip.add' | translate}}"
+        ui-sref="site-addedit({siteId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <div show-if-admin="institute" dropdown class="os-inline-btn">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ui-sref="site-import">
+              <span class="fa fa-hospital-o"></span>
+              <span translate="site.list">Sites</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="site-import-jobs">
+              <span class="fa fa-list-alt"></span>
+              <span translate="bulk_imports.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <os-help class="os-btns btn default" link="site_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'site.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="site.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="site.type">Type</span>
+          </th>
+          <th class="col">
+            <span translate="site.code">Code</span>
+          </th>
+          <th class="col">
+            <span translate="site.institute">Institute</span>
+          </th>
+          <th class="col">
+            <span translate="site.cp_count">Collection Protocols</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="site in siteList" os-row-click="showSiteOverview(site)">
+          <td class="col">
+            <a ui-sref="site-detail.overview({siteId: site.id})">
+              <span>{{site.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{site.type}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.code | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.instituteName}}</span>
+          </td>
+          <td class="col">
+            <span>{{site.cpCount | number: 0}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/site/search.html'"></div>
+
+</div>

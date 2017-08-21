@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <OS_AUTH_DOMAINS />
+  <CATISSUE_ADDRESS />
+  <CATISSUE_USER />
+  <CATISSUE_SPECIMEN /> 
+  <CATISSUE_SPECIMENLIST_TAGS />
+  <SHARED_SPECIMENLIST_TAGS />
+  <CATISSUE_SPEC_TAG_ITEMS />
+</dataset>

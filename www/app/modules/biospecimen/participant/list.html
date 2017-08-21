@@ -1,0 +1,31 @@
+<div>
+  <div class="container">
+    <os-list data="ctx.participants" item-sref="participant-detail.overview({cprId: row.hidden.cprId})"
+      cell-template="modules/biospecimen/participant/list-cell.html"
+      enable-selection="false" show-item="showParticipant(row)" init-ctrl="setListCtrl($list)">
+    </os-list>
+  </div>
+
+  <div os-right-drawer>
+    <os-list-filters filters-cfg="ctx.filtersCfg" filters="ctx.filters"
+      load-values="loadFilterValues(expr)" init-ctrl="setFiltersCtrl($listFilters)">
+    </os-list-filters>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/list-cell.html">
+  <span ng-switch on="data.columns[$index].metainfo.type">
+    <span ng-switch-when="'number'">
+      {{col | number | osNoValue}}
+    </span>
+    <span ng-switch-default>
+      {{col | osNoValue}}
+    </span>
+  </span>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/list-pager.html">
+  <div>
+    <os-list-pager opts="listViewCtx.ctrl.pagerOpts()"></os-list-pager>
+  </div>
+</script>

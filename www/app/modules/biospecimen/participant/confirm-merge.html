@@ -1,0 +1,28 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="participant.confirm_merging"> Merging Participant </span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <span ng-switch on="!cpr.participant.firstName && !cpr.participant.lastName">
+      <p ng-switch-when="true">
+        <span translate="participant.confirm_no_name_merge" translate-values="params"></span>
+      </p>
+      <p ng-switch-when="false">
+        <span translate="participant.confirm_merge" translate-values="params"></span>
+      </p>
+    </span>
+  </div>
+  <div class="os-modal-footer">
+    <a class="btn os-btn-text" href="https://openspecimen.atlassian.net/wiki/x/AoAAAg" target="_blank">
+      <span translate="common.help">Help</span>
+    </a>
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-danger" ng-click="ok()">
+      <span translate="common.yes">Yes</span>
+    </button>
+  </div>
+</div>
+

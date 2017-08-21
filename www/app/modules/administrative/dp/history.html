@@ -1,0 +1,46 @@
+<div class="clearfix">
+  <div class="os-btns pull-right">
+    <a class="btn default" ng-href="{{exportUrl}}" target="_blank" ng-disabled="!orders[0]">
+      <span class="fa fa-download"></span>
+      <span translate="common.buttons.export">Export</span>
+    </a>
+  </div>
+  <div class="os-table">
+    <div class="os-table-head">
+      <div class="row">
+        <div class="col os-col-25">
+          <span translate="dp.distribution_order.order_name">Order Name</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="dp.distribution_order.dist_date">Distribution Date</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="dp.distribution_order.specimen_type">Specimen Type</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="dp.distribution_order.anatomic_site">Anatomic Site</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="dp.distribution_order.pathology_status">Pathology Status</span>
+        </div>
+        <div class="col os-col-15">
+          <span translate="dp.distribution_order.specimens_dist">Specimens Distributed</span>
+        </div>
+      </div>
+    </div>
+    <div class="os-table-body">
+      <div class="row" ng-repeat="order in orders">
+        <div class="col os-col-25">
+          <a ui-sref="order-detail.overview({orderId: order.id})">
+            {{order.name}}
+          </a>
+        </div>
+        <div class="col os-col-15">{{order.executionDate | date: global.dateFmt}}</div>
+        <div class="col os-col-15">{{order.groupByAttrVals.specimenType}}</div>
+        <div class="col os-col-15">{{order.groupByAttrVals.anatomicSite}}</div>
+        <div class="col os-col-15">{{order.groupByAttrVals.pathologyStatus}}</div>
+        <div class="col os-col-15">{{order.distributedSpecimenCount}}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<div>
+  <div class="os-modal-header">
+    <span>{{queryCtx.title}}</span>
+    <div class="os-close" ng-click="cancel()">&times;</div>
+  </div>
+  <div class="os-modal-body">
+    <table class="table" style="margin-bottom: 0px;">
+      <thead>
+        <th class="col-xs-5" translate="queries.field">Field</th>
+        <th class="col-xs-3" translate="queries.operator">Operator</th>
+        <th class="col-xs-4" translate="queries.cond_value">Condition Value</th>
+      </thead>
+    </table>
+    <div class="os-query-pv-table-container">
+      <table class="table">
+        <tbody>
+          <tr ng-repeat="filter in queryCtx.filters | filter: {'parameterized': true}">
+            <td class="col-xs-5" ng-switch on="!filter.expr">
+              <span ng-switch-when="true">
+                <i>{{filter.form.caption}} &gt;&gt; </i>
+                <i ng-if="filter.field.extensionForm">{{filter.field.extensionForm}} &gt;&gt; </i> 
+                <i>{{filter.field.caption}}</i>
+              </span>
+              <i ng-switch-default>{{filter.desc}}</i>
+            </td>
+            <td class="col-xs-3" ng-if="!filter.expr"> <!-- option-id: name -->
+              <os-select id="operator" ng-model="filter.newOp"
+                placeholder="{{'queries.select_op' | translate}}"
+                list="filter.field.ops" display-prop="desc" 
+                on-change="onOpSelect(filter)" append-to-body="true" required>
+              </os-select>
+            </td>
+            <td class="col-xs-3" ng-if="filter.expr">
+              <os-select id="operator" ng-model="filter.newOp"
+                placeholder="{{'queries.select_op' | translate}}"
+                options="filter.tObj.ops" display-prop="desc"
+                on-change="onOpSelect(filter)" append-to-body="true" required>
+              </os-select>
+            </td>
+            <td class="col-xs-4">
+              <div ng-if="!filter.unaryOp">
+                <div id="value" ng-switch="filter.valueType">
+                  <div ng-switch-when="select">
+                    <os-select ng-model="filter.value"
+                      placeholder="{{'queries.select_cond_value' | translate}}"
+                      list="filter.field.pvs" append-to-body="true" required>
+                    </os-select>
+                  </div>
+                  <div ng-switch-when="multiSelect">
+                    <os-select multiple ng-model="filter.value"
+                      placeholder="{{'queries.select_cond_values' | translate}}"
+                      list="filter.field.pvs" append-to-body="true">
+                    </os-select>
+                  </div>
+                  <div ng-switch-when="tagsSelect">
+                    <textarea class="form-control" placeholder="{{'queries.specify_multiple_cond' | translate}}" 
+                      rows="2" ng-model="filter.value" os-enable-tab>
+                    </textarea>
+                  </div>
+                  <div ng-switch-when="betweenDate" class="clearfix os-query-range-value">
+                    <input class="pull-left form-control" placeholder="{{'queries.range_min' | translate}}"
+                      type="text" os-query-date-picker="{{global.queryDateFmt}}"
+                      ng-model="filter.value[0]"> 
+                    <span class="pull-left">and</span>
+                    <input class="pull-left form-control" placeholder="{{'queries.range_max' | translate}}"
+                      type="text" os-query-date-picker="{{global.queryDateFmt}}"
+                      ng-model="filter.value[1]">
+                  </div>
+                  <div ng-switch-when="betweenNumeric" class="clearfix os-query-range-value">
+                    <input class="pull-left form-control" placeholder="{{'queries.range_min' | translate}}" 
+                      type="text" ng-model="filter.value[0]">
+                    <span class="pull-left">and</span>
+                    <input class="pull-left form-control" placeholder="{{'queries.range_max' | translate}}" 
+                      type="text" ng-model="filter.value[1]">
+                  </div>
+                  <div ng-switch-when="lookupSingle">
+                    <input type="hidden" 
+                      os-lookup opts="filter.field.lookupProps" 
+                      placeholder="{{'queries.select_cond_value' | translate}}"
+                      ng-model="filter.value">
+                    </input>
+                  </div>
+                  <div ng-switch-when="lookupMultiple">
+                    <input type="hidden" 
+                      os-lookup opts="filter.field.lookupProps" multiple
+                      placeholder="{{'queries.select_cond_values' | translate}}"
+                      ng-model="filter.value">
+                    </input>
+                  </div>
+                  <input ng-switch-when="datePicker" class="form-control"
+                    placeholder="{{'queries.select_date' | translate}}"
+                    type="text" os-query-date-picker="{{global.queryDateFmt}}"
+                    ng-model="filter.value"></input>
+                  <input ng-switch-default class="form-control"
+                    placeholder="{{'queries.specify_cond' | translate}}"
+                    type="text" ng-model="filter.value">
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+      <span class="fa fa-play"></span>
+      <span translate="queries.view_records">View Records</span>
+    </button>
+  </div>
+</div>

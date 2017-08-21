@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.common.domain.Module"
+    table="OS_MODULES">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_MODULES_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME" unique="true"/>
+
+    <property name="description" column="DESCRIPTION"/>
+
+    <set name="configProps" inverse="true" cascade="all-delete-orphan">
+      <key column="MODULE_ID"/>
+      <one-to-many  class="com.krishagni.catissueplus.core.common.domain.ConfigProperty"/>
+    </set>
+  </class>
+</hibernate-mapping>

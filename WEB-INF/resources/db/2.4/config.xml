@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <changeSet author="slakhani" id="Config settings for feedback-email enable/disable">
+    <sql>
+      call add_cfg_prop(
+        'common', 'feedback_enabled',
+        'common_feedback_enabled', 'common_feedback_enabled_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding support email">
+    <sql>
+      call add_cfg_prop(
+        'common', 'support_email',
+        'common_support_email', 'common_support_email_desc',
+        'STRING', 'support@krishagni.com'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'notifications', 'Email notification service');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (OS_MODULES_SEQ.nextval, 'notifications', 'Email notification service');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Adding email notification config properties for objects in os">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_users_created',
+        'users_created', 'users_created_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_forgot_password_link',
+        'users_forgot_password_link', 'users_forgot_password_link_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_new_user_request',
+        'users_new_user_request', 'users_new_user_request_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_passwd_changed',
+        'users_passwd_changed', 'users_passwd_changed_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_request_rejected',
+        'users_request_rejected', 'users_request_rejected_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_role_updated',
+        'users_role_updated', 'users_role_updated_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_users_signed_up',
+        'users_signed_up', 'users_signed_up_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_order_distributed',
+        'order_distributed', 'order_distributed_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_query_export_data',
+        'query_export_data', 'query_export_data_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_query_share_query_folder',
+        'query_share_query_folder', 'query_share_query_folder_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_specimen_list_shared',
+        'specimen_list_shared', 'specimen_list_shared_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+      
+  <changeSet author="vgaikwad" id="Auth module config setting: Token inactive interval in minutes">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'token_inactive_interval', 
+        'auth_token_inactive_interval', 'auth_token_inactive_interval', 
+        'INT', '60'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating data type of email server port form string to int">
+    <sql>
+      update 
+        os_cfg_props
+      set 
+        data_type = 'INT'
+      where
+        name = 'server_port' and 
+        module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating data type of email starttls enabled from string to boolean">
+    <sql>
+      update 
+        os_cfg_props
+      set 
+        data_type = 'BOOLEAN'
+      where
+        name = 'starttls_enabled' and 
+        module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating data type of email authentication enabled from string to boolean">
+    <sql>
+      update 
+        os_cfg_props
+      set 
+        data_type = 'BOOLEAN'
+      where
+        name = 'auth_enabled' and 
+        module_id = (select identifier from os_modules where name = 'email')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Updating data type of cp coding enabled from string to boolean">
+    <sql>
+      update 
+        os_cfg_props
+      set 
+        data_type = 'BOOLEAN'
+      where
+        name = 'cp_coding_enabled' and 
+        module_id = (select identifier from os_modules where name = 'biospecimen')
+    </sql>
+  </changeSet>
+</databaseChangeLog>

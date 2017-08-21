@@ -1,0 +1,217 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>specimen</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.SpecimenDetail</name>
+
+    <field>
+      <caption>#getMessage("specimen_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("specimen_cp_short")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+   
+    <field>
+      <caption>#getMessage("specimen_visit_name")</caption>
+      <attribute>visitName</attribute>
+    </field>     
+
+    <field>
+      <caption>#getMessage("specimen_req_code")</caption>
+      <attribute>reqCode</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_label")</caption>
+      <attribute>label</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_barcode")</caption>
+      <attribute>barcode</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_class")</caption>
+      <attribute>specimenClass</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_type")</caption>
+      <attribute>type</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_lineage")</caption>
+      <attribute>lineage</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_parent_specimen_label")</caption>
+      <attribute>parentLabel</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_anatomic_site")</caption>
+      <attribute>anatomicSite</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_laterality")</caption>
+      <attribute>laterality</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_collection_status")</caption>
+      <attribute>status</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_pathological_status")</caption>
+      <attribute>pathology</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("specimen_initial_quantity")</caption>
+      <attribute>initialQty</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_available_quantity")</caption>
+      <attribute>availableQty</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_concentration")</caption>
+      <attribute>concentration</attribute>
+    </field>
+
+    <field>
+      <multiple>true</multiple>
+      <caption>#getMessage("specimen_biohazard")</caption>
+      <attribute>biohazards</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("specimen_freeze_thaw_cycles")</caption>
+      <attribute>freezeThawCycles</attribute>
+    </field>
+
+    <field>
+      <type>datetime</type>
+      <caption>#getMessage("specimen_created_on")</caption>
+      <attribute>createdOn</attribute>
+    </field>
+    
+    <record>
+      <caption>#getMessage("specimen_location")</caption>
+      <attribute>storageLocation</attribute>
+
+      <field>
+        <caption>#getMessage("specimen_location_container")</caption>
+        <attribute>name</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_row")</caption>
+        <attribute>positionY</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_column")</caption>
+        <attribute>positionX</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_location_position")</caption>
+        <attribute>position</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("specimen_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("specimen_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>  
+
+    <record>
+      <caption>#getMessage("specimen_coll_event")</caption>
+      <attribute>collectionEvent</attribute>
+    
+      <field>
+        <type>datetime</type>
+        <caption>#getMessage("specimen_coll_event_dt")</caption>
+        <attribute>time</attribute>
+      </field>
+
+      <record>
+        <caption>#getMessage("specimen_event_user")</caption>
+        <attribute>user</attribute>
+
+        <field>
+          <caption>#getMessage("specimen_event_user_email")</caption>
+          <attribute>emailAddress</attribute>
+        </field>
+      </record>
+
+      <field>
+        <caption>#getMessage("specimen_coll_event_comments")</caption>
+        <attribute>comments</attribute>
+      </field>
+
+      <field>	
+        <caption>#getMessage("specimen_coll_event_procedure")</caption>
+        <attribute>procedure</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_coll_event_container")</caption>
+        <attribute>container</attribute>
+      </field>
+    </record>  
+
+    <record>
+      <caption>#getMessage("specimen_received_event")</caption>
+      <attribute>receivedEvent</attribute>
+    
+      <field>
+        <type>datetime</type>
+        <caption>#getMessage("specimen_received_event_dt")</caption>
+        <attribute>time</attribute>
+      </field>
+
+      <record>
+        <caption>#getMessage("specimen_event_user")</caption>
+        <attribute>user</attribute>
+
+        <field>
+          <caption>#getMessage("specimen_event_user_email")</caption>
+          <attribute>emailAddress</attribute>
+        </field>
+      </record>
+
+      <field>
+        <caption>#getMessage("specimen_received_event_comments")</caption>
+        <attribute>comments</attribute>
+      </field>
+
+      <field>
+        <caption>#getMessage("specimen_received_event_quality")</caption>
+        <attribute>receivedQuality</attribute>
+      </field>
+    </record>
+
+    <record type="customFields" entityType="SpecimenExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
+  </record>
+</object-schema>

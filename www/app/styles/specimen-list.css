@@ -1,0 +1,73 @@
+.os-list-container > div {
+  display: flex;
+  height: 98%;
+}
+
+.os-list-container .os-col-20 {
+  flex : 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-list-container .os-col-80 {
+  flex: 8;
+}
+
+.os-list-container .os-col-20 > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0px;
+}
+
+.os-list-container .os-col-20 .os-table.os-table-condensed {
+  margin-top: 5px;
+  margin-bottom: 0px;
+  flex: none;
+}
+
+.os-specimen-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.os-specimen-list-selected-list {
+   color: #DD4B39;
+}
+
+.os-specimen-list-selected-list:before {
+  content: ' ';
+  display: block;
+  border-left: 3px solid #DD4B39;
+  position: absolute;
+  height: 20px;
+}
+
+.os-specimen-list .list {
+  padding: 2px 8px;
+}
+
+.os-specimen-list .list div:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 170px;
+  white-space: nowrap;
+  padding-left: 10px;
+}
+
+.os-specimen-list .list:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.os-specimen-list .list .btn {
+  border: 0px;
+}
+
+.os-specimen-list-desc-po {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0px -15px;
+  padding: 0px 15px;
+}

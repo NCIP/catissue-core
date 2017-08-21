@@ -1,3 +1,0 @@
-Label,Specimen Activity Status,Pathologic Finding#1#1#1,Detail#1#1#1#1,Histoogic Type#1#1#1,Histologic Variant Type#1#1#1#1,Grading System Name#1#1#1,Grade#1#1#1,Other Grading System Name#1#1#1,Comments For SpecimenBaseSolidTissuePathologyAnnotation#1#1,activityStatus#1
-21,Active,Interstitial Disease,Interstitial Disease Details,Acinar Cell Cystadenocarcinoma,AML With t(8;21)(q22;q22),WHO Grade I,C,Cannot Be Determined,Comments For SpecimenBaseSolidTissuePathologyAnnotation#1#1,Active
-22,Active,Actinic Keratosis,Actinic Keratosis Details,Acinar Cell Carcinoma,AML With Abnormal Bone Marrow Eosinophil Inv(16) or t(16;16) or t(16;16)(p13;q22)(CBF Beta/MHY11),WHO Grade I,a,Cannot Be Determined,Comments For SpecimenBaseSolidTissuePathologyAnnotation#1#1,Active

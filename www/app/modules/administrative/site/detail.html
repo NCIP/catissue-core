@@ -1,0 +1,28 @@
+
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="site-list">
+            <span translate="site.list">Sites</span>
+          </a>
+        </li>
+      </ul>
+      <h3>{{site.name}}</h3>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref=".overview">
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="site.menu.overview">Overview</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

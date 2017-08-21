@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  <changeSet author="vpawar" id="Default email config settings" dbms="mysql">
+    <validCheckSum>7:99a31d1bee2382405c91a16d17b1b6a0</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'email', 'Email service');
+
+      call add_cfg_prop(
+        'email', 'account_id',
+        'email_account_id', 'email_account_id_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'account_password',
+        'email_account_password', 'email_account_password_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_host',
+        'email_server_host', 'email_server_host_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_port',
+        'email_server_port', 'email_server_port_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'starttls_enabled',
+        'email_starttls_enabled', 'email_starttls_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'auth_enabled',
+        'email_auth_enabled', 'email_auth_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'admin_email_id',
+        'email_admin_email_id', 'email_admin_email_id_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default email config settings" dbms="oracle">
+    <validCheckSum>7:9058aad8ec30b537ea00953bd0b2fa70</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'email', 'Email service');
+
+      call add_cfg_prop(
+        'email', 'account_id',
+        'email_account_id', 'email_account_id_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'account_password',
+        'email_account_password', 'email_account_password_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_host',
+        'email_server_host', 'email_server_host_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'server_port',
+        'email_server_port', 'email_server_port_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'starttls_enabled',
+        'email_starttls_enabled', 'email_starttls_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'auth_enabled',
+        'email_auth_enabled', 'email_auth_enabled_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'email', 'admin_email_id',
+        'email_admin_email_id', 'email_admin_email_id_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Common application settings" dbms="mysql">
+    <validCheckSum>7:db2e1d754db0d380c8926b11950f9535</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'common', 'Base application');
+        
+      call add_cfg_prop(
+        'common', 'app_url',
+        'common_app_url', 'common_app_url_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'common', 'locale',
+        'common_locale', 'common_locale_desc',
+        'STRING', 'en_US'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Common application settings" dbms="oracle">
+    <validCheckSum>7:f7e18dab8a3189a75d4559cab3aeaf2f</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'common', 'Base application');
+        
+      call add_cfg_prop(
+        'common', 'app_url',
+        'common_app_url', 'common_app_url_desc',
+        'STRING', ''
+      );
+      
+      call add_cfg_prop(
+        'common', 'locale',
+        'common_locale', 'common_locale_desc',
+        'STRING', 'en_US'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="mysql">
+    <validCheckSum>7:12e1a61d8b797d03c7b5d6e742ff189b</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'biospecimen', 'Biospecimen');
+        
+      call add_cfg_prop(
+        'biospecimen', 'participant_consent_dir',
+        'participant_consent_dir', 'participant_consent_dir_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Biospecimen module and participant consent dir config setting" dbms="oracle">
+    <validCheckSum>7:03b76b4b20372134f628ca5c9550677b</validCheckSum>
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (os_modules_seq.nextval, 'biospecimen', 'Biospecimen');
+        
+      call add_cfg_prop(
+        'biospecimen', 'participant_consent_dir',
+        'participant_consent_dir', 'participant_consent_dir_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Surgical pathology report deidentifier config property">
+    <validCheckSum>7:7b8bb174300220c459cdd606e4c791eb</validCheckSum>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'spr_deidentifier',
+        'spr_deidentifier', 'spr_deidentifier',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Surgical pathalogy reports dir config setting">
+    <validCheckSum>7:42cec972718e9c6f818596c4f53bf1c5</validCheckSum>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'spr_dir',
+        'spr_dir', 'spr_dir_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Config settings to specify UID pattern and/or validator">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_uid_pattern', 
+        'participant_uid_pattern', 'participant_uid_pattern_desc',
+        'STRING', '^(?!000|666)[0-8][0-9]{2}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'participant_uid_validator', 
+        'participant_uid_validator', 'participant_uid_validator_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Config settings to specify MPI pattern and/or validator">
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_pattern', 'mpi_pattern', 'mpi_pattern_desc', 'STRING', '');
+    </sql>
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_validator', 'mpi_validator', 'mpi_validator_desc', 'STRING', '');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default specimen label print config settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'specimen_label_printer', 
+        'specimen_label_printer', 'specimen_label_printer_desc', 'STRING', 
+        'defaultSpecimenLabelPrinter'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'specimen_label_print_rules', 
+        'specimen_label_print_rules', 'specimen_label_print_rules_desc', 'STRING', 
+        'classpath:/com/krishagni/catissueplus/core/biospecimen/default_specimen_print_rules.csv'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Default visit label print config settings">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'visit_label_printer', 
+        'visit_label_printer', 'visit_label_printer_desc', 'STRING', 
+        'defaultVisitLabelPrinter'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'visit_label_print_rules', 
+        'visit_label_print_rules', 'visit_label_print_rules_desc', 'STRING', 
+        'classpath:/com/krishagni/catissueplus/core/biospecimen/default_visit_print_rules.csv'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Config settings for welcome video">
+    <sql>
+      call add_cfg_prop (
+        'common', 'welcome_video_source', 
+        'common_welcome_video_source', 'common_welcome_video_source_desc', 
+        'STRING', ''
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop (
+        'common', 'welcome_video_url', 
+        'common_welcome_video_url', 'common_welcome_video_url_desc', 
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="asamgir" id="Config setting to specimen type abbreviation map">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'specimen_type_abbr_map', 
+        'specimen_type_abbr_map', 'specimen_type_abbr_map_desc', 
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

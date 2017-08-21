@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CpReportSettings" table="OS_CP_REPORT_SETTINGS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_CP_REPORT_SETTINGS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one name="cp" column="CP_ID"/>
+
+    <property name="enabled" column="ENABLED"/>
+
+    <many-to-one name="dataQuery" column="DATA_QUERY_ID"/>
+
+    <property name="configJson" column="CONFIG"/>
+
+    <property name="emailTmpl" column="EMAIL_TMPL"/>
+
+    <set name="recipients" table="OS_CP_REPORT_RCPTS">
+      <key column="REPORT_ID"/>
+      <many-to-many column="USER_ID" class="com.krishagni.catissueplus.core.administrative.domain.User"/>
+    </set>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <filter name="activeEntity"/>
+
+    <query name="getByCpId">
+      select
+        setting
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CpReportSettings setting
+        join setting.cp cp
+      where
+        cp.id = :cpId
+    </query>
+
+    <query name="getByCpShortTitle">
+      select
+        setting
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CpReportSettings setting
+        join setting.cp cp
+      where
+        cp.shortTitle = :shortTitle
+    </query>
+  </class>
+</hibernate-mapping>

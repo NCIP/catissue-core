@@ -1,5 +1,0 @@
-Name,Type,User ID,Email Address,Street,City,State,Zip Code,Country,Phone Number,Fax Number,Activity Status
-Collection Site_014,Collection Site,1,admin@admin.com,Addr11,Hawaii,Florida,78787,South Africa,55555,343434,Active
-Laboratory Site_014,Laboratory,1,admin@admin.com,Addr22,city1,Hawaii,43453,South Africa,4534534,76776,Active
-Site _014,Not Specified,1,admin@admin.com,Addr33,city2,Florida,45235,India,74477,34444,Active
-Repository Type Site_014,Repository,1,admin@admin.com,Addr44,city3,Florida,4354,India,5567567,345345,Active

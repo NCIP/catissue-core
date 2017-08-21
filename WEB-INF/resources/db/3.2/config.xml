@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Enabling or disabling SAML athentication">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'saml_enable',
+        'saml_enable', 'saml_enable_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Creating scheduled job to consume bulk import files" dbms="mysql">
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+        scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+      values
+        (default, 'Bulk Import Records', @userId, now(), null, 10, null, null,
+        null, 'Active', 'MINUTELY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.importer.services.impl.ImportRecordsTask', 0, null)
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Creating scheduled job to consume bulk import files" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        userId number;
+      begin
+        select identifier into userId from catissue_user where login_name like '$system';
+
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week,
+          scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'Bulk Import Records', userId, SYSDATE, null, 10, null, null,
+          null, 'Active', 'MINUTELY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.importer.services.impl.ImportRecordsTask', 0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Config setting to specify OS deploy environment">
+    <sql>
+      call add_cfg_prop(
+        'common', 'deploy_env',
+        'deploy_env', 'deploy_env_desc',
+        'STRING', 'TEST'
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

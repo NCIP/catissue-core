@@ -1,0 +1,5 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Not Hispanic or Latino,Ethnicity_PID,null
+getNextPvId(),,,null,Hispanic or Latino,Ethnicity_PID,null
+getNextPvId(),,,null,Not Reported,Ethnicity_PID,null
+getNextPvId(),,,null,Unknown,Ethnicity_PID,null

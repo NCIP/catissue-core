@@ -1,0 +1,12 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,ACD Vacutainer,2003997,null
+getNextPvId(),,,null,Heparin Vacutainer,2003997,null
+getNextPvId(),,,null,EDTA Vacutainer,2003997,null
+getNextPvId(),,,null,Serum Separator Vacutainer,2003997,null
+getNextPvId(),,,null,Sterile Specimen Container,2003997,null
+getNextPvId(),,,null,No Additive Vacutainer,2003997,null
+getNextPvId(),,,null,Citrate Vacutainer,2003997,null
+getNextPvId(),,,null,Not Specified,2003997,null
+getNextPvId(),,,null,CPT,2003997,null
+getNextPvId(),,,null,Paxgene,2003997,null
+getNextPvId(),,,null,Streck,2003997,null

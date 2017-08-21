@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.AnonymizeEvent" table="OS_PARTICIPANT_ANON_EVENTS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_PART_ANON_EVENTS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one name="cpr" column="CPR_ID"/>
+
+    <many-to-one name="anonymizedBy" column="ANONYMIZED_BY"/>
+
+    <property name="anonymizeTime" column="ANONYMIZE_TIME"/>
+  </class>
+</hibernate-mapping>

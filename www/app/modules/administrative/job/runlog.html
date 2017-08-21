@@ -1,0 +1,75 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="job-list">
+            <span translate="jobs.list">Scheduled Jobs</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3>
+        <span>{{job.name}}</span>
+        <span translate="jobs.run_logs">Run Log</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="jobs.id">Id</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.run_by">Run By</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.started_at">Started At</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.time_taken">Time Taken</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.status">Status</span>
+          </th>
+          <th class="col">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="jobRun in jobRuns">
+          <td class="col">
+            <span>#{{jobRun.id}}</span>
+          </td>
+          <td class="col">
+            <span>{{jobRun.runBy.firstName}} {{jobRun.runBy.lastName}}</span>
+          </td>
+          <td class="col">
+            <span>{{jobRun.startedAt | date: global.dateTimeFmt | osNoValue}}</span>
+          </td>
+          <td class="col" ng-switch on="jobRun.status != 'IN_PROGRESS'">
+            <span ng-switch-when="true">
+              <span>{{(jobRun.finishedAt - jobRun.startedAt) / 1000 | number : 2}}</span>
+              <span translate="jobs.seconds">seconds</span>
+            </span>
+            <span ng-switch-when="false" translate="common.na"></span>
+          </td>
+          <td class="col">
+            <span>{{'jobs.statuses.' + jobRun.status | translate}}</span>
+          </td>
+          <td class="col" show-if-allowed="jobResource.runOpts"
+            ng-switch on="jobRun.status != 'IN_PROGRESS' && !!jobRun.logFilePath">
+            <a ng-switch-when="true" href="{{job.getResultUrl(jobRun.id)}}" target="_blank">
+              <i class="fa fa-download"></i>
+            </a>
+            <span ng-switch-default>&nbsp;</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

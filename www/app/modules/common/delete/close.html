@@ -1,0 +1,22 @@
+<div class="os-modal">
+  <div class="os-modal-header">
+    <span>
+     <span translate="common.close">Close</span>
+     <span>{{ctx.entityName}}</span>
+    </span>
+  </div>
+  <div class="os-modal-body">
+    <div class="form-group">
+      <textarea class="form-control" rows="2" ng-model="ctx.reason" placeholder="{{'common.close_reason' | translate}}">
+      </textarea>
+    </div>
+  </div>
+  <div class="os-modal-footer">
+    <button class="btn os-btn-text" ng-click="cancel()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </button>
+    <button class="btn btn-primary" ng-click="close()">
+      <span translate="common.buttons.close">Close</span>
+    </button>
+  </div>
+</div>

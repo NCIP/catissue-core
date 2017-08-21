@@ -1,0 +1,52 @@
+<div class="clearfix" ng-if="view == 'specimen_tree' || !view">
+  <div class="col-xs-3">
+    <div class="os-visits list-group">
+      <div class="list-group-item os-section-hdr">
+        <span translate="visits.list">Visits</span>
+      </div>
+      
+      <a class="list-group-item" ng-repeat="visit in visits" 
+        ui-sref="participant-detail.visits({visitId: visit.id, eventId: visit.eventId})"
+        ui-sref-active="active">
+        <h5 class="list-group-item-heading">
+          <os-event-desc event-point="visit.eventPoint" event-label="visit.eventLabel"></os-event-desc>
+        </h5>
+
+        <p class="list-group-item-text">
+          <span class="name" title="{{visit.name}}" ng-if="visit.name">
+            {{visit.name}}
+          </span>
+          <span class="status" ng-if="visit.status == 'Pending' || !visit.status">
+            {{'visits.status.pending' | translate}}
+            <span ng-if="visit.anticipatedVisitDate != null">
+              | {{visit.anticipatedVisitDate | date: global.dateFmt}}
+            </span>
+          </span>
+          <span class="status" ng-if="visit.status == 'Complete'">
+            {{'visits.status.complete' | translate}} | {{visit.visitDate | date: global.dateFmt}}
+          </span>
+          <span class="status" ng-if="visit.status == 'Missed Collection'">
+            {{'visits.status.missed' | translate}} | {{visit.visitDate | date: global.dateFmt}}
+          </span>
+        </p>
+
+        <p class="os-more-options" ng-click="showVisitDetail($event, visit.id, visit.eventId)">
+          <span class="fa fa-eye"></span>
+        </p>
+
+      </a>
+    </div>
+  </div>
+
+  <div class="col-xs-9">
+    <os-specimen-tree cp="cp" cpr="cpr" visit="visit" specimens="specimens" allowed-ops="specimenAllowedOps" 
+      reload="reload()" collection-date="visit.visitDate" pending-spmns-disp-interval="pendingSpmnsDispInterval">
+    </os-specimen-tree>
+  </div>
+  </div>
+</div>
+
+<div class="col-xs-12" 
+  ng-include src="'modules/biospecimen/participant/collect-specimens.html'"
+  ng-if="view == 'collect_specimens'">
+</div>

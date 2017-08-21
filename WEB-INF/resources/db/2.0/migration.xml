@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="nmarwaha" id="Updating activity status for Specimen Req table" >
+    <sql>
+      update 
+        catissue_cp_req_specimen 
+      set 
+        activity_status = 'Active' 
+      where 
+        activity_status is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="mysql">
+    <sql>
+      insert into os_departments
+        (name, institute_id)
+      select 
+        distinct d.name, u.institution_id 
+      from 
+        catissue_user u
+        inner join catissue_department d on d.identifier = u.department_id
+    </sql>
+
+    <sql>
+      update 
+        catissue_user u 
+        inner join os_departments od on od.institute_id = u.institution_id
+        inner join catissue_department d on d.name = od.name 
+      set 
+        u.department_id = od.identifier 
+      where 
+        d.identifier = u.department_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Script to map departments and institutes" dbms="oracle">
+    <validCheckSum>7:755315db33621a5e65c2293b664d2309</validCheckSum>
+    <sql>
+      insert into os_departments
+        (identifier, name, institute_id)
+      select 
+        os_departments_seq.nextval, t0.dept_name, t0.institution_id
+      from (
+        select
+          d.name as dept_name, u.institution_id as institution_id
+        from
+          catissue_user u
+          inner join catissue_department d on d.identifier = u.department_id
+        group by
+          d.name, u.institution_id
+        ) t0;
+    </sql>
+
+    <sql>
+      merge into catissue_user us using (
+        select 
+          u.identifier as user_id, od.identifier as new_dept_id
+        from 
+          catissue_user u
+          inner join os_departments od on od.institute_id = u.institution_id
+          inner join catissue_department d on d.name = od.name
+        where 
+          d.identifier = u.department_id
+      ) t on (us.identifier = t.user_id) 
+      when matched then update set us.department_id = t.new_dept_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Drop foreign key on institution id column from CATISSUE_USER">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyTableName="CATISSUE_USER" foreignKeyName="FKB025CFC71792AD22" />
+    </preConditions>
+
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_USER"
+      constraintName="FKB025CFC71792AD22"/>
+  </changeSet>
+  
+  <changeSet author="vlonushte" id="Drop institution id column from CATISSUE_USER">
+    <preConditions onFail="MARK_RAN">
+      <columnExists columnName="INSTITUTION_ID" tableName="CATISSUE_USER"/>
+    </preConditions>
+
+    <dropColumn
+      columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migration script for container data" dbms="mysql">
+    <validCheckSum>7:302a0a6df58f62d59d1fb55560da6c5a</validCheckSum>
+    <sql>
+      select identifier into @sys_usr_id from catissue_user where email_address like '$system';
+      
+      insert into os_storage_containers(
+        identifier, name, barcode, temperature, 
+        no_of_rows, no_of_cols,
+        row_labeling_scheme, column_labeling_scheme, site_id, 
+        parent_container_id, activity_status, comments, created_by)
+      select 
+        cc.identifier, cc.name, cc.barcode, csc.temperature, 
+        c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
+        csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
+        null, cc.activity_status, cc.comments, @sys_usr_id
+      from 
+        catissue_storage_container csc 
+        inner join catissue_container cc ON cc.identifier=csc.identifier 
+        inner join catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
+        left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
+    </sql>
+    
+    <sql>
+      update 
+        os_storage_containers osc
+        join catissue_container_position ccp on osc.identifier = ccp.container_id
+      set 
+        osc.parent_container_id = ccp.parent_container_id
+    </sql>
+    
+    <sql>
+      update os_storage_containers set store_specimens = 1 
+      where 
+        (
+          select count(container_id) as count from catissue_specimen_position 
+          where os_storage_containers.identifier=catissue_specimen_position.container_id
+        ) >= 1
+    </sql>
+    
+    <sql>
+      insert into os_container_positions(
+        pos_one, pos_two, 
+        pos_one_str, pos_two_str, 
+        storage_container_id, occupying_specimen_id) 
+      select 
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        csp.container_id, csp.specimen_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_specimen_position csp ON csp.identifier = cap.identifier
+    </sql>
+    
+    <sql>
+      insert into os_container_positions(
+        pos_one, pos_two, 
+        pos_one_str, pos_two_str,
+        storage_container_id, occupying_container_id) 
+      select 
+        cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        ccp.parent_container_id, ccp.container_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_container_position ccp on ccp.identifier=cap.identifier
+    </sql>
+  </changeSet> 
+  
+  <changeSet author="nmarwaha" id="Migration script for container data" dbms="oracle">
+    <validCheckSum>7:1aa1b72ffb2e8483197d38bdca60f625</validCheckSum>
+    <sql endDelimiter="//">
+      declare 
+        sys_usr_id number;
+      begin 
+        select identifier into sys_usr_id from catissue_user where email_address like '$system';
+      
+        insert into os_storage_containers(
+          identifier, name, barcode, temperature, 
+          no_of_rows, no_of_cols, 
+          row_labeling_scheme, column_labeling_scheme, site_id, 
+          parent_container_id, activity_status, comments, created_by)
+        select 
+          cc.identifier, cc.name, cc.barcode, csc.temperature, 
+          c_capacity.one_dimension_capacity, c_capacity.two_dimension_capacity,
+          csc.one_dimension_labelling_scheme, csc.two_dimension_labelling_scheme, csc.site_id, 
+          null, cc.activity_status, cc.comments, sys_usr_id
+        from 
+          catissue_storage_container csc 
+          inner join catissue_container cc ON cc.identifier=csc.identifier 
+          inner join catissue_capacity c_capacity ON cc.capacity_id=c_capacity.identifier 
+          left join catissue_container_position ccp ON ccp.container_id=cc.identifier;
+      end;
+      //
+    </sql>
+    
+    <sql>
+      merge into os_storage_containers osc using (
+        select 
+          osc.identifier as new_cntr_id, ccp.parent_container_id as parent_id
+        from 
+          catissue_container_position ccp 
+          join os_storage_containers osc on osc.identifier = ccp.container_id
+      ) t on (osc.identifier = t.new_cntr_id) 
+      when matched then update set osc.parent_container_id = t.parent_id
+    </sql>
+   
+    <sql>
+      update os_storage_containers set store_specimens = 1 
+      where 
+        (
+          select count(container_id) as count from catissue_specimen_position 
+          where os_storage_containers.identifier=catissue_specimen_position.container_id
+        ) >= 1
+    </sql>
+    
+    <sql>
+      insert into os_container_positions(
+        identifier, pos_one, pos_two, 
+        pos_one_str, pos_two_str, 
+        storage_container_id, occupying_specimen_id) 
+      select 
+        os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        csp.container_id, csp.specimen_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_specimen_position csp ON csp.identifier = cap.identifier
+    </sql>
+    
+    <sql>
+      insert into os_container_positions(
+        identifier, pos_one, pos_two, 
+        pos_one_str, pos_two_str,
+        storage_container_id, occupying_container_id) 
+      select 
+        os_container_positions_seq.nextval, cap.position_dimension_two, cap.position_dimension_one, 
+        cap.position_dimension_two_string, cap.position_dimension_one_string,
+        ccp.parent_container_id, ccp.container_id 
+      from 
+        catissue_abstract_position cap 
+        inner join catissue_container_position ccp on ccp.identifier=cap.identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating sequences for container and position table" dbms="oracle" runOnChange="true">
+    <sql endDelimiter="//">
+      begin
+        declare
+          containerId number;
+          positionId number;
+        begin
+          select 
+            nvl(max(identifier),0)+1 into containerId
+          from 
+            os_storage_containers;
+  
+          select 
+            nvl(max(identifier),0)+1 into positionId
+          from 
+            os_container_positions;
+  
+          execute immediate('alter sequence os_storage_containers_seq increment by '||containerId);
+          execute immediate('alter sequence os_container_positions_seq increment by '||positionId);
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating sequences for institution table" dbms="oracle" runOnChange="true">
+    <sql endDelimiter="//">
+      begin
+        declare
+          instId number;
+        begin
+        
+          select 
+            nvl(max(identifier),0)+1 into instId
+          from 
+            catissue_institution;
+  
+          execute immediate('alter sequence catissue_institute_seq increment by '||instId);
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Administrator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, site_id, system_role) 
+      select 
+        sc.user_id, @role_id, sc.site_id, 1 
+      from 
+        catissue_site_coordinators sc 
+        inner join catissue_site s on s.identifier = sc.site_id
+        inner join catissue_user u on u.identifier = sc.user_id
+      where
+        s.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Assign Administrator role to existing site coordinators" dbms="oracle">
+    <sql endDelimiter="//">
+      declare
+        role_id number;
+      begin
+        select identifier into role_id from rbac_roles where name = 'Administrator';
+
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, site_id, system_role)
+        select
+          rbac_subject_roles_seq.nextval, sc.user_id, role_id, sc.site_id, 1
+        from
+          catissue_site_coordinators sc
+          inner join catissue_site s on s.identifier = sc.site_id
+          inner join catissue_user u on u.identifier = sc.user_id
+        where
+          s.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Principal Investigator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, cp_id, system_role) 
+      select 
+        cp.principal_investigator_id, @role_id, cp.identifier, 1  
+      from 
+        catissue_collection_protocol cp
+        inner join catissue_user u on u.identifier = cp.principal_investigator_id 
+      where 
+        cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Principal Investigator role to PI of existing CP's" dbms="oracle">
+    <sql endDelimiter="//">  
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Principal Investigator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, cp_id, system_role) 
+        select 
+          rbac_subject_roles_seq.nextval, cp.principal_investigator_id, role_id, cp.identifier, 1  
+        from 
+          catissue_collection_protocol cp
+          inner join catissue_user u on u.identifier = cp.principal_investigator_id 
+        where 
+          cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';
+      end; 
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="mysql">
+    <sql>
+      select identifier into @role_id from rbac_roles where name = 'Coordinator';
+      
+      insert into rbac_subject_roles 
+        (subject_id, role_id, cp_id, system_role) 
+      select 
+        coord.user_id, @role_id, coord.collection_protocol_id, 1  
+      from 
+        catissue_coll_coordinators coord
+        inner join catissue_collection_protocol cp on cp.identifier = coord.collection_protocol_id
+        inner join catissue_user u on u.identifier = coord.user_id
+      where  
+        cp.activity_status != 'Disabled' and u.activity_status != 'Disabled';   
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Assign Coordinator role to coordinators of existing CP's" dbms="oracle">
+    <sql endDelimiter="//">
+      declare 
+        role_id number;
+      begin 
+        select identifier into role_id from rbac_roles where name = 'Coordinator';
+   
+        insert into rbac_subject_roles 
+          (identifier, subject_id, role_id, cp_id, system_role) 
+        select 
+          rbac_subject_roles_seq.nextval, coord.user_id, role_id, coord.collection_protocol_id, 1  
+        from 
+          catissue_coll_coordinators coord
+          inner join catissue_collection_protocol cp on cp.identifier = coord.collection_protocol_id
+          inner join catissue_user u on u.identifier = coord.user_id
+        where  
+          cp.activity_status != 'Disabled' and u.activity_status != 'Disabled'; 
+      end;   
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards">
+    <sql>
+      insert into os_specimen_biohazards
+        (specimen_id, biohazard)
+      select 
+        s.identifier, b.name
+      from
+        catissue_specimen s
+        inner join catissue_specimen_biohz_rel br on br.specimen_id = s.identifier
+        inner join catissue_biohazard b on b.identifier = br.biohazard_id 
+      where 
+        s.activity_status != 'Disabled' and 
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards PV values" dbms="mysql">
+    <sql>
+      insert into catissue_permissible_value
+        (public_id, value) 
+      select
+        'specimen_biohazard', b.name
+      from
+        catissue_biohazard b
+      where
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Migrate specimen biohazards PV values" dbms="oracle">
+    <validCheckSum>7:b36f0f73321e8437aa5cdbe26c4c67c6</validCheckSum>
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, public_id, value) 
+      select
+        catissue_permi_value_seq.nextval, 'specimen_biohazard', b.name
+      from
+        catissue_biohazard b
+      where
+        b.activity_status != 'Disabled'
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop specimen biohazard view">
+    <dropView viewName="specimen_biohazard_view"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop specimen biohazard relation table">
+    <dropTable tableName="catissue_specimen_biohz_rel"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop biohazard types table">
+    <dropTable tableName="catissue_biohazard"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop last_run_on column from catissue_saved_queries table">
+    <preConditions>
+      <columnExists columnName="LAST_RUN_ON" tableName="CATISSUE_SAVED_QUERIES"/>
+    </preConditions>
+    <dropColumn
+      columnName="LAST_RUN_ON"
+      tableName="CATISSUE_SAVED_QUERIES"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop last_run_count column from catissue_saved_queries table">
+    <preConditions>
+      <columnExists columnName="LAST_RUN_COUNT" tableName="CATISSUE_SAVED_QUERIES"/>
+    </preConditions>
+    <dropColumn
+      columnName="LAST_RUN_COUNT"
+      tableName="CATISSUE_SAVED_QUERIES"/>
+  </changeSet>
+    
+  <changeSet author="nmarwaha" id="Drop report job details table">
+    <preConditions>
+      <tableExists tableName="report_job_details"/>
+    </preConditions>
+    <dropTable tableName="report_job_details"/>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11" dbms="mysql">
+    <sql>drop trigger if exists specimen_coll_event_trg</sql>
+    <sql>drop trigger if exists specimen_rcvd_event_trg</sql>
+    <sql>drop trigger if exists specimen_transfer_event_trg</sql>
+    <sql>drop trigger if exists specimen_distri_event_trg</sql>
+    <sql>drop trigger if exists specimen_disposal_event_trg</sql>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Drop event triggers that were introduced in v11" dbms="oracle">
+    <sql>drop trigger specimen_coll_event_trg</sql>
+    <sql>drop trigger specimen_rcvd_event_trg</sql>
+    <sql>drop trigger specimen_transfer_event_trg</sql>
+    <sql>drop trigger specimen_distri_event_trg</sql>
+    <sql>drop trigger specimen_disposal_event_trg</sql>
+  </changeSet>
+  
+</databaseChangeLog>

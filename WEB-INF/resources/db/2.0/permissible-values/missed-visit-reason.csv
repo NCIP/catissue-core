@@ -1,0 +1,10 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Beyond processing time,missed_visit_reason,null
+getNextPvId(),,,null,Insufficient sample collected / available,missed_visit_reason,null
+getNextPvId(),,,null,Poor sample quality,missed_visit_reason,null
+getNextPvId(),,,null,Laboratory error,missed_visit_reason,null
+getNextPvId(),,,null,Sample not collected by clinic / Clinic error,missed_visit_reason,null
+getNextPvId(),,,null,Patient declined consent,missed_visit_reason,null
+getNextPvId(),,,null,Patient declined collection,missed_visit_reason,null
+getNextPvId(),,,null,Sample damaged,missed_visit_reason,null
+getNextPvId(),,,null,Visit cancelled,missed_visit_reason,null

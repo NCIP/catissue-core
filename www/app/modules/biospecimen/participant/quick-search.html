@@ -1,0 +1,16 @@
+<div class="form-group">
+  <div>
+    <input type="text" os-md-input name="ppid" ng-model="searchData.ppid"
+      class="form-control" placeholder="{{'participant.protocol_id' | translate}}" ng-disabled = "searchData.participantId"
+      autofocus>
+    <div os-field-error field="searchForm.ppid"></div>
+  </div>
+</div>
+
+<div class="form-group" ng-if="userCtx.hasPhiAccess">
+  <div>
+    <input type="text" os-md-input name="participantId" ng-model="searchData.participantId"
+      class="form-control" placeholder="{{'participant.id' | translate}}" ng-disabled = "searchData.ppid">
+    <div os-field-error field="searchForm.participantId"></div>
+  </div>
+</div>

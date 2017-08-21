@@ -1,0 +1,36 @@
+<div dropdown  class="btn-group os-inline-btn">
+  <button class="btn btn-default default" ng-click="addToDefaultList()">
+    <span class="fa fa-shopping-cart"></span>
+    <span translate="specimens.buttons.assign_to">Add to Cart</span>
+  </button>
+  <button class="btn btn-default dropdown-toggle default">
+    <span class="caret"></span>
+  </button>
+  
+  <ul class="dropdown-menu os-query-folders-dd" ng-class="{'dropdown-menu-right': !leftAlign}">
+    <li>
+      <input ng-model="filterOpts.name" type="text" class="form-control"
+        placeholder="{{'specimen_list.search_list' | translate}}" ng-click="$event.stopPropagation()">
+    </li>
+    <li>
+      <ul class="dropdown-menu-subgroup">
+        <li ng-repeat="list in specimenLists" ng-click="addToList(list)">
+          <a>
+            <os-spmn-list-name list="list"></os-spmn-list-name>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a ng-click="addToList()">
+        <span translate="specimen_list.create_new_list">Create New</span>
+      </a>
+    </li>
+    <li ng-if="specimenLists.length > 0">
+      <a ui-sref="specimen-lists">
+        <span translate="specimen_list.manage_lists">Manage Carts</span>
+      </a>
+    </li>
+  </ul>
+</div>

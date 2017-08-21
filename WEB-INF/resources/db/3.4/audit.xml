@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vpawar" id="Audit and track changes to position labeling mode of containers">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="POS_LABELING_MODE" type="${text.type}(16)"/>
+      <column name="positionLabelingMode_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to position labeling mode of container types">
+    <addColumn tableName="OS_CONTAINER_TYPES_AUD">
+      <column name="POS_LABELING_MODE" type="${text.type}(16)"/>
+      <column name="positionLabelingMode_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to reserved positions request ID and time">
+    <addColumn tableName="OS_CONTAINER_POSITIONS_AUD">
+      <column name="RESERVATION_ID" type="${text.type}(40)"/>
+      <column name="reservationId_MOD" type="${bit.type}"/>
+      <column name="RESERVATION_TIME" type="${nullable.ts.type}"/>
+      <column name="reservationTime_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to CP based container auto selection strategy">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="CONTAINER_SEL_STRATEGY" type="${text.type}(32)"/>
+      <column name="containerSelectionStrategy_MOD" type="${bit.type}"/>
+      <column name="ALIQUOTS_IN_SAME_CONT" type="${boolean.type}"/>
+      <column name="aliquotsInSameContainer_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit and track changes to cell display property setting of containers">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="CELL_DISPLAY_PROP" type="${text.type}(16)"/>
+      <column name="cellDisplayProp_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to container/freezer capacity">
+    <addColumn tableName="OS_STORAGE_CONTAINERS_AUD">
+      <column name="CAPACITY" type="${int.type}"/>
+      <column name="capacity_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Audit and track changes to extract SPR text setting">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="EXTRACT_SPR_TEXT" type="${boolean.type}"/>
+      <column name="extractSprText_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Audit and track changes to specimen's collection protocol">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="COLLECTION_PROTOCOL_ID" type="${int.type}"/>
+      <column name="collectionProtocol_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Audit and track changes to participant's source">
+    <addColumn tableName="CATISSUE_PARTICIPANT_AUD">
+      <column name="SOURCE" type="${text.type}(16)"/>
+      <column name="source_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Audit and track changes to specimen barcode setting">
+    <addColumn tableName="CAT_COLLECTION_PROTOCOL_AUD">
+      <column name="BARCODING_ENABLED" type="${boolean.type}"/>
+      <column name="barcodingEnabled_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Audit and track changes to user's primary site">
+    <addColumn tableName="CATISSUE_USER_AUD">
+      <column name="PRIMARY_SITE_ID" type="${int.type}"/>
+      <column name="primarySite_MOD" type="${bit.type}"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

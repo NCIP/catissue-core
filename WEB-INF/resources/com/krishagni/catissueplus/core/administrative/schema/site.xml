@@ -1,0 +1,54 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>site</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.SiteDetail</name>
+    
+    <field>
+      <caption>#getMessage("site_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("site_name")</caption>
+      <attribute>name</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("site_institute_name")</caption>
+      <attribute>instituteName</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("site_code")</caption>
+      <attribute>code</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("site_type")</caption>
+      <attribute>type</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("site_address")</caption>
+      <attribute>address</attribute>
+    </field>
+
+    <record>
+      <attribute>coordinators</attribute>
+      <multiple>true</multiple>
+      <caption>#getMessage("site_coordinators")</caption>
+      
+      <field>
+        <caption>#getMessage("site_coordinators_email_address")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <record type="customFields" entityType="SiteExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
+  </record>
+</object-schema>
+

@@ -1,0 +1,42 @@
+
+.os-extn-form .panel-heading { 
+  display: none;
+}
+
+.os-extn-form .panel {
+  border: none;
+}
+
+.os-extn-form .modal-footer {
+  text-align: left;
+  direction: rtl;
+}
+
+.os-extn-form .modal-footer button {
+  margin-left: 0px!important;
+  margin-right: 10px;
+}
+
+.os-extn-multi-rec-badge {
+  background: #ab9364;
+  padding: 4px 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.os-extn-hdr {
+  padding: 6px 15px; 
+  font-size: 16px; 
+  color: #666666; 
+  margin-bottom: 10px;
+}
+
+/*
+* Temporary we hide print button.
+*/
+#de-form #print {
+  display: none;
+}
+
+

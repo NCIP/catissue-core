@@ -1,4 +1,0 @@
-catissue_specimen_protocol;select TITLE,SHORT_TITLE,START_DATE from catissue_specimen_protocol where TITLE='Specimen_1'
-catissue_coll_prot_event;select  COLLECTION_POINT_LABEL,STUDY_CALENDAR_EVENT_POINT from catissue_coll_prot_event where COLLECTION_POINT_LABEL='Label_1'
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='TITLE'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event 

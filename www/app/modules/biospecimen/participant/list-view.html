@@ -1,0 +1,56 @@
+<div>
+  <alert ng-if="alert.msg" type="{{alert.type}}" class="os-alert">{{alert.msg}}</alert>
+
+  <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header-panel'" 
+    default-tmpl="'modules/biospecimen/participant/list-header.html'">
+  </os-plugin-hooks>
+
+  <div class="os-container-wrapper" ui-view></div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/list-header.html">
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list">
+            <span translate="cp.list">Collection Protocols</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cp.id})">
+            <span>{{cp.shortTitle}}</span>
+          </a>
+        </li>
+      </ul>
+      <h3>
+        <span translate="{{listViewCtx.listName}}"></span>
+      </h3>
+    </div>
+
+    <div class="os-page-header-actions">
+      <ng-include ng-if="!!listViewCtx.headerActionsTmpl" src="listViewCtx.headerActionsTmpl"></ng-include>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <ng-include ng-if="!!listViewCtx.headerButtonsTmpl" src="listViewCtx.headerButtonsTmpl"></ng-include>
+
+      <os-plugin-hooks view-name="'participant-list'" sec-name="'page-header'"></os-plugin-hooks>
+
+      <!-- Safari requires this. Otherwise the buttons in plugin-hooks or header buttons template will be
+        sticking to search button -->
+      <button class="default" ng-show="!true"></button>
+
+      <ng-include src="'modules/biospecimen/participant/more-menu.html'"></ng-include>
+    </div>
+
+    <div class="right">
+      <button class="default" os-right-drawer-toggle ng-if="listViewCtx.showSearch == true">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+</script>

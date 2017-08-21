@@ -1,0 +1,137 @@
+<div>
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="cpResource.updateOpts" class="default" title="{{'cp.tooltip.edit' | translate}}"
+        ui-sref="cp-addedit({cpId:cp.id})">
+        <span class="fa fa-pencil"></span>
+        <span translate="common.buttons.edit">Edit</span>
+      </button>
+      <button show-if-allowed="cpResource.createOpts" class="default" ui-sref="cp-addedit({cpId:cp.id, mode:'copy'})">
+        <span class="fa fa-copy"></span>
+        <span translate="cp.menu_options.clone">Clone</span>
+      </button>
+      <button show-if-allowed="cpResource.deleteOpts" class="default" ng-click="deleteCp()">
+        <span class="fa fa-trash"></span>
+        <span translate="cp.menu_options.delete">Delete</span>
+      </button>
+      <a href="{{downloadUri}}" class="btn default" target="_blank">
+        <span class="fa fa-download"></span>
+        <span translate="cp.menu_options.export">Export</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div class="col-xs-8">
+      <ul class="os-key-values os-two-cols" os-inline-editors on-save="editCp">
+        <li class="item">
+          <strong class="key key-sm" translate="cp.title">Title:</strong>
+          <os-inline-edit editor="titleEditor" name="title" class="value value-md" value="cp.title">
+            <span ng-if="titleEditor.isDisplayMode()">{{titleEditor.viewValue}}</span>
+            <input ng-if="titleEditor.isEditMode()" class="form-control" type="text" ng-model="titleEditor.editValue">
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.short_title">Short Title:</strong>
+          <os-inline-edit editor="stEditor" name="shortTitle" class="value value-md" value="cp.shortTitle">
+            <span ng-if="stEditor.isDisplayMode()">{{stEditor.viewValue}}</span>
+            <input ng-if="stEditor.isEditMode()" class="form-control" type="text" ng-model="stEditor.editValue">
+          </os-inline-edit>
+        </li>
+
+        <li class="item" ng-if="codingEnabled">
+          <strong class="key key-sm" translate="cp.code">Short Code</strong>
+          <os-inline-edit editor="codeEditor" name="code" class="value value-md" value="cp.code">
+            <span ng-if="codeEditor.isDisplayMode()">{{codeEditor.viewValue}}</span>
+            <input ng-if="codeEditor.isEditMode()" class="form-control" type="text" ng-model="codeEditor.editValue">
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.pi">Principal Investigator</strong>
+          <os-inline-edit editor="piEditor" name="pi" class="value value-md" value="cp.principalInvestigator">
+            <span ng-if="piEditor.isDisplayMode()">{{piEditor.viewValue | osUserDisplayName}}</span>
+            <os-users ng-if="piEditor.isEditMode()" ng-model="piEditor.editValue"></os-users>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.start_date">Start Date:</strong>
+          <os-inline-edit editor="sdEditor" name="stDate" class="value value-md" value="cp.startDate">
+            <span ng-if="sdEditor.isDisplayMode()">{{sdEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+            <os-date-picker ng-if="sdEditor.isEditMode()" date="sdEditor.editValue">
+            </os-date-picker>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.end_date">End Date:</strong>
+          <os-inline-edit editor="edEditor" name="endDate" class="value value-md" value="cp.endDate">
+            <span ng-if="edEditor.isDisplayMode()">{{edEditor.viewValue | date: global.dateFmt | osNoValue}}</span>
+            <os-date-picker ng-if="edEditor.isEditMode()" date="edEditor.editValue">
+            </os-date-picker>
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.ethics_approval_id">Ethics Approval ID:</strong>
+          <os-inline-edit editor="irbEditor" name="irbId" class="value value-md" value="cp.irbId">
+            <span ng-if="irbEditor.isDisplayMode()">{{irbEditor.viewValue | osNoValue}}</span>
+            <input ng-if="irbEditor.isEditMode()" type="text" ng-model="irbEditor.editValue" class="form-control" >
+          </os-inline-edit>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.repositories">Sites</strong>
+          <span class="value value-md">
+            <span ng-repeat="site in cp.cpSites">
+              {{site.siteName}} <span ng-if="codingEnabled && !!site.code">({{site.code}})</span>, 
+            </span>
+          </span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.anticipated_participant_count">Expected Registrations</strong>
+          <span class="value value-md">{{cp.anticipatedParticipantsCount | osNoValue}}</span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.sop_document">SOP Document</strong>
+          <span class="value value-md" ng-switch on="!cp.sopDocumentUrl && !cp.sopDocumentName">
+            <span ng-switch-when="true" translate="common.not_specified">
+              Not Specified
+            </span>
+            <span ng-switch-default>
+              <span ng-if="cp.sopDocumentUrl">
+                <a ng-href="{{cp.sopDocumentUrl}}" target="_blank">
+                  <span>{{cp.sopDocumentUrl}}</span>
+                </a>
+              </span>
+              <span ng-if="cp.sopDocumentName">
+                <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
+                  <span>{{cp.$$sopDocDispName}}</span>
+                </a>
+              </span>
+            </span>
+          </span>
+        </li>
+
+        <li class="item">
+          <strong class="key key-sm" translate="cp.extract_spr_text">Extract Text from SPR PDF docs?</strong>
+          <span class="value value-md" ng-switch on="cp.extractSprText">
+            <span ng-switch-when="true" translate="common.yes">Yes</span>
+            <span ng-switch-when="false" translate="common.no">No</span>
+            <span ng-switch-default translate="common.not_specified">Not Specified</span>
+          </span>
+        </li>
+      </ul>
+
+      <div ng-if="!!cp.extensionDetail">
+        <div os-extension-overview ext-object="cp.extensionDetail" show-column="2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

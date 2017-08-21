@@ -1,0 +1,55 @@
+#if( $jobRun.message )
+  #set ($message = $jobRun.message)
+#else
+  #set ($message = "None")
+#end
+
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  Hello $fname $lname,
+                  <br><br>
+                  Job <b>$job.name</b> has failed. Given below are job run details. Please contact administrator for further investigation.
+                  <br><br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table>
+                  <tr>
+                    <td>Job Run ID </td> <td> : $jobRun.id</td>
+                  </tr>
+                  <tr>
+                    <td>Start Time </td><td> : $dateFmt.format($jobRun.startedAt) </td>
+                  </tr>
+                  <tr>
+                    <td>Finish Time  </td> <td>: $dateFmt.format($jobRun.finishedAt) </td>
+                  </tr>
+                  <tr>
+                    <td>Error</td><td> : $message </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

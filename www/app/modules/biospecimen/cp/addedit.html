@@ -1,0 +1,211 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list">
+            <span translate="cp.list">Collection Protocols</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3>
+        <span ng-if="!cp.id" translate="cp.create_cp_title">Create Collection Protocol</span>
+        <span ng-if="!!cp.id">
+          {{cp.shortTitle}} <span ng-if="codingEnabled && !!cp.code">({{cp.code}})</span>
+        </span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <ng-form name="cpForm" os-form-validator="cpForm" validator="cpFormValidator" class="form-horizontal" novalidate>
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.repositories">Sites</label>
+        <div class="col-xs-6">
+          <os-sites multiple name="repositoryNames" ng-model="cp.repositoryNames"
+            placeholder="{{'cp.repositories' | translate}}" resource="CollectionProtocol" operation="{{op}}"
+            on-select="onRepositorySelect($item)" on-remove="onRepositoryRemove($item)" required>
+          </os-sites>
+          <div os-field-error field="cpForm.repositoryNames"></div>
+        </div>
+      </div>
+
+      <div class="os-cp-site-code" ng-if="codingEnabled && showSiteCoding">
+        <div class="form-group clearfix">
+          <div class="col-xs-offset-3">
+            <div class="col-xs-3">
+              <label class="control-label" translate="cp.site">Site</label>
+            </div>
+            <div class="col-xs-3">
+              <label class="control-label" translate="cp.code">Code</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group clearfix os-table-body" ng-repeat="cpSite in cp.cpSites">
+          <div class="col-xs-offset-3">
+            <div class="col-xs-3">
+              <label class="control-label">{{cpSite.siteName}}</label>
+            </div> 
+            <div class="col-xs-3">
+              <input name="code{{$index}}" type="text" ng-model="cpSite.code" class="form-control" 
+                ng-maxlength="16" placeholder="{{'cp.code' | translate}}">
+              <div os-field-error field="cpForm['code' + $index]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="codingEnabled">
+        <div class="col-xs-offset-3 col-xs-6">
+          <a ng-click="$parent.showSiteCoding = !$parent.showSiteCoding">
+            <span ng-if="!showSiteCoding" translate="cp.show_site_coding">More Site Code Information</span>
+            <span ng-if="showSiteCoding" translate="cp.hide_site_coding">Less Site Code Information</span>
+          </a>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.title">Title</label>
+        <div class="col-xs-6">
+          <input type="text" name="title" ng-model="cp.title" ng-maxlength="255"
+            class="form-control" placeholder="{{'cp.title' | translate}}" required>
+          <div os-field-error field="cpForm.title"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.short_title">Short Title</label>
+        <div class="col-xs-6">
+          <input type="text" name="shortTitle" ng-model="cp.shortTitle" 
+            class="form-control" placeholder="{{'cp.short_title' | translate}}" ng-maxlength="50" required>
+          <div os-field-error field="cpForm.shortTitle"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="codingEnabled">
+        <label class="control-label col-xs-3" translate="cp.code">Short Code</label>
+        <div class="col-xs-6">
+          <input type="text" name="code" ng-model="cp.code" ng-maxlength="16"
+            class="form-control" placeholder="{{'cp.code' | translate}}">
+          <div os-field-error field="cpForm.code"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.pi">Principal Investigator</label>
+        <div class="col-xs-6">
+          <os-users name="pi" ng-model="cp.principalInvestigator" placeholder="{{'cp.pi' | translate}}" required></os-users>
+          <div os-field-error field="cpForm.pi"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.coordinators">Protocol Coordinators</label>
+        <div class="col-xs-6">
+          <os-users multiple ng-model="cp.coordinators" placeholder="{{'cp.coordinators' | translate}}"></os-users>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.date">Date</label>
+        <div class="col-xs-3">
+          <os-date-picker name="startDate" date="cp.startDate"
+            placeholder="{{'cp.start_date' | translate}}">
+          </os-date-picker>
+          <div os-field-error field="cpForm.startDate"></div>
+        </div>
+        <div class="col-xs-3">
+          <os-date-picker name="endDate" date="cp.endDate"
+            placeholder="{{'cp.end_date' | translate}}">
+          </os-date-picker>
+          <div os-field-error field="cpForm.endDate"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.ethics_approval_id">Ethics Approval ID</label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.irbId" class="form-control" placeholder="{{'cp.ethics_approval_id' | translate}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.anticipated_participants_cnt">
+          Anticipated Participants Count
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="anticipatedParticipantCnt" ng-model="cp.anticipatedParticipantsCount"
+            class="form-control" ng-pattern="/^[0-9]*$/" placeholder="{{'cp.anticipated_participants_cnt' | translate}}">
+          <div os-field-error field="cpForm.anticipatedParticipantCnt"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.sop_document_url">
+          SOP Document URL
+        </label>
+        <div class="col-xs-6">
+          <input type="text" ng-model="cp.sopDocumentUrl" class="form-control" 
+            placeholder="{{'cp.sop_document_url' | translate}}"
+            ng-disabled="!!sopDocUploader.ctrl.data || !!cp.sopDocumentName">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" translate="cp.sop_document_file">
+          SOP Document File
+        </label>
+        <div class="col-xs-6"> 
+          <form action="{{sopDocUploadUrl}}">
+            <div os-file-upload ctrl="sopDocUploader.ctrl" ng-disabled="!!cp.sopDocumentUrl">
+            </div>
+            <div ng-if="!!cp.sopDocumentName && !sopDocUploader.ctrl.data">
+              <a ng-href="{{cp.getSopDocDownloadUrl()}}" target="_blank">
+                <span>{{cp.$$sopDocDispName}}</span>
+              </a>
+              <a ng-click="removeSopDocument()">
+                <span class="fa fa-times-circle"></span>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="cp.extract_spr_text">Extract Text from SPR PDF Docs?</label>
+        <div class="col-xs-9">
+          <label class="radio-inline"> 
+            <input type="radio" name="extractSprText" ng-model="cp.extractSprText" ng-value="true">
+            <span translate="common.yes">Yes</span>
+          </label>
+          <label class="radio-inline"> 
+            <input type="radio" name="extractSprText" ng-model="cp.extractSprText" ng-value="false">
+            <span translate="common.no">No</span>
+          </label>
+        </div>
+      </div>
+
+      <div ng-if="!mode || mode != 'copy'">
+        <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+          <div id="de-form" class="os-extn-form" os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="cp"></div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createCp()"> 
+            <span ng-if="!cp.id" translate="common.buttons.create"> Create </span>
+            <span ng-if="!!cp.id" translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </ng-form>
+  </div>
+</div>
+

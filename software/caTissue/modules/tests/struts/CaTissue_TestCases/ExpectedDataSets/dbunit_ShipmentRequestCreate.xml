@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_base_shipment LABEL="Specimen_L2" SENDER_SITE_ID="41" ACTIVITY_STATUS="In Progress"/>
-	<catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="Specimen_L2"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-		
-</dataset>

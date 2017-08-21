@@ -1,0 +1,5 @@
+IDENTIFIER,VALUE,PUBLIC_ID
+getNextPvId(),HH:mm,time_format
+getNextPvId(),hh:mm a,time_format
+getNextPvId(),K:mm a,time_format
+getNextPvId(),k:mm,time_format

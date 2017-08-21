@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_specimen LABEL="SP_2_D24" COMMENTS="Testing"/>
-  <catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="SP_2_D24"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<BulkOperationMetadata templateName="addInstitution" batchSize="5">
-	<BulkOperationClass className="edu.wustl.catissuecore.domain.Institution"		     
-		 >
-		<attribute name="name" csvColumnName="Institution name"   />
-	</BulkOperationClass>
-</BulkOperationMetadata>

@@ -1,2 +1,0 @@
-ID,Array Type,Created By_User_ID,Created by_First_Name,Created by_Last_Name,Array_Label,Spec_Array_Barcode,Specimen Class,holdsSpecimenType#1,holdsSpecimenType#2,holdsSpecimenType#3,Storage_Position_Container_Id,Storage_Position_Container_D1,Storage_Position_Container_D2,Spec_Array_Comments,Capacity_Dim_One,Capacity_Dim_Two,Specimen_Barcode#1,Specimen_Label#1,Dim_One#1,Dim_Two#1
-101,5,1,admin,admin,Test_Specimen_Array_Type_82,,Tissue,,Fixed Tissue,,81,1,2,SA_Comm,5,5,1_1,SP_2,1,1

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <changeSet author="vlonushte" id="Config properties to enable/disable shipment shipped/received email notifications">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_shipment_shipped',
+        'shipment_shipped', 'shipment_shipped_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'notifications', 'email_shipment_received',
+        'shipment_received', 'shipment_received_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen catalog module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'catalog', 'Specimen catalog settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen catalog module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (OS_MODULES_SEQ.nextval, 'catalog', 'Specimen catalog settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="ID of query to use for default catalog">
+    <sql>
+      call add_cfg_prop(
+        'catalog', 'default_query',
+        'default_query', 'default_query_desc',
+        'INT', ''
+      );
+    </sql>
+  </changeSet>
+ 
+  <changeSet author="ckhilosiya" id="Config properties for shipment export report query">
+    <comment>TODO: move to appropriate module</comment>
+    <sql>
+      call add_cfg_prop(
+        'common', 'shipment_export_report',
+        'shipment_export_report', 'shipment_export_report_desc',
+        'INT', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Query module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'query', 'Query module settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Query module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (OS_MODULES_SEQ.nextval, 'query', 'Query module settings');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Max no. of concurrent queries">
+    <sql>
+      call add_cfg_prop(
+        'query', 'max_concurrent_queries',
+        'max_concurrent_queries', 'max_concurrent_queries_desc',
+        'INT', '10'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Max no. of records in memory">
+    <sql>
+      call add_cfg_prop(
+        'query', 'max_recs_in_memory',
+        'max_recs_in_memory', 'max_recs_in_memory_desc',
+        'INT', '100'
+      );
+    </sql>
+  </changeSet>
+</databaseChangeLog>

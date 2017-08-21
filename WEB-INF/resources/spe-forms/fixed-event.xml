@@ -1,0 +1,70 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenFixedEvent</name>
+    <caption>#getMessage("fixed_event")</caption>
+    <table>CATISSUE_FIXED_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <dropDown>
+        <name>fixationType</name>
+        <udn>fixationType</udn>
+        <caption>#getMessage("fixed_event_fixation_type")</caption>
+        <column>FIXATION_TYPE</column>
+        <options>
+          <sql>
+            select value from catissue_permissible_value where public_id = 'fixation_type' order by value
+          </sql>
+        </options>
+        <mandatory>true</mandatory>
+      </dropDown>
+    </row>
+
+    <row>
+      <numberField>
+        <name>durationInMins</name>
+        <udn>durationInMins</udn>
+        <caption>#getMessage("fixed_event_duration_in_minutes")</caption>
+        <column>DURATION_IN_MINUTES</column>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("specimen_event_user")</caption>
+        <column>USER_ID</column>
+        <showInGrid>true</showInGrid>
+        <mandatory>true</mandatory>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("specimen_event_date_time")</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("specimen_event_comments")</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>
+

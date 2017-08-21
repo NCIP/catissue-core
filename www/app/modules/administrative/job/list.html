@@ -1,0 +1,101 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="jobs.list">Scheduled Jobs</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"></os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="jobResource.createOpts" class="default"
+        title="{{'jobs.tooltip.create_job' | translate}}" ui-sref="job-addedit({jobId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+      <os-help class="os-btns btn default" link="job_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'job.tooltip.search_jobs' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="jobs.title">Title</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.created_by">Created By</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.type">Job Type</span>
+          </th>
+          <th class="col">
+            <span translate="jobs.last_run_on">Last Run On</span>
+          </th>
+          <th class="col">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="job in jobs" os-row-click="executeJob(job)">
+          <td class="col">
+            <a ng-click="executeJob(job)">
+              <span>#{{job.id}} {{job.name}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{job.createdBy.firstName}} {{job.createdBy.lastName}}</span>
+          </td>
+          <td class="col">
+            <span>{{'jobs.types.' + job.type | translate}}</span>
+          </td>
+          <td class="col" ng-switch on="!!job.lastRunOn">
+            <span ng-switch-when="true">{{job.lastRunOn | date: global.dateTimeFmt}}</span>
+            <span ng-switch-default translate="common.na">Not Available</span>
+          </td>
+          <td class="col os-more-options os-click-esc">
+            <div dropdown>
+              <button class="btn btn-xs btn-default dropdown-toggle">
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li show-if-allowed="jobResource.updateOpts">
+                  <a ui-sref="job-addedit({jobId: job.id})">
+                    <i class="fa fa-pencil"></i>
+                    <span translate="jobs.edit_job"></span>
+                  </a>
+                </li>
+                <li show-if-allowed="jobResource.deleteOpts">
+                  <a ng-click="deleteJob(job)">
+                    <i class="fa fa-trash"></i>
+                    <span translate="jobs.delete_job"></span>
+                  </a>
+                </li>
+                <li>
+                  <a ui-sref="job-run-log({jobId: job.id})">
+                    <i class="fa fa-bars"></i>
+                    <span translate="jobs.view_job_runs"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/job/search.html'"></div>
+</div>

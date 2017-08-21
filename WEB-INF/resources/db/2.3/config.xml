@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="nmarwaha" id="Config setting to specify MPI format and/or generator">
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_format', 'mpi_format', 'mpi_format_desc', 'STRING', '');
+    </sql>
+    <sql>
+      call add_cfg_prop('biospecimen', 'mpi_generator', 'mpi_generator', 'mpi_generator_desc', 'STRING', '');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Config property to set participant uid mandatory">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'uid_mandatory',
+        'uid_mandatory', 'uid_mandatory_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Config property to enable/disable participant/visit/specimen access restrictions based on MRN sites">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'mrn_restriction_enabled',
+        'mrn_restriction_enabled', 'mrn_restriction_enabled_desc',
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+  
+
+</databaseChangeLog>

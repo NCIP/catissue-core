@@ -1,0 +1,8 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Black or African American,Race_PID,2
+getNextPvId(),,,null,Not Reported,Race_PID,6
+getNextPvId(),,,null,Unknown,Race_PID,8
+getNextPvId(),,,null,Asian,Race_PID,4
+getNextPvId(),,,null,American Indian or Alaska Native,Race_PID,3
+getNextPvId(),,,null,White,Race_PID,1
+getNextPvId(),,,null,Native Hawaiian or Other Pacific Islander,Race_PID,5

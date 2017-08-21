@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="Siteman New_cancer_AnyCP_Tissue_AnyType_843"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

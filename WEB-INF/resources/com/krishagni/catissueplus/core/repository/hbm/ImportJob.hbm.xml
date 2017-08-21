@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.importer.domain.ImportJob"
+    table="OS_BULK_IMPORT_JOBS">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_BULK_IMPORT_JOBS_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME" not-null="true"/>
+
+    <property name="type" column="TYPE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.importer.domain.ImportJob$Type</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="dateFormat" column="DATE_FORMAT"/>
+
+    <property name="timeFormat" column="TIME_FORMAT"/>
+ 
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.importer.domain.ImportJob$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+
+    <property name="totalRecords" column="TOTAL_RECORDS"/>
+
+    <property name="failedRecords" column="FAILED_RECORDS"/>
+
+    <many-to-one name="createdBy" column="CREATED_BY"/>
+
+    <property name="creationTime" column="CREATION_TIME"/>
+
+    <property name="endTime" column="END_TIME"/>
+
+    <map name="params" table="OS_BULK_IMPORT_JOB_PARAMS" lazy="false" batch-size="26">
+      <key column="JOB_ID"/>
+      <map-key column="PARAM" type="string"/>
+      <element column="VALUE" type="string"/>
+    </map>
+  </class>
+</hibernate-mapping>

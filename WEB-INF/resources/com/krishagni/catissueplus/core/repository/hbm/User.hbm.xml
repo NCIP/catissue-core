@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class
+    name="com.krishagni.catissueplus.core.administrative.domain.User"
+    table="CATISSUE_USER">
+	
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_USER_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="emailAddress" column="EMAIL_ADDRESS" unique="true"/>
+
+    <property name="phoneNumber" column="PHONE_NUMBER"/>
+
+    <property name="firstName"  column="FIRST_NAME"/>
+
+    <property name="lastName" column="LAST_NAME"/>
+
+    <property name="loginName" column="LOGIN_NAME" not-null="true"/>
+
+    <property name="creationDate" column="START_DATE"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+
+    <property name="address" column="address"/>
+
+    <many-to-one name="institute" column="INSTITUTE_ID" lazy="false" fetch="join"/>
+
+    <many-to-one name="primarySite" column="PRIMARY_SITE_ID"/>
+
+    <many-to-one name="authDomain" column="DOMAIN_NAME" property-ref="name" lazy="false" fetch="join"/>
+	
+    <property name="password" column="PASSWORD"/>
+	    
+    <set name="passwords" inverse="true" cascade="save-update">
+      <key column="USER_ID"/>
+      <one-to-many  class="com.krishagni.catissueplus.core.administrative.domain.Password" />
+    </set>
+		
+    <property name="comments" column="STATUS_COMMENT"/>
+
+    <property name="type" column="TYPE" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.User$Type</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+ 
+    <property name="manageForms" column="MANAGE_FORMS"/>
+
+    <filter name="activeEntity"/>
+    
+    <sql-query name="getDependentEntities">
+      <return-scalar column="entityName" type="string"/>
+      <return-scalar column="count" type="int"/>    
+    
+      select 
+        de.entityName as entityName, de.count as count
+      from
+        (
+          select
+            'site' as entityName, count(s.identifier) as count  
+          from 
+            catissue_site s
+            inner join catissue_site_coordinators sc on sc.site_id = s.identifier 
+          where
+            s.activity_status != 'Disabled' and
+            sc.user_id = :userId
+
+          union 
+
+          select 
+            'collection_protocol' as entityName, count(cp.identifier) as count 
+          from 
+            catissue_collection_protocol cp
+            left join catissue_coll_coordinators cc 
+              on cc.collection_protocol_id = cp.identifier and cp.principal_investigator_id != :userId
+          where 
+            cp.activity_status != 'Disabled' and
+            (cp.principal_investigator_id = :userId or cc.user_id = :userId)
+
+          union
+
+          select 
+            'distribution_protocol' as entityName, count(dp.identifier) as count 
+          from
+            catissue_distribution_protocol dp 
+          where
+            dp.activity_status != 'Disabled' and
+            dp.principal_investigator_id = :userId
+        ) de
+      where 
+        de.count > 0
+    </sql-query>
+
+    <sql-query name="getCpCountByUsers">
+      <return-scalar column="userId"  type="long"/>
+      <return-scalar column="cpCount" type="int"/>
+
+      select 
+        u.identifier as userId, count(distinct cp.identifier) as cpCount 
+      from 
+        catissue_collection_protocol cp 
+        left join catissue_coll_coordinators cc on cc.collection_protocol_id = cp.identifier 
+        inner join catissue_user u 
+          on u.identifier = cp.principal_investigator_id or u.identifier = cc.user_id 
+      where 
+        u.identifier in (:userIds) and
+        cp.activity_status != 'Disabled' and
+        u.activity_status != 'Disabled'
+      group by 
+        u.identifier
+    </sql-query>
+
+    <query name="getActiveUsersEmailIds">
+      select
+        distinct user.emailAddress
+      from
+        com.krishagni.catissueplus.core.auth.domain.LoginAuditLog log
+        join log.user user
+      where
+        log.loginTime between :startDate and :endDate and
+        log.loginSuccessful is true and
+        user.activityStatus != 'Disabled'
+    </query>
+    
+    <query name="getPasswordsUpdatedBeforeDate">
+      select
+        user.id, user.firstName, user.lastName, user.emailAddress, max(passwd.updationDate)
+      from
+        com.krishagni.catissueplus.core.administrative.domain.Password passwd
+        join passwd.user user
+        join user.authDomain domain
+      where
+        user.activityStatus = 'Active' and
+        domain.name = 'openspecimen'
+      group by
+        user.id, user.firstName, user.lastName, user.emailAddress
+      having
+        max(passwd.updationDate) &lt;= :updateDate
+    </query>
+    
+    <query name="getInactiveUsers">
+      select
+        iu
+      from
+        com.krishagni.catissueplus.core.administrative.domain.User iu
+      where
+        iu.id in (
+          select
+            user.id
+          from
+            com.krishagni.catissueplus.core.auth.domain.LoginAuditLog log
+            right join log.user user
+          where
+            user.activityStatus = 'Active' and
+            ((log.loginSuccessful is null and user.creationDate &lt;= :lastLoginTime) or log.loginSuccessful = 1)
+          group by
+            user.id
+          having
+            max(log.loginTime) &lt;= :lastLoginTime or max(log.loginTime) is null)
+        )
+    </query>
+    
+    <query name="updateStatus">
+      update
+        com.krishagni.catissueplus.core.administrative.domain.User user
+      set
+        user.activityStatus = :activityStatus
+      where
+        user.id in (:userIds)
+    </query>
+  </class>
+</hibernate-mapping>

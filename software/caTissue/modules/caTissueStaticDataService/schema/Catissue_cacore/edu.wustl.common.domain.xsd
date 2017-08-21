@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" targetNamespace="gme://caCORE.caCORE/3.2/edu.wustl.common.domain" elementFormDefault="qualified">
-  <xs:element name="AbstractDomainObject" type="AbstractDomainObject" />
-  <xs:complexType name="AbstractDomainObject">
-    <xs:sequence />
-  </xs:complexType>
-</xs:schema>
-

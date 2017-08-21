@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_audit_event_details ELEMENT_NAME="FROM_POSITION_DIMENSION_ONE" CURRENT_VALUE="3"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

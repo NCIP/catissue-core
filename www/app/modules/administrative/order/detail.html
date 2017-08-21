@@ -1,0 +1,29 @@
+<div> 
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="order-list">
+            <span translate="orders.list">Distribution Orders</span>
+          </a>
+        </li>
+      </ul>
+      <h3>{{order.name}}</h3>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="order-detail.overview"> 
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="orders.menu.overview">Overview</span>
+        </a>
+      </li>
+
+      <os-plugin-hooks view-name="'order-detail'" sec-name="'side-menu'"></os-plugin-hooks>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

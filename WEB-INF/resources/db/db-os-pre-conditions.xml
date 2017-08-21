@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+  
+  <changeSet author="slakhani" id="Pre condition to check the storage engine" dbms="mysql" runAlways="true">
+    <preConditions onFail="HALT" onFailMessage="OpenSpecimen expects MySQL to use InnoDB as default storage engine. Set 'default_storage_engine=InnoDB' in my.cnf or my.ini and restart MySQL database server">
+      <sqlCheck expectedResult="InnoDB">
+        select @@global.default_storage_engine;
+      </sqlCheck>
+    </preConditions>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Pre condition to check the case sensitivity" dbms="mysql" runAlways="true">
+    <preConditions onFail="HALT" onFailMessage="OpenSpecimen expects case insensitive flag to be set in MySQL. Set 'lower_case_table_names = 1' in my.cnf or my.ini and restart MySQL database server">
+      <sqlCheck expectedResult="1">
+        select @@global.lower_case_table_names;
+      </sqlCheck>
+    </preConditions>
+  </changeSet>
+  
+</databaseChangeLog>

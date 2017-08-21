@@ -1,0 +1,99 @@
+
+<div ng-if="!signedUp">
+  <div class="os-center-box os-sign-up-box">
+    <form name="userForm" class="form-horizontal" os-form-validator="userForm" validator="userFormValidator" novalidate>
+      <div class="os-header">
+        <h3 translate="user.create_account">Create your OpenSpecimen Account</h3>
+      </div>
+
+      <div class="os-body">
+        <div class="link">
+          <span translate="user.already_have_an_openspecimen_id">Already have an OpenSpecimen ID?</span> 
+          <a ui-sref="login" translate="user.sign_in_here">Sign In here </a>
+        </div>
+        <div class="form-group">
+          <div class="col-xs-6">
+            <input type="text" name="lastName" ng-model="user.lastName" class="form-control"
+              placeholder="{{'user.last_name' | translate}}" ng-maxlength="255" required/>
+            <div os-field-error field="userForm.lastName"></div>
+          </div>
+          <div class="col-xs-6">
+            <input type="text" name="firstName" ng-model="user.firstName" class="form-control"
+              placeholder="{{'user.first_name' | translate}}" ng-maxlength="255" required/>
+            <div os-field-error field="userForm.firstName"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-6">
+            <input type="email" name="email" class="form-control" ng-model="user.emailAddress"
+              placeholder="{{'user.email_address' | translate}}" ng-maxlength="255" required> 
+            <div os-field-error field="userForm.email"></div>
+          </div>
+          <div class="col-xs-6">
+            <input type="text" name="phoneNumber" ng-model="user.phoneNumber" class="form-control"
+                   placeholder="{{'user.phone_number' | translate}}" ng-maxlength="16"/>
+            <div os-field-error field="userForm.phoneNumber"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-6" ng-hide="domains.length == 1">
+            <os-select ng-model="user.domainName" list="domains" name="domain"
+              placeholder="{{'user.domain_name' | translate}}" required>
+            </os-select>
+            <div os-field-error field="userForm.domain"></div>
+          </div>
+          <div ng-class="{true: 'col-xs-12', false: 'col-xs-6'}[domains.length == 1]">
+            <input type="text" name="loginName" class="form-control" ng-model="user.loginName"
+              placeholder="{{'user.login_name' | translate}}" ng-maxlength="255" required>
+            <div os-field-error field="userForm.loginName"></div>
+          </div>
+        </div>
+      
+        <div class="form-group">
+          <div class="col-xs-6">
+            <os-select ng-model="user.instituteName" list="institutes" on-select="onInstituteSelect($item)"
+              name="institute" placeholder="{{'user.institute' | translate}}" required>
+            </os-select>
+            <div os-field-error field="userForm.institute"></div>
+          </div>
+          <div class="col-xs-6">
+            <os-select ng-model="user.primarySite" list="sites" refresh="searchSites($select.search)"
+              name="primarySite" placeholder="{{'user.primary_site' | translate}}">
+            </os-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-12">
+            <textarea rows="2" placeholder="{{'user.address' | translate}}" ng-model="user.address" class="form-control">
+            </textarea>
+          </div>
+        </div>
+
+        <div>
+          <button class="btn btn-block btn-primary" os-form-submit="signup()">
+            <span translate="user.signup"> Sign up </span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel panel-default os-margin-10" ng-if="signedUp">
+  <div class="panel-body">
+    <p>
+      <strong translate="user.signed_up">
+        Your membership request has been received. Please wait for an approval email from OpenSpecimen Administrator.
+        Thank you.
+      </strong>
+    </p>
+    <p>
+      <a ui-sref="login" translate="user.return_to_signin">Return to Sign in</a>
+    </p>
+  </div>
+</div>
+
+

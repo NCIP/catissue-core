@@ -1,5 +1,0 @@
-Please send questions or comments to the E-mail addresses listed below:
-
-<b>E-mail: </b><a href='mailto:@@SUPPORTEMAIL@@'>@@SUPPORTEMAIL@@</a>
-
-For help regarding the caTISSUE Suite system, please refer to the <a href='RedirectToHelp.do'>Help</a>&nbsp;section.

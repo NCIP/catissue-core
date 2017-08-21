@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+
+  <changeSet author="nmarwaha" id="Update the key type for PPID">
+    <sql>
+      update 
+        key_seq_generator ksg 
+      set 
+        ksg.key_type = 'PPID'
+      where
+        ksg.key_type = 'edu.wustl.catissuecore.domain.CollectionProtocol';
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Populate the container hierarchy" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          os_containers_hierarchy
+      </sqlCheck>
+    </preConditions>
+  
+    <sqlFile 
+      encoding="utf8"
+      path="create_container_hierarchy_mysql.sql"
+      relativeToChangelogFile="true"
+      endDelimiter="//"
+      splitStatements="true"
+      stripComments="true"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Populate the container hierarchy" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          case when (count(*) > 0) then 1 else 0 end 
+        from 
+          os_containers_hierarchy
+      </sqlCheck>
+    </preConditions>
+  
+    <sqlFile 
+      encoding="utf8"
+      path="create_container_hierarchy_oracle.sql"
+      relativeToChangelogFile="true"
+      endDelimiter="/"
+      splitStatements="true"
+      stripComments="true"/>
+
+    <sql>call migrate()</sql>
+  
+    <sql>commit;</sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Address migration to user table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        catissue_user usr,
+        catissue_address addr
+      set
+        usr.address = (concat_ws( ',',
+          nullif(addr.street,''),
+          nullif(addr.city,''),
+          nullif(addr.state,''),
+          nullif(addr.country,''),
+          nullif(addr.zipcode,''),
+          nullif(addr.fax_number,'')))
+      where
+        usr.address_id = addr.identifier;
+    </sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Address migration to site table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_SITE" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        catissue_site site,
+        catissue_address addr
+      set
+        site.address = (concat_ws( ',',
+          nullif(addr.street,''),
+          nullif(addr.city,''),
+          nullif(addr.state,''),
+          nullif(addr.country,''),
+          nullif(addr.zipcode,''),
+          nullif(addr.fax_number,'')))
+      where
+        site.address_id = addr.identifier;
+    </sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Phone number data migration to user table" dbms="mysql">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        catissue_user usr,
+        catissue_address addr
+      set
+        usr.phone_number = addr.phone_number
+      where
+        usr.address_id = addr.identifier;
+    </sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Address migration to user table" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        ( select
+          usr.address as new_address,
+            (nvl2(addr.street,addr.street || ',','') ||
+            nvl2(addr.city,addr.city || ',','') ||
+            nvl2(addr.state,addr.state || ',','') ||
+            nvl2(addr.country,addr.country || ',','') ||
+            nvl2(addr.zipcode,addr.zipcode || ',','') ||
+            nvl2(addr.fax_number,addr.fax_number || ',','')) as old_address
+      from
+        catissue_user usr
+        inner join catissue_address addr on usr.address_id=addr.identifier) t
+      set
+        t.new_address = substr(t.old_address, 1 ,length(t.old_address)-1);
+    </sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Address migration to site table" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_SITE" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        ( select
+          site.address as new_address,
+            (nvl2(addr.street,addr.street || ',','') ||
+            nvl2(addr.city,addr.city || ',','') ||
+            nvl2(addr.state,addr.state || ',','') ||
+            nvl2(addr.country,addr.country || ',','') ||
+            nvl2(addr.zipcode,addr.zipcode || ',','') ||
+            nvl2(addr.fax_number,addr.fax_number || ',','')) as old_address
+      from
+        catissue_site site
+        inner join catissue_address addr on site.address_id=addr.identifier) t
+      set
+        t.new_address = substr(t.old_address, 1 ,length(t.old_address)-1);
+    </sql>
+  </changeSet>
+
+  <changeSet author="hemant" id="Phone number data migration to user table" dbms="oracle">
+    <validCheckSum>7:a314272a4fb3519094b51dfe9b324d25</validCheckSum>
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <sql>
+      update
+        ( select
+            usr.phone_number as new_number,
+            case
+              when addr.phone_number is null then ' '
+              else addr.phone_number
+            end as old_number
+          from
+            catissue_user usr
+            inner join catissue_address addr on usr.address_id=addr.identifier
+        ) t
+      set
+        t.new_number=t.old_number;
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Drop address_id column from catissue site table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_SITE"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Drop address_id column from catissue user table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists 
+        tableName="CATISSUE_USER" 
+        columnName="ADDRESS_ID"/>
+    </preConditions>
+    <dropColumn columnName="ADDRESS_ID" tableName="CATISSUE_USER"/>
+  </changeSet>
+
+</databaseChangeLog>

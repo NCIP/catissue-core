@@ -1,0 +1,20 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>institute</name>
+  <record> 
+    <name>com.krishagni.catissueplus.core.administrative.events.InstituteDetail</name>
+    
+    <field>
+      <caption>#getMessage("institute_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("institute_name")</caption>
+      <attribute>name</attribute>
+    </field>
+
+  </record>
+</object-schema>
+

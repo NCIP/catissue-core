@@ -1,0 +1,48 @@
+<div> 
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="dp-list">
+            <span translate="dp.list">Distribution Protocols</span>
+          </a>
+        </li>
+      </ul>
+    
+      <h3>
+        <span>{{distributionProtocol.shortTitle}}</span>
+    
+        <span class="os-status-closed" ng-if="distributionProtocol.activityStatus == 'Closed'" translate="dp.closed">
+          Closed
+        </span>
+      </h3>
+    </div>
+  </div>
+
+  <div os-side-menu>
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref="dp-detail.overview"> 
+          <span class="fa fa-eye"></span>
+          <span class="os-title" translate="dp.menu.overview">Overview</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="dp-detail.history">
+          <span class="fa fa-history"></span>
+          <span class="os-title" translate="dp.menu.history">History</span>
+        </a>
+      </li>
+      <li ng-class="{'active': includesState('req-root')}" ng-if="isEditAllowed">
+        <a ui-sref="req-list">
+          <span class="fa fa-list-ol"></span>
+          <span class="os-title" translate="dp.menu.requirements">Requirements</span>
+        </a>
+      </li>
+
+      <os-plugin-hooks view-name="'dp-detail'" sec-name="'side-menu'"></os-plugin-hooks>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

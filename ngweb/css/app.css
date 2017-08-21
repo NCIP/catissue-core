@@ -1,0 +1,363 @@
+
+.cp-padded-hr {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.cp-clear {
+  clear: both;
+}
+
+.cp-select {
+  background-color: rgb(245, 245, 245);
+}
+
+.cp-form {
+  font-size: 14px;
+}
+
+.cp-round-button-icon {
+  width: 40px;
+  height:40px;
+  border-radius:100%;
+}
+
+.cp-notifs {
+  text-align: center;
+  z-index: 100;
+  position: fixed;
+  width:100%;
+  top: 1px;
+}
+
+.define-view-notifs {
+  text-align: center;
+  z-index: 100;
+  position: fixed;
+  left: 10px;
+  right: 10px;
+}
+
+.cp-de-form {
+  font-size: 14px;
+}
+
+.cp-print-label {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 20%;
+  text-align: right;
+  padding-left: 20px;
+  font-weight: bold;
+}
+
+.cp-print-value {
+  border-top: none !important;
+  vertical-align: middle;
+  width: 30%;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.ka-tree ul {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+.ka-tree-node-toggle-marker, .ka-tree-node-checkbox {
+  margin-right: 4px;
+  float: left;
+  cursor: pointer;
+}
+
+.ka-tree-node-toggle-marker {
+  margin-top: 6px;
+}
+
+.ka-tree-node-label {
+  margin-top: 2px;
+  float: left;
+}
+
+.ka-tree-node-offset {
+  padding-left: 15px;
+}
+
+.tooltip {
+	z-index: 9999;
+}
+
+.watch-tutorial {
+  margin-top: 10px;
+  float: left;
+  padding-left: 20px;
+}
+
+.plus-addon {
+  position: relative;
+}
+
+.plus-addon-input-right input {
+  padding-right: 30px;
+}
+
+.plus-addon-input-right span {
+  position: absolute;
+  right: 0px;
+  padding: 10px 20px;
+  pointer-events: none;
+}
+
+.ka-tags-container {
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+
+.ka-tags-container .ka-tags {
+  clear: both;
+  padding-left: 0px;
+}
+
+.ka-tags-container .ka-tags  .ka-tag {
+  padding: 3px 5px 3px 18px;
+  margin: 3px 0 3px 5px;
+  position: relative;
+  line-height: 13px;
+  color: #333;
+  cursor: default;
+  border: 1px solid #aaaaaa;
+  border-radius: 3px;
+  box-shadow: 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  background-clip: padding-box;
+  background-color: #e4e4e4;
+}
+
+.ka-tags-container .ka-tags .ka-tags-remove {
+  left: 3px;
+  display: block;
+  width: 12px;
+  height: 13px;
+  position: absolute;
+  right: 3px;
+  top: 4px;
+  font-size: 1px;
+  outline: none;
+  background: url('../external/select2/css/select2.png') right top no-repeat;
+  line-height: 13px;
+}
+
+.ka-tags-container .ka-tags li {
+  float: left;
+  list-style: none;
+}
+
+.ka-tags-container .ka-tags .ka-tag-input {
+  height: 28px;
+  line-height: 27px;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  width: 100%;
+}
+  
+.ka-tags-container .ka-tags .ka-tag-input input {
+  padding: 5px;
+  margin: 1px 0;
+  height: 27px;
+  font-family: sans-serif;
+  font-size: 100%;
+  color: #666;
+  outline: 0;
+  border: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: transparent !important;
+  width: 100%;
+}
+
+.ka-wizard-steps:after, .ka-wizard-step-titles:after, .ka-wizard-step-progs:after, .ka-wizard-step-prog > div:after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+.ka-wizard-step-title {
+  float: left;
+  width: 200px;
+  text-align: center;
+  color: #999999;
+}
+
+.ka-wizard-step-title.ka-wizard-step-selected {
+  font-weight: bold;
+  color: #232323;
+}
+
+.ka-wizard-step-title.ka-wizard-step-finished {
+  color: #232323;
+}
+
+.ka-wizard-step-prog {
+  float: left;
+}
+
+.ka-wizard-step-prog > div {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border-radius: 50%;
+  border: 4px solid #edeff0;
+  background-color: #edeff0;
+  cursor: pointer;
+}
+
+.ka-wizard-step-prog.ka-wizard-step-selected > div, .ka-wizard-step-prog.ka-wizard-step-finished > div {
+  background-color: #3276b1;
+}
+
+.ka-wizard-step-prog.ka-wizard-last-step:after,
+.ka-wizard-step-prog.ka-wizard-first-step:before {
+  width: 90px;
+  height: 0px;
+  border: none; /* This is present to get rid of border added by .ka-wizard-step-prog */
+  border-bottom: 2px dashed #edeff0;
+  float: left;
+  content: ' ';
+  margin-top: 8px;
+  background-color: transparent;
+}
+
+.ka-wizard-step-prog:after {
+  width: 180px;
+  height: 8px;
+  float: left;
+  content: ' ';
+  margin-top: 6px;
+  background-color: #edeff0;
+  border: 2px solid #edeff0;
+}
+
+.ka-wizard-step-prog.ka-wizard-step-finished > div:after {
+  width: 20px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+}
+
+.ka-wizard-step-prog.ka-wizard-step-selected.ka-wizard-first-step > div:before,
+.ka-wizard-step-prog.ka-wizard-step-finished.ka-wizard-first-step > div:before {
+  content: ' ';
+  width: 0px;
+}
+
+.ka-wizard-step-prog.ka-wizard-step-selected > div:before,
+.ka-wizard-step-prog.ka-wizard-step-finished > div:before {
+  content: ' ';
+  width: 6px;
+  height: 4px;
+  background-color: #3276b1;
+  margin-top: 4px;
+  position: absolute;
+  margin-left: -6px;
+}
+
+.ka-wizard-step-prog.ka-wizard-step-finished:after {
+  background-color: #3276b1;
+}
+
+
+.ka-modal-header {
+  height: 44px;
+  background-color: #edeff0;
+  padding: 10px 10px 10px 20px;
+  font-size: 18px;
+  color: #232323;
+}
+
+.popover .df-modal-header {
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.ka-modal-header:after {
+  content: ' ';
+  display: table;
+  clear: both;
+}
+
+.ka-modal-header > div.ka-close {
+  float: right;
+  font-size: 30px;
+  margin-top: -7px;
+}
+
+.ka-close {
+  cursor: pointer;
+}
+
+.ka-modal-body {
+  padding: 10px 20px;
+}
+
+.popover .ka-modal-body {
+  padding: 5px 10px;
+  max-height: 400px;
+  overflow: auto;
+}
+
+.ka-modal-footer {
+  height: 44px;
+  background-color: #edeff0;
+  text-align: right;
+  margin: 10px -20px -10px -20px;
+}
+
+.ka-modal-footer > button.btn-primary, .ka-modal-footer > button.btn-default {
+  margin-right: 10px;
+}
+
+.ka-modal-footer > button.ka-btn-text {
+  margin-right: 20px;
+}
+
+.ka-modal-footer:after {
+  clear: both;
+  content: ' ';
+  display: table;
+}
+
+.ka-btn-secondary {
+  color: #ffffff;
+  background: #888;
+  border-color: #666;
+}
+
+.ka-btn-secondary:hover, .ka-btn-secondary:focus, .ka-btn-secondary:active {
+  color: #ffffff;
+  background: #777;
+  border-color: #555;
+}
+
+.ka-btn-text {
+  background: transparent;
+  color: #428bca;
+}
+  
+.list-group.ka-list-box {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 100%;
+  overflow: auto;
+}
+
+.ka-list-box .list-group-item {
+  border: none;
+  padding: 5px 10px;
+}
+
+.list-group-item .os-btns.right {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+}

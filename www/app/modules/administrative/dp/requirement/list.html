@@ -1,0 +1,65 @@
+
+<div class="clearfix">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span translate="dp.menu.requirements">Requirements</span>
+      <div class="os-action-btns">
+        <button class="btn btn-primary" ui-sref="req-addedit()">
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.add">Add</span>
+        </button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <table class="os-table">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col os-col-15">
+              <span translate="dp.distribution_order.specimen_type">Specimen Type</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="dp.distribution_order.anatomic_site">Anatomic Site</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="dp.distribution_order.pathology_status">Pathology Status</span>
+            </th>
+            <th class="col os-col-20">
+              <span translate="dp.distribution_order.clinical_diagnosis">Clinical Diagnosis</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="dp.distribution_order.target_qty">Target Quantity</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="dp.distribution_order.distributed_qty">Distributed Quantity</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="dp.distribution_order.distributed_cnt">Distributed Count</span>
+            </th>
+            <th class="col os-col-5"></th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body">
+          <tr class="row" ng-repeat="dpr in dprs">
+            <td class="col os-col-15">{{dpr.specimenType}}</td>
+            <td class="col os-col-15">{{dpr.anatomicSite}}</td>
+            <td class="col os-col-15">{{dpr.pathologyStatuses | osArrayJoin}}</td>
+            <td class="col os-col-20">{{dpr.clinicalDiagnosis}}</td>
+            <td class="col os-col-10">{{dpr.specimenCount * dpr.quantity}}</td>
+            <td class="col os-col-10">{{dpr.distributedQty}}</td>
+            <td class="col os-col-10">{{dpr.distributedCnt}}</td>
+            <td class="col os-col-5 os-no-right-padding">
+              <div class="pull-right btn-group btn-group-xs">
+                <button class="btn btn-default" ui-sref="req-addedit({reqId: dpr.id})">
+                  <span class="fa fa-pencil"></span>
+                </button>
+                <button class="btn btn-default" ng-click="deleteDpr(dpr)">
+                  <span class="fa fa-trash"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,0 @@
-Name,Type,User ID,Email Address,Street,City,State,Zip Code,Country,Phone Number,Fax Number,Activity Status
-,Collection Site,1,admin@admin.com,Addr1,Hawaii,Florida,78787,South Africa,55555,343434,Active
-tmp site 001,,1,admin@admin.com,Addr2,city1,Hawaii,43453,South Africa,4534534,76776,Active
-tmp site A001,Not Specified,,admin@admin.com,Addr3,city2,Florida,45235,India,74477,34444,Active
-tmp site D001,Repository,1,admin@admin.com,,city3,Florida,4354,India,5567567,345345,Active
-tmp site E001,Repository,1,admin@admin.com,Addr5,,Florida,4354,India,5567567,345345,Active
-tmp site F001,Repository,1,admin@admin.com,Addr5,city3,,4354,India,5567567,345345,Active
-tmp site H001,Repository,1,admin@admin.com,Addr5,city3,Florida,4354,,5567567,345345,Active
-tmp site J001,Repository,1,admin@admin.com,Addr5,city3,Florida,4354,India,5567567,34543,

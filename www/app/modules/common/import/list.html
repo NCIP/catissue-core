@@ -1,0 +1,98 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs ng-show="importDetail.breadcrumbs.length > 0">
+        <li ng-repeat="breadcrumb in importDetail.breadcrumbs">
+          <a ui-sref="{{breadcrumb.state}}" translate="{{breadcrumb.title}}"></a>
+        </li>
+      </ul>
+      <h3>
+        <span translate="{{importDetail.title}}"></span>
+      </h3> 
+    </div>
+  </div>
+
+  <div class="container" ng-switch on="importJobs.length > 0">
+    <span ng-switch-when="false" translate="bulk_imports.no_jobs">
+      No jobs to show
+    </span>
+    <table class="os-table" ng-switch-when="true">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col os-col-20">
+            <span translate="bulk_imports.job_id">Job ID</span>
+          </th>
+          <th class="col os-col-15">
+            <span translate="bulk_imports.submitted_by">Submitted By</span>
+          </th>
+          <th class="col os-col-15">
+            <span translate="bulk_imports.submit_time">Submit Time</span>
+          </th>
+          <th class="col os-col-15">
+            <span translate="bulk_imports.finish_time">Finish Time</span>
+          </th>
+          <th class="col os-col-10">
+            <span translate="bulk_imports.processed_records">Success</span>
+          </th>
+          <th class="col os-col-10">
+            <span translate="bulk_imports.failed_records">Failed</span>
+          </th>
+          <th class="col os-col-10">
+            <span translate="bulk_imports.status">Status</span>
+          </th>
+          <th class="col os-col-5">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="importJob in importJobs">
+          <td class="col os-col-20">
+            <a>
+              <span>#{{importJob.id}}</span> 
+              <span translate="bulk_imports.import_types.{{importJob.type}}"></span>
+              <span ng-switch on="importJob.name != 'extensions'">
+                <span ng-switch-when="true" translate="bulk_imports.object_types.{{importJob.name}}"></span>
+                <span ng-switch-when="false"> {{'bulk_imports.extension_name' | translate: importJob}} </span> 
+              </span>
+            </a>
+          </td>
+          <td class="col os-col-15">
+            <span>{{importJob.createdBy.firstName}} {{importJob.createdBy.lastName}}</span>
+          </td>
+          <td class="col os-col-15">
+            <span>{{importJob.creationTime | date: global.dateTimeFmt}}</span>
+          </td>
+          <td class="col os-col-15">
+            <span ng-if="importJob.endTime">{{importJob.endTime | date: global.dateTimeFmt}}</span>
+          </td>
+          <td class="col os-col-10">
+            <span>{{importJob.totalRecords - importJob.failedRecords}}</span>
+          </td>
+          <td class="col os-col-10">
+            <span>{{importJob.failedRecords}}</span>
+          </td>
+          <td class="col os-col-10">
+            <span translate="bulk_imports.status_{{importJob.status}}"></span>
+          </td>
+          <td class="col os-col-5">
+            <div class="btn-group btn-group-xs">
+              <div class="btn btn-default" title="{{'bulk_imports.tooltip.download' | translate}}">
+                <a href="{{importJob.outputFileUrl}}" target="_blank">
+                  <span class="fa fa-download"></span>
+                </a>
+              </div>
+              <button ng-if="importJob.status == 'IN_PROGRESS'" type="button" class="btn btn-default"
+                ng-click="stopJob(importJob)" title="{{'bulk_imports.tooltip.stop' | translate}}">
+                <span class="fa fa-stop-circle-o"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pager total-items="pagingOpts.totalJobs" items-per-page="pagingOpts.jobsPerPage"
+      ng-model="pagingOpts.currPage" ng-switch-when="true">
+    </pager>
+  </div>
+</div>

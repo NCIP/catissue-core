@@ -1,0 +1,35 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>participant</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.ParticipantDetail</name>
+
+    <field>
+      <caption>#getMessage("participant_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+   
+    <field>
+      <caption>#getMessage("participant_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("participant_ppid")</caption>
+      <attribute>ppid</attribute>
+    </field>
+
+    #parse( 'com/krishagni/catissueplus/core/biospecimen/schema/participant-static-fields.xml' )
+
+    <field>
+      <caption>#getMessage("participant_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>  
+
+    <record type="customFields" entityType="ParticipantExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
+  </record>
+</object-schema>

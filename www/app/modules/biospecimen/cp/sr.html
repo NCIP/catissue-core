@@ -1,0 +1,134 @@
+<div>
+  <ul class="os-key-values os-two-cols">
+    <li class="item">
+      <strong class="key key-sm" translate="srs.name">Name</strong>
+      <div class="value value-md">
+        <span>{{childReq.name | osNoValue}}</span> 
+      </div>
+    </li>
+    <li class="item" ng-if="codingEnabled">
+      <strong class="key key-sm" translate="srs.code">Short Code</strong>
+      <div class="value value-md">
+        <span>{{childReq.code | osNoValue}}</span> 
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.label_fmt">Label Format</strong>
+      <div class="value value-md">
+        <span>{{childReq.labelFmt | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.when_to_print">When to Print</strong>
+      <div class="value value-md" ng-switch on="!!childReq.labelAutoPrintMode">
+        <span ng-switch-when="true">
+          {{'srs.spmn_label_auto_print_modes.' + childReq.labelAutoPrintMode | translate}}
+        </span>
+        <span ng-switch-default translate="common.not_specified">
+          Not Specified
+        </span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.label_print_copies">Label Print Copies</strong>
+      <div class="value value-md">
+        <span>{{childReq.labelPrintCopies | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.specimen_class">Specimen Class</strong>
+      <div class="value value-md">
+        <span>{{childReq.specimenClass}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.specimen_type">Specimen Type</strong>
+      <div class="value value-md">
+        <span>{{childReq.type}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.anatomic_site">Anatomic Site</strong>
+      <div class="value value-md">
+        <span>{{childReq.anatomicSite}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.laterality">Laterality</strong>
+      <div class="value value-md">
+        <span>{{childReq.laterality}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.pathology">Pathology</strong>
+      <div class="value value-md">
+        <span>{{childReq.pathology | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.initial_qty">Initial Quantity</strong>
+      <div class="value value-md">
+        <span>{{childReq.initialQty | osNumberInScientificNotation}}</span>
+        <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type">
+        </os-specimen-unit>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.concentration">Concentration</strong>
+      <div class="value value-md">
+        <span>{{childReq.concentration | osNumberInScientificNotation}}</span>
+        <os-specimen-unit specimen-class="childReq.specimenClass" type="childReq.type"
+          measure="concentration" ng-if="!!childReq.concentration || childReq.concentration == 0">
+        </os-specimen-unit>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.storage_type">Storage Type</strong>
+      <div class="value value-md" ng-switch on="childReq.storageType == 'Virtual'">
+        <span ng-switch-when="true" translate="common.no">No</span>
+        <span ng-switch-default translate="common.yes">Yes</span>
+      </div>
+    </li>
+    <li class="item" ng-if="childReq.specimenClass == 'Molecular' ? codingEnabled : !codingEnabled"> 
+      <strong class="key key-sm">&nbsp;</strong>
+      <div class="value value-md">
+        <span>&nbsp;</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.collector">Collector</strong>
+      <div class="value value-md">
+        <span>{{childReq.collector | osUserDisplayName | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.receiver">Receiver</strong>
+      <div class="value value-md">
+        <span>{{childReq.receiver | osUserDisplayName | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.collection_container">Collection Container</strong>
+      <div class="value value-md">
+        <span>{{childReq.collectionContainer | osNoValue}}</span>
+      </div>
+    </li>
+    <li class="item">
+      <strong class="key key-sm" translate="srs.collection_proc">Collection Procedure</strong>
+      <div class="value value-md">
+        <span>{{childReq.collectionProcedure | osNoValue}}</span>
+      </div>
+    </li>
+  </ul>
+
+  <div class="os-divider"></div>
+
+  <div>
+    <button class="btn btn-success" ng-click="showEditSr(childReq)" show-if-allowed="cpResource.updateOpts">
+      <span translate="common.buttons.edit">Edit</span>
+    </button>
+    <a class="btn os-btn-text-secondary" ng-click="revertEdit()">
+      <span translate="common.buttons.cancel">Cancel</span>
+    </a>
+  </div>
+</div>

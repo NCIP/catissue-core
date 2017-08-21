@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vpawar" id="Collection protocol short code">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Collection protocol event short code">
+    <addColumn tableName="CATISSUE_COLL_PROT_EVENT">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Anticipated specimen short code">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding consents waived column to collection protocol table">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists 
+          tableName="CATISSUE_COLLECTION_PROTOCOL" 
+          columnName="CONSENTS_WAIVED"/>
+      </not>
+    </preConditions>
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="CONSENTS_WAIVED" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Update collection protocol consents waived">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(identifier) from catissue_collection_protocol where consents_waived is not null
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      update
+        catissue_collection_protocol
+      set
+        consents_waived = 1
+      where
+        identifier not in (
+          select
+            distinct coll_protocol_id
+          from
+            catissue_consent_tier
+          where
+            activity_status = 'Active'
+
+          union
+
+          select
+            distinct collection_protocol_id as cpId
+          from
+            catissue_coll_prot_reg
+          where
+            consent_document_name is not null
+        );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="mysql" >
+    <sql>
+      update 
+        key_seq_generator ksg 
+        join catissue_collection_protocol cp on ksg.key_value = cp.short_title
+      set 
+        ksg.key_value = cp.identifier
+      where
+        ksg.key_type = 'PPID';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Replace cp short title with cp id as key in key sequence generator table" dbms="oracle">
+    <sql>
+      merge into
+        key_seq_generator ksg
+      using  (
+        select 
+          k.identifier as key_id, cp.identifier as cp_id
+        from 
+          key_seq_generator k
+          join catissue_collection_protocol cp on  k.key_value = cp.short_title 
+        where 
+          k.key_type = 'PPID'
+      ) t on (ksg.identifier = t.key_id)
+      when matched then
+      update set  
+        ksg.key_value = t.cp_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Add default receiving site column in distribution protocol">
+    <addColumn tableName="CATISSUE_DISTRIBUTION_PROTOCOL">
+      <column name="DEF_RECEIVING_SITE_ID" type="${int.type}"></column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on default receiving site of distribution protocol">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_DEF_REC_SITE_ID"
+      baseTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      baseColumnNames="DEF_RECEIVING_SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Table to maintain distribution protocol sites">
+    <createTable tableName="OS_DISTRIBUTION_PROTOCOL_SITES">
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="SITE_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Primary key on distribution protocol id and site id of DP sites">
+    <addPrimaryKey
+      tableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      columnNames="DISTRIBUTION_PROTOCOL_ID, SITE_ID"/>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on distribution protocol id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_DP_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="FK on site id of DP sites">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_SITES_SITE_ID"
+      baseTableName="OS_DISTRIBUTION_PROTOCOL_SITES"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding cohort column to visit table">
+    <addColumn tableName="CATISSUE_SPECIMEN_COLL_GROUP">
+      <column name="COHORT" type="${text.type}(64)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating collection protocol extension view" runOnChange="true">
+    <createView viewName="os_cp_extn_records_view" replaceIfExists="true">
+      select 
+        re.object_id as cp_id, re.record_id as record_id, fc.container_id as form_id
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
+      where 
+        fc.entity_type = 'CollectionProtocolExtension'
+        and fc.deleted_on is null 
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop foreign key for site id from site cp table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP"
+      constraintName="FK3"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop foreign key for collection protocol id from site cp table">
+    <dropForeignKeyConstraint
+      baseTableName="CATISSUE_SITE_CP"
+      constraintName="FK4"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop primary key of site cp table">
+    <dropPrimaryKey tableName="CATISSUE_SITE_CP"/>
+  </changeSet> 
+
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="mysql">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  
+  <changeSet author="vlonushte" id="Primary key to identify CP-site relation" dbms="oracle">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="IDENTIFIER" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Site Cp table sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SITE_CP_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="Update identifier column with default value in of site cp table" dbms="oracle">
+    <sql>
+      update CATISSUE_SITE_CP set IDENTIFIER = OS_SITE_CP_SEQ.nextval;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vlonuste" id="PK on identifier of  site cp table" dbms="oracle">
+    <addPrimaryKey 
+      columnNames="IDENTIFIER" 
+      tableName="CATISSUE_SITE_CP"
+    />
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Adding code to identify CP-site relation">
+    <addColumn tableName="CATISSUE_SITE_CP">
+      <column name="CODE" type="${text.type}(16)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on site id of site cp table">
+    <addForeignKeyConstraint
+      constraintName="FK_SITE_CP_SITE_ID"
+      baseTableName="CATISSUE_SITE_CP"
+      baseColumnNames="SITE_ID"
+      referencedTableName="CATISSUE_SITE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="FK on collection protocol id of site cp table">
+    <addForeignKeyConstraint
+      constraintName="FK_SITE_CP_COLL_PROT_ID"
+      baseTableName="CATISSUE_SITE_CP"
+      baseColumnNames="COLLECTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique constraint on site id and cp id in site cp table">
+    <addUniqueConstraint 
+      tableName="CATISSUE_SITE_CP"
+      columnNames="SITE_ID, COLLECTION_PROTOCOL_ID"
+      constraintName="OS_CP_SITE_SITE_ID_CP_ID_UQ"/>
+  </changeSet>
+
+</databaseChangeLog>

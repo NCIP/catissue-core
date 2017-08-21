@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CATISSUE_INSTITUTION  NAME="default-institute" ACTIVITY_STATUS="Active" />
+   
+  <OS_DEPARTMENTS NAME="default-department" INSTITUTE_ID="9"/>
+</dataset>

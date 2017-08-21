@@ -1,2 +1,0 @@
-Storage Type Name,Temperature,One Dimension,Two Dimension,Comments,Activity Status,oneDimensionLabel,twoDimensionLabel,holdsSpecimenClass#1,holdsSpecimenClass#2,holdsSpecimenClass#3,holdsSpecimenClass#4,holdsStorageType#1,holdsStorageType#2,holdsStorageType#3,holdsStorageType#4
-BO_Storage_Type_Res,-10,10,10,Test Comment,Active,Row,Column,Cell,Tissue,Fluid,,4,23,,

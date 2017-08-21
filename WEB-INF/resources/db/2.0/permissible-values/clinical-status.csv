@@ -1,0 +1,16 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,"Relapse, Not Specified",2003988,null
+getNextPvId(),,,null,Post-Operative,2003988,null
+getNextPvId(),,,null,Not Specified,2003988,null
+getNextPvId(),,,null,Operative,2003988,null
+getNextPvId(),,,null,Remission,2003988,null
+getNextPvId(),,,null,Pre-Operative,2003988,null
+getNextPvId(),,,null,Pre-Therapy,2003988,null
+getNextPvId(),,,null,"Relapse, Distant Site",2003988,null
+getNextPvId(),,,null,No Diagnosis / Control,2003988,null
+getNextPvId(),,,null,Post-Therapy,2003988,null
+getNextPvId(),,,null,New Diagnosis,2003988,null
+getNextPvId(),,,null,"Relapse, Primary Site",2003988,null
+getNextPvId(),,,null,"On-Therapy",2003988,null
+getNextPvId(),,,null,"Palliative Care",2003988,null
+getNextPvId(),,,null,Follow-up,2003988,null

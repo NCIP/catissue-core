@@ -1,0 +1,26 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title" translate="user.filter.title">User Filter</h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="userFilterOpts.name" class="form-control"
+        placeholder="{{'user.name' | translate}}">
+    </div>
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="userFilterOpts.loginName" class="form-control"
+        placeholder="{{'user.login_name' | translate}}">
+    </div>
+    <div class="form-group">
+      <os-select os-md-input ng-model="userFilterOpts.institute" list="institutes"
+        placeholder="{{'user.institute' | translate}}" select-prop="name" display-prop="name">
+      </os-select>
+    </div>
+    <div class="form-group">
+      <os-select os-md-input ng-model="userFilterOpts.activityStatus" list="activityStatuses"
+        placeholder="{{'user.activity_status' | translate}}">
+      </os-select>
+    </div>
+  </div>
+</div>

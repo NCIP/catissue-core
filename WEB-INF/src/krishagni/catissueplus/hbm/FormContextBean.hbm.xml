@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="krishagni.catissueplus.beans.FormContextBean" table="CATISSUE_FORM_CONTEXT">
+    <id name="identifier" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_FORM_CONTEXT_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="containerId" column="CONTAINER_ID"/>
+
+    <property name="entityType" column="ENTITY_TYPE"/>
+
+    <property name="cpId" column="CP_ID"/>
+
+    <property name="sortOrder" column="SORT_ORDER"/>
+
+    <property name="multiRecord" column="IS_MULTIRECORD"/>
+        
+    <property name="sysForm" column="IS_SYS_FORM" type="boolean"/>
+
+    <property name="deletedOn" column="DELETED_ON" type="timestamp"/>	
+                			
+    <sql-query name="getFormsAttachedToAllProtocols">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        c.identifier as formId, c.caption as formCaption,
+        c.create_time as creationTime, c.last_modify_time as modificationTime
+      from
+        dyextn_containers c
+        inner join catissue_user u on u.identifier = c.created_by
+        inner join catissue_form_context fctxt on fctxt.container_id = c.identifier
+      where
+        c.deleted_on is null and 
+        fctxt.deleted_on is null and 
+        fctxt.cp_id = -1 and 
+        fctxt.entity_type != 'Query'
+    </sql-query>
+
+    <sql-query name="getFormsByEntityType">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="cpCount" type="integer"/>
+      <return-scalar column="allCp" type="integer"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        c.identifier as formId, c.name as formName, c.caption as formCaption,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        derived.cpCount as cpCount, derived.allCp, derived.sysForm,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        dyextn_containers c
+        inner join catissue_user u on u.identifier = c.created_by
+        inner join (
+          select
+            ic.identifier as formId, min(ctxt.cp_id) as allCp, count(distinct ctxt.cp_id) as cpCount, max(ctxt.is_sys_form) as sysForm
+          from
+            dyextn_containers ic
+            left join catissue_form_context ctxt on ctxt.container_id = ic.identifier and ctxt.deleted_on is null
+          where
+            ic.deleted_on is null and ctxt.entity_type = :entityType
+          group by
+            ic.identifier
+        ) derived on derived.formId = c.identifier
+      where
+        c.deleted_on is null		
+      order by
+        c.caption
+    </sql-query>
+
+    <sql-query name="getFormsByCpAndEntityType">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="entityType" type="string"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        c.identifier as formId, c.name as formName, c.caption as formCaption,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        ctxt.entity_type as entityType, ctxt.is_sys_form as sysForm,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        dyextn_containers c
+        inner join catissue_user u on u.identifier = c.created_by
+        inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
+      where
+        ctxt.entity_type in (:entityTypes) and
+        (ctxt.cp_id = -1 or ctxt.cp_id = :cpId) and
+        ctxt.deleted_on is null and
+        c.deleted_on is null
+      order by
+        c.caption
+    </sql-query>
+
+    <sql-query name="getQueryForms">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        c.identifier as formId, c.name as formName, c.caption as formCaption,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        dyextn_containers c
+        inner join catissue_user u on u.identifier = c.created_by
+        inner join catissue_form_context ctxt on ctxt.container_id = c.identifier
+      where
+        c.deleted_on is null and
+        ctxt.deleted_on is null and
+        ctxt.entity_type = 'Query'
+      order by
+        ctxt.sort_order
+    </sql-query>
+
+    <sql-query name="getFormContexts">
+      <return-scalar column="ctxtId"        type="long"/>
+      <return-scalar column="formId"        type="long"/>
+      <return-scalar column="entityLevel"   type="string"/>
+      <return-scalar column="multirecord" type="boolean"/>
+      <return-scalar column="sysForm"       type="boolean"/>
+      <return-scalar column="cpId"          type="long"/>
+      <return-scalar column="shortTitle"    type="string"/>
+      <return-scalar column="title"         type="string"/>
+            
+      select
+        fctxt.identifier as ctxtId, fctxt.container_id as formId, fctxt.entity_type as entityLevel, 
+        fctxt.is_multirecord as multirecord, fctxt.is_sys_form as sysForm,
+        cp.identifier as cpId, cp.short_title as shortTitle, cp.title as title
+      from
+        catissue_form_context fctxt
+        inner join dyextn_containers c on c.identifier = fctxt.container_id	
+        left join catissue_collection_protocol cp on cp.identifier = fctxt.cp_id
+      where
+        c.deleted_on is null and
+        (cp.activity_status != 'Disabled' or fctxt.cp_id = -1) and
+        fctxt.deleted_on is null and
+        fctxt.container_id = :formId
+    </sql-query>
+
+    <query name="getFormContext"> <!-- TODO -->
+      from
+        FormContextBean as f
+      where
+        f.containerId = :formId and
+        (f.cpId = :cpId or f.cpId = -1) and
+        f.entityType = :entityType and
+        f.deletedOn is null
+    </query>
+    
+    <query name="getSysFormContexts">
+      from
+        FormContextBean as f
+      where
+        f.containerId = :formId and
+        f.sysForm = true and
+        f.deletedOn is null
+    </query>
+                
+    <query name="getFormContextsById"> <!-- TODO used in data entry-->
+      from
+        FormContextBean as f 
+      where
+        f.identifier in (:ids) and f.deletedOn is null
+    </query>
+        
+    <query name="getQueryFormCtxtByContainerId"> <!-- TODO used in aq forms import-->
+      from
+        FormContextBean as f
+      where
+        f.containerId = :formId and
+        f.entityType = :entityType and
+        f.deletedOn is null
+    </query>
+
+    <sql-query name="getCprForms">
+      <return-scalar column="formCtxtId" type="long"/>
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+      <return-scalar column="multirecord" type="boolean"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="recordCnt" type="integer"/>
+            
+      select
+        fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
+        fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
+        count(r.identifier) as recordCnt
+      from
+        catissue_form_context fc
+        left join catissue_coll_prot_reg reg on reg.collection_protocol_id = fc.cp_id
+        inner join dyextn_containers c on c.identifier = fc.container_id
+        inner join catissue_user u on u.identifier = c.created_by
+        left join catissue_form_record_entry r 
+          on r.form_ctxt_id = fc.identifier and r.object_id = :cprId and r.activity_status = 'ACTIVE'
+      where
+        c.deleted_on is null and 
+        fc.deleted_on is null and
+        fc.entity_type = 'Participant' and (reg.identifier = :cprId or fc.cp_id = -1)
+      group by
+        fc.identifier, fc.container_id, c.caption , fc.cp_id, 
+        c.create_time, c.last_modify_time, u.identifier, u.first_name, u.last_name,
+        fc.is_multirecord, fc.is_sys_form
+    </sql-query>
+
+    <sql-query name="getSpecimenForms">
+      <return-scalar column="formCtxtId" type="long"/>
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+      <return-scalar column="multirecord" type="boolean"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="recordCnt" type="integer"/>
+            
+      select
+        fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
+        fc.is_multirecord as multirecord, fc.is_sys_form as sysForm,	
+        count(r.identifier) as recordCnt
+      from
+        catissue_form_context fc
+        left join (
+          catissue_coll_prot_reg reg
+          inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier
+          inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier) 
+          on reg.collection_protocol_id = fc.cp_id
+        inner join dyextn_containers c on c.identifier = fc.container_id
+        inner join catissue_user u on u.identifier = c.created_by
+        left join catissue_form_record_entry r 
+          on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
+      where
+        c.deleted_on is null and 
+        fc.deleted_on is null and
+        fc.entity_type = 'Specimen' and (specimen.identifier = :specimenId or fc.cp_id = -1)
+      group by
+        fc.identifier, fc.container_id, c.caption , fc.cp_id, 
+        c.create_time, c.last_modify_time, u.identifier, u.first_name, u.last_name,
+        fc.is_multirecord, fc.is_sys_form
+    </sql-query>
+        
+    <sql-query name="getSpecimenEventForms">
+      <return-scalar column="formCtxtId" type="long"/>
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+      <return-scalar column="multirecord" type="boolean"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="recordCnt" type="integer"/>
+
+      select
+        fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
+        fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 	
+        count(r.identifier) as recordCnt
+      from
+        catissue_form_context fc
+        left join (
+          catissue_coll_prot_reg reg
+          inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier
+          inner join catissue_specimen specimen on specimen.specimen_collection_group_id = scg.identifier)
+          on reg.collection_protocol_id = fc.cp_id
+        inner join dyextn_containers c on c.identifier = fc.container_id
+        inner join catissue_user u on u.identifier = c.created_by
+        left join catissue_form_record_entry r 
+          on r.form_ctxt_id = fc.identifier and r.object_id = :specimenId and r.activity_status = 'ACTIVE'
+      where
+        c.deleted_on is null and 
+        fc.deleted_on is null and
+        fc.entity_type = 'SpecimenEvent' and (specimen.identifier = :specimenId or fc.cp_id = -1)
+      group by
+        fc.identifier, fc.container_id, c.caption , fc.cp_id, 
+        c.create_time, c.last_modify_time, u.identifier, u.first_name, u.last_name,
+        fc.is_multirecord, fc.is_sys_form
+      order by 
+        c.caption  
+    </sql-query>
+        
+    <sql-query name="getScgForms">
+      <return-scalar column="formCtxtId" type="long"/>
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="creationTime" type="timestamp"/>
+      <return-scalar column="modificationTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+      <return-scalar column="multirecord" type="boolean"/>
+      <return-scalar column="sysForm" type="boolean"/>
+      <return-scalar column="recordCnt" type="integer"/>
+
+      select
+        fc.identifier as formCtxtId, fc.container_id as formId, c.caption as formCaption, fc.cp_id as cpId,
+        c.create_time as creationTime,
+        case when c.last_modify_time is null then c.create_time else c.last_modify_time end as modificationTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName,
+        fc.is_multirecord as multirecord, fc.is_sys_form as sysForm, 
+        count(r.identifier) as recordCnt
+      from
+        catissue_form_context fc
+        left join (
+          catissue_coll_prot_reg reg
+          inner join catissue_specimen_coll_group scg on scg.collection_protocol_reg_id = reg.identifier)
+          on reg.collection_protocol_id = fc.cp_id
+        inner join dyextn_containers c on c.identifier = fc.container_id
+        inner join catissue_user u on u.identifier = c.created_by
+        left join catissue_form_record_entry r 
+          on r.form_ctxt_id = fc.identifier and r.object_id = :scgId and r.activity_status = 'ACTIVE'
+      where
+        c.deleted_on is null and 
+        fc.deleted_on is null and
+        fc.entity_type = 'SpecimenCollectionGroup' and (scg.identifier = :scgId or fc.cp_id = -1)
+      group by
+        fc.identifier, fc.container_id, c.caption , fc.cp_id, 
+        c.create_time, c.last_modify_time, u.identifier, u.first_name, u.last_name,
+        fc.is_multirecord, fc.is_sys_form
+      order by
+        c.caption		
+    </sql-query>
+
+    <query name="getFormContextsByEntity">
+      from 
+        krishagni.catissueplus.beans.FormContextBean fc
+      where
+        fc.entityType = :entityType and
+        fc.cpId = :cpId and
+        fc.deletedOn is null
+    </query>
+
+    <sql-query name="getFormByCtxt">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCaption" type="string"/>
+
+      select
+        c.identifier as formId, c.caption as formCaption
+      from
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+      where
+        c.deleted_on is null and fc.deleted_on is null and fc.identifier = :formCtxtId
+    </sql-query> 
+
+    <sql-query name="getFormRecords">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="recordId" type="long"/>
+      <return-scalar column="updateTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        r.identifier as id, r.record_id as recordId, r.update_time as updateTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        catissue_form_record_entry r
+        inner join catissue_form_context f on r.form_ctxt_id = f.identifier
+        inner join dyextn_containers c on c.identifier = f.container_id            	
+        inner join catissue_user u on u.identifier = r.updated_by
+      where
+        c.deleted_on is null and 	
+        f.deleted_on is null and
+        r.form_ctxt_id = :formCtxtId and 
+        r.object_id = :objectId and 
+        r.activity_status = 'ACTIVE'
+    </sql-query>
+
+    <sql-query name="getParticipantObjId">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="cpId" type="long"/>
+
+      select
+        reg.identifier as id, reg.collection_protocol_id as cpId
+      from
+        catissue_coll_prot_reg reg
+        inner join catissue_collection_protocol cp on cp.identifier = reg.collection_protocol_id
+      where
+        reg.protocol_participant_id = :ppId and cp.title = :cpTitle
+    </sql-query>
+
+    <sql-query name="getContainerId">
+      <return-scalar column="containerId" type="long"/>
+
+      select
+        fc.container_id as containerId
+      from
+        catissue_form_context fc
+        inner join dyextn_containers c on c.identifier = fc.container_id
+      where
+        fc.identifier = :identifier and
+        c.deleted_on is null and
+        fc.deleted_on is null
+    </sql-query>
+
+    <sql-query name="getFormContextId">
+      <return-scalar column="ctxtId" type="long"/>
+      <return-scalar column="cpId" type="long"/>
+            
+      select
+        fc.identifier as ctxtId, fc.cp_id as cpId
+      from
+        catissue_form_context fc
+        inner join dyextn_containers c on c.identifier = fc.container_id
+      where
+        fc.container_id = :containerId and 
+        entity_type = :entityType and 
+        (cp_id = :cpId or cp_id = -1) and
+        c.deleted_on is null and
+        fc.deleted_on is null
+    </sql-query>
+
+    <sql-query name="getFormNameContextId">
+      <return-scalar column="formName" type="string"/>
+      <return-scalar column="ctxtId" type="long"/>
+
+      select
+        c.name as formName, fc.identifier as ctxtId
+      from
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+      where
+        c.deleted_on is null and
+        fc.deleted_on is null and
+        fc.entity_type = :entityType and
+        fc.cp_id = :cpId
+    </sql-query>
+                         
+    <sql-query name="getFormIds">
+      <return-scalar column="formId" type="long"/>
+
+      select
+        container_id as formId
+      from
+        catissue_form_context fc
+        inner join dyextn_containers c on c.identifier = fc.container_id	
+      where
+        c.deleted_on is null and 	
+        fc.deleted_on is null and
+        (cp_id = :cpId or cp_id = -1) and entity_type in (:entityTypes)
+    </sql-query>
+        
+    <sql-query name="getRecordCount">
+      <return-scalar column="recordCnt" type="long"/>
+        	
+      select 
+        count(*) as recordCnt 
+      from 
+        catissue_form_record_entry r
+        inner join catissue_form_context fc on fc.identifier = r.form_ctxt_id
+        inner join dyextn_containers c on c.identifier =fc.container_id		  
+      where 
+        r.form_ctxt_id = :formCtxtId and 
+        r.object_id = :objectId and 
+        r.activity_status = 'ACTIVE' and
+        c.deleted_on is null and	 
+        fc.deleted_on is null
+    </sql-query>
+    
+    <sql-query name="getDependentEntities">
+      <return-scalar column="entityType" type="string"/>
+      <return-scalar column="recordCnt" type="int"/>
+      
+      select 
+        fc.entity_type as entityType, count(*) as recordCnt
+      from 
+        dyextn_containers c
+        inner join catissue_form_context fc on fc.container_id = c.identifier
+        inner join catissue_form_record_entry r on r.form_ctxt_id = fc.identifier
+      where
+        c.identifier = :formId and
+        r.activity_status = 'ACTIVE' and
+        c.deleted_on is null and 
+        fc.deleted_on is null
+      group by
+        fc.entity_type
+    </sql-query>
+
+    <sql-query name="getRecordsByEntityAndObject">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCtxId" type="long"/>
+      <return-scalar column="recordId" type="long"/>
+      <return-scalar column="updateTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        fc.container_id as formId, fc.identifier as formCtxId, 
+        re.record_id as recordId, re.update_time as updateTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        catissue_form_context fc
+        inner join catissue_form_record_entry re on re.form_ctxt_id = fc.identifier
+        inner join catissue_user u on u.identifier = re.updated_by
+      where
+        fc.entity_type = :entityType and 
+        re.object_id = :objectId and
+        re.activity_status = 'ACTIVE' and 
+        fc.deleted_on is null
+    </sql-query>
+
+    <sql-query name="getRecords">
+      <return-scalar column="formId" type="long"/>
+      <return-scalar column="formCtxId" type="long"/>
+      <return-scalar column="recordId" type="long"/>
+      <return-scalar column="updateTime" type="timestamp"/>
+      <return-scalar column="userId" type="long"/>
+      <return-scalar column="userFirstName" type="string"/>
+      <return-scalar column="userLastName" type="string"/>
+
+      select
+        fc.container_id as formId, fc.identifier as formCtxId,
+        re.record_id as recordId, re.update_time as updateTime,
+        u.identifier as userId, u.first_name as userFirstName, u.last_name as userLastName
+      from
+        catissue_form_context fc
+        inner join catissue_form_record_entry re on re.form_ctxt_id = fc.identifier
+        inner join catissue_user u on u.identifier = re.updated_by
+      where
+        fc.container_id = :formId and 
+        fc.entity_type = :entityType and 
+        re.object_id = :objectId and
+        re.activity_status = 'ACTIVE' and
+        fc.deleted_on is null
+    </sql-query>
+    
+    <sql-query name="getUpdateTime">
+      <return-scalar column="lastModifyTime" type="date"/>
+
+      select
+        f.last_modify_time as lastModifyTime
+      from
+        dyextn_containers f
+      where
+        f.identifier = :formId
+    </sql-query>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,148 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3 translate="cp.list">Collection Protocols</h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"> </os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <div dropdown class="os-inline-btn">
+        <button show-if-allowed="cpResource.createOpts" class="default dropdown-toggle" title="{{'cp.tooltip.add' | translate}}"
+          ui-sref="cp-addedit({cpId: ''})">
+          <span class="fa fa-plus"></span>
+          <span translate="common.buttons.create">Create</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a ui-sref="cp-addedit">
+              <i class="fa fa-plus"></i>
+              <span translate="common.buttons.create">Create</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="cp-import">
+              <i class="fa fa-upload"></i>
+              <span translate="common.buttons.import">Import</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <os-plugin-hooks view-name="'cp-list'" sec-name="'page-header'"></os-plugin-hooks>
+
+      <ng-include src="'modules/biospecimen/cp/more-menu.html'"></ng-include>
+
+      <os-help class="os-btns btn default" link="cp_help_link"></os-help>
+    </div>
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'cp.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+   
+  <div class="container">
+
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="cp.short_title">Short Title</span>
+          </th>
+          <th class="col os-desc-column">
+            <span translate="cp.title">Title</span>
+          </th>
+          <th class="col">
+            <span translate="cp.pi">Principal Investigator</span>
+          </th>
+          <th class="col">
+            <span translate="cp.start_date">Start Date</span>
+          </th>
+          <th class="col">
+            <span translate="cp.participant_count">Participants</span>
+          </th>
+          <th class="col">
+            <span translate="cp.specimen_count">Specimens</span>
+          </th>
+          <th class="col">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="cp in cpList" os-row-click="showCpSummary(cp)">
+          <td class="col">
+            <a ui-sref="cp-summary-view({cpId: cp.id})">
+              <span>{{cp.shortTitle}}</span>
+            </a>
+          </td>
+          <td class="col os-desc-column">
+            <a ui-sref="cp-summary-view({cpId: cp.id})">
+              <span>{{cp.title}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{cp.principalInvestigator | osUserDisplayName}}</span>
+          </td>
+          <td class="col">
+            <span>{{cp.startDate | date: global.dateFmt}}</span>
+          </td>
+          <td class="col">
+            <span>{{cp.participantCount | number: 0}}</span>
+          </td>
+          <td class="col">
+            <span>{{cp.specimenCount | number: 0}}</span>
+          </td>
+          <td class="col os-click-esc">
+            <div class="os-more-option-btns">
+              <button class="btn btn-xs btn-default" title="{{'cp.view_list' | translate}}"
+                ui-sref="cp-list-view({cpId: cp.id})">
+                <span class="fa fa-list"></span>
+              </button>
+              <button class="btn btn-xs btn-default" title="{{'cp.view_catalog' | translate}}"
+                ng-click="viewCatalog(cp)">
+                <span class="fa fa-table"></span>
+              </button>
+
+              <span class="os-more-options">
+                <div dropdown dropdown-append-to-body>
+                  <button class="dropdown-toggle">
+                    <span class="fa fa-ellipsis-v"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li>
+                      <a ui-sref="cp-detail.overview({cpId: cp.id})">
+                        <span class="fa fa-eye"></span>
+                        <span translate="cp.view_details">View Details</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a ui-sref="participant-list({cpId: cp.id})">
+                        <span class="fa fa-group"></span>
+                        <span translate="cp.view_participants">View Participants</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a ng-click="viewCatalog(cp)">
+                        <span class="fa fa-table"></span>
+                        <span translate="cp.view_catalog">View Catalog</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/biospecimen/cp/search.html'"></div>
+
+</div>

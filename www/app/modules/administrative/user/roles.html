@@ -1,0 +1,113 @@
+<div class="clearfix">
+  <div class="col-xs-10">
+    <div class="list-group">
+      <div class="list-group-item os-section-hdr">
+        <span translate="user.role.roles">Roles</span>
+      </div>
+      <div class="list-group-item" ng-if="userRolesList.length == 0 && !addMode">
+        <div class="alert alert-warning">
+          <span translate="user.role.no_roles">
+            There are no roles to show. Add a new role by clicking Add Role ...
+          </span>
+        </div>
+      </div>
+
+      <div class="list-group-item" ng-if="userRolesList.length > 0"  ng-class="{'os-bottom-padding-none': addMode}">
+        <div class="os-table os-table-fixed" ng-class="{'os-bottom-margin-none': addMode}">
+          <div class="os-table-head">
+            <div class="row">
+              <div class="col col-xs-3" translate="user.role.site">Site</div>
+              <div class="col col-xs-5" translate="user.role.cp">Collection Protocol</div>
+              <div class="col col-xs-3" translate="user.role.role">Role</div>
+              <div class="col col-xs-1">&nbsp;</div>
+            </div>
+          </div>
+          <div class="os-table-body">
+            <div ng-repeat="role in userRolesList">
+              <div class="row" ng-if="role.id != currentRole.id">
+                <div class="col col-xs-3 os-ellipsis">{{role.site || ('user.role.all' | translate)}}</div>
+                <div class="col col-xs-5 os-ellipsis">{{role.collectionProtocol || ('user.role.all' | translate)}}</div>
+                <div class="col col-xs-3 os-ellipsis">{{role.role}}</div>
+
+                <div class="col col-xs-1 action">
+                  <div ng-if="role.isUpdateAllowed" class="btn-group">
+                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="showEditRole(role)">
+                      <span class="fa fa-pencil"></span>
+                    </button>
+                    <button class="btn btn-xs btn-default os-btn-icon" ng-click="removeRole(role)">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div ng-if="role.id == currentRole.id" class="os-inplace-form-edit-po">
+                <div class="list-group-item">
+                  <div class="title" translate="user.role.update_role">Update role</div>
+                  <div class="content" ng-include="'role-add-edit.html'"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a show-if-allowed="userResource.updateOpts" class="list-group-item" ng-click="showAddRole()"
+        translate="user.role.add_role" ng-if="!addMode && allowAddRoles()">Add role...</a>
+
+      <div ng-if="addMode" class="os-inplace-form-edit-po">
+        <div class="list-group-item">
+          <div class="title" translate="user.role.new_role">New Role</div>
+          <div class="content" ng-include="'role-add-edit.html'"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="role-add-edit.html">
+  <form name="pform" os-form-validator="pform" novalidate>
+    <div class="clearfix">
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select os-md-input ng-model="currentRole.site" list="sitePvs" name="site" on-change="loadCps"
+            placeholder="{{'user.role.site' | translate}}" refresh="loadSites($select.search)" required>
+          </os-select>
+          <div os-field-error field="pform.site"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select os-md-input ng-model="currentRole.collectionProtocol" list="cps" name="cp"
+            placeholder="{{'user.role.cp' | translate}}" required>
+          </os-select>
+          <div os-field-error field="pform.cp"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        <div class="form-group">
+          <os-select os-md-input ng-model="currentRole.role" list="roles" name="role"
+            placeholder="{{'user.role.role' | translate}}" required>
+          </os-select>
+          <div os-field-error field="pform.role"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group clearfix">
+      <div class="col-xs-4">
+        <button type="submit" class="btn btn-success"  os-form-submit="saveOrUpdateRole()"
+          translate="common.buttons.save">
+          Save
+        </button>
+        <a class="btn os-btn-text-secondary" os-form-cancel="revertEdit()" translate="common.buttons.cancel">
+          Cancel
+        </a>
+      </div>
+    </div>
+  </form>
+</script>

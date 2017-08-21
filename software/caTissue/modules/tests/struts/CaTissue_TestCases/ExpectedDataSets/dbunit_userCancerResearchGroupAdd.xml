@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_cancer_research_group NAME="Benedict" />
-	<catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="Benedict"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>
-
-

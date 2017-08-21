@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasources>
+	<local-tx-datasource>
+		<jndi-name>openspecimen</jndi-name>
+		<connection-url>@database_url@</connection-url>
+		<user-name>@username@</user-name>
+		<password>@password@</password>
+		<driver-class>@database_driver@</driver-class>
+	</local-tx-datasource>
+</datasources>

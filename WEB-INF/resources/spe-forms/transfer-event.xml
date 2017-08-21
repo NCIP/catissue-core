@@ -1,0 +1,89 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenTransferEvent</name>
+    <caption>#getMessage("transfer_event")</caption>
+    <table>CATISSUE_TRANSFER_EVENT_PARAM</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <storageContainer>
+        <name>fromContainer</name>
+        <udn>fromContainer</udn>
+        <caption>#getMessage("transfer_event_from_container")</caption>
+        <column>FROM_STORAGE_CONTAINER_ID</column>
+      </storageContainer>
+
+      <numberField>
+        <name>fromDimensionTwo</name>
+        <udn>fromDimensionTwo</udn>
+        <caption>#getMessage("transfer_event_dim_two")</caption>
+        <column>FROM_POSITION_DIMENSION_Two</column>
+      </numberField>
+
+      <numberField>
+        <name>fromDimensionOne</name>
+        <udn>fromDimensionOne</udn>
+        <caption>#getMessage("transfer_event_dim_one")</caption>
+        <column>FROM_POSITION_DIMENSION_ONE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <storageContainer>
+        <name>toContainer</name>
+        <udn>toContainer</udn>
+        <caption>#getMessage("transfer_event_to_container")</caption>
+        <column>TO_STORAGE_CONTAINER_ID</column>
+      </storageContainer>
+
+      <numberField>
+        <name>toDimensionTwo</name>
+        <udn>toDimensionTwo</udn>
+        <caption>#getMessage("transfer_event_dim_two")</caption>
+        <column>TO_POSITION_DIMENSION_Two</column>
+      </numberField>
+
+      <numberField>
+        <name>toDimensionOne</name>
+        <udn>toDimensionOne</udn>
+        <caption>#getMessage("transfer_event_dim_one")</caption>
+        <column>TO_POSITION_DIMENSION_ONE</column>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("specimen_event_user")</caption>
+        <column>USER_ID</column>
+        <showInGrid>true</showInGrid>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("specimen_event_date_time")</caption>
+        <column>EVENT_TIMESTAMP</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("specimen_event_comments")</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

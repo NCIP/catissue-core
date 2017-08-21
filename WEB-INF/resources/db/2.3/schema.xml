@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="
+    http://www.liquibase.org/xml/ns/dbchangelog 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="ahegade" id="Modify concentration from double to big decimal in catissue_specimen table" dbms="mysql">
+    <modifyDataType tableName="CATISSUE_SPECIMEN" columnName="CONCENTRATION" newDataType="${decimal.type}(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Rename specimen quantity unit to specimen units for various measures">
+    <renameTable oldTableName="OS_SPECIMEN_QTY_UNITS" newTableName="OS_SPECIMEN_UNITS"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Rename unit to quantity measure unit">
+    <renameColumn
+      columnDataType="${text.type}(32)"
+      oldColumnName="UNIT"
+      newColumnName="QTY_UNIT"
+      tableName="OS_SPECIMEN_UNITS"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Rename unit html display code to quantity measure specific">
+    <renameColumn
+      columnDataType="${text.type}(32)"
+      oldColumnName="HTML_DISPLAY_CODE"
+      newColumnName="QTY_HTML_DISPLAY_CODE"
+      tableName="OS_SPECIMEN_UNITS"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding concentration unit in specimen unit table">
+    <addColumn tableName="OS_SPECIMEN_UNITS">
+      <column name="CONC_UNIT" type="${text.type}(32)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding concentration html display code in specimen unit table">
+    <addColumn tableName="OS_SPECIMEN_UNITS">
+      <column name="CONC_HTML_DISPLAY_CODE" type="${text.type}(32)"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="ckhilosiya" id="Remove not null constraint on site_id in os_orders table">
+    <dropNotNullConstraint
+      tableName="OS_ORDERS"
+      columnName="SITE_ID"
+      columnDataType="${int.type}"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated the phone number column size in audit table to match with the on in the schema">
+    <modifyDataType tableName="CATISSUE_USER_AUD" columnName="PHONE_NUMBER" newDataType="${text.type}(63)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Add index on spr">
+    <createIndex indexName="OS_SPR_NO_IDX" tableName="CATISSUE_SPECIMEN_COLL_GROUP" unique="false">
+      <column name="SURGICAL_PATHOLOGY_NUMBER"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop cp extension records view">
+    <preConditions onFail="MARK_RAN">
+      <viewExists viewName="os_cp_extn_records_view"/>
+    </preConditions>
+    <dropView viewName="os_cp_extn_records_view"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating cp field extensions view" runOnChange="true">
+    <createView viewName="os_cp_cust_field_extns_view" replaceIfExists="true">
+      select 
+        re.object_id as cp_id, re.record_id as record_id, fc.container_id as form_id  
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
+      where 
+        fc.entity_type = 'CollectionProtocolExtension'
+        and fc.deleted_on is null 
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating participant field extensions view" runOnChange="true">
+    <createView viewName="os_part_cust_field_extns_view" replaceIfExists="true">
+      select 
+        re.object_id as pid, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
+      where 
+        fc.entity_type = 'ParticipantExtension'
+        and fc.deleted_on is null 
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Creating visit field extensions view" runOnChange="true">
+    <createView viewName="os_visit_cust_field_extns_View" replaceIfExists="true"> 
+      select 
+        re.object_id as scg_id, re.record_id as record_id, fc.container_id as form_id 
+      from 
+        catissue_form_record_entry re 
+        join catissue_form_context fc on fc.identifier = re.form_ctxt_id
+      where 
+        fc.entity_type = 'VisitExtension'
+        and fc.deleted_on is null 
+        and re.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Adding description column for specimen lists">
+    <addColumn tableName="CATISSUE_SPECIMENLIST_TAGS">
+      <column name="DESCRIPTION" type="${clob.type}"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

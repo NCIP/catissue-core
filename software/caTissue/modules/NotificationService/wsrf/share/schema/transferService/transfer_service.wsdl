@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Transfer" targetNamespace="http://www.globus.org/transfer/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://www.globus.org/transfer/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://www.globus.org/transfer/bindings" location="transfer_bindings.wsdl"/>
-  <wsdl:service name="TransferService">
-    <wsdl:port name="ResourcePort" binding="binding:ResourceSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

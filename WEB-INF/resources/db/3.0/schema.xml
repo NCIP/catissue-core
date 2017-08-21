@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="slakhani" id="Remove not null constraint on phone number in catissue_user table">
+    <dropNotNullConstraint 
+      tableName="CATISSUE_USER" 
+      columnName="PHONE_NUMBER" 
+      columnDataType="${text.type}(63)"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Remove unique constraint for site,mrn in catissue_part_medical_id table">
+    <dropUniqueConstraint 
+      tableName="CATISSUE_PART_MEDICAL_ID" 
+      constraintName="MRN_SITE_UNIQUE"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Added PMBC specimen type under class Cell">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select 
+          count(pv.identifier) 
+        from 
+          catissue_permissible_value pv 
+          join catissue_permissible_value parent on pv.parent_identifier = parent.identifier
+        where 
+          pv.value = 'PBMC' and parent.value = 'Cell' and parent.public_id = '2003991'
+      </sqlCheck>
+    </preConditions>
+    <sql>
+      insert into catissue_permissible_value
+        (identifier, concept_code, definition, parent_identifier, value, public_id, sortorder)
+      values 
+        (getNextPvId(),'','',getPvParentId('2003991', 'Cell'),'PBMC',null,null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="View to compute container hierarchy" runOnChange="true" dbms="mysql">
+    <sql> 
+      create or replace view os_container_hierarchy_view as 
+        select 
+          h.descendent_id as container_id, 
+          group_concat(distinct a.name order by a.identifier separator ' -> ') as hierarchy 
+        from 
+          os_containers_hierarchy h 
+          inner join os_storage_containers a on a.identifier = h.ancestor_id 
+        where 
+          a.activity_status != 'Disabled' 
+        group by 
+          h.descendent_id;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="View to compute container hierarchy" runOnChange="true" dbms="oracle">
+    <sql> 
+      create or replace view os_container_hierarchy_view as (
+        select 
+          h.descendent_id as container_id, 
+          LISTAGG(a.name, '->') within group( order by a.identifier) as hierarchy 
+        from 
+          os_containers_hierarchy h 
+          inner join os_storage_containers a on a.identifier = h.ancestor_id 
+        where 
+          a.activity_status != 'Disabled' 
+        group by 
+          h.descendent_id
+      )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Specimen label print settings at CP level">
+    <createTable tableName="OS_CP_SPMN_LBL_PRINT_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false" />
+      </column>
+      
+      <column name="LINEAGE" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+      
+      <column name="PRINT_MODE" type="${text.type}(32)">
+      </column>
+      
+      <column name="COPIES" type="${int.type}">
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="CP specimen label print settings sequence" dbms="oracle">
+    <createSequence 
+      sequenceName="OS_SPMN_LBL_PRINT_SETTINGS_SEQ" 
+      startValue="1" 
+      incrementBy="1" 
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="FK on specimen label print settings CP">
+    <addForeignKeyConstraint 
+      constraintName="FK_OS_CP_SPMN_PRINT_SETTINGS"
+      baseTableName="OS_CP_SPMN_LBL_PRINT_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Only one print setting per (CP, lineage) combination">
+    <addUniqueConstraint 
+      constraintName="OS_CP_SPMN_PRINT_SETTINGS_UQ" 
+      tableName="OS_CP_SPMN_LBL_PRINT_SETTINGS" 
+      columnNames="CP_ID,LINEAGE"/>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Number of copies of specimen labels to print">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN">
+      <column name="LABEL_PRINT_COPIES" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Removing unused num copies from print job">
+    <dropColumn tableName="OS_LABEL_PRINT_JOBS" columnName="NUM_COPIES"/>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Token can be null for basic authentication">
+    <dropNotNullConstraint 
+      tableName="OS_USER_API_CALLS_LOG" 
+      columnName="AUTH_TOKEN"
+      columnDataType="${text.type}(64)" />
+  </changeSet>
+</databaseChangeLog>

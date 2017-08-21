@@ -1,0 +1,201 @@
+<div>
+  <div class="os-page-hdr">
+    <h3 class="os-title">Patient and Specimen Details</h3>
+  </div>
+
+  <div class="container">
+    <form name="pspecimens" class="form-horizontal" os-form-validator="pspecimens" validator="pval" novalidate>
+      <div class="os-section-hdr">
+        <span>Patient Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">First Name</label>
+        <div class="col-xs-3">
+          <input name="firstName" type="text" ng-model="cpr.participant.firstName" 
+            class="form-control" placeholder="First Name" required>
+          <div os-field-error field="pspecimens.firstName"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Last Name</label>
+        <div class="col-xs-3">
+          <input name="lastName" type="text" ng-model="cpr.participant.lastName" 
+            class="form-control" placeholder="Last Name" required>
+          <div os-field-error field="pspecimens.lastName"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Patient ID</label>
+        <div class="col-xs-3">
+          <input name="ppid" type="text" ng-model="cpr.ppid" 
+            class="form-control" placeholder="Participant ID" required>
+          <div os-field-error field="pspecimens.ppid"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Gender</label>
+        <div class="col-xs-3">
+          <os-select ng-model="cpr.participant.gender" list="genders" placeholder="Select Gender">
+          </os-select>
+        </div>
+      </div>
+
+      <!-- div class="form-group">
+        <label class="control-label col-xs-2">Consent</label>
+        <div class="col-xs-3">
+          <div class="os-file-upload btn btn-default" ng-if="!consent.files">
+            <span>Choose Consent File</span>
+            <input type="file" files="consent.files" os-file-upload/>
+          </div>
+          <div ng-if="consent.filename" class="os-input-addon-grp">
+            <span class="form-control">{{consent.filename}}</span>
+            <button class="btn os-input-addon-right" ng-click="removeConsent()">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </div>
+      </div -->
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Does patient smoke?</label>
+        <div class="col-xs-3">
+          <label class="radio-inline">
+            <input type="radio" name="patientSmokes" value="true" ng-model="patientSmokingHistory.patientSmokes"> Yes
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="patientSmokes" value="false" ng-model="patientSmokingHistory.patientSmokes"> No
+          </label>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Visit Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Date</label>
+        <div class="col-xs-3">
+          <input name="visitDate" type="text" ng-model="visit.visitDate" 
+            class="form-control" placeholder="Visit Date" required
+            datepicker-popup="{{global.dateFmt}}" show-button-bar="true" 
+            is-open="dt.isOpen" ng-focus="dt.isOpen=true">
+          <div os-field-error field="pspecimens.visitDate"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Hospital</label>
+        <div class="col-xs-3">
+          <os-select name="hospital" ng-model="visit.site" required list="hospitals" 
+            placeholder="Select Hospital">
+          </os-select>
+          <div os-field-error field="pspecimens.hospital"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Diagnosis</label>
+        <div class="col-xs-3">
+          <os-select ng-model="visit.clinicalDiagnosis" list="diagnoses" 
+            refresh="searchClinicalDiagnoses" placeholder="Select Diagnosis">
+          </os-select>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Blood Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Label</label>
+        <div class="col-xs-3">
+          <input name="bloodLabel" type="text" ng-model="blood.label" class="form-control" placeholder="Label" required>
+          <div os-field-error field="pspecimens.bloodLabel"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Barcode</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="blood.barcode" class="form-control" placeholder="Barcode"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Anatomic Site</label>
+        <div class="col-xs-3">
+          <os-select name="bloodSite" ng-model="blood.anatomicSite" list="anatomicSites" required
+            placeholder="Select Anatomic Site">
+          </os-select>
+          <div os-field-error field="pspecimens.bloodSite"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Quantity</label>
+        <div class="col-xs-3">
+          <input name="bloodQty" type="text" ng-model="blood.initialQty" class="form-control" placeholder="Quantity" required>
+          <div os-field-error field="pspecimens.bloodQty"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Warm ischemia time</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="bloodExtn.warmIschemiaTime" class="form-control" 
+            placeholder="Warm Ischemia Time">
+        </div>
+
+        <label class="control-label col-xs-2">Comments</label>
+        <div class="col-xs-3">
+          <textarea ng-model="blood.collectionEvent.comments" class="form-control" 
+            placeholder="Comments">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="os-section-hdr">
+        <span>Frozen Tissue Details</span>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Label</label>
+        <div class="col-xs-3">
+          <input name="ftLabel" type="text" ng-model="frozenTissue.label" class="form-control" placeholder="Label" required>
+          <div os-field-error field="pspecimens.ftLabel"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Barcode</label>
+        <div class="col-xs-3">
+          <input type="text" ng-model="frozenTissue.barcode" class="form-control" placeholder="Barcode"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Anatomic Site</label>
+        <div class="col-xs-3">
+          <os-select name="ftSite" ng-model="frozenTissue.anatomicSite" required list="anatomicSites" 
+            placeholder="Select Anatomic Site">
+          </os-select>
+          <div os-field-error field="pspecimens.ftSite"></div>
+        </div>
+
+        <label class="control-label col-xs-2">Quantity</label>
+        <div class="col-xs-3">
+          <input name="ftQty" type="text" ng-model="frozenTissue.initialQty" class="form-control" placeholder="Quantity" required>
+          <div os-field-error field="pspecimens.ftQty"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="control-label col-xs-2">Comments</label>
+        <div class="col-xs-3">
+          <textarea ng-model="frozenTissue.collectionEvent.comments" class="form-control" 
+            placeholder="Comments">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+          <button type="submit" class="btn btn-primary" os-form-submit="collectSpecimens()">Save</button>
+          <button type="submit" class="btn btn-default">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Quantity Not Sufficient,2003994,null
+getNextPvId(),,,null,Cauterized,2003994,null
+getNextPvId(),,,null,"Unacceptable, Not Specified",2003994,null
+getNextPvId(),,,null,Hemorrhagic,2003994,null
+getNextPvId(),,,null,Lipemic,2003994,null
+getNextPvId(),,,null,Frozen,2003994,null
+getNextPvId(),,,null,Not Specified,2003994,null
+getNextPvId(),,,null,Damaged,2003994,null
+getNextPvId(),,,null,Thawed,2003994,null
+getNextPvId(),,,null,Clotted,2003994,null
+getNextPvId(),,,null,Hemolyzed,2003994,null
+getNextPvId(),,,null,Acceptable,2003994,null
+getNextPvId(),,,null,Necrotic,2003994,null

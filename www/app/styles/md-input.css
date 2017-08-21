@@ -1,0 +1,201 @@
+
+.os-md-input-label.ng-hide-add, 
+.os-md-input-label.ng-hide-remove {
+  transition: all linear 0.2s;
+  display: block!important;
+  position: absolute;
+}
+
+.os-md-input-label.ng-hide-add.ng-hide-add-active,
+.os-md-input-label.ng-hide-remove {
+  top: -8px;
+  display: block!important;
+  position: absolute;
+  opacity: 0;
+}
+
+.os-md-input-label.ng-hide-add,
+.os-md-input-label.ng-hide-remove.ng-hide-remove-active {
+  top: -14px;
+  opacity: 1;
+  display: block!important;
+  position: absolute;
+}
+
+.os-md-input {
+  position: relative;
+}
+
+.os-md-input > label {
+  position: absolute;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.8em;
+  font-weight: normal;
+  top: -1.25em;
+}
+
+.os-md-input input:focus,
+.os-md-input textarea:focus,
+.os-md-input button.ui-select-match:focus, 
+.os-md-input .ui-select-match:hover {
+  border-bottom: 2px solid #66afe9!important;
+  background: #fff!important;
+  border-color: #66afe9!important;
+}
+
+#data-table tbody td input,
+.os-md-input input,
+.os-md-input .ui-select-match,
+.os-md-input .ui-select-search {
+  border: 0;
+  height: auto!important;
+  box-shadow: none !important;
+  border-radius: 0;
+  border-bottom: 2px solid #ddd;
+  margin-top: 15px;
+  outline: none;
+  display: block;
+  width: 100%;
+}
+
+#data-table tbody td input,
+.os-md-input input {
+  padding: 2px 0px;
+}
+
+#data-table tbody td .de-select,
+.os-md-input .ui-select-match,
+.os-md-input .ui-select-search {
+  padding: 2px 0px 1px 0px;
+}
+
+#data-table tbody td textarea,
+.os-md-input textarea {
+  resize: none;
+  margin-top: 15px;
+  border: 0;
+  padding: 2px 0px;
+  box-shadow: none !important;
+  border-radius: 0;
+  border-bottom: 2px solid #ddd;
+  outline: none;
+  display: block;
+  width: 100%;
+  white-space: pre-wrap;
+}
+
+/*.os-md-input .ui-select-bootstrap > .ui-select-match > .caret {
+  position: absolute;
+  bottom: 1px;
+  top: inherit;
+  right: -3px;
+  transform: rotate(-45deg);
+  border-top: 6px solid;
+  border-color: #000;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+}*/
+
+.os-table.bulk-edit .os-md-input input,
+.os-table.bulk-edit .os-md-input textarea,
+.os-table.bulk-edit .os-md-input .ui-select-match,
+.os-table.bulk-edit .os-md-input .ui-select-search {
+  margin-top: 0px;
+  /*height: 26px!important;*/
+  /*background: transparent;*/
+}
+
+.os-table.bulk-edit button.right {
+  float: right;
+  padding: 6px 0px 0px 0px;
+}
+
+.os-md-input .ui-select-bootstrap > .ui-select-match > .ui-select-toggle {
+  border: 0px;
+  box-shadow: none;
+  height: auto!important;
+  min-height: 20px;
+  padding: 0px;
+  background: transparent;
+}
+
+.os-md-input .ui-select-bootstrap > .ui-select-match .btn-link {
+  right: 0px!important;
+}
+
+.os-md-input .ui-select-bootstrap > .ui-select-match > .ui-select-toggle:hover {
+  background: transparent;
+}
+
+.os-md-input .ui-select-bootstrap > .ui-select-match > .ui-select-toggle .caret {
+  position: absolute;
+  bottom: -6px;
+  top: inherit;
+  right: -4px;
+  transform: rotate(-45deg);
+  border-top: 6px solid;
+  border-color: #666;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+}
+
+.os-md-input .ui-select-multiple.form-control {
+  border: none;
+  padding-top: 2px;
+  box-shadow: none;
+}
+
+.os-md-input .ui-select-container.ui-select-multiple .ui-select-match {
+  display: inline;
+  border: none;
+}
+
+.os-md-input .ui-select-multiple .ui-select-search {
+  display: inline;
+  padding-bottom: 0px;
+  border-bottom: 2px solid #ddd!important;
+}
+
+.os-md-input-addon, 
+.os-md-input + .os-input-addon-right {
+  border: none;
+  background-color: inherit;
+}
+
+.bulk-edit .os-md-input .os-date-picker {
+  margin-top: 0px!important;
+}
+
+.os-md-form {
+  margin-bottom: 20px;
+}
+
+.os-md-form label {
+  color: #666;
+}
+
+.os-md-form .input {
+  margin-top: -17px;
+}
+
+.os-md-form .form-group {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.os-md-form .os-md-input.read {
+  margin-top: 7px;
+}
+
+.os-md-form .input, .os-md-form .read {
+  padding-left: 0px;
+}
+
+.os-text-checkbox.md-input .checkbox {
+  margin-bottom: 3px;
+  padding-top: 20px;
+}
+
+.os-text-checkbox.md-input .message {
+  padding-top: 20px;
+}

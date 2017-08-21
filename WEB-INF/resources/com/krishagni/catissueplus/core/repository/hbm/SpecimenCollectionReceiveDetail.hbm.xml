@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenCollectionReceiveDetail"
+    table="OS_SPMN_COLL_RECV_DETAILS_VIEW" mutable="false" batch-size="25">
+
+    <id name="id" column="SPECIMEN_ID" type="long">
+      <generator class="foreign">
+        <param name="property">specimen</param>
+      </generator>
+    </id>
+
+    <property name="collContainer" column="COLL_CONTAINER"/>
+
+    <property name="collProcedure" column="COLL_PROCEDURE"/>
+
+    <many-to-one name="collector" column="COLLECTOR_ID"/>
+
+    <property name="collTime" column="COLL_TIME"/>
+
+    <property name="recvQuality" column="RECV_QUALITY"/>
+
+    <many-to-one name="receiver" column="RECEIVER_ID"/>
+
+    <property name="recvTime" column="RECV_TIME"/>
+
+    <many-to-one name="specimen" column="SPECIMEN_ID" insert="false" update="false"/>
+  </class>
+</hibernate-mapping>

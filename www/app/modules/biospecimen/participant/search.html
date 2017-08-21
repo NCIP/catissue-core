@@ -1,0 +1,50 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title" translate="participant.filter_title">
+      Participants Filter
+    </h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="filterOpts.ppid" class="form-control"
+        placeholder="{{'participant.ppid' | translate}}">
+    </div>
+
+    <div class="form-group">
+      <os-date-picker md-type="true" date="filterOpts.registrationDate"
+        placeholder="{{'participant.reg_date' | translate}}">
+      </os-date-picker>
+    </div>
+
+    <div ng-if="userCtx.hasPhiAccess">
+      <div class="form-group">
+        <input os-md-input type="text" ng-model="filterOpts.participantId" class="form-control"
+          placeholder="{{'participant.id' | translate}}">
+      </div>
+
+      <div class="form-group">
+        <input os-md-input type="text" ng-model="filterOpts.name" class="form-control"
+          placeholder="{{'participant.name' | translate}}">
+      </div>
+
+      <div class="form-group">
+        <os-date-picker md-type="true" date="filterOpts.dob"
+          placeholder="{{'participant.birth_date' | translate}}">
+        </os-date-picker>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input os-md-input type="text" ng-model="filterOpts.specimen" class="form-control"
+        placeholder="{{'participant.spmn_label_or_barcode' | translate}}">
+    </div>
+
+    <div class="form-group os-btns">
+      <button class="default full-width" translate="common.buttons.clear_filters" ng-click="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+
+  </div>
+</div>

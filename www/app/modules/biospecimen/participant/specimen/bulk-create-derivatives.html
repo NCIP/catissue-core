@@ -1,0 +1,114 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="specimens.create_derivatives">
+          Create Derived Specimens
+        </span>
+      </h3>
+    </div>
+  </div>
+  
+  <div class="container">
+    <form name="derivativesForm" os-form-validator="derivativesForm" novalidate>
+      <div class="os-bottom-border" ng-if="ctx.derivedSpmns.length > 1">
+        <a ng-click="copyFirstToAll()">
+          <span translate="specimens.copy_first_to_all">Copy first to all</span>
+        </a>
+      </div>
+      <table class="os-table bulk-edit">
+        <thead class="os-table-head">
+          <tr class="row">
+            <th class="col os-col-15">
+              <span translate="specimens.parent_specimen">Parent Specimen</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.parent_type">Parent Type</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.label">Label</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.type">Type</span>
+            </th>
+            <th class="col os-col-10">
+              <span translate="specimens.qty">Quantity</span>
+            </th>
+            <th class="col os-col-15">
+              <span translate="specimens.created_on">Created On</span>
+            </th>
+            <th class="col os-col-20">
+              <span translate="specimens.location">Location</span>
+            </th>
+            <th class="col os-col-5">
+              <span translate="specimens.print">Print?</span>
+            </th>
+            <th class="col os-col-5">
+              <span translate="specimens.close_parent">Close Parent?</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="os-table-body" os-storage-positions>
+          <tr class="row" ng-repeat="derived in ctx.derivedSpmns" ng-form="dform">
+            <td class="col">
+              <a ui-sref="specimen({specimenId: derived.parentId})">
+                <span>{{derived.parentLabel}}</span>
+                <span>({{derived.ppid}})</span>
+              </a>
+            </td>
+            <td class="col">
+              <span>{{derived.parentType}}</span>
+            </td>
+            <td class="col">
+              <input name="label" type="text" os-md-input ng-model="derived.label">
+            </td>
+            <td class="col">
+              <os-specimen-types name="type" md-input specimen="derived" required>
+              </os-specimen-types>
+              <div os-field-error field="dform.type"></div>
+            </td>
+            <td class="col">
+              <os-spmn-measure name="qty" specimen="derived" quantity="derived.initialQty" md-input>
+              </os-spmn-measure>
+              <div os-field-error field="dform.qty"></div>
+            </td>
+            <td class="col">
+              <os-date-picker name="createdOn" date="derived.createdOn" md-type="true" required>
+              </os-date-picker>
+              <div os-field-error field="dform.createdOn"></div>
+            </td>
+            <td class="col">
+              <os-storage-position os-md-input entity="derived" cp-id="derived.cpId"
+                container-list-cache="containerListCache" hide-placeholder>
+              </os-storage-position>
+            </td>
+            <td class="col">
+              <os-checkbox ng-model="derived.printLabel"></os-checkbox>
+            </td>
+            <td class="col">
+              <div class="clearfix">
+                <os-checkbox ng-model="derived.closeParent"></os-checkbox>
+                <button class="btn os-btn-text right" ng-click="removeSpecimen($index)">
+                  <span class="fa fa-remove"></span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-12">
+          <button class="btn btn-primary" os-form-submit="createDerivatives()">
+            <span translate="specimens.create_derivatives">Submit</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.cancel">Cancel</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

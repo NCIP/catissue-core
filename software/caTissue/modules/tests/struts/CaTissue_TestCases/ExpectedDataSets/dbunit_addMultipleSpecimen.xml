@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_audit_event_details ELEMENT_NAME="SPECIMEN_CLASS" CURRENT_VALUE="Fluid"/>
-	<catissue_audit_event_details ELEMENT_NAME="SPECIMEN_CLASS" CURRENT_VALUE="Fluid"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>
-
-

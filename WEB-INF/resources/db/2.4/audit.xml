@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="
+    http://www.liquibase.org/xml/ns/dbchangelog 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext 
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vpawar" id="Column to identify pooled specimen requirement">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="POOLED_SPMN_REQ_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in pooled specimen requirement">
+    <addColumn tableName="CATISSUE_CP_REQ_SPECIMEN_AUD">
+      <column name="pooledSpecimenRequirement_MOD" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Column to identify pooled specimen">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="POOLED_SPECIMEN_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Track changes in pooled specimen">
+    <addColumn tableName="CATISSUE_SPECIMEN_AUD">
+      <column name="pooledSpecimen_MOD" type="${boolean.type}"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of CP code">
+    <modifyDataType
+      tableName="CAT_COLLECTION_PROTOCOL_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of CP event code">
+    <modifyDataType
+      tableName="CATISSUE_COLL_PROT_EVENT_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Increase width of event SR code">
+    <modifyDataType
+      tableName="CATISSUE_CP_REQ_SPECIMEN_AUD"
+      columnName="CODE"
+      newDataType="${text.type}(32)"/>
+  </changeSet>
+</databaseChangeLog>

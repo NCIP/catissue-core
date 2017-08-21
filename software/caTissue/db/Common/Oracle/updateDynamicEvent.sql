@@ -1,1 +1,0 @@
-alter table catissue_default_action add constraint fk_form_context foreign key (IDENTIFIER) references dyextn_abstract_form_context (IDENTIFIER);

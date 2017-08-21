@@ -1,0 +1,42 @@
+<div>
+  <div class="os-modal-header">
+    <span translate="user.announcement.title">Broadcast announcement to active users</span>
+  </div>
+  <div class="os-modal-body">
+    <div class="os-alert-container show">
+      <div class="alert alert-info">
+        <span>{{'user.announcement.info' | translate: ctx}}</span>
+      </div>
+    </div>
+
+    <form name="announcementForm" os-form-validator="announcementForm" novalidate>
+      <div class="form-group">
+        <label>
+          <span translate="user.announcement.subject">Subject</span>
+        </label>
+        <input name="subject" type="text" class="form-control" placeholder="{{'user.announcement.subject' | translate}}"
+          ng-model="ctx.announcement.subject" required>
+        <div os-field-error field="announcementForm.subject"></div>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <span translate="user.announcement.message">Message</span>
+        </label>
+        <textarea name="message" rows="3" class="form-control" placeholder="{{'user.announcement.message_input' | translate}}"
+          ng-model="ctx.announcement.message" required>
+        </textarea>
+        <div os-field-error field="announcementForm.message"></div>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" os-form-submit="submit()">
+          <span translate="common.buttons.submit">Submit</span>
+        </button>
+        <button class="btn os-btn-text" os-form-cancel="cancel()">
+          <span translate="common.buttons.cancel">Cancel</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

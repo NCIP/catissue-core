@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_base_shipment LABEL="Persi" SENDER_COMMENTS="Tested"/>
-  <catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="Persi"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

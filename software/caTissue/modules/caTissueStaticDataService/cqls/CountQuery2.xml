@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cql2:CQLQuery xmlns:cql2="http://CQL.caBIG/2/org.cagrid.cql2">
-    <cql2:CQLTargetObject className="edu.wustl.catissuecore.domain.TissueSpecimen">
-    </cql2:CQLTargetObject>
-    <cql2:CQLQueryModifier>
-        <cql2:CountOnly>true</cql2:CountOnly>
-    </cql2:CQLQueryModifier>
-
-</cql2:CQLQuery>

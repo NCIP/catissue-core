@@ -1,0 +1,10 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,New,4285,null
+getNextPvId(),,,null,Pending - Protocol Review,4285,null
+getNextPvId(),,,null,Pending - For Distribution,4285,null
+getNextPvId(),,,null,Pending - Specimen Preparation,4285,null
+getNextPvId(),,,null,Rejected - Inappropriate Request,4285,null
+getNextPvId(),,,null,Rejected - Specimen Unavailable,4285,null
+getNextPvId(),,,null,Rejected - Unable to Create,4285,null
+getNextPvId(),,,null,Distributed,4285,null
+getNextPvId(),,,null,Distributed And Close,4285,null

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="mdnasim" id="Delete unused PVs">
+    <validCheckSum>7:d6277aa6e1ced83b4538cfa6510c465f</validCheckSum>
+    <sql>
+      delete from catissue_permissible_value where public_id in ('2004100', '2003990','4284', '4285', '2004200',
+        '2004000', '2004300', 'order_status', 'shipping_activity_status');
+
+      delete from catissue_cde where public_id in ('2004100', '2003990','4284', '4285', '2004200', '2004000',
+        '2004300', 'order_status', 'shipping_activity_status');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Rename attributes with meaningful name and public id">
+    <sql>
+      call rename_pv_attribute('2003988', 'clinical_status', 'Clinical Status', 'Clinical Status', '1.0');
+
+      call rename_pv_attribute('2003989', 'gender', 'Gender', 'Gender', '1.0');
+
+      call rename_pv_attribute('2003991', 'specimen_type', 'Specimen Type', 'Specimen Type', '1.0');
+
+      call rename_pv_attribute('2003992', 'laterality', 'Laterality', 'Laterality', '1.0');
+
+      call rename_pv_attribute('2003993', 'pathology_status', 'Pathology Status', 'Pathology Status', '1.0');
+
+      call rename_pv_attribute('2003994', 'receive_quality', 'Received Quality', 'Received Quality', '1.0');
+
+      call rename_pv_attribute('2003995', 'fixation_type', 'Fixation Type', 'Fixation Type', '1.0');
+
+      call rename_pv_attribute('2003996', 'collection_procedure', 'Collection Procedure', 'Collection Procedure', '1.0');
+
+      call rename_pv_attribute('2003997', 'collection_container', 'Collection Container', 'Collection Container', '1.0');
+
+      call rename_pv_attribute('2003998', 'frozen_method', 'Frozen Method', 'Frozen Method', '1.0');
+
+      call rename_pv_attribute('2003999', 'embedding_medium', 'Embedding Medium', 'Embedding Medium', '1.0');
+
+      call rename_pv_attribute('2004001', 'vital_status', 'Vital Status', 'Vital Status', '1.0');
+
+      call rename_pv_attribute('Clinical_Diagnosis_PID', 'clinical_diagnosis', 'Clinical Diagnosis', 'Clinical Diagnosis', '1.0');
+
+      call rename_pv_attribute('Ethnicity_PID', 'ethnicity', 'Ethnicity', 'Ethnicity', '1.0');
+
+      call rename_pv_attribute('Hist_Quality', 'histological_quality', 'Histological Quality', 'Histological Quality', '1.0');
+
+      call rename_pv_attribute('Morphological_Abnormalitiy_PID', 'morphological_abnormality', 'Morphological Abnormality', 'Morphological Abnormality', '1.1');
+
+      call rename_pv_attribute('Race_PID', 'race', 'Race', 'Race', '1.0');
+
+      call rename_pv_attribute('scg_collection_status', 'visit_status', 'Visit Collection Status', 'Visit Collection Status', '1.0');
+
+      call rename_pv_attribute('Site_Type_PID', 'site_type', 'Site Type', 'Site Type', '1.0');
+
+      call rename_pv_attribute('Tissue_Site_PID', 'anatomic_site', 'Anatomic Site', 'Anatomic Site', '1.0');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Set public id of all specimen types" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value c
+        inner join catissue_permissible_value p on p.identifier = c.parent_identifier and
+        p.public_id = 'specimen_type'
+      set
+        c.public_id = p.public_id;
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Set public id of all specimen types" dbms="oracle">
+    <sql>
+      update
+        catissue_permissible_value
+      set
+        public_id = 'specimen_type'
+      where
+        public_id is null and
+        parent_identifier in (
+          select
+            identifier
+          from
+            catissue_permissible_value
+          where
+            public_id = 'specimen_type' and
+            parent_identifier is null
+        );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Move specimen type and pathology status abbreviations from csv to PV properties">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from os_pv_props where name = 'abbreviation';
+      </sqlCheck>
+    </preConditions>
+
+    <customChange class="com.krishagni.catissueplus.core.upgrade.MoveAbbreviationsToPvProps"></customChange>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Remove specimen type and pathology status abbreviation file path configuration properties">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="2">
+        select
+          count(*)
+        from
+          os_cfg_props p
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name = 'biospecimen' and
+          p.name in ('specimen_type_abbr_map', 'spmn_path_status_abbr_map');
+      </sqlCheck>
+    </preConditions>
+
+    <sql>
+      call remove_cfg_prop('biospecimen', 'specimen_type_abbr_map');
+
+      call remove_cfg_prop('biospecimen', 'spmn_path_status_abbr_map');
+    </sql>
+  </changeSet>
+</databaseChangeLog>

@@ -1,2 +1,0 @@
-SCG name,Label,Barcode,Created On,Activity Status,Comment,Is Available,Collection Status,Specimen Class,Type,Tissue Site,Tissue Side,Initial Quantity,Available Quantity,Lineage,Pathological Status,Container name,Position one,Position two,Event Comments#1,Reason Deviation#1,Date (MM-DD-YYYY HH:MM)#1,User ID#1,Activity Entry#1,Duration In Minutes#1#1,Fixation Type#1#1
-CP1_961_736,specimen111,spc123,8/8/2012,Active,Test,TRUE,Collected,Tissue,Fixed Tissue,Not Specified,Not Specified,10,10,New,Not Specified,Test_Site_Box_5x5_637,4,1,Test,Test,8/8/2012 10:10,1,Active,11,Methanol

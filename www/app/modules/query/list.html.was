@@ -1,0 +1,190 @@
+<div>
+  <div os-page-header>
+    <h3> 
+      <span>Queries</span>
+    </h3>
+    <button class="os-round-btn" title="{{'container.tooltip.add' | translate}}" ui-sref="container-addedit({containerId: ''})">
+      <span class="fa fa-plus"></span>
+    </button>
+    <div class="os-more-options">
+      <button os-right-drawer-toggle class="os-search-button" title="{{'container.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+      </button>
+    </div>
+  </div>    
+
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-2 folders">
+        <table class="table" style="margin-bottom: 0px;">
+          <thead>
+            <tr><th>Folders</th></tr>
+          </thead>
+          <tbody>
+            <tr ng-class="{'selected-folder': queryData.selectedFolderId == -1}">
+              <td class="item clearfix">
+                <div ng-click="selectFolder(-1)">All</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table" style="margin-top: 5px; margin-bottom: 0px;">
+          <thead>
+            <tr><th>My Folders</th></tr>
+          </thead>
+        </table>
+        <div style="max-height: 150px; overflow: auto">
+          <table class="table table-condensed borderless" ng-if="queryData.myFolders.length != 0">
+            <tbody>
+              <tr ng-repeat="folder in queryData.myFolders" ng-class="{'selected-folder': queryData.selectedFolderId == folder.id}">
+                <td class="item clearfix"> 
+                  <div class="pull-left" ng-click="selectFolder(folder.id)" 
+                    tooltip-placement="bottom" tooltip="{{folder.name}}" tooltip-append-to-body="true">
+                    {{folder.name}}
+                  </div>
+
+                  <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default" ng-click="editFolder(folder)"
+                      tooltip-placement="bottom" tooltip="Edit folder settings" tooltip-append-to-body="true">
+                      <span class="fa fa-cog"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="deleteFolder(folder)"
+                      tooltip-placement="bottom" tooltip="Delete folder" tooltip-append-to-body="true">
+                      <span class="fa fa-trash-o"></span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-condensed borderless" ng-if="queryData.myFolders.length == 0">
+            <tbody>
+              <tr>
+                <td>None</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <table class="table" style="margin-top: 5px; margin-bottom: 0px;">
+          <thead>
+            <tr>
+              <th>Shared Folders</th>
+            </tr>
+          </thead>
+        </table>
+
+        <div style="max-height: 150px; overflow: auto">
+          <table class="table table-condensed borderless" ng-if="queryData.sharedFolders.length != 0">
+            <tbody>
+              <tr ng-repeat="folder in queryData.sharedFolders" ng-class="{'selected-folder': queryData.selectedFolderId == folder.id}">
+                <td class="item clearfix">
+                  <div class="pull-left" ng-click="selectFolder(folder.id)" 
+                    tooltip-placement="bottom" tooltip="{{folder.name}}" tooltip-append-to-body="true">
+                    {{folder.name}}
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-condensed borderless" ng-if="queryData.sharedFolders.length == 0">
+            <tbody>
+              <tr>
+                <td>None</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <table class="table" style="margin-top: 5px; margin-bottom: 0px;" ng-if="queryData.isAdmin">
+          <thead>
+            <tr>
+              <th>Audit Logs</th>
+            </tr>
+          </thead>
+        </table>
+        <div style="max-height: 150px; overflow: auto" ng-if="queryData.isAdmin">
+          <table class="table table-condensed borderless">
+            <tbody>
+              <tr>
+                <td class="item clearfix">
+                  <span ng-click="viewAllAuditLogs('LAST_24')">Last 24 Hrs</span>
+                </td>
+              </tr>
+              <tr>
+                <td class="item clearfix">
+                  <span ng-click="viewAllAuditLogs('ALL')">ALL</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-10">
+        <table class="table list" overflow="auto" ng-if="queryList.queries.length > 0">
+          <thead>
+            <tr>
+              <th class="col-xs-4" style="padding-left: 35px;">Title</th>
+              <th class="col-xs-3">Created By</th>
+              <th class="col-xs-2">Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="query in queryList.queries"
+                  ng-class="{selected: queryData.selectedQueries.indexOf(query) > -1}"> 
+              <td class="clearfix">
+                <div class="pull-left query-select-cb">
+                  <input type="checkbox" checklist-model="queryData.selectedQueries" checklist-value="query">
+                </div>
+                <div class="pull-left" style="width: 90%;">
+                  <a style="cursor:pointer;" ng-click="runQuery(query)" 
+                    tooltip-append-to-body="true" tooltip-placement="bottom" tooltip="Click to view records">
+                    #{{query.id}} {{query.title}}
+                  </a>
+                </div>
+              </td>
+              <td>{{query.createdBy.firstName}} {{query.createdBy.lastName}}</td>
+              <td>
+                {{query.lastModifiedOn | date: global.dateFmt}}
+                <div class="pull-right btn-group btn-group-xs">
+                  <button type="button" class="btn btn-default" ng-click="editQuery(query)"
+                    tooltip-placement="bottom" tooltip="Edit Query" tooltip-append-to-body="true">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                  </button>
+                  <a type="button" class="btn btn-default" 
+                    tooltip-placement="bottom" tooltip="Download Query Definition" tooltip-append-to-body="true"
+                    href="/openspecimen/rest/ng/saved-queries/{{query.id}}/definition-file" target="_blank">
+                    <span class="glyphicon glyphicon-download-alt"></span>
+                  </a>
+                  <button type="button" class="btn btn-default" ng-click="viewAuditLog(query)" 
+                    tooltip-placement="bottom" tooltip="View Query Run Log" tooltip-append-to-body="true">
+                    <i class="fa fa-bars"></i> 
+                  </button>
+                  <button type="button" class="btn btn-default" ng-click="deleteQuery(query)"
+                    tooltip-placement="bottom" tooltip="Delete Query" tooltip-append-to-body="true"
+                    ng-if="queryData.userId == query.createdBy.id || queryData.isAdmin">
+                    <span class="fa fa-trash-o"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table class="table" ng-if="!queryList.queries || queryList.queries.length == 0">
+          <thead><tr><th>Information</th></tr></thead>
+          <tbody><tr><td>There are no queries to show in selected folder</td></tr></tbody>
+        </table>
+        <div ng-if="queryData.totalQueries > queryData.pageSize">
+          <pagination class="pagination-sm"
+            total-items="queryData.totalQueries" 
+            items-per-page="queryData.pageSize"  
+            max-size="5" 
+            ng-model="queryData.currentPage" 
+            ng-change="changeQueriesPage(false)">
+          </pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

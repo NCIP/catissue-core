@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="com.krishagni.rbac.domain.Subject" table="CATISSUE_USER">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_USER_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+       
+    <set name="roles" inverse="true" cascade="all-delete-orphan" table="RBAC_SUBJECT_ROLES">
+      <key column="SUBJECT_ID"/>
+      <one-to-many class="com.krishagni.rbac.domain.SubjectRole"/>
+    </set>
+
+    <set name="accessList" table="RBAC_SUBJECT_ACCESS_VIEW">
+      <key column="SUBJECT_ID"/>
+      <one-to-many class="com.krishagni.rbac.domain.SubjectAccess"/>
+    </set>
+
+    <query name="getAccessList">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="getAccessListBySites">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+        left join sa.site site
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations) and
+        (site.id is null or site.name in (:sites))
+    </query>
+
+    <query name="getAccessListByCp">
+      select
+        sa
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+        left join sa.collectionProtocol cp
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        (cp.id is null or cp.id = :cpId) and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="getAccessListCount">
+      select
+        count(sa)
+      from
+        com.krishagni.rbac.domain.Subject s
+        join s.accessList sa
+      where
+        s.id = :subjectId and
+        sa.resource = :resource and
+        sa.operation in (:operations)
+    </query>
+
+    <query name="removeRolesByCp">
+      delete from
+        com.krishagni.rbac.domain.SubjectRole role
+      where
+        role.collectionProtocol.id = :cpId
+    </query>
+
+    <sql-query name="canUserPerformOpOnCp" >
+      <return-scalar column="subjectId" type="long"/>
+      
+      select 
+        subject_id as subjectId
+      from
+        rbac_subject_access_view
+      where
+        subject_id = :subjectId and
+        resource_name = :resource and
+        operation = :operation and
+        (cp_id = :cpId or cp_id is null) 
+    </sql-query>
+    
+    <sql-query name="canUserPerformOpOnCpSite" >
+      <return-scalar column="subjectId" type="long"/>
+      
+      select  
+        subject_id as subjectId
+      from
+        rbac_subject_access_view
+      where
+        subject_id = :subjectId and
+        resource_name = :resource and
+        operation = :operation and
+        (cp_id = :cpId or cp_id is null) and
+        (site_id in (:siteIds) or site_id is null)
+    </sql-query>
+
+    <sql-query name="getCpSiteForOpExec">
+      <return-scalar column="cpId" type="long"/>
+      <return-scalar column="siteId" type="long"/>
+
+      select
+        cp_id as cpId, site_id as siteId 
+      from 
+        rbac_subject_access_view
+      where
+        resource_name = :resource 
+        and operation = :operation
+        and subject_id = :userId
+    </sql-query>
+
+    <sql-query name="getSubjectIds">
+      <return-scalar column="subjectId" type="long"/>
+
+      select
+        distinct s.identifier as subjectId
+      from
+        catissue_user s
+        inner join rbac_subject_access_view sa on sa.subject_id = s.identifier
+        inner join catissue_institution userInst on userInst.identifier = s.institute_id
+        inner join (
+          select
+            site.identifier as siteId, site.institute_id as instituteId
+          from
+            catissue_collection_protocol cp
+            inner join catissue_site_cp cpSite on cpSite.collection_protocol_id = cp.identifier
+            inner join catissue_site site on site.identifier = cpSite.site_id
+          where
+            cp.identifier = :cpId and
+            cp.activity_status != 'Disabled' and
+            site.activity_status != 'Disabled'
+        ) cpSiteInst on cpSiteInst.instituteId = userInst.identifier
+      where
+        sa.resource_name = :resource and
+        sa.operation in (:operations) and
+        (sa.cp_id is null or sa.cp_id = :cpId) and
+        (sa.site_id is null or sa.site_id = cpSiteInst.siteId) and
+        s.activity_status != 'Disabled'
+    </sql-query>
+  </class>  
+</hibernate-mapping>

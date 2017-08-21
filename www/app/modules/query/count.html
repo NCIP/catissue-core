@@ -1,0 +1,28 @@
+<div class="os-query-count-po">
+  <div ng-if="queryLocal.waitingForCnt">
+    <span translate="queries.waiting_for_count">
+      Please wait for a moment while we count Participants and Specimens matching your criteria
+    </span>
+  </div>
+  <div ng-if="!queryLocal.waitingForCnt && !queryLocal.countResults">
+    <span translate="queries.error">
+      Error occurred. Please contact system administrator for further resolution
+    </span>
+  </div>
+  <table class="table table-bordered" ng-if="!queryLocal.waitingForCnt && !!queryLocal.countResults">
+    <tbody>
+      <tr>
+        <td translate="queries.participants">Participants</td>
+        <td>{{queryLocal.countResults.cprCnt}}</td>
+      </tr>
+      <tr>
+        <td translate="queries.specimens">Specimens</td>
+        <td>{{queryLocal.countResults.specimenCnt}}</td>
+      </tr>
+    </tbody>
+  </table>
+ 
+  <button class="btn btn-success" ng-click="closePopover()" translate="common.buttons.ok">
+    Ok
+  </button>
+</div>

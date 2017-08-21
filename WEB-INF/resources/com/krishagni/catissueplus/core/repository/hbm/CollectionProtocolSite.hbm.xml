@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolSite" table="CATISSUE_SITE_CP">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SITE_CP_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="collectionProtocol" column="COLLECTION_PROTOCOL_ID"/>
+    
+    <many-to-one name="site" column="SITE_ID"/>
+    
+    <property name="code" column="CODE"/>
+  </class>
+</hibernate-mapping>

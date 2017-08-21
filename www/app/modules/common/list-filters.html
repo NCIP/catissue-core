@@ -1,0 +1,53 @@
+<div class="os-search">
+  <div class="os-head">
+    <h3 class="os-title">
+      <span translate="common.filters.title">Filters</span>
+    </h3>
+  </div>
+
+  <div class="os-body">
+    <div class="form-group" ng-repeat="filterCfg in filtersCfg" ng-if="ctx.hasPhiAccess || filterCfg.metainfo.phi != 'true'">
+      <span ng-if="filterCfg.dataType == 'INTEGER' || filterCfg.dataType == 'FLOAT'">
+        <div class="row">
+          <div class="col-xs-6">
+            <input os-md-input type="text" ng-model="filters[$index].min" class="form-control"
+              placeholder="{{'common.filters.min' | translate: {caption: filterCfg.caption} }}">
+          </div>
+          <div class="col-xs-6">
+            <input os-md-input type="text" ng-model="filters[$index].max" class="form-control"
+              placeholder="{{'common.filters.max' | translate: {caption: filterCfg.caption} }}">
+          </div>
+        </div>
+      </span>
+      <span ng-if="filterCfg.dataType == 'DATE'">
+        <div class="row">
+          <div class="col-xs-6">
+            <os-date-picker md-type="true" date="filters[$index].min"
+              date-only="true" date-only-fmt="{{ctx.global.shortDateFmt}}"
+              placeholder="{{'common.filters.min' | translate: {caption: filterCfg.caption} }}">
+            </os-date-picker>
+          </div>
+          <div class="col-xs-6">
+            <os-date-picker md-type="true" date="filters[$index].max"
+              date-only="true" date-only-fmt="{{ctx.global.shortDateFmt}}"
+              placeholder="{{'common.filters.max' | translate: {caption: filterCfg.caption} }}">
+            </os-date-picker>
+          </div>
+        </div>
+      </span>
+      <span ng-if="filterCfg.dataType == 'STRING'">
+        <span ng-switch on="filterCfg.searchType == 'contains'">
+          <span ng-switch-when="true">
+            <input os-md-input type="text" ng-model="filters[$index]" class="form-control"
+              placeholder="{{filterCfg.caption}}">
+          </span>
+          <span ng-switch-when="false">
+            <os-select os-md-input ng-model="filters[$index]" list="filterCfg.values"
+              placeholder="{{filterCfg.caption}}" ng-click="loadFilterValues(filterCfg)">
+            </os-select>
+          </span>
+        </span>
+      </span>
+    </div>
+  </div>
+</div>

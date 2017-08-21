@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="OGSANaming" targetNamespace="http://schemas.ggf.org/naming/2006/03/naming/service" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:binding="http://schemas.ggf.org/naming/2006/03/naming/bindings" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://schemas.ggf.org/naming/2006/03/naming/bindings" location="resolution_bindings.wsdl"/>
-  <wsdl:service name="OGSANamingService">
-    <wsdl:port name="NamingPort" binding="binding:NamingSOAPBinding">
-      <soap:address location="http://localhost:8080/wsrf/services/"/>
-    </wsdl:port>
-  </wsdl:service>
-</wsdl:definitions>

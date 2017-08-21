@@ -1,0 +1,9 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,"Malignant, Invasive",2003993,null
+getNextPvId(),,,null,"Malignant, Pre-Invasive",2003993,null
+getNextPvId(),,,null,Non-Malignant,2003993,null
+getNextPvId(),,,null,"Non-Malignant, Diseased",2003993,null
+getNextPvId(),,,null,Pre-Malignant,2003993,null
+getNextPvId(),,,null,Not Specified,2003993,null
+getNextPvId(),,,null,Malignant,2003993,null
+getNextPvId(),,,null,Metastatic,2003993,null

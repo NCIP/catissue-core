@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class 
+    name="com.krishagni.rbac.domain.Group" 
+    table="CATISSUE_USER">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_GROUP_SEQ</param>
+      </generator>
+    </id>
+       
+    <set 
+      name="groupRoles" 
+      inverse="true" cascade="all-delete-orphan"
+      table="RBAC_GROUP_ROLES">
+      <key column="GROUP_ID"/>
+      <one-to-many class="com.krishagni.rbac.domain.GroupRole"/>
+    </set>
+    
+    <sql-query name="getRolesforGroupAccess">
+      <return-scalar column="ROLE_ID" type="long"/>
+    
+      select 
+        ROLES.IDENTIFIER as ROLE_ID
+      from 
+        RBAC_GROUP_ROLES GRP 
+        join RBAC_ROLES ROLES on GRP.ROLE_ID = ROLES.IDENTIFIER
+        join RBAC_ROLE_ACCESS_LIST ACL on ACL.ROLE_ID = ROLES.IDENTIFIER
+        join RBAC_ROLE_ACCESS_LIST_OPS RLOPS on RLOPS.ACL_ID = ACL.IDENTIFIER
+        join RBAC_RESOURCES RES on RES.IDENTIFIER = ACL.RESOURCE_ID
+        join RBAC_OPERATIONS OPS on RLOPS.OPERATION_ID = OPS.IDENTIFIER
+      where 
+        (OPS.NAME = :operationName or OPS.NAME = 'ALL')
+        and (RES.NAME = :resourceName or RES.NAME = 'ALL')
+        and (GRP.DSO_ID = :dsoId or GRP.DSO_ID = -1) 
+        and GRP.GROUP_ID = :groupId
+        and RLOPS.RES_OBJ_ID = :resourceInstanceId
+    </sql-query>
+  </class> 
+</hibernate-mapping>

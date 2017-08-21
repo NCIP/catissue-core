@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_user FIRST_NAME="hit123_FirstName" LAST_NAME="hit123_LastName" DEPARTMENT_ID="2" CANCER_RESEARCH_GROUP_ID="2"
-INSTITUTION_ID="2" EMAIL_ADDRESS="hitesh_123@yahoo.com" ACTIVITY_STATUS="New"/>		
-	<catissue_address CITY="LA" STATE="California" COUNTRY="United States" ZIPCODE="8888976" PHONE_NUMBER="09862117" />
-	<catissue_audit_event_details ELEMENT_NAME="EMAIL_ADDRESS" CURRENT_VALUE="hitesh_123@yahoo.com"/> 
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

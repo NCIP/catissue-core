@@ -1,0 +1,11 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Unknown,2003990,null
+getNextPvId(),,,null,XXXY Syndrome,2003990,null
+getNextPvId(),,,null,Penta X Syndrome,2003990,null
+getNextPvId(),,,null,Mosaic including XXXXY,2003990,null
+getNextPvId(),,,null,XY,2003990,null
+getNextPvId(),,,null,Klinefelter's Syndrome,2003990,null
+getNextPvId(),,,null,XX,2003990,null
+getNextPvId(),,,null,XXX,2003990,null
+getNextPvId(),,,null,XXYY Syndrome,2003990,null
+getNextPvId(),,,null,Not Specified,2003990,null

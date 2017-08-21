@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>        
+  <CATISSUE_INSTITUTION  NAME="updated-institute" ACTIVITY_STATUS="Active" />
+ 
+  <OS_DEPARTMENTS  IDENTIFIER="1" NAME="updated-department" INSTITUTE_ID="1"/>
+ 
+  <OS_AUTH_DOMAINS  DOMAIN_NAME="default"/>
+ 
+  <CATISSUE_USER  FIRST_NAME="ADMIN" LAST_NAME="ADMIN" LOGIN_NAME="admin@admin.com" EMAIL_ADDRESS="admin@admin.com" 
+    ACTIVITY_STATUS="Active" DOMAIN_NAME="default" DEPARTMENT_ID="1"/>
+    
+  <CATISSUE_USER  FIRST_NAME="SUPER" LAST_NAME="ADMIN" LOGIN_NAME="super@admin.com" EMAIL_ADDRESS="super@admin.com" 
+    ACTIVITY_STATUS="Active" DOMAIN_NAME="default"/>
+</dataset>

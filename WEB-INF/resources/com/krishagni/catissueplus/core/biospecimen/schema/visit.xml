@@ -1,0 +1,104 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>visit</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.VisitDetail</name>
+   
+    <field>
+      <caption>#getMessage("visit_identifier")</caption>
+      <attribute>id</attribute>
+    </field>
+
+    <field>
+      <caption>#getMessage("visit_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+    </field>     
+
+    <field>
+      <caption>#getMessage("visit_ppid")</caption>
+      <attribute>ppid</attribute>
+    </field>     
+
+    <field>
+      <caption>#getMessage("visit_event_label")</caption>
+      <attribute>eventLabel</attribute>
+    </field>     
+
+    <field>
+      <caption>#getMessage("visit_name")</caption>
+      <attribute>name</attribute>
+    </field>     
+
+    <field>
+      <type>date</type>
+      <caption>#getMessage("visit_date")</caption>
+      <attribute>visitDate</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_site")</caption>
+      <attribute>site</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_status")</caption>
+      <attribute>status</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_clinical_diagnosis")</caption>
+      <attribute>clinicalDiagnosis</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_clinical_status")</caption>
+      <attribute>clinicalStatus</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_cohort")</caption>
+      <attribute>cohort</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_surgical_pathology_number")</caption>
+      <attribute>surgicalPathologyNumber</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("visit_spr_file_name")</caption>
+      <attribute>sprName</attribute>
+    </field>  
+
+    <record>
+      <attribute>missedBy</attribute>
+      <caption>#getMessage("visit_missed_by")</caption>
+
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+
+    <field>
+      <caption>#getMessage("visit_missed_reason")</caption>
+      <attribute>missedReason</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_comments")</caption>
+      <attribute>comments</attribute>
+    </field>  
+
+    <field>
+      <caption>#getMessage("visit_activity_status")</caption>
+      <attribute>activityStatus</attribute>
+    </field>  
+
+    <record type="customFields" entityType="VisitExtension">
+      <attribute>extensionDetail</attribute>
+    </record>
+  </record>
+</object-schema>

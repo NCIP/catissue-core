@@ -1,4 +1,0 @@
-catissue_specimen_protocol;select PRINCIPAL_INVESTIGATOR_ID,TITLE,SHORT_TITLE,START_DATE from catissue_specimen_protocol where TITLE='Blood Distribution Protocol'
-catissue_distribution_spec_req;select SPECIMEN_CLASS,SPECIMEN_TYPE,TISSUE_SITE,PATHOLOGY_STATUS,QUANTITY from catissue_distribution_spec_req where DISTRIBUTION_PROTOCOL_ID In(select IDENTIFIER from catissue_specimen_protocol where TITLE='Blood Distribution Protocol')
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='TITLE'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event

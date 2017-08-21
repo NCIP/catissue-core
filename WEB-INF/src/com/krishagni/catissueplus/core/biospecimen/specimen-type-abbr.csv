@@ -1,0 +1,46 @@
+#Specimen_Type,abbreviation
+Amniotic Fluid,AF
+Bile,Bi
+Body Cavity Fluid,BCF
+Bone Marrow Plasma,BMP
+cDNA,cDNA
+Cerebrospinal Fluid,CF
+Cryopreserved Cells,CC
+DNA,DNA
+Feces,Fe
+Fixed Cell Block,FCB
+Fixed Tissue,FiT
+Fixed Tissue Block,FTB
+Fixed Tissue Slide,FTS
+Fresh Tissue,FT
+Frozen Cell Block,FrCB
+Frozen Cell Pellet,FCP
+Frozen Tissue,FrT
+Frozen Tissue Block,FrTB
+Frozen Tissue Slide,FrTS
+Gastric Fluid,GF
+Lavage,La
+Microdissected,Md
+Milk,Mi
+Not Specified,
+Pericardial Fluid,PF
+Plasma,Pl
+protein,Pr
+RNA,RNA
+"RNA, cytoplasmic",RNAc
+"RNA, nuclear",RNAn
+"RNA, poly-A enriched",RNAp
+Saliva,Sa
+Serum,Se
+Slide,Sl
+Sputum,Sp
+Sweat,Sw
+Synovial Fluid,SF
+Total Nucleic Acid,TNA
+Urine,Ur
+Vitreous Fluid,VF
+Whole Blood,WB
+Whole Bone Marrow,WBM
+Whole Genome Amplified DNA,WGAD
+Buffy Coat,BC
+PBMC,PBMC

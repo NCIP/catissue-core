@@ -1,0 +1,122 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="job-list"> 
+            <span translate="jobs.list">Scheduled Jobs</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3 ng-switch on="!job.id">
+        <span ng-switch-when="true" translate="jobs.create_job">Create Scheduled Job"</span>
+        <span ng-switch-default>
+          <span translate="common.update">Update</span> 
+          <span> {{job.name}} </span>
+        </span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="jobForm" class="form-horizontal" os-form-validator="jobForm" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.name">Job Name</span>
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="name" ng-model="job.name" class="form-control" 
+            placeholder="{{'jobs.name' | translate}}" ng-maxlength="255" required>
+          <div os-field-error field="jobForm.name"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.type">Job Type</span>
+        </label>
+        <div class="col-xs-6">
+          <label class="radio-inline">
+            <input type="radio" name="jobType" ng-model="job.type" ng-value="'INTERNAL'" required>
+            <span translate="jobs.internal">Internal</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="jobType" ng-model="job.type" ng-value="'EXTERNAL'" required>
+            <span translate="jobs.external">External</span>
+          </label>
+          <div os-field-error field="jobForm.jobType"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="job.type == 'EXTERNAL'">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.command">External Command</span>
+        </label>
+        <div class="col-xs-6">
+          <textarea name="command" ng-model="job.command" class="form-control" 
+            placeholder="{{'jobs.command_desc' | translate}}" rows="2" required>
+          </textarea>
+          <div os-field-error field="jobForm.command"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="job.type == 'INTERNAL'">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.fqn">Task Implementation</span>
+        </label>
+
+        <div class="col-xs-6">
+          <textarea name="fqn" ng-model="job.taskImplFqn" class="form-control" 
+            placeholder="{{'jobs.fqn_desc' | translate}}" rows="2" required>
+          </textarea>
+          <div os-field-error field="jobForm.fqn"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!!job.type">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.run_args">Runtime Arguments</span>
+        </label>
+        <div class="col-xs-6">
+          <label class="radio-inline">
+            <input type="radio" name="argsProvided" ng-model="job.rtArgsProvided" ng-value="true" required>
+            <span translate="jobs.args_provided">Provided</span>
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="argsProvided" ng-model="job.rtArgsProvided" ng-value="false" required>
+            <span translate="jobs.args_not_provided">Not Provided</span>
+          </label>
+          <div os-field-error field="jobForm.argsProvided"></div>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!!job.rtArgsProvided">
+        <label class="col-xs-3 control-label">
+          <span translate="jobs.args_help_text">Runtime Arguments Help Text</span>
+        </label>
+
+        <div class="col-xs-6">
+          <textarea name="helpText" ng-model="job.rtArgsHelpText" class="form-control" 
+            placeholder="{{'jobs.args_help_text_desc' | translate}}" rows="2" required>
+          </textarea>
+          <div os-field-error field="jobForm.helpText"></div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button ng-switch on="!!job.id" class="btn btn-primary" os-form-submit="saveOrUpdateJob()">
+            <span ng-switch-when="false" translate="common.buttons.create">Create</span>
+            <span ng-switch-when="true" translate="common.buttons.update">Update</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

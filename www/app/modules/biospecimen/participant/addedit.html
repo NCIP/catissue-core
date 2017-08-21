@@ -1,0 +1,438 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="cp-list-view({cpId: cp.id})">
+            <span>{{cp.shortTitle}}</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!!cpr.id"> 
+        <span ng-switch-when="true" translate="participant.edit_participant">Edit Participant</span>
+        <span ng-switch-default translate="participant.register_participant">Register Participant</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="pform" class="form-horizontal" os-form-validator="pform" validator="pformValidator" novalidate>
+      <div ng-switch on="!matchedParticipants || matchedParticipants.length == 0">
+        <div ng-switch-when="true" ng-switch on="partCtx.twoStepReg">
+          <div ng-switch-when="false">
+            <div ng-include="'modules/biospecimen/participant/single-step-addedit.html'"></div>
+          </div>
+          <div ng-switch-when="true">
+            <div ng-include="'modules/biospecimen/participant/participant-lookup-fields.html'"></div>
+          </div>
+        </div>
+        <div class="row" ng-switch-when="false">
+          <div class="col-xs-12" ng-include="'modules/biospecimen/participant/matched-participants.html'"></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/single-step-addedit.html">
+  <div>
+    <div class="form-group" ng-if="partCtx.showNoMatchWarning">
+      <div class="col-xs-offset-3 col-xs-6">
+        <div class="alert alert-warning os-participant-matching-msg">
+          <span translate="participant.no_matching_participant">
+            No matching participant found
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="partCtx.obj" in-objs="partCtx.inObjs">
+          </sde-form-fields>
+        </div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/static-addedit.html'"></div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="register()" ng-switch on="!!cpr.id">
+            <span ng-switch-when="true" translate="participant.buttons.update_registration"> Update </span>
+            <span ng-switch-default translate="participant.buttons.register"> Register </span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/static-addedit.html">
+  <div os-disable-fields="disableFieldOpts">
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
+      <div class="col-xs-6">
+        <os-date-picker name="regDate" date="cpr.registrationDate" date-only = "{{global.locale.endsWith('_SG')}}"
+          required placeholder="{{'participant.regDate' | translate}}">
+        </os-date-picker>
+        <div os-field-error field="pform.regDate"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="cpr.id || !cp.ppidFmt || cp.manualPpidEnabled">
+      <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
+      <div class="col-xs-6">
+        <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control"
+          placeholder="{{'participant.ppid' | translate}}" required
+          ng-disabled="cp.ppidFmt && !cp.manualPpidEnabled">
+        <div os-field-error field="pform.ppid"></div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.name">Name</label>
+      <div class="col-xs-2">
+        <input type="text" ng-model="cpr.participant.firstName" class="form-control" 
+          placeholder="{{'participant.first_name' | translate}}"/>
+      </div>
+      <div class="col-xs-2">
+        <input type="text" ng-model="cpr.participant.lastName" class="form-control"
+          placeholder="{{'participant.last_name' | translate}}"/>
+      </div>
+      <div class="col-xs-2">
+        <input type="text" ng-model="cpr.participant.middleName" class="form-control"
+          placeholder="{{'participant.middle_name' | translate}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.birth_date">Birth Date</label>
+      <div class="col-xs-6">
+        <os-date-picker name="birthDate" date="cpr.participant.birthDate"
+          date-only = "{{global.locale.endsWith('_SG')}}" placeholder="{{'participant.birth_date' | translate}}">
+        </os-date-picker>
+        <div os-field-error field="pform.birthDate"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="participant.uid">Social Security Number</label>
+      <div class="col-xs-6">
+        <input name="uid" type="text" ng-model="cpr.participant.uid" class="form-control" 
+          ng-required="global.appProps.uid_mandatory">
+        <div os-field-error field="pform.uid"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="cpr.participant.id || !global.appProps.auto_empi_enabled">
+      <label class="col-xs-3 control-label" translate="participant.mpi">Master Patient Index</label>
+      <div class="col-xs-6">
+        <input name="empi" type="text" ng-model="cpr.participant.empi" class="form-control" 
+          placeholder="{{'participant.mpi' | translate}}" ng-disabled="global.appProps.auto_empi_enabled"/>
+      </div>
+    </div>
+
+    <div ng-if="showAdvDemographics">
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="participant.gender">Gender</label>
+        <div class="col-xs-9">
+          <label class="radio-inline" ng-repeat="gender in genders">
+            <input type="radio" name="gender" ng-model="cpr.participant.gender" ng-value="gender"> {{gender}}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="participant.vital_status">Vital Status</label>
+        <div class="col-xs-9">
+          <label class="radio-inline" ng-repeat="vitalStatus in vitalStatuses">
+            <input type="radio" name="vitalStatus" ng-model="cpr.participant.vitalStatus" ng-value="vitalStatus">
+            <span>{{vitalStatus}}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="participant.death_date">Death Date</label>
+        <div class="col-xs-6">
+          <os-date-picker date="cpr.participant.deathDate"
+            ng-disabled="cpr.participant.vitalStatus != 'Dead'" 
+            placeholder="{{'participant.death_date' | translate}}">
+          </os-date-picker>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="participant.ethnicity">Ethnicity</label>
+        <div class="col-xs-6">
+          <os-pvs name="ethnicity" ng-model="cpr.participant.ethnicity" attribute="ethnicity"
+            placeholder="{{'participant.ethnicity' | translate}}">
+          </os-pvs>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="participant.race">Race</label>
+        <div class="col-xs-6">
+          <os-pvs multiple ng-model="cpr.participant.races" attribute="race"
+            placeholder="{{'participant.select_race' | translate}}">
+          </os-pvs>
+        </div>
+      </div>
+    </div> <!-- End of Show Adv Demographics -->
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <a ng-click="showAdvDemographics = !showAdvDemographics">
+          <span ng-if="!showAdvDemographics" translate="participant.more_demographics">
+            More Demographic Information
+          </span>
+          <span ng-if="showAdvDemographics" translate="participant.less_demographics">
+            Less Demographic Information
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div id="pmiForm">
+      <div class="os-divider"></div>
+
+      <div class="form-group clearfix">
+        <div class="col-xs-offset-3 col-xs-3">
+          <label class="control-label" translate="participant.site">Site</label>
+        </div>
+        <div class="col-xs-3">
+          <label class="control-label" translate="participant.mrn">Medical Record Number</label>
+        </div>
+      </div>
+
+      <div os-unique-items>
+        <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
+          <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator">
+            <fieldset record-name="cpr.participant.pmis">
+              <div class="col-xs-3 col-xs-offset-3" ng-switch on="!!partCtx.mrnAccessRestriction">
+                <span ng-switch-when="true">
+                  <os-sites name="siteName" ng-model="pmi.siteName"
+                    placeholder="{{'participant.select_site' | translate}}" ng-required="!!pmi.mrn"
+                    ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
+                    exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
+                  </os-sites>
+                </span>
+                <span ng-switch-when="false">
+                  <os-sites name="siteName" ng-model="pmi.siteName"
+                    placeholder="{{'participant.select_site' | translate}}" ng-required="!!pmi.mrn"
+                    ng-click="addPmiIfLast($index)" list-all="true"
+                    exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
+                  </os-sites>
+                </span>
+                <div os-field-error field="pmiForm.siteName"></div>
+              </div>
+
+              <div class="col-xs-3">
+                <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
+                  placeholder="{{'participant.mrn_short' | translate}}">
+              </div>
+
+              <div class="col-xs-1">
+                <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </button>
+              </div>
+            <fieldset>
+          </ng-form>
+        </div>
+      </div>
+    </div>
+
+    <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+      <div id="de-form" class="os-extn-form" os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="cpr.participant">
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/participant-lookup-fields.html">
+  <div class="form-group">
+    <label class="col-xs-3 control-label" translate="participant.reg_date">Registration Date</label>
+    <div class="col-xs-6">
+      <os-date-picker name="regDate" date="cpr.registrationDate" date-only = "{{global.locale.endsWith('_SG')}}"
+        required placeholder="{{'participant.regDate' | translate}}">
+      </os-date-picker>
+      <div os-field-error field="pform.regDate"></div>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="cpr.id || !cp.ppidFmt || cp.manualPpidEnabled">
+    <label class="col-xs-3 control-label" translate="participant.ppid">Participant Protocol ID</label>
+    <div class="col-xs-6">
+      <input type="text" name="ppid" ng-model="cpr.ppid" class="form-control" 
+        placeholder="{{'participant.ppid' | translate}}" required
+        ng-disabled="cp.ppidFmt && !cp.manualPpidEnabled">
+      <div os-field-error field="pform.ppid"></div>
+    </div>
+  </div>
+
+  <div class="os-divider"></div>
+
+  <div class="form-group">
+    <label class="col-xs-3 control-label" translate="participant.uid">Social Security Number</label>
+    <div class="col-xs-6">
+      <input name="uid" type="text" ng-model="cpr.participant.uid" class="form-control"
+        placeholder="{{'participant.uid' | translate}}" 
+        ng-required="!cpr.participant.empi && !cpr.participant.pmis[0].siteName"> 
+      <div os-field-error field="pform.uid"></div>
+    </div>
+  </div>
+
+  <div class="form-group"> 
+    <label class="col-xs-3 control-label" translate="participant.mpi">Master Patient Index</label>
+    <div class="col-xs-6">
+      <input name="empi" type="text" ng-model="cpr.participant.empi" class="form-control" 
+        placeholder="{{'participant.mpi' | translate}}" 
+        ng-required="!cpr.participant.uid && !cpr.participant.pmis[0].siteName"> 
+      <div os-field-error field="pform.empi"></div>
+    </div>
+  </div>
+
+  <div id="pmiForm">
+    <div class="form-group clearfix">
+      <div class="col-xs-offset-3 col-xs-3">
+        <label class="control-label" translate="participant.site">Site</label>
+      </div>
+      <div class="col-xs-3">
+        <label class="control-label" translate="participant.mrn">Medical Record Number</label>
+      </div>
+    </div>
+
+    <div os-unique-items>
+      <div class="form-group clearfix" ng-repeat="pmi in cpr.participant.pmis">
+        <ng-form name="pmiForm" os-form-validator="pmiForm" parent-validator="pformValidator">
+          <div class="col-xs-3 col-xs-offset-3">
+            <os-sites name="siteName" ng-model="pmi.siteName" placeholder="{{'participant.select_site' | translate}}"
+              ng-required="!!pmi.mrn" ng-click="addPmiIfLast($index)" resource="ParticipantPhi" operation="{{op}}"
+              exclude-types="partCtx.excludeSiteTypes" include-types="partCtx.includeSiteTypes" os-unique-item>
+            </os-sites>
+            <div os-field-error field="pmiForm.siteName"></div>
+          </div>
+
+          <div class="col-xs-3">
+            <input name="mrn" type="text" ng-model="pmi.mrn" class="form-control" ng-focus="addPmiIfLast($index)"
+              placeholder="{{'participant.mrn_short' | translate}}">
+          </div>
+
+          <div class="col-xs-1">
+            <button class="btn btn-default pull-right" ng-click="removePmi(pmi)">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>
+          </div>
+        </ng-form>
+      </div>
+    </div>
+  </div>
+
+  <div class="os-divider"></div>
+
+  <div class="form-group">
+    <div class="col-xs-offset-3 col-xs-6">
+      <button class="btn btn-primary" os-form-submit="lookup()"> 
+        <span translate="participant.buttons.lookup"> Lookup </span>
+      </button>
+      <button class="btn os-btn-text" ng-click="back()">
+        <span translate="common.buttons.discard">Discard</span>
+      </button>
+    </div>
+  </div>
+</script>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/matched-participants.html">
+  <div class="alert alert-warning os-participant-matching-msg">
+    <span translate="participant.similar_participants">
+      Following matching participant(s) found 
+    </span>
+  </div>
+
+  <div class="os-participant-matching-tbl">
+    <table class="os-table os-table-muted-hdr os-border">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">&nbsp;</th>
+          <th class="col" translate="participant.first_name">First Name</th>
+          <th class="col" translate="participant.last_name">Last Name</th>
+          <th class="col" translate="participant.birth_date">Birth Date</th>
+          <th class="col" translate="participant.uid_short">SSN</th>
+          <th class="col" translate="participant.pmis">Medical Identifiers</th>
+          <th class="col" translate="participant.matched_attrs">Matched Attributes</th>
+          <th class="col" ng-if="partCtx.hasPreRegParticipants" translate="participant.already_reg">Already Registered?</th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="matchedPart in matchedParticipants" 
+          ng-class="{'bg-info': selectedParticipant == matchedPart.participant}">
+
+          <td class="col">
+            <input type="radio" name="selectedParticipant" ng-checked="selectedParticipant == matchedPart.participant"
+              ng-click="selectParticipant(matchedPart.participant)" value="{{matchedPart.participant.id}}"
+              ng-if="!matchedPart.preReg">
+          </td>
+          <td class="col">{{matchedPart.participant.firstName | osNoValue}}</td>
+          <td class="col">{{matchedPart.participant.lastName | osNoValue}}</td>
+          <td class="col"> 
+            {{matchedPart.participant.birthDate | date: global.dateFmt | osNoValue}}
+          </td>
+          <td class="col">{{matchedPart.participant.uid | osNoValue}}</td>
+          <td class="col">{{matchedPart.participant.pmis | osArrayJoin: pmiText | osNoValue}}</td>
+          <td class="col">{{matchedPart.matchedAttrs | osArrayJoin: matchedAttrText}}</td>
+          <td class="col" ng-if="partCtx.hasPreRegParticipants" ng-switch on="matchedPart.preReg">
+            <span ng-switch-when="true" translate="common.yes">Yes</span>
+            <span ng-switch-when="false" translate="common.no">No</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div ng-if="partCtx.twoStepReg && selectedParticipant">
+    <div ng-include="'modules/biospecimen/participant/summary.html'"></div>
+  </div>
+
+  <div> 
+    <button class="btn btn-primary" ng-if="!cpr.id && selectedParticipant" ng-click="registerUsingSelectedParticipant()"> 
+      <span ng-switch on="partCtx.twoStepReg">
+        <span ng-switch-when="false" translate="participant.buttons.register_selected_participant"> 
+          Register Selected Participant 
+        </span>
+        <span ng-switch-when="true" translate="participant.buttons.register"> 
+          Add Participant 
+        </span>
+      </span>
+    </button>
+    <span ng-if="!!cpr.id && selectedParticipant">
+      <button class="btn btn-primary" ng-if="selectedParticipant.id == -1" ng-click="registerUsingSelectedParticipant()">
+        <span translate="participant.buttons.update_registration"> Update </span>
+      </button>
+      <button class="btn btn-primary" ng-if="selectedParticipant.id != -1" ng-click="confirmMerge()">
+        <span translate="participant.buttons.merge_participants"> Merge Participants </span>
+      </button>
+    </span>
+    <button class="btn btn-primary" ng-if="allowIgnoreMatches" ng-click="ignoreMatchesAndRegister()">
+      <span translate="participant.buttons.ignore_matches"> 
+        Ignore Matches and Proceed 
+      </span>
+    </button>
+    <button class="btn os-btn-secondary" ng-click="lookupAgain()">
+      <span translate="common.buttons.previous">
+        Previous
+      </span>
+    </button>
+  </div>
+</script>

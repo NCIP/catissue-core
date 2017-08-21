@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_site IDENTIFIER="181" NAME="Penn Lab" TYPE="Repository" EMAIL_ADDRESS="admin@admin.com" ACTIVITY_STATUS="Active" USER_ID="1"/>
-	<catissue_address STREET="street2" CITY="city2" STATE="Colorado" COUNTRY="United States" ZIPCODE="10091" PHONE_NUMBER="9021506687" FAX_NUMBER="1100"/>
-	<catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="Penn Lab"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

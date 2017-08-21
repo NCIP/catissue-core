@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_order NAME="OrderArray" COMMENTS="TestArray"/>
-  <catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="OrderArray"/>
-  <catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

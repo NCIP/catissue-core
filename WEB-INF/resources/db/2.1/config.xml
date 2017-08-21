@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+  
+  <changeSet author="vpawar" id="Config setting to specify application data directory">
+    <sql>
+      call add_cfg_prop(
+        'common', 'data_dir', 
+        'common_data_dir', 'common_data_dir_desc', 
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Adding auth module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (default, 'auth', 'auth_desc');
+    </sql>
+  </changeSet> 
+
+  <changeSet author="vpawar" id="Adding auth module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values
+        (os_modules_seq.nextval, 'auth', 'auth_desc');
+    </sql>
+  </changeSet> 
+
+  <changeSet author="vpawar" id="Auth module config settings: failed logins and validate token ip">
+    <sql>
+      call add_cfg_prop(
+        'auth', 'allowed_failed_logins', 
+        'auth_allowed_failed_logins', 'auth_allowed_failed_logins_desc', 
+        'INT', '5'
+      );
+    </sql>
+    <sql>
+      call add_cfg_prop(
+        'auth', 'verify_token_ip_address', 
+        'auth_verify_token_ip_addr', 'auth_verify_token_ip_addr_desc', 
+        'BOOLEAN', 'false'
+      );
+    </sql>
+  </changeSet>
+
+  <changeSet author="asamgir" id="Config setting for specimen pathology status abbreviation map">
+    <sql>
+      call add_cfg_prop(
+        'biospecimen', 'spmn_path_status_abbr_map',
+        'spmn_path_status_abbr_map', 'spmn_path_status_abbr_map_desc',
+        'STRING', ''
+      );
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

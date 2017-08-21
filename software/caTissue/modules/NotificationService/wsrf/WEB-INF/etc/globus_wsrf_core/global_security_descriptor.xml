@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<securityConfig xmlns="http://www.globus.org">
-    <credential>
-        <key-file value="C:\caGrid\ws-core-4.0.3/etc/containerkey.pem"/>
-        <cert-file value="C:\caGrid\ws-core-4.0.3/etc/containercert.pem"/>
-    </credential>
-    <gridmap value="C:\caGrid\ws-core-4.0.3/etc/grid-security/grid-mapfile"/>
-</securityConfig>

@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <catissue_specimen BARCODE="Barcode_00002" LABEL="Label_00002"/>
-  <catissue_audit_event_details ELEMENT_NAME="LABEL" CURRENT_VALUE="Label_00002"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
-</dataset>

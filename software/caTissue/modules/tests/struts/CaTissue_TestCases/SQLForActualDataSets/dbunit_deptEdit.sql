@@ -1,1 +1,0 @@
-catissue_department;select name from catissue_department where name='Blood Cancer'

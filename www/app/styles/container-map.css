@@ -1,0 +1,232 @@
+.os-container-locations {
+  display: flex;
+  flex-direction: column;
+  /*align-items: center;*/
+  height: 100%;
+}
+
+.os-container-locations .input-spmn-labels {
+  flex: 1;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.os-container-locations .map {
+  flex: 5;
+  width: 100%;
+  overflow: auto;
+}
+
+.os-container-vacate-cb {
+  margin-top: 10px;
+}
+
+.os-container-vacate-cb:after {
+  content: ' ';
+  display: block;
+  clear: both;
+}
+
+.os-container-vacate-cb .checkbox {
+  float: left;
+  height: 16px;
+  margin-top: 4px;
+}
+
+.os-container-vacate-cb .message {
+  float: left;
+  color: #707070;
+  padding-right: 15px;
+}
+
+.os-container-map-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.os-container-map {
+  table-layout: fixed;
+}
+
+.os-container-map td {
+  border-bottom: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  padding: 0px 2px;
+  position: relative;
+}
+
+.os-container-map td:hover {
+  background: #f5f5f5;
+}
+
+.os-container-map tr:first-child td {
+  border-top: 1px solid #dddddd;
+}
+
+.os-container-map td:first-child {
+  border-left: 1px solid #dddddd;
+}
+
+.os-container-map .slot {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.os-container-map .slot-dummy {
+  margin-top: 75%;
+}
+
+.os-container-map .slot-element {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.os-container-map .slot-element .slot-add {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  left: 50%;
+  margin-left: -0.5em;
+  color: #428bca;
+}
+
+.os-container-map.disable-slot-selectors .slot-selector {
+  display: none;
+}
+
+.os-container-map .slot-selector {
+  float: left;
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+.os-container-map .slot-pos {
+  width: 100%;
+  text-align: right; 
+  padding: 2px 0px;
+  font-size: 0.85em;
+}
+
+.os-container-map .slot-desc {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  background: #3a87ad;
+  border: #3a87ad;
+  color: white;
+  border-radius: 3px; 
+  font-size: 1em;
+  padding: 2px 0px;
+  display: block;
+  text-decoration: none!important;
+  text-align: center;
+
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5em;
+  width: 100%;
+}
+
+.os-container-map .slot-desc:hover {
+  color: white;
+}
+
+.os-container-map .slot-assigned .slot-desc {
+  background: rgba(92, 184, 92, 0.8);
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.os-container-map .slot-vacated .slot-desc {
+  background: #d9534f;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  min-height: 24px;
+}
+
+.os-container-map .slot-assigned,
+.os-container-map .slot-occupied {
+  background: #f5f5f5;
+}
+
+.os-container-tree {
+  height: 100%;
+  overflow: auto;
+}
+
+/** Scroll bar **/
+.os-container-tree::-webkit-scrollbar,
+.os-container-locations .map::-webkit-scrollbar {
+  height:12px;
+  width:12px
+}
+
+.os-container-tree::-webkit-scrollbar-thumb:vertical,
+.os-container-tree::-webkit-scrollbar-thumb:horizontal,
+.os-container-locations .map::-webkit-scrollbar-thumb:vertical,
+.os-container-locations .map::-webkit-scrollbar-thumb:horizontal {
+  background: #d0d0d0;
+}
+
+.os-container-tree::-webkit-scrollbar-track:hover,
+.os-container-locations .map::-webkit-scrollbar-track:hover {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.os-container-tree::-webkit-scrollbar-track,
+.os-container-locations .map::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+/** Container position control **/
+.os-container-pos-selector-wrapper {
+  max-height: 410px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  overflow: auto;
+}
+
+.os-container-pos {
+  min-width: 40px;
+  text-align: center;
+}
+
+td.os-container-pos {
+  cursor: pointer;
+}
+
+td.os-container-pos .os-circle {
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  background: #a0a0a0;
+  border-radius: 100%;
+}
+
+td.os-container-pos.occupied > .os-circle {
+  background: #5cb85c!important;
+}
+
+td.os-container-pos.assigned > .os-circle {
+  background: #f0ad4e!important;
+}
+
+
+td.os-container-pos.occupied,
+td.os-container-pos.assigned {
+  cursor: auto!important;
+}
+
+td.os-container-pos.selected {
+  background: #d5d5d5;
+}
+

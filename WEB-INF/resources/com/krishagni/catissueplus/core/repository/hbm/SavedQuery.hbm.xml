@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+  <class name="com.krishagni.catissueplus.core.de.domain.SavedQuery" 
+         table="CATISSUE_SAVED_QUERIES">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_SAVED_QUERIES_SEQ</param>
+      </generator>      
+    </id>
+
+    <property name="title" column="TITLE"/>
+
+    <many-to-one 
+      name="createdBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="CREATED_BY"
+     />
+     
+    <many-to-one
+      name="lastUpdatedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      update="true"
+      insert="true"
+      column="LAST_UPDATED_BY"
+    />
+
+    <property name="queryDefJson" column="QUERY_DEF"/>
+	
+    <property name="lastUpdated"  column="LAST_UPDATED_ON" type="timestamp"/>
+	
+    <property name="deletedOn" column="DELETED_ON" type="timestamp"/>
+	
+    <set 
+      name="folders" 
+      table="CATISSUE_QUERY_FOLDER_QUERIES">
+      <key column="QUERY_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.de.domain.QueryFolder" column="FOLDER_ID" />
+    </set>
+	
+    <query name="getQueriesByIds">
+      from SavedQuery s where s.id IN (:queryIds) and s.deletedOn is null
+    </query>
+    
+    <sql-query name="insertQueryChangeLog">
+      insert into catissue_import_queries_log
+        (filename, md5_digest, status, executed_on, query_id) 
+      values
+        (:fileName, :md5Digest, :status, :executedOn, :queryId)
+    </sql-query>
+    
+    <sql-query name="getQueryIdAndDigest">
+      select 
+        query_id, md5_digest 
+      from
+        catissue_import_queries_log ql 
+      where
+        ql.filename = :fileName 
+        and ql.executed_on in ( 
+          select 
+            max(executed_on) 
+          from
+            catissue_import_queries_log 
+          where
+            filename = :fileName 
+        )
+    </sql-query>
+  </class> 
+</hibernate-mapping>

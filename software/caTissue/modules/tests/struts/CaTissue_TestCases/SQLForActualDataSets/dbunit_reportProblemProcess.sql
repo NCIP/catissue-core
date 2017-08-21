@@ -1,3 +1,0 @@
-catissue_reported_problem;select ACTIVITY_STATUS from catissue_reported_problem where IDENTIFIER='21'
-catissue_audit_event_details;select ELEMENT_NAME,CURRENT_VALUE from catissue_audit_event_details where ELEMENT_NAME='ACTIVITY_STATUS'
-catissue_audit_event;select EVENT_TYPE from catissue_audit_event

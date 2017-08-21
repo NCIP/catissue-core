@@ -1,0 +1,50 @@
+{
+  "id":null,
+  "title":"Distribution order data query",
+  "createdBy":null,
+  "lastUpdatedBy":null,
+  "lastRunOn":null,
+  "lastUpdated":null,
+  "lastRunCount":null,
+  "cpId":-1,
+  "drivingForm":null,
+  "filters":[
+    {
+      "id":1,
+      "field":"Order.orderName",
+      "op":"EXISTS",
+      "values":[null],
+      "expr":null,
+      "desc":null,
+      "parameterized":false
+    }
+  ],
+  "queryExpression":[
+    {
+      "nodeType":"FILTER",
+      "value":1
+    }
+  ],
+  "selectList":[
+    "CollectionProtocol.shortTitle",
+    "Participant.ppid",
+    "SpecimenCollectionGroup.collectionProtocolEvent.collectionPointLabel",
+    "SpecimenCollectionGroup.clinicalDiagnosis",
+    "Specimen.label",
+    "Specimen.type",
+    "Specimen.tissueSite",
+    "Specimen.tissueSide",
+    "Specimen.pathologicalStatus",
+    "Specimen.createdOn",
+    "Specimen.availableQty",
+    "Specimen.extensions.SpecimenDistributedEvent.quantity"
+  ],
+  "reporting":{
+    "type":"none",
+    "params":{}
+  },
+  "folders":null,
+  "wideRowMode":"DEEP",
+  "deletedOn":null
+}
+

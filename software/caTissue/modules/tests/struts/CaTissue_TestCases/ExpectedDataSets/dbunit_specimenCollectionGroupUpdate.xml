@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_specimen_coll_group BARCODE="1_1" COMMENTS="comment" SURGICAL_PATHOLOGY_NUMBER="Z04"/>
-	<catissue_abs_speci_coll_group CLINICAL_DIAGNOSIS="Balloon cell melanoma" CLINICAL_STATUS="New Diagnosis"/>
-	<catissue_audit_event_details ELEMENT_NAME="RECEIVED_QUALITY" CURRENT_VALUE="Frozen"/>
-  <catissue_audit_event EVENT_TYPE="UPDATE"/>
- </dataset>

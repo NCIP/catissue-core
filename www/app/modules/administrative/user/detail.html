@@ -1,0 +1,65 @@
+<div> 
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="user-list">
+            <span translate="user.list">Users</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3>{{user.lastName}} {{user.firstName}}</h3>
+    </div>
+
+    <div class="os-btns right">
+      <div ng-if="(currentUser.admin || !user.admin) && user.activityStatus != 'Pending'">
+        <button show-if-allowed="userResource.updateOpts" class="primary" title="{{'user.tooltip.edit' | translate}}"
+          ui-sref="user-addedit({userId: user.id})">
+          <span class="fa fa-pencil"></span>
+          <span translate="common.buttons.edit">Edit</span>
+        </button>
+        <div dropdown os-show-if-menu-items-present class="inline">
+          <button class="default dropdown-toggle">
+            <span translate="common.buttons.more">More</span>
+            <span class="fa fa-caret-down"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li show-if-allowed="userResource.deleteOpts">
+              <a ng-click="deleteUser()">
+                <span class="fa fa-trash"></span>
+                <span translate="common.buttons.delete">Delete</span>
+              </a>
+            </li>
+            <li ng-if="user.domainName == global.defaultDomain && currentUser.id != user.id && currentUser.admin">
+              <a ui-sref="user-password({userId: user.id})">
+                <span class="fa fa-key"></span>
+                <span translate="common.buttons.reset_password">Reset Password</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div os-side-menu ng-if="user.activityStatus != 'Pending'">
+    <ul>
+      <li ui-sref-active="active">
+        <a ui-sref=".overview">
+          <i class="fa fa-eye"></i>
+          <span class="os-title" translate="user.menu.overview">Overview</span>
+        </a>
+      </li>
+      <li ng-if="user.type == 'NONE'" ui-sref-active="active">
+        <a ui-sref=".roles">
+          <i class="fa fa-users"></i>
+          <span class="os-title" translate="user.menu.roles">Roles</span>
+        </a>
+      </li>
+      <os-plugin-hooks view-name="'user-detail'" sec-name="'side-menu'"></os-plugin-hooks>
+    </ul>
+  </div>
+  
+  <div class="os-side-menu-page-content" ui-view></div>
+</div>

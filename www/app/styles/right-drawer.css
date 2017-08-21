@@ -1,0 +1,48 @@
+.os-right-drawer {
+  position: absolute;
+  height: auto;
+  border-left: 1px solid #ddd;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  top: 161px;
+  transform: scaleX(0.00001);
+  transform-origin:100% 50%;
+  transition: all 0.25s ease-in-out 0s;
+  display: none;
+  overflow: auto;
+}
+
+.os-right-drawer.active {
+  transform: scaleX(1);
+  display: block;
+}
+
+.os-right-drawer .os-head {
+  margin-left: 15px;
+}
+
+.os-right-drawer .os-body {
+  margin: 25px 15px 15px;
+}
+
+.os-right-drawer .os-title {
+  margin: 0px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #333!important;
+  line-height: 1.42;
+  padding: 8px 0px;
+  border-bottom: 2px solid #ddd;
+}
+
+
+.os-right-drawer .control-label {
+  color: #666!important;
+}
+
+.os-right-drawer .os-md-input input,
+.os-right-drawer .os-md-input .ui-select-match,
+.os-right-drawer .os-md-input .ui-select-search {
+  margin-top: 5px;
+}

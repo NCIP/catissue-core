@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <changeSet author="nmarwaha" id="Disable collection events for child specimens" dbms="mysql">
+    <sql>
+      update 
+        catissue_form_record_entry ntry 
+        join catissue_specimen sp on sp.identifier = ntry.object_id 
+        join catissue_coll_event_param cep on cep.identifier = ntry.record_id
+      set 
+        ntry.activity_status = 'Disabled'
+      where 
+        sp.lineage in ('Aliquot','Derived')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Disable received events for child specimens" dbms="mysql">
+    <sql>
+      update 
+        catissue_form_record_entry ntry 
+        join catissue_specimen sp on sp.identifier = ntry.object_id 
+        join catissue_received_event_param rep on rep.identifier = ntry.record_id
+      set 
+        ntry.activity_status = 'Disabled'
+      where 
+        sp.lineage in ('Aliquot','Derived')
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Disable collection events for child specimens" dbms="oracle">
+    <sql>
+      merge into catissue_form_record_entry rec_ntry using (
+        select 
+          ntry.identifier as record_id 
+        from 
+          catissue_form_record_entry ntry 
+          join catissue_specimen sp on sp.identifier = ntry.object_id 
+          join catissue_coll_event_param cep on cep.identifier = ntry.record_id
+        where 
+          sp.lineage in ('Aliquot','Derived')
+      ) t on (rec_ntry.identifier = t.record_id) 
+      when matched then update set rec_ntry.activity_status = 'Disabled'
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Disable received events for child specimens" dbms="oracle">
+    <sql>
+      merge into catissue_form_record_entry rec_ntry using (
+        select 
+          ntry.identifier as record_id 
+        from 
+          catissue_form_record_entry ntry 
+          join catissue_specimen sp on sp.identifier = ntry.object_id 
+          join catissue_received_event_param rep on rep.identifier = ntry.record_id
+        where 
+          sp.lineage in ('Aliquot','Derived')
+      ) t on (rec_ntry.identifier = t.record_id) 
+      when matched then update set rec_ntry.activity_status = 'Disabled'
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

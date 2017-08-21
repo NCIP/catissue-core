@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.Visit" table="CATISSUE_SPECIMEN_COLL_GROUP" batch-size="100">
+
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_SPECIMEN_COLL_GRP_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="clinicalDiagnosis" column="CLINICAL_DIAGNOSIS" />
+
+    <property name="clinicalStatus" column="CLINICAL_STATUS" />
+
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
+
+    <property name="name" column="NAME" />
+
+    <property name="status" column="COLLECTION_STATUS" />
+		
+    <property name="sprName" lazy="true" column="SPR_NAME"/>
+    
+    <property name="sprLocked" column="SPR_LOCKED"/>
+		
+    <property name="comments" type="string" column="COMMENTS"/>
+
+    <property name="surgicalPathologyNumber" column="SURGICAL_PATHOLOGY_NUMBER" />
+
+    <property name="visitDate" type="timestamp" column="COLLECTION_TIMESTAMP" />
+
+    <property name="missedReason" column="MISSED_REASON" />
+
+    <many-to-one name="registration"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration"
+      column="COLLECTION_PROTOCOL_REG_ID" />
+
+    <many-to-one name="cpEvent"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent" 
+      column="COLLECTION_PROTOCOL_EVENT_ID" />
+
+    <many-to-one name="site" 
+      class="com.krishagni.catissueplus.core.administrative.domain.Site"
+      column="SITE_ID" />
+
+    <set name="specimens" table="CATISSUE_SPECIMEN" inverse="true" cascade="save-update">
+      <key column="SPECIMEN_COLLECTION_GROUP_ID"></key>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen" />
+      <filter name="activeEntity"/>
+    </set>
+
+    <many-to-one name="missedBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="MISSED_BY"
+    />
+    
+    <property name="cohort" column="COHORT"/>
+
+    <filter name="activeEntity"/>
+
+    <query name="getVisitsByIds">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit
+      where
+        id in (:ids)
+    </query>
+
+    <query name="getVisitByName">
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit 
+      where 
+        name in (:names)
+    </query>
+
+    <query name="getVisitBySpr">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit
+      where
+        surgicalPathologyNumber = :sprNumber
+    </query>
+
+    <query name="getLatestVisitByCprId">
+      select
+        visit
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.Visit visit
+        join visit.registration cpr
+      where
+        cpr.id = :cprId and
+        visit.status = 'Complete'
+      order by
+        visit.visitDate desc, visit.id desc
+    </query>
+
+    <sql-query name="getVisitsSummaryByCprId">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="eventId" type="long"/>
+      <return-scalar column="name" type="string"/>
+      <return-scalar column="eventStatus" type="string"/>
+      <return-scalar column="label" type="string"/>
+      <return-scalar column="calendarPoint" type="int"/>
+      <return-scalar column="status" type="string"/>
+      <return-scalar column="visitDate" type="timestamp"/>
+      <return-scalar column="regDate" type="timestamp"/>
+      <return-scalar column="missedReason" type="string"/>
+      <return-scalar column="cpId" type="long"/>
+
+      select
+        scg.identifier as id, cpe.identifier as eventId, scg.name as name, cpe.activity_status as eventStatus,
+        cpe.collection_point_label as label, cpe.study_calendar_event_point as calendarPoint,
+        scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
+        scg.missed_reason as missedReason, cpr.collection_protocol_id as cpId
+      from   
+        catissue_coll_prot_reg cpr
+        inner join catissue_coll_prot_event cpe 
+          on cpe.collection_protocol_id = cpr.collection_protocol_id
+        left join catissue_specimen_coll_group scg 
+          on scg.collection_protocol_event_id = cpe.identifier and 
+             scg.collection_protocol_reg_id = cpr.identifier and
+             scg.activity_status != 'Disabled'
+      where
+        cpr.identifier = :cprId and
+        cpr.activity_status != 'Disabled'
+
+      union
+
+      select
+        scg.identifier as id, null as eventId, scg.name as name, null as eventStatus,
+        null as label, null as calendarPoint,
+        scg.collection_status as status, scg.collection_timestamp as visitDate, cpr.registration_date as regDate,
+        scg.missed_reason as missedReason, cpr.collection_protocol_id as cpId
+      from
+        catissue_coll_prot_reg cpr
+        inner join catissue_specimen_coll_group scg 
+          on scg.collection_protocol_event_id is null  and
+             scg.collection_protocol_reg_id = cpr.identifier and
+             scg.activity_status != 'Disabled'
+      where
+        cpr.identifier = :cprId and
+        cpr.activity_status != 'Disabled'
+    </sql-query>
+
+    <sql-query name="getVisitsCollectionStatus">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="event_id" type="long"/>
+      <return-scalar column="anticipated" type="int"/>
+      <return-scalar column="collected" type="int"/>
+      <return-scalar column="missed" type="int"/>
+ 
+      select
+        scg.identifier as id, cpe.identifier as event_id,
+        count(case when sp_rq.activity_status != 'Disabled' then sp_rq.identifier else null end) as anticipated,
+        count(case when s.collection_status = 'Collected' then s.identifier else null end) as collected,
+        count(case when s.collection_status = 'Missed Collection' then s.identifier else null end) as missed
+      from
+        catissue_coll_prot_event cpe
+        inner join catissue_cp_req_specimen sp_rq 
+          on sp_rq.collection_protocol_event_id = cpe.identifier
+        left join catissue_specimen_coll_group scg 
+          on scg.collection_protocol_event_id = cpe.identifier and 
+             scg.collection_protocol_reg_id = :cprId and
+             scg.activity_status != 'Disabled'
+        left join catissue_specimen s 
+          on s.specimen_collection_group_id = scg.identifier and 
+             s.req_specimen_id = sp_rq.identifier and 
+             s.activity_status != 'Disabled'
+      where
+        cpe.identifier in (:eventIds)
+      group by
+        scg.identifier, cpe.identifier
+    </sql-query>
+
+    <sql-query name="getVisitsUnplannedSpecimenCount">
+      <return-scalar column="id" type="long"/>
+      <return-scalar column="event_id" type="long"/>
+      <return-scalar column="unplanned" type="int"/>
+ 
+      select 
+        scg.identifier as id, scg.collection_protocol_event_id as event_id,
+        count(s.identifier) as unplanned 
+      from
+        catissue_specimen_coll_group scg
+        inner join catissue_specimen s on s.specimen_collection_group_id = scg.identifier
+      where 
+        scg.identifier in (:visitIds) and
+        scg.collection_protocol_reg_id = :cprId and 
+        s.req_specimen_id is null and
+        scg.activity_status != 'Disabled' and
+        s.activity_status != 'Disabled'
+      group by 
+        scg.identifier, scg.collection_protocol_event_id
+    </sql-query>
+  </class>
+</hibernate-mapping>

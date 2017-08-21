@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        
+  <property name="now" value="now()"   dbms="mysql" />
+  <property name="now" value="sysdate" dbms="oracle" />
+
+  <changeSet  author="ahegade" id="ScheduleJob resource" dbms="mysql">
+    <sql>
+      insert into rbac_resources(name) values('ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet  author="ahegade" id="Adding ScheduleJob resources" dbms="oracle">
+    <sql>
+      insert into rbac_resources
+        (identifier, name) 
+      values
+        (rbac_resources_seq.nextval, 'ScheduledJob');
+    </sql>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Default job permissions to site admin">
+    <sql>call assign_to_role('Administrator', 'ScheduledJob', 'Read');</sql>
+    <sql>commit;</sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Assign permissions on SPR resource to PI, Coordinator and Tissue Banker">
+    <sql>
+      call assign_to_role('Tissue Banker', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
+      call assign_to_role('Principal Investigator', 'SurgicalPathologyReport', 'Read');
+      call assign_to_role('Coordinator', 'SurgicalPathologyReport', 'Read,Create,Update,Delete');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update public_id of all anatomic site PVs at 3 levels" dbms="mysql">
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = pv.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+
+    <sql>
+      update
+        catissue_permissible_value pv
+        inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        inner join catissue_permissible_value ipv1 on ipv1.parent_identifier = ipv.identifier
+        inner join catissue_permissible_value cpv on cpv.parent_identifier = ipv1.identifier
+      set
+        cpv.public_id = 'Tissue_Site_PID'
+      where
+        pv.public_id = 'Tissue_Site_PID';
+    </sql>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Update public_id of all anatomic site PVs at 3 levels" dbms="oracle">
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          pv.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          ipv.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+          inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+
+    <sql>
+      merge into catissue_permissible_value cpv using (
+        select 
+          ipv1.identifier as pv_id
+        from 
+          catissue_permissible_value pv
+          inner join catissue_permissible_value ipv on ipv.parent_identifier = pv.identifier
+          inner join catissue_permissible_value ipv1 on ipv1.parent_identifier = ipv.identifier
+        where 
+          pv.public_id = 'Tissue_Site_PID'          
+      ) t on (cpv.parent_identifier = t.pv_id) 
+      when matched then update set cpv.public_id = 'Tissue_Site_PID'
+    </sql>
+  </changeSet>
+</databaseChangeLog>

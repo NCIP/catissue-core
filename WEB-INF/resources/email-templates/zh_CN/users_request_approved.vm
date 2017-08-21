@@ -1,0 +1,61 @@
+#if( $token )
+  #set ($url = "$appUrl/#/reset-password?token=$token.token")
+#else
+  #set ($url = "$appUrl/#/")
+#end
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  您好 $user.firstName $user.lastName,
+                  <br><br>
+                  欢迎成为OpenSpecimen的一员！你现在可以继续登录到应用程序。
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="border-collapse:collapse;padding-bottom:10px">
+                <table cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;color:#333">
+                  <tbody>
+                    <tr>
+                      <td style="background:#3068a2;background:-moz-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-webkit-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-o-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:-ms-linear-gradient(top,#4687ce 0%,#3068a2 100%);background:linear-gradient(top,#4687ce 0%,#3068a2 100%);padding:0px;border-collapse:collapse;border-radius:3px;padding:5px;margin:0px">
+                        <a style="color:#3b73af;text-decoration:none;color:#fff;font-weight:bold;padding:6px;font-size:14px;line-height:1.429;font-family:Arial,sans-serif" href="$url" target="_blank">登录</a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                如果需要系统使用帮助你可以利用下面的在线资源：
+                <ul>
+                  <li>
+                    <a href="http://help.openspecimen.org/">查看在线培训视频</a>
+                  </li>
+                  <li>
+                    <a href="http://forums.openspecimen.org/">加入OpenSpecimen社区论坛</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

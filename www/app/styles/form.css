@@ -1,0 +1,57 @@
+
+.os-page-hdr + .container.os-de-form {
+  padding: 0px 0px 5px;
+}
+
+.os-form-association .os-modal-body {
+  height: 530px;
+  display: flex;
+  flex-direction: column;
+}
+
+.os-form-association-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.os-form-association-empty-list,
+.os-form-association-form {
+  flex: 0 0 auto;
+}
+
+.os-form-association-form {
+  margin-top: 10px;
+}
+.os-form-association-form .os-select-container {
+  margin: 10px 0;
+}
+
+.os-tag {
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.os-entity-extn-overview ul.os-key-values {
+  margin-top: -20px;
+} 
+
+.os-entity-extn-form-fields .de-sf-content .form-group,
+.os-entity-extn-form-fields .de-sf-content + .form-group {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.os-entity-extn-form-fields .de-sf-content .de-sf-cell {
+  padding-left: 0px;
+  padding-right: 20px;
+}
+
+.os-entity-extn-form-fields .de-sf-content > .form-group:first-child .de-sf-cell {
+  padding-top: 7px;
+}
+
+.form-group.right-btns {
+  text-align: right;
+}

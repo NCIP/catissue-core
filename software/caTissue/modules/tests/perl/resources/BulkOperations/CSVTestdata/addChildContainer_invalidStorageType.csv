@@ -1,2 +1,0 @@
-Storage Type ID,Barcode,container name,Activity Status,Full,Comments,Dimension one,Dimension Two,Parent Container Name,Location one,Location two,No Of Containers,holdsStorageType#1,holdsStorageType#2,holdsSpecimenClass#1,holdsSpecimenClass#2
-5,,test_cont2,Active,FALSE,,10,5,Test_Site_Test_Storage_Type_902,,,,,,,

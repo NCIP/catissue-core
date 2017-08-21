@@ -1,0 +1,46 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="padding:0px;border-collapse:collapse;padding:0px;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  您好 $user.firstName $user.lastName,
+                  <br><br>
+                  你在 OpenSpecimen 的注册请求正被管理员审核，一旦请求通过，你将收到邮件通知。
+                  <br><br>
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                在此之前，你可以通过如下操作来打发额外时间：
+                <ul>
+                  <li>
+                    <a href="http://help.openspecimen.org/">观看OpenSpecimen 培训视频</a>
+                  </li>
+                  <li>
+                    <a href="http://forums.openspecimen.org/">加入OpenSpecimen社区论坛</a>
+                  </li>
+                  <li>
+                    <a href="https://www.youtube.com/results?search_query=best+way+to+kill+time">看一些关于如何消磨时间的YouTube视频</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

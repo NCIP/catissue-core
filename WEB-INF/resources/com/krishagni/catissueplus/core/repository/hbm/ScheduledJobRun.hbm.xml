@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun" table="OS_SCHEDULED_JOB_RUNS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_SCHEDULED_JOB_RUNS_SEQ</param>
+      </generator>
+    </id>
+
+    <many-to-one
+      name="scheduledJob"
+      class="com.krishagni.catissueplus.core.administrative.domain.ScheduledJob"
+      column="SCHEDULED_JOB_ID"/>
+
+    <many-to-one
+      name="runBy"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="RUN_BY"/>
+
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">com.krishagni.catissueplus.core.administrative.domain.ScheduledJobRun$Status</param>
+        <param name="type">12</param>
+      </type>
+    </property>
+      
+    <property name="startedAt" column="STARTED_AT"/>
+    
+    <property name="finishedAt" column="FINISHED_AT"/>
+    
+    <property name="logFilePath" column="LOG_FILE_PATH"/>
+
+    <property name="message" column="MESSAGE"/>
+    
+    <property name="rtArgs" column="RT_ARGS"/>
+  </class>
+</hibernate-mapping>

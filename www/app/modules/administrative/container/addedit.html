@@ -1,0 +1,360 @@
+
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="container-list">
+            <span translate="container.list">Storage Containers</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!container.id">
+        <span ng-switch-when="true" translate="container.create_container">Create Container</span>
+        <span ng-switch-when="false">{{container.name}}</span>
+      </h3>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div ng-switch on="ctx.view == 'review_multiple_containers'">
+      <div ng-switch-when="false">
+        <div ng-include src="'modules/administrative/container/save-container.html'"></div>
+      </div>
+      <div ng-switch-when="true">
+        <div ng-include src="'modules/administrative/container/save-multiple-containers.html'"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/administrative/container/save-container.html">
+  <form name="cform" class="form-horizontal" os-form-validator="cform" validator="cformValidator" novalidate>
+    <div class="form-group" ng-if="!container.id">
+      <label class="col-xs-3 control-label">
+        <span translate="container.create_mode">Create</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="createMode" ng-model="ctx.mode" ng-value="'single'" ng-change="onCreateModeChange()">
+          <span translate="container.single_container">Single Container</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="createMode" ng-model="ctx.mode" ng-value="'multiple'" ng-change="onCreateModeChange()">
+          <span translate="container.multiple_containers">Multiple Containers</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="createMode" ng-model="ctx.mode" ng-value="'hierarchy'" ng-change="onCreateModeChange()">
+          <span translate="container.container_hierarchy">Container Hierarchy</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="ctx.mode != 'single'">
+      <label class="col-xs-3 control-label">
+        <span translate="container.num_of_containers">Number of Containers</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" name="numOfContainers" ng-model="container.numOfContainers" class="form-control"
+          placeholder="{{'container.num_of_containers' | translate}}" ng-pattern="/^[1-9][0-9]*$/" required>
+        <div os-field-error field="cform.numOfContainers"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="container.type">Type</span>
+      </label>
+      <div class="col-xs-6">
+        <os-select ng-model="container.typeName" list="containerTypes" name="type" display-prop="name"
+          select-prop="name" placeholder="{{'container.type' | translate}}"
+          on-select="onSelectContainerType($item)" ng-required="ctx.createHierarchy">
+        </os-select>
+        <div os-field-error field="cform.type"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="ctx.mode == 'single'">
+      <label class="col-xs-3 control-label">
+        <span translate="container.name">Name</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" name="name" ng-model="container.name" class="form-control"
+          required placeholder="{{'container.name' | translate}}" ng-maxlength="255">
+        <div os-field-error field="cform.name"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="ctx.mode == 'single'">
+      <label class="col-xs-3 control-label">
+        <span translate="container.barcode">Barcode</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" name="barcode" ng-model="container.barcode" class="form-control"
+          placeholder="{{'container.barcode' | translate}}" ng-maxlength="255">
+        <div os-field-error field="cform.barcode"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!locationSelected">
+      <label class="col-xs-3 control-label">
+        <span translate="container.parent_site">Parent Site</span>
+      </label>
+      <div class="col-xs-6">
+        <os-sites name="parentSite" ng-model="container.siteName" placeholder="{{'container.site' | translate}}"
+          on-select="loadAllCps()" resource="StorageContainer" operation="{{ctx.op}}" required>
+        </os-sites>
+        <div os-field-error field="cform.parentSite"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!locationSelected">
+      <label class="col-xs-3 control-label">
+        <span translate="container.parent_container">Parent Container</span>
+      </label>
+      <div class="col-xs-6">
+        <os-storage-position entity="container"></os-storage-position>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!container.id && ctx.mode == 'single'">
+      <label class="col-xs-3 control-label">
+        <span translate="container.dimensionless">Dimensionless?</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="dimensionless" ng-model="container.$$dimensionless" ng-value="true"
+            ng-click="setDimensionless(true)">
+          <span translate="common.yes">Yes</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="dimensionless" ng-model="container.$$dimensionless" ng-value="false">
+          <span translate="common.no">No</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!container.$$dimensionless">
+      <label class="col-xs-3 control-label">
+        <span translate="container.dimension">Dimension</span>
+      </label>
+      <div class="col-xs-3">
+        <input type="text" name="noOfRows" ng-model="container.noOfRows" class="form-control"
+          placeholder="{{'container.vertical_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+        <div os-field-error field="cform.noOfRows"></div>
+      </div>
+      <div class="col-xs-3">
+        <input type="text" name="noOfColumns" ng-model="container.noOfColumns" class="form-control"
+          placeholder="{{'container.horizontal_dimension' | translate}}" ng-pattern="/^[0-9]*$/" required>
+        <div os-field-error field="cform.noOfColumns"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!container.storageLocation.name">
+      <label class="col-xs-3 control-label">
+        <span translate="container.capacity">Capacity</span>
+      </label>
+      <div class="col-xs-6">
+        <div class="input-group">
+          <input type="text" name="capacity" ng-model="container.capacity" class="form-control"
+            placeholder="{{'container.capacity' | translate}}" ng-pattern="/^[1-9][0-9]*$/" ng-required="ctx.capacityReq">
+          <div class="input-group-addon">
+            <span translate="container.specimens">specimens</span>
+          </div>
+        </div>
+        <div os-field-error field="cform.capacity"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!container.$$dimensionless">
+      <label class="col-xs-3 control-label">
+        <span translate="container.position_labeling">Position Labeling</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="posLabelingMode" ng-model="container.positionLabelingMode" ng-value="'LINEAR'">
+          <span translate="container.position_labeling_modes.LINEAR">Linear</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="posLabelingMode" ng-model="container.positionLabelingMode" ng-value="'TWO_D'">
+          <span translate="container.position_labeling_modes.TWO_D">Row and Column</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="container.positionLabelingMode == 'TWO_D'">
+      <label class="col-xs-3 control-label">
+        <span translate="container.labeling_scheme">Labeling Scheme</span>
+      </label>
+      <div class="col-xs-3">
+        <os-select ng-model="container.rowLabelingScheme" list="positionLabelingSchemes"
+          name="rowLabelingScheme" placeholder="{{'container.vertical_labeling_scheme' | translate}}" required>
+        </os-select>
+        <div os-field-error field="cform.rowLabelingScheme"></div>
+      </div>
+      <div class="col-xs-3">
+        <os-select ng-model="container.columnLabelingScheme" list="positionLabelingSchemes"
+          name="columnLabelingScheme" placeholder="{{'container.horizontal_labeling_scheme' | translate}}" required>
+        </os-select>
+        <div os-field-error field="cform.columnLabelingScheme"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="container.temperature">Temperature (Celsius)</span>
+      </label>
+      <div class="col-xs-6">
+        <input type="text" name="temperature" ng-model="container.temperature" class="form-control"
+          placeholder="{{'container.temperature' | translate}}" ng-pattern="/^[-]?[0-9]*$/">
+        <div os-field-error field="cform.temperature"></div>
+      </div>
+    </div>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group" ng-if="!container.$$dimensionless">
+      <label class="col-xs-3 control-label">
+        <span translate="container.stores_specimens">Stores Specimens</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="storesSpecimen" ng-model="container.storeSpecimensEnabled" ng-value="true">
+          <span translate="common.yes">Yes</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="storesSpecimen" ng-model="container.storeSpecimensEnabled" ng-value="false">
+          <span translate="common.no">No</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!container.$$dimensionless && !locationSelected && !container.storageLocation.name">
+      <label class="col-xs-3 control-label">
+        <span translate="container.cell_display_prop">Display</span>
+      </label>
+      <div class="col-xs-9">
+        <label class="radio-inline">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_LABEL'">
+          <span translate="container.cell_display_props.SPECIMEN_LABEL">Specimen Labels</span>
+        </label>
+        <label class="radio-inline" ng-if="ctx.barcodingEnabled">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_BARCODE'">
+          <span translate="container.cell_display_props.SPECIMEN_BARCODE">Specimen Barcode</span>
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="cellDisplayProp" ng-model="container.cellDisplayProp" ng-value="'SPECIMEN_PPID'">
+          <span translate="container.cell_display_props.SPECIMEN_PPID">PPIDs</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="container.collection_protocol">Collection Protocol</span>
+      </label>
+      <div class="col-xs-6">
+        <os-select multiple ng-model="container.allowedCollectionProtocols" list="cps"
+          placeholder="{{container.collection_protocol | translate}}">
+        </os-select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="container.specimen_types">Specimen Types</span>
+      </label>
+      <div class="col-xs-6">
+        <os-group-selector
+          placeholder="{{container.specimen_types | translate}}"
+          opts="specimenTypeSelectorOpts"
+          selected-categories="container.allowedSpecimenClasses"
+          selected-category-items="container.allowedSpecimenTypes">
+        </os-group-selector>
+      </div>
+    </div>
+ 
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-offset-3 col-xs-6">
+        <button class="btn btn-primary" os-form-submit="save()">
+          <span ng-if="!container.id && ctx.mode != 'multiple'"  translate="common.buttons.create"> Create </span>
+          <span ng-if="!container.id && ctx.mode == 'multiple'"  translate="common.buttons.next"> Next </span>
+          <span ng-if="!!container.id" translate="common.buttons.update"> Update </span>
+        </button>
+        <button class="btn os-btn-text" ng-click="back()">
+          <span translate="common.buttons.discard">Discard</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="modules/administrative/container/save-multiple-containers.html">
+  <form name="cform" class="form-horizontal" os-form-validator="cform" validator="cformValidator" novalidate>
+    <table class="os-table bulk-edit">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col col-xs-4">
+            <span translate="container.name">Name</span>
+          </th>
+          <th class="col col-xs-3">
+            <span translate="container.site">Site</span>
+            <a ng-click="copyFirstSiteToAll()" style="font-weight: normal">
+              (<span translate="common.copy_first_to_all">Copy first to all</span>)
+            </a>
+          </th>
+          <th class="col col-xs-4">
+            <span translate="container.parent_container">Parent Container</span>
+            <a ng-click="copyFirstParentContainerToAll()" style="font-weight: normal">
+              (<span translate="common.copy_first_to_all">Copy first to all</span>)
+            </a>
+          </th>
+          <th class="col col-xs-1">
+            <span>&nbsp;</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="mcont in ctx.containers" ng-form="mform">
+          <td class="col">
+            <span ng-if="!!mcont.typeName" translate="container.auto_name">Auto</span>
+            <span ng-if="!mcont.typeName">
+              <input name="name" type="text" os-md-input class="form-control" ng-model="mcont.name" required>
+              <div os-field-error field="mform.name"></div>
+            </span>
+          </td>
+          <td class="col">
+            <os-select name="site" os-md-input ng-model="mcont.siteName" list="sites"
+              on-select="siteSelected(mcont)" required>
+            </os-select>
+            <div os-field-error field="mform.site"></div>
+          </td>
+          <td class="col">
+            <os-storage-position name="location" os-md-input entity="mcont" hide-placeholder>
+            </os-storage-position>
+          </td>
+          <td class="col">
+            <button class="btn os-btn-text" ng-click="removeContainer($index)">
+              <span class="fa fa-times-circle"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="os-divider"></div>
+
+    <div class="form-group">
+      <div class="col-xs-6">
+        <button class="btn btn-primary" os-form-submit="saveMultipleContainers()">
+          <span translate="common.buttons.create"> Create </span>
+        </button>
+        <button class="btn os-btn-text" ng-click="ctx.view = ''">
+          <span translate="common.buttons.back">Discard</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</script>

@@ -1,0 +1,52 @@
+.os-pivot-table {
+  height: 100%;
+}
+
+.os-pivot-table table {
+  border: 1px solid #ddd;
+  width: 0!important;
+  min-width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.os-pivot-table th {
+  background: #e6eeee;
+  padding: 10px;
+}
+
+.os-pivot-table td {
+  padding: 5px;
+}
+
+.os-pivot-table tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.os-pivot-table th, .os-pivot-table td {
+  border-right: 1px solid #ddd;
+  text-align: center;
+  font-size: 14px;
+}
+
+.os-pivot-table .title {
+  background: #428bca!important;
+  color: #ffffff;
+  width: 100%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.os-pivot-table .ellipsis, .os-pivot-table th, .os-pivot-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.os-pivot-table .col-key {
+  font-style: italic;
+}
+
+.os-pivot-table tr.row-separator {
+  border-top: 3px solid #ddd;
+}

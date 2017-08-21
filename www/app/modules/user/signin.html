@@ -1,0 +1,28 @@
+
+<div>
+  <div class="os-custom-banner">
+    <div style="height: 100px;"></div>
+    <h3 translate="user.sign_in_title">Sign in to continue to OpenSpecimen</h3>
+  </div>
+
+  <div class="os-center-box">
+    <img class="os-rounded-img" src="images/profile-user.png" />
+    <form ng-submit="login()">
+      <div class="os-group-controls">
+        <input type="text"     class="form-control" ng-model="loginData.loginName" placeholder="{{'user.login_name' | translate}}">
+        <input type="password" class="form-control" ng-model="loginData.password"  placeholder="{{'user.password' | translate}}">
+        <div ng-if="domains.length > 1">
+          <os-select ng-model="loginData.domainName" list="domains" name="domain"
+            placeholder="{{'user.domain_name' | translate}}" required>
+          </os-select>
+	</div>
+      </div>
+      <span class="os-error-msg" ng-if="loginError" translate="user.sign_in_failed">The username or password you entered is incorrect</span>
+      <button type="submit" class="btn btn-block btn-primary" translate="user.sign_in">Sign in</button>
+      <div style="padding-top: 5px;">
+        <a ui-sref="forgot-password" translate="user.forgot_password">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
+

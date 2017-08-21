@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class 
+    name="com.krishagni.catissueplus.core.de.domain.QueryFolder" 
+    table="CATISSUE_QUERY_FOLDERS">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_QUERY_FOLDERS_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="NAME"/>
+
+    <property name="sharedWithAll" column="SHARED_WITH_ALL"/>
+
+    <many-to-one 
+      name="owner"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      column="OWNER"
+     />
+     
+    <set 
+      name="sharedWith" 
+      table="CATISSUE_QFOLDER_SHARE_SETTING">
+      <key column="FOLDER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.administrative.domain.User" column="USER_ID"/>
+    </set>
+	
+    <set 
+      name="savedQueries" 
+      table="CATISSUE_QUERY_FOLDER_QUERIES">
+      <key column="FOLDER_ID"/>
+      <many-to-many class="com.krishagni.catissueplus.core.de.domain.SavedQuery" column="QUERY_ID" />
+    </set>
+	
+    <query name="getQueryFoldersByUser">
+      select 
+        distinct f 
+      from 
+        QueryFolder f inner join f.owner owner left join f.sharedWith sharedWith 
+      where 
+        owner.id = :userId or sharedWith.id = :userId or f.sharedWithAll = true
+    </query>
+    
+    <query name="getQueryFolderByName">
+      from QueryFolder f where f.name = :name
+    </query>
+  </class> 
+</hibernate-mapping>

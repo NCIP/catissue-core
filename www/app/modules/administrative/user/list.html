@@ -1,0 +1,117 @@
+
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <h3>
+        <span translate="user.list">Users</span>
+      </h3>
+    </div>
+    <div class="os-page-header-actions">
+      <os-list-pager opts="pagerOpts"> </os-list-pager>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button show-if-allowed="userResource.createOpts" class="default" title="{{'user.tooltip.add' | translate}}"
+        ui-sref="user-addedit({userId: ''})">
+        <span class="fa fa-plus"></span>
+        <span translate="common.buttons.create">Create</span>
+      </button>
+
+      <button show-if-admin class="default" title="{{'user.announcement.tooltip' | translate}}"
+        ng-click="broadcastAnnouncement()">
+        <span translate="user.announcement.new">New Announcement</span>
+      </button>
+
+      <div show-if-allowed="userResource.createOpts" dropdown class="os-inline-btn">
+        <button class="default dropdown-toggle">
+          <span translate="common.buttons.import">Import</span>
+          <span class="fa fa-caret-down"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li>
+            <a ui-sref="user-import({objectType: 'user'})">
+              <span class="fa fa-user"></span>
+              <span translate="user.list">Users</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import({objectType: 'userRoles'})">
+              <span class="fa fa-lock"></span>
+              <span translate="user.user_roles">User Roles</span>
+            </a>
+          </li>
+          <li>
+            <a ui-sref="user-import-jobs">
+              <span class="fa fa-list-alt"></span>
+              <span translate="bulk_imports.view_jobs">View Jobs</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <os-plugin-hooks view-name="'user-list'" sec-name="'page-header'"></os-plugin-hooks>
+      <os-help class="os-btns btn default" link="user_help_link"></os-help>
+    </div>
+   
+    <div class="right">
+      <button class="default" os-right-drawer-toggle title="{{'user.tooltip.search' | translate}}">
+        <span class="fa fa-search"></span>
+        <span translate="common.buttons.search">Search</span>
+      </button>
+    </div>
+  </div>
+    
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="user.name">Name</span>
+          </th>
+          <th class="col">
+            <span translate="user.email_address">Email Address</span>
+          </th>
+          <th class="col">
+            <span translate="user.login_name">Login Name</span>
+          </th>
+          <th class="col">
+            <span translate="user.cp_count">Collection Protocols</span>
+          </th>
+          <th class="col">
+            <span translate="user.user_since">User Since</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="user in users" os-row-click="showUserOverview(user)">
+          <td class="col">
+            <a ui-sref="user-detail.overview({userId: user.id})">
+              <span>{{user | osUserDisplayName}}</span>
+            </a>
+          </td>
+          <td class="col">
+            <span>{{user.emailAddress}}</span>
+          </td>
+          <td class="col">
+            <span>{{user.loginName}}</span>
+          </td>
+          <td class="col">
+            <span>{{user.cpCount | number: 0}}</span>
+          </td>
+          <td class="col" ng-switch on="!!user.creationDate">
+            <span ng-switch-when="true">
+              {{user.creationDate | date: 'yyyy'}}
+            </span>
+            <span ng-switch-when="false" translate="common.na">
+              Not Available
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div os-right-drawer ng-include="'modules/administrative/user/search.html'"></div>
+</div>

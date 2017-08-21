@@ -1,0 +1,9 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Pending,2004300,null
+getNextPvId(),,,null,Pending-Partially Complete,2004300,null
+getNextPvId(),,,null,Overdue,2004300,null
+getNextPvId(),,,null,Overdue-Partially Complete,2004300,null
+getNextPvId(),,,null,Complete,2004300,null
+getNextPvId(),,,null,Complete-Late,2004300,null
+getNextPvId(),,,null,Incomplete,2004300,null
+getNextPvId(),,,null,Not Collected,2004300,null

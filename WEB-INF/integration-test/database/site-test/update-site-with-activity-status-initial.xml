@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <OS_AUTH_DOMAINS IDENTIFIER="1" DOMAIN_NAME="default"/>
+ 
+  <CATISSUE_USER IDENTIFIER="1" FIRST_NAME="ADMIN" LAST_NAME="ADMIN" LOGIN_NAME="admin@admin.com" EMAIL_ADDRESS="admin@admin.com" 
+    ACTIVITY_STATUS="Active" DOMAIN_NAME="default"/>
+    
+  <CATISSUE_SITE IDENTIFIER="1" NAME="default-site1" CODE="1" TYPE="repository" ACTIVITY_STATUS="Active" />
+    
+  <CATISSUE_SITE_COORDINATORS />
+</dataset>

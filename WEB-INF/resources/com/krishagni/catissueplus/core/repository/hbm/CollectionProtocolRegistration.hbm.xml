@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration" table="CATISSUE_COLL_PROT_REG" batch-size="100">
+
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_COLL_PROT_REG_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="consentSignDate" column="CONSENT_SIGN_DATE" />
+
+    <property name="consentComments" column="CONSENT_COMMENTS" />
+    
+    <property name="signedConsentDocumentName" column="CONSENT_DOCUMENT_NAME"/>
+
+    <property name="ppid" column="PROTOCOL_PARTICIPANT_ID" />
+
+    <property name="barcode" column="BARCODE" />
+
+    <property name="registrationDate" column="REGISTRATION_DATE" />
+
+    <property name="activityStatus" column="ACTIVITY_STATUS" />
+
+    <many-to-one 
+      name="consentWitness" 
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      column="CONSENT_WITNESS" />
+
+    <many-to-one 
+      name="participant"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.Participant"
+      column="PARTICIPANT_ID" />
+
+    <many-to-one 
+      name="collectionProtocol"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol" 
+      column="COLLECTION_PROTOCOL_ID" />
+
+    <set name="consentResponses" table="CATISSUE_CONSENT_TIER_RESPONSE" inverse="true" cascade="all-delete-orphan">
+      <key column="COLL_PROT_REG_ID" />
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.ConsentTierResponse" />
+    </set>
+
+    <set name="visits" table="CATISSUE_SPECIMEN_COLL_GROUP" inverse="true">
+      <key column="COLLECTION_PROTOCOL_REG_ID" />
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Visit" />
+      <filter name="activeEntity"/>
+    </set>
+
+    <filter name="activeEntity"/>
+
+    <query name="getCprByCpIdAndPpid">
+      select 
+        cpr
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.id = :cpId and
+        cpr.ppid = :ppid
+    </query>
+
+    <query name="getCprByCpTitleAndPpid">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.title = :title and
+        cpr.ppid = :ppid
+    </query>
+    
+    <query name="getCprByCpShortTitleAndPpid">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.shortTitle = :shortTitle and
+        cpr.ppid = :ppid
+    </query>
+
+    <query name="getCprByCpShortTitleAndEmpi">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+        join cpr.participant p
+      where
+        cpr.collectionProtocol.shortTitle = :shortTitle and
+        p.empi = :empi
+    </query>
+    
+    <query name="getCprByCpIdAndPid">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.id = :cpId and
+        cpr.participant.id = :participantId 
+    </query>
+
+    <query name="getCprsByCpId">
+      select
+        cpr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolRegistration cpr
+      where
+        cpr.collectionProtocol.id = :cpId
+      order by
+        cpr.id
+    </query>
+  </class>
+</hibernate-mapping>

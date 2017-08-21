@@ -1,0 +1,258 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li> 
+          <a ui-sref="cp-list-view({cpId: cpr.cpId})">
+            <span>{{cpr.cpShortTitle}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="participant-detail.overview({cprId: cpr.id})">
+            <ng-switch on="!!(cpr.participant.lastName || cpr.participant.firstName)">
+              <span ng-switch-when="true"> {{cpr.participant.firstName}} {{cpr.participant.lastName}} </span>
+              <span ng-switch-when="false" translate="common.na"> N/A </span>
+            </ng-switch>
+            <span>({{cpr.ppid}})</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="visit-detail.overview({visitId: visit.id, eventId: visit.eventId})">
+            <span>T{{visit.eventPoint}}: {{visit.eventLabel}}</span>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            <span>{{parentSpecimen.label}}</span>
+          </a>
+        </li>
+      </ul>
+
+      <h3>
+        <span translate="specimens.create_derivative">Create Derivative</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="derivativeForm" class="form-horizontal" os-form-validator="derivativeForm" novalidate>
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.parent_specimen">Parent Specimen</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <a ui-sref="specimen-detail.overview({specimenId: parentSpecimen.id, srId: parentSpecimen.reqId})">
+            <span>{{parentSpecimen.label}}</span>
+          </a>
+        </div>
+        <label class="col-xs-2 control-label" translate="specimens.available_qty">Available Quantity</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <os-spmn-measure-val specimen="parentSpecimen" value="parentSpecimen.availableQty"></os-spmn-measure-val>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimens.specimen_type">Specimen Type</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.type}}</span>
+        </div>
+        <label class="col-xs-2 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+        <div class="col-xs-2 os-ctrl-padding-top">
+          <span>{{parentSpecimen.anatomicSite}}</span>
+        </div>
+      </div>
+
+      <div ng-switch on="fieldsCtx.hasDict">
+        <div ng-switch-when="true">
+          <sde-form-fields base-fields="fieldsCtx.sysDict" fields="fieldsCtx.cpDict"
+            obj="spmnCtx.obj" in-objs="spmnCtx.inObjs" ex-objs="spmnCtx.exObjs">
+          </sde-form-fields>
+        </div>
+        <div ng-switch-default>
+          <div ng-include="'modules/biospecimen/participant/specimen/static-add-derivative.html'">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6 os-text-checkbox">
+          <div class="checkbox">
+            <os-checkbox ng-model="derivative.closeParent"></os-checkbox>
+          </div>
+          <div class="message os-ctrl-padding-top">
+            <span translate="specimens.close_parent_q">Do you want to close parent specimen?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="createDerivative()">
+            <span translate="common.buttons.create">Create</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/ng-template" id="modules/biospecimen/participant/specimen/static-add-derivative.html">
+  <div>
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.type">Specimen Type</label>
+      <div class="col-xs-6">
+        <os-specimen-types name="specimenType" specimen="derivative" placeholder="{{'specimens.type' | translate}}" required>
+        </os-specimen-types>
+        <div os-field-error field="derivativeForm.specimenType"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
+      <label class="col-xs-3 control-label" translate="specimens.label">Label</label>
+      <div class="col-xs-6">
+        <input name="label" ng-model="derivative.label" class="form-control"
+          type="text" placeholder="{{'specimens.label' | translate}}"
+          ng-required="!cpr.derivativeLabelFmt || cp.manualSpecLabelEnabled">
+        <div os-field-error field="derivativeForm.label"></div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-if="barcodingEnabled">
+      <label class="col-xs-3 control-label" translate="specimens.barcode">Barcode</label>
+      <div class="col-xs-6">
+        <input ng-model="derivative.barcode" class="form-control"
+          type="text" placeholder="{{'specimens.barcode' | translate}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.qty">Initial Quantity</label>
+      <div class="col-xs-6">
+        <os-spmn-measure name="quantity" specimen="derivative" quantity="derivative.initialQty"
+          placeholder="{{'specimens.available_qty' | translate}}"> 
+        </os-spmn-measure>
+        <div os-field-error field="derivativeForm.quantity"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.concentration">Concentration</label>
+      <div class="col-xs-6">
+        <os-spmn-measure name="concentration" specimen="derivative" quantity="derivative.concentration" measure="concentration"
+          placeholder="{{'specimens.concentration' | translate}}">
+        </os-spmn-measure>
+        <div os-field-error field="derivativeForm.concentration"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.location">Location</label>
+      <div class="col-xs-6" ng-switch on="autoAllocation">
+        <div class="control-text" ng-switch-when="true">
+          <span ng-switch on="!derivative.storageLocation || !derivative.storageLocation.name">
+            <span ng-switch-when="true" translate="specimens.auto">Auto</span>
+            <span ng-switch-default>
+              <os-disp-storage-position position="derivative.storageLocation"></os-disp-storage-position>
+            </span>
+          </span>
+          <button class="btn btn-default btn-xs" title="{{'container.tooltip.select' | translate}}"
+            ng-click="cancelReservation()">
+            <span class="fa fa-dropbox"></span>
+          </button>
+        </div>
+        <div ng-switch-default>
+          <os-storage-position entity="derivative" cp-id="cpr.cpId"></os-storage-position>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.pathology_status">Pathology Status</label>
+      <div class="col-xs-6">
+        <os-pvs name="pathology" ng-model="derivative.pathology" attribute="pathology-status"
+          required placeholder="{{'specimens.pathology_status' | translate}}">
+        </os-pvs>
+        <div os-field-error field="derivativeForm.pathology"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.anatomic_site">Anatomic Site</label>
+      <div class="col-xs-6">
+        <os-pvs name="anatomicSite" ng-model="derivative.anatomicSite" attribute="anatomic-site" 
+          show-only-leaf-values="true" required placeholder="{{'specimens.anatomic_site' | translate}}">
+        </os-pvs>
+        <div os-field-error field="derivativeForm.anatomicSite"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.laterality">Laterality</label>
+      <div class="col-xs-6">
+        <os-pvs name="laterality" ng-model="derivative.laterality" attribute="laterality"
+          required placeholder="{{'specimens.laterality' | translate}}">
+        </os-pvs>
+        <div os-field-error field="derivativeForm.laterality"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.created_on">Created On</label>
+      <div class="col-xs-6">
+        <div class="os-date-time clearfix">
+          <div class="os-col-65 os-no-padding input">
+            <os-date-picker name="createdOn" date="derivative.createdOn"
+              placeholder="{{'specimens.created_on' | translate}}" required>
+            </os-date-picker>
+          </div>
+          <div class="os-col-35">
+            <timepicker ng-model="derivative.createdOn" class="os-time-no-wheels" show-meridian="false">
+            </timepicker>
+          </div>
+        </div>
+        <div os-field-error field="derivativeForm.createdOn"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" translate="specimens.freeze_thaw_cycles">Freeze/Thaw Cycles</label>
+      <div class="col-xs-6">
+        <input name="freezeThawCycles" ng-model="derivative.freezeThawCycles"
+          class="form-control" placeholder="{{'specimens.freeze_thaw_cycles' | translate}}"
+          ng-pattern="/^[0-9]*$/">
+        <div os-field-error field="derivativeForm.freezeThawCycles"></div>
+        <div class="os-text-checkbox">
+          <div class="checkbox">
+            <os-checkbox ng-model="derivative.incrParentFreezeThaw" ng-true-value="1" ng-false-value="0"
+              ng-change="toggleIncrParentFreezeThaw()">
+            </os-checkbox>
+          </div>
+          <div class="message os-ctrl-padding-top">
+            <span translate="specimens.increment_parent_freeze_thaw">
+              Increment parent specimen's Freeze/Thaw cycle count
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label">
+        <span translate="specimens.comments">Comments</span>
+      </label>
+      <div class="col-xs-6">
+        <textarea ng-model="derivative.comments" class="form-control"
+          placeholder="{{'specimens.comments' | translate}}" rows="2">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="os-entity-extn-form-fields" ng-if="!!extnOpts">
+      <div id='de-form' class='os-extn-form' os-de-form opts="extnOpts" ctrl="deFormCtrl" extended-obj="derivative">
+      </div>
+    </div>
+  </div>
+</script>

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement" table="CATISSUE_CP_REQ_SPECIMEN" batch-size="25">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">CATISSUE_REQ_SPECIMEN_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" column="SPEC_REQ_LABEL"/>
+
+    <property name="code" column="CODE"/>
+
+    <property name="lineage" column="LINEAGE"/>
+      
+    <property name="specimenClass" column="SPECIMEN_CLASS"/>
+
+    <property name="specimenType" column="SPECIMEN_TYPE"/>
+      
+    <property name="anatomicSite" column="TISSUE_SITE"/>
+
+    <property name="laterality" column="TISSUE_SIDE"/>
+      
+    <property name="pathologyStatus" column="PATHOLOGICAL_STATUS"/>
+
+    <property name="storageType" column="STORAGE_TYPE"/>
+
+    <property name="initialQuantity" column="INITIAL_QUANTITY"/>
+
+    <property name="concentration" column="CONCENTRATION"/>
+
+    <many-to-one
+      name="collector"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      column="COLLECTOR_ID"/>
+
+    <property name="collectionProcedure" column="COLLECTION_PROCEDURE"/>
+
+    <property name="collectionContainer" column="COLLECTION_CONTAINER"/>
+
+    <many-to-one
+      name="receiver"
+      class="com.krishagni.catissueplus.core.administrative.domain.User"
+      cascade="none"
+      column="RECEIVER_ID"/>
+
+    <many-to-one
+      name="collectionProtocolEvent"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocolEvent"
+      cascade="none"
+      column="COLLECTION_PROTOCOL_EVENT_ID"/>
+
+    <property name="labelFormat" column="LABELFORMAT"/>
+    
+    <property name="labelAutoPrintMode" column="LABEL_AUTO_PRINT_MODE">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.catissueplus.core.biospecimen.domain.CollectionProtocol$SpecimenLabelAutoPrintMode
+        </param>
+        <param name="type">12</param>
+      </type>
+    </property>
+    
+    <property name="labelPrintCopies" column="LABEL_PRINT_COPIES"/>
+
+    <property name="activityStatus" column="ACTIVITY_STATUS"/>
+  
+    <property name="sortOrder" column="SORT_ORDER"/>
+      
+    <many-to-one
+      name="parentSpecimenRequirement"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"
+      cascade="none"
+      update="true"
+      column="PARENT_SPECIMEN_ID"/>
+
+    <set name="childSpecimenRequirements" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc" batch-size="25">
+      <key column="PARENT_SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <many-to-one
+      name="pooledSpecimenRequirement"
+      class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"
+      cascade="none"
+      update="true"
+      column="POOLED_SPMN_REQ_ID"/>
+
+    <set name="specimenPoolReqs" table="CATISSUE_CP_REQ_SPECIMEN" inverse="true" cascade="all" order-by="id asc" batch-size="25">
+      <key column="POOLED_SPMN_REQ_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <set name="specimens" inverse="true" cascade="all">
+      <key column="REQ_SPECIMEN_ID"/>
+      <one-to-many class="com.krishagni.catissueplus.core.biospecimen.domain.Specimen"/>
+      <filter name="activeEntity"/>
+    </set>
+
+    <filter name="activeEntity"/>
+
+    <query name="getByCode">
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+      where
+        sr.code = :code
+    </query>
+    
+    <query name="getSpecimensCount">
+      select 
+        count(spec.id) 
+      from 
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+        join sr.specimens spec
+      where
+        spec.collectionStatus = 'Collected'
+        and sr.id = :srId
+    </query>
+    
+    <query name="getByCpEventLabelAndSrCode">
+      select
+        sr
+      from
+        com.krishagni.catissueplus.core.biospecimen.domain.SpecimenRequirement sr
+        join sr.collectionProtocolEvent event
+        join event.collectionProtocol cp
+      where
+        cp.shortTitle = :cpShortTitle
+        and event.eventLabel = :eventLabel
+        and sr.code = :code
+    </query>
+  </class>
+</hibernate-mapping>

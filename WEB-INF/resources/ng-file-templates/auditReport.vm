@@ -1,0 +1,13 @@
+Audit Summary Report,
+
+Exported By :, $exportEvent.getExportBy(),
+Exported On :, $exportEvent.getExportOn(),
+Duration :, $exportEvent.getDateFrom() To $exportEvent.getDateTo(),
+Objects:, $exportEvent.getObjectTypes(),
+Users:, $exportEvent.getUserList()
+Operations:, $exportEvent.getOperations()
+
+UserId ,FirstName , LastName , LoginName , Event Type , Object name ,Count
+ #foreach($reportDto in $exportEvent.getReportDetailsList())
+     $reportDto.getIdentifier(),$reportDto.getFirstName(),$reportDto.getLastName(),$reportDto.getLoginName(),$reportDto.getEventType(), $reportDto.getObjectName(),$reportDto.getCount()
+ #end

@@ -1,0 +1,9 @@
+"对象 Id","对象类型","操作","失败的外部应用程序","状态","原因"
+#foreach($notification in $failedNotifications)
+  #set ($reason='')
+  #if($notification.comments)
+    #set ($reason=$notification.comments)
+  #end
+                   
+  "${notification.audit.objectId}","${notification.audit.objectType}","${notification.audit.operation}","${notification.externalApplication.applicationName}","${notification.status}","${reason}"
+#end

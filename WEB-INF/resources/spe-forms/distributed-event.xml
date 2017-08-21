@@ -1,0 +1,81 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<form>
+  <view>
+    <name>SpecimenDistributedEvent</name>
+    <caption>#getMessage("distributed_event")</caption>
+    <table>OS_SPMN_DISTRIBUTIONS_VIEW</table>
+    <primaryKey>IDENTIFIER</primaryKey>
+
+    <row>
+      <textField>
+        <name>name</name>
+        <udn>name</udn>
+        <caption>#getMessage("order_name")</caption>
+        <column>NAME</column>
+      </textField>
+    </row>
+
+    <row>
+      <textField>
+        <name>dpShortTitle</name>
+        <udn>dpShortTitle</udn>
+        <caption>#getMessage("order_dp_short_title")</caption>
+        <column>DP_SHORT_TITLE</column>
+      </textField>
+    </row>
+
+    <row>
+      <userField>
+        <name>requester</name>
+        <udn>requester</udn>
+        <caption>#getMessage("order_requester")</caption>
+        <column>REQUESTER_ID</column>
+      </userField>
+    </row>
+
+    <row>
+      <numberField>
+        <name>quantity</name>
+        <udn>quantity</udn>
+        <caption>#getMessage("order_items_quantity")</caption>
+        <column>QUANTITY</column>
+        <mandatory>true</mandatory>
+        <noOfDigitsAfterDecimal>4</noOfDigitsAfterDecimal>
+      </numberField>
+    </row>
+
+    <row>
+      <userField>
+        <name>user</name>
+        <udn>user</udn>
+        <caption>#getMessage("order_distributor")</caption>
+        <column>DISTRIBUTOR_ID</column>
+        <showInGrid>true</showInGrid>
+      </userField>
+    </row>
+
+    <row>
+      <datePicker>
+        <name>time</name>
+        <udn>time</udn>
+        <caption>#getMessage("order_execution_date")</caption>
+        <column>EXECUTION_DATE</column>
+        <format>MM-dd-yyyy HH:mm</format>
+        <showInGrid>true</showInGrid>
+        <default>current_date</default>
+        <mandatory>true</mandatory>
+      </datePicker>
+    </row>
+
+    <row>
+      <textArea>
+        <name>comments</name>
+        <udn>comments</udn>
+        <caption>#getMessage("order_comments")</caption>
+        <column>COMMENTS</column>
+        <height>2</height>
+      </textArea>
+    </row>
+  </view>
+</form>

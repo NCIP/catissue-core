@@ -1,0 +1,24 @@
+<div class="clearfix">
+  <div class="col-xs-3">
+    <ul class="os-vertical-wizard">
+      <li ng-class="{'done': step.finished, 'active': step.selected}" ng-repeat="step in steps">
+        <h4 class="step-no">{{$index + 1}}</h4>
+        <div class="step-desc">
+          <span class="step-title">{{step.title}}</span>
+          <span class="step-text">{{step.desc}}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-xs-9">
+    <div class="panel panel-default os-vertical-wizard-content">
+      <div class="panel-heading">
+        <div class="panel-title">{{steps[selectedStep].title}}</div>
+      </div>
+      <div class="panel-body">
+        <div ng-transclude></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<catissue_site NAME="Washu lab_1" TYPE="Repository" EMAIL_ADDRESS="admin@admin.com" ACTIVITY_STATUS="Active" USER_ID="1"/>
-	<catissue_address STREET="street12" CITY="city12" STATE="California" COUNTRY="United States" ZIPCODE="12345" PHONE_NUMBER="9863786754" FAX_NUMBER="110000" />
-	<catissue_audit_event_details ELEMENT_NAME="NAME" CURRENT_VALUE="Washu lab_1" />
-    <catissue_audit_event EVENT_TYPE="INSERT"/>
-	<catissue_audit_event EVENT_TYPE="INSERT"/>
-</dataset>

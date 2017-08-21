@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="vlonushte" id="CSV file field separator setting">
+    <sql>
+      call add_cfg_prop(
+        'common', 'field_separator',
+        'field_separator', 'field_separator_desc',
+        'CHAR', ','
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Adding email notification config property for CP expiry">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_cp_expiring_notification',
+        'cp_expiring_notification', 'cp_expiring_notification_desc',
+        'BOOLEAN', 'true'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Adding administrative module" dbms="mysql">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (default, 'administrative', 'Administrative');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Adding administrative module" dbms="oracle">
+    <sql>
+      insert into os_modules
+        (identifier, name, description)
+      values 
+        (OS_MODULES_SEQ.nextval, 'administrative', 'Administrative');
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Adding email config properties for DP expiry">
+    <sql>
+      call add_cfg_prop(
+        'notifications', 'email_dp_expiring_notification',
+        'dp_expiring_notification', 'dp_expiring_notification_desc',
+        'BOOLEAN', 'true'
+      );
+      
+      call add_cfg_prop(
+        'administrative', 'dp_expiry_rem_notif',
+        'dp_expiry_rem_notif', 'dp_expiry_rem_notif_desc',
+        'INT', '30'
+      );
+      
+      call add_cfg_prop(
+        'administrative', 'dp_expiry_rem_rept_inter',
+        'dp_expiry_rem_rept_inter', 'dp_expiry_rem_rept_inter_desc',
+        'INT', '5'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating scheduled job for protocol expiry notification" dbms="mysql">
+    <validCheckSum>7:6cce9da769c891659720e988bf1d7787</validCheckSum>
+    <sql>
+      select identifier into @userId from catissue_user where login_name = '$system';
+      
+      insert into os_scheduled_jobs
+        (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+        scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+      values
+        (default, 'CP Expiry Notification', @userId, now(), null, 30, 00, null, 
+        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpExpiringNotification', 0, null),
+        
+        (default, 'DP Expiry Notification', @userId, now(), null, 30, 00, null, 
+        null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.administrative.services.impl.DpExpiringNotification', 0, null)
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Creating scheduled job for protocol expiry notification" dbms="oracle">
+    <validCheckSum>7:76ca3970f043e151ddf413e3cc174434</validCheckSum>
+    <sql endDelimiter="//">
+      declare 
+        userId number;
+      begin 
+        select identifier into userId from catissue_user where login_name like '$system';
+        
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'CP Expiry Notification', userId, SYSDATE, null, 30, 00, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.biospecimen.services.impl.CpExpiringNotification', 0, null);
+         
+        insert into os_scheduled_jobs
+          (identifier, name, created_by, start_date, end_date, scheduled_minute, scheduled_hour, scheduled_day_of_week, 
+           scheduled_day_of_month, activity_status, repeat_schedule, type, command, task_impl_fqn, rt_args_provided, rt_args_help_text)
+        values
+          (OS_SCHEDULED_JOBS_SEQ.nextVal, 'DP Expiry Notification', userId, SYSDATE, null, 30, 00, null, 
+           null, 'Active', 'DAILY', 'INTERNAL', null, 'com.krishagni.catissueplus.core.administrative.services.impl.DpExpiringNotification', 0, null);
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Training card url setting">
+    <sql>
+      call add_cfg_prop(
+        'common', 'training_url',
+        'training_url', 'training_url_desc',
+        'STRING', 'https://openspecimen.atlassian.net/wiki/x/UQDi'
+      );
+    </sql>
+  </changeSet>
+  
+  <changeSet author="slakhani" id="Email account password value should be secured">
+    <sql>
+      update 
+        os_cfg_props
+      set
+        is_secure = 1
+      where
+        module_id = (select identifier from os_modules where name = 'email') and
+        name = 'account_password';
+    </sql>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Securing existing email account password value">
+    <validCheckSum>7:5d8ea3bbc00fce3f107fe32b9976f50d</validCheckSum>
+    <customChange class="com.krishagni.catissueplus.core.upgrade.ConfigEmailPasswordUpdater"></customChange>
+  </changeSet>
+</databaseChangeLog>

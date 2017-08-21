@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.openspecimen.core.migration.domain.Migration"
+    table="OS_MIGRATIONS">
+
+    <id name="id" column="IDENTIFIER" type="long">
+      <generator class="native">
+        <param name="sequence">OS_MIGRATION_SEQ</param>
+      </generator>
+    </id>
+
+    <property name="name" type="string" column="NAME" />
+
+    <property name="versionFrom" column="VERSION_FROM" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.openspecimen.core.migration.domain.Migration$Version
+        </param>
+        <param name="type">
+          12
+        </param>
+      </type>
+    </property>
+
+    <property name="versionTo" column="VERSION_TO" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.openspecimen.core.migration.domain.Migration$Version
+        </param>
+        <param name="type">
+          12
+        </param>
+      </type>
+    </property>
+	
+    <property name="status" column="STATUS" not-null="true">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">
+          com.krishagni.openspecimen.core.migration.domain.Migration$Status
+        </param>
+        <param name="type">
+          12
+        </param>
+      </type>
+    </property>
+
+    <property name="date" type="timestamp" column="MIGRATION_DATE" />	
+
+    <query name="getMigrationInfo"> 
+      select 
+        mg
+      from 
+        com.krishagni.openspecimen.core.migration.domain.Migration mg
+      where 
+        mg.name = :name and mg.versionFrom =:versionFrom and mg.versionTo =:versionTo
+    </query>
+
+  </class>
+</hibernate-mapping>
+        
+        

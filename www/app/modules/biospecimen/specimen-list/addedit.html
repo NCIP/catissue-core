@@ -1,0 +1,89 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="specimen-lists">
+            <span translate="specimen_list.lists">Specimen Lists</span>
+          </a>
+        </li>
+      </ul>
+      <h3 ng-switch on="!list.id && list.id != 0">
+        <span ng-switch-when="true" translate="specimen_list.create_list">Create Specimen List</span>
+        <span ng-switch-default translate="specimen_list.update_list">Update Specimen List</span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="container">
+    <form name="listForm" class="form-horizontal" os-form-validator="listForm" validator="listFormValidator" novalidate>
+      <div class="form-group" ng-if="!list.defaultList">
+        <label class= "col-xs-3 control-label" translate="specimen_list.name">
+          Name
+        </label>
+        <div class="col-xs-6">
+          <input type="text" name="listName" ng-model="list.name" class="form-control" 
+            required  placeholder="{{'specimen_list.name' | translate}}" ng-maxlength="255">
+          <div os-field-error field="listForm.listName"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-xs-3 control-label" translate="specimen_list.share_list_with_users">
+          Share list with following users
+        </label>
+        <div class="col-xs-6">
+          <os-users multiple ng-model="list.sharedWith" placeholder="{{'specimen_list.users' | translate}}">
+          </os-users>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class= "col-xs-3 control-label" translate="specimen_list.description">
+          Description
+        </label>
+        <div class="col-xs-6">
+          <textarea rows="2" placeholder="{{'specimen_list.description' | translate}}" ng-model="list.description" class="form-control">
+          </textarea>
+        </div>
+      </div>
+
+      <div class="form-group" ng-if="!isQueryOrSpecimenPage">
+        <label class="col-xs-3 control-label" translate="specimen_list.specimens">
+          Specimens
+        </label>
+        <div class="col-xs-6">
+          <textarea rows="2" name="specimens" ng-model="input.labelText" class="form-control" ng-required="!list.id"
+            placeholder="{{'specimen_list.enter_specimen_label' | translate}}">
+          </textarea>
+          <div os-field-error field="listForm.specimens"></div>
+          <div class="os-text-checkbox" ng-if="input.barcodingEnabled">
+            <div class="checkbox">
+              <os-checkbox ng-model="input.useBarcode"></os-checkbox>
+            </div>
+            <div class="message os-ctrl-padding-top">
+              <span translate="specimens.use_barcode">Use Barcode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="os-divider"></div>
+
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-6">
+          <button class="btn btn-primary" os-form-submit="saveOrUpdateList()" ng-switch on="!list.id && list.id != 0">
+            <span ng-switch-when="true"  translate="common.buttons.create"> Create </span>
+            <span ng-switch-default translate="common.buttons.update"> Update </span>
+          </button>
+          <button class="btn btn-danger" ng-if="list.isAllowedToDeleteList" ng-click="deleteList()">
+            <span translate="common.buttons.delete">Delete</span>
+          </button>
+          <button class="btn os-btn-text" ng-click="back()">
+            <span translate="common.buttons.discard">Discard</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

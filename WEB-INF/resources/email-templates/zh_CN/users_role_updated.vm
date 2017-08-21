@@ -1,0 +1,136 @@
+<table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-spacing:0;border-collapse:separate">
+  <tbody>
+    <tr>
+      <td style="border-collapse:collapse;">
+        <table cellspacing="0" border="0" width="100%" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px;line-height:20px">
+          <tbody>
+            <tr>
+              <td style="border-collapse:collapse;padding-bottom:10px">
+                <p style="margin:10px 0 0 0">
+                  您好 $user.firstName $user.lastName,
+                  <br><br>
+                  
+                  #if( $sr.collectionProtocol )
+                    #set( $cp = $sr.collectionProtocol.shortTitle )
+                    #set( $cpText = "收集方法" )
+                  #else
+                    #set( $cp = "所有目前的已经将来的" )
+                    #set( $cpText = "收集方法（s）" )
+                  #end
+                  
+                  #if( $sr.site )
+                    #set( $site = $sr.site.name )
+                    #set( $siteText = "站点" )
+                  #else
+                    #set( $site = "全部站点" )
+                    #set( $siteText = "站点（s）" )
+                  #end
+
+                  #if( $oldSr )
+                    #if( $oldSr.collectionProtocol )
+                      #set( $oldCP = $oldSr.collectionProtocol.shortTitle )
+                      #set ( $oldCPText = "收集方法" )
+                    #else
+                      #set( $oldCP = "所有目前的已经将来的" )
+                      #set( $oldCPText = "收集方法（s）" )
+                    #end
+
+                    #if( $oldSr.site )
+                      #set( $oldSite = $oldSr.site.name )
+                      #set( $oldSiteText = "站点" )
+                    #else
+                      #set( $oldSite = "全部站点")
+                      #set( $oldSiteText = "站点（s）" )
+                    #end
+                  #end
+
+                  #if( $operation == 'ADD' )
+                    您已经被分配 <b> $sr.role.name </b> 的权限，您可以对 $siteText <b> $site </b> 进行 <b> $cp </b> $cpText 的管理
+                  #end
+
+                  #if( $operation == 'UPDATE' )
+                    您的职能有所改变。
+                    您的 <b> $oldSr.role.name </b> 在角色 <b> $oldCP </b> $oldCPText 對於 $oldSiteText <b> $oldSite </b>
+                    已更新。<br><br>
+                    您的新职能是 <b> $sr.role.name </b> 对 $siteText <b> $site </b> 在 <b>$cp</b> $cpText
+                  #end
+
+                  #if( $operation == 'REMOVE' )
+                    您的 <b>$sr.role.name</b> 职能对站点 $siteText <b>$site</b> 在单位 <b>$cp</b> $cpText 已经被移除。
+                    <br><br>
+                    如有任何疑问请联系管理员。
+                  #end
+
+                  #if( $operation != 'REMOVE')
+                    <br><br>
+                    A brief description of your role is mentioned below:
+                    <br><br>
+                    您的职能简要如下： $sr.role.description
+                  #end
+                </p>
+              </td>
+            </tr>
+            #if( $operation != 'REMOVE' )
+              <tr>
+                <td style="border-collapse:collapse;padding:0px;padding-bottom:10px">
+	          <table width="80%" style="border-collapse: collapse" cellpadding="5">
+		    <tr>
+		      <th align="left" style="border-bottom:1px solid #e3e3e3;">职能描述</th>
+		      <th align="left" style="border-bottom:1px solid #e3e3e3;">资源</th>
+		    </tr>
+              
+		    #set($prefix = "rbac_resource_")
+	            #foreach( $ac in $sr.role.acl )
+		      <tr style="padding-top: 10px; padding-bottom: 10px;">
+		        #set($resourceKey = "$prefix$ac.resource.name")
+	                <td>$messageSource.getMessage($resourceKey.toLowerCase(), null, $locale)</td>
+	                <td>
+		          #set( $operations = [] )
+		          #foreach( $resourceInstantOp in $ac.operations )
+			    #set( $result = $operations.add($resourceInstantOp.operation.name) )
+			  #end
+			           
+			  #if( $operations.contains("Read") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Read</span>
+			    </div>
+		 	  #end
+			           
+			  #if( $operations.contains("Create") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Create</span>
+			    </div>
+			  #end
+			           
+			  #if( $operations.contains("Update") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Update</span>
+		            </div>
+			  #end
+			           
+			  #if( $operations.contains("Delete") )
+			    <div style="font-weight: 700;color: #fff;background: #ab9364;padding: 3px 5px;float: left;margin-right: 5px;">
+			      <span>Delete</span>
+			    </div>
+		          #end
+                        </td>
+		      </tr>
+		    #end
+		  </table>
+                </td>
+              </tr>
+            #end
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="height:5px;line-height:5px;">&nbsp;</td>
+    </tr>
+    <tr>
+      <td>
+        #parse( $footer )
+      </td>
+    <tr>
+  </tbody>
+</table>

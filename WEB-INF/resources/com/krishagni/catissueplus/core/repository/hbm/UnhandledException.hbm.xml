@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="false">
+  <class name="com.krishagni.catissueplus.core.common.domain.UnhandledException" table="OS_UNHANDLED_EXCEPTIONS">
+    <id name="id" column="IDENTIFIER">
+      <generator class="native">
+        <param name="sequence">OS_UNHANDLED_EXCEPTIONS_SEQ</param>
+      </generator>
+    </id>
+    
+    <many-to-one name="user" column="USER_ID"/>
+
+    <property name="className" column="CLASS_NAME"/>
+
+    <property name="methodName" column="METHOD_NAME"/>
+
+    <property name="timestamp" column="TIMESTAMP"/>
+    
+    <property name="exception" column="EXCEPTION"/>
+
+    <property name="stackTrace" column="STACK_TRACE"/>
+    
+    <property name="inputArgs" column="INPUT_ARGS"/>
+  </class>
+</hibernate-mapping>

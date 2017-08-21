@@ -1,0 +1,151 @@
+<div>
+  <div os-page-header>
+    <div class="os-page-header-content">
+      <ul os-breadcrumbs>
+        <li>
+          <a ui-sref="query-list" translate="queries.list">Queries</a>
+        </li>
+      </ul>
+
+      <h3> 
+        <span ng-if="!queryLocal.id" translate="queries.new_query">
+          New Query
+        </span>
+        <span ng-if="!!queryLocal.id">
+          {{queryLocal.title}}
+        </span>
+      </h3>
+    </div>
+  </div>
+
+  <div class="os-page-commands">
+    <div class="left">
+      <button class="default" ng-click="saveQuery()"
+        ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0">
+        <span class="fa fa-save"></span>
+        <span translate="common.buttons.save">Save</span>
+      </button>
+      <button class="default" ng-click="getCount()" 
+        ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0"
+        title="{{'queries.count_results' | translate}}"
+        data-placement="bottom" data-container="body"
+        content-template="modules/query/count.html" bs-popover>
+        <span class="fa fa-dashboard"></span>
+        <span translate="queries.get_count">Get Count</span>
+      </button>
+      <button class="default" ui-sref="query-results({queryId: queryLocal.id, editMode: 1})"
+        ng-disabled="!queryLocal.isValid || queryLocal.filters.length == 0">
+        <span class="fa fa-table"></span>
+        <span translate="queries.view_records">View Records</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="os-query-container">
+    <div class="os-query-cp-forms">
+      <accordion close-others="true"> 
+        <div class="panel panel-primary os-query-block-margin">
+          <div class="panel-heading">
+            <h3 class="panel-title" translate="queries.select_cp">
+              Select a Collection Protocol
+            </h3>
+          </div>
+        </div>
+
+        <div class="os-query-block-margin">
+          <os-select ng-model="queryLocal.selectedCp" list="cps" display-prop="shortTitle" 
+            on-change="loadCpForms" ng-disabled="queryLocal.disableCpSelection">
+          </os-select>
+        </div>
+
+        <div class="panel panel-primary os-query-block-margin">
+          <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left" translate="queries.add_filter">
+              Add Filter
+            </h3>
+            <div class="pull-right" title="Click to add temporal filter">
+              <button type="button" class="btn btn-default btn-xs"
+                ng-click="onTemporalFilterSelect()"
+                title="{{'queries.add_filter' | translate}}"
+                data-placement="right" 
+                data-container="body"
+                content-template="modules/query/addedit-temporal-filter.html" bs-popover>
+                <span class="glyphicon glyphicon-time"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <accordion-group ng-repeat="form in queryLocal.selectedCp.forms">
+            <accordion-heading>
+              <div ng-click="onFormSelect(form)">
+                {{form.caption}}
+              </div>
+            </accordion-heading>
+            <div ng-if="form == openForm">
+              <div ng-if="!form.staticFields" translate="queries.loading_form_fields">
+                Loading form fields. Please wait for a moment ...
+              </div>
+              <div ng-if="form.staticFields">
+                <div class="input-group os-query-search-field">
+                  <input type="text" class="form-control" 
+                    placeholder="{{'queries.search_field' | translate}}" 
+                    ng-model="queryLocal.searchField" 
+                    ng-keyup="form.showExtnFields = (queryLocal.searchField != '' )" >
+                  <div class="input-group-addon">
+                    <span class="fa fa-search"> </span>
+                  </div>
+                </div>
+                <div id="{{::form.name}}.{{::field.name}}"
+                  data-arg="{{::form.name}}.{{::field.name}}"
+                  ng-repeat="field in form.staticFields | filter: {caption: queryLocal.searchField}">
+                  <span class="os-query-form-field" ng-class="{'selected': queryLocal.currFilter.field == field}"
+                    ng-click="onFieldSelect(field, $event)">
+                    {{::field.caption}}
+                  </span>
+                </div>
+                <div class="os-query-block-margin"
+                  ng-repeat="extnForm in form.extnForms">
+                  <span class="os-query-extn-form"
+                    ng-click="extnForm.showExtnFields = !extnForm.showExtnFields" 
+                    ng-show="filteredExtnFields.length > 0">
+                    {{::extnForm.caption}}
+                    <i ng-if="form.showExtnFields || extnForm.showExtnFields" class="fa fa-caret-down"></i>
+                    <i ng-if="!form.showExtnFields && !extnForm.showExtnFields" class="fa fa-caret-right"></i>
+                  </span>
+
+                  <div class="os-query-extn-form-fields"
+                    ng-show="(form.showExtnFields || extnForm.showExtnFields) && filteredExtnFields.length > 0">
+                    <div id="{{::form.name}}.{{::field.name}}" 
+                      data-arg="{{::form.name}}.{{::field.name}}"
+                      ng-repeat="field in filteredExtnFields  = (extnForm.fields | filter: {caption: queryLocal.searchField})">
+                      <span class="os-query-form-field"
+                        ng-click="onFieldSelect(field, $event)">
+                        {{::field.caption}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </accordion-group>
+        </div>
+      </accordion>
+    </div>
+
+    <div class="os-query-exprs-filters">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title" translate="queries.expr_and_filters">
+            Expressions and Filters
+          </h3>
+        </div>
+        <div class="panel-body">
+          <div ng-include src="'modules/query/query-expr.html'"></div>
+          <div ng-include src="'modules/query/filters.html'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

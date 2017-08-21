@@ -1,0 +1,67 @@
+<div>
+  <div os-page-header>
+    <h3>
+      <span translate="specimens.search_results" translate-value-key="{{searchKey}}">
+        Specimen Search Result for {{key}}
+      </span>
+    </h3>
+  </div>
+
+  <div class="container">
+    <table class="os-table os-table-hover">
+      <thead class="os-table-head">
+        <tr class="row">
+          <th class="col">
+            <span translate="specimens.cp">Collection Protocol</span>
+          </th>
+          <th class="col">
+            <span translate="specimens.label">Label</span>
+          </th>
+          <th class="col" ng-if="barcodingEnabled">
+            <span translate="specimens.barcode">Barcode</span>
+          </th>
+          <th class="col">
+            <span translate="specimens.type">Type</span>
+          </th>
+          <th class="col">
+            <span translate="specimens.available_qty">Available Quantity</span>
+          </th>
+          <th class="col">
+            <span translate="specimens.location">Location</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="os-table-body">
+        <tr class="row" ng-repeat="spmn in specimens" os-row-click="showSpecimenDetail(spmn)">
+          <td class="col">
+            <span>{{spmn.cpShortTitle}}</span>
+          </td>
+          <td class="col">
+            <span>{{spmn.label}}</span>
+          </td>
+          <td class="col" ng-if="barcodingEnabled">
+            <span>{{spmn.barcode | osNoValue}}</span>
+          </td>
+          <td class="col">
+            <span>{{spmn.type}}</span>
+          </td>
+          <td class="col">
+            <span>{{spmn.availableQty}}</span>
+            <os-specimen-unit specimen-class="spmn.specimenClass" type="spmn.type"></os-specimen-unit>
+          </td>
+          <td class="col">
+            <span ng-switch on="!!spmn.storageLocation.id && spmn.storageLocation.id != -1">
+              <span ng-switch-when="true">
+                {{spmn.storageLocation.name}}
+                ({{spmn.storageLocation.positionY}} x {{spmn.storageLocation.positionX}})
+              </span>
+              <span ng-switch-default translate="specimens.virtually_located">
+                Virtual
+              </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

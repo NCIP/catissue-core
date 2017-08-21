@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+  <changeSet author="ahegade" id="Missed reason column in visits table">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="MISSED_REASON" type="VARCHAR2(255 CHAR)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Track modification of visit missed reason">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="missedReason_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Renaming specimen audit created on column">
+    <renameColumn tableName="catissue_specimen_aud"
+      oldColumnName="CREATED_ON_DATE"
+      newColumnName="CREATED_ON"
+      columnDataType="timestamp null"/>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify initial quantity from double to big decimal in specimen audit table">
+    <validCheckSum>7:2874a2a4a842a71aed0431757a71e85e</validCheckSum>
+    <modifyDataType tableName="catissue_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="number(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify available quantity from double to big decimal in specimen audit table">
+    <validCheckSum>7:1bddc237e1cededa50c9ea21bcdfbaa9</validCheckSum>
+    <modifyDataType tableName="catissue_specimen_aud" columnName="AVAILABLE_QUANTITY" newDataType="number(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Modify quantity from double to big decimal in specimel requirement audit table">
+    <validCheckSum>7:0bbcd85e8ad04dcab1cdf6a0b005f865</validCheckSum>
+    <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="INITIAL_QUANTITY" newDataType="number(24,8)" />
+  </changeSet>
+
+  <changeSet author="ahegade" id="Column for specifying person who has missed the visit">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="MISSED_BY" type="NUMBER(19, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="ahegade" id="Tracking the person who has missed the visit">
+    <addColumn tableName="cat_specimen_coll_group_aud">
+      <column name="missedBy_MOD" type="NUMBER(1, 0)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Change width of anatomic site to match data table">
+    <modifyDataType tableName="catissue_cp_req_specimen_aud" columnName="TISSUE_SITE" newDataType="VARCHAR2(150 CHAR)" />
+  </changeSet>
+</databaseChangeLog>

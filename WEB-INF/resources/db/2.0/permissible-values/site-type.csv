@@ -1,0 +1,5 @@
+IDENTIFIER,CONCEPT_CODE,DEFINITION,PARENT_IDENTIFIER,value,PUBLIC_ID,SORTORDER
+getNextPvId(),,,null,Laboratory,Site_Type_PID,null
+getNextPvId(),,,null,Repository,Site_Type_PID,null
+getNextPvId(),,,null,Not Specified,Site_Type_PID,null
+getNextPvId(),,,null,Collection Site,Site_Type_PID,null

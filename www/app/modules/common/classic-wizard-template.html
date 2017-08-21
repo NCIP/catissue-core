@@ -1,0 +1,10 @@
+<div class="os-classic-wizard">
+  <ul class="steps">
+    <li ng-class="{'done': step.finished, 'active': step.selected}" ng-repeat="step in steps">
+      <span class="step-no">{{$index + 1}}</span>
+      <span>{{step.title}}</span>
+    </li>
+  </ul>
+
+  <div ng-transclude/>
+</div>

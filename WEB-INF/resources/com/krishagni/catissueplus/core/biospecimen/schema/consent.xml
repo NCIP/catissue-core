@@ -1,0 +1,57 @@
+#macro(getMessage $code)$messageSource.getMessage($code, null, $locale)#end
+
+<object-schema>
+  <name>consent</name>
+
+  <record> 
+    <name>com.krishagni.catissueplus.core.biospecimen.events.ConsentDetail</name>
+    
+    <field>
+      <caption>#getMessage("participant_cp_short_title")</caption>
+      <attribute>cpShortTitle</attribute>
+      <key>true</key>
+    </field>
+    
+    <field>
+      <caption>#getMessage("participant_ppid")</caption>
+      <attribute>ppid</attribute>
+      <key>true</key>
+    </field>
+    
+    <field>
+      <type>date</type>
+      <caption>#getMessage("participant_consent_sign_date")</caption>
+      <attribute>consentSignatureDate</attribute>
+    </field>
+    
+    <record>
+      <caption>#getMessage("participant_consent_witness")</caption>
+      <attribute>witness</attribute>
+    
+      <field>
+        <caption>#getMessage("user_email")</caption>
+        <attribute>emailAddress</attribute>
+      </field>
+    </record>
+    
+    <field>
+      <caption>#getMessage("participant_consent_comments")</caption>
+      <attribute>comments</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("participant_consent_tier_statement")</caption>
+      <attribute>statement</attribute>
+    </field>
+      
+    <field>
+      <caption>#getMessage("participant_consent_tier_response")</caption>
+      <attribute>response</attribute>
+    </field>
+    
+    <field>
+      <caption>#getMessage("participant_consent_doc_name")</caption>
+      <attribute>consentDocumentName</attribute>
+    </field>
+  </record>
+</object-schema>

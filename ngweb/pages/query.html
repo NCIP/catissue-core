@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+<html ng-app="plus">
+  <head>
+    <link href="../external/select2/css/select2.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/select2/css/select2-bootstrap.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/eternicode/css/datepicker.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/jquery/css/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css"></link>
+    <link href="../external/angularjs/css/ng-grid.min.css" rel="stylesheet" type="text/css"></link>
+
+    <script src="../external/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../external/jquery/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="../external/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../external/select2/select2.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/angular.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/angular-resource.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ng-grid-2.0.7.min.js" type="text/javascript"></script>
+    <script src="../external/angularjs/sortable.js" type="text/javascript"></script>
+    <script src="../external/angularjs/ui-bootstrap-tpls-0.11.0.min.js" type="text/javascript"></script>
+    <script src="../external/eternicode/js/bootstrap-datepicker.js" type="text/javascript"></script>
+
+    <script src="../js/wrapper.js" type="text/javascript"></script>
+    <script src="../js/services.js" type="text/javascript"></script>
+    <script src="../js/controllers.js" type="text/javascript"></script>
+    <script src="../js/directives.js" type="text/javascript"></script>
+    <script src="../js/query-directives.js" type="text/javascript"></script>
+    <script src="../js/app.js" type="text/javascript"></script>
+  
+    <style type="text/css">
+      .sortablePlaceholder {
+        float: left;
+        width: 2.5em;
+        height: 2.5em;
+      }
+
+      .focus {
+        border-color: #66AFE9;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+        outline: 0 none;
+      }
+
+      .op-btn {
+        background-color: #f5f5f5;
+        margin-bottom: 2%;
+      }  
+
+      .droppable {
+        background-color: #ffffff;
+        border: 1px dashed #cccccc;
+      }
+
+      .dropped {
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+      }
+
+      .tool-box-panel {
+        height: 17%;
+      }
+
+      .z-up {
+        z-index: 100;
+      }
+
+      .filter-item {
+        padding: 10px 15px;
+        display: block;
+        border: 1px solid #DDDDDD;
+        border-radius: 4px;
+        margin-top: 1%;
+      }
+
+      .filter-item-error {
+        border: 1px solid red;
+      }
+
+      .filter-item-valign {
+        height: 2.5em;
+        list-style-type: none;
+        margin-right: 0.7em;
+        padding-top: 0.5em;
+        vertical-align: middle;
+      }
+
+      .filter-node {
+        background-color: #cccccc; 
+        width:2.5em; 
+        border-radius: 50%; 
+        border: 1px solid #cccccc;
+        text-align: center;
+      }
+
+      .op-node {
+        background-color: #f5f5f5; 
+        width:2.5em; 
+        border: 1px solid #cccccc;
+        text-align: center;
+      }
+
+      .paren-node {
+        background-color: #ffffff;
+        width:1.5em;
+        border: 1px solid #cccccc;
+        text-align: center;
+      }
+
+      span.glyphicon-remove {
+        font-size: 0.5em;
+        color: #cccccc;
+      }
+
+      .data-grid {
+        border: 1px solid rgb(212,212,212);
+        width: 100%;
+      }
+
+      .tooltip-inner {
+        background-color: #ffffcc;
+        border: 1px solid #f0c36d;
+        color: #000000;
+      }
+
+      .tooltip-arrow:after {
+        border: 1px solid #f0c36d;
+      }
+
+      .tooltip.top .tooltip-arrow {
+        border-top-color: #ffffcc;
+      }
+
+      .tooltip.bottom .tooltip-arrow {
+        border-bottom-color: #ffffcc;
+      }
+
+      .tooltip.left .tooltip-arrow {
+        border-left-color: #ffffcc;
+      }
+
+      .tooltip.right .tooltip-arrow {
+        border-right-color: #ffffcc;
+      }
+
+      .popover {
+        background-color: #ffffcc;
+	border: 1px solid #f0C36D;
+      }
+
+      .popover.right .arrow:after {
+	border-right-color: #ffffcc;
+      }
+
+      .popover.bottom .arrow:after {
+	border-bottom-color: #ffffcc;
+      }
+
+      .popover.top .arrow:after {
+	border-top-color: #ffffcc;
+      }
+
+      .popover.left .arrow:after {
+	border-left-color: #ffffcc;
+      }
+
+      .popover.right .arrow {
+	border-right-color: #F0C36D;
+      }
+
+      .popover.bottom .arrow {
+	border-bottom-color: #F0C36D;
+      }
+
+      .popover.top .arrow {
+	border-top-color: #F0C36D;
+      }
+
+      .popover.left .arrow {
+	border-left-color: #F0C36D;
+      }
+
+      .popover .arrow, .popover .arrow:after {
+	border-color: rgba(240, 195, 109, 0);
+      }
+
+      .nav-pills > li {
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+
+      html, body {
+        height: 100%;
+      }
+    </style>
+  </head>
+
+  <body ng-controller="QueryController">
+    <div style="margin-left: 2%; height: 100%; width: 96%;" ng-if="queryData.showRecs">
+      <div class="row" style="6%;margin-bottom: 1%;">
+        <div class="pull-left" style="padding-left: 15px;">
+          <div class="btn-group">
+            <div class="btn btn-default" ng-click="redefineQuery()"> 
+              <span>&larr;</span>
+              <span>Back</span> 
+            </div> 
+            <div class="btn btn-default" ng-click="redefineQuery()"> 
+              <span class="glyphicon glyphicon-wrench"></span> 
+              <span> Edit Query </span>
+            </div> 
+            <div class="btn btn-default"> 
+              <span class="glyphicon glyphicon-eye-open"></span> 
+              <span> Define View </span>
+            </div> 
+          </div>
+        </div>
+      </div>
+      <div class="row" style="height: 90%; padding-left: 15px;">
+        <div class="data-grid" style="height: 100%;" ng-grid="queryData.resultGridOpts"></div>
+      </div>
+    </div>
+    <div style="height: 100%; margin-left: 2%; width: 96%;" ng-if="!queryData.showRecs">
+      <div class="row" style="height: 100%;">
+        <div class="col-xs-3" style="height: 100%;">
+          <div class="panel panel-primary" style="height: 20%;"> 
+            <div class="panel-heading panel-title">
+              Collection Protocol
+            </div>
+            <div class="panel-body">
+              <ka-callout show-when="{{showCpSelectCallout()}}"
+                          data-container="body" data-placement="right" data-content="Select a collection protocol">
+                <ka-select 
+                  ng-model="queryData.selectedCp"
+                  options="queryData.cpList" 
+                  option-id="id" option-value="shortTitle" 
+                  on-select="onCpSelect" 
+                  ng-disabled="queryData.filters.length > 0" style="width: 100%;">
+                </ka-select>
+              </ka-callout>
+            </div>
+          </div>
+ 
+          <div style="height: 80%;">
+            <accordion ka-fix-height="100%" close-others="true"> <!-- style="height: 100%;" -->
+              <div style="height: 9%;" class="panel panel-primary">
+                <div class="panel-heading">
+                  <ka-callout
+                    show-when="{{showFormSelectCallout()}}"
+                    data-container="body" data-placement="right"
+                    data-content="Click on form title">
+                    <div class="panel-title">Forms</div>
+                  </ka-callout>
+                </div>
+              </div>
+              <div style="height: 84%; margin-top: 5px;overflow:auto;">
+                <accordion-group ng-repeat="form in queryData.cpForms" is-open="false">
+                  <accordion-heading>
+                    <div ng-click="onFormClick(form)">{{form.caption}}</div>
+                  </accordion-heading>
+                  <div ng-show="!form.fields">
+                    Loading form fields. Please wait for a while...
+                  </div>
+                  <div ng-show="form.fields">
+                    <div style="margin-bottom: 3px;" 
+                         class="field" 
+                         ka-draggable="{helper: 'clone', zIndex: 100}" 
+                         id="{{form.name}}.{{field.name}}" 
+                         data-arg="{{form.name}}.{{field.name}}"
+                         ng-repeat="field in form.fields">
+                      <span style="cursor: pointer;" tooltip="Click to add field in filter condition" tooltip-placement="right" ng-click="addField($event, form, field)">
+                        {{field.caption}}
+                      </span>
+                      <!-- div ka-show-on-parent-focus tooltip="Click to add field to filter" 
+                       class="btn btn-default btn-xs" style="display:none" ng-click="addField($event, form, field)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                  </div -->
+                    </div>
+                  </div>
+                </accordion-group>
+              </div>
+            </accordion>
+          </div>
+        </div>
+
+        <div class="col-xs-9" style="height:100%;">
+          <ul class="nav nav-pills nav-justified">
+            <li class="active"><a href="#addFilter" data-toggle="tab">Add Filter</a></li>
+            <li><a href="#editQuery" data-toggle="tab">Query Expression</a></li>
+          </ul>
+
+          <div class="tab-content" style="height: 25%;margin-bottom: 1%;">
+            <div class="tab-pane fade in active" id="addFilter">
+              <div class="panel panel-primary">
+                <div class="panel-body">
+                  <div style="margin-bottom: 2%;">
+                      <div class="pull-left">
+                    <ka-callout 
+                      show-when="{{showOpSelectCallout()}}"
+                      data-container="body" data-placement="left"
+                      data-content="Choose an operator">
+                        <div class="btn-toolbar" role="toolbar" aq-filter-ops field="queryData.currFilter.field">
+                          <div class="btn-group">
+                            <div tooltip="Equals" tooltip-placement="bottom" 
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="eq" ng-click="addOp($event, 'eq')" class="op btn btn-default"> &#61; </div>
+                            <div tooltip="Not Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ne" ng-click="addOp($event, 'ne')" class="op btn btn-default"> &#8800; </div>
+                            <div tooltip="Less Than" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="lt" ng-click="addOp($event, 'lt')" class="op numeric btn btn-default"> &#60; </div>
+                            <div tooltip="Less Than or Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="le" ng-click="addOp($event, 'le')" class="op numeric btn btn-default"> &#8804; </div>
+                            <div tooltip="Greater Than" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="gt" ng-click="addOp($event, 'gt')" class="op numeric btn btn-default"> &#62; </div>
+                            <div tooltip="Greater Than or Equals" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ge" ng-click="addOp($event, 'ge')" class="op numeric btn btn-default"> &#8805; </div>
+                          </div>
+                          <div class="btn-group">
+                            <div tooltip="Exists" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="exists" ng-click="addOp($event, 'exists')" class="op btn btn-default">&#8707;</div>
+                            <div tooltip="Does Not Exists" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_exists" ng-click="addOp($event, 'not_exists')" class="op btn btn-default">&#8708;</div>
+                            <div tooltip="Element Of" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="qin" ng-click="addOp($event, 'qin')" class="op pv btn btn-default"> &#8712; </div>
+                            <div tooltip="Not Element Of" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="not_in" ng-click="addOp($event, 'not_in')" class="op pv btn btn-default"> &#8713; </div>
+                          </div>
+                          <div class="btn-group">
+                            <div tooltip="Starts With" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="starts_with" ng-click="addOp($event, 'starts_with')" class="op string btn btn-default"> &#8963;&#61;</div>
+                            <div tooltip="Ends With" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="ends_with" ng-click="addOp($event, 'ends_with')" class="op string btn btn-default"> &#36;&#61;</div>
+                            <div tooltip="Contains" tooltip-placement="bottom"
+                                 ka-draggable="{helper: 'clone', zIndex: 100}" data-arg="contains" ng-click="addOp($event, 'contains')" class="op string btn btn-default"> &#126;</div>
+                          </div>
+                        </div>
+                    </ka-callout>
+                      </div>
+              
+                    <!-- div class="pull-right">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-default active">Normal</button>
+                        <button type="button" class="btn btn-default">Temporal</button>
+                      </div>
+                    </div -->
+
+                    <div class="clearfix"></div>
+                  </div>
+
+                  <div style="margin-bottom: 2%;">
+                    <div id="filterField" ng-switch="!queryData.currFilter.field">
+                      <div ng-switch-when="true" style="margin-right: 2%; width: 25%"
+                           ka-droppable="{accept: '.field', activeClass: 'focus'}" 
+                           on-drop="onFieldSelect"
+                           class="btn pull-left droppable"> Form Field </div>
+                      <div ng-switch-default style="margin-right: 2%; width:25%"
+                           class="btn pull-left dropped"> {{queryData.currFilter.field.caption}} </div>
+                    </div>
+                        
+                    <div ng-switch="!queryData.currFilter.op">
+                      <div id="filterOpAb" ng-switch-when="true" style="margin-right: 2%; width: 10%"
+                           ka-droppable="{accept: '.op', activeClass: 'focus'}"
+                           on-drop="onOperatorSelect"
+                           class="btn pull-left droppable"> Operator </div>
+                      <div id="filterOpPr" ng-switch-default style="margin-right: 2%; width: 10%"
+                           class="btn pull-left dropped"> <span ng-bind-html="getOpCode(queryData.currFilter.op)"></span></div>
+                    </div>
+
+                    <div class="pull-left" style="margin-right: 2%; width:40%;" ng-hide="isUnaryOpSelected()">
+                      <ka-callout 
+                        show-when="{{showValueSelectCallout()}}"
+                        data-container="body" data-placement="top"
+                        data-content="Specify condition value">
+                        <div ng-switch="getValueType()">
+                          <div ng-switch-when="select">
+                            <ka-select options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
+                          </div>
+                          <div ng-switch-when="multiSelect">
+                            <ka-select multiple options="queryData.currFilter.field.pvs" ng-model="queryData.currFilter.value" style="width: 100%"></ka-select>
+                          </div>
+                          <input ng-switch-when="datePicker" class="form-control" type="text" ka-date-picker ng-model="queryData.currFilter.value"></input>
+                          <input ng-switch-default class="form-control" type="text" placeholder="Value" ng-model="queryData.currFilter.value"></input>
+                        </div>
+                      </ka-callout>
+                    </div>
+
+
+                    <div class="pull-right"> <!-- style="margin-bottom: 2%;" -->
+                      <ka-callout
+                        show-when="{{showAddFilterCallout()}}"
+                        data-container="body" data-placement="bottom"
+                        data-content="Click to create filter">
+                        <button class="btn btn-success" ng-disabled="disableAddFilterBtn()" ng-click="addFilter()" ng-show="!queryData.currFilter.id">Add</button>
+                      </ka-callout>
+                      <button class="btn btn-success" ng-click="editFilter()" ng-show="queryData.currFilter.id">Edit</button>
+                      <button class="btn btn-default" ng-click="clearFilter()">Clear</button>
+                    </div>
+                  </div>
+
+                  <div class="clearfix"></div>
+
+                  <!-- div style="margin-bottom: 2%;">
+                    <div class="pull-left" style="margin-right: 2%;">
+                      <label class="checkbox-inline">
+                        <input type="checkbox" id="parameterized" value="1" name="parameterized">Is Parameterized?</input>
+                      </label>
+                    </div>
+                    <div class="pull-left hidden">
+                      <input class="form-control" type="text" placeholder="Filter Name"></input>
+                    </div>
+
+                    <div class="clearfix"></div>
+                  </div -->
+                </div>
+              </div>
+            </div> <!-- end of add filter tab -->
+
+            <div class="tab-pane fade" id="editQuery">
+              <div class="panel panel-primary">
+                <div class="panel-body">
+                  <div class="btn-toolbar">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default" ng-click="setJoinType('all')" ng-class="{active: queryData.joinType == 'all'}">All</button>
+                      <button type="button" class="btn btn-default" ng-click="setJoinType('any')" ng-class="{active: queryData.joinType == 'any'}">Any</button>
+                      <button type="button" class="btn btn-default" ng-click="setJoinType('adv')" ng-class="{active: queryData.joinType == 'adv'}">Advanced</button>
+                    </div>
+
+                    <div class="btn-group" ng-show="queryData.joinType == 'adv'">
+                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="and">AND</div>
+                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="or">OR</div>
+                      <div tooltip="Intersection" tooltip-placement="bottom"
+                           class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="intersect">&#8745;</div>
+                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable: '#expr'}" data-arg="not">NOT</div>
+                    </div>
+
+                    <div class="btn-group" ng-show="queryData.joinType == 'adv'">
+                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable:'#expr'}" data-arg="(">(</div>
+                      <div class="btn btn-default" ka-draggable="{helper: opDrag, zIndex: 100, connectToSortable:'#expr'}" data-arg=")">)</div>
+                    </div>
+                  </div>
+
+                  <ka-callout show-when="{{!queryData.isValid}}" data-container="body" data-placement="bottom"
+                              data-content="There's an error in your query expression. Please rectify before proceeding"
+                              fade-out="2000">
+                    <div id="expr" class="filter-item clearfix" ng-class="{'filter-item-error': !queryData.isValid}" 
+                         style="width: 100%; margin-top: 2%;" ng-model="queryData.exprNodes" ui-sortable="exprSortOpts">
+                      <div ng-switch="node.type" ng-repeat="node in queryData.exprNodes" class="pull-left">
+                        <div ng-switch-when="filter" class="filter-item-valign filter-node">
+                          <b>{{node.value}}</b>
+                        </div>
+                        <div ng-switch-when="op" class="filter-item-valign op-node" data-node-pos="{{$index}}" style="position: relative;">
+                             <!-- ka-droppable="{accept: '.adv-op', activeClass: 'focus'}" on-drop="onAdvOpDrop" data-node-pos="{{$index}}" -->
+                          <span ng-bind-html="getOpCode(node.value)"></span>
+                          <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                        </div>
+                        <div ng-switch-when="paren" class="filter-item-valign paren-node" style="position: relative;">
+                          {{node.value}}
+                          <span style="position: absolute; top: 0; right: 0; cursor: pointer;" class="glyphicon glyphicon-remove" ng-click="removeNode($index)"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </ka-callout>
+                </div>
+              </div>
+            </div>
+          </div> <!-- end of tabs -->
+
+          <ka-callout 
+            show-when="{{showAddFilterSuccessCallout()}}" fade-out="3000"
+            data-container="body" data-placement="top"
+            data-content="You've successfully created filter. Repeat this process to create more filters.">
+            <div class="panel panel-primary" style="height: 58%; margin-bottom: 10px">
+              <div class="panel-heading" style="height: 11%;">
+                <div class="panel-title">Filters</div>
+              </div>
+              <div class="panel-body" style="height: 85%; overflow: auto;">
+                <div class="filter-item" style="display: table; width: 100%;" ng-repeat="filter in queryData.filters">
+                  <div class="filter-item-valign pull-left" style="background-color: #cccccc; width:2.5em; border-radius: 50%; border: 1px solid #cccccc;text-align: center;margin-right: 2%;">
+                    <div><b>{{filter.id}}</b></div>
+                  </div>
+                  <div class="col-xs-10 filter-item-valign pull-left">
+                    <i>{{filter.formCaption}} &gt;&gt; {{filter.field.caption}} </i> <b> {{getOpDesc(filter.op)}} </b> <i>{{filter.value}}</i>
+                  </div>
+                  <div>
+                    <div class="btn-group pull-right">
+                      <button class="btn btn-default" ng-click="deleteFilter(filter)"><span class="glyphicon glyphicon-trash"></span></button>
+                      <button class="btn btn-default" ng-click="displayFilter(filter)"><span class="glyphicon glyphicon-pencil"></span></button>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ka-callout>
+          <div class="pull-right">
+            <div class="btn-group">
+              <div class="btn btn-default" tooltip="Get Count" tooltip-placement="top" ng-click="getCount()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+                <span class="glyphicon glyphicon-dashboard"></span>
+                <span>Get Count</span>
+              </div>
+              <div class="btn btn-default" tooltip="Run Query" tooltip-placement="top" ng-click="getRecords()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+                <span class="glyphicon glyphicon-play"></span>
+                <span>View Records</span>
+              </div>
+              <div class="btn btn-default" tooltip="Save Query" tooltip-placement="top" ng-click="saveQuery()" ng-disabled="queryData.filters.length == 0 || !queryData.isValid">
+                <span class="glyphicon glyphicon-save"></span>
+                <span>Save Query</span>
+              </div>
+            </div>
+          </div>
+          <!-- div class="pull-left" style="position: absolute; top: 0; left: 50%; margin-left: -20%; padding: 6px 12px; z-index: 5000; width: 40%; background-color: #ffffcc; color: black;" ng-if="queryData.notifs.showCount" -->
+          <div class="pull-left clearfix" style="border-radius: 4px; padding: 6px 12px 5px 12px; width: 60%; border: 1px solid #f0c36d; background-color: #ffffcc; color: black; margin-right: 1%;" ng-if="queryData.notifs.showCount">
+            <div ng-if="queryData.notifs.waitCount">
+              <span>Counting ...</span>
+            </div>
+            <div ng-if="!queryData.notifs.waitCount"> 
+              <span style="margin-right: 2.5em"><b>Participant Count:</b> {{queryData.cprCnt}} </span>
+              <span><b>Specimen Count:</b> {{queryData.specimenCnt}} </span>
+              <span style="font-size: 1.2em; cursor: pointer;" class="pull-right" ng-click="closeNotif('showCount')">&times;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/ng-template" id="showCount.html">
+        <!-- div class="modal-header">
+          <h4>Records Count</h4>
+        </div -->
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-7"><b>Collection Protocol Registration Count</b></div>
+            <div class="col-xs-3"><h3>200</h3></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-7"><b>Specimen Count</b></div>
+            <div class="col-xs-3"><h3>400</h3></div>
+          </div>
+        </div>
+        <!-- div class="modal-footer">
+          <button class="btn btn-primary" ng-click="$dismiss()">OK</button>
+        </div -->
+    </script>
+  </body>
+</html>

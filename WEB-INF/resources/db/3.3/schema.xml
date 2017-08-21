@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet author="vlonushte" id="Drop index on login name to add index on (login name, domain)" dbms="mysql">
+    <dropIndex tableName="CATISSUE_USER" indexName="LOGIN_NAME"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop unique constraint on login name to add same on (login name, domain)" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="1">
+        select count(*) from user_constraints where table_name='CATISSUE_USER' and constraint_name='SYS_C00107630';
+      </sqlCheck>
+    </preConditions>
+
+    <dropUniqueConstraint
+      tableName="CATISSUE_USER"
+      constraintName="SYS_C00107630"
+      uniqueColumns="LOGIN_NAME"/>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Unique login name per auth domain">
+    <addUniqueConstraint
+      constraintName="CAT_USER_LNAME_DOMAIN_UQ"
+      tableName="CATISSUE_USER"
+      columnNames="LOGIN_NAME, DOMAIN_NAME"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Remove unique constraint to allow duplicate specimen label" dbms="mysql">
+    <dropUniqueConstraint tableName="CATISSUE_SPECIMEN" constraintName="LABEL"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Remove unique constraint to allow duplicate specimen label" dbms="oracle">
+    <dropUniqueConstraint tableName="CATISSUE_SPECIMEN" constraintName="SYS_C00107672"/>
+  </changeSet>
+
+  <changeSet author="ckhilosiya" id="Add index for faster lookup on specimen label">
+    <!-- Removal of unique constraint forces us to have an explicit index on specimen label -->
+    <createIndex indexName="CATISSUE_SPECIMEN_LABEL_IDX" tableName="CATISSUE_SPECIMEN">
+      <column name="LABEL"></column>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Collection protocol SOP document and URL">
+    <addColumn tableName="CATISSUE_COLLECTION_PROTOCOL">
+      <column name="SOP_DOCUMENT_URL" type="${text.type}(255)"/>
+      <column name="SOP_DOCUMENT_NAME" type="${text.type}(255)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="PV properties">
+    <createTable tableName="OS_PV_PROPS">
+      <column name="PV_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="NAME" type="${text.type}(32)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="VALUE" type="${text.type}(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="FK on PV ID of PV properties">
+    <addForeignKeyConstraint
+      constraintName="FK_PV_PROPS_PV_ID"
+      baseTableName="OS_PV_PROPS"
+      baseColumnNames="PV_ID"
+      referencedTableName="CATISSUE_PERMISSIBLE_VALUE"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Function to obtain PV ID given attribute name and value" dbms="mysql">
+    <sql endDelimiter="//">
+      drop function if exists getPvId
+      //
+
+      create function getPvId (publicId varchar(255), pvValue varchar(255))
+        returns bigint(20)
+      begin
+        return getPvParentId(publicId, pvValue);
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Function to obtain PV ID given attribute name and value" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace function getPvId(
+        publicId IN varchar2,
+        pvValue IN varchar2
+      )
+      return number as
+      begin
+        return getPvParentId(publicId, pvValue);
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to rename PV attribute" dbms="mysql">
+    <sql endDelimiter="//">
+      drop procedure if exists rename_pv_attribute;
+      //
+
+      create procedure rename_pv_attribute(
+        in oldAttrName text,
+        in newAttrName text,
+        in newCaption text,
+        in newDef text,
+        in version text
+      )
+      begin
+        insert into catissue_cde
+          (public_id, long_name, definition, version, last_updated)
+        values
+          (newAttrName, newCaption, newDef, version, ${now});
+
+        update
+          catissue_permissible_value
+        set
+          public_id = newAttrName
+        where
+          public_id = oldAttrName;
+
+        delete from catissue_cde where public_id = oldAttrName;
+      end
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to rename PV attribute" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure rename_pv_attribute(
+        oldAttrName   in varchar2,
+        newAttrName   in varchar2,
+        newCaption    in varchar2,
+        newDef        in varchar2,
+        version       in varchar2
+      ) as
+      begin
+        insert into catissue_cde
+          (public_id, long_name, definition, version, last_updated)
+        values
+          (newAttrName, newCaption, newDef, version, ${now});
+
+        update
+          catissue_permissible_value
+        set
+          public_id = newAttrName
+        where
+          public_id = oldAttrName;
+
+        delete from catissue_cde where public_id = oldAttrName;
+      end;
+      //
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vgaikwad" id="Create procedure to remove config property" dbms="mysql">
+    <sql endDelimiter="//">
+      drop procedure if exists remove_cfg_prop;
+      //
+
+      create procedure remove_cfg_prop(
+        in moduleName text,
+        in propName text
+      )
+      begin
+        delete s
+        from
+          os_cfg_settings s
+          join os_cfg_props p on p.identifier = s.property_id
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name= moduleName and p.name = propName;
+
+        delete p
+        from
+          os_cfg_props p
+          join os_modules m on m.identifier = p.module_id
+        where
+          m.name= moduleName and p.name = propName;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Create procedure to remove config property" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure remove_cfg_prop(
+        moduleName in varchar2,
+        propName   in varchar2
+      ) as
+      begin
+        delete
+        from
+          os_cfg_settings s
+        where
+          s.property_id in (
+           select
+             p.identifier
+           from
+             os_cfg_props p
+             join os_modules m on m.identifier = p.module_id
+           where
+             m.name = moduleName and p.name = propName
+          );
+
+        delete
+        from
+          os_cfg_props p
+        where
+          p.identifier in (
+            select
+              p.identifier
+            from
+              os_cfg_props p
+              join os_modules m on m.identifier = p.module_id
+            where
+              m.name = moduleName and p.name = propName
+          );
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Move specimen units from tables of its own to PV properties">
+    <customChange class="com.krishagni.catissueplus.core.upgrade.MoveSpecimenUnitsToPvProps"></customChange>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Drop specimen units as units are stored as PV properties">
+    <dropTable tableName="OS_SPECIMEN_UNITS"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Drop foreign key constraint from institution_id column in catissue_user table">
+    <preConditions onFail="MARK_RAN">
+      <foreignKeyConstraintExists foreignKeyName="FKB025CFC71792AD22"/>
+    </preConditions>
+    
+    <dropForeignKeyConstraint baseTableName="CATISSUE_USER" constraintName="FKB025CFC71792AD22"/>
+  </changeSet>
+  
+  
+  <changeSet author="nmarwaha" id="Drop institution_id column from catissue_user table">
+    <preConditions onFail="MARK_RAN">
+      <columnExists columnName="INSTITUTION_ID" tableName="CATISSUE_USER"/>
+    </preConditions>
+
+    <dropColumn
+      columnName="INSTITUTION_ID"
+      tableName="CATISSUE_USER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Added institute_id column in catissue_user table">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="INSTITUTE_ID" type="${int.type}"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on institute id of user table">
+    <addForeignKeyConstraint
+      constraintName="FK_USER_INSTITUTE_ID"
+      baseTableName="CATISSUE_USER"
+      baseColumnNames="INSTITUTE_ID"
+      referencedTableName="CATISSUE_INSTITUTION"
+      referencedColumnNames="IDENTIFIER" />
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migrate the user's institute id from respective department" dbms="mysql">
+    <sql>
+      update 
+        catissue_user usr 
+        inner join os_departments dept on dept.identifier = usr.department_id
+        inner join catissue_institution inst on inst.identifier = dept.institute_id
+      set 
+        usr.institute_id = inst.identifier
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Migrate the user's institute id from respective department" dbms="oracle">
+    <sql>
+      merge into catissue_user usr using (
+        select 
+          u.identifier as user_id, inst.identifier as inst_id
+        from 
+          catissue_user u
+          inner join os_departments dept on dept.identifier = u.department_id
+          inner join catissue_institution inst on inst.identifier = dept.institute_id
+      ) t on (usr.identifier = t.user_id) 
+      when matched then update set usr.institute_id = t.inst_id
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated user view" runOnChange="true">
+    <sql>
+      create or replace view USER_VIEW as (
+        select
+          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
+          u.email_address as email_address,
+          concat(u.first_name, concat(' ', u.last_name)) as name,
+          i.name as institute_name
+        from
+          catissue_user u
+          inner join catissue_institution i on u.institute_id = i.identifier
+        where
+          u.activity_status != 'Disabled' and i.activity_status != 'Disabled'
+      )
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Updated the CP coordinator view" runOnChange="true">
+    <sql>
+      create or replace view cp_coord_view as (
+        select 
+          u.identifier as identifier, u.first_name as first_name, u.last_name as last_name,
+          u.email_address as email_address, cpcrd.collection_protocol_id as cp_id, i.name as institute_name
+        from 
+          catissue_coll_coordinators cpcrd 
+          join catissue_user u on cpcrd.user_id = u.identifier 
+          join catissue_institution i on i.identifier = u.institute_id
+      )
+    </sql>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Stored procedure to create indices on foreign keys" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure create_index_on_fk as
+        cnt number := 0;
+        index_name varchar2(128);
+      begin
+        declare column_already_indexed exception;
+
+        pragma exception_init(column_already_indexed, -1408); -- ora-01408
+
+        begin
+          for uc in (
+            select
+              cons.table_name as table_name, cols.column_name as column_name
+            from
+              user_constraints cons
+              left join user_cons_columns cols on cols.constraint_name = cons.constraint_name
+            where
+              cons.constraint_type = 'R'
+          )
+
+          loop
+            index_name := uc.column_name;
+            if length(index_name) > 20 then
+              index_name := substr(index_name, 0, 20);
+            end if;
+
+            index_name := index_name || cnt || '_idx';
+            begin
+              execute immediate 'create index ' || index_name || ' on ' || uc.table_name || '(' || uc.column_name || ')';
+            exception
+              when column_already_indexed then
+                continue;
+            end;
+
+            cnt:=cnt+1;
+          end loop;
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="slakhani" id="Creating indices on foreign keys" dbms="oracle">
+    <sql>call create_index_on_fk()</sql>
+  </changeSet>
+
+  <changeSet author="vlonushte" id="Drop available column from specimen table as it is no longer used">
+    <dropColumn tableName="CATISSUE_SPECIMEN" columnName="AVAILABLE"/>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Procedure to drop index created on foreign key" runOnChange="true" dbms="oracle">
+    <sql endDelimiter="//">
+      create or replace procedure drop_index_on_fk(
+        tableName in varchar2,
+        columnName in varchar2
+      ) is
+        index_name_start varchar2(128);
+        index_name varchar2(128);
+      begin
+        declare index_not_exist exception;
+        pragma exception_init(index_not_exist, -1418); -- ora-01418
+
+        begin
+          index_name_start := columnName;
+          if length(index_name_start) > 20 then
+            index_name_start := substr(index_name_start, 0, 20);
+          end if;
+          index_name_start := index_name_start || '%';
+
+          select
+            index_name into index_name
+          from
+            all_ind_columns
+          where
+            table_name = tableName and
+            column_name = columnName and
+            index_name like index_name_start;
+
+          execute immediate 'drop index ' || index_name;
+          exception
+            when index_not_exist then
+              null;
+        end;
+      end;
+      //
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Drop index on parent specimen ID of specimen" dbms="oracle">
+    <sql>
+      call drop_index_on_fk('CATISSUE_SPECIMEN', 'PARENT_SPECIMEN_ID');
+    </sql>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Index on parent specimen ID and activity status of specimen" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from all_ind_columns where index_name='OS_PARENT_SPMN_ACT_STAT_IDX' and table_name='CATISSUE_SPECIMEN';
+      </sqlCheck>
+    </preConditions>
+
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_PARENT_SPMN_ACT_STAT_IDX">
+      <column name="PARENT_SPECIMEN_ID"/>
+      <column name="ACTIVITY_STATUS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Index on pooled specimen ID and activity status of specimen" dbms="oracle">
+    <preConditions onFail="MARK_RAN">
+      <sqlCheck expectedResult="0">
+        select count(*) from all_ind_columns where index_name='OS_POOLED_SPMN_ACT_STAT_IDX' and table_name='CATISSUE_SPECIMEN';
+      </sqlCheck>
+    </preConditions>
+
+    <createIndex tableName="CATISSUE_SPECIMEN" indexName="OS_POOLED_SPMN_ACT_STAT_IDX">
+      <column name="POOLED_SPECIMEN_ID"/>
+      <column name="ACTIVITY_STATUS"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="vgaikwad" id="Foreign key on pooled specimen ID of specimen table">
+    <addForeignKeyConstraint
+      constraintName="FK_POOLED_SPECIMEN_ID"
+      baseTableName="CATISSUE_SPECIMEN"
+      baseColumnNames="POOLED_SPECIMEN_ID"
+      referencedTableName="CATISSUE_SPECIMEN"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP report settings">
+    <createTable tableName="OS_CP_REPORT_SETTINGS">
+      <column name="IDENTIFIER" type="${int.type}" autoIncrement="${autoIncrement}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="CP_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="ENABLED" type="${boolean.type}" defaultValue="1">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="DATA_QUERY_ID" type="${int.type}"/>
+
+      <column name="CONFIG" type="${clob.type}"/>
+
+      <column name="EMAIL_TMPL" type="${clob.type}"/>
+
+      <column name="ACTIVITY_STATUS" type="${text.type}(16)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP report settings sequence" dbms="oracle">
+    <createSequence
+      sequenceName="OS_CP_REPORT_SETTINGS_SEQ"
+      startValue="1"
+      incrementBy="1"
+      ordered="true"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report settings CP">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_SETTINGS_CP_ID"
+      baseTableName="OS_CP_REPORT_SETTINGS"
+      baseColumnNames="CP_ID"
+      referencedTableName="CATISSUE_COLLECTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report settings query">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_SETTINGS_QUERY_ID"
+      baseTableName="OS_CP_REPORT_SETTINGS"
+      baseColumnNames="DATA_QUERY_ID"
+      referencedTableName="CATISSUE_SAVED_QUERIES"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="CP report recipients">
+    <createTable tableName="OS_CP_REPORT_RCPTS">
+      <column name="REPORT_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on recipients' report ID">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_RCPTS_RPT_ID"
+      baseTableName="OS_CP_REPORT_RCPTS"
+      baseColumnNames="REPORT_ID"
+      referencedTableName="OS_CP_REPORT_SETTINGS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="FK on report recipients' user ID">
+    <addForeignKeyConstraint
+      constraintName="FK_CP_RPT_RCPTS_USR_ID"
+      baseTableName="OS_CP_REPORT_RCPTS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Truncate the comments to max length of 2000 characters" dbms="mysql">
+    <sql>
+      update catissue_specimen_coll_group set comments = SUBSTR(comments, 1, 2000)
+    </sql>
+  </changeSet>
+
+  <changeSet author="nmarwaha" id="Modify data type for comments in visit table to keep it same for oracle/mysql" dbms="mysql">
+    <modifyDataType tableName="CATISSUE_SPECIMEN_COLL_GROUP" columnName="COMMENTS" newDataType="${text.type}(2000)" />
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="User type enumeration">
+    <addColumn tableName="CATISSUE_USER">
+      <column name="TYPE" type="${text.type}(16)" defaultValue="NONE"/>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="Set type = 'SUPER' for super administrator user">
+    <sql>
+      update 
+        catissue_user
+      set
+        type = 'SUPER' 
+      where 
+        is_admin = 1;
+    </sql>
+  </changeSet>
+  
+  <changeSet author="vpawar" id="Container ancestors detail view" runOnChange="true">
+    <sql>
+      create or replace view os_container_ancestors_view as
+      select
+        h.descendent_id as container_id, a.name as freezer
+      from
+        os_containers_hierarchy h
+        inner join os_storage_containers a on a.identifier = h.ancestor_id
+      where
+        a.activity_status != 'Disabled' and a.parent_container_id is null
+    </sql>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="DP coordinators">
+    <createTable tableName="OS_DP_COORDINATORS">
+      <column name="DISTRIBUTION_PROTOCOL_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="${int.type}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="DP coordinators primary key">
+    <addPrimaryKey 
+      constraintName="PK_OS_DP_COORD"
+      tableName="OS_DP_COORDINATORS" 
+      columnNames="DISTRIBUTION_PROTOCOL_ID, USER_ID"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on DP coordinator user ID">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_COORD_USER_ID"
+      baseTableName="OS_DP_COORDINATORS"
+      baseColumnNames="USER_ID"
+      referencedTableName="CATISSUE_USER"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="nmarwaha" id="FK on DP coordinator DP ID">
+    <addForeignKeyConstraint
+      constraintName="FK_DP_COORD_DP_ID"
+      baseTableName="OS_DP_COORDINATORS"
+      baseColumnNames="DISTRIBUTION_PROTOCOL_ID"
+      referencedTableName="CATISSUE_DISTRIBUTION_PROTOCOL"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+
+  <changeSet author="vpawar" id="Specimen collection and receive details of entire specimen hierarchy" runOnChange="true">
+    <createView viewName="OS_SPMN_COLL_RECV_DETAILS_VIEW" replaceIfExists="true">
+      select
+        h.descendent_id as specimen_id,
+        col.container as coll_container, col.collection_procedure as coll_procedure,
+        col.user_id as collector_id, col.event_timestamp as coll_time,
+        rcv.received_quality as recv_quality, rcv.user_id as receiver_id, rcv.event_timestamp as recv_time
+      from
+        catissue_specimen_hierarchy h
+        inner join catissue_form_record_entry cre on cre.object_id = h.ancestor_id
+        inner join catissue_form_context cf on cf.identifier = cre.form_ctxt_id
+        inner join dyextn_containers cfn on cfn.identifier = cf.container_id
+        inner join catissue_coll_event_param col on col.identifier = cre.record_id
+        inner join catissue_form_record_entry rre on rre.object_id = h.ancestor_id
+        inner join catissue_form_context rf on rf.identifier = rre.form_ctxt_id
+        inner join dyextn_containers rfn on rfn.identifier = rf.container_id
+        inner join catissue_received_event_param rcv on rcv.identifier = rre.record_id
+      where
+        cfn.name = 'SpecimenCollectionEvent' and cfn.deleted_on is null and
+        cf.deleted_on is null and cre.activity_status = 'ACTIVE' and
+        rfn.name = 'SpecimenReceivedEvent' and rfn.deleted_on is null and
+        rf.deleted_on is null and rre.activity_status = 'ACTIVE'
+    </createView>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Link every API call to relevant login event">
+    <addColumn tableName="OS_USER_API_CALLS_LOG">
+      <column name="LOGIN_AUDIT_LOG_ID" type="${int.type}">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet author="mdnasim" id="Foreign key on login event of api calls log table">
+    <addForeignKeyConstraint
+      constraintName="FK_API_CALL_LOG_AUDIT_LOG_ID"
+      baseTableName="OS_USER_API_CALLS_LOG"
+      baseColumnNames="LOGIN_AUDIT_LOG_ID"
+      referencedTableName="OS_LOGIN_AUDIT_LOGS"
+      referencedColumnNames="IDENTIFIER"/>
+  </changeSet>
+  
+  <changeSet author="mdnasim" id="Drop auth token which is replaced by login event column">
+    <dropColumn tableName="OS_USER_API_CALLS_LOG" columnName="AUTH_TOKEN"/>
+  </changeSet>
+</databaseChangeLog>
